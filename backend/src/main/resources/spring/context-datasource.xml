@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:util="http://www.springframework.org/schema/util"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+	                       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	                       http://www.springframework.org/schema/util
+	                       http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <util:properties id="globals" location="classpath:/properties/globals.properties" />
+    <util:properties id="jdbc" location="classpath:/properties/#{globals['Globals.ServerType']}/jdbc.properties" />
+
+    <!-- ================================================================================== -->
+    <!-- = LOCAL SYSTEM DB -->
+    <!-- ================================================================================== -->
+    <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="#{jdbc['Jdbc.DriverClassName']}"/>
+        <property name="url" value="#{jdbc['Jdbc.Url']}" />
+        <property name="username" value="#{jdbc['Jdbc.UserName']}"/>
+        <property name="password" value="#{jdbc['Jdbc.Password']}"/>
+
+        <property name="maxActive" value="#{jdbc['Jdbc.MaxActive']}"></property>
+        <property name="maxWait" value="#{jdbc['Jdbc.MaxWait']}"></property>
+        <property name="maxIdle" value="#{jdbc['Jdbc.MaxIdle']}"></property>
+        <property name="removeAbandoned" value="#{jdbc['Jdbc.RemoveAbandoned']}"></property>
+        <property name="removeAbandonedTimeout" value="#{jdbc['Jdbc.RemoveAbandonedTimeout']}"></property>
+        <property name="validationQuery" value="SELECT 1" />
+    </beans:bean>
+
+</beans:beans>
