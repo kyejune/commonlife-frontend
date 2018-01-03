@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  */
@@ -19,6 +20,11 @@ public class ExampleServiceImpl implements ExampleService {
     @Override
     public ExampleInfo getExample() {
         return exampleDAO.selectExample();
+    }
+
+    @Override
+    public List<ExampleInfo> getExampleList() {
+        return exampleDAO.selectExampleList();
     }
 
     @Override

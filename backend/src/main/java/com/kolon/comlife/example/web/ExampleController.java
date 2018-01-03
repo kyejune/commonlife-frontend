@@ -4,8 +4,10 @@ import com.kolon.comlife.example.model.ExampleInfo;
 import com.kolon.comlife.example.service.ExampleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * Example Controller
@@ -20,15 +22,19 @@ public class ExampleController {
 
     @GetMapping(
             value = "/",
-            produces = "application/json")
-    public ExampleInfo getExampleInJson() {
-        ExampleInfo info = exampleService.getExample();
-        return info;
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public List<ExampleInfo> getExampleInJson() {
+        List<ExampleInfo> exampleInfoList = exampleService.getExampleList();
+
+        for( ExampleInfo e : exampleInfoList ) {
+            logger.debug(">> " + e);
+        }
+        return exampleInfoList;
     }
 
     @PostMapping(
             value = "/",
-            produces = "application/json")
+            produces = MediaType.APPLICATION_JSON_VALUE )
     public void setExampleInJson(@RequestBody ExampleInfo example) {
         exampleService.setExample(example);
         return;
