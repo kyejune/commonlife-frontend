@@ -18,8 +18,8 @@ public class ExampleServiceImpl implements ExampleService {
     private ExampleDAO exampleDAO;
 
     @Override
-    public ExampleInfo getExample() {
-        return exampleDAO.selectExample();
+    public ExampleInfo getExample( String name ) {
+        return exampleDAO.selectExample( name );
     }
 
     @Override
@@ -28,8 +28,18 @@ public class ExampleServiceImpl implements ExampleService {
     }
 
     @Override
-    public void setExample(ExampleInfo example) {
-        exampleDAO.insertExample(example);
+    public ExampleInfo setExample(ExampleInfo example) {
+        return exampleDAO.insertExample(example);
+    }
+
+    @Override
+    public ExampleInfo updateExample(ExampleInfo example) {
+        return exampleDAO.updateExample(example);
+    }
+
+    @Override
+    public void deleteExample(ExampleInfo example) {
+        exampleDAO.deleteExample(example);
         return;
     }
 }

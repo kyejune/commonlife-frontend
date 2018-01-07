@@ -6,11 +6,15 @@ import java.util.List;
 
 public interface ExampleService {
 
-    public ExampleInfo getExample();
+    public ExampleInfo getExample( String name );
 
     public List<ExampleInfo> getExampleList();
 
-    public void setExample(ExampleInfo example);
+    public ExampleInfo setExample(ExampleInfo example);
+
+    public ExampleInfo updateExample(ExampleInfo example);
+
+    public void deleteExample(ExampleInfo example);
 
 }
 

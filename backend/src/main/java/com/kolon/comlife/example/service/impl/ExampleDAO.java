@@ -24,16 +24,30 @@ public class ExampleDAO {
     private SqlSession sqlSession;
 */
 
-    public ExampleInfo selectExample() {
-        return example;
+    public ExampleInfo selectExample(String name) {
+        this.example.setName(name);
+        return sqlSession.selectOne("Example.selectExample", this.example);
     }
 
     public List<ExampleInfo> selectExampleList() {
-        return sqlSession.selectList( "Example.selectExampleList" );
+        return sqlSession.selectList("Example.selectExampleList");
     }
 
-    public void insertExample(ExampleInfo newExample) {
+    public ExampleInfo insertExample(ExampleInfo newExample) {
         this.example = newExample;
+        sqlSession.insert("Example.insertExample", this.example);
+        return this.example;
+    }
+
+    public ExampleInfo updateExample(ExampleInfo updateExample) {
+        this.example = updateExample;
+        sqlSession.update("Example.updateExample", this.example);
+        return this.example;
+    }
+
+    public void deleteExample(ExampleInfo deleteExample) {
+        this.example = deleteExample;
+        sqlSession.delete("Example.deleteExample", this.example);
         return;
     }
 
