@@ -18,7 +18,7 @@ class Footer extends Component {
             <footer role="navigation"
                     className="md-paper md-paper--1 md-bottom-navigation md-background--primary md-bottom-navigation--dynamic">
 
-                <NavLink exact to="/" activeClassName="footer__button--selected" className="md-fake-btn md-pointer--hover md-fake-btn--no-outline md-bottom-nav md-bottom-nav--active md-bottom-nav--fixed">
+                <NavLink exact to="/community" activeClassName="footer__button--selected" className="md-fake-btn md-pointer--hover md-fake-btn--no-outline md-bottom-nav md-bottom-nav--active md-bottom-nav--fixed">
                     <FontIcon>book</FontIcon>
                     <div className="md-bottom-nav-label">Community</div>
                 </NavLink>

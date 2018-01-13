@@ -17,22 +17,6 @@ class Header extends React.Component {
                     <select className="md-title md-title--toolbar">
                         <option value="">역삼하우징</option>
                     </select>
-
-
-                    <ul className="md-tabs" role="tablist">
-                       <li role="tab">
-                           <NavLink to="/community/feed">FEED</NavLink>
-                       </li>
-
-                        <li role="tab">
-                            <NavLink to="/community/event">EVENT</NavLink>
-                        </li>
-
-                        <li role="tab">
-                            <NavLink to="/community/news">NEWS</NavLink>
-                        </li>
-                    </ul>
-
                 </header>
 
             </div>
