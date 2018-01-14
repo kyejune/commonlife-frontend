@@ -1,27 +1,31 @@
-import React from 'react';
-import {Route, NavLink, Link, Switch} from 'react-router-dom';
+import React, { Component } from 'react';
+import { FontIcon, TabsContainer, Tabs, Tab } from 'react-md';
 
 import CommunityFeed from 'components/routes/CommunityFeed';
 import CommunityNews from 'components/routes/CommunityNews';
 import CommunityEvent from 'components/routes/CommunityEvent';
 
+class Community extends Component{
 
-const Community = ({ match }) => {
-    return (
-        <div>
-            <div className="md-tabs" role="tablist">
-                <NavLink to="/community/feed">FEED</NavLink>
-                <NavLink to="/community/event">EVENT</NavLink>
-                <NavLink to="/community/news">NEWS</NavLink>
-            </div>
+    render(){
 
-            <Route exact path='/community' component={CommunityFeed}/>
-            <Route path='/community/feed' component={CommunityFeed}/>
-            <Route path='/community/event' component={CommunityEvent}/>
-            <Route path='/community/news' component={CommunityNews}/>
+        return(
+            <TabsContainer panelClassName="md-grid" colored
+                           defaultTabIndex={0}>
+                <Tabs tabId="simple-tab" mobile={true} className="cl-second-header">
+                    <Tab label="feed">
+                        <CommunityFeed/>
+                    </Tab>
+                    <Tab label="event">
+                        <CommunityEvent/>
+                    </Tab>
+                    <Tab label="news">
+                        <CommunityNews/>
+                    </Tab>
+                </Tabs>
+            </TabsContainer>
+        )
+    }
+}
 
-        </div>
-    );
-};
-
-export default Community
+export default Community;
