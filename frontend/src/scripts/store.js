@@ -1,8 +1,7 @@
-// import { observable, action } from 'mobx';
-//
-//
-// export default class ViewStore {
-//
-//     @observable temp = null;
-//
-// }
+import { observable } from 'mobx';
+
+const Store = observable({
+    temp:'t,e,m,p',
+});
+
+export default Store;

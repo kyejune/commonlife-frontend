@@ -5,13 +5,23 @@ import CommunityFeed from 'components/routes/CommunityFeed';
 import CommunityNews from 'components/routes/CommunityNews';
 import CommunityEvent from 'components/routes/CommunityEvent';
 
+
 class Community extends Component{
+
+    constructor(props){
+        super(props);
+    }
+
+    onTabChange( index ){
+
+    }
 
     render(){
 
         return(
             <TabsContainer panelClassName="md-grid" colored
-                           defaultTabIndex={0}>
+                           defaultTabIndex={0}
+                           onTabChange={ index => this.onTabChange( index ) }>
                 <Tabs tabId="simple-tab" mobile={true} className="cl-second-header">
                     <Tab label="feed">
                         <CommunityFeed/>
