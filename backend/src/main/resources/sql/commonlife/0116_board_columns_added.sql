@@ -1,0 +1,5 @@
+ALTER TABLE BOARD
+ADD USR_ID int(11) not null;
+
+ALTER TABLE BOARD
+ADD CMPLX_ID int(11) not null;
