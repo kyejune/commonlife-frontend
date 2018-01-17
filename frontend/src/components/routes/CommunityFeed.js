@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Button} from 'react-md';
 
 const CommunityFeed = () => {
 
@@ -9,10 +10,16 @@ const CommunityFeed = () => {
     }
 
     return (
-        <div style={style}>
-            <h2>
-                커뮤니티 피드
-            </h2>
+        <div className="cl-fitted-box">
+
+            <div style={style}>
+                <h2>
+                    커뮤니티 피드
+                </h2>
+            </div>
+
+
+            <Button floating primary iconClassName="fa fa-pencil fa-2x" className="cl-write__button--fixed"/>
         </div>
     );
 };

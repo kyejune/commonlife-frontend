@@ -6,3 +6,11 @@ body{
 *{
   box-sizing: border-box;
 }
+
+
+
+.cl-write__button--fixed{
+  position: fixed;
+  bottom: 2em;
+  right: 1em;
+}

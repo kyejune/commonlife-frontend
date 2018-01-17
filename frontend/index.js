@@ -1,5 +1,7 @@
 // import 'react-md/dist/react-md.blue-amber.min.css';
 import 'styles/app.scss';
+import 'font-awesome/fonts/fontawesome-webfont.eot';
+import 'font-awesome/scss/font-awesome.scss';
 
 import 'react-md/dist/react-md.min.js';
 import React, {Component} from 'react';
@@ -21,11 +23,15 @@ class App extends Component {
     }
 
     componentDidMount() {
+
         document.addEventListener('scroll', ()=>{
-            this.setState({
-                scrolled: ( document.documentElement.scrollTop > 56 )
-            })
-        });
+            let doc = document.querySelector('.react-swipeable-view-container>div[aria-hidden=false]');
+            if( doc ){
+                this.setState({
+                    scrolled: ( doc.scrollTop > 56 )
+                });
+            }
+        }, true );
     }
 
     render() {
