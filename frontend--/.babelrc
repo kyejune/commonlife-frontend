@@ -1,0 +1,14 @@
+{
+  "presets": ["env", "react"],
+
+  "plugins": [
+    "wildcard",
+
+    ["module-resolver", {
+      "root": ["./src"],
+      "alias":{
+
+      }
+    }],
+  ]
+}

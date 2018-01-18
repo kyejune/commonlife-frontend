@@ -4,13 +4,6 @@ A super simple React app using [Parcel](https://parceljs.org/) as build tool
 ## Run
 Running requires Node 8 or later
 
-## Build With Cordova
-https://cordova.apache.org/docs/ko/latest/guide/cli/
-
-```
-sudo npm install -g cordova
-```
-
 ```
 npm install 
 npm start

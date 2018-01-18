@@ -1,3 +1,4 @@
+// import 'react-md/dist/react-md.blue-amber.min.css';
 import 'styles/app.scss';
 import 'font-awesome/fonts/fontawesome-webfont.eot';
 import 'font-awesome/scss/font-awesome.scss';
@@ -21,7 +22,6 @@ class App extends Component {
         }
     }
 
-
     componentDidMount() {
 
         document.addEventListener('scroll', ()=>{
@@ -32,7 +32,6 @@ class App extends Component {
                 });
             }
         }, true );
-
     }
 
     render() {
