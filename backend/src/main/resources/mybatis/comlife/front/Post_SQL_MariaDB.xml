@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Post">
+
+    <select id="selectPostList" parameterType="String" resultType="postInfo">
+        /* 공통게시판 리스트 조회 */
+        SELECT
+                BOARD_IDX,
+                BOARD_TYPE,
+                TITLE,
+                CONTENT,
+                CONTENT_TYPE,
+                READ_CNT,
+                OPEN_DT,
+                CLOSE_DT,
+                HTML_YN,
+                USE_YN,
+                DEL_YN,
+                WRITE_NM,
+                WRITE_HP,
+                WRITE_EMAIL,
+                ORDERER_DATE_TIME,
+                ORDER_NO,
+                REG_DTTM,
+                REG_USERID,
+                UPD_DTTM,
+                UPD_USERID,
+                USR_ID,
+                CMPLX_ID
+        FROM
+                BOARD
+        WHERE
+                USE_YN = 'Y'
+                AND
+                DEL_YN = 'N'
+        LIMIT
+                20
+        OFFSET
+                0
+    </select>
+
+</mapper>
