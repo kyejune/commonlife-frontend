@@ -9,11 +9,6 @@ class CommunityFeed extends Component {
 		super( props );
 
 		this.state = {
-			style: {
-				height: 3000,
-				width: '100%',
-				backgroundColor: 'orange',
-			},
 
 			isWrite: false,
 
@@ -114,17 +109,12 @@ class CommunityFeed extends Component {
 		return (
 			<div className="cl-fitted-box">
 
-				<div style={this.state.style}>
-					<h2>
-						커뮤니티 피드
-					</h2>
-
-					컨텐츠 내용
+				<div>
 					{ this.state.cardData.map( ( card, index ) => {
 						return (
 							<CardItem key={index} cardData={card}/>
 						)
-					} ) };
+					} ) }
 				</div>
 
 

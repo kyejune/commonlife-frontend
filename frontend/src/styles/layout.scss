@@ -15,6 +15,11 @@
 
   & > header{
     transition: margin-top 0.6s ease-out;
+
+    .md-btn--icon{
+      padding: 0;
+    }
+
   }
 
 

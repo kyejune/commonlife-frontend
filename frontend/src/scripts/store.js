@@ -1,7 +1,7 @@
 import { observable } from 'mobx';
 
 const Store = observable({
-    temp:'t,e,m,p',
+    startAt:'/',
 });
 
 export default Store;

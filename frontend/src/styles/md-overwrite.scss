@@ -23,10 +23,15 @@ $md-secondary-color: #f4ca5c;
 // Drawer하단에서 나오기 추가
 .md-drawer--bottom{
   left: 0;
+  top: 0;
   width: 100%;
   transform: translate3d(0, 100%, 0);
 }
 
+
+.md-drawer--fixed{
+  bottom: initial;
+}
 
 
 @include react-md-everything;

@@ -7,39 +7,45 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
+import createBrowserHistory from 'history/createBrowserHistory'
 
 import {Header, Footer} from './src/components/layouts/*';
 import {Community, CommunityFeed, HomeIoT, LifeInfo, Reservation} from './src/components/routes/*';
+import Store from 'scripts/store';
 
 try {
-	document.write( '<script src="cordova.js"></script>' );
+    document.write('<script src="cordova.js"></script>');
 }
-catch( error ) {
-    console.warn( 'cannot load cordova.js' );
+catch (error) {
+    console.warn('cannot load cordova.js');
 }
 
 class App extends Component {
 
-    constructor( prop ){
-        super( prop );
+    constructor(props) {
+        super(props);
 
         this.state = {
             scrolled: false,
+            history: createBrowserHistory(),
+            isDevice: !!window.cordova,
         }
     }
 
 
     componentDidMount() {
 
-        document.addEventListener('scroll', ()=>{
+        document.addEventListener('scroll', () => {
             let doc = document.querySelector('.react-swipeable-view-container>div[aria-hidden=false]');
-            if( doc ){
+            if (doc) {
                 this.setState({
-                    scrolled: ( doc.scrollTop > 56 )
+                    scrolled: (doc.scrollTop > 56)
                 });
             }
-        }, true );
+        }, true);
 
+        Store.startAt = this.state.history.location.pathname || '/community';
+        this.state.history.replace('/community');
     }
 
     render() {
@@ -47,17 +53,23 @@ class App extends Component {
         return (
             <Router>
 
-                <div className={ classNames( { 'App':true, 'cl-app--expand':this.state.scrolled } ) }>
+                <div className={classNames({
+                    'App': true,
+                    'cl-app--expand': this.state.scrolled,
+                    'cl-is-device': this.state.isDevice
+                })}>
                     <Header/>
 
                     <div className="app-content">
 
-                        <Route exact path="/" component={Community}/>
+                        <Switch>
+                            <Route path="/community" component={Community}/>
+                            <Route path="/iot" component={HomeIoT}/>
+                            <Route path="/life" component={LifeInfo}/>
+                            <Route path="/reservation" component={Reservation}/>
 
-                        <Route path="/community" component={Community}/>
-                        <Route path="/iot" component={HomeIoT}/>
-                        <Route path="/life" component={LifeInfo}/>
-                        <Route path="/reservation" component={Reservation}/>
+                            <Route component={Community}/>
+                        </Switch>
 
                     </div>
 
@@ -72,6 +84,6 @@ class App extends Component {
 
 ReactDOM.render(<App/>, document.getElementById("app"));
 
-document.addEventListener( 'deviceready', () => {
-    console.log( 'device ready' );
-} );
+document.addEventListener('deviceready', () => {
+
+});

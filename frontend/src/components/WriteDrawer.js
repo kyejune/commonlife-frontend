@@ -3,7 +3,9 @@ import React, {Component} from 'react';
 import {Button, Drawer, Toolbar, FocusContainer} from 'react-md';
 
 import BottomDrawer from 'components/BottomDrawer';
-
+import addSrc from 'images/img-bt-gray@3x.png';
+import completeSrc from 'images/complete-bt-blueicon@3x.png';
+import previewSrc from 'images/img-preview-holder@3x.png';
 
 class WriteDrawer extends Component {
 
@@ -14,6 +16,7 @@ class WriteDrawer extends Component {
     render() {
 
         return (
+
             <BottomDrawer
                 type={Drawer.DrawerTypes.TEMPORARY}
                 visible={this.props.visible}
@@ -23,6 +26,7 @@ class WriteDrawer extends Component {
                 defaultMedia="mobile"
                 portal={true}
                 overlay={false}
+                className="cl-write"
             >
 
                 <Toolbar
@@ -32,17 +36,29 @@ class WriteDrawer extends Component {
                     title="새글 쓰기"
                 />
 
-                <section className="cl-write__section cl-bg--write">
+                <section className="cl-write-section dialogs__content">
 
-                    <FocusContainer
-                        focusOnMount
-                        onSubmit={this.props.onWriteChange}>
+                    <textarea name="" id="" cols="30" rows="5" placeholder="새로운 글을 작성해 보세요."/>
 
-                        <textarea name="" id="" cols="30" rows="10" placeholder="새로운 글을 작성해 보세요."/>
 
-                    </FocusContainer>
+                    <footer>
+                        <div className="cl-preview-holder">
+                            <img src={previewSrc} alt="이미지 미리보기" width="52" height="52"/>
+                            <button>이미지 삭제</button>
+                        </div>
+                        <div className="cl-write-toolbar cl-flex-between">
+                            <button>
+                                <img src={addSrc} alt="이미지 추가" width="139" height="36"/>
+                            </button>
+                            <button>
+                                <img src={completeSrc} alt="이미지 추가" width="97" height="36"/>
+                            </button>
+                        </div>
+                    </footer>
+
 
                 </section>
+
             </BottomDrawer>
         )
     }

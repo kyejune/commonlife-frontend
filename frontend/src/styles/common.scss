@@ -1,7 +1,10 @@
-body{
+html{
 
 }
 
+body{
+  top: 0;
+}
 
 *{
   box-sizing: border-box;
@@ -13,9 +16,17 @@ body{
   position: fixed;
   bottom: 2em;
   right: 1em;
+  z-index: 1;
 }
 
 
 .cl-bg--write{
   background-color: rgba(0,0,0,0.3);
+}
+
+
+.cl-flex-between{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
 }
