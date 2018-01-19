@@ -1,6 +1,10 @@
 package com.kolon.comlife.post.model;
 
+import com.kolon.comlife.postFile.model.PostFileInfo;
+import com.kolon.comlife.user.model.UserInfo;
 import org.apache.ibatis.type.Alias;
+
+import java.util.List;
 
 @Alias("postInfo")
 public class PostInfo {
@@ -27,6 +31,12 @@ public class PostInfo {
     private String updUserid;
     private String usrId;
     private String cmplxId;
+
+    // Relations
+    private UserInfo user;
+    private List<PostFileInfo> postFiles;
+    private UserInfo register;
+    private UserInfo updater;
 
     public int getBoardIdx() {
         return boardIdx;
@@ -202,6 +212,42 @@ public class PostInfo {
 
     public void setCmplxId(String cmplxId) {
         this.cmplxId = cmplxId;
+    }
+
+    /*
+        Relations Getter and Setter
+     */
+
+    public List<PostFileInfo> getPostFiles() {
+        return postFiles;
+    }
+
+    public void setPostFiles(List<PostFileInfo> postFiles) {
+        this.postFiles = postFiles;
+    }
+
+    public UserInfo getUser() {
+        return user;
+    }
+
+    public void setUser(UserInfo user) {
+        this.user = user;
+    }
+
+    public UserInfo getRegister() {
+        return register;
+    }
+
+    public void setRegister(UserInfo register) {
+        this.register = register;
+    }
+
+    public UserInfo getUpdater() {
+        return updater;
+    }
+
+    public void setUpdater(UserInfo updater) {
+        this.updater = updater;
     }
 
 }
