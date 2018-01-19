@@ -5,7 +5,7 @@ import com.kolon.comlife.post.model.PostInfo;
 import java.util.List;
 
 public class UserInfo {
-    private String usrId;
+    private int usrId;
     private String userClass;
     private String kind;
     private String userId;
@@ -23,7 +23,7 @@ public class UserInfo {
     private String smsChkNo;
     private String smsChkDt;
     private String aprvSts;
-    private String cmplxId;
+    private int cmplxId;
     private String dong;
     private String ho;
     private String headId;
@@ -50,11 +50,11 @@ public class UserInfo {
     // Relations
     private List<PostInfo> posts;
 
-    public String getUsrId() {
+    public int getUsrId() {
         return usrId;
     }
 
-    public void setUsrId(String usrId) {
+    public void setUsrId(int usrId) {
         this.usrId = usrId;
     }
 
@@ -82,9 +82,9 @@ public class UserInfo {
         this.userId = userId;
     }
 
-    public String getUserPw() {
-        return userPw;
-    }
+//    public String getUserPw() {
+//        return userPw;
+//    }
 
     public void setUserPw(String userPw) {
         this.userPw = userPw;
@@ -194,11 +194,11 @@ public class UserInfo {
         this.aprvSts = aprvSts;
     }
 
-    public String getCmplxId() {
+    public int getCmplxId() {
         return cmplxId;
     }
 
-    public void setCmplxId(String cmplxId) {
+    public void setCmplxId(int cmplxId) {
         this.cmplxId = cmplxId;
     }
 
@@ -250,89 +250,89 @@ public class UserInfo {
         this.sipUserCancel = sipUserCancel;
     }
 
-    public String getToken() {
-        return token;
-    }
+//    public String getToken() {
+//        return token;
+//    }
 
     public void setToken(String token) {
         this.token = token;
     }
 
-    public String getTokenIssueDt() {
-        return tokenIssueDt;
-    }
+//    public String getTokenIssueDt() {
+//        return tokenIssueDt;
+//    }
 
     public void setTokenIssueDt(String tokenIssueDt) {
         this.tokenIssueDt = tokenIssueDt;
     }
 
-    public String getTokenValidDt() {
-        return tokenValidDt;
-    }
+//    public String getTokenValidDt() {
+//        return tokenValidDt;
+//    }
 
     public void setTokenValidDt(String tokenValidDt) {
         this.tokenValidDt = tokenValidDt;
     }
 
-    public String getTokenHeader() {
-        return tokenHeader;
-    }
+//    public String getTokenHeader() {
+//        return tokenHeader;
+//    }
 
     public void setTokenHeader(String tokenHeader) {
         this.tokenHeader = tokenHeader;
     }
 
-    public String getTokenPayload() {
-        return tokenPayload;
-    }
+//    public String getTokenPayload() {
+//        return tokenPayload;
+//    }
 
     public void setTokenPayload(String tokenPayload) {
         this.tokenPayload = tokenPayload;
     }
 
-    public String getTokenSignature() {
-        return tokenSignature;
-    }
+//    public String getTokenSignature() {
+//        return tokenSignature;
+//    }
 
     public void setTokenSignature(String tokenSignature) {
         this.tokenSignature = tokenSignature;
     }
 
-    public String getTokenEncrypt() {
-        return tokenEncrypt;
-    }
+//    public String getTokenEncrypt() {
+//        return tokenEncrypt;
+//    }
 
     public void setTokenEncrypt(String tokenEncrypt) {
         this.tokenEncrypt = tokenEncrypt;
     }
 
-    public String getTokenIssuer() {
-        return tokenIssuer;
-    }
+//    public String getTokenIssuer() {
+//        return tokenIssuer;
+//    }
 
     public void setTokenIssuer(String tokenIssuer) {
         this.tokenIssuer = tokenIssuer;
     }
 
-    public String getSecretKey() {
-        return secretKey;
-    }
+//    public String getSecretKey() {
+//        return secretKey;
+//    }
 
     public void setSecretKey(String secretKey) {
         this.secretKey = secretKey;
     }
 
-    public String getGwToken() {
-        return gwToken;
-    }
+//    public String getGwToken() {
+//        return gwToken;
+//    }
 
     public void setGwToken(String gwToken) {
         this.gwToken = gwToken;
     }
 
-    public String getGwValidDt() {
-        return gwValidDt;
-    }
+//    public String getGwValidDt() {
+//        return gwValidDt;
+//    }
 
     public void setGwValidDt(String gwValidDt) {
         this.gwValidDt = gwValidDt;

@@ -26,11 +26,11 @@ public class PostInfo {
     private String ordererDateTime;
     private String orderNo;
     private String regDttm;
-    private String regUserid;
+    private int regUserid;
     private String updDttm;
-    private String updUserid;
-    private String usrId;
-    private String cmplxId;
+    private int updUserid;
+    private int usrId;
+    private int cmplxId;
 
     // Relations
     private UserInfo user;
@@ -174,11 +174,11 @@ public class PostInfo {
         this.regDttm = regDttm;
     }
 
-    public String getRegUserid() {
+    public int getRegUserid() {
         return regUserid;
     }
 
-    public void setRegUserid(String regUserid) {
+    public void setRegUserid(int regUserid) {
         this.regUserid = regUserid;
     }
 
@@ -190,27 +190,27 @@ public class PostInfo {
         this.updDttm = updDttm;
     }
 
-    public String getUpdUserid() {
+    public int getUpdUserid() {
         return updUserid;
     }
 
-    public void setUpdUserid(String updUserid) {
+    public void setUpdUserid(int updUserid) {
         this.updUserid = updUserid;
     }
 
-    public String getUsrId() {
+    public int getUsrId() {
         return usrId;
     }
 
-    public void setUsrId(String usrId) {
+    public void setUsrId(int usrId) {
         this.usrId = usrId;
     }
 
-    public String getCmplxId() {
+    public int getCmplxId() {
         return cmplxId;
     }
 
-    public void setCmplxId(String cmplxId) {
+    public void setCmplxId(int cmplxId) {
         this.cmplxId = cmplxId;
     }
 

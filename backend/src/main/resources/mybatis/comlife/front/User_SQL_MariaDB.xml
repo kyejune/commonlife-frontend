@@ -15,7 +15,7 @@
                 0
     </select>
 
-    <select id="selectUserListById" parameterType="String" resultType="userInfo">
+    <select id="selectUserListById" parameterType="java.util.List" resultType="userInfo">
         /* 공통게시판 리스트 조회 */
         SELECT
                 *
@@ -24,7 +24,9 @@
         WHERE
                 USR_ID
                 IN
-                ()
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
     </select>
 
 </mapper>
