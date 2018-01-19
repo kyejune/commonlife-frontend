@@ -127,6 +127,10 @@ class CardItem extends Component{
 						{/* RSVP */}
 						{ this.cardRsvp() }
 					</CardActions>
+
+
+
+
 				</Card>
 			)
 		}

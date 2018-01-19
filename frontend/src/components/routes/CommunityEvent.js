@@ -6,11 +6,6 @@ class CommunityEvent extends Component {
 		super( props );
 
 		this.state = {
-			style: {
-				height: 3000,
-				width: '100%',
-				backgroundColor: 'yellow',
-			},
 			cardData: [
 				{
 					index: '3',
@@ -62,7 +57,7 @@ class CommunityEvent extends Component {
 						return (
 							<CardItem key={index} cardData={card}/>
 						)
-					} ) };
+					} ) }
 				</div>
 			</div>
 		)

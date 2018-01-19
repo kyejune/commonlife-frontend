@@ -11,6 +11,7 @@ import createBrowserHistory from 'history/createBrowserHistory'
 
 import {Header, Footer} from './src/components/layouts/*';
 import {Community, CommunityFeed, HomeIoT, LifeInfo, Reservation} from './src/components/routes/*';
+import CardItemView from 'components/ui/CardItemView';
 import Store from 'scripts/store';
 
 try {
@@ -63,14 +64,17 @@ class App extends Component {
                     <div className="app-content">
 
                         <Switch>
+                            <Route path="/community/view" component={CardItemView}/>
                             <Route path="/community" component={Community}/>
+
+
+
                             <Route path="/iot" component={HomeIoT}/>
                             <Route path="/life" component={LifeInfo}/>
                             <Route path="/reservation" component={Reservation}/>
 
                             <Route component={Community}/>
                         </Switch>
-
                     </div>
 
                     <Footer/>
