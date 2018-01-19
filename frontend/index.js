@@ -11,6 +11,13 @@ import classNames from 'classnames';
 import {Header, Footer} from './src/components/layouts/*';
 import {Community, CommunityFeed, HomeIoT, LifeInfo, Reservation} from './src/components/routes/*';
 
+try {
+	document.write( '<script src="cordova.js"></script>' );
+}
+catch( error ) {
+    console.warn( 'cannot load cordova.js' );
+}
+
 class App extends Component {
 
     constructor( prop ){
@@ -64,3 +71,7 @@ class App extends Component {
 }
 
 ReactDOM.render(<App/>, document.getElementById("app"));
+
+document.addEventListener( 'deviceready', () => {
+    console.log( 'device ready' );
+} );
