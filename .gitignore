@@ -1,3 +1,13 @@
 *.iml
 .idea
 target
+
+# package manager dependencies
+node_modules
+
+# lock files
+package-lock.json
+yarn.lock
+
+# logs
+yarn-error.log
