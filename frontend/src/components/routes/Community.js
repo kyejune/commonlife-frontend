@@ -8,31 +8,32 @@ import CommunityFeed from 'components/routes/CommunityFeed';
 import CommunityNews from 'components/routes/CommunityNews';
 import CommunityEvent from 'components/routes/CommunityEvent';
 
+// 애니메이션 라운터 추가
+// https://github.com/trungdq88/react-router-page-transition/blob/master/EXAMPLES.md
+
 
 class Community extends Component{
 
     constructor(props){
         super(props);
+
+        this.state = {
+            name:'community',
+            tabs:['feed', 'event', 'news']
+        }
     }
 
     onTabChange = (activeTabIndex) => {
-        const { history, location: { pathname } } = this.props;
-
-        let search;
-        if (activeTabIndex > 0) {
-            search = stringify({ tab: activeTabIndex });
-        }
-
-        history.replace({ pathname, search });
+        let path = '/' + this.state.name + '/' + this.state.tabs[activeTabIndex];
+        this.props.history.replace( path );
     };
 
     render(){
 
         let activeTabIndex = 0;
-        let search = this.props.location.search.match(/\d/);
-        if( search != null )
-            activeTabIndex = parseInt(search[0]);
-
+        let tabStr = this.props.location.pathname.split('/')[2];
+        if( tabStr != null )
+            activeTabIndex = this.state.tabs.indexOf( tabStr );
 
         return(
             <TabsContainer panelClassName="md-grid" colored

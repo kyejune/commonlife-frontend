@@ -59,13 +59,13 @@ class App extends Component {
                     'cl-app--expand': this.state.scrolled,
                     'cl-is-device': this.state.isDevice
                 })}>
+
                     <Header/>
 
                     <div className="app-content">
 
                         <Switch>
-                            <Route path="/community/view" component={CardItemView}/>
-                            <Route path="/community" component={Community}/>
+                            <Route path="/community/:tab" component={Community}/>
 
 
 
