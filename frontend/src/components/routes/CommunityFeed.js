@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
+import {observer} from 'mobx-react';
 import { Button } from 'react-md';
 import WriteDrawer from "components/WriteDrawer";
 import CardItem from 'components/ui/CardItem';
+import Store from 'scripts/store';
+import DB from 'scripts/db';
 
 class CommunityFeed extends Component {
 
@@ -9,90 +12,12 @@ class CommunityFeed extends Component {
 		super( props );
 
 		this.state = {
-
 			isWrite: false,
-
-			cardData: [
-				{
-					index: '1',
-					type: 'news',
-					author: {
-						name: '김딸기',
-						avatar: 'https://placeimg.com/100/100/people',
-						place: '역삼하우스',
-					},
-					content: '오늘의 뉴스 안녕하세요. 반갑습니다.',
-					like_count: '10',
-					created_at: '2018-01-09 00:00:00',
-				},
-				{
-					index: '2',
-					type: 'feed',
-					author: {
-						name: '김용',
-						avatar: 'https://placeimg.com/100/100/people',
-						place: '역삼하우스',
-					},
-					content: '안녕하세요. 반갑습니다.',
-					thumbnail: 'https://placeimg.com/640/480/people',
-					like_count: '10',
-					event_title: '모임합니다',
-					event_schedule: '2018-01-12 00:00:00',
-					event_location: '모임공간',
-					rsvp_count: '0',
-					created_at: '2018-01-09 00:00:00',
-				},
-				{
-					index: '3',
-					type: 'event',
-					author: {
-						name: '한초코',
-						avatar: 'https://placeimg.com/100/100/people',
-						place: '역삼하우스',
-					},
-					thumbnail: 'https://placeimg.com/640/480/people',
-					like_count: '10',
-					event_title: '모임합니다',
-					event_schedule: '2018-01-12 00:00:00',
-					event_location: '모임공간',
-					rsvp_count: '0',
-					created_at: '2018-01-09 00:00:00',
-				},
-				{
-					index: '4',
-					type: 'event',
-					author: {
-						name: '조은풀',
-						avatar: 'https://placeimg.com/100/100/people',
-						place: '역삼하우스1',
-					},
-					thumbnail: 'https://placeimg.com/640/480/people',
-					like_count: '11',
-					event_title: '파티합니다',
-					event_schedule: '2018-01-12 00:00:00',
-					event_location: '파티룸',
-					rsvp_count: '0',
-					created_at: '2018-01-09 00:00:00',
-				},
-				{
-					index: '6',
-					type: 'feed',
-					author: {
-						name: '신쪼리',
-						avatar: 'https://placeimg.com/100/100/people',
-						place: '역삼하우스1',
-					},
-					content: '안녕하세요. 반갑습니다.1',
-					thumbnail: 'https://placeimg.com/640/480/people',
-					like_count: '11',
-					event_title: '모임합니다1',
-					event_schedule: '2018-01-12 00:00:00',
-					event_location: '모임공간',
-					rsvp_count: '0',
-					created_at: '2018-01-09 00:00:00',
-				}
-			]
 		}
+	}
+
+    componentDidMount(){
+		DB.getFeed();
 	}
 
 	onWriteChange ( isWrite ) {
@@ -110,7 +35,7 @@ class CommunityFeed extends Component {
 			<div className="cl-fitted-box">
 
 				<div>
-					{ this.state.cardData.map( ( card, index ) => {
+					{ Store.feed.map( ( card, index ) => {
 						return (
 							<CardItem key={index} cardData={card}/>
 						)
@@ -132,4 +57,4 @@ class CommunityFeed extends Component {
 	}
 }
 
-export default CommunityFeed;
+export default observer(CommunityFeed);
