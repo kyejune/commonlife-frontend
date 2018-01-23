@@ -22,7 +22,7 @@ class CommunityNews extends Component {
 
 					{ Store.news.map( ( card, index ) => {
 						return (
-                            <CardItem key={index} cardData={card}/>
+                            <CardItem key={index} list="/community/news" cardData={card}/>
 						)
 					} ) }
 

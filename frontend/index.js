@@ -7,11 +7,11 @@ import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
-import createBrowserHistory from 'history/createBrowserHistory'
+import createBrowserHistory from 'history/createBrowserHistory';
+
 
 import {Header, Footer} from './src/components/layouts/*';
 import {Community, CommunityFeed, HomeIoT, LifeInfo, Reservation} from './src/components/routes/*';
-import CardItemView from 'components/ui/CardItemView';
 import Store from 'scripts/store';
 
 try {
@@ -65,11 +65,7 @@ class App extends Component {
                     <div className="app-content">
 
                         <Switch>
-
-                            <Route path="/community/feed/view/:id" component={CardItemView} />
-                            <Route path="/community/:tab" component={Community}></Route>
-
-
+                            <Route path="/community/:tab" component={Community}/>
                             <Route path="/iot" component={HomeIoT}/>
                             <Route path="/life" component={LifeInfo}/>
                             <Route path="/reservation" component={Reservation}/>

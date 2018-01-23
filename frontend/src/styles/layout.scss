@@ -3,10 +3,6 @@
   margin-top: 56px;
   overflow: scroll;
   transition: margin-top 0.6s ease-out;
-
-  & > div {
-    height: 200vh; // 스크롤 테스트용
-  }
 }
 
 /* Header */

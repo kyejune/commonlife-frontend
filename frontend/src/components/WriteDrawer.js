@@ -1,11 +1,13 @@
 /* WriteDrawer.jsx */
 import React, {Component} from 'react';
 import {Button, Drawer, Toolbar, FocusContainer} from 'react-md';
+import {observer} from 'mobx-react';
 
 import BottomDrawer from 'components/BottomDrawer';
 import addSrc from 'images/img-bt-gray@3x.png';
 import completeSrc from 'images/complete-bt-blueicon@3x.png';
 import previewSrc from 'images/img-preview-holder@3x.png';
+import Store from "../scripts/store";
 
 class WriteDrawer extends Component {
 
@@ -20,9 +22,7 @@ class WriteDrawer extends Component {
             <BottomDrawer
                 type={Drawer.DrawerTypes.TEMPORARY}
                 visible={this.props.visible}
-                onVisibilityChange={this.props.onWriteChange}
-                onMediaTypeChange={() => {
-                }}
+                onVisibilityChange={()=>{}}
                 defaultMedia="mobile"
                 portal={true}
                 overlay={false}
@@ -32,7 +32,7 @@ class WriteDrawer extends Component {
                 <Toolbar
                     colored
                     fixed
-                    nav={<Button icon onClick={() => this.props.onWriteChange(false)}>close</Button>}
+                    nav={<Button icon onClick={() => Store.drawer = '' }>close</Button>}
                     title="새글 쓰기"
                 />
 
@@ -64,4 +64,4 @@ class WriteDrawer extends Component {
     }
 }
 
-export default WriteDrawer;
+export default observer(WriteDrawer);

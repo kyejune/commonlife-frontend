@@ -21,7 +21,7 @@ class CommunityEvent extends Component {
 				<div>
 					{ Store.event.map( ( card, index ) => {
 						return (
-							<CardItem key={index} cardData={card}/>
+							<CardItem key={index} list="/community/event" cardData={card}/>
 						)
 					} ) }
 				</div>

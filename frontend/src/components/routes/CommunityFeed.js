@@ -11,23 +11,21 @@ class CommunityFeed extends Component {
 	constructor ( props ) {
 		super( props );
 
-		this.state = {
-			isWrite: false,
-		}
+		// this.state = {
+		// 	isWrite: false,
+		// }
 	}
 
     componentDidMount(){
 		DB.getFeed();
 	}
 
-	onWriteChange ( isWrite ) {
-
-		console.log( 'FEED change:', isWrite )
-
-		this.setState( {
-			isWrite: isWrite,
-		} )
-	}
+	// onWriteChange ( isWrite ) {
+    //
+	// 	this.setState( {
+	// 		isWrite: isWrite,
+	// 	} )
+	// }
 
 
 	render () {
@@ -37,7 +35,7 @@ class CommunityFeed extends Component {
 				<div>
 					{ Store.feed.map( ( card, index ) => {
 						return (
-							<CardItem key={index} cardData={card}/>
+							<CardItem key={index} list="/community/feed" cardData={card}/>
 						)
 					} ) }
 				</div>
@@ -46,12 +44,11 @@ class CommunityFeed extends Component {
 				<Button floating primary
 						iconClassName="fa fa-pencil fa-2x"
 						className="cl-write__button--fixed"
-						onClick={()=>this.onWriteChange( true )}
+						onClick={()=> Store.drawer = 'write' }
 				/>
 
 				<WriteDrawer
-					visible={this.state.isWrite}
-					onWriteChange={( value )=>this.onWriteChange( value )}/>
+					visible={ Store.drawer === 'write' }/>
 			</div>
 		)
 	}

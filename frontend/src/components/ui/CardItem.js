@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {BrowserHistory, withRouter} from 'react-router';
 import {Avatar, Button, Card, CardActions, CardText, CardTitle, Media, MediaOverlay} from 'react-md';
 import {Link} from 'react-router-dom';
 
@@ -102,13 +103,14 @@ class CardItem extends Component {
 
     render() {
 
+
         if (this.props.cardData) {
             return (
                 <Card style={{maxWidth: "600px"}} className="md-block-centered">
                     {/* 작성자 정보 - 피드, 뉴스 */}
                     {this.cardAuthorInfo()}
 
-                    <Link to="/community/feed/view/0">
+                    <Link to={ this.props.list + '/view/' + 0 }>
                         {/* 이벤트 썸네일, 제목 */}
                         {this.cardEventTitle()}
 
@@ -142,4 +144,4 @@ class CardItem extends Component {
     }
 }
 
-export default CardItem;
+export default withRouter(CardItem);
