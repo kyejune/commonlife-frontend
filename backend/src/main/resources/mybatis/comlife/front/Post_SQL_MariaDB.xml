@@ -47,4 +47,28 @@
                 #{offset}
     </select>
 
+    <insert id="insertPost" parameterType="PostInfo">
+        INSERT
+        INTO    BOARD
+        (
+            BOARD_TYPE,
+            TITLE,
+            CONTENT,
+            USR_ID,
+            CMPLX_ID,
+            REG_DTTM,
+            UPD_DTTM
+        )
+        VALUES
+        (
+            #{boardType},
+            #{title},
+            #{content},
+            #{usrId},
+            0,
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
 </mapper>

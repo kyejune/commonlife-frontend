@@ -8,9 +8,7 @@ import com.kolon.comlife.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -32,7 +30,7 @@ public class PostController {
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public PaginateInfo getPostInJson(HttpServletRequest request) {
+    public PaginateInfo getPostsInJson(HttpServletRequest request) {
         String page = request.getParameter( "page" );
         if( page == null ) {
             page = "1";
@@ -78,5 +76,14 @@ public class PostController {
         paginateInfo.setData( postInfoList );
 
         return paginateInfo;
+    }
+
+    @PostMapping(
+            value = "/",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public PostInfo setPost(@RequestBody PostInfo post) {
+        // TODO: USR_ID 는 토큰 등을 통해서 전달받도록 추후 업데이트 필요
+        // TODO: 파일은 S3에 저장할 것인가? 저장 시점은 언제로 할 것인가?
+        return postService.setPost( post );
     }
 }
