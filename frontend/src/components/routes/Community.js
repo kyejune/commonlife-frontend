@@ -31,6 +31,7 @@ class Community extends Component{
     render(){
 
         let activeTabIndex = 0;
+
         let tabStr = this.props.location.pathname.split('/')[2];
         if( tabStr != null )
             activeTabIndex = this.state.tabs.indexOf( tabStr );
