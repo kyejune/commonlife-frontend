@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Repository("postDAO")
 public class PostDAO {
@@ -17,8 +18,12 @@ public class PostDAO {
         return null;
     }
 
-    public List<PostInfo> selectPostList(HttpServletRequest request) {
-        return sqlSession.selectList( "Post.selectPostList", request );
+    public int countPostList() {
+        return sqlSession.selectOne( "Post.countPostList" );
+    }
+
+    public List<PostInfo> selectPostList(Map params) {
+        return sqlSession.selectList( "Post.selectPostList", params );
     }
 
     public PostInfo insertPost(PostInfo post) {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 
 @Service("postService")
 public class PostServiceImpl implements PostService {
@@ -19,8 +20,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostInfo> getPostList(HttpServletRequest request) {
-        return postDAO.selectPostList( request );
+    public int countPostList() {
+        return postDAO.countPostList();
+    }
+
+    @Override
+    public List<PostInfo> getPostList(Map params) {
+        return postDAO.selectPostList( params );
     }
 
     @Override

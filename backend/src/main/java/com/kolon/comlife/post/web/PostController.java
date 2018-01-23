@@ -1,5 +1,6 @@
 package com.kolon.comlife.post.web;
 
+import com.kolon.comlife.common.model.PaginateInfo;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.post.service.PostService;
 import com.kolon.comlife.user.model.UserInfo;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/post/*")
@@ -29,9 +32,21 @@ public class PostController {
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PostInfo> getPostInJson(HttpServletRequest request) {
+    public PaginateInfo getPostInJson(HttpServletRequest request) {
+        String page = request.getParameter( "page" );
+        if( page == null ) {
+            page = "1";
+        }
+        int pageNum = Integer.parseInt( page );
+        int limit = 20;
+        int offset = limit * ( pageNum - 1 );
+
+        Map<String, Integer> paginationParams = new HashMap<String, Integer>();
+        paginationParams.put( "limit", limit );
+        paginationParams.put( "offset", offset );
+
         // 포스트 목록 추출
-        List<PostInfo> postInfoList = postService.getPostList( request );
+        List<PostInfo> postInfoList = postService.getPostList( paginationParams );
 
         // USR_ID 추출
         List<Integer> userIds = new ArrayList<Integer>();
@@ -39,18 +54,29 @@ public class PostController {
             userIds.add( e.getUsrId() );
         }
 
-        // 추출한 ID로 유저 정보 SELECT
-        List<UserInfo> userList = userService.getUserListById( userIds );
+        if( userIds.size() > 0 ) {
+            // 추출한 ID로 유저 정보 SELECT
+            List<UserInfo> userList = userService.getUserListById( userIds );
 
-        // 유저 정보 바인딩
-        for( PostInfo post : postInfoList ) {
-            for( UserInfo user : userList ) {
-                if( post.getUsrId() == user.getUsrId() ) {
-                    post.setUser( user );
+            // 유저 정보 바인딩
+            for( PostInfo post : postInfoList ) {
+                for( UserInfo user : userList ) {
+                    if( post.getUsrId() == user.getUsrId() ) {
+                        post.setUser( user );
+                    }
                 }
             }
         }
 
-        return postInfoList;
+        // 페이지네이션 계산
+        int countPosts = postService.countPostList();
+        double totalPages = Math.ceil( ( double ) countPosts / ( double ) limit );
+        PaginateInfo paginateInfo = new PaginateInfo();
+        paginateInfo.setCurrentPage( pageNum );
+        paginateInfo.setTotalPages( totalPages );
+        paginateInfo.setPerPage( limit );
+        paginateInfo.setData( postInfoList );
+
+        return paginateInfo;
     }
 }

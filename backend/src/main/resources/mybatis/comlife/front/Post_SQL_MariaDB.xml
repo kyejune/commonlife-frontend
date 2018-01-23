@@ -3,7 +3,14 @@
 
 <mapper namespace="Post">
 
-    <select id="selectPostList" parameterType="String" resultType="postInfo">
+    <select id="countPostList" resultType="java.lang.Integer">
+        SELECT
+                COUNT( * ) as COUNT
+        FROM
+                BOARD
+    </select>
+
+    <select id="selectPostList" parameterType="java.util.Map" resultType="postInfo">
         /* 공통게시판 리스트 조회 */
         SELECT
                 BOARD_IDX,
@@ -35,9 +42,9 @@
                 AND
                 DEL_YN = 'N'
         LIMIT
-                20
+                #{limit}
         OFFSET
-                0
+                #{offset}
     </select>
 
 </mapper>
