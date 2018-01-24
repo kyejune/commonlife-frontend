@@ -25,9 +25,9 @@ phases:
     #commands:
       # - command
       # - command
-#artifacts:
-  #files:
-    # - location
+artifacts:
+  files:
+    - backend/target/commonlife-0.1-SNAPSHOT.war
     # - location
   #discard-paths: yes
   #base-directory: location
