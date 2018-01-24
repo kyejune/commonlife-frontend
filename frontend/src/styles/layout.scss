@@ -1,0 +1,99 @@
+
+.app-content {
+  margin-top: 56px;
+  overflow: scroll;
+  transition: margin-top 0.6s ease-out;
+}
+
+/* Header */
+.App {
+
+
+  & > header{
+    transition: margin-top 0.6s ease-out;
+
+    .md-btn--icon{
+      padding: 0;
+    }
+
+  }
+
+
+
+  // 스크롤해서 위아래 메뉴 치울때,
+  &.cl-app--expand {
+
+    & > header {
+      margin-top: -56px;
+    }
+
+    .app-content{
+      margin-top: 0;
+    }
+
+    .cl-second-header{
+      margin-top: 0;
+    }
+
+    & > footer {
+      margin-bottom: -56px;
+    }
+
+    .cl-fitted-box{
+      max-height: calc( 100vh - 48px );
+    }
+  }
+
+}
+
+/* SubHeader */
+.cl-second-header {
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  margin-top: 56px;
+  transition: margin-top 0.6s ease-out;
+
+  & + .md-tabs-content {
+    padding-top: 40px;
+  }
+}
+
+
+.cl-fitted-box{
+  transition: max-height 0.6s ease-out;
+  max-height: calc( 100vh - 56px*2 - 48px );
+  width: 100%;
+}
+
+/* Footer */
+.App > footer {
+
+  background-color: #ffffff;
+  transition: margin-bottom 0.6s ease-out;
+
+  .footer__button--selected {
+    color: orange;
+  }
+}
+
+
+.cl-fixed-page{
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  z-index: 100;
+}
+
+
+.cl-content{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  margin-top: 56px;
+  height: calc( 100vh - 56px );
+  background-color: white;
+}
