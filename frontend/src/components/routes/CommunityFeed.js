@@ -1,23 +1,18 @@
 import React, { Component } from 'react';
 import {observer} from 'mobx-react';
 import { Button } from 'react-md';
-import WriteDrawer from "components/WriteDrawer";
+import WriteDrawer from "components/drawers/WriteDrawer";
 import CardItem from 'components/ui/CardItem';
 import Store from 'scripts/store';
 import DB from 'scripts/db';
+import BottomDrawer from "components/drawers/BottomDrawer";
+import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 
 class CommunityFeed extends Component {
 
     componentDidMount(){
 		DB.getFeed();
 	}
-
-	// onWriteChange ( isWrite ) {
-    //
-	// 	this.setState( {
-	// 		isWrite: isWrite,
-	// 	} )
-	// }
 
 
 	render () {
@@ -39,8 +34,11 @@ class CommunityFeed extends Component {
 						onClick={()=> Store.drawer = 'write' }
 				/>
 
-				<WriteDrawer
-					visible={ Store.drawer === 'write' }/>
+                <BottomDrawer visible={Store.drawer === 'write'} portal={true}>
+                    <DrawerContentHolder title="새글쓰기">
+                        <WriteDrawer/>
+                    </DrawerContentHolder>
+                </BottomDrawer>
 			</div>
 		)
 	}

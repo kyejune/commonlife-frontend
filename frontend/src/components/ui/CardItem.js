@@ -131,7 +131,10 @@ class CardItem extends Component {
 								<div className="col">
 									{/* Like */}
 									<Button flat className="cl-card-item__button"><span>Like</span>
-										<i>{this.props.cardData.like_count}</i></Button>
+                                        <Link to={this.props.list + '/like/' + 0 + '?count=' + this.props.cardData.like_count}>
+                                            <i>{this.props.cardData.like_count}</i>
+                                        </Link>
+                                    </Button>
 
 									{/* Share */}
 									{this.cardShare()}

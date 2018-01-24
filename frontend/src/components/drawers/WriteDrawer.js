@@ -3,13 +3,13 @@ import React, {Component} from 'react';
 import {Button, Drawer, Toolbar} from 'react-md';
 import {observer} from 'mobx-react';
 
-import BottomDrawer from 'components/BottomDrawer';
+import BottomDrawer from 'components/drawers/BottomDrawer';
 import addSrc from 'images/img-bt-gray@3x.png';
 import completeSrc from 'images/complete-bt-blueicon@3x.png';
 import previewSrc from 'images/img-preview-holder@3x.png';
 import Store from "scripts/store";
 
-class WriteDrawer extends Component {
+class WriteDrawer extends BottomDrawer {
 
     handleSubmit() {
         console.log('submit');
@@ -17,24 +17,13 @@ class WriteDrawer extends Component {
 
     render() {
 
-        return (
-
-            <BottomDrawer
-                type={Drawer.DrawerTypes.TEMPORARY}
-                visible={this.props.visible}
-                onVisibilityChange={()=>{}}
-                defaultMedia="mobile"
-                portal={true}
-                overlay={false}
-                className="cl-write"
-            >
-
-                <Toolbar
-                    colored
-                    fixed
-                    nav={<Button icon onClick={() => Store.drawer = '' }>close</Button>}
-                    title="새글 쓰기"
-                />
+        return <div>
+                {/*<Toolbar*/}
+                    {/*colored*/}
+                    {/*fixed*/}
+                    {/*nav={<Button icon onClick={() => Store.drawer = '' }>close</Button>}*/}
+                    {/*title="새글 쓰기"*/}
+                {/*/>*/}
 
                 <section className="cl-write-section dialogs__content">
 
@@ -58,10 +47,18 @@ class WriteDrawer extends Component {
 
 
                 </section>
-
-            </BottomDrawer>
-        )
+            </div>
     }
 }
 
 export default observer(WriteDrawer);
+
+// {/*<BottomDrawer*/}
+// {/*type={Drawer.DrawerTypes.TEMPORARY}*/}
+// {/*visible={this.props.visible}*/}
+// {/*onVisibilityChange={()=>{}}*/}
+// {/*defaultMedia="mobile"*/}
+// {/*portal={true}*/}
+// {/*overlay={false}*/}
+// {/*className="cl-write"*/}
+// {/*>*/}

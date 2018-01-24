@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import {observer} from 'mobx-react';
-import {TabsContainer, Tabs, Tab} from 'react-md';
+import {TabsContainer, Tabs, Tab, Drawer} from 'react-md';
 import {withRouter} from 'react-router';
 
 import CommunityFeed from './CommunityFeed';
 import CommunityNews from './CommunityNews';
 import CommunityEvent from './CommunityEvent';
-import CardItemDetailDrawer from "./CardItemDetailDrawer";
+import DrawerContentHolder from 'components/drawers/DrawerContentHolder';
+import CardItemDetail from "../drawers/CardItemDetail";
+import People from "../drawers/People";
 import Store from "scripts/store";
 
 class Community extends Component {
@@ -37,11 +39,19 @@ class Community extends Component {
                 activeTabIndex = this.state.tabs.indexOf(tabStr);
 
         } else if (paths.length >= 4) {
-            let detailStr = paths[3];
-            if (detailStr === 'view'){
-                Store.drawer = 'card-item-detail';
+
+            switch (paths[3]) {
+                case 'view':
+                    Store.drawer = 'card-item-detail';
+                    break;
+
+                case 'like':
+                    Store.drawer = 'people';
+                    break;
             }
         }
+
+        const Temp = <h1>111111111111</h1>;
 
         return (
             <div>
@@ -65,8 +75,21 @@ class Community extends Component {
                     </Tabs>
                 </TabsContainer>
 
-                <CardItemDetailDrawer
-                    visibility={ Store.drawer === 'card-item-detail' }/>
+                {/* 카드 상세보기 */}
+                <Drawer {...Store.customDrawerProps}
+                        visible={Store.drawer === 'card-item-detail'}>
+                    <DrawerContentHolder>
+                        <CardItemDetail/>
+                    </DrawerContentHolder>
+                </Drawer>
+
+                {/* Like 찍은 분들 */}
+                <Drawer visible={Store.drawer === 'people'}
+                        {...Store.customDrawerProps} >
+                    <DrawerContentHolder>
+                        <People/>
+                    </DrawerContentHolder>
+                </Drawer>
             </div>
         )
     }

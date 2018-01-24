@@ -6,9 +6,8 @@
 
 .cl-write-section{
 
-  padding-top:  56px;
   background-image: url("../images/bg-2-dark@2x.png");
-  height: 100%;
+  height: calc( 100vh - 56px );
 
   textarea{
     margin-top: 1em;

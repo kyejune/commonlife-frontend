@@ -19,17 +19,9 @@ class CardItemDetailDrawer extends Component{
 
     render(){
 
-        return <Drawer
-            type={Drawer.DrawerTypes.TEMPORARY}
-            visible={ Store.drawer === 'card-item-detail' }
-            onVisibilityChange={()=>{}}
-            defaultMedia="mobile"
-            portal={true}
-            overlay={false}
-            className="cl-card-detail"
-            position="right"
-        >
+        console.log( 'CardItemDetailDrawer', this.props );
 
+        return <div className="cl-card-detail">
             <Toolbar
                 colored
                 fixed
@@ -42,7 +34,7 @@ class CardItemDetailDrawer extends Component{
                 카드 아이템 뷰어
             </section>
 
-        </Drawer>
+        </div>
     }
 }
 
