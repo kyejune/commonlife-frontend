@@ -66,27 +66,8 @@
   position: relative;
   margin-right: 10px;
   border-radius: 0;
-  border: 0; }
-  .cl-card-item .md-avatar:before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -1px;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 10px 6px 0 0;
-    border-color: #ffffff transparent transparent transparent; }
-  .cl-card-item .md-avatar:after {
-    content: '';
-    position: absolute;
-    right: -1px;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 0 0 10px 6px;
-    border-color: transparent transparent #ffffff transparent; }
+  border: 0;
+  clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%); }
 
 .cl-card-item .md-card-title {
   padding: 15px; }

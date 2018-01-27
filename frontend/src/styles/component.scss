@@ -96,32 +96,33 @@
         border-radius: 0;
         border: 0;
 
-        // before, after 대체용
-        // clip-path: polygon(5% 5%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%);
+        clip-path: polygon( 15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
 
-        &:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -1px;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 10px 6px 0 0;
-            border-color: #ffffff transparent transparent transparent;
-        }
+        //clip-pa
 
-        &:after {
-            content: '';
-            position: absolute;
-            right: -1px;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border-style: solid;
-            border-width: 0 0 10px 6px;
-            border-color: transparent transparent #ffffff transparent;
-        }
+        //&:before {
+        //    content: '';
+        //    position: absolute;
+        //    top: 0;
+        //    left: -1px;
+        //    width: 0;
+        //    height: 0;
+        //    border-style: solid;
+        //    border-width: 10px 6px 0 0;
+        //    border-color: #ffffff transparent transparent transparent;
+        //}
+        //
+        //&:after {
+        //    content: '';
+        //    position: absolute;
+        //    right: -1px;
+        //    bottom: 0;
+        //    width: 0;
+        //    height: 0;
+        //    border-style: solid;
+        //    border-width: 0 0 10px 6px;
+        //    border-color: transparent transparent #ffffff transparent;
+        //}
     }
 
     .md-card-title {
