@@ -51,8 +51,6 @@ class Community extends Component {
             }
         }
 
-        const Temp = <h1>111111111111</h1>;
-
         return (
             <div>
 

@@ -34,7 +34,7 @@ class CommunityFeed extends Component {
 						onClick={()=> Store.drawer = 'write' }
 				/>
 
-                <BottomDrawer visible={Store.drawer === 'write'} portal={true}>
+                <BottomDrawer visible={Store.drawer === 'write'} onVisibilityChange={()=>{}} portal={true}>
                     <DrawerContentHolder title="새글쓰기">
                         <WriteDrawer/>
                     </DrawerContentHolder>

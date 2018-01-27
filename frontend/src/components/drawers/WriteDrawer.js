@@ -1,13 +1,11 @@
 /* WriteDrawer.jsx */
-import React, {Component} from 'react';
-import {Button, Drawer, Toolbar} from 'react-md';
+import React from 'react';
 import {observer} from 'mobx-react';
 
 import BottomDrawer from 'components/drawers/BottomDrawer';
 import addSrc from 'images/img-bt-gray@3x.png';
 import completeSrc from 'images/complete-bt-blueicon@3x.png';
 import previewSrc from 'images/img-preview-holder@3x.png';
-import Store from "scripts/store";
 
 class WriteDrawer extends BottomDrawer {
 
@@ -18,12 +16,6 @@ class WriteDrawer extends BottomDrawer {
     render() {
 
         return <div>
-                {/*<Toolbar*/}
-                    {/*colored*/}
-                    {/*fixed*/}
-                    {/*nav={<Button icon onClick={() => Store.drawer = '' }>close</Button>}*/}
-                    {/*title="새글 쓰기"*/}
-                {/*/>*/}
 
                 <section className="cl-write-section dialogs__content">
 

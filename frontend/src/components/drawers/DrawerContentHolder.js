@@ -1,6 +1,6 @@
 /* DrawerContentHolder.jsx */
 import React, {Component} from 'react';
-import {Button, Drawer, Toolbar} from 'react-md';
+import {Button, Toolbar} from 'react-md';
 import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
 import Store from "scripts/store";
@@ -21,7 +21,6 @@ class DrawerContentHolder extends Component {
 
     render() {
 
-        console.log( 'holder:', this.props.match.params.drawer );
         let CustomHeader = null;
         if( this.props.match.params.drawer === 'like' ){
 

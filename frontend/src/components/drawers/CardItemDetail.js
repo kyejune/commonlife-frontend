@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
-import { Button, Drawer, Toolbar} from "react-md";
+import { Button, Toolbar} from "react-md";
 import Store from "scripts/store";
 
 
