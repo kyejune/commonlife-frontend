@@ -19,7 +19,6 @@ const Store = observable({
         defaultMedia: 'mobile',
         portal: true,
         position: 'right',
-        // overlary: false,
     },
 
 });

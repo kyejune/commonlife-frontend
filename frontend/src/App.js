@@ -29,7 +29,7 @@ class App extends Component {
     }
 
 
-    componentDidMount() {
+    componentWillMount() {
 
         document.addEventListener('scroll', () => {
             let doc = document.querySelector('.react-swipeable-view-container>div[aria-hidden=false]');
@@ -41,7 +41,7 @@ class App extends Component {
         }, true);
 
         Store.startAt = this.state.history.location.pathname || '/community';
-        this.state.history.replace('/community');
+        this.state.history.replace( Store.startAt );
     }
 
     render() {

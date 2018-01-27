@@ -19,43 +19,46 @@ class Community extends Component {
         this.state = {
             name: 'community',
             tabs: ['feed', 'event', 'news'],
+            tabIndex: 0,
+            drawer: '',
         }
     }
 
     onTabChange = (activeTabIndex) => {
+        console.log( 'tab change:', activeTabIndex );
         let path = '/' + this.state.name + '/' + this.state.tabs[activeTabIndex];
         this.props.history.replace(path);
-    };
+    }
+
+    componentDidMount(){
+        this.updateRoute();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location)
+            this.updateRoute();
+    }
+
+    updateRoute(){
+        console.log( this.props.location.pathname );
+        let paths = this.props.location.pathname.match(/\w+/g)||['community','feed'];
+
+        const drawers = { view:'card-item-detail', like:'people' };
+        Store.drawer = drawers[paths[2]];
+
+        this.setState({
+            drawer: Store.drawer || '',
+            tabIndex: this.state.tabs.indexOf( paths[1] || 'feed' )
+        });
+    }
 
     render() {
 
-        let activeTabIndex = 0;
-
-        let paths = this.props.location.pathname.split('/');
-
-        if (paths.length === 3) {
-            let tabStr = paths[2];
-            if (tabStr != null)
-                activeTabIndex = this.state.tabs.indexOf(tabStr);
-
-        } else if (paths.length >= 4) {
-
-            switch (paths[3]) {
-                case 'view':
-                    Store.drawer = 'card-item-detail';
-                    break;
-
-                case 'like':
-                    Store.drawer = 'people';
-                    break;
-            }
-        }
 
         return (
             <div>
-
                 <TabsContainer panelClassName="md-grid" colored
-                               activeTabIndex={activeTabIndex}
+                               activeTabIndex={this.state.tabIndex}
                                onTabChange={index => this.onTabChange(index)}>
                     <Tabs tabId="simple-tab"
                           mobile={true}
@@ -75,15 +78,15 @@ class Community extends Component {
 
                 {/* 카드 상세보기 */}
                 <Drawer {...Store.customDrawerProps}
-                        visible={Store.drawer === 'card-item-detail'}>
+                        visible={this.state.drawer.toString() === 'card-item-detail'}>
                     <DrawerContentHolder>
                         <CardItemDetail/>
                     </DrawerContentHolder>
                 </Drawer>
 
                 {/* Like 찍은 분들 */}
-                <Drawer visible={Store.drawer === 'people'}
-                        {...Store.customDrawerProps} >
+                <Drawer {...Store.customDrawerProps}
+                        visible={this.state.drawer.toString() === 'people'}>
                     <DrawerContentHolder>
                         <People/>
                     </DrawerContentHolder>
