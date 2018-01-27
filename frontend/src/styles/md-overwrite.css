@@ -229,6 +229,17 @@ caption, .md-caption {
   width: 100%;
   transform: translate3d(0, 100%, 0); }
 
+.md-drawer header .md-btn {
+  min-width: auto; }
+
+.md-drawer .md-title--toolbar {
+  width: calc( 100% - 36px*2);
+  text-align: center;
+  margin: 0; }
+
+.md-btn {
+  padding: 0; }
+
 .md-drawer--fixed {
   bottom: initial; }
 

@@ -25,7 +25,6 @@ class Community extends Component {
     }
 
     onTabChange = (activeTabIndex) => {
-        console.log( 'tab change:', activeTabIndex );
         let path = '/' + this.state.name + '/' + this.state.tabs[activeTabIndex];
         this.props.history.replace(path);
     }
@@ -40,7 +39,7 @@ class Community extends Component {
     }
 
     updateRoute(){
-        console.log( this.props.location.pathname );
+
         let paths = this.props.location.pathname.match(/\w+/g)||['community','feed'];
 
         const drawers = { view:'card-item-detail', like:'people' };
@@ -79,7 +78,7 @@ class Community extends Component {
                 {/* 카드 상세보기 */}
                 <Drawer {...Store.customDrawerProps}
                         visible={this.state.drawer.toString() === 'card-item-detail'}>
-                    <DrawerContentHolder>
+                    <DrawerContentHolder back>
                         <CardItemDetail/>
                     </DrawerContentHolder>
                 </Drawer>
@@ -87,7 +86,7 @@ class Community extends Component {
                 {/* Like 찍은 분들 */}
                 <Drawer {...Store.customDrawerProps}
                         visible={this.state.drawer.toString() === 'people'}>
-                    <DrawerContentHolder>
+                    <DrawerContentHolder back>
                         <People/>
                     </DrawerContentHolder>
                 </Drawer>

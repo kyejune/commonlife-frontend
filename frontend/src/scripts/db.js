@@ -22,10 +22,15 @@ export default {
         setTimeout( ()=>{
             Store.event = event;
         }, 1000 );
+    },
+
+
+    /* 글보기 */
+    getCardContent( type, index, callback ){
+        setTimeout( ()=>{
+            callback( feed[index] );
+        }, 500 );
     }
-
-
-
 
 };
 

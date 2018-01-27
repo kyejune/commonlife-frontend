@@ -93,7 +93,7 @@ class CardItem extends Component {
 	cardRsvp = ()=> {
 		if( this.props.cardData.type === 'event' ) {
 			return (
-				<Button flat className="cl-card-item__rsvp"></Button>
+				<Button flat className="cl-icon cl-card-item__rsvp"/>
 			);
 		}
 		else {
@@ -103,7 +103,6 @@ class CardItem extends Component {
 
 	render () {
 
-
 		if( this.props.cardData ) {
 			return (
 				<div className="cl-card-item">
@@ -111,7 +110,7 @@ class CardItem extends Component {
 						{/* 작성자 정보 - 피드, 뉴스 */}
 						{this.cardAuthorInfo()}
 
-						<Link to={this.props.list + '/view/' + 0}>
+						<Link to={this.props.list + '/view/' + this.props.cardData.index }>
 							{/* 이벤트 썸네일, 제목 */}
 							{this.cardEventTitle()}
 

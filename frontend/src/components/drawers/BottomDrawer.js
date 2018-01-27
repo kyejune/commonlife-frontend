@@ -14,6 +14,7 @@ class BottomDrawer extends Drawer{
         Drawer.defaultProps.position = 'bottom';
         super(props);
     }
+
     render(){
         return super.render()
     }

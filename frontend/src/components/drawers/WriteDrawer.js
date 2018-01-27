@@ -9,48 +9,33 @@ import previewSrc from 'images/img-preview-holder@3x.png';
 
 class WriteDrawer extends BottomDrawer {
 
-    handleSubmit() {
-        console.log('submit');
-    }
-
     render() {
 
         return <div>
 
-                <section className="cl-write-section dialogs__content">
+            <section className="cl-write-section dialogs__content">
 
-                    <textarea name="" id="" cols="30" rows="5" placeholder="새로운 글을 작성해 보세요."/>
-
-
-                    <footer>
-                        <div className="cl-preview-holder">
-                            <img src={previewSrc} alt="이미지 미리보기" width="52" height="52"/>
-                            <button>이미지 삭제</button>
-                        </div>
-                        <div className="cl-write-toolbar cl-flex-between">
-                            <button>
-                                <img src={addSrc} alt="이미지 추가" width="139" height="36"/>
-                            </button>
-                            <button>
-                                <img src={completeSrc} alt="이미지 추가" width="97" height="36"/>
-                            </button>
-                        </div>
-                    </footer>
+                <textarea name="" id="" cols="30" rows="5" placeholder="새로운 글을 작성해 보세요."/>
 
 
-                </section>
-            </div>
+                <footer className="cl-flex-between">
+                    <div className="cl-preview-holder">
+                        <img src={previewSrc} alt="이미지 미리보기" width="52" height="52"/>
+                        <button>이미지 삭제</button>
+                    </div>
+
+                    <button>
+                        <img src={addSrc} alt="이미지 추가" width="139" height="36"/>
+                    </button>
+                    <button>
+                        <img src={completeSrc} alt="이미지 추가" width="97" height="36"/>
+                    </button>
+                </footer>
+
+
+            </section>
+        </div>
     }
 }
 
 export default observer(WriteDrawer);
-
-// {/*<BottomDrawer*/}
-// {/*type={Drawer.DrawerTypes.TEMPORARY}*/}
-// {/*visible={this.props.visible}*/}
-// {/*onVisibilityChange={()=>{}}*/}
-// {/*defaultMedia="mobile"*/}
-// {/*portal={true}*/}
-// {/*overlay={false}*/}
-// {/*className="cl-write"*/}
-// {/*>*/}

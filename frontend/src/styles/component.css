@@ -1,10 +1,32 @@
 @charset "UTF-8";
+/* Drawer */
+.md-drawer {
+  background-image: url("../images/bg-2-dark@2x.png");
+  color: white; }
+  .md-drawer a {
+    color: #BDA45E;
+    text-decoration: underline; }
+  .md-drawer img {
+    vertical-align: middle; }
+  .md-drawer footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 20;
+    height: 50px;
+    background-color: #eeeeee;
+    padding: 7px 16px;
+    align-items: center;
+    color: #4a4a4a; }
+    .md-drawer footer .cl-strong {
+      color: #5F5F5F;
+      font-weight: bolder; }
+
 /* 새글 쓰기 */
 .cl-write {
   height: 100vh; }
 
 .cl-write-section {
-  background-image: url("../images/bg-2-dark@2x.png");
   height: calc( 100vh - 56px); }
   .cl-write-section textarea {
     margin-top: 1em;
@@ -14,15 +36,13 @@
     font-size: 18px;
     color: white;
     background-color: transparent; }
-  .cl-write-section footer {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 20; }
 
 .cl-preview-holder {
+  position: absolute;
   padding-left: 15px;
-  padding-bottom: 20px; }
+  padding-bottom: 20px;
+  bottom: 50px;
+  left: 0; }
   .cl-preview-holder img, .cl-preview-holder button {
     display: inline-block;
     vertical-align: middle; }
@@ -30,11 +50,6 @@
     color: #77787A;
     font-size: 12px;
     text-decoration: underline; }
-
-.cl-write-toolbar {
-  height: 50px;
-  background-color: #eeeeee;
-  padding: 7px 0; }
 
 /*
  * 카드아이템
@@ -116,14 +131,6 @@
 .cl-card-item .h-group {
   width: 100%; }
 
-.cl-card-item .cl-card-item__rsvp {
-  min-width: 56px;
-  height: 28px;
-  margin: 0;
-  padding: 0;
-  background-image: url("../images/rsvp-copy@3x.png");
-  background-size: 66px; }
-
 .cl-card-item__button {
   position: relative;
   min-width: 56px;
@@ -142,14 +149,45 @@
     top: 5px;
     width: 17px;
     height: 17px;
-    padding-top: 2px;
     border-radius: 50%;
     background-color: #f4ca5c;
     font-size: 9px;
     font-style: normal;
     text-align: center;
-    color: #000000; }
+    color: #000000;
+    line-height: 17px; }
   .cl-card-item__button:hover {
     color: #000000; }
     .cl-card-item__button:hover span {
       border-bottom: 2px solid #f4ca5c; }
+
+/* Content Holder */
+.cl-back__button {
+  padding: 0;
+  text-align: left; }
+
+/* Card Item Detail */
+.cl-card-detail {
+  height: calc( 100vh - 106px);
+  overflow: auto; }
+  .cl-card-detail .cl-info {
+    background-color: #F4F4F4;
+    padding: 16px;
+    padding-bottom: 10px; }
+    .cl-card-detail .cl-info > h3 {
+      border-bottom: 1px solid #cfcfcf;
+      padding-bottom: 34px;
+      font-weight: bold;
+      color: #000000; }
+  .cl-card-detail .cl-content--card {
+    padding: 16px;
+    min-height: 100px; }
+
+/* Icon */
+.cl-icon.cl-card-item__rsvp {
+  min-width: 56px;
+  height: 28px;
+  margin: 0;
+  padding: 0;
+  background-image: url("../images/rsvp-copy@3x.png");
+  background-size: 66px; }

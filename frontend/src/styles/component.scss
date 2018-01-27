@@ -1,3 +1,37 @@
+/* Drawer */
+.md-drawer{
+
+  background-image: url("../images/bg-2-dark@2x.png");
+  color: white;
+
+  a{
+    color: #BDA45E;
+    text-decoration: underline;
+  }
+
+  img{
+    vertical-align: middle;
+  }
+
+  footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 20;
+    height: 50px;
+    background-color: #eeeeee;
+    padding: 7px 16px;
+    align-items: center;
+    color: #4a4a4a;
+
+    .cl-strong{
+      color: #5F5F5F;
+      font-weight: bolder;
+    }
+  }
+}
+
+
 
 /* 새글 쓰기 */
 .cl-write{
@@ -6,7 +40,7 @@
 
 .cl-write-section{
 
-  background-image: url("../images/bg-2-dark@2x.png");
+  //background-image: url("../images/bg-2-dark@2x.png");
   height: calc( 100vh - 56px );
 
   textarea{
@@ -18,19 +52,15 @@
     color: white;
     background-color: transparent;
   }
-
-  footer{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 20;
-  }
 }
 
 .cl-preview-holder{
 
+  position: absolute;
   padding-left: 15px;
   padding-bottom: 20px;
+  bottom: 50px;
+  left: 0;
 
   img, button{
     display: inline-block;
@@ -44,11 +74,6 @@
   }
 }
 
-.cl-write-toolbar{
-  height: 50px;
-  background-color: #eeeeee;
-  padding: 7px 0;
-}
 
 /*
  * 카드아이템
@@ -70,6 +95,9 @@
         margin-right: 10px;
         border-radius: 0;
         border: 0;
+
+        // before, after 대체용
+        // clip-path: polygon(5% 5%, 100% 0%, 100% 75%, 75% 75%, 75% 100%, 50% 75%, 0% 75%);
 
         &:before {
             content: '';
@@ -155,15 +183,6 @@
     .h-group {
         width: 100%;
     }
-
-    .cl-card-item__rsvp {
-        min-width: 56px;
-        height: 28px;
-        margin: 0;
-        padding: 0;
-        background-image: url("../images/rsvp-copy@3x.png");
-        background-size: 66px;
-    }
 }
 
 .cl-card-item__button {
@@ -187,13 +206,13 @@
         top: 5px;
         width: 17px;
         height: 17px;
-        padding-top: 2px;
         border-radius: 50%;
         background-color: #f4ca5c;
         font-size: 9px;
         font-style: normal;
         text-align: center;
         color: #000000;
+        line-height: 17px;
     }
 
     &:hover {
@@ -204,3 +223,58 @@
         }
     }
 }
+
+
+/* Content Holder */
+.cl-back__button{
+  padding: 0;
+  text-align: left;
+}
+
+
+
+
+/* Card Item Detail */
+.cl-card-detail{
+
+  height: calc( 100vh - 106px );
+  overflow: auto;
+
+  .cl-info{
+    background-color: #F4F4F4;
+    padding: 16px;
+    padding-bottom: 10px;
+
+    &>h3{
+      border-bottom: 1px solid #cfcfcf;
+      padding-bottom: 34px;
+      font-weight: bold;
+      color: #000000;
+    }
+  }
+
+  .cl-content--card{
+    padding: 16px;
+    min-height: 100px;
+  }
+
+}
+
+
+
+
+
+/* Icon */
+.cl-icon{
+
+  &.cl-card-item__rsvp{
+    min-width: 56px;
+    height: 28px;
+    margin: 0;
+    padding: 0;
+    background-image: url("../images/rsvp-copy@3x.png");
+    background-size: 66px;
+  }
+
+}
+
