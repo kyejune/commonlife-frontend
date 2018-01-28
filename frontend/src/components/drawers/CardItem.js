@@ -5,6 +5,16 @@ import { Link } from 'react-router-dom';
 
 class CardItem extends Component {
 
+	// 카드 종류
+	cardName = ()=> {
+		if( this.props.cardData.type === 'brand') {
+			return 'cl-card-item cl-card-item--brand';
+		}
+		else {
+			return 'cl-card-item';
+		}
+	};
+
 	// 피드, 뉴스 작성자 정보
 	cardAuthorInfo = ()=> {
 		if( this.props.cardData.type !== 'event' ) {
@@ -27,6 +37,21 @@ class CardItem extends Component {
 	// 이벤트 썸네일, 제목
 	cardEventTitle = ()=> {
 		if( this.props.cardData.type === "event" ) {
+			return (
+				<div>
+					<Media>
+						<img src={this.props.cardData.thumbnail} alt="이벤트 썸네일"/>
+						<MediaOverlay>
+							<CardTitle
+								// 이벤트 제목
+								title={this.props.cardData.event_title}
+							/>
+						</MediaOverlay>
+					</Media>
+				</div>
+			);
+		}
+		if( this.props.cardData.type === "brand" ) {
 			return (
 				<div>
 					<Media>
@@ -105,7 +130,7 @@ class CardItem extends Component {
 
 		if( this.props.cardData ) {
 			return (
-				<div className="cl-card-item">
+				<div className={this.cardName()}>
 					<Card style={{ maxWidth: "600px" }} className="md-block-centered">
 						{/* 작성자 정보 - 피드, 뉴스 */}
 						{this.cardAuthorInfo()}
@@ -129,8 +154,9 @@ class CardItem extends Component {
 							<div className="h-group">
 								<div className="col">
 									{/* Like */}
-									<Button flat className="cl-card-item__button"><span>Like</span>
-                                        <Link to={this.props.list + '/like/' + 0 + '?count=' + this.props.cardData.like_count}>
+									<Button flat className="cl-card-item__button">
+										<span>Like</span>
+                                        <Link to={this.props.list + '/like/' + this.props.cardData.index}>
                                             <i>{this.props.cardData.like_count}</i>
                                         </Link>
                                     </Button>

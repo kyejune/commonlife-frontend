@@ -17,7 +17,7 @@ body {
   position: fixed;
   bottom: 2em;
   right: 1em;
-  z-index: 1; }
+  z-index: 9; }
 
 .cl-bg--write {
   background-color: rgba(0, 0, 0, 0.3); }

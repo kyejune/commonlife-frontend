@@ -162,6 +162,7 @@
         h2 {
             position: absolute;
             bottom: 10px;
+            width: calc(100% - 30px);
         }
     }
 
@@ -216,6 +217,7 @@
     }
 
     &:hover {
+        background: transparent;
         color: #000000;
 
         span {
@@ -224,6 +226,42 @@
     }
 }
 
+.cl-card-item--brand {
+    position: relative;
+
+    .md-card-text {
+        display: none;
+    }
+
+    .md-dialog-footer--card.md-dialog-footer--inline {
+        position: absolute;
+        bottom: 0;
+        z-index: 9;
+        width: 100%;
+    }
+
+    hr {
+        position: absolute;
+        bottom: 55px;
+        z-index: 9;
+        width: calc(100% - 30px);
+        opacity: 0.7;
+    }
+
+    .md-media-overlay {
+        h2 {
+            bottom: 77px;
+        }
+    }
+
+    .cl-card-item__button {
+        color: #8b9da7;
+
+        span {
+            border-color: transparent;
+        }
+    }
+}
 
 /* Content Holder */
 .cl-back__button{
@@ -277,4 +315,3 @@
   }
 
 }
-

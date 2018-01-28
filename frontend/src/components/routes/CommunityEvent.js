@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {observer} from 'mobx-react';
-import CardItem from 'components/ui/CardItem';
-import DB from "scripts/db";
+import CardItem from 'components/drawers/CardItem';
 import Store from "scripts/store";
+import DB from "scripts/db";
 
 class CommunityEvent extends Component {
 
