@@ -1,4 +1,4 @@
 .cache
 /dist
 /www
-src/**/* .css
+src/**/*.css

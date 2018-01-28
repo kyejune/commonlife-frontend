@@ -10,7 +10,7 @@ class CardItemDetailDrawer extends Component {
 
     componentWillMount() {
 
-        DB.getCardContent('temp', this.props.match.params.id, data => {
+        DB.getCardContent( this.props.match.params.tab, this.props.match.params.id, data => {
 
             this.setState(data);
             this.props.updateTitle(data.content || data.event_title); // ContentHolder에 전달
