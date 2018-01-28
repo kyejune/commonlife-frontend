@@ -53,6 +53,34 @@ body{
 
 
 /* Helper */
+
+.cl-dynamic-lines{
+  white-space: initial;
+  box-sizing: content-box;
+}
+
+
+/* 말줄임 표시 */
+.cl-ellipsis{
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  word-wrap:normal;
+  width:100%;
+  overflow:hidden;
+}
+
+
+/* 여러줄 말줄임 표시 */
+@for $i from 2 to 5 {
+
+  .cl-ellipsis--#{$i}{
+
+  }
+
+}
+
+
+/* 마진 & 패딩 설정 */
 @for $i from 0 to 11 {
   .m-#{$i}em { margin: #{$i}em; }
   .mt-#{$i}em { margin-top: #{$i}em; }

@@ -69,6 +69,7 @@ class DrawerContentHolder extends Component {
                     fixed
                     nav={CloseButton}
                     title={ this.state.title }
+                    titleClassName="cl-ellipsis"
                     children={ CustomHeader }
                 />
 

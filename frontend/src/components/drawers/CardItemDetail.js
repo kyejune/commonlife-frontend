@@ -35,7 +35,7 @@ class CardItemDetailDrawer extends Component {
 
             <div className="cl-info">
 
-                <h3>{this.state.content || this.state.event_title}</h3>
+                <h3 className="cl-dynamic-lines">{this.state.content || this.state.event_title}</h3>
 
                 <div className="cl-black">
                     <span className="cl-bold mr-1em">12월 28일(수)</span>
