@@ -29,7 +29,7 @@ export default {
     getCardContent( type, index, callback ){
         axios.get( '/dummy/feed.json' )
             .then( response => {
-                callback( response.data );
+                callback( response.data[0] );
                 } );
     },
 

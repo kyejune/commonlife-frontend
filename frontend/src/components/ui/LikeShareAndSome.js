@@ -20,14 +20,10 @@ export default class LikeShareAndSome extends Component{
             Some = <Button flat inkDisabled className="cl-icon cl-card-item__rsvp"/>;
 
         else if( this.props.qa )
-            Some = <Button flat inkDisabled className="cl-mrn--16">
-                <img src={qaSrc} alt="문의하기" height="36"/>
-            </Button>;
+            Some = <Button inkDisabled className="cl-mrn--32" iconEl={<img src={qaSrc} alt="문의하기" height="36"/>}/>;
 
         else if( this.props.schedule )
-            Some = <Button inkDisabled className="cl-mrn--16">
-                <img src={calSrc} alt="달력에추가" height="36"/>
-            </Button>;
+            Some = <Button inkDisabled className="cl-mrn--32" iconEl={<img src={calSrc} alt="달력에추가" height="36"/>}/>;
 
 
         return <div className="cl-flex-between">
