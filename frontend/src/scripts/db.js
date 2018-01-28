@@ -25,12 +25,21 @@ export default {
 			} );
     },
 
-
     /* 글보기 */
     getCardContent( type, index, callback ){
-        setTimeout( ()=>{
-            callback( feed[index] );
-        }, 500 );
+        axios.get( '/dummy/feed.json' )
+            .then( response => {
+                callback( response.data );
+                } );
+    },
+
+    /* Likey */
+    getLikey( id, callback ) {
+        axios.get( '/dummy/likey.json' )
+            .then( response => {
+            	callback( response.data );
+				// Store.likey = response.data;
+            } );
     }
 
 };

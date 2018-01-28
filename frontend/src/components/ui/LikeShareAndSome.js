@@ -20,7 +20,7 @@ export default class LikeShareAndSome extends Component{
             Some = <Button flat inkDisabled className="cl-icon cl-card-item__rsvp"/>;
 
         else if( this.props.qa )
-            Some = <Button inkDisabled className="cl-mrn--16">
+            Some = <Button flat inkDisabled className="cl-mrn--16">
                 <img src={qaSrc} alt="문의하기" height="36"/>
             </Button>;
 

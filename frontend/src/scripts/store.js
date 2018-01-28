@@ -8,6 +8,9 @@ const Store = observable({
     event: [],
     news: [],
 
+	/* likey */
+	likey: [],
+
     /* 현재 열려있는 Drawer */
     drawer: '',
     drawerOptions: null,

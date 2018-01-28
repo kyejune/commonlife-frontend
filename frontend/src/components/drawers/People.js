@@ -1,17 +1,41 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
-import { Button, Drawer, Toolbar} from "react-md";
+import DB from "scripts/db";
+import LikeList from 'components/drawers/LikeList';
+import {observer} from 'mobx-react';
 
 
 class People extends Component{
 
+	constructor( props ) {
+		super( props );
+
+		this.state = {
+			likey: [],
+		}
+	}
+
+	componentWillMount(){
+		DB.getLikey( 1, data => {
+			this.setState( { likey: data } );
+		});
+	}
+
     render(){
 
-        return <div>
+        return (
+        	<div>
                 {this.props.match.params.id }번 아이디 게시물의 사람,사람,사람,,, 을 출력해주세여.
+
+				{ this.state.likey.map( ( like, index ) => {
+					return (
+						<LikeList key={index} likeData={like}/>
+					)
+				} ) }
             </div>
+		)
     }
 }
 
 
-export default withRouter(People);
+export default observer(withRouter(People));
