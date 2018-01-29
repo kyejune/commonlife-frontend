@@ -24,6 +24,7 @@
   &.cl-app--expand {
 
     & > header {
+      transition-delay: 0.4s;
       margin-top: -56px;
     }
 
@@ -32,6 +33,7 @@
     }
 
     .cl-second-header{
+      transition-delay: 0.4s;
       margin-top: 0;
     }
 
