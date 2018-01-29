@@ -5041,3 +5041,50 @@ body {
   padding: 0;
   background-image: url("images/rsvp-copy@3x.png");
   background-size: 66px; }
+
+/* Like Lisk */
+.cl-like__header {
+  height: 10px; }
+
+.cl-like__dim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -9;
+  width: 100vw;
+  height: 100vh;
+  background-color: #2e3137;
+  opacity: 0.7; }
+
+.cl-like__hr {
+  border-bottom: 1px solid #ffffff;
+  opacity: 0.1; }
+
+.cl-like__item {
+  margin: 14px 0; }
+
+.cl-like__avatar {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-left: 22px;
+  border-radius: 0;
+  border: 0;
+  clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%); }
+
+.cl-like__name {
+  text-align: center;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0 12px; }
+
+.cl-like__place {
+  width: calc(100% - 190px); }
+
+.cl-like__arrow {
+  width: 24px;
+  height: 24px;
+  margin-right: 18px;
+  background-image: url("images/ic-favorite-24-px@3x.png");
+  background-repeat: no-repeat;
+  background-size: 24px; }
