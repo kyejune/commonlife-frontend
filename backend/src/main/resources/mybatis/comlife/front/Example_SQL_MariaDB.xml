@@ -13,7 +13,9 @@
         WHERE   name = #{name}
     </select>
 
-    <insert id="insertExample" parameterType="ExampleInfo">
+    <!-- useGeneratedKeys="true", keyProperty="id" 설정하여, 반환 값으로 auto increment된 key값(id)를 반한 합니다. -->
+    <!-- 참조: https://taetaetae.github.io/2017/04/04/mybatis-useGeneratedKeys/ -->
+    <insert id="insertExample" useGeneratedKeys="true" keyProperty="id" parameterType="ExampleInfo">
         INSERT
         INTO    EXAMPLE
                 ( name )

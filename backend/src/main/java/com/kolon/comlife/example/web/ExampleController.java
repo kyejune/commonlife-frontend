@@ -4,7 +4,10 @@ import com.kolon.comlife.example.model.ExampleInfo;
 import com.kolon.comlife.example.service.ExampleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -33,11 +36,29 @@ public class ExampleController {
         return exampleInfoList;
     }
 
+//    @PostMapping(
+//            value = "/",
+//            produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ExampleInfo setExampleInJson(@RequestBody ExampleInfo example) {
+//        return exampleService.setExample(example);
+//    }
+
     @PostMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ExampleInfo setExampleInJson(@RequestBody ExampleInfo example) {
-        return exampleService.setExample(example);
+    public ResponseEntity<ExampleInfo> setExampleInJson(@RequestBody ExampleInfo example) {
+        ExampleInfo info;
+
+        try {
+            info = exampleService.setExample(example);
+        } catch (org.springframework.dao.DuplicateKeyException dupKeyEx) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+
+        // @ResponseBody 대신 ResponseEntity로 HttpStatus 및 body를 함께 반환 할 수 있습니다
+        // 참조 : https://stackoverflow.com/questions/16232833/how-to-respond-with-http-400-error-in-a-spring-mvc-responsebody-method-returnin
+        logger.debug(">> " + info);
+        return ResponseEntity.status(HttpStatus.CREATED).body(info);
     }
 
     @GetMapping(
