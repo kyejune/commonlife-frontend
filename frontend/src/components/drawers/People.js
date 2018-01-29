@@ -25,13 +25,15 @@ class People extends Component{
 
         return (
         	<div>
-                {this.props.match.params.id }번 아이디 게시물의 사람,사람,사람,,, 을 출력해주세여.
-
+                {/*{this.props.match.params.id }번 아이디 게시물의 사람,사람,사람,,, 을 출력해주세여.*/}
+				<div className="cl-like__header"/>
 				{ this.state.likey.map( ( like, index ) => {
 					return (
 						<LikeList key={index} likeData={like}/>
 					)
 				} ) }
+
+				<div className="cl-like__dim"/>
             </div>
 		)
     }
