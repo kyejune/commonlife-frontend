@@ -22,6 +22,18 @@
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </context:component-scan>
 
+    <!-- todo: CORS 설정을 필요한 api 대해서 제한적으로 오픈합니다. -->
+    <mvc:cors>
+        <mvc:mapping
+                path="/example/**"
+                allowed-methods="GET, POST, PUT, DELETE"
+        />
+        <mvc:mapping
+                path="/post/**"
+                allowed-methods="GET, POST, PUT, DELETE"
+        />
+    </mvc:cors>
+
     <mvc:annotation-driven />
 
     <!-- MultipartResolver -->

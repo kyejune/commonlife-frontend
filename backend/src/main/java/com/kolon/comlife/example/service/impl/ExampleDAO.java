@@ -39,10 +39,9 @@ public class ExampleDAO {
         return this.example;
     }
 
-    public ExampleInfo updateExample(ExampleInfo updateExample) {
+    public int updateExample(ExampleInfo updateExample) {
         this.example = updateExample;
-        sqlSession.update("Example.updateExample", this.example);
-        return this.example;
+        return sqlSession.update("Example.updateExample", this.example);
     }
 
     public void deleteExample(ExampleInfo deleteExample) {

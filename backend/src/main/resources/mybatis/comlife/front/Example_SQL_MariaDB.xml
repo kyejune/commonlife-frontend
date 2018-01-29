@@ -22,21 +22,10 @@
         VALUES  ( #{name} )
     </insert>
 
-    <!--
-    TODO: 현재 pk가 없어서 update 처리하기가 곤란. 향후 업데이트
-    <update id="updateExample" parameterType="ExampleInfo">
+    <update id="updateExample" useGeneratedKeys="true" keyProperty="id" parameterType="ExampleInfo">
         UPDATE  EXAMPLE
         SET     name = #{name}
-        WHERE   name = #{key}
-    </update>
-    -->
-
-    <!-- TODO: 임시로 update 시 insert 처리 -->
-    <update id="updateExample" parameterType="ExampleInfo">
-        INSERT
-        INTO    EXAMPLE
-                ( name )
-        VALUES  ( #{name} )
+        WHERE   id = #{id}
     </update>
 
     <delete id="deleteExample" parameterType="ExampleInfo">
