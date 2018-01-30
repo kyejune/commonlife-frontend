@@ -4787,12 +4787,14 @@ body {
     padding: 0; }
 
 .App.cl-app--expand > header {
+  transition-delay: 0.4s;
   margin-top: -56px; }
 
 .App.cl-app--expand .app-content {
   margin-top: 0; }
 
 .App.cl-app--expand .cl-second-header {
+  transition-delay: 0.4s;
   margin-top: 0; }
 
 .App.cl-app--expand > footer {

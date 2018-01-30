@@ -3,3 +3,4 @@
 /build
 /www
 src/**/*.css
+src/*.css
