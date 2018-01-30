@@ -18,6 +18,14 @@ class People extends Component{
 	componentWillMount(){
 		DB.getLikey( 1, data => {
 			this.setState( { likey: data } );
+
+            // ContentHolder에 전달
+            this.props.updateTitle(
+                <h2 className="md-title md-title--toolbar cl-ellipsis">
+					<span>{this.props.title}</span>
+					<span className="cl-secondary ml-03em">{data.length}</span>
+				</h2>
+			);
 		});
 	}
 

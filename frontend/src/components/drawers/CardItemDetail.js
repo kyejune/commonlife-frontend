@@ -8,6 +8,15 @@ import LikeShareAndSome from "components/ui/LikeShareAndSome";
 
 class CardItemDetailDrawer extends Component {
 
+    constructor(props){
+        super( props );
+
+        let match = this.props.match.params;
+        this.state = {
+            likeLink: '/community/' + match.tab + '/' + match.index + '/like'
+        }
+    }
+
     componentWillMount() {
 
         DB.getCardContent( this.props.match.params.tab, this.props.match.params.id, data => {
@@ -22,7 +31,6 @@ class CardItemDetailDrawer extends Component {
     render() {
 
         if (this.state === null) return null;
-
 
         let Img;
         if (this.state.thumbnail)
@@ -55,8 +63,9 @@ class CardItemDetailDrawer extends Component {
                     className="p-0em cl-card-item"
                 />
 
+                {/*this.props.list + '/like/' + this.props.cardData.index*/}
                 {/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
-                <LikeShareAndSome like={ { to:'/', count:0 } } share schedule={this.state.type === 'event'} qa={this.state.type !== 'event'} />
+                <LikeShareAndSome like={ { to: this.state.likeLink, count:0 } } share schedule={this.state.type === 'event'} qa={this.state.type !== 'event'} />
 
             </div>
 

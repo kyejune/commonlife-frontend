@@ -1,8 +1,9 @@
+$dur: 0.4s;
+$delay: 0.2s;
 
 .app-content {
   margin-top: 56px;
-  overflow: scroll;
-  transition: margin-top 0.6s ease-out;
+  transition: margin-top $dur ease-out;
 }
 
 /* Header */
@@ -10,12 +11,55 @@
 
 
   & > header{
-    transition: margin-top 0.6s ease-out;
+    transform : translateZ(0px);
+    transition: margin-top $dur ease-out;
 
     .md-btn--icon{
       padding: 0;
     }
 
+  }
+
+  .app-content{
+
+  }
+
+  & > footer{
+    transform : translateZ(0px);
+    background-color: #ffffff;
+    transition: margin-bottom $dur ease-out;
+
+    .md-bottom-nav--fixed{
+      font-size: 0;
+      padding-top: 2px;
+    }
+
+    img{
+      width: 40px;
+      height: 34px;
+      opacity: 0.4;
+      transition: opacity 0.4s;
+    }
+
+    .md-bottom-nav-label{
+      color: #1052a5;
+      font-size: 12px;
+      line-height: 1.1em;
+      color: rgba( 0, 0, 0, 0.4 );
+      transition: color 0.4s;
+    }
+
+    .footer__button--selected {
+
+      img{
+        opacity: 1;
+      }
+
+      .md-bottom-nav-label{
+        color: #1052a5;
+      }
+
+    }
   }
 
 
@@ -24,7 +68,7 @@
   &.cl-app--expand {
 
     & > header {
-      transition-delay: 0.4s;
+      transition-delay: $delay;
       margin-top: -56px;
     }
 
@@ -33,7 +77,7 @@
     }
 
     .cl-second-header{
-      transition-delay: 0.4s;
+      transition-delay: $delay;
       margin-top: 0;
     }
 
@@ -56,7 +100,8 @@
   left: 0;
   top: 0;
   margin-top: 56px;
-  transition: margin-top 0.6s ease-out;
+  transform : translateZ(0px);
+  transition: margin-top $dur ease-out;
 
   & + .md-tabs-content {
     padding-top: 40px;
@@ -65,22 +110,10 @@
 
 
 .cl-fitted-box{
-  transition: max-height 0.6s ease-out;
+  transition: max-height $dur ease-out;
   max-height: calc( 100vh - 56px*2 - 48px );
   width: 100%;
 }
-
-/* Footer */
-.App > footer {
-
-  background-color: #ffffff;
-  transition: margin-bottom 0.6s ease-out;
-
-  .footer__button--selected {
-    color: orange;
-  }
-}
-
 
 .cl-fixed-page{
   position: fixed;
@@ -101,8 +134,6 @@
 }
 
 
-
-/* Drawer */
-.md-drawer--active .dialogs__content{
-  margin-top: 56px;
+.react-swipeable-view-container>div[aria-hidden=false]{
+  -webkit-overflow-scrolling: touch;
 }

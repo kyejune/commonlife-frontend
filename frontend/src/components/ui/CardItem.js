@@ -113,7 +113,7 @@ class CardItem extends Component {
 						{/* 작성자 정보 - 피드, 뉴스 */}
 						{this.cardAuthorInfo()}
 
-						<Link to={this.props.list + '/view/' + this.props.cardData.index }>
+						<Link to={this.props.list + '/' + this.props.cardData.index + '/view/' }>
 							{/* 이벤트 썸네일, 제목 */}
 							{this.cardEventTitle()}
 
@@ -130,7 +130,7 @@ class CardItem extends Component {
 
 						<CardActions>
 							{/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
-							<LikeShareAndSome like={ { to:this.props.list + '/like/' + this.props.cardData.index, count:this.props.cardData.like_count } } share={this.props.cardData.type !== 'feed'} />
+							<LikeShareAndSome like={ { to:this.props.list + '/' + this.props.cardData.index + '/like', count:this.props.cardData.like_count } } share={this.props.cardData.type !== 'feed'} />
 						</CardActions>
 					</Card>
 				</div>

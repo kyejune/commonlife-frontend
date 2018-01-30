@@ -62,7 +62,7 @@ class App extends Component {
                     <div className="app-content">
 
                         <Switch>
-                            <Route path="/community/:tab/:drawer/:id" component={Community}/>
+                            <Route path="/community/:tab/:id/:drawer" component={Community}/>
                             <Route path="/iot" component={HomeIoT}/>
                             <Route path="/life" component={LifeInfo}/>
                             <Route path="/reservation" component={Reservation}/>

@@ -43,7 +43,7 @@ class Community extends Component {
         let paths = this.props.location.pathname.match(/\w+/g)||['community','feed'];
 
         const drawers = { view:'card-item-detail', like:'people' };
-        Store.drawer = drawers[paths[2]];
+        Store.drawer = drawers[paths[3]];
 
         this.setState({
             drawer: Store.drawer || '',
@@ -87,7 +87,7 @@ class Community extends Component {
                 <Drawer {...Store.customDrawerProps}
                         visible={this.state.drawer.toString() === 'people'}>
                     <DrawerContentHolder back>
-                        <People/>
+                        <People title="LIKE"/>
                     </DrawerContentHolder>
                 </Drawer>
             </div>
