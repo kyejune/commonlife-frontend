@@ -47,7 +47,75 @@
                 #{offset}
     </select>
 
-    <insert id="insertPost" parameterType="PostInfo">
+    <select id="selectPost" parameterType="java.util.Map" resultType="postInfo">
+        SELECT
+                BOARD_IDX,
+                BOARD_TYPE,
+                TITLE,
+                CONTENT,
+                CONTENT_TYPE,
+                READ_CNT,
+                OPEN_DT,
+                CLOSE_DT,
+                HTML_YN,
+                USE_YN,
+                DEL_YN,
+                WRITE_NM,
+                WRITE_HP,
+                WRITE_EMAIL,
+                ORDERER_DATE_TIME,
+                ORDER_NO,
+                REG_DTTM,
+                REG_USERID,
+                UPD_DTTM,
+                UPD_USERID,
+                USR_ID,
+                CMPLX_ID
+        FROM
+                BOARD
+        WHERE
+                USE_YN = 'Y'
+                AND
+                DEL_YN = 'N'
+                AND
+                BOARD_IDX = #{boardIdx}
+    </select>
+
+    <select id="selectLatestPost" resultType="postInfo">
+        SELECT
+                BOARD_IDX,
+                BOARD_TYPE,
+                TITLE,
+                CONTENT,
+                CONTENT_TYPE,
+                READ_CNT,
+                OPEN_DT,
+                CLOSE_DT,
+                HTML_YN,
+                USE_YN,
+                DEL_YN,
+                WRITE_NM,
+                WRITE_HP,
+                WRITE_EMAIL,
+                ORDERER_DATE_TIME,
+                ORDER_NO,
+                REG_DTTM,
+                REG_USERID,
+                UPD_DTTM,
+                UPD_USERID,
+                USR_ID,
+                CMPLX_ID
+        FROM
+                BOARD
+        WHERE
+                USE_YN = 'Y'
+                AND
+                DEL_YN = 'N'
+                AND
+                BOARD_IDX = LAST_INSERT_ID()
+    </select>
+
+    <insert id="insertPost" parameterType="postInfo">
         INSERT
         INTO    BOARD
         (
@@ -70,5 +138,21 @@
             CURRENT_TIMESTAMP
         )
     </insert>
+
+    <update id="updatePost" parameterType="postInfo">
+        update  `BOARD`
+        set     `BOARD_TYPE` =  #{boardType},
+                `TITLE` =       #{title},
+                `CONTENT` =     #{content},
+                `UPD_DTTM` =    CURRENT_TIMESTAMP
+        where   `BOARD_IDX` =   #{boardIdx}
+    </update>
+
+    <update id="deletePost" parameterType="postInfo">
+        update  `BOARD`
+        set     `DEL_YN` =  'Y',
+                `UPD_DTTM` =    CURRENT_TIMESTAMP
+        where   `BOARD_IDX` =   #{boardIdx}
+    </update>
 
 </mapper>

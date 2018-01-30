@@ -18,6 +18,6 @@ public interface PostService {
 
     public PostInfo updatePost(PostInfo example);
 
-    public void deletePost(PostInfo example);
+    public void deletePost(int id);
 
 }

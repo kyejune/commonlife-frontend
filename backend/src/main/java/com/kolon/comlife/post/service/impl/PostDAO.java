@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +21,9 @@ public class PostDAO {
     private SqlSession sqlSession;
 
     public PostInfo selectPost(int id) {
-        return null;
+        Map<String, Integer> selectParams = new HashMap<String, Integer>();
+        selectParams.put( "boardIdx", id );
+        return sqlSession.selectOne( "Post.selectPost", selectParams );
     }
 
     public int countPostList() {
@@ -33,14 +36,20 @@ public class PostDAO {
 
     public PostInfo insertPost(PostInfo post) {
         sqlSession.insert( "Post.insertPost", post );
-        return post;
+        return sqlSession.selectOne( "Post.selectLatestPost" );
     }
 
     public PostInfo updatePost(PostInfo post) {
-        return null;
+        sqlSession.update( "Post.updatePost", post );
+        Map<String, Integer> selectParams = new HashMap<String, Integer>();
+        selectParams.put( "boardIdx", post.getBoardIdx() );
+        return sqlSession.selectOne( "Post.selectPost", selectParams );
     }
 
-    public void deletePost(PostInfo post) {
+    public void deletePost(int id) {
+        Map<String, Integer> selectParams = new HashMap<String, Integer>();
+        selectParams.put( "boardIdx", id );
+        sqlSession.update( "Post.deletePost", id );
         return;
     }
 }

@@ -86,4 +86,27 @@ public class PostController {
         // TODO: 파일은 S3에 저장할 것인가? 저장 시점은 언제로 할 것인가?
         return postService.setPost( post );
     }
+
+    @GetMapping(
+            value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public PostInfo getPostInJson( @PathVariable("id") int id ) {
+        return postService.getPost( id );
+    }
+
+    @PutMapping(
+            value = "/{id}"
+    )
+    public PostInfo updatePost( @PathVariable("id") int id, @RequestBody PostInfo post ) {
+        post.setBoardIdx( id );
+        return postService.updatePost( post );
+    }
+
+    @DeleteMapping(
+            value = "/{id}"
+    )
+    public void deletePost( @PathVariable("id") int id ) {
+        postService.deletePost( id );
+        return;
+    }
 }
