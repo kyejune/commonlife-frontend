@@ -5083,8 +5083,7 @@ body {
 
 .cl-like__arrow {
   width: 24px;
-  height: 24px;
-  margin-right: 18px;
-  background-image: url("images/ic-favorite-24-px@3x.png");
-  background-repeat: no-repeat;
-  background-size: 24px; }
+  margin-right: 18px; }
+  .cl-like__arrow img {
+    position: relative;
+    top: 2px; }
