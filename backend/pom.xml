@@ -270,10 +270,8 @@
         <!-- AWS -->
         <dependency>
             <groupId>com.amazonaws</groupId>
-            <artifactId>aws-java-sdk-bom</artifactId>
+            <artifactId>aws-java-sdk</artifactId>
             <version>1.11.106</version>
-            <type>pom</type>
-            <scope>import</scope>
         </dependency>
         <!-- AWS : end -->
 
