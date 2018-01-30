@@ -1,0 +1,4 @@
+GET http://localhost:8080/post/6
+Content-Type: application/json; charset=UTF-8
+
+###

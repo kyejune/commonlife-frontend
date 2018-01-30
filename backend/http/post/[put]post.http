@@ -1,0 +1,10 @@
+PUT http://localhost:8080/post/6
+Content-Type: application/json; charset=UTF-8
+
+{
+    "boardType": "event",
+    "title": "Lorem Ipsum",
+    "content": "Lorem ipsum dolar sit amet"
+}
+
+###

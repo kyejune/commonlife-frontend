@@ -1,0 +1,8 @@
+PUT http://localhost:8080/example/test3
+Content-Type: application/json; charset=UTF-8
+
+{
+    "name": "test4"
+}
+
+###
