@@ -267,6 +267,16 @@
             <version>1.4.6</version>
         </dependency>
 
+        <!-- AWS -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk-bom</artifactId>
+            <version>1.11.106</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <!-- AWS : end -->
+
         <!-- Testing -->
         <dependency>
             <groupId>junit</groupId>
