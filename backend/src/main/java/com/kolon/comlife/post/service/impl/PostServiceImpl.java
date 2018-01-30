@@ -40,8 +40,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void deletePost(PostInfo post) {
-        postDAO.deletePost(post);
+    public void deletePost(int id) {
+        postDAO.deletePost(id);
         return;
     }
 }

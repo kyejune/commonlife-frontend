@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {observer} from 'mobx-react';
 import { Button } from 'react-md';
 import WriteDrawer from "components/drawers/WriteDrawer";
-import CardItem from 'components/drawers/CardItem';
+import CardItem from 'components/ui/CardItem';
 import Store from 'scripts/store';
 import DB from 'scripts/db';
 import BottomDrawer from "components/drawers/BottomDrawer";

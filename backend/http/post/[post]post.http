@@ -1,0 +1,11 @@
+POST http://localhost:8080/post/
+Content-Type: application/json; charset=UTF-8
+
+{
+    "boardType": "event",
+    "title": "title",
+    "content": "content",
+    "usrId": 14
+}
+
+###

@@ -68,13 +68,29 @@ public class ExampleController {
         return exampleService.getExample(name);
     }
 
+
     @PutMapping(
-            value = "/{name}",
+            value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ExampleInfo updateExampleInJson(@PathVariable("name") String name, @RequestBody ExampleInfo example) {
-        // TODO: 원래는 update 로직을 타야 하지만 현재 pk가 없어서 where 조건을 걸기 곤란하므로 delete 후 새로 insert
-        exampleService.deleteExample( exampleService.getExample( name ) );
-        return exampleService.updateExample(example);
+    public ResponseEntity<ExampleInfo> updateExampleInJson(@PathVariable("id") int id,
+                                                           @RequestBody ExampleInfo example) {
+
+        // PUT에 대한 예외 처리 참조
+        // 참조 : https://stackoverflow.com/questions/2342579/http-status-code-for-update-and-delete
+        int updatedCount = 0;
+
+        try {
+            example.setId(id);
+            updatedCount = exampleService.updateExample(example);
+        } catch (org.springframework.dao.DuplicateKeyException dupKeyEx) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
+
+        if( updatedCount == 0) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
     @DeleteMapping(

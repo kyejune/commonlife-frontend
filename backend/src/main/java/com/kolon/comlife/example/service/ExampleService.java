@@ -12,7 +12,7 @@ public interface ExampleService {
 
     public ExampleInfo setExample(ExampleInfo example);
 
-    public ExampleInfo updateExample(ExampleInfo example);
+    public int updateExample(ExampleInfo example);
 
     public void deleteExample(ExampleInfo example);
 

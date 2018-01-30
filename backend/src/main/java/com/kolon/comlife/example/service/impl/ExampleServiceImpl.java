@@ -33,7 +33,7 @@ public class ExampleServiceImpl implements ExampleService {
     }
 
     @Override
-    public ExampleInfo updateExample(ExampleInfo example) {
+    public int updateExample(ExampleInfo example) {
         return exampleDAO.updateExample(example);
     }
 
