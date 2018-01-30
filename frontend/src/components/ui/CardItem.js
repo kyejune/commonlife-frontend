@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { Avatar, Button, Card, CardActions, CardText, CardTitle, Media, MediaOverlay } from 'react-md';
+import { Avatar, Card, CardActions, CardText, CardTitle, Media, MediaOverlay } from 'react-md';
 import { Link } from 'react-router-dom';
+import LikeShareAndSome from "components/ui/LikeShareAndSome";
 
 class CardItem extends Component {
 
@@ -103,28 +104,28 @@ class CardItem extends Component {
 	};
 
 	// Share
-	cardShare = ()=> {
-		if( this.props.cardData.type !== "feed" ) {
-			return (
-				<Button flat className="cl-card-item__button"><span>Share</span></Button>
-			);
-		}
-		else {
-			return '';
-		}
-	};
+	// cardShare = ()=> {
+	// 	if( this.props.cardData.type !== "feed" ) {
+	// 		return (
+	// 			<Button flat className="cl-card-item__button"><span>Share</span></Button>
+	// 		);
+	// 	}
+	// 	else {
+	// 		return '';
+	// 	}
+	// };
 
 	// RSVP
-	cardRsvp = ()=> {
-		if( this.props.cardData.type === 'event' ) {
-			return (
-				<Button flat className="cl-icon cl-card-item__rsvp"/>
-			);
-		}
-		else {
-			return '';
-		}
-	};
+	// cardRsvp = ()=> {
+	// 	if( this.props.cardData.type === 'event' ) {
+	// 		return (
+	// 			<Button flat className="cl-icon cl-card-item__rsvp"/>
+	// 		);
+	// 	}
+	// 	else {
+	// 		return '';
+	// 	}
+	// };
 
 	render () {
 
@@ -151,24 +152,26 @@ class CardItem extends Component {
 						<hr/>
 
 						<CardActions>
-							<div className="h-group">
-								<div className="col">
-									{/* Like */}
-									<Button flat className="cl-card-item__button">
-										<span>Like</span>
-                                        <Link to={this.props.list + '/like/' + this.props.cardData.index}>
-                                            <i>{this.props.cardData.like_count}</i>
-                                        </Link>
-                                    </Button>
+							{/*<div className="h-group">*/}
+								{/*<div className="col">*/}
+									{/*/!* Like *!/*/}
+									{/*<Button flat className="cl-card-item__button">*/}
+										{/*<span>Like</span>*/}
+                                        {/*<Link to={this.props.list + '/like/' + this.props.cardData.index}>*/}
+                                            {/*<i>{this.props.cardData.like_count}</i>*/}
+                                        {/*</Link>*/}
+                                    {/*</Button>*/}
 
-									{/* Share */}
-									{this.cardShare()}
-								</div>
-								<div className="col right">
-									{/* RSVP */}
-									{this.cardRsvp()}
-								</div>
-							</div>
+									{/*/!* Share *!/*/}
+									{/*{this.cardShare()}*/}
+								{/*</div>*/}
+								{/*<div className="col right">*/}
+									{/*/!* RSVP *!/*/}
+									{/*{this.cardRsvp()}*/}
+								{/*</div>*/}
+							{/*</div>*/}
+							{/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
+							<LikeShareAndSome like={ { to:'/', count:0 } } share schedule={this.props.cardData.type === 'event'} qa={this.props.cardData.type !== 'event'} />
 						</CardActions>
 					</Card>
 				</div>
