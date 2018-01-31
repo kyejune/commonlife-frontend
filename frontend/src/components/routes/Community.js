@@ -20,7 +20,7 @@ class Community extends Component {
             name: 'community',
             tabs: ['feed', 'event', 'news'],
             tabIndex: 0,
-            drawer: '',
+            drawer: Store.drawer,
         }
     }
 
@@ -43,10 +43,13 @@ class Community extends Component {
         let paths = this.props.location.pathname.match(/\w+/g)||['community','feed'];
 
         const drawers = { view:'card-item-detail', like:'people' };
-        Store.drawer = drawers[paths[3]];
+        if( drawers[paths[3]]  )
+            Store.drawer.push( drawers[paths[3]] );
+
+        console.log( 'update drawer' );
 
         this.setState({
-            drawer: Store.drawer || '',
+            drawer: Store.drawer || [],
             tabIndex: this.state.tabs.indexOf( paths[1] || 'feed' )
         });
     }
@@ -77,7 +80,7 @@ class Community extends Component {
 
                 {/* 카드 상세보기 */}
                 <Drawer {...Store.customDrawerProps}
-                        visible={this.state.drawer.toString() === 'card-item-detail'}>
+                        visible={this.state.drawer.indexOf( 'card-item-detail' ) >= 0 }>
                     <DrawerContentHolder back>
                         <CardItemDetail/>
                     </DrawerContentHolder>
@@ -85,7 +88,7 @@ class Community extends Component {
 
                 {/* Like 찍은 분들 */}
                 <Drawer {...Store.customDrawerProps}
-                        visible={this.state.drawer.toString() === 'people'}>
+                        visible={this.state.drawer.indexOf( 'people' ) >= 0}>
                     <DrawerContentHolder back>
                         <People title="LIKE"/>
                     </DrawerContentHolder>

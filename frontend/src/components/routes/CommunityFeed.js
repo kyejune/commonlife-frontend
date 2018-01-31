@@ -31,10 +31,12 @@ class CommunityFeed extends Component {
 				<Button floating primary
 						iconClassName="fa fa-pencil fa-2x"
 						className="cl-write__button--fixed"
-						onClick={()=> Store.drawer = 'write' }
+						onClick={()=> Store.drawer.push('write') }
 				/>
 
-                <BottomDrawer visible={Store.drawer === 'write'} onVisibilityChange={()=>{}} portal={true}>
+                <BottomDrawer visible={Store.drawer.indexOf('write')>=0}
+							  onVisibilityChange={()=>{}}
+							  portal={true}>
                     <DrawerContentHolder title="새글쓰기">
                         <WriteDrawer/>
                     </DrawerContentHolder>

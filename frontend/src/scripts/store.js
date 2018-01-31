@@ -12,7 +12,7 @@ const Store = observable({
 	likey: [],
 
     /* 현재 열려있는 Drawer */
-    drawer: '',
+    drawer: [],
     drawerOptions: null,
 
     /* Drawer에 기본적으로 넘겨주는 파라미터 */
@@ -25,7 +25,5 @@ const Store = observable({
     },
 
 });
-
-
 
 export default Store;

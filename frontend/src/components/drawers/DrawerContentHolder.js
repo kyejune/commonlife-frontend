@@ -1,5 +1,6 @@
 /* DrawerContentHolder.jsx */
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import {Button, Toolbar} from 'react-md';
 import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
@@ -16,6 +17,10 @@ class DrawerContentHolder extends Component {
         }
     }
 
+    componentDidMount(){
+        ReactDOM.findDOMNode(this).parentNode.style.zIndex = (Store.drawer.length + 100).toString();
+    }
+
 
     onClose(){
 
@@ -23,7 +28,8 @@ class DrawerContentHolder extends Component {
             paths.length -= 2;
         this.props.history.replace(paths.join('/'));
 
-        Store.drawer = '';
+
+        Store.drawer.pop();
     }
 
     updateTitle( title ){
@@ -65,7 +71,9 @@ class DrawerContentHolder extends Component {
 
         // 자식 객체로 들어오는 children에게 updateTitle 메서드를 제공해서, 변경가능하게끔
         let childrenWithProps = React.Children.map( children, child =>
-            React.cloneElement( child, { updateTitle: title=> this.updateTitle(title) })
+            React.cloneElement( child, {
+                updateTitle: title=> this.updateTitle(title),
+            })
         );
 
         return <div className="cl-drawer-content-holder">
