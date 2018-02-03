@@ -1,0 +1,4 @@
+GET http://localhost:8080/like/1
+Content-Type: application/json; charset=UTF-8
+
+###

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Like">
+    <select id="countPostList" resultType="java.lang.Integer">
+        SELECT Count(*) AS COUNT
+        FROM   board
+    </select>
+
+    <select id="selectLikeList" parameterType="java.util.Map" resultType="likeInfo">
+        SELECT
+            `LIKE_IDX`,
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_IDX`,
+            `DEL_YN`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `LIKE`
+        WHERE
+            `DEL_YN` = 'N'
+            AND
+            `PARENT_TYPE` = 'POST'
+            AND
+            `PARENT_IDX` = #{parentIdx}
+    </select>
+
+    <select id="selectLatestLike" resultType="LikeInfo">
+        SELECT
+            `LIKE_IDX`,
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_IDX`,
+            `DEL_YN`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `LIKE`
+        WHERE
+            `DEL_YN` = 'N'
+            AND
+            `PARENT_TYPE` = 'POST'
+            AND
+            `PARENT_IDX` = #{parentIdx}
+            AND
+            `LIKE_IDX` = LAST_INSERT_ID()
+    </select>
+
+    <select id="hasLike" resultType="LikeInfo">
+        SELECT
+            `LIKE_IDX`,
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_IDX`,
+            `DEL_YN`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `LIKE`
+        WHERE
+            `DEL_YN` = 'N'
+            AND
+            `PARENT_TYPE` = 'POST'
+            AND
+            `PARENT_IDX` = #{parentIdx}
+            AND
+            `USR_ID` = #{usrId}
+    </select>
+
+    <insert id="addLike" parameterType="likeInfo">
+        INSERT
+        INTO    `LIKE`
+        (
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_IDX`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        )
+        VALUES
+        (
+            'POST',
+            #{parentIdx},
+            #{usrIdx},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <update id="cancelLike" parameterType="java.util.Map">
+        UPDATE  `LIKE`
+        SET     `DEL_YN` = 'Y',
+                `UPD_DTTM` = CURRENT_TIMESTAMP
+        WHERE   `DEL_YN` = 'N'
+                AND
+                `PARENT_TYPE` = 'POST'
+                AND
+                `PARENT_IDX` = #{parentIdx}
+                AND
+                `USR_IDX` = #{usrIdx}
+    </update>
+</mapper>
