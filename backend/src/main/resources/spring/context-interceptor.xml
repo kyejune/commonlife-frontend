@@ -2,15 +2,30 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
 					http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
 					http://www.springframework.org/schema/mvc
-					http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
-    
+					http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+					http://www.springframework.org/schema/util
+					http://www.springframework.org/schema/util/spring-util-4.3.xsd" >
+
+    <util:properties id="globals" location="classpath:/properties/globals.properties" />
+    <util:properties id="devprop"
+                     location="classpath:/properties/#{globals['Globals.ServerType']}/development.properties"
+                     ignore-resource-not-found="true"/>
+
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**" />
             <bean id="logInterceptor" class="com.kolon.common.interceptor.LogInterceptor" />
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="apiKeyCheckerInterceptor" class="com.kolon.common.interceptor.ApiKeyCheckerInterceptor" >
+                <property name="apiTestYN" value="#{devprop['apiTestYN']}" />
+                <property name="apiKey" value="#{devprop['apiKey']}" />
+            </bean>
         </mvc:interceptor>
     </mvc:interceptors>
 

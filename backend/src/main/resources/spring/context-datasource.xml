@@ -20,11 +20,11 @@
         <property name="username" value="#{jdbc['Jdbc.UserName']}"/>
         <property name="password" value="#{jdbc['Jdbc.Password']}"/>
 
-        <property name="maxActive" value="#{jdbc['Jdbc.MaxActive']}"></property>
-        <property name="maxWait" value="#{jdbc['Jdbc.MaxWait']}"></property>
-        <property name="maxIdle" value="#{jdbc['Jdbc.MaxIdle']}"></property>
-        <property name="removeAbandoned" value="#{jdbc['Jdbc.RemoveAbandoned']}"></property>
-        <property name="removeAbandonedTimeout" value="#{jdbc['Jdbc.RemoveAbandonedTimeout']}"></property>
+        <property name="maxActive" value="#{jdbc['Jdbc.MaxActive']}" />
+        <property name="maxWait" value="#{jdbc['Jdbc.MaxWait']}" />
+        <property name="maxIdle" value="#{jdbc['Jdbc.MaxIdle']}" />
+        <property name="removeAbandoned" value="#{jdbc['Jdbc.RemoveAbandoned']}" />
+        <property name="removeAbandonedTimeout" value="#{jdbc['Jdbc.RemoveAbandonedTimeout']}" />
         <property name="validationQuery" value="SELECT 1" />
     </beans:bean>
 
