@@ -10,11 +10,6 @@
 					http://www.springframework.org/schema/util
 					http://www.springframework.org/schema/util/spring-util-4.3.xsd" >
 
-    <util:properties id="globals" location="classpath:/properties/globals.properties" />
-    <util:properties id="devprop"
-                     location="classpath:/properties/#{globals['Globals.ServerType']}/development.properties"
-                     ignore-resource-not-found="true"/>
-
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/**" />
@@ -23,8 +18,8 @@
         <mvc:interceptor>
             <mvc:mapping path="/**" />
             <bean id="apiKeyCheckerInterceptor" class="com.kolon.common.interceptor.ApiKeyCheckerInterceptor" >
-                <property name="apiTestYN" value="#{devprop['apiTestYN']}" />
-                <property name="apiKey" value="#{devprop['apiKey']}" />
+                <property name="apiTestYN" value="#{prop_dev['apiTestYN']}" />
+                <property name="apiKey" value="#{prop_dev['apiKey']}" />
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>

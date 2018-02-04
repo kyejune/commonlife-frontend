@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/beans"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xmlns:util="http://www.springframework.org/schema/util"
+             xmlns:beans="http://www.springframework.org/schema/beans"
+             xsi:schemaLocation="http://www.springframework.org/schema/beans
+	                       http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	                       http://www.springframework.org/schema/util
+	                       http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <!-- Beginning of Properties -->
+    <util:properties id="globals" location="classpath:/properties/globals.properties" />
+    <util:properties id="prop_jdbc"
+                     location="classpath:/properties/#{systemProperties['spring.profiles.active'] == null ? 'default' : systemProperties['spring.profiles.active'] }/jdbc.properties" />
+    <util:properties id="prop_dev"
+                     location="classpath:/properties/#{systemProperties['spring.profiles.active'] == null ? 'default' : systemProperties['spring.profiles.active'] }/development.properties"
+                     ignore-resource-not-found="true"/>
+    <!-- End of Properties -->
+</beans:beans>
