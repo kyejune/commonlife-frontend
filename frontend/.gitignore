@@ -4,3 +4,7 @@
 /www
 src/**/*.css
 src/*.css
+res/
+plugins/
+hooks/
+platforms/
