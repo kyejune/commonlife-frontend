@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {HashRouter, Route, Switch} from 'react-router-dom';
 import './App.css';
 import 'font-awesome/fonts/fontawesome-webfont.eot';
 import 'react-md/dist/react-md.min.js';
 
 import classNames from 'classnames';
-import createBrowserHistory from 'history/createBrowserHistory';
+// import { HashRouter } from 'react-router-dom'
+// import createBrowserHistory from 'history/createBrowserHistory';
+// import createHashHistory from 'history/createHashHistory';
 
 
 import Header from 'components/layouts/Header';
@@ -14,7 +16,7 @@ import Community from 'components/routes/Community';
 import HomeIoT from 'components/routes/HomeIoT';
 import LifeInfo from 'components/routes/LifeInfo';
 import Reservation from 'components/routes/Reservation';
-import Store from 'scripts/store';
+// import Store from 'scripts/store';
 
 class App extends Component {
 
@@ -23,7 +25,7 @@ class App extends Component {
 
         this.state = {
             scrolled: false,
-            history: createBrowserHistory(),
+            // history: createHashHistory(),
             isDevice: !!window.cordova,
         }
     }
@@ -40,14 +42,14 @@ class App extends Component {
             }
         }, true);
 
-        Store.startAt = this.state.history.location.pathname || '/community';
-        this.state.history.replace( Store.startAt );
+        // Store.startAt = this.state.history.location.pathname || '/community';
+        // this.state.history.replace( Store.startAt );
     }
 
     render() {
 
         return (
-            <Router>
+            <HashRouter>
 
                 <div className={classNames({
                     'App': true,
@@ -76,7 +78,7 @@ class App extends Component {
 
                 </div>
 
-            </Router>
+            </HashRouter>
         );
 
     }
