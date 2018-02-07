@@ -7,7 +7,9 @@ import com.kolon.comlife.user.model.UserInfo;
 import com.kolon.comlife.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -18,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/post/*")
+@RequestMapping("/posts/*")
 public class PostController {
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
@@ -30,7 +32,7 @@ public class PostController {
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public PaginateInfo getPostsInJson(HttpServletRequest request) {
+    public ResponseEntity<PaginateInfo> getPostsInJson(HttpServletRequest request) {
         String page = request.getParameter( "page" );
         if( page == null ) {
             page = "1";
@@ -75,38 +77,41 @@ public class PostController {
         paginateInfo.setPerPage( limit );
         paginateInfo.setData( postInfoList );
 
-        return paginateInfo;
+        return ResponseEntity.status( HttpStatus.OK ).body( paginateInfo );
     }
 
     @PostMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public PostInfo setPost(@RequestBody PostInfo post) {
+    public ResponseEntity<PostInfo> setPost(@RequestBody PostInfo post) {
         // TODO: USR_ID 는 토큰 등을 통해서 전달받도록 추후 업데이트 필요
         // TODO: 파일은 S3에 저장할 것인가? 저장 시점은 언제로 할 것인가?
-        return postService.setPost( post );
+        PostInfo result = postService.setPost( post );
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
     @GetMapping(
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public PostInfo getPostInJson( @PathVariable("id") int id ) {
-        return postService.getPost( id );
+    public ResponseEntity<PostInfo> getPostInJson( @PathVariable("id") int id ) {
+        PostInfo result = postService.getPost( id );
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
     @PutMapping(
             value = "/{id}"
     )
-    public PostInfo updatePost( @PathVariable("id") int id, @RequestBody PostInfo post ) {
+    public ResponseEntity<PostInfo> updatePost( @PathVariable("id") int id, @RequestBody PostInfo post ) {
         post.setBoardIdx( id );
-        return postService.updatePost( post );
+        PostInfo result = postService.updatePost( post );
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
     @DeleteMapping(
             value = "/{id}"
     )
-    public void deletePost( @PathVariable("id") int id ) {
+    public ResponseEntity<PostInfo> deletePost( @PathVariable("id") int id ) {
         postService.deletePost( id );
-        return;
+        return ResponseEntity.status( HttpStatus.OK ).body( null );
     }
 }

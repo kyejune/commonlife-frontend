@@ -7,7 +7,9 @@ import com.kolon.comlife.user.model.UserInfo;
 import com.kolon.comlife.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -16,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/like/*")
+@RequestMapping("/posts/{postId}/likes/*")
 public class LikeController {
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
@@ -26,11 +28,11 @@ public class LikeController {
     private UserService userService;
 
     @GetMapping(
-            value = "/{parentIdx}",
+            value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public List<LikeInfo> getLikeList( @PathVariable("parentIdx") int parentIdx ) {
-        List<LikeInfo> likes = likeService.getLikeList( parentIdx );
+    public ResponseEntity<List<LikeInfo>> getLikeList(@PathVariable( "postId" ) int postId ) {
+        List<LikeInfo> likes = likeService.getLikeList( postId );
 
         // USR_ID 추출
         List<Integer> userIds = new ArrayList<Integer>();
@@ -52,34 +54,35 @@ public class LikeController {
             }
         }
 
-        return likes;
+        return ResponseEntity.status( HttpStatus.OK ).body( likes );
     }
 
     @GetMapping(
-            value = "/has/{parentIdx}",
+            value = "/has",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public boolean hasLike( @PathVariable("parentIdx") int parentIdx, HttpServletRequest request ) {
+    public boolean hasLike( @PathVariable( "postId" ) int postId, HttpServletRequest request ) {
         int usrIdx = Integer.parseInt( request.getParameter( "usrIdx" ) );
-        return likeService.hasLike( parentIdx, usrIdx );
+        return likeService.hasLike( postId, usrIdx );
     }
 
     @PostMapping(
-            value = "/{parentIdx}",
+            value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public LikeInfo addLike(@PathVariable("parentIdx") int parentIdx, @RequestBody LikeInfo likeInfo ) {
+    public ResponseEntity<LikeInfo> addLike( @PathVariable( "postId" ) int postId, @RequestBody LikeInfo likeInfo ) {
         int usrIdx = likeInfo.getUsrIdx();
-        return likeService.addLike( parentIdx, usrIdx );
+        LikeInfo result = likeService.addLike( postId, usrIdx );
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
     @DeleteMapping(
-            value = "/{parentIdx}",
+            value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public void cancelLike(@PathVariable("parentIdx") int parentIdx, @RequestBody LikeInfo likeInfo) {
+    public ResponseEntity<LikeInfo> cancelLike( @PathVariable( "postId" ) int postId, @RequestBody LikeInfo likeInfo) {
         int usrIdx = likeInfo.getUsrIdx();
-        likeService.cancelLike( parentIdx, usrIdx );
-        return;
+        likeService.cancelLike( postId, usrIdx );
+        return ResponseEntity.status( HttpStatus.OK ).body( null );
     }
 }

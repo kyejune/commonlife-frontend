@@ -17,7 +17,7 @@ import java.util.List;
  * Example Controller
  */
 @RestController
-@RequestMapping("/example/*")
+@RequestMapping("/examples/*")
 public class ExampleController {
     private static final Logger logger = LoggerFactory.getLogger(ExampleController.class);
 
@@ -27,13 +27,14 @@ public class ExampleController {
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ExampleInfo> getExampleInJson() {
+    public ResponseEntity<List<ExampleInfo>> getExampleInJson() {
         List<ExampleInfo> exampleInfoList = exampleService.getExampleList();
 
         for (ExampleInfo e : exampleInfoList) {
             logger.debug(">> " + e);
         }
-        return exampleInfoList;
+
+        return ResponseEntity.status(HttpStatus.OK).body(exampleInfoList);
     }
 
 //    @PostMapping(
@@ -64,8 +65,9 @@ public class ExampleController {
     @GetMapping(
             value = "/{name}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ExampleInfo getExampleOneInJson(@PathVariable("name") String name) {
-        return exampleService.getExample(name);
+    public ResponseEntity<ExampleInfo> getExampleOneInJson(@PathVariable("name") String name) {
+        ExampleInfo example = exampleService.getExample(name);
+        return ResponseEntity.status(HttpStatus.OK).body( example );
     }
 
 
@@ -96,10 +98,10 @@ public class ExampleController {
     @DeleteMapping(
             value = "/{name}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public void deleteExampleInJson(@PathVariable("name") String name) {
+    public ResponseEntity deleteExampleInJson(@PathVariable("name") String name) {
         ExampleInfo example = exampleService.getExample( name );
         exampleService.deleteExample(example);
-        return;
+        return ResponseEntity.status(HttpStatus.OK).body( null );
     }
 
 }
