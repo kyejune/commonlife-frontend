@@ -1,6 +1,6 @@
-package com.kolon.comlife.user.service;
+package com.kolon.comlife.users.service;
 
-import com.kolon.comlife.user.model.UserInfo;
+import com.kolon.comlife.users.model.UserInfo;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package com.kolon.comlife.user.service.impl;
+package com.kolon.comlife.users.service.impl;
 
-import com.kolon.comlife.user.model.UserInfo;
+import com.kolon.comlife.users.model.UserInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 

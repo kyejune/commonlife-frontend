@@ -1,7 +1,7 @@
-package com.kolon.comlife.user.service.impl;
+package com.kolon.comlife.users.service.impl;
 
-import com.kolon.comlife.user.model.UserInfo;
-import com.kolon.comlife.user.service.UserService;
+import com.kolon.comlife.users.model.UserInfo;
+import com.kolon.comlife.users.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
