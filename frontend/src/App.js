@@ -34,7 +34,8 @@ class App extends Component {
     componentWillMount() {
 
         document.addEventListener('scroll', () => {
-            let doc = document.querySelector('.react-swipeable-view-container>div[aria-hidden=false]');
+            // let doc = document.querySelector('.react-swipeable-view-container>div[aria-hidden=false]');
+            let doc = document.querySelector('.cl-fitted-box');
             if (doc) {
                 this.setState({
                     scrolled: (doc.scrollTop > 56)
@@ -65,8 +66,14 @@ class App extends Component {
 
                         <Switch>
                             <Route path="/community/:tab/:id/:drawer" component={Community}/>
+
+
                             <Route path="/iot" component={HomeIoT}/>
+
+
                             <Route path="/life" component={LifeInfo}/>
+
+
                             <Route path="/reservation" component={Reservation}/>
 
                             <Route component={Community}/>

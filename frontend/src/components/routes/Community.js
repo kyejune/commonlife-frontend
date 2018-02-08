@@ -56,8 +56,6 @@ class Community extends Component {
 
     render() {
 
-        console.log('Community render:', this.props );
-
         return (
             <div>
                 <TabsContainer panelClassName="md-grid" colored

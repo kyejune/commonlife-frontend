@@ -85,9 +85,18 @@ $delay: 0.2s;
       margin-bottom: -56px;
     }
 
+
+    // 커뮤니티
     .cl-fitted-box{
       max-height: calc( 100vh - 48px );
     }
+
+    // 예약
+    .cl-header--reservation + .cl-fitted-box{
+      max-height: 100vh;
+    }
+
+
   }
 
 }
@@ -108,12 +117,25 @@ $delay: 0.2s;
   }
 }
 
-
 .cl-fitted-box{
   transition: max-height $dur ease-out;
   max-height: calc( 100vh - 56px*2 - 48px );
   width: 100%;
+  overflow: scroll;
 }
+
+
+.cl-header--reservation{
+  min-height: 86px;
+  background-color: #2e3137;
+  color: white;
+
+  &+.cl-fitted-box{
+    padding-top: 86px;
+    max-height: calc( 100vh - 56px*2 );
+  }
+}
+
 
 .cl-fixed-page{
   position: fixed;

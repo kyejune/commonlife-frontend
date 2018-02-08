@@ -49,6 +49,9 @@
 .App.cl-app--expand .cl-fitted-box {
   max-height: calc( 100vh - 48px); }
 
+.App.cl-app--expand .cl-header--reservation + .cl-fitted-box {
+  max-height: 100vh; }
+
 /* SubHeader */
 .cl-second-header {
   position: fixed;
@@ -65,7 +68,16 @@
 .cl-fitted-box {
   transition: max-height 0.4s ease-out;
   max-height: calc( 100vh - 56px*2 - 48px);
-  width: 100%; }
+  width: 100%;
+  overflow: scroll; }
+
+.cl-header--reservation {
+  min-height: 86px;
+  background-color: #2e3137;
+  color: white; }
+  .cl-header--reservation + .cl-fitted-box {
+    padding-top: 86px;
+    max-height: calc( 100vh - 56px*2); }
 
 .cl-fixed-page {
   position: fixed;
