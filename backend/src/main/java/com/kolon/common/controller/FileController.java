@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * FILE 컨트롤러
  */
-@Controller
+//@Controller
 public class FileController {
     private String rootPath = PropertiesMap.getInstance().getValue("system.storage.file.path");
 

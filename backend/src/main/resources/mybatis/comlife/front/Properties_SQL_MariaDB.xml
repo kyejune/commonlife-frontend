@@ -58,59 +58,29 @@
 
     <select id="selectPropertiesList" parameterType="propertiesInfo" resultType="propertiesInfo">
         /* 프로퍼티 리스트 조회 */
-        DECLARE @propGroup VARCHAR(100) SET @propGroup = #{propGroup}
-        DECLARE @propKey VARCHAR(100) SET @propKey = #{propKey}
-        DECLARE @searchType1 VARCHAR(100) SET @searchType1 = #{searchKeyword1}
-        DECLARE @searchKeyword1 VARCHAR(100) SET @searchKeyword1 = #{searchKeyword1}
-
-
-        <include refid="Common.prefixPagination"/>
         SELECT
-            PROP_GROUP,
-            PROP_KEY,
-            PROP_VALUE,
-            PROP_DESC,
-            USE_YN,
-            REG_DTTM,
-            REG_USERID,
-            UPD_DTTM,
-            UPD_USERID,
-            ROW_NUMBER() OVER(ORDER BY PROP_GROUP DESC) ROWNUM,
-            COUNT(1) OVER() AS TOT
-        FROM(
-            SELECT
-                PROP_GROUP,
-                PROP_KEY,
-                PROP_VALUE,
-                PROP_DESC,
-                USE_YN,
-                REG_DTTM,
-                REG_USERID,
-                UPD_DTTM,
-                UPD_USERID
-            FROM SYS_PROPERTIES WITH(NOLOCK)
-            WHERE 1=1
-              AND ISNULL(USE_YN,'Y') = 'Y'
+          PROP_GROUP,
+          PROP_KEY,
+          PROP_VALUE,
+          PROP_DESC,
+          USE_YN,
+          REG_DTTM,
+          REG_USERID,
+          UPD_DTTM,
+          UPD_USERID
+        FROM
+          SERVICE_PROPERTIES
+        WHERE
+          IFNULL(USE_YN,'Y') = 'Y'
         <choose>
             <when test='propGroup != null'>
-                AND PROP_GROUP LIKE '%'+@propGroup+'%'
+              AND PROP_GROUP LIKE '%'+#{propGroup}+'%'
             </when>
             <when test='propKey != null'>
-                AND PROP_KEY LIKE '%'+@propKey+'%'
+              AND PROP_KEY LIKE '%'+#{propKey}+'%'
             </when>
-            <when test='searchType1 != null and searchType1.equals("PROP_GROUP")'>
-                AND PROP_GROUP LIKE '%'+@searchKeyword1+'%'
-            </when>
-            <when test='searchType1 != null and searchType1.equals("PROP_VALUE")'>
-                AND PROP_VALUE LIKE '%'+@searchKeyword1+'%'
-            </when>
-            <otherwise>
-                AND (PROP_VALUE LIKE '%'+@searchKeyword1+'%' OR PROP_GROUP LIKE '%'+@searchKeyword1+'%')
-            </otherwise>
         </choose>
-        )A
-        <include refid="Common.orderby"/>
-        <include refid="Common.suffixPagination"/>
+        ;
     </select>
 
 
