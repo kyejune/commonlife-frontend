@@ -4414,6 +4414,14 @@ ul {
   padding-left: 0;
   margin: 0; }
 
+button, select {
+  border: none;
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+  -webkit-appearance: none; }
+
+/* clear mobile style */
 /* Text */
 .cl-bold {
   font-weight: bold; }
@@ -5104,7 +5112,8 @@ ul {
   transition: max-height 0.4s ease-out;
   max-height: calc( 100vh - 56px*2 - 48px);
   width: 100%;
-  overflow: scroll; }
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch; }
 
 .cl-header--reservation {
   min-height: 86px;

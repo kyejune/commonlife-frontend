@@ -46,8 +46,6 @@ class Community extends Component {
         if( drawers[paths[3]]  )
             Store.drawer.push( drawers[paths[3]] );
 
-        console.log( 'update drawer' );
-
         this.setState({
             drawer: Store.drawer || [],
             tabIndex: this.state.tabs.indexOf( paths[1] || 'feed' )

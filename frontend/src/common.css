@@ -16,6 +16,14 @@ ul {
   padding-left: 0;
   margin: 0; }
 
+button, select {
+  border: none;
+  background-image: none;
+  background-color: transparent;
+  box-shadow: none;
+  -webkit-appearance: none; }
+
+/* clear mobile style */
 /* Text */
 .cl-bold {
   font-weight: bold; }

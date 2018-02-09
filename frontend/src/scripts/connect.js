@@ -1,3 +1,4 @@
+
 document.addEventListener('deviceready', function(){
-    alert('APP START CONNECT');
+    console.log( 'camera:', navigator.camera);
 }, false);

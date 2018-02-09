@@ -5,10 +5,6 @@ import 'font-awesome/fonts/fontawesome-webfont.eot';
 import 'react-md/dist/react-md.min.js';
 
 import classNames from 'classnames';
-// import { HashRouter } from 'react-router-dom'
-// import createBrowserHistory from 'history/createBrowserHistory';
-// import createHashHistory from 'history/createHashHistory';
-
 
 import Header from 'components/layouts/Header';
 import Footer from 'components/layouts/Footer';
@@ -16,7 +12,7 @@ import Community from 'components/routes/Community';
 import HomeIoT from 'components/routes/HomeIoT';
 import LifeInfo from 'components/routes/LifeInfo';
 import Reservation from 'components/routes/Reservation';
-// import Store from 'scripts/store';
+// import Store from 'scripts/connect';
 
 class App extends Component {
 
@@ -25,7 +21,6 @@ class App extends Component {
 
         this.state = {
             scrolled: false,
-            // history: createHashHistory(),
             isDevice: !!window.cordova,
         }
     }
@@ -42,9 +37,6 @@ class App extends Component {
                 });
             }
         }, true);
-
-        // Store.startAt = this.state.history.location.pathname || '/community';
-        // this.state.history.replace( Store.startAt );
     }
 
     render() {

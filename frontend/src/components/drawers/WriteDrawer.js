@@ -9,6 +9,51 @@ import previewSrc from 'images/img-preview-holder@3x.png';
 
 class WriteDrawer extends BottomDrawer {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            base64Img: null,
+        }
+    }
+
+
+    selectPicture() {
+        let gettedPicture = (base64) => this.gettedPicture(base64);
+        let failedPicture = (msg) => this.failedPicture(msg);
+
+        navigator.camera.getPicture(
+            gettedPicture,
+            failedPicture,
+            {
+                quality: 100,
+                sourceType: 0,
+                destinationType: 0
+            });
+    }
+
+    gettedPicture(base64){
+
+        this.setState({
+            base64Img: 'data:image/jpeg;base64,' + base64
+        });
+
+    }
+
+    failedPicture(message) {
+        alert(message);
+    }
+
+    clearPicture() {
+        this.setState({
+            base64Img: null,
+        });
+    }
+
+    complete() {
+
+    }
+
     render() {
 
         return <div>
@@ -20,15 +65,15 @@ class WriteDrawer extends BottomDrawer {
 
                 <footer className="cl-flex-between">
                     <div className="cl-preview-holder">
-                        <img src={previewSrc} alt="이미지 미리보기" width="52" height="52"/>
-                        <button>이미지 삭제</button>
+                        <img src={this.state.base64Img || previewSrc} alt="이미지 미리보기" width="52" height="52"/>
+                        <button onClick={() => this.clearPicture()}>이미지 삭제</button>
                     </div>
 
-                    <button>
+                    <button onClick={() => this.selectPicture()}>
                         <img src={addSrc} alt="이미지 추가" width="139" height="36"/>
                     </button>
-                    <button>
-                        <img src={completeSrc} alt="이미지 추가" width="97" height="36"/>
+                    <button onClick={() => this.complete()}>
+                        <img src={completeSrc} alt="완료" width="97" height="36"/>
                     </button>
                 </footer>
 
