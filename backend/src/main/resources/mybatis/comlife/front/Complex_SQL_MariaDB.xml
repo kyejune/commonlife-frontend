@@ -25,6 +25,8 @@
       MNL_SRC -- ??
     FROM
       COMPLEX_M
+      AND
+      COMPLEX_M.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
     ;
   </select>
 
@@ -53,6 +55,8 @@
       COMPLEX_M
     WHERE
       CMPLX_ID = #{cmplxId}
+      AND
+      COMPLEX_M.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
     ;
   </select>
 
@@ -71,6 +75,8 @@
       COMPLEX_M LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
       COMPLEX_M_EXT
       ON COMPLEX_M.CMPLX_ID = COMPLEX_M_EXT.CMPLX_ID
+    WHERE
+      COMPLEX_M.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
     ORDER BY
       COMPLEX_M.CMPLX_NM ASC
     ;

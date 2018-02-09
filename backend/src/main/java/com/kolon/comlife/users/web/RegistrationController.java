@@ -2,6 +2,7 @@ package com.kolon.comlife.users.web;
 
 import com.kolon.comlife.common.model.DataListInfo;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
+import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.users.model.AgreementInfo;
@@ -282,7 +283,212 @@ public class RegistrationController {
                     .body( new SimpleErrorInfo( (String)result.get("MSG") ) );
         }
 
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo( (String)result.get("MSG")) );
+    }
+
+
+    /**
+     * 3-1. 사용자 아이디 중복 확인
+     */
+    @GetMapping(
+            value="/existedUser/{userId}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity checkExistedUser( @PathVariable("userId") String userId ) {
+        ObjectMapper mapper = new ObjectMapper();
+        HttpGet hg;
+        URIBuilder builder = new URIBuilder();
+        URI uri = null;
+        Map result;
+
+        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
+        try {
+            builder.setScheme("https")
+                    .setHost("dev-master.smartiok.com")
+                    .setPath("/mobile/controller/MobileUserController/checkUserId.do")
+                    .setParameter("userId", userId );
+            uri = builder.build();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+        }
+
+        hg = new HttpGet(uri);
+        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
+
+        try {
+            HttpResponse hr = httpClient.execute(hg);
+            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
+        } catch (IOException e) {
+            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
+            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
+        }
+
+        if( !(boolean)result.get("resFlag")) {
+            return ResponseEntity
+                    .status( HttpStatus.CONFLICT )
+                    .body( new SimpleErrorInfo( (String)result.get("MSG") ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo( (String)result.get("MSG")) );
+    }
+
+
+    /**
+     * 3-2. 사용자 휴대폰 인증번호 요청
+     */
+    @GetMapping(
+            value="/certUserCellNo",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity requestCertUserCellNo( HttpServletRequest request ) {
+        ObjectMapper mapper = new ObjectMapper();
+        HttpGet hg;
+        URIBuilder builder = new URIBuilder();
+        URI uri = null;
+        Map result;
+
+        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
+        try {
+            builder.setScheme("https")
+                    .setHost("dev-master.smartiok.com")
+                    .setPath("/mobile/controller/MobileUserCertNoController/reqUserCertNumber.do")
+                    .setParameter("cmplxId", request.getParameter("cmplxId"))
+                    .setParameter("dong", request.getParameter("dong"))
+                    .setParameter("ho", request.getParameter("ho"))
+                    .setParameter("headNm", request.getParameter("headNm"))
+                    .setParameter("headCell", request.getParameter("headCell"))
+                    .setParameter("userNm", request.getParameter("userNm"))
+                    .setParameter("userCell", request.getParameter("userCell"))
+                    .setParameter("userCertId", request.getParameter("userCertId"))
+            ;
+            uri = builder.build();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+        }
+
+        hg = new HttpGet(uri);
+        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
+
+        try {
+            HttpResponse hr = httpClient.execute(hg);
+            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
+        } catch (IOException e) {
+            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
+            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
+        }
+
+        if( !(boolean)result.get("resFlag")) {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND )
+                    .body( new SimpleErrorInfo( (String)result.get("msg") ) );
+        }
+
         return ResponseEntity.status( HttpStatus.OK ).body( result );
+    }
+
+    /**
+     * 3-3. 사용자 휴대폰 인증번호 확인
+     */
+    @PostMapping(
+            value="/certUserCellNo",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity validateCertUserCellNo( HttpServletRequest request ) {
+        ObjectMapper mapper = new ObjectMapper();
+        HttpGet hg;
+        URIBuilder builder = new URIBuilder();
+        URI uri = null;
+        Map result;
+
+        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
+        try {
+            builder.setScheme("https")
+                    .setHost("dev-master.smartiok.com")
+                    .setPath("/mobile/controller/MobileUserCertNoController/confirmUserCertNumber.do")
+                    .setParameter("userCell", request.getParameter("userCell"))
+                    .setParameter("userCertId", request.getParameter("userCertId"))
+                    .setParameter("userCertNum", request.getParameter("userCertNum"));
+            uri = builder.build();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+        }
+
+        hg = new HttpGet(uri);
+        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
+
+        try {
+            HttpResponse hr = httpClient.execute(hg);
+            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
+        } catch (IOException e) {
+            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
+            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
+        }
+
+        if( !(boolean)result.get("resFlag")) {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND )
+                    .body( new SimpleErrorInfo( (String)result.get("MSG") ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo( (String)result.get("MSG")) );
+    }
+
+
+    /**
+     * 3-4. 회원 가입
+     */
+    @PostMapping(
+            value="/newUser",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity registerNewUser( HttpServletRequest request ) {
+        ObjectMapper mapper = new ObjectMapper();
+        HttpGet hg;
+        URIBuilder builder = new URIBuilder();
+        URI uri = null;
+        Map result;
+
+        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
+        try {
+            builder.setScheme("https")
+                    .setHost("dev-master.smartiok.com")
+                    .setPath("/mobile/controller/MobileUserController/registerMember.do")
+                    .setParameter("cmplxId", request.getParameter("cmplxId"))
+                    .setParameter("dong", request.getParameter("dong"))
+                    .setParameter("ho", request.getParameter("ho"))
+                    .setParameter("headNm", request.getParameter("headNm"))
+                    .setParameter("headCell", request.getParameter("headCell"))
+                    .setParameter("userNm", request.getParameter("userNm"))
+                    .setParameter("userCell", request.getParameter("userCell"))
+                    .setParameter("certNum", request.getParameter("userCertNum"))  // 주의!: certNum과 userCertNum이 다름
+                    .setParameter("smsChkYn", request.getParameter("smsChkYn"))
+                    .setParameter("smsChkDt", request.getParameter("smsChkDt"))
+                    .setParameter("userId", request.getParameter("userId"))
+                    .setParameter("userPw", request.getParameter("userPw"))
+            ;
+            uri = builder.build();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+        }
+
+        hg = new HttpGet(uri);
+        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
+
+        try {
+            HttpResponse hr = httpClient.execute(hg);
+            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
+        } catch (IOException e) {
+            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
+            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
+        }
+
+        if( !(boolean)result.get("resFlag")) {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( new SimpleErrorInfo( (String)result.get("MSG") ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo( (String)result.get("MSG")) );
     }
 
 }
