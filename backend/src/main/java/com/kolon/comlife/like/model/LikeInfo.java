@@ -1,6 +1,6 @@
 package com.kolon.comlife.like.model;
 
-import com.kolon.comlife.user.model.UserInfo;
+import com.kolon.comlife.users.model.UserInfo;
 import org.apache.ibatis.type.Alias;
 
 @Alias("likeInfo")

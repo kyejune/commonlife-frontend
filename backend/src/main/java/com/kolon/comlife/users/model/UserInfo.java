@@ -1,4 +1,4 @@
-package com.kolon.comlife.user.model;
+package com.kolon.comlife.users.model;
 
 import com.kolon.comlife.post.model.PostInfo;
 
