@@ -1,0 +1,2473 @@
+{
+	"info": {
+		"name": "CommonLife",
+		"_postman_id": "81dfbbbb-751f-9cce-1a1b-3fef4c75bb5a",
+		"description": "CommonLife Backend API 셋\n1. Backend와 Frontend간의 개발한 API 사용 방법 공유 \n2. API 레벨의 테스트 케이스 작성",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "0-Unsorted",
+			"description": "",
+			"item": [
+				{
+					"name": "Example/test1/Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "ae83d5c9-9b46-48af-a5a1-b3fdfa015fb1",
+								"type": "text/javascript",
+								"exec": [
+									"",
+									"",
+									"pm.test(\"response is ok\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"response body should be json\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.response.to.be.json; ",
+									"    // pm.expect(jsonData.value).to.eql('{\"id\":2,\"name\":\"test2\"}');",
+									"});",
+									"",
+									"pm.test(\"body['name'] should be 'test2'\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    console.log(jsonData);",
+									"    pm.expect(jsonData['name']).to.eql(\"test2\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/example/test2",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"example",
+								"test2"
+							]
+						},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "186c28b5-aa68-4de1-9190-cdd6a8c1bb58",
+							"name": "Example/test1/Get",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "http://localhost:8080/example/test2",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"example",
+										"test2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 02 Feb 2018 05:07:26 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "21",
+							"body": "{\"id\":2,\"name\":\"test2\"}"
+						}
+					]
+				},
+				{
+					"name": "Example/All/Get",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/example/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"example",
+								""
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Example/Update/Success",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7507f9db-35e7-4361-bbde-7ec1f8fdb9fc",
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Should be failed with 404\", function () {",
+									"    pm.response.to.have.status(404);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"test12\"\n}"
+						},
+						"url": {
+							"raw": "{{API_HOST}}/example/99999",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"example",
+								"99999"
+							]
+						},
+						"description": "404 Not Found must be returned."
+					},
+					"response": []
+				},
+				{
+					"name": "Example/test3/Post",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"test33\"\n}"
+						},
+						"url": {
+							"raw": "{{API_HOST}}/example/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"example",
+								""
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "POST/All/GET",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7a1dd80d-aee3-4f4c-ab21-ed56121c0ae0",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}",
+								"disabled": true
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/posts/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"posts",
+								""
+							]
+						},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "b5e91fc0-b4dc-4bc6-ad53-c7f18dc1f55b",
+							"name": "POST/All/GET",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "api_key",
+										"value": "acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70",
+										"disabled": true
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/posts/",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"posts",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 15:30:34 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "82",
+							"body": "{\"currentPage\":1,\"totalPages\":1.0,\"perPage\":20,\"data\":[{\"boardIdx\":1,\"boardType\":\"event\",\"title\":\"title\",\"content\":\"content\",\"contentType\":\"\",\"readCnt\":\"0\",\"openDt\":\"\",\"closeDt\":\"\",\"htmlYn\":\"N\",\"useYn\":\"Y\",\"delYn\":\"N\",\"writeNm\":\"\",\"writeHp\":\"\",\"writeEmail\":\"\",\"ordererDateTime\":\"\",\"orderNo\":null,\"regDttm\":\"2018-02-01 09:24:06.0\",\"regUserid\":0,\"updDttm\":\"2018-02-01 09:24:06.0\",\"updUserid\":0,\"usrId\":14,\"cmplxId\":0,\"user\":{\"usrId\":14,\"userClass\":null,\"kind\":\"AD00501\",\"userId\":\"benit204\",\"userNm\":\"홍길동\",\"cell\":\"010-2584-3958\",\"email\":\"youknow@kolon.com\",\"cellYn\":\"Y\",\"emailYn\":\"a\",\"liveYn\":\"N\",\"inDt\":null,\"outDt\":null,\"reDt\":null,\"smsChkYn\":\"Y\",\"smsChkNo\":null,\"smsChkDt\":null,\"aprvSts\":\"AD00404\",\"cmplxId\":0,\"dong\":\"201\",\"ho\":\"204\",\"headId\":\"14\",\"loginYn\":null,\"sipUserId\":null,\"sipUserCancel\":null,\"gwAccessId\":null,\"regId\":null,\"regDt\":null,\"chgId\":null,\"chgDt\":null,\"posts\":null},\"postFiles\":null,\"register\":null,\"updater\":null},{\"boardIdx\":2,\"boardType\":\"event\",\"title\":\"title\",\"content\":\"content\",\"contentType\":\"\",\"readCnt\":\"0\",\"openDt\":\"\",\"closeDt\":\"\",\"htmlYn\":\"N\",\"useYn\":\"Y\",\"delYn\":\"N\",\"writeNm\":\"\",\"writeHp\":\"\",\"writeEmail\":\"\",\"ordererDateTime\":\"\",\"orderNo\":null,\"regDttm\":\"2018-02-01 09:24:29.0\",\"regUserid\":0,\"updDttm\":\"2018-02-01 09:24:29.0\",\"updUserid\":0,\"usrId\":14,\"cmplxId\":0,\"user\":{\"usrId\":14,\"userClass\":null,\"kind\":\"AD00501\",\"userId\":\"benit204\",\"userNm\":\"홍길동\",\"cell\":\"010-2584-3958\",\"email\":\"youknow@kolon.com\",\"cellYn\":\"Y\",\"emailYn\":\"a\",\"liveYn\":\"N\",\"inDt\":null,\"outDt\":null,\"reDt\":null,\"smsChkYn\":\"Y\",\"smsChkNo\":null,\"smsChkDt\":null,\"aprvSts\":\"AD00404\",\"cmplxId\":0,\"dong\":\"201\",\"ho\":\"204\",\"headId\":\"14\",\"loginYn\":null,\"sipUserId\":null,\"sipUserCancel\":null,\"gwAccessId\":null,\"regId\":null,\"regDt\":null,\"chgId\":null,\"chgDt\":null,\"posts\":null},\"postFiles\":null,\"register\":null,\"updater\":null},{\"boardIdx\":3,\"boardType\":\"event\",\"title\":\"title\",\"content\":\"content\",\"contentType\":\"\",\"readCnt\":\"0\",\"openDt\":\"\",\"closeDt\":\"\",\"htmlYn\":\"N\",\"useYn\":\"Y\",\"delYn\":\"N\",\"writeNm\":\"\",\"writeHp\":\"\",\"writeEmail\":\"\",\"ordererDateTime\":\"\",\"orderNo\":null,\"regDttm\":\"2018-02-02 06:01:53.0\",\"regUserid\":0,\"updDttm\":\"2018-02-02 06:01:53.0\",\"updUserid\":0,\"usrId\":14,\"cmplxId\":0,\"user\":{\"usrId\":14,\"userClass\":null,\"kind\":\"AD00501\",\"userId\":\"benit204\",\"userNm\":\"홍길동\",\"cell\":\"010-2584-3958\",\"email\":\"youknow@kolon.com\",\"cellYn\":\"Y\",\"emailYn\":\"a\",\"liveYn\":\"N\",\"inDt\":null,\"outDt\":null,\"reDt\":null,\"smsChkYn\":\"Y\",\"smsChkNo\":null,\"smsChkDt\":null,\"aprvSts\":\"AD00404\",\"cmplxId\":0,\"dong\":\"201\",\"ho\":\"204\",\"headId\":\"14\",\"loginYn\":null,\"sipUserId\":null,\"sipUserCancel\":null,\"gwAccessId\":null,\"regId\":null,\"regDt\":null,\"chgId\":null,\"chgDt\":null,\"posts\":null},\"postFiles\":null,\"register\":null,\"updater\":null},{\"boardIdx\":4,\"boardType\":\"event\",\"title\":\"title\",\"content\":\"content\",\"contentType\":\"\",\"readCnt\":\"0\",\"openDt\":\"\",\"closeDt\":\"\",\"htmlYn\":\"N\",\"useYn\":\"Y\",\"delYn\":\"N\",\"writeNm\":\"\",\"writeHp\":\"\",\"writeEmail\":\"\",\"ordererDateTime\":\"\",\"orderNo\":null,\"regDttm\":\"2018-02-04 12:33:36.0\",\"regUserid\":0,\"updDttm\":\"2018-02-04 12:33:36.0\",\"updUserid\":0,\"usrId\":14,\"cmplxId\":0,\"user\":{\"usrId\":14,\"userClass\":null,\"kind\":\"AD00501\",\"userId\":\"benit204\",\"userNm\":\"홍길동\",\"cell\":\"010-2584-3958\",\"email\":\"youknow@kolon.com\",\"cellYn\":\"Y\",\"emailYn\":\"a\",\"liveYn\":\"N\",\"inDt\":null,\"outDt\":null,\"reDt\":null,\"smsChkYn\":\"Y\",\"smsChkNo\":null,\"smsChkDt\":null,\"aprvSts\":\"AD00404\",\"cmplxId\":0,\"dong\":\"201\",\"ho\":\"204\",\"headId\":\"14\",\"loginYn\":null,\"sipUserId\":null,\"sipUserCancel\":null,\"gwAccessId\":null,\"regId\":null,\"regDt\":null,\"chgId\":null,\"chgDt\":null,\"posts\":null},\"postFiles\":null,\"register\":null,\"updater\":null},{\"boardIdx\":5,\"boardType\":\"event\",\"title\":\"title\",\"content\":\"content\",\"contentType\":\"\",\"readCnt\":\"0\",\"openDt\":\"\",\"closeDt\":\"\",\"htmlYn\":\"N\",\"useYn\":\"Y\",\"delYn\":\"N\",\"writeNm\":\"\",\"writeHp\":\"\",\"writeEmail\":\"\",\"ordererDateTime\":\"\",\"orderNo\":null,\"regDttm\":\"2018-02-04 12:48:50.0\",\"regUserid\":0,\"updDttm\":\"2018-02-04 12:48:50.0\",\"updUserid\":0,\"usrId\":14,\"cmplxId\":0,\"user\":{\"usrId\":14,\"userClass\":null,\"kind\":\"AD00501\",\"userId\":\"benit204\",\"userNm\":\"홍길동\",\"cell\":\"010-2584-3958\",\"email\":\"youknow@kolon.com\",\"cellYn\":\"Y\",\"emailYn\":\"a\",\"liveYn\":\"N\",\"inDt\":null,\"outDt\":null,\"reDt\":null,\"smsChkYn\":\"Y\",\"smsChkNo\":null,\"smsChkDt\":null,\"aprvSts\":\"AD00404\",\"cmplxId\":0,\"dong\":\"201\",\"ho\":\"204\",\"headId\":\"14\",\"loginYn\":null,\"sipUserId\":null,\"sipUserCancel\":null,\"gwAccessId\":null,\"regId\":null,\"regDt\":null,\"chgId\":null,\"chgDt\":null,\"posts\":null},\"postFiles\":null,\"register\":null,\"updater\":null},{\"boardIdx\":6,\"boardType\":\"event\",\"title\":\"title\",\"content\":\"content\",\"contentType\":\"\",\"readCnt\":\"0\",\"openDt\":\"\",\"closeDt\":\"\",\"htmlYn\":\"N\",\"useYn\":\"Y\",\"delYn\":\"N\",\"writeNm\":\"\",\"writeHp\":\"\",\"writeEmail\":\"\",\"ordererDateTime\":\"\",\"orderNo\":null,\"regDttm\":\"2018-02-04 12:49:45.0\",\"regUserid\":0,\"updDttm\":\"2018-02-04 12:49:45.0\",\"updUserid\":0,\"usrId\":14,\"cmplxId\":0,\"user\":{\"usrId\":14,\"userClass\":null,\"kind\":\"AD00501\",\"userId\":\"benit204\",\"userNm\":\"홍길동\",\"cell\":\"010-2584-3958\",\"email\":\"youknow@kolon.com\",\"cellYn\":\"Y\",\"emailYn\":\"a\",\"liveYn\":\"N\",\"inDt\":null,\"outDt\":null,\"reDt\":null,\"smsChkYn\":\"Y\",\"smsChkNo\":null,\"smsChkDt\":null,\"aprvSts\":\"AD00404\",\"cmplxId\":0,\"dong\":\"201\",\"ho\":\"204\",\"headId\":\"14\",\"loginYn\":null,\"sipUserId\":null,\"sipUserCancel\":null,\"gwAccessId\":null,\"regId\":null,\"regDt\":null,\"chgId\":null,\"chgDt\":null,\"posts\":null},\"postFiles\":null,\"register\":null,\"updater\":null},{\"boardIdx\":7,\"boardType\":\"event\",\"title\":\"title\",\"content\":\"content\",\"contentType\":\"\",\"readCnt\":\"0\",\"openDt\":\"\",\"closeDt\":\"\",\"htmlYn\":\"N\",\"useYn\":\"Y\",\"delYn\":\"N\",\"writeNm\":\"\",\"writeHp\":\"\",\"writeEmail\":\"\",\"ordererDateTime\":\"\",\"orderNo\":null,\"regDttm\":\"2018-02-04 12:49:51.0\",\"regUserid\":0,\"updDttm\":\"2018-02-04 12:49:51.0\",\"updUserid\":0,\"usrId\":14,\"cmplxId\":0,\"user\":{\"usrId\":14,\"userClass\":null,\"kind\":\"AD00501\",\"userId\":\"benit204\",\"userNm\":\"홍길동\",\"cell\":\"010-2584-3958\",\"email\":\"youknow@kolon.com\",\"cellYn\":\"Y\",\"emailYn\":\"a\",\"liveYn\":\"N\",\"inDt\":null,\"outDt\":null,\"reDt\":null,\"smsChkYn\":\"Y\",\"smsChkNo\":null,\"smsChkDt\":null,\"aprvSts\":\"AD00404\",\"cmplxId\":0,\"dong\":\"201\",\"ho\":\"204\",\"headId\":\"14\",\"loginYn\":null,\"sipUserId\":null,\"sipUserCancel\":null,\"gwAccessId\":null,\"regId\":null,\"regDt\":null,\"chgId\":null,\"chgDt\":null,\"posts\":null},\"postFiles\":null,\"register\":null,\"updater\":null}]}"
+						}
+					]
+				},
+				{
+					"name": "POST/event/POST",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"boardType\": \"event\",\n    \"title\": \"title\",\n    \"content\": \"content\",\n    \"usrId\": 14\n}"
+						},
+						"url": {
+							"raw": "{{API_HOST}}/post/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"post",
+								""
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "Complex Get All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "",
+								"disabled": true
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/complexes/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"complexes",
+								""
+							]
+						},
+						"description": "모든 단지의 정보 가져오기"
+					},
+					"response": [
+						{
+							"id": "3bab31ea-47b2-4c22-ad1a-f23adb62eef5",
+							"name": "Complex Get All",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/complexes/",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"complexes",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 15:21:19 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "31",
+							"body": "[{\"cmplxId\":119,\"cmplxGrp\":null,\"cmplxNm\":\"Cvnet 단지(TCP)\",\"cmplxCd\":\"7000\",\"cmplxSNm\":\"씨브이넷아파트\",\"latiPos\":37.5576862,\"longPos\":126.92348700000002,\"unitCnt\":\"\",\"addr\":\"서울 마포구 동교로 171 (동교동)\",\"addrDtl\":\"\",\"addr1\":\"서울시\",\"addr2\":\"마포구\",\"loc1Nm\":\"\",\"loc2Nm\":\"\",\"loc3Nm\":\"\",\"postNo\":\"13837\",\"imgSrc\":\"\",\"mapSrc\":null,\"logoImgSrc\":\"apt1502349010965\",\"mnlSrc\":null},{\"cmplxId\":125,\"cmplxGrp\":null,\"cmplxNm\":\"동원테스트현장\",\"cmplxCd\":\"1234\",\"cmplxSNm\":\"동원테스트현장\",\"latiPos\":37.3945833,\"longPos\":126.96039280000002,\"unitCnt\":\"2\",\"addr\":\"경기 안양시 동안구 시민대로 273 (관양동, 효성인텔리안)\",\"addrDtl\":\"\",\"addr1\":\"경기\",\"addr2\":\"안양시\",\"loc1Nm\":\"경기\",\"loc2Nm\":\"안양시\",\"loc3Nm\":\"\",\"postNo\":\"14054\",\"imgSrc\":\"apt1515375112535\",\"mapSrc\":null,\"logoImgSrc\":\"apt1506047271149\",\"mnlSrc\":\"apt1515374728671\"},{\"cmplxId\":126,\"cmplxGrp\":null,\"cmplxNm\":\"삼성스마트가전\",\"cmplxCd\":\"4000\",\"cmplxSNm\":\"삼성\",\"latiPos\":37.5104873,\"longPos\":127.04599229999997,\"unitCnt\":\"\",\"addr\":\"서울 강남구 봉은사로 418 (삼성동, 조양빌딩)\",\"addrDtl\":\"\",\"addr1\":\"서울\",\"addr2\":\"강남구\",\"loc1Nm\":\"서울\",\"loc2Nm\":\"강남구\",\"loc3Nm\":\"\",\"postNo\":\"06153\",\"imgSrc\":\"\",\"mapSrc\":null,\"logoImgSrc\":\"apt1501544428869\",\"mnlSrc\":null},{\"cmplxId\":127,\"cmplxGrp\":null,\"cmplxNm\":\"따복하우스1차 베니트 개발\",\"cmplxCd\":\"TBS1\",\"cmplxSNm\":\"따복 1차 베니트\",\"latiPos\":37.4255245,\"longPos\":126.99038900000005,\"unitCnt\":\"3\",\"addr\":\"경기 과천시 코오롱로 11 (별양동, 코오롱)\",\"addrDtl\":\"10층 (별양동 코오롱타워 본관)\",\"addr1\":\"경기\",\"addr2\":\"과천시\",\"loc1Nm\":\"경기\",\"loc2Nm\":\"과천시\",\"loc3Nm\":\"\",\"postNo\":\"13837\",\"imgSrc\":\"\",\"mapSrc\":null,\"logoImgSrc\":null,\"mnlSrc\":null},{\"cmplxId\":128,\"cmplxGrp\":null,\"cmplxNm\":\"CVNET(Rest)\",\"cmplxCd\":\"CVNT\",\"cmplxSNm\":\"CVREST\",\"latiPos\":0.0,\"longPos\":0.0,\"unitCnt\":\"100\",\"addr\":\"경기 수원시 권선구 경수대로 14 (대황교동, 대황교동 가스충전소)\",\"addrDtl\":\"\",\"addr1\":\"서울특별시\",\"addr2\":\"강남구\",\"loc1Nm\":\"서울특별시\",\"loc2Nm\":\"강남구\",\"loc3Nm\":\"\",\"postNo\":\"16661\",\"imgSrc\":\"\",\"mapSrc\":null,\"logoImgSrc\":null,\"mnlSrc\":null},{\"cmplxId\":129,\"cmplxGrp\":null,\"cmplxNm\":\"따복하우스1차 코맥스 개발\",\"cmplxCd\":\"TCS1\",\"cmplxSNm\":\"코맥스 개발.\",\"latiPos\":37.4308517,\"longPos\":127.1550545,\"unitCnt\":\"1\",\"addr\":\"경기 성남시 중원구 둔촌대로 494 (상대원동)\",\"addrDtl\":\"\",\"addr1\":\"경기\",\"addr2\":\"성남시\",\"loc1Nm\":\"경기\",\"loc2Nm\":\"성남시\",\"loc3Nm\":\"\",\"postNo\":\"13229\",\"imgSrc\":\"\",\"mapSrc\":null,\"logoImgSrc\":null,\"mnlSrc\":null},{\"cmplxId\":130,\"cmplxGrp\":null,\"cmplxNm\":\"Load Runner 현장\",\"cmplxCd\":\"LOAD\",\"cmplxSNm\":\"Load Runner 현장\",\"latiPos\":37.4255245,\"longPos\":126.99038900000005,\"unitCnt\":\"1000\",\"addr\":\"경기 과천시 코오롱로 11 (별양동, 코오롱)\",\"addrDtl\":\"10층\",\"addr1\":\"경기\",\"addr2\":\"과천시\",\"loc1Nm\":\"경기\",\"loc2Nm\":\"과천시\",\"loc3Nm\":\"\",\"postNo\":\"13837\",\"imgSrc\":\"\",\"mapSrc\":null,\"logoImgSrc\":null,\"mnlSrc\":null}]"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "1-Post ",
+			"description": "",
+			"item": [
+				{
+					"name": "1-1. POST 전체 목록",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=UTF-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/posts/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"posts",
+								""
+							]
+						},
+						"description": "전체 POST 가져오기 "
+					},
+					"response": []
+				},
+				{
+					"name": "1-2. 특정 POST  가져오기",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=UTF-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/posts/2",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"posts",
+								"2"
+							]
+						},
+						"description": "전체 POST 가져오기 "
+					},
+					"response": []
+				},
+				{
+					"name": "1-3. 새로운 포스트 생성",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"boardType\": \"event\",\n    \"title\": \"title\",\n    \"content\": \"content\"\n}"
+						},
+						"url": {
+							"raw": "{{API_HOST}}/posts/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"posts",
+								""
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "1-4. 포스트 수정",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"boardType\": \"EVENT\",\n    \"title\": \"CHANGED TITLE\",\n    \"content\": \"CHANGED CONTENT\"\n}"
+						},
+						"url": {
+							"raw": "{{API_HOST}}/posts/1",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"posts",
+								"1"
+							]
+						},
+						"description": "특정 ID의 POST 수정 "
+					},
+					"response": []
+				},
+				{
+					"name": "1-5. 포스트 삭제",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{API_HOST}}/posts/2",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"posts",
+								"2"
+							]
+						},
+						"description": "특정 ID의 POST 수정 "
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "36c2a9ab-2f42-4c31-a8c6-b076f7149532",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "756427dd-1d83-4054-bd4d-0ca484dab882",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "1-Post/Like",
+			"description": "Post의 Like 기능 테스트 ",
+			"item": [
+				{
+					"name": "1-1. POST 따봉 가져오기",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=UTF-8"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/posts/1/likes/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"posts",
+								"1",
+								"likes",
+								""
+							]
+						},
+						"description": "전체 POST 가져오기 "
+					},
+					"response": []
+				},
+				{
+					"name": "1-1. 1따봉 추가",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usrIdx\": 1\n}"
+						},
+						"url": {
+							"raw": "{{API_HOST}}/posts/1/likes/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"posts",
+								"1",
+								"likes",
+								""
+							]
+						},
+						"description": "전체 POST 가져오기 "
+					},
+					"response": []
+				},
+				{
+					"name": "1-1. 1따봉 취소",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json; charset=UTF-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"usrIdx\": 14\n}\n\n"
+						},
+						"url": {
+							"raw": "{{API_HOST}}/posts/1/likes/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"posts",
+								"1",
+								"likes",
+								""
+							]
+						},
+						"description": "전체 POST 가져오기 "
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "2-User Registration",
+			"description": "This folder contains a series of user registration apis.\n",
+			"item": [
+				{
+					"name": "0. 약관 정보 가져오기 ",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/agreement",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"agreement"
+							]
+						},
+						"description": "가장 최근 약관 정보 가져오기"
+					},
+					"response": []
+				},
+				{
+					"name": "1. 등록지점 선택 (현장 목록 가져오기)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/complexes/",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"complexes",
+								""
+							]
+						},
+						"description": "현장의 목록과 현장의 필요 정보를 가져옵니다"
+					},
+					"response": [
+						{
+							"id": "fc24faff-0905-4f43-b07a-f1e80ad0c5e8",
+							"name": "1. 등록지점 선택 (현장 목록 가져오기)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/complexes",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"complexes"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 08:15:32 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "662",
+							"body": "[{\"cmplxId\":119,\"cmplxGrp\":\"\",\"cmplxNm\":\"Cvnet 단지(TCP)\",\"addr\":\"서울 마포구 동교로 171 (동교동)\",\"addrDtl\":\"\",\"addr1\":\"서울시\",\"addr2\":\"마포구\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":128,\"cmplxGrp\":\"\",\"cmplxNm\":\"CVNET(Rest)\",\"addr\":\"경기 수원시 권선구 경수대로 14 (대황교동, 대황교동 가스충전소)\",\"addrDtl\":\"\",\"addr1\":\"서울특별시\",\"addr2\":\"강남구\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":130,\"cmplxGrp\":\"\",\"cmplxNm\":\"Load Runner 현장\",\"addr\":\"경기 과천시 코오롱로 11 (별양동, 코오롱)\",\"addrDtl\":\"10층\",\"addr1\":\"경기\",\"addr2\":\"과천시\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":125,\"cmplxGrp\":\"\",\"cmplxNm\":\"동원테스트현장\",\"addr\":\"경기 안양시 동안구 시민대로 273 (관양동, 효성인텔리안)\",\"addrDtl\":\"\",\"addr1\":\"경기\",\"addr2\":\"안양시\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":127,\"cmplxGrp\":\"\",\"cmplxNm\":\"따복하우스1차 베니트 개발\",\"addr\":\"경기 과천시 코오롱로 11 (별양동, 코오롱)\",\"addrDtl\":\"10층 (별양동 코오롱타워 본관)\",\"addr1\":\"경기\",\"addr2\":\"과천시\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":129,\"cmplxGrp\":\"\",\"cmplxNm\":\"따복하우스1차 코맥스 개발\",\"addr\":\"경기 성남시 중원구 둔촌대로 494 (상대원동)\",\"addrDtl\":\"\",\"addr1\":\"경기\",\"addr2\":\"성남시\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":126,\"cmplxGrp\":\"\",\"cmplxNm\":\"삼성스마트가전\",\"addr\":\"서울 강남구 봉은사로 418 (삼성동, 조양빌딩)\",\"addrDtl\":\"\",\"addr1\":\"서울\",\"addr2\":\"강남구\",\"clMapSrc\":null,\"clLogoImgSrc\":null}]"
+						},
+						{
+							"id": "054658b1-dd45-4ef8-b19a-ffef3ec23e21",
+							"name": "1. 등록지점 선택 (현장 목록 가져오기)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/complexes/",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"complexes",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 15:32:24 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "1395",
+							"body": "{\"data\":[{\"cmplxId\":119,\"cmplxGrp\":\"\",\"cmplxNm\":\"Cvnet 단지(TCP)\",\"addr\":\"서울 마포구 동교로 171 (동교동)\",\"addrDtl\":\"\",\"addr1\":\"서울시\",\"addr2\":\"마포구\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":128,\"cmplxGrp\":\"\",\"cmplxNm\":\"CVNET(Rest)\",\"addr\":\"경기 수원시 권선구 경수대로 14 (대황교동, 대황교동 가스충전소)\",\"addrDtl\":\"\",\"addr1\":\"서울특별시\",\"addr2\":\"강남구\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":130,\"cmplxGrp\":\"\",\"cmplxNm\":\"Load Runner 현장\",\"addr\":\"경기 과천시 코오롱로 11 (별양동, 코오롱)\",\"addrDtl\":\"10층\",\"addr1\":\"경기\",\"addr2\":\"과천시\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":125,\"cmplxGrp\":\"\",\"cmplxNm\":\"동원테스트현장\",\"addr\":\"경기 안양시 동안구 시민대로 273 (관양동, 효성인텔리안)\",\"addrDtl\":\"\",\"addr1\":\"경기\",\"addr2\":\"안양시\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":127,\"cmplxGrp\":\"\",\"cmplxNm\":\"따복하우스1차 베니트 개발\",\"addr\":\"경기 과천시 코오롱로 11 (별양동, 코오롱)\",\"addrDtl\":\"10층 (별양동 코오롱타워 본관)\",\"addr1\":\"경기\",\"addr2\":\"과천시\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":129,\"cmplxGrp\":\"\",\"cmplxNm\":\"따복하우스1차 코맥스 개발\",\"addr\":\"경기 성남시 중원구 둔촌대로 494 (상대원동)\",\"addrDtl\":\"\",\"addr1\":\"경기\",\"addr2\":\"성남시\",\"clMapSrc\":null,\"clLogoImgSrc\":null},{\"cmplxId\":126,\"cmplxGrp\":\"\",\"cmplxNm\":\"삼성스마트가전\",\"addr\":\"서울 강남구 봉은사로 418 (삼성동, 조양빌딩)\",\"addrDtl\":\"\",\"addr1\":\"서울\",\"addr2\":\"강남구\",\"clMapSrc\":null,\"clLogoImgSrc\":null}]}"
+						}
+					]
+				},
+				{
+					"name": "2-1. 동 목록 가져오기",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/complexes/132",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"complexes",
+								"132"
+							]
+						},
+						"description": "119 단지의 동목록 가져오기"
+					},
+					"response": [
+						{
+							"id": "e706e0cd-fe69-4f00-8fb7-30d537114a3d",
+							"name": "2-1. 동 목록 가져오기",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/complexes/132",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"complexes",
+										"132"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Length",
+									"value": "37",
+									"name": "Content-Length",
+									"description": ""
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=ISO-8859-1",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 15:42:21 GMT",
+									"name": "Date",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "128",
+							"body": "{\"DATA\":{\"DONG\":[\"101\",\"102\",\"103\"]}}"
+						}
+					]
+				},
+				{
+					"name": "2-1. 동 목록 가져오기 (단지id가 없는 경우)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/complexes/99999",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"complexes",
+								"99999"
+							]
+						},
+						"description": "119 단지의 동목록 가져오기"
+					},
+					"response": [
+						{
+							"id": "d7f2e6ca-e355-4d06-a5e8-d17c6b798185",
+							"name": "2-1. 동 목록 가져오기 (없는 경우)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/complexes/99999",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"complexes",
+										"99999"
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 16:45:12 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "2881",
+							"body": "{\"msg\":\"해당하는 동이 없습니다\"}"
+						}
+					]
+				},
+				{
+					"name": "2-2. 호 목록 가져오기",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/complexes/132/101",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"complexes",
+								"132",
+								"101"
+							]
+						},
+						"description": "132 단지\n101 동의 \n호목록 가져오기"
+					},
+					"response": [
+						{
+							"id": "7e0e4a95-3427-4a5d-b5af-9b9380921396",
+							"name": "2-2. 호 목록 가져오기",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/complexes/119/101",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"complexes",
+										"119",
+										"101"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Length",
+									"value": "23",
+									"name": "Content-Length",
+									"description": ""
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=ISO-8859-1",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 15:39:04 GMT",
+									"name": "Date",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "692",
+							"body": "{\"DATA\":{\"HO\":[\"102\"]}}"
+						},
+						{
+							"id": "bd33fa2e-ee75-4f45-8b2b-f0dcf22df786",
+							"name": "2-2. 호 목록 가져오기",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/complexes/119/101",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"complexes",
+										"119",
+										"101"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 16:39:48 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "818",
+							"body": "{\"data\":[\"102\"]}"
+						}
+					]
+				},
+				{
+					"name": "2-2. 호 목록 가져오기 (동이 없는 경우)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/complexes/132/NoHo",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"complexes",
+								"132",
+								"NoHo"
+							]
+						},
+						"description": "132 단지\nNoHo 동의 \n호목록 가져오기"
+					},
+					"response": [
+						{
+							"id": "52d3d7ff-d8e6-40bd-bf73-681151265393",
+							"name": "2-2. 호 목록 가져오기",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/complexes/119/101",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"complexes",
+										"119",
+										"101"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Length",
+									"value": "23",
+									"name": "Content-Length",
+									"description": ""
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=ISO-8859-1",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 15:39:04 GMT",
+									"name": "Date",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "692",
+							"body": "{\"DATA\":{\"HO\":[\"102\"]}}"
+						},
+						{
+							"id": "b398036b-5ff8-48a0-b0da-95dda84a0ad6",
+							"name": "2-2. 호 목록 가져오기",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/complexes/119/101",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"complexes",
+										"119",
+										"101"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 16:39:48 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "818",
+							"body": "{\"data\":[\"102\"]}"
+						}
+					]
+				},
+				{
+					"name": "2-3. 세대주 휴대폰 인증번호 요청",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"certHeadCellNo"
+							],
+							"query": [
+								{
+									"key": "cmplxId",
+									"value": "132",
+									"equals": true
+								},
+								{
+									"key": "dong",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "ho",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "headNm",
+									"value": "김영헌",
+									"equals": true
+								},
+								{
+									"key": "headCell",
+									"value": "01050447244",
+									"equals": true
+								}
+							]
+						},
+						"description": "132 단지 101 동의 세대주에게 '인증번호' 요청"
+					},
+					"response": [
+						{
+							"id": "5a40bb90-5a19-4376-8462-2e758d7a7541",
+							"name": "2-3. 세대주 휴대폰 인증번호 요청",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"certHeadCellNo"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Feb 2018 02:56:50 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 3769,
+							"body": "{\"resFlag\":true,\"msg\":\"인증번호가 SMS로 발송되었습니다.\",\"userCertId\":18}"
+						}
+					]
+				},
+				{
+					"name": "2-4. 세대주 휴대폰 인증번호 확인",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "api_key",
+								"value": "acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=19&headCertNum=479848",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"certHeadCellNo"
+							],
+							"query": [
+								{
+									"key": "cmplxId",
+									"value": "132",
+									"equals": true
+								},
+								{
+									"key": "dong",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "ho",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "headNm",
+									"value": "김영헌",
+									"equals": true
+								},
+								{
+									"key": "headCell",
+									"value": "01050447244",
+									"equals": true
+								},
+								{
+									"key": "userCertId",
+									"value": "19",
+									"equals": true
+								},
+								{
+									"key": "headCertNum",
+									"value": "479848",
+									"equals": true
+								}
+							]
+						},
+						"description": "132 단지 101 동의 세대주 '인증번호' 확인"
+					},
+					"response": [
+						{
+							"id": "61e25f38-990f-41ad-b02c-ee5d0620393a",
+							"name": "2-4. 세대주 휴대폰 인증번호 확인",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=16&headCertNum=472998",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"certHeadCellNo"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true
+										},
+										{
+											"key": "userCertId",
+											"value": "16",
+											"equals": true
+										},
+										{
+											"key": "headCertNum",
+											"value": "472998",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 17:14:38 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "457",
+							"body": "{\"MSG\":\"인증번호가 일치합니다.\",\"resFlag\":true,\"smsChkDt\":\"2018-02-09 02:14:37\"}"
+						},
+						{
+							"id": "577af963-c987-4dea-a407-8765dd03ae18",
+							"name": "2-4. 세대주 휴대폰 인증번호 확인",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=16&headCertNum=472998",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"certHeadCellNo"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true
+										},
+										{
+											"key": "userCertId",
+											"value": "16",
+											"equals": true
+										},
+										{
+											"key": "headCertNum",
+											"value": "472998",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 17:14:56 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": ""
+								}
+							],
+							"cookie": [],
+							"responseTime": "189",
+							"body": "{\"msg\":\"인증번호가 일치하지 않습니다.\\r\\n확인 후 다시 입력해주세요.\"}"
+						},
+						{
+							"id": "a575714f-a066-4e5d-ab31-e23648386889",
+							"name": "2-4. 세대주 휴대폰 인증번호 확인",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=18&headCertNum=185805",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"certHeadCellNo"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true
+										},
+										{
+											"key": "userCertId",
+											"value": "18",
+											"equals": true
+										},
+										{
+											"key": "headCertNum",
+											"value": "185805",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Feb 2018 02:57:34 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 126,
+							"body": "{\"msg\":\"인증번호가 일치합니다.\"}"
+						}
+					]
+				},
+				{
+					"name": "3-1. 사용자 아이디 중복 확인",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/existedUser/NEWUSER",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"existedUser",
+								"NEWUSER"
+							]
+						},
+						"description": "반환값 \n- 200 OK : 사용 가능한 ID는"
+					},
+					"response": [
+						{
+							"id": "98871cbd-9b25-48aa-9e70-9a2f4b3a14a4",
+							"name": "3-1. 사용자 아이디 중복 확인",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/existedUser/NEWUSER",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"existedUser",
+										"NEWUSER"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Feb 2018 02:48:45 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 122,
+							"body": "{\"msg\":\"NEWUSER 는 사용가능한 아이디 입니다.\"}"
+						}
+					]
+				},
+				{
+					"name": "3-1. 사용자 아이디 중복 확인 (이미 존재하는 경우)",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/existedUser/baek",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"existedUser",
+								"baek"
+							]
+						},
+						"description": "반환 \n- 409 Conflict \n- msg  "
+					},
+					"response": [
+						{
+							"id": "46687981-7653-4236-ac43-88529fa926a9",
+							"name": "3-1. 사용자 아이디 중복 확인 (이미 존재하는 경우)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/existedUser/baek",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"existedUser",
+										"baek"
+									]
+								}
+							},
+							"status": "Conflict",
+							"code": 409,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Feb 2018 02:49:29 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 163,
+							"body": "{\"msg\":\"이미 사용중인 아이디 입니다.\"}"
+						}
+					]
+				},
+				{
+					"name": "3-2. 사용자 휴대폰 인증번호 요청",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/certUserCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=19&userNm=사용자KIM&userCell=01050447244",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"certUserCellNo"
+							],
+							"query": [
+								{
+									"key": "cmplxId",
+									"value": "132",
+									"equals": true
+								},
+								{
+									"key": "dong",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "ho",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "headNm",
+									"value": "김영헌",
+									"equals": true
+								},
+								{
+									"key": "headCell",
+									"value": "01050447244",
+									"equals": true
+								},
+								{
+									"key": "userCertId",
+									"value": "19",
+									"equals": true
+								},
+								{
+									"key": "userNm",
+									"value": "사용자KIM",
+									"equals": true
+								},
+								{
+									"key": "userCell",
+									"value": "01050447244",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "3-3. 세대주 휴대폰 인증번호 확인",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/certUserCellNo?userCertId=19&userCertNum=479848&userCell=01050447244",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"certUserCellNo"
+							],
+							"query": [
+								{
+									"key": "cmplxId",
+									"value": "132",
+									"equals": true,
+									"disabled": true
+								},
+								{
+									"key": "dong",
+									"value": "101",
+									"equals": true,
+									"disabled": true
+								},
+								{
+									"key": "ho",
+									"value": "101",
+									"equals": true,
+									"disabled": true
+								},
+								{
+									"key": "headNm",
+									"value": "김영헌",
+									"equals": true,
+									"disabled": true
+								},
+								{
+									"key": "headCell",
+									"value": "01050447244",
+									"equals": true,
+									"disabled": true
+								},
+								{
+									"key": "userCertId",
+									"value": "19",
+									"equals": true
+								},
+								{
+									"key": "userCertNum",
+									"value": "479848",
+									"equals": true
+								},
+								{
+									"key": "userCell",
+									"value": "01050447244",
+									"equals": true
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": [
+						{
+							"id": "90d583e0-bf8c-415d-8766-62b6b0b731c7",
+							"name": "3-2. 세대주 휴대폰 인증번호 확인",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/certUserCellNo?userCertId=19&userCertNum=479848&userCell=01050447244",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"certUserCellNo"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "userCertId",
+											"value": "19",
+											"equals": true
+										},
+										{
+											"key": "userCertNum",
+											"value": "479848",
+											"equals": true
+										},
+										{
+											"key": "userCell",
+											"value": "01050447244",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Feb 2018 03:05:02 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 780,
+							"body": "{\"msg\":\"인증번호가 유효하지 않습니다.\\r\\n인증번호 요청을 다시 해주시기 바랍니다.\"}"
+						},
+						{
+							"id": "1ac58891-3c3e-44d7-b396-d470705b299e",
+							"name": "3-2. 세대주 휴대폰 인증번호 확인",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/certUserCellNo?userCertId=19&userCertNum=479848&userCell=01050447244",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"certUserCellNo"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "userCertId",
+											"value": "19",
+											"equals": true
+										},
+										{
+											"key": "userCertNum",
+											"value": "479848",
+											"equals": true
+										},
+										{
+											"key": "userCell",
+											"value": "01050447244",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Feb 2018 03:07:05 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 129,
+							"body": "{\"msg\":\"인증번호가 일치합니다.\"}"
+						}
+					]
+				},
+				{
+					"name": "3-4. 회원등록",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "{{api_key}}",
+								"value": "{{api_key_val}}"
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "{{API_HOST}}/users/registration/newUser?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=19&userCertNum=479848&userCell=01050447244&smsChkYn=Y",
+							"host": [
+								"{{API_HOST}}"
+							],
+							"path": [
+								"users",
+								"registration",
+								"newUser"
+							],
+							"query": [
+								{
+									"key": "cmplxId",
+									"value": "132",
+									"equals": true
+								},
+								{
+									"key": "dong",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "ho",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "headNm",
+									"value": "김영헌",
+									"equals": true
+								},
+								{
+									"key": "headCell",
+									"value": "01050447244",
+									"equals": true
+								},
+								{
+									"key": "userCertId",
+									"value": "19",
+									"equals": true
+								},
+								{
+									"key": "userCertNum",
+									"value": "479848",
+									"equals": true
+								},
+								{
+									"key": "userCell",
+									"value": "01050447244",
+									"equals": true
+								},
+								{
+									"key": "smsChkYn",
+									"value": "Y",
+									"equals": true,
+									"description": "'3-3.사용자 휴대폰 인증번호 확인'에 성공하였다면, Y, 아니면 N"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": [
+						{
+							"id": "0907773b-e0cf-4f25-b05d-10966a67aa7e",
+							"name": "3-2. 세대주 휴대폰 인증번호 확인",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/certUserCellNo?userCertId=19&userCertNum=479848&userCell=01050447244",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"certUserCellNo"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "userCertId",
+											"value": "19",
+											"equals": true
+										},
+										{
+											"key": "userCertNum",
+											"value": "479848",
+											"equals": true
+										},
+										{
+											"key": "userCell",
+											"value": "01050447244",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Feb 2018 03:05:02 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 780,
+							"body": "{\"msg\":\"인증번호가 유효하지 않습니다.\\r\\n인증번호 요청을 다시 해주시기 바랍니다.\"}"
+						},
+						{
+							"id": "6fe54e51-aab3-4a27-9f3a-c1a498cf7e92",
+							"name": "3-2. 세대주 휴대폰 인증번호 확인",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{API_HOST}}/users/registration/certUserCellNo?userCertId=19&userCertNum=479848&userCell=01050447244",
+									"host": [
+										"{{API_HOST}}"
+									],
+									"path": [
+										"users",
+										"registration",
+										"certUserCellNo"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true,
+											"disabled": true
+										},
+										{
+											"key": "userCertId",
+											"value": "19",
+											"equals": true
+										},
+										{
+											"key": "userCertNum",
+											"value": "479848",
+											"equals": true
+										},
+										{
+											"key": "userCell",
+											"value": "01050447244",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Feb 2018 03:07:05 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked",
+									"name": "Transfer-Encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [],
+							"responseTime": 129,
+							"body": "{\"msg\":\"인증번호가 일치합니다.\"}"
+						}
+					]
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e6f82338-5663-442b-892e-4ffbe8e85283",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "7fe356fd-d818-40cd-88e9-7cf71b17c895",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,9 @@
+{
+	"info": {
+		"name": "CommonLife.TEST",
+		"_postman_id": "284f9150-8e80-cd44-5cc5-1091c994e804",
+		"description": "CommonLife Backend API TEST Suite",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": []
+}

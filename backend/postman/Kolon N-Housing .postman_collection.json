@@ -1,0 +1,915 @@
+{
+	"info": {
+		"name": "Kolon N-Housing ",
+		"_postman_id": "6d09d7a7-7ddd-b99c-3e24-b135dc65313b",
+		"description": "n-Housing 개발 서버(베니트 소재)의 Master서버 및 모바일 서버의 API 셋을 관리합니다.\n휴대폰 인증 및 IOT기기와 실제 연동 되어있으니 사용시 유의하시기 바랍니다. 궁금하신 점은 김영헌께 문의 주세요.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"description": null,
+			"item": [
+				{
+					"name": "1. 세대주 인증번호 요청",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserCertNoController/reqHeadCertNumber.do?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244",
+							"protocol": "https",
+							"host": [
+								"dev-master",
+								"smartiok",
+								"com"
+							],
+							"path": [
+								"mobile",
+								"controller",
+								"MobileUserCertNoController",
+								"reqHeadCertNumber.do"
+							],
+							"query": [
+								{
+									"key": "cmplxId",
+									"value": "132",
+									"equals": true,
+									"description": "을지로 Tree하우스 테스트 à CMPLX_ID:132 ,10세대"
+								},
+								{
+									"key": "dong",
+									"value": "101",
+									"equals": true,
+									"description": "101동"
+								},
+								{
+									"key": "ho",
+									"value": "101",
+									"equals": true,
+									"description": "101호"
+								},
+								{
+									"key": "headNm",
+									"value": "김영헌",
+									"equals": true
+								},
+								{
+									"key": "headCell",
+									"value": "01050447244",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "91d4a459-2af3-4118-92ec-71847e7ba165",
+							"name": "1. 세대주 인증번호 요청",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserCertNoController/reqHeadCertNumber.do?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244",
+									"protocol": "https",
+									"host": [
+										"dev-master",
+										"smartiok",
+										"com"
+									],
+									"path": [
+										"mobile",
+										"controller",
+										"MobileUserCertNoController",
+										"reqHeadCertNumber.do"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true,
+											"description": "을지로 Tree하우스 테스트 à CMPLX_ID:132 ,10세대"
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true,
+											"description": "101동"
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true,
+											"description": "101호"
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Connection",
+									"value": "keep-alive",
+									"name": "Connection",
+									"description": ""
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 16:50:35 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Server",
+									"value": "Apache-Coyote/1.1",
+									"name": "Server",
+									"description": ""
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked",
+									"name": "transfer-encoding",
+									"description": ""
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Mon Feb 25 2086 19:48:24 GMT+0900 (KST)",
+									"httpOnly": false,
+									"domain": "dev-master.smartiok.com",
+									"path": "/mobile/controller/MobileUserCertNoController",
+									"secure": false,
+									"value": "z9c984sc7aukl",
+									"key": "SCOUTER"
+								},
+								{
+									"expires": "Mon Feb 25 2086 20:27:14 GMT+0900 (KST)",
+									"httpOnly": false,
+									"domain": "dev-master.smartiok.com",
+									"path": "/mobile/controller/MobileUserController",
+									"secure": false,
+									"value": "z1t57aceutug94",
+									"key": "SCOUTER"
+								}
+							],
+							"responseTime": "3668",
+							"body": "{\"resFlag\":true,\"msg\":\"인증번호가 SMS로 발송되었습니다.\",\"userCertId\":10}"
+						},
+						{
+							"id": "ace51c75-d3e6-4e61-a1ea-6c9100e91d57",
+							"name": "1. 세대주 인증번호 요청",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserCertNoController/reqHeadCertNumber.do?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244",
+									"protocol": "https",
+									"host": [
+										"dev-master",
+										"smartiok",
+										"com"
+									],
+									"path": [
+										"mobile",
+										"controller",
+										"MobileUserCertNoController",
+										"reqHeadCertNumber.do"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "132",
+											"equals": true,
+											"description": "을지로 Tree하우스 테스트 à CMPLX_ID:132 ,10세대"
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true,
+											"description": "101동"
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true,
+											"description": "101호"
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Connection",
+									"value": "keep-alive",
+									"name": "Connection",
+									"description": ""
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 16:50:35 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Server",
+									"value": "Apache-Coyote/1.1",
+									"name": "Server",
+									"description": ""
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked",
+									"name": "transfer-encoding",
+									"description": ""
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Mon Feb 25 2086 19:48:24 GMT+0900 (KST)",
+									"httpOnly": false,
+									"domain": "dev-master.smartiok.com",
+									"path": "/mobile/controller/MobileUserCertNoController",
+									"secure": false,
+									"value": "z9c984sc7aukl",
+									"key": "SCOUTER"
+								},
+								{
+									"expires": "Mon Feb 25 2086 20:27:14 GMT+0900 (KST)",
+									"httpOnly": false,
+									"domain": "dev-master.smartiok.com",
+									"path": "/mobile/controller/MobileUserController",
+									"secure": false,
+									"value": "z1t57aceutug94",
+									"key": "SCOUTER"
+								}
+							],
+							"responseTime": "3668",
+							"body": "{\"resFlag\":true,\"msg\":\"인증번호가 SMS로 발송되었습니다.\",\"userCertId\":10}"
+						}
+					]
+				},
+				{
+					"name": "2. 세대주 인증번호 확인",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserCertNoController/confirmHeadCertNumber.do?headNm=baek&headCell=01065785597&userCertId=5&headCertNum=874372",
+							"protocol": "https",
+							"host": [
+								"dev-master",
+								"smartiok",
+								"com"
+							],
+							"path": [
+								"mobile",
+								"controller",
+								"MobileUserCertNoController",
+								"confirmHeadCertNumber.do"
+							],
+							"query": [
+								{
+									"key": "headNm",
+									"value": "baek",
+									"equals": true
+								},
+								{
+									"key": "headCell",
+									"value": "01065785597",
+									"equals": true
+								},
+								{
+									"key": "userCertId",
+									"value": "5",
+									"equals": true
+								},
+								{
+									"key": "headCertNum",
+									"value": "874372",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "3. 사용자 인증번호 요청",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserCertNoController/reqUserCertNumber.do?headCell=01065785597&headNm=baek&cmplxId=125&dong=101&ho=101&userCertId=5&userCell=01065785597",
+							"protocol": "https",
+							"host": [
+								"dev-master",
+								"smartiok",
+								"com"
+							],
+							"path": [
+								"mobile",
+								"controller",
+								"MobileUserCertNoController",
+								"reqUserCertNumber.do"
+							],
+							"query": [
+								{
+									"key": "headCell",
+									"value": "01065785597",
+									"equals": true
+								},
+								{
+									"key": "headNm",
+									"value": "baek",
+									"equals": true
+								},
+								{
+									"key": "cmplxId",
+									"value": "125",
+									"equals": true
+								},
+								{
+									"key": "dong",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "ho",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "userCertId",
+									"value": "5",
+									"equals": true
+								},
+								{
+									"key": "userCell",
+									"value": "01065785597",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "4. 사용자 인증번호 확인 및 가입",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserCertNoController/confirmUserCertNumber.do?userCell=01065785597&userCertId=5&userCertNum=074465",
+							"protocol": "https",
+							"host": [
+								"dev-master",
+								"smartiok",
+								"com"
+							],
+							"path": [
+								"mobile",
+								"controller",
+								"MobileUserCertNoController",
+								"confirmUserCertNumber.do"
+							],
+							"query": [
+								{
+									"key": "userCell",
+									"value": "01065785597",
+									"equals": true
+								},
+								{
+									"key": "userCertId",
+									"value": "5",
+									"equals": true
+								},
+								{
+									"key": "userCertNum",
+									"value": "074465",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "2-1. 동조회",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserController/listDongInfo.do?cmplxId=125",
+							"protocol": "https",
+							"host": [
+								"dev-master",
+								"smartiok",
+								"com"
+							],
+							"path": [
+								"mobile",
+								"controller",
+								"MobileUserController",
+								"listDongInfo.do"
+							],
+							"query": [
+								{
+									"key": "cmplxId",
+									"value": "125",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				},
+				{
+					"name": "2-2. 호조회",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserController/listHoInfo.do?cmplxId=132&dong=101",
+							"protocol": "https",
+							"host": [
+								"dev-master",
+								"smartiok",
+								"com"
+							],
+							"path": [
+								"mobile",
+								"controller",
+								"MobileUserController",
+								"listHoInfo.do"
+							],
+							"query": [
+								{
+									"key": "cmplxId",
+									"value": "132",
+									"equals": true
+								},
+								{
+									"key": "dong",
+									"value": "101",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "185a8df3-cdd3-45b0-b4a1-7b399aa21b27",
+							"name": "2-2. 호조회",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserController/listHoInfo.do?cmplxId=125&dong=101",
+									"protocol": "https",
+									"host": [
+										"dev-master",
+										"smartiok",
+										"com"
+									],
+									"path": [
+										"mobile",
+										"controller",
+										"MobileUserController",
+										"listHoInfo.do"
+									],
+									"query": [
+										{
+											"key": "cmplxId",
+											"value": "125",
+											"equals": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Connection",
+									"value": "keep-alive",
+									"name": "Connection",
+									"description": ""
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": ""
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 08 Feb 2018 15:38:56 GMT",
+									"name": "Date",
+									"description": ""
+								},
+								{
+									"key": "Server",
+									"value": "Apache-Coyote/1.1",
+									"name": "Server",
+									"description": ""
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked",
+									"name": "transfer-encoding",
+									"description": ""
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Mon Feb 25 2086 19:48:24 GMT+0900 (KST)",
+									"httpOnly": false,
+									"domain": "dev-master.smartiok.com",
+									"path": "/mobile/controller/MobileUserCertNoController",
+									"secure": false,
+									"value": "z9c984sc7aukl",
+									"key": "SCOUTER"
+								},
+								{
+									"expires": "Mon Feb 25 2086 20:27:14 GMT+0900 (KST)",
+									"httpOnly": false,
+									"domain": "dev-master.smartiok.com",
+									"path": "/mobile/controller/MobileUserController",
+									"secure": false,
+									"value": "z1t57aceutug94",
+									"key": "SCOUTER"
+								}
+							],
+							"responseTime": "84",
+							"body": "{\"DATA\":{\"HO\":[\"101\",\"102\"]}}"
+						}
+					]
+				},
+				{
+					"name": "회원등록",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserController/registerMember.do?userId=newuser9&userPw=fumT4DmfVP/X+RgvSg1CBNA6QAberSGDf0Iu49s0cMSlundj0QVHqTM+hS6BcVyY&headNm=김영헌&headCell=01050447244&userNm=사용자KIM&userCell=01050447244&cmplxId=133&dong=101&ho=101&smsChkYn=N&certNum=20000&smsChkDt=2017-11-08 16:20:16",
+							"protocol": "https",
+							"host": [
+								"dev-master",
+								"smartiok",
+								"com"
+							],
+							"path": [
+								"mobile",
+								"controller",
+								"MobileUserController",
+								"registerMember.do"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "newuser9",
+									"equals": true
+								},
+								{
+									"key": "userPw",
+									"value": "fumT4DmfVP/X+RgvSg1CBNA6QAberSGDf0Iu49s0cMSlundj0QVHqTM+hS6BcVyY",
+									"equals": true
+								},
+								{
+									"key": "headNm",
+									"value": "김영헌",
+									"equals": true
+								},
+								{
+									"key": "headCell",
+									"value": "01050447244",
+									"equals": true
+								},
+								{
+									"key": "userNm",
+									"value": "사용자KIM",
+									"equals": true
+								},
+								{
+									"key": "userCell",
+									"value": "01050447244",
+									"equals": true
+								},
+								{
+									"key": "cmplxId",
+									"value": "133",
+									"equals": true
+								},
+								{
+									"key": "dong",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "ho",
+									"value": "101",
+									"equals": true
+								},
+								{
+									"key": "smsChkYn",
+									"value": "N",
+									"equals": true
+								},
+								{
+									"key": "certNum",
+									"value": "20000",
+									"equals": true
+								},
+								{
+									"key": "smsChkDt",
+									"value": "2017-11-08 16:20:16",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": [
+						{
+							"id": "62e17703-0ce0-4639-9902-2e1fd8f746f6",
+							"name": "회원등록",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserController/registerMember.do?userId=newuser6&userPw=fumT4DmfVP/X+RgvSg1CBNA6QAberSGDf0Iu49s0cMSlundj0QVHqTM+hS6BcVyY&headNm=김영헌&headCell=01050447244&userNm=사용자KIM&userCell=01050447244&cmplxId=133&dong=101&ho=101&smsChkYn=Y&certNum=22&smsChkDt=2017-11-08 16:20:16",
+									"protocol": "https",
+									"host": [
+										"dev-master",
+										"smartiok",
+										"com"
+									],
+									"path": [
+										"mobile",
+										"controller",
+										"MobileUserController",
+										"registerMember.do"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "newuser6",
+											"equals": true
+										},
+										{
+											"key": "userPw",
+											"value": "fumT4DmfVP/X+RgvSg1CBNA6QAberSGDf0Iu49s0cMSlundj0QVHqTM+hS6BcVyY",
+											"equals": true
+										},
+										{
+											"key": "headNm",
+											"value": "김영헌",
+											"equals": true
+										},
+										{
+											"key": "headCell",
+											"value": "01050447244",
+											"equals": true
+										},
+										{
+											"key": "userNm",
+											"value": "사용자KIM",
+											"equals": true
+										},
+										{
+											"key": "userCell",
+											"value": "01050447244",
+											"equals": true
+										},
+										{
+											"key": "cmplxId",
+											"value": "133",
+											"equals": true
+										},
+										{
+											"key": "dong",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "ho",
+											"value": "101",
+											"equals": true
+										},
+										{
+											"key": "smsChkYn",
+											"value": "Y",
+											"equals": true
+										},
+										{
+											"key": "certNum",
+											"value": "22",
+											"equals": true
+										},
+										{
+											"key": "smsChkDt",
+											"value": "2017-11-08 16:20:16",
+											"equals": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"_postman_previewtype": "text",
+							"header": [
+								{
+									"key": "Connection",
+									"value": "keep-alive",
+									"name": "Connection",
+									"description": "Options that are desired for the connection"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json;charset=UTF-8",
+									"name": "Content-Type",
+									"description": "The mime type of this content"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 09 Feb 2018 03:10:14 GMT",
+									"name": "Date",
+									"description": "The date and time that the message was sent"
+								},
+								{
+									"key": "Server",
+									"value": "Apache-Coyote/1.1",
+									"name": "Server",
+									"description": "A name for the server"
+								},
+								{
+									"key": "transfer-encoding",
+									"value": "chunked",
+									"name": "transfer-encoding",
+									"description": "The form of encoding used to safely transfer the entity to the user. Currently defined methods are: chunked, compress, deflate, gzip, identity."
+								}
+							],
+							"cookie": [
+								{
+									"expires": "Mon Feb 25 2086 19:48:24 GMT+0900 (KST)",
+									"httpOnly": false,
+									"domain": "dev-master.smartiok.com",
+									"path": "/mobile/controller/MobileUserCertNoController",
+									"secure": false,
+									"value": "z9c984sc7aukl",
+									"key": "SCOUTER"
+								},
+								{
+									"expires": "Mon Feb 25 2086 20:27:14 GMT+0900 (KST)",
+									"httpOnly": false,
+									"domain": "dev-master.smartiok.com",
+									"path": "/mobile/controller/MobileUserController",
+									"secure": false,
+									"value": "z1t57aceutug94",
+									"key": "SCOUTER"
+								}
+							],
+							"responseTime": 42,
+							"body": "{\"MSG\":\"정상 처리되었습니다.\",\"resFlag\":true}"
+						}
+					]
+				},
+				{
+					"name": "아이디중복검사",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://dev-master.smartiok.com/mobile/controller/MobileUserController/checkUserId.do?userId=baek",
+							"protocol": "https",
+							"host": [
+								"dev-master",
+								"smartiok",
+								"com"
+							],
+							"path": [
+								"mobile",
+								"controller",
+								"MobileUserController",
+								"checkUserId.do"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "baek",
+									"equals": true
+								}
+							]
+						},
+						"description": null
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a860843c-c57f-4fbd-995f-4d9b696445fb",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "1d528148-1df6-4deb-b917-e534902aa664",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
