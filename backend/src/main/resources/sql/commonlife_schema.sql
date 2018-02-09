@@ -8,27 +8,20 @@ CREATE DATABASE @database_name
 
 USE @database_name;
 
+
+------------------------------------------------------------------------------------------------------
+--- todo: TO BE DELETED  - Example Table  ------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
 CREATE TABLE EXAMPLE( id int NOT NULL AUTO_INCREMENT, name VARCHAR(100), primary key(id) );
 CREATE UNIQUE INDEX `name_UNIQUE` on EXAMPLE (`name` ASC);
 INSERT INTO EXAMPLE VALUES ('test1');
 INSERT INTO EXAMPLE VALUES ('test2');
+------------------------------------------------------------------------------------------------------
 
 
--- 단지그룹 (민간과 공공 2개만 존재합니다.) --
-CREATE TABLE `COMPLEX_GRP_TYPE_M` (
-  `CMPLX_GRP_TYPE_ID` int(11) NOT NULL AUTO_INCREMENT,
-  `CMPLX_GRP_TYPE` varchar(100) DEFAULT NULL,
-  `CMPLX_GRP_TYPE_DESC` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`CMPLX_GRP_TYPE_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-INSERT INTO `COMPLEX_GRP_TYPE_M`(CMPLX_GRP_TYPE, CMPLX_GRP_TYPE_DESC)
-VALUES ('따복하우스', '공공:따복하우스 단지그룹');
-
-INSERT INTO `COMPLEX_GRP_TYPE_M`(CMPLX_GRP_TYPE, CMPLX_GRP_TYPE_DESC)
-VALUES ('CommonLife', '민간:커먼라이프 단지그룹');
-
+------------------------------------------------------------------------------------------------------
+-- CommonLife New/Extended Tables --------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------
 
 ---- 사용자 보안 정책 정보 ----
 CREATE TABLE `USR_REG_AGREEMENT` (
@@ -51,3 +44,17 @@ CREATE TABLE `COMPLEX_M_EXT` (
   UNIQUE KEY `CMPLX_IDX` (`CMPLX_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- 단지그룹 (민간과 공공 2개만 존재합니다.) --
+CREATE TABLE `COMPLEX_GRP_TYPE_M` (
+  `CMPLX_GRP_TYPE_ID` int(11) NOT NULL AUTO_INCREMENT,
+  `CMPLX_GRP_TYPE` varchar(100) DEFAULT NULL,
+  `CMPLX_GRP_TYPE_DESC` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`CMPLX_GRP_TYPE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+INSERT INTO `COMPLEX_GRP_TYPE_M`(CMPLX_GRP_TYPE, CMPLX_GRP_TYPE_DESC)
+VALUES ('따복하우스', '공공:따복하우스 단지그룹');
+
+INSERT INTO `COMPLEX_GRP_TYPE_M`(CMPLX_GRP_TYPE, CMPLX_GRP_TYPE_DESC)
+VALUES ('CommonLife', '민간:커먼라이프 단지그룹');
