@@ -4414,12 +4414,16 @@ ul {
   padding-left: 0;
   margin: 0; }
 
+li {
+  list-style: none; }
+
 button, select {
   border: none;
   background-image: none;
   background-color: transparent;
   box-shadow: none;
-  -webkit-appearance: none; }
+  -webkit-appearance: none;
+  padding: 0; }
 
 /* clear mobile style */
 /* Text */
@@ -5391,3 +5395,92 @@ button, select {
   .cl-like__arrow img {
     position: relative;
     top: 2px; }
+
+.cl-30mins {
+  display: flex;
+  overflow: auto;
+  color: #9b9b9b;
+  align-items: flex-end;
+  padding-left: 16px;
+  padding-bottom: 10px; }
+  .cl-30mins .cl-30min {
+    position: relative;
+    list-style: none;
+    width: 26px;
+    height: 85px;
+    flex-shrink: 0;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 11px;
+    pointer-events: none; }
+    .cl-30mins .cl-30min:first-child {
+      pointer-events: initial;
+      z-index: 1; }
+    .cl-30mins .cl-30min:nth-child(even) {
+      height: 55px; }
+  .cl-30mins .cl-hour__label {
+    position: absolute;
+    top: 0;
+    left: 2px;
+    white-space: nowrap; }
+
+.cl-time-area, .cl-time-scheduler .cl-area--disabled, .cl-time-scheduler .cl-area--selected {
+  position: absolute;
+  bottom: 0;
+  height: 60px;
+  margin-left: -1px; }
+
+.cl-time-scheduler {
+  position: relative; }
+  .cl-time-scheduler .cl-areas {
+    position: absolute;
+    top: 0;
+    left: 0; }
+  .cl-time-scheduler .cl-area--disabled {
+    background: linear-gradient(45deg, transparent 49%, black 0, black 50%, transparent 0, transparent 99%, black 0);
+    background-size: 8px 8px; }
+    .cl-time-scheduler .cl-area--disabled:after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border: 1px solid rgba(151, 151, 151, 0.4); }
+  .cl-time-scheduler .cl-area--selected {
+    min-width: 26px;
+    background-color: #4a90e2;
+    border: 2px solid #195fb1;
+    border-radius: 3px;
+    transition: all 0.2s; }
+    .cl-time-scheduler .cl-area--selected.cl-controlling {
+      background-color: rgba(74, 144, 226, 0.5); }
+    .cl-time-scheduler .cl-area--selected.react-draggable-dragging {
+      background-color: rgba(74, 144, 226, 0.5);
+      border-color: #90AFD9; }
+      .cl-time-scheduler .cl-area--selected.react-draggable-dragging .cl-area-handle {
+        border-color: #90AFD9; }
+  .cl-time-scheduler .cl-area-handle {
+    position: absolute;
+    background-color: #ffffff;
+    border: 2px solid #0c4990;
+    width: 14px;
+    height: 14px;
+    margin-left: -9px;
+    border-radius: 50%;
+    top: calc( 50% - 7px);
+    z-index: 1;
+    transition: all 0.2s; }
+    .cl-time-scheduler .cl-area-handle.react-draggable-dragging {
+      background-color: orange;
+      width: 20px;
+      height: 20px;
+      margin-left: -12px;
+      top: calc( 50% - 10px); }
+  .cl-time-scheduler .cl-time-ctrl {
+    padding: 20px 16px; }
+    .cl-time-scheduler .cl-time-ctrl p {
+      font-size: 14px;
+      line-height: 24px;
+      margin-bottom: 0.2em; }
+    .cl-time-scheduler .cl-time-ctrl button {
+      opacity: 0.5; }
+  .cl-time-scheduler.cl-time-scheduler--incorrect .cl-area--selected {
+    background-color: rgba(255, 0, 0, 0.2); }

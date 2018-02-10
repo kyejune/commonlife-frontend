@@ -12,7 +12,7 @@ import Community from 'components/routes/Community';
 import HomeIoT from 'components/routes/HomeIoT';
 import LifeInfo from 'components/routes/LifeInfo';
 import Reservation from 'components/routes/Reservation';
-// import Store from 'scripts/connect';
+import Playground from 'components/Playground';
 
 class App extends Component {
 
@@ -67,6 +67,10 @@ class App extends Component {
 
 
                             <Route path="/reservation" component={Reservation}/>
+
+
+                            <Route path="/playground" component={Playground}/>
+
 
                             <Route component={Community}/>
                         </Switch>
