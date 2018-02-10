@@ -7,11 +7,9 @@ import com.kolon.comlife.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.users.model.AgreementInfo;
 import com.kolon.comlife.users.service.RegistrationService;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.utils.URIBuilder;
+import com.kolon.common.http.HttpRequestFailedException;
+import com.kolon.common.http.HttpGetRequester;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
@@ -32,6 +29,17 @@ import java.util.Map;
 @RequestMapping("/users/registration/*")
 public class RegistrationController {
     private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
+
+    private static final String IOK_MASTER_HOST         = "https://dev-master.smartiok.com";
+    private static final String IOK_LIST_DONG_INFO_PATH = "/mobile/controller/MobileUserController/listDongInfo.do";
+    private static final String IOK_LIST_HO_INFO_PATH = "/mobile/controller/MobileUserController/listHoInfo.do";
+    private static final String IOK_REQ_HAED_CERT_NUM_PATH = "/mobile/controller/MobileUserCertNoController/reqHeadCertNumber.do";
+    private static final String IOK_CFRM_HAED_CERT_NUM_PATH = "/mobile/controller/MobileUserCertNoController/confirmHeadCertNumber.do";
+    private static final String IOK_CHECK_USER_ID_PATH = "/mobile/controller/MobileUserController/checkUserId.do";
+    private static final String IOK_REQ_USER_CERT_NUM_PATH = "/mobile/controller/MobileUserCertNoController/reqUserCertNumber.do";
+    private static final String IOK_CFRM_USER_CERT_NUM_PATH = "/mobile/controller/MobileUserCertNoController/confirmUserCertNumber.do";
+    private static final String IOK_REGISTER_USER_PATH = "/mobile/controller/MobileUserController/registerMember.do";
+
 
     @Resource(name = "registrationService")
     private RegistrationService regService;
@@ -48,14 +56,14 @@ public class RegistrationController {
     @GetMapping(
             value="/agreement",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<AgreementInfo> getAgreement(HttpServletRequest request) {
+    public ResponseEntity getAgreement(HttpServletRequest request) {
         List<AgreementInfo> agreements;
 
         agreements = regService.getLatestAgreement();
 
         if( agreements.isEmpty() ) {
             logger.debug("return value is NULL");
-            return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( null );
+            return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( new SimpleMsgInfo("표시할 정보가 없습니다.") );
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( agreements.get(0) );
@@ -68,7 +76,7 @@ public class RegistrationController {
     @GetMapping(
             value="/complexes",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getComplexList() {
+    public ResponseEntity<DataListInfo> getComplexList() {
         DataListInfo result = new DataListInfo();
         List<ComplexSimpleInfo> complexList = null;
 
@@ -85,47 +93,53 @@ public class RegistrationController {
             value="/complexes/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getComplexDongList( @PathVariable("id") int id ) {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpGet hg;
-        URIBuilder builder = new URIBuilder();
-        URI uri = null;
-        Map result;
-        DataListInfo retBody;
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        List<String>     dongList;    // 동 목록
+        DataListInfo     retBody;
 
-        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
         try {
-            builder.setScheme("https")
-                    .setHost("dev-master.smartiok.com")
-                    .setPath("/mobile/controller/MobileUserController/listDongInfo.do")
-                    .setParameter("cmplxId", String.valueOf(id) );
-            uri = builder.build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+            requester = new HttpGetRequester( httpClient,
+                                              IOK_MASTER_HOST,
+                                              IOK_LIST_DONG_INFO_PATH );
+            requester.setParameter("cmplxId", String.valueOf(id) );
+            result = requester.execute();
         }
-
-        hg = new HttpGet(uri);
-        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
-
-        try {
-            HttpResponse hr = httpClient.execute(hg);
-            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
-        } catch (IOException e) {
-            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
             return ResponseEntity
                     .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다"));
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
         }
 
-        // IOK 반환 값 변환 및 에러 핸들링
-        List hoList = (List)((Map)result.get("DATA")).get("DONG");
-        if( hoList.isEmpty() )
+        dongList = (List)result.get("DATA").get("DONG");
+        if( dongList.isEmpty() )
         {
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND)
                     .body(new SimpleErrorInfo("해당하는 동이 없습니다"));
         }
-        retBody = new DataListInfo(hoList);
+
+        retBody = new DataListInfo(dongList);
 
         return ResponseEntity.status( HttpStatus.OK ).body( retBody );
     }
@@ -137,43 +151,47 @@ public class RegistrationController {
             value="/complexes/{id}/{dong}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getComplexDongHoList( @PathVariable("id") int id, @PathVariable("dong") String dong ) {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpGet hg;
-        URIBuilder builder = new URIBuilder();
-        URI uri = null;
-        Map result;
-        DataListInfo retBody;
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        List<String>     hoList;    // 호 목록
+        DataListInfo     retBody;
 
-        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
         try {
-            builder.setScheme("https")
-                    .setHost("dev-master.smartiok.com")
-                    .setPath("/mobile/controller/MobileUserController/listHoInfo.do")
-                    .setParameter("cmplxId", String.valueOf(id) )
-                    .setParameter("dong", dong);
-            uri = builder.build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+            requester = new HttpGetRequester( httpClient,
+                                              IOK_MASTER_HOST,
+                                              IOK_LIST_HO_INFO_PATH );
+            requester.setParameter("cmplxId", String.valueOf(id) );
+            requester.setParameter("dong", String.valueOf(dong) );
+            result = requester.execute();
+        }
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
             return ResponseEntity
                     .status( HttpStatus.BAD_REQUEST )
-                    .body(new SimpleErrorInfo("잘못된 요청입니다"));  // todo: Error Message 한 곳으로 통합해야 함
+                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
         }
-
-        hg = new HttpGet(uri);
-        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
-
-        try {
-            HttpResponse hr = httpClient.execute(hg);
-            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
-        } catch (IOException e) {
-            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
             return ResponseEntity
                     .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다"));
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
         }
 
         // IOK 반환 값 변환 및 에러 핸들링
-        List hoList = (List)((Map)result.get("DATA")).get("HO");
+        hoList = (List)result.get("DATA").get("HO");
         if( hoList.isEmpty() )
         {
             return ResponseEntity
@@ -192,43 +210,52 @@ public class RegistrationController {
             value="/certHeadCellNo",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity requestCertHeadCellNo( HttpServletRequest request ) {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpGet hg;
-        URIBuilder builder = new URIBuilder();
-        URI uri = null;
-        Map result;
-
-        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
-        try {
-            builder.setScheme("https")
-                    .setHost("dev-master.smartiok.com")
-                    .setPath("/mobile/controller/MobileUserCertNoController/reqHeadCertNumber.do")
-                    .setParameter("cmplxId", request.getParameter("cmplxId"))
-                    .setParameter("dong", request.getParameter("dong"))
-                    .setParameter("ho", request.getParameter("ho"))
-                    .setParameter("headNm", request.getParameter("headNm"))
-                    .setParameter("headCell", request.getParameter("headCell"));
-            uri = builder.build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
-        }
-
-        hg = new HttpGet(uri);
-        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
+        HttpGetRequester requester;
+        Map              result;
 
         try {
-            HttpResponse hr = httpClient.execute(hg);
-            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
-        } catch (IOException e) {
-            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
-            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
+            requester = new HttpGetRequester(
+                    httpClient,
+                    IOK_MASTER_HOST,
+                    IOK_REQ_HAED_CERT_NUM_PATH );
+            requester
+                .setParameter("cmplxId", request.getParameter("cmplxId"))
+                .setParameter("dong", request.getParameter("dong"))
+                .setParameter("ho", request.getParameter("ho"))
+                .setParameter("headNm", request.getParameter("headNm"))
+                .setParameter("headCell", request.getParameter("headCell"));
+            result = requester.execute();
+        }
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleMsgInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
         }
 
-        if( !(boolean)result.get("resFlag")) {
+        if( !(boolean)result.get("resFlag") ) {
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND )
-                    .body( new SimpleErrorInfo( (String)result.get("msg") ) );
+                    .body( new SimpleErrorInfo((String)result.get("msg")));
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
@@ -242,17 +269,15 @@ public class RegistrationController {
             value="/certHeadCellNo",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity validateCertHeadCellNo( HttpServletRequest request ) {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpGet hg;
-        URIBuilder builder = new URIBuilder();
-        URI uri = null;
-        Map result;
+        HttpGetRequester requester;
+        Map              result;
 
-        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
         try {
-            builder.setScheme("https")
-                    .setHost("dev-master.smartiok.com")
-                    .setPath("/mobile/controller/MobileUserCertNoController/confirmHeadCertNumber.do")
+            requester = new HttpGetRequester(
+                    httpClient,
+                    IOK_MASTER_HOST,
+                    IOK_CFRM_HAED_CERT_NUM_PATH );
+            requester
                     .setParameter("cmplxId", request.getParameter("cmplxId"))
                     .setParameter("dong", request.getParameter("dong"))
                     .setParameter("ho", request.getParameter("ho"))
@@ -260,31 +285,44 @@ public class RegistrationController {
                     .setParameter("headCell", request.getParameter("headCell"))
                     .setParameter("userCertId", request.getParameter("userCertId"))
                     .setParameter("headCertNum", request.getParameter("headCertNum"));
-            uri = builder.build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+            result = requester.execute();
+        }
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleMsgInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
         }
 
-        hg = new HttpGet(uri);
-        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
-
-        try {
-            HttpResponse hr = httpClient.execute(hg);
-            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
-        } catch (IOException e) {
-            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
-            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
-        }
-
-        if( !(boolean)result.get("resFlag")) {
+        if( !(boolean)result.get("resFlag") ) {
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND )
-                    .body( new SimpleErrorInfo( (String)result.get("MSG") ) );
+                    .body( new SimpleErrorInfo((String)result.get("msg")));
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo( (String)result.get("MSG")) );
+        return ResponseEntity.status( HttpStatus.OK ).body( lowerMsgKeyName(result) );
     }
+
+
 
 
     /**
@@ -294,42 +332,49 @@ public class RegistrationController {
             value="/existedUser/{userId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity checkExistedUser( @PathVariable("userId") String userId ) {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpGet hg;
-        URIBuilder builder = new URIBuilder();
-        URI uri = null;
-        Map result;
+        HttpGetRequester requester;
+        Map              result;
 
-        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
         try {
-            builder.setScheme("https")
-                    .setHost("dev-master.smartiok.com")
-                    .setPath("/mobile/controller/MobileUserController/checkUserId.do")
+            requester = new HttpGetRequester(
+                    httpClient,
+                    IOK_MASTER_HOST,
+                    IOK_CHECK_USER_ID_PATH );
+            requester
                     .setParameter("userId", userId );
-            uri = builder.build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+            result = requester.execute();
         }
-
-        hg = new HttpGet(uri);
-        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
-
-        try {
-            HttpResponse hr = httpClient.execute(hg);
-            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
-        } catch (IOException e) {
-            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
-            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
-        }
-
-        if( !(boolean)result.get("resFlag")) {
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
             return ResponseEntity
-                    .status( HttpStatus.CONFLICT )
-                    .body( new SimpleErrorInfo( (String)result.get("MSG") ) );
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleMsgInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo( (String)result.get("MSG")) );
+        if( !(boolean)result.get("resFlag") ) {
+            return ResponseEntity.status( HttpStatus.CONFLICT ).body( lowerMsgKeyName(result) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( lowerMsgKeyName(result) );
     }
 
 
@@ -340,17 +385,15 @@ public class RegistrationController {
             value="/certUserCellNo",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity requestCertUserCellNo( HttpServletRequest request ) {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpGet hg;
-        URIBuilder builder = new URIBuilder();
-        URI uri = null;
-        Map result;
+        HttpGetRequester requester;
+        Map              result;
 
-        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
         try {
-            builder.setScheme("https")
-                    .setHost("dev-master.smartiok.com")
-                    .setPath("/mobile/controller/MobileUserCertNoController/reqUserCertNumber.do")
+            requester = new HttpGetRequester(
+                    httpClient,
+                    IOK_MASTER_HOST,
+                    IOK_REQ_USER_CERT_NUM_PATH );
+            requester
                     .setParameter("cmplxId", request.getParameter("cmplxId"))
                     .setParameter("dong", request.getParameter("dong"))
                     .setParameter("ho", request.getParameter("ho"))
@@ -358,29 +401,39 @@ public class RegistrationController {
                     .setParameter("headCell", request.getParameter("headCell"))
                     .setParameter("userNm", request.getParameter("userNm"))
                     .setParameter("userCell", request.getParameter("userCell"))
-                    .setParameter("userCertId", request.getParameter("userCertId"))
-            ;
-            uri = builder.build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+                    .setParameter("userCertId", request.getParameter("userCertId"));
+            result = requester.execute();
         }
-
-        hg = new HttpGet(uri);
-        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
-
-        try {
-            HttpResponse hr = httpClient.execute(hg);
-            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
-        } catch (IOException e) {
-            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
-            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleMsgInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
         }
 
         if( !(boolean)result.get("resFlag")) {
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND )
-                    .body( new SimpleErrorInfo( (String)result.get("msg") ) );
+                    .body( result );
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
@@ -393,44 +446,51 @@ public class RegistrationController {
             value="/certUserCellNo",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity validateCertUserCellNo( HttpServletRequest request ) {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpGet hg;
-        URIBuilder builder = new URIBuilder();
-        URI uri = null;
-        Map result;
+        HttpGetRequester requester;
+        Map              result;
 
-        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
         try {
-            builder.setScheme("https")
-                    .setHost("dev-master.smartiok.com")
-                    .setPath("/mobile/controller/MobileUserCertNoController/confirmUserCertNumber.do")
+            requester = new HttpGetRequester(
+                    httpClient,
+                    IOK_MASTER_HOST,
+                    IOK_CFRM_USER_CERT_NUM_PATH );
+            requester
                     .setParameter("userCell", request.getParameter("userCell"))
                     .setParameter("userCertId", request.getParameter("userCertId"))
                     .setParameter("userCertNum", request.getParameter("userCertNum"));
-            uri = builder.build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+            result = requester.execute();
         }
-
-        hg = new HttpGet(uri);
-        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
-
-        try {
-            HttpResponse hr = httpClient.execute(hg);
-            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
-        } catch (IOException e) {
-            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
-            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleMsgInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
         }
 
         if( !(boolean)result.get("resFlag")) {
-            return ResponseEntity
-                    .status( HttpStatus.NOT_FOUND )
-                    .body( new SimpleErrorInfo( (String)result.get("MSG") ) );
+            return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( lowerMsgKeyName(result) );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo( (String)result.get("MSG")) );
+        return ResponseEntity.status( HttpStatus.OK ).body( lowerMsgKeyName(result) );
     }
 
 
@@ -441,17 +501,15 @@ public class RegistrationController {
             value="/newUser",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity registerNewUser( HttpServletRequest request ) {
-        ObjectMapper mapper = new ObjectMapper();
-        HttpGet hg;
-        URIBuilder builder = new URIBuilder();
-        URI uri = null;
-        Map result;
+        HttpGetRequester requester;
+        Map              result;
 
-        // todo: URI를 db table 또는 프로퍼티에서 로딩할 수 있도록 분리해야 함
         try {
-            builder.setScheme("https")
-                    .setHost("dev-master.smartiok.com")
-                    .setPath("/mobile/controller/MobileUserController/registerMember.do")
+            requester = new HttpGetRequester(
+                    httpClient,
+                    IOK_MASTER_HOST,
+                    IOK_REGISTER_USER_PATH );
+            requester
                     .setParameter("cmplxId", request.getParameter("cmplxId"))
                     .setParameter("dong", request.getParameter("dong"))
                     .setParameter("ho", request.getParameter("ho"))
@@ -459,36 +517,53 @@ public class RegistrationController {
                     .setParameter("headCell", request.getParameter("headCell"))
                     .setParameter("userNm", request.getParameter("userNm"))
                     .setParameter("userCell", request.getParameter("userCell"))
-                    .setParameter("certNum", request.getParameter("userCertNum"))  // 주의!: certNum과 userCertNum이 다름
+                    .setParameter("certNum", request.getParameter("userCertId"))  // 주의!: certNum과 userCertNum이 다름
                     .setParameter("smsChkYn", request.getParameter("smsChkYn"))
                     .setParameter("smsChkDt", request.getParameter("smsChkDt"))
                     .setParameter("userId", request.getParameter("userId"))
-                    .setParameter("userPw", request.getParameter("userPw"))
-            ;
-            uri = builder.build();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body(null);
+                    .setParameter("userPw", request.getParameter("userPw"));
+            result = requester.execute();
         }
-
-        hg = new HttpGet(uri);
-        hg.addHeader("Content-type", MediaType.APPLICATION_JSON_VALUE );
-
-        try {
-            HttpResponse hr = httpClient.execute(hg);
-            result = mapper.readValue( hr.getEntity().getContent(), Map.class);
-        } catch (IOException e) {
-            logger.error( "Unable to make connection to " + uri + "\n\tMessage: " + e.getMessage() );
-            return ResponseEntity.status( HttpStatus.SERVICE_UNAVAILABLE ).body(null);
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleMsgInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
         }
 
         if( !(boolean)result.get("resFlag")) {
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( (String)result.get("MSG") ) );
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( lowerMsgKeyName(result) );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo( (String)result.get("MSG")) );
+        return ResponseEntity.status( HttpStatus.OK ).body( lowerMsgKeyName(result) );
     }
 
+    /**
+     * 읿부 IOK의 반환 결과의 Key 값이 'MSG'와 같이 대문자로 반환 됨
+     * 일관성 유지를 위해 따라서, 소문자로 변경함
+     */
+    private Map lowerMsgKeyName(Map map) {
+        map.put("msg", map.get("MSG"));
+        map.remove("MSG");
+        return map;
+    }
 }
