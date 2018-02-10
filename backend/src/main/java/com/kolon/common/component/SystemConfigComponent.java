@@ -29,7 +29,6 @@ import java.util.Properties;
  */
 @Component
 public class SystemConfigComponent {
-    private static final long serialVersionUID = 571311190879279146L;
     public static final Logger logger = LoggerFactory.getLogger(SystemConfigComponent.class);
 
 

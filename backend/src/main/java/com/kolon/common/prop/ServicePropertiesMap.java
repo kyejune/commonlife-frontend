@@ -10,7 +10,8 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicReference;
+import java.util.Map;
+
 
 @Component("servicePropertiesMap")
 public class ServicePropertiesMap {
@@ -19,11 +20,10 @@ public class ServicePropertiesMap {
     @Resource
     PropertiesService propertiesService;
 
-    private AtomicReference< HashMap< String, KeyValueMap > > atomicRefPropGroup;
+    private Map<String, KeyValueMap> propGroup;
 
     public ServicePropertiesMap( ) {
-        this.atomicRefPropGroup = new AtomicReference<>();
-        this.atomicRefPropGroup.set( new HashMap<String, KeyValueMap>() );
+        this.propGroup = new HashMap();
     }
 
     @PostConstruct
@@ -46,19 +46,17 @@ public class ServicePropertiesMap {
 //                    p.getPropValue() + " { " + p.getPropDesc() + "}" );
         }
 
-        atomicRefPropGroup.set(newMap);
+        this.propGroup = newMap;
     }
 
     public void reload() {
         this.reloadInternal();
     }
 
-    public KeyValueMap getByGroup(String keyGroup) {
-        return atomicRefPropGroup.get().get(keyGroup);
-    }
+    public KeyValueMap getByGroup(String keyGroup) { return this.propGroup.get(keyGroup); }
 
     public String getByKey(String keyGroup, String key) {
-        KeyValueMap kvm = atomicRefPropGroup.get().get(keyGroup);
+        KeyValueMap kvm = this.propGroup.get(keyGroup);
         if (kvm == null) {
             return null;
         }
