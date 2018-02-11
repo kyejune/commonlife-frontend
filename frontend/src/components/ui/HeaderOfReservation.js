@@ -18,16 +18,16 @@ class HeaderOfReservation extends Component {
 				<p className="cl-reservation__credit-point">75.0</p>
 			</div>
 
-			<a href="#" className="cl-reservation__link-recent-reserve">
+			<div className="cl-reservation__link-recent-reserve">
 				<i><img src={recentReserve} alt="" height="20"/></i>
 				<span>최근 예약내역</span>
-			</a>
+			</div>
 
-			<a href="#" className="cl-reservation__link-recent-reserve">
+			<div className="cl-reservation__link-recent-reserve">
 				<i><img src={recentReserveReady} alt="" height="20"/></i>
 				<span>예약대기</span>
 				<span className="cl-reservation__link-recent-reserve-count">3</span>
-			</a>
+			</div>
 
 		</div>
 	}

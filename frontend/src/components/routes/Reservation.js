@@ -31,7 +31,7 @@ class Reservation extends Component {
 
                 <ul className="cl-reservation__list--group">
                     <li className="cl-reservation__list-item">
-                        <a href="#">
+                        <div>
                             <div className="cl-flex-between">
                                 <img src={ReserveGroupHome} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -40,10 +40,10 @@ class Reservation extends Component {
                                 </div>
                                 <img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
                             </div>
-                        </a>
+                        </div>
                     </li>
                     <li className="cl-reservation__list-item">
-                        <a href="#">
+                        <div>
                             <div className="cl-flex-between">
                                 <img src={ReserveGroupTool} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -52,10 +52,10 @@ class Reservation extends Component {
                                 </div>
                                 <img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
                             </div>
-                        </a>
+                        </div>
                     </li>
                     <li className="cl-reservation__list-item">
-                        <a href="#">
+                        <div>
                             <div className="cl-flex-between">
                                 <img src={ReserveGroupStore} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -64,10 +64,10 @@ class Reservation extends Component {
                                 </div>
                                 <img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
                             </div>
-                        </a>
+                        </div>
                     </li>
                     <li className="cl-reservation__list-item">
-                        <a href="#">
+                        <div>
                             <div className="cl-flex-between">
                                 <img src={ReserveGroupEtc} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -76,7 +76,7 @@ class Reservation extends Component {
                                 </div>
                                 <img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
                             </div>
-                        </a>
+                        </div>
                     </li>
                 </ul>
 
@@ -84,7 +84,7 @@ class Reservation extends Component {
 
                 <ul className="cl-reservation__list--service">
                     <li className="cl-reservation__list-item">
-                        <a href="#">
+                        <div>
                             <div className="cl-flex-between">
                                 <img src={ReserveServiceLaundry} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -96,10 +96,10 @@ class Reservation extends Component {
                                     <span>예약하기</span>
                                 </button>
                             </div>
-                        </a>
+                        </div>
                     </li>
                     <li className="cl-reservation__list-item cl-reservation__notice">
-                        <a href="#">
+                        <div>
                             <div className="cl-flex-between">
                                 <img src={ReserveServiceCleaning} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -111,10 +111,10 @@ class Reservation extends Component {
                                     <span>예약하기</span>
                                 </button>
                             </div>
-                        </a>
+                        </div>
                     </li>
                     <li className="cl-reservation__list-item">
-                        <a href="#">
+                        <div>
                             <div className="cl-flex-between">
                                 <img src={ReserveServiceCleaning} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -126,10 +126,10 @@ class Reservation extends Component {
                                     <span>예약하기</span>
                                 </button>
                             </div>
-                        </a>
+                        </div>
                     </li>
                     <li className="cl-reservation__list-item">
-                        <a href="#">
+                        <div>
                             <div className="cl-flex-between">
                                 <img src={ReserveServiceFood} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -141,10 +141,10 @@ class Reservation extends Component {
                                     <span>예약하기</span>
                                 </button>
                             </div>
-                        </a>
+                        </div>
                     </li>
                     <li className="cl-reservation__list-item">
-                        <a href="#">
+                        <div>
                             <div className="cl-flex-between">
                                 <img src={ReserveServiceCarwash} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -156,7 +156,7 @@ class Reservation extends Component {
                                     <span>예약하기</span>
                                 </button>
                             </div>
-                        </a>
+                        </div>
                     </li>
                 </ul>
 

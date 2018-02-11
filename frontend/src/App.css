@@ -5094,7 +5094,7 @@ button, select {
   margin-bottom: -56px; }
 
 .App.cl-app--expand .cl-fitted-box {
-  max-height: calc( 100vh - 48px); }
+  max-height: calc(100vh - 48px); }
 
 .App.cl-app--expand .cl-header--reservation + .cl-fitted-box {
   max-height: 100vh; }
@@ -5114,18 +5114,20 @@ button, select {
 
 .cl-fitted-box {
   transition: max-height 0.4s ease-out;
-  max-height: calc( 100vh - 56px*2 - 48px);
+  max-height: calc(100vh - 56px * 2 - 48px);
   width: 100%;
   overflow: scroll;
   -webkit-overflow-scrolling: touch; }
 
 .cl-header--reservation {
-  min-height: 86px;
+  min-height: 145px;
   background-color: #2e3137;
   color: white; }
   .cl-header--reservation + .cl-fitted-box {
-    padding-top: 86px;
-    max-height: calc( 100vh - 56px*2); }
+    padding-top: 145px;
+    min-height: calc(100vh - 56px * 2);
+    max-height: calc(100vh - 56px * 2);
+    background-image: url("images/bg-3@2x.png"); }
 
 .cl-fixed-page {
   position: fixed;
@@ -5139,11 +5141,38 @@ button, select {
   left: 0;
   width: 100vw;
   margin-top: 56px;
-  height: calc( 100vh - 56px);
+  height: calc(100vh - 56px);
   background-color: white; }
 
 .react-swipeable-view-container > div[aria-hidden=false] {
   -webkit-overflow-scrolling: touch; }
+
+.cl-select-with-title {
+  height: 60px;
+  padding: 0 8px; }
+  .cl-select-with-title h5 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: #4a4a4a; }
+
+.cl-select-with-title__select {
+  width: 125px;
+  height: 33px;
+  overflow: hidden;
+  background-image: url("images/cl-select-with-title-select-bullet@2x.png");
+  background-repeat: no-repeat;
+  background-position: 90% 50%;
+  background-size: 12px;
+  background-color: rgba(255, 255, 255, 0.4); }
+  .cl-select-with-title__select select {
+    width: 125px;
+    height: 33px;
+    padding: 7px 5px 5px 14px;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.87); }
 
 /* Drawer */
 .md-drawer--active header h2 {
@@ -5494,3 +5523,200 @@ button, select {
       opacity: 0.5; }
   .cl-time-scheduler.cl-time-scheduler--incorrect .cl-area--selected {
     background-color: rgba(255, 0, 0, 0.2); }
+
+.cl-reservation__credit-wrap {
+  height: 90px;
+  margin: 0 15px;
+  padding-top: 10px;
+  border-bottom: 1px solid #cfcfcf; }
+
+.cl-reservation__credit-label {
+  opacity: 0.5;
+  font-size: 12px;
+  color: #ffffff; }
+
+.cl-reservation__credit-text {
+  font-size: 15px;
+  color: #ffffff; }
+  .cl-reservation__credit-text span {
+    font-weight: 500;
+    color: #f4ca5c; }
+
+.cl-reservation__credit-point {
+  font-size: 41px;
+  font-weight: 300;
+  color: #f4ca5c; }
+
+.cl-reservation__link-recent-reserve {
+  display: inline-block;
+  height: 55px;
+  padding: 0 10px 0 15px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 55px;
+  color: #96989B; }
+  .cl-reservation__link-recent-reserve i {
+    position: relative;
+    top: 3px;
+    margin-right: 3px; }
+  .cl-reservation__link-recent-reserve span {
+    position: relative;
+    top: -1px; }
+
+.cl-reservation__link-recent-reserve-count {
+  padding-left: 5px;
+  color: #f4ca5c; }
+
+.cl-reservation__list-item {
+  margin: 0 8px 5px;
+  padding: 22px 18px 22px 12px;
+  border-radius: 2px;
+  background-color: #f4f4f4;
+  box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.14); }
+  .cl-reservation__list-item a {
+    text-decoration: none; }
+
+.cl-reservation__list-item-type-img {
+  width: 45px; }
+
+.cl-reservation__list--group .cl-reservation__list-item {
+  background-color: #f4f4f4;
+  box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.14); }
+
+.cl-reservation__list--group .cl-reservation__list-item-text {
+  width: calc( 100% - 45px - 24px);
+  padding-left: 8px; }
+  .cl-reservation__list--group .cl-reservation__list-item-text h5 {
+    position: relative;
+    top: 2px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87); }
+  .cl-reservation__list--group .cl-reservation__list-item-text p {
+    margin: 0;
+    opacity: 0.5;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.87); }
+
+.cl-reservation__list--group .cl-reservation__list-item-bullet {
+  width: 24px; }
+
+.cl-reservation__list--service .cl-reservation__list-item {
+  background-color: rgba(244, 244, 244, 0.7);
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14); }
+  .cl-reservation__list--service .cl-reservation__list-item:last-child {
+    margin-bottom: 40px; }
+
+.cl-reservation__list--service .cl-reservation__list-item-text {
+  width: calc( 100% - 45px - 94px);
+  padding-left: 8px; }
+  .cl-reservation__list--service .cl-reservation__list-item-text h5 {
+    position: relative;
+    top: 2px;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87); }
+  .cl-reservation__list--service .cl-reservation__list-item-text p {
+    margin: 0;
+    opacity: 0.5;
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.87); }
+
+.cl-reservation__list--service .cl-reservation__list-item-bullet {
+  width: 94px;
+  opacity: 0.5;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.29;
+  color: #000000; }
+  .cl-reservation__list--service .cl-reservation__list-item-bullet img {
+    position: relative;
+    top: 4px;
+    width: 18px;
+    height: 18px; }
+  .cl-reservation__list--service .cl-reservation__list-item-bullet span {
+    padding-left: 4px; }
+
+.cl-credit-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  width: 100vw;
+  height: 100vh; }
+  .cl-credit-popup:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.85); }
+
+.cl-credit-popup__btn-close {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 0; }
+  .cl-credit-popup__btn-close img {
+    width: 28px;
+    height: 28px; }
+
+.cl-credit-popup__btn-wrap {
+  position: fixed;
+  bottom: 4%;
+  left: 4%;
+  width: 92%; }
+
+.cl-credit-popup__content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
+  width: 80%;
+  text-align: center; }
+
+.cl-credit-popup__title {
+  margin-bottom: 60px;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+  color: #fafafa; }
+  .cl-credit-popup__title img {
+    width: 30px;
+    height: 30px; }
+
+.cl-credit-popup__need {
+  margin-bottom: 5px;
+  font-size: 14px;
+  text-align: center;
+  color: #fafafa; }
+  .cl-credit-popup__need span {
+    font-weight: bold;
+    color: #f4ca5c; }
+
+.cl-credit-popup__remaining {
+  margin: 0;
+  font-size: 14px;
+  text-align: center;
+  color: #fafafa; }
+  .cl-credit-popup__remaining span {
+    font-weight: bold; }
+
+.cl-credit-popup__btn, .cl-credit-popup__btn--request, .cl-credit-popup__btn--submit {
+  margin-top: 6px;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  text-align: center;
+  font-size: 14px; }
+
+.cl-credit-popup__btn--request {
+  background-color: #000000;
+  color: #9b9b9b; }
+
+.cl-credit-popup__btn--submit {
+  background-color: #4a4a4a;
+  color: #eeeeee; }
