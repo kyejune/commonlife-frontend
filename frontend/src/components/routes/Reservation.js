@@ -42,7 +42,12 @@ class Reservation extends Component {
 
     updateRoute(){
 
-        if( this.props.match.params.id  )
+        // id위치에 특정 단어가 들어올때 처리
+        if( this.props.match.params.id  === 'history' )
+            Store.drawer.push( 'reservation-history' );
+
+        // id위치에 일반적으로 숫자가 들어오면 상세보기
+        else if( this.props.match.params.id  )
             Store.drawer.push( 'reservation-detail' );
 
         this.setState({
@@ -204,6 +209,14 @@ class Reservation extends Component {
                     visible={this.state.drawer.indexOf( 'reservation-detail' ) >= 0}>
                 <DrawerContentHolder back>
                     <ReservationDetail/>
+                </DrawerContentHolder>
+            </Drawer>
+
+            {/* 히스토리 */}
+            <Drawer {...Store.customDrawerProps}
+                    visible={this.state.drawer.indexOf( 'reservation-history' ) >= 0}>
+                <DrawerContentHolder back>
+                    <div>히스토리 내용이 되는 컴퍼넌트를 여기에 위치</div>
                 </DrawerContentHolder>
             </Drawer>
 
