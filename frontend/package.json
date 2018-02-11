@@ -17,6 +17,7 @@
         "eject": "react-scripts eject"
     },
     "dependencies": {
+        "convert-time": "^0.3.0",
         "cordova-android": "^7.0.0",
         "cordova-ios": "4.5.4",
         "cordova-plugin-camera": "^4.0.2",
@@ -39,6 +40,7 @@
         "node-sass-chokidar": "^0.0.3",
         "npm-run-all": "^4.1.2",
         "query-string": "^5.0.1",
+        "react-draggable": "^3.0.5",
         "react-md": "^1.2.10",
         "react-router-dom": "^4.2.2"
     },

@@ -16,12 +16,16 @@ ul {
   padding-left: 0;
   margin: 0; }
 
+li {
+  list-style: none; }
+
 button, select {
   border: none;
   background-image: none;
   background-color: transparent;
   box-shadow: none;
-  -webkit-appearance: none; }
+  -webkit-appearance: none;
+  padding: 0; }
 
 /* clear mobile style */
 /* Text */
