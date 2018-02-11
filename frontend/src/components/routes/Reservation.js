@@ -5,7 +5,7 @@ import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 import {Drawer} from 'react-md';
 import { Link } from 'react-router-dom';
 import HeaderOfReservation from 'components/ui/HeaderOfReservation';
-import NoCreditPopup from "components/ui/NoCreditPopup";
+// import NoCreditPopup from "components/ui/NoCreditPopup";
 import SelectWithTitle from 'components/ui/SelectWithTitle';
 import ReserveGroupArrow from 'images/ic-favorite-24-px-blue@3x.png';
 import ReserveGroupHome from 'images/r-icon-1@3x.png';
@@ -17,9 +17,9 @@ import ReserveServiceCleaning from 'images/rs-icon-2@3x.png';
 import ReserveServiceFood from 'images/rs-icon-3@3x.png';
 import ReserveServiceCarwash from 'images/rs-icon-4@3x.png';
 import ReserveIcPlus from 'images/page-1@3x.png';
-import ReserveIcTimeNext from 'images/shape-time-next@3x.png';
-import ReserveIcTimePlus from 'images/shape-time-plus@3x.png';
-import ReserveIcNotice from 'images/alert-icon-red@3x.png';
+// import ReserveIcTimeNext from 'images/shape-time-next@3x.png';
+// import ReserveIcTimePlus from 'images/shape-time-plus@3x.png';
+// import ReserveIcNotice from 'images/alert-icon-red@3x.png';
 
 class Reservation extends Component {
 
@@ -219,7 +219,6 @@ class Reservation extends Component {
                     <div>히스토리 내용이 되는 컴퍼넌트를 여기에 위치</div>
                 </DrawerContentHolder>
             </Drawer>
-
 
         </div>
     }

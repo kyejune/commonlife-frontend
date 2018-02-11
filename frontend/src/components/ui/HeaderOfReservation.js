@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import recentReserve from 'images/recent-reservation-bt-white@3x.png';
 import recentReserveReady from 'images/ic-favorite-24-px-copy-14@3x.png';
 
@@ -18,16 +19,16 @@ class HeaderOfReservation extends Component {
 				<p className="cl-reservation__credit-point">75.0</p>
 			</div>
 
-			<div className="cl-reservation__link-recent-reserve">
+			<Link to={ '/reservation/history' } className="cl-reservation__link-recent-reserve">
 				<i><img src={recentReserve} alt="" height="20"/></i>
 				<span>최근 예약내역</span>
-			</div>
+			</Link>
 
-			<div className="cl-reservation__link-recent-reserve">
+			<Link to={ '/reservation/history' } className="cl-reservation__link-recent-reserve">
 				<i><img src={recentReserveReady} alt="" height="20"/></i>
 				<span>예약대기</span>
 				<span className="cl-reservation__link-recent-reserve-count">3</span>
-			</div>
+			</Link>
 
 		</div>
 	}
