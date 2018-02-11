@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Draggable from 'react-draggable';
 import classNames from 'classnames';
+import convertTime from 'convert-time';
 import minusSrc from 'images/ic-minus-24-px@3x.png';
 import plusSrc from 'images/ic-plus-24-px@3x.png';
 
@@ -108,6 +109,20 @@ class TimeScheduler extends Component {
         this.draggableHandle.setState({ x: targetHour * this.state.W * 2 });
 
         this.setState({ hour: targetHour });
+
+        setTimeout( ()=> this.updateTimeSize(), 0 );
+    }
+
+
+    // 선택된 오전, 오후 텍스트 출력
+    getHHMM( hourStep ){
+
+        if( hourStep.toString().includes('.5') )
+            hourStep = hourStep.toString().replace('.5', ':30');
+        else
+            hourStep += ':00';
+
+        return convertTime( hourStep );
     }
 
 
@@ -126,7 +141,7 @@ class TimeScheduler extends Component {
 
             // 시간단위 표시
             if (i % 2 === 0) timeString =
-                <span className="cl-hour__label">{((h < 12) ? '오전' + h : '오후' + (h - 12)).replace('오후0', '오후12')}</span>;
+                <span className="cl-hour__label">{ (( h < 12 )?'오전':'오후') + ((h > 12)?h-12:h) }</span>;
 
             // 첫번째 블록에 같이 스크롤될 요소들 추가: 기예약된 부분, 컨트롤 영역
             if (i === 0) {
@@ -151,14 +166,6 @@ class TimeScheduler extends Component {
                         >
                             <span className="cl-area-handle" ref={ref => this.handleEl = ref}/>
                         </Draggable>
-
-                        {/*<div className="cl-area-handle"*/}
-                             {/*ref={ref => this.handleEl = ref}*/}
-                             {/*draggable="true"*/}
-                             {/*ondragstart={ ()=>this.handleStart() }*/}
-                             {/*ondrag={ ()=>this.handleDrag() }*/}
-                             {/*ondragend={ ()=>this.handleStop() }*/}
-                        />
                     </div>
                 </Draggable>;
 
@@ -175,9 +182,15 @@ class TimeScheduler extends Component {
 
         return <div className={ classNames( "cl-time-scheduler", { "cl-time-scheduler--incorrect": this.state.incorrect } ) }>
 
-            <span className="cl-30mins">
+            <div className="cl-time--selected">
+                <div>{ this.getHHMM( this.state.start ) }</div>
+                <div>{ this.getHHMM( this.state.start + this.state.hour ) }</div>
+            </div>
+
+
+            <div className="cl-30mins">
                 {halfHours}
-            </span>
+            </div>
 
             <div className="cl-time-ctrl cl-flex-between">
                 <button onClick={ ()=> this.timeOffset( -0.5) }>

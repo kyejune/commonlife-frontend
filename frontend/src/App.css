@@ -4450,7 +4450,7 @@ button, select {
 .cl-bg--write {
   background-color: rgba(0, 0, 0, 0.3); }
 
-.cl-flex-between {
+.cl-flex-between, .cl-time-scheduler .cl-time--selected {
   display: flex;
   flex-flow: row wrap;
   justify-content: space-between;
@@ -5402,7 +5402,9 @@ button, select {
   color: #9b9b9b;
   align-items: flex-end;
   padding-left: 16px;
-  padding-bottom: 10px; }
+  padding-bottom: 10px;
+  padding-top: 20px;
+  border-top: 1px solid #cfcfcf; }
   .cl-30mins .cl-30min {
     position: relative;
     list-style: none;
@@ -5430,7 +5432,15 @@ button, select {
   margin-left: -1px; }
 
 .cl-time-scheduler {
-  position: relative; }
+  position: relative;
+  border-top: 1px solid #cfcfcf; }
+  .cl-time-scheduler .cl-time--selected div {
+    width: 50%;
+    text-align: center;
+    padding: 17px 0;
+    font-size: 14px; }
+    .cl-time-scheduler .cl-time--selected div:first-child {
+      border-right: 1px solid #cfcfcf; }
   .cl-time-scheduler .cl-areas {
     position: absolute;
     top: 0;

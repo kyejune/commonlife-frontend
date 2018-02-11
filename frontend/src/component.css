@@ -249,7 +249,9 @@
   color: #9b9b9b;
   align-items: flex-end;
   padding-left: 16px;
-  padding-bottom: 10px; }
+  padding-bottom: 10px;
+  padding-top: 20px;
+  border-top: 1px solid #cfcfcf; }
   .cl-30mins .cl-30min {
     position: relative;
     list-style: none;
@@ -277,7 +279,8 @@
   margin-left: -1px; }
 
 .cl-time-scheduler {
-  position: relative; }
+  position: relative;
+  border-top: 1px solid #cfcfcf; }
   .cl-time-scheduler .cl-areas {
     position: absolute;
     top: 0;

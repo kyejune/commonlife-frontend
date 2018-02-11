@@ -7,6 +7,9 @@
   align-items: flex-end;
   padding-left: 16px;
   padding-bottom: 10px;
+  padding-top: 20px;
+  border-top: 1px solid #cfcfcf;
+
 
   .cl-30min{
     position: relative;
@@ -46,6 +49,26 @@
 .cl-time-scheduler{
 
   position: relative;
+  border-top: 1px solid #cfcfcf;
+
+
+
+  .cl-time--selected{
+    @extend .cl-flex-between;
+
+    div{
+      width: 50%;
+      text-align: center;
+      padding: 17px 0;
+      font-size: 14px;
+
+      &:first-child{
+        border-right: 1px solid #cfcfcf;
+      }
+    }
+  }
+
+
 
   .cl-areas{
     position: absolute;
