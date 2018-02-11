@@ -1,0 +1,260 @@
+.cl-reservation__credit-wrap {
+    height: 90px;
+    margin: 0 15px;
+    padding-top: 10px;
+    border-bottom: 1px solid #cfcfcf;
+}
+
+.cl-reservation__credit-label {
+    opacity: 0.5;
+    font-size: 12px;
+    color: #ffffff;
+}
+
+.cl-reservation__credit-text {
+    font-size: 15px;
+    color: #ffffff;
+
+    span {
+        font-weight: 500;
+        color: $md-secondary-color;
+    }
+}
+
+.cl-reservation__credit-point {
+    font-size: 41px;
+    font-weight: 300;
+    color: $md-secondary-color;
+}
+
+.cl-reservation__link-recent-reserve {
+    display: inline-block;
+    height: 55px;
+    padding: 0 10px 0 15px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 55px;
+    color: #96989B;
+
+    i {
+        position: relative;
+        top: 3px;
+        margin-right: 3px;
+    }
+
+    span {
+        position: relative;
+        top: -1px;
+    }
+}
+
+.cl-reservation__link-recent-reserve-count {
+    padding-left: 5px;
+    color: $md-secondary-color;
+}
+
+.cl-reservation__list-item {
+    margin: 0 8px 5px;
+    padding: 3px 18px 22px 12px;
+    border-radius: 2px;
+    background-color: #f4f4f4;
+    box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+
+    a {
+        text-decoration: none;
+    }
+}
+
+.cl-reservation__list-item-type-img {
+    width: 45px;
+}
+
+.cl-reservation__list--group {
+    .cl-reservation__list-item {
+        background-color: #f4f4f4;
+        box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+    }
+
+    .cl-reservation__list-item-text {
+        width: calc( 100% - 45px - 24px );
+        padding-left: 8px;
+
+        h5 {
+            position: relative;
+            top: 2px;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.87);
+        }
+
+        p {
+            margin: 0;
+            opacity: 0.5;
+            font-size: 12px;
+            color: rgba(0, 0, 0, 0.87);
+        }
+    }
+
+    .cl-reservation__list-item-bullet {
+        width: 24px;
+    }
+}
+
+.cl-reservation__list--service{
+    .cl-reservation__list-item {
+        background-color: rgba(244, 244, 244, 0.7);
+        box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+
+        &:last-child {
+            margin-bottom: 40px;
+        }
+    }
+
+    .cl-reservation__list-item-text {
+        width: calc( 100% - 45px - 94px );
+        padding-left: 8px;
+
+        h5 {
+            position: relative;
+            top: 2px;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 500;
+            color: rgba(0, 0, 0, 0.87);
+        }
+
+        p {
+            margin: 0;
+            opacity: 0.5;
+            font-size: 12px;
+            color: rgba(0, 0, 0, 0.87);
+        }
+    }
+
+    .cl-reservation__list-item-bullet {
+        width: 94px;
+        opacity: 0.5;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.29;
+        color: #000000;
+
+        img {
+            position: relative;
+            top: 4px;
+            width: 18px;
+            height: 18px;
+        }
+
+        span {
+            padding-left: 4px;
+        }
+    }
+}
+
+.cl-credit-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 99;
+    width: 100vw;
+    height: 100vh;
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.85);
+    }
+}
+
+.cl-credit-popup__btn-close {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    padding: 0;
+
+    img {
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.cl-credit-popup__btn-wrap {
+    position: fixed;
+    bottom: 4%;
+    left: 4%;
+    width: 92%;
+}
+
+.cl-credit-popup__content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -60%);
+    width: 80%;
+    text-align: center;
+}
+
+.cl-credit-popup__title {
+    margin-bottom: 60px;
+    font-size: 18px;
+    font-weight: 500;
+    text-align: center;
+    color: #fafafa;
+
+    img {
+        width: 30px;
+        height: 30px;
+    }
+}
+
+.cl-credit-popup__need {
+    margin-bottom: 5px;
+    font-size: 14px;
+    text-align: center;
+    color: #fafafa;
+
+    span {
+        font-weight: bold;
+        color: $md-secondary-color;
+    }
+}
+
+.cl-credit-popup__remaining {
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
+    color: #fafafa;
+
+    span {
+        font-weight: bold;
+    }
+}
+
+.cl-credit-popup__btn {
+    margin-top: 6px;
+    padding-top: 11px;
+    padding-bottom: 11px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.cl-credit-popup__btn--request {
+    @extend .cl-credit-popup__btn;
+
+    background-color: #000000;
+    color: #9b9b9b;
+}
+
+.cl-credit-popup__btn--submit {
+    @extend .cl-credit-popup__btn;
+
+    background-color: #4a4a4a;
+    color: #eeeeee;
+}

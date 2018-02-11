@@ -2,161 +2,187 @@ $dur: 0.4s;
 $delay: 0.2s;
 
 .app-content {
-  margin-top: 56px;
-  transition: margin-top $dur ease-out;
+    margin-top: 56px;
+    transition: margin-top $dur ease-out;
 }
 
 /* Header */
 .App {
 
-
-  & > header{
-    transform : translateZ(0px);
-    transition: margin-top $dur ease-out;
-
-    .md-btn--icon{
-      padding: 0;
-    }
-
-  }
-
-  .app-content{
-
-  }
-
-  & > footer{
-    transform : translateZ(0px);
-    background-color: #ffffff;
-    transition: margin-bottom $dur ease-out;
-
-    .md-bottom-nav--fixed{
-      font-size: 0;
-      padding-top: 2px;
-    }
-
-    img{
-      width: 40px;
-      height: 34px;
-      opacity: 0.4;
-      transition: opacity 0.4s;
-    }
-
-    .md-bottom-nav-label{
-      color: #1052a5;
-      font-size: 12px;
-      line-height: 1.1em;
-      color: rgba( 0, 0, 0, 0.4 );
-      transition: color 0.4s;
-    }
-
-    .footer__button--selected {
-
-      img{
-        opacity: 1;
-      }
-
-      .md-bottom-nav-label{
-        color: #1052a5;
-      }
-
-    }
-  }
-
-
-
-  // 스크롤해서 위아래 메뉴 치울때,
-  &.cl-app--expand {
-
     & > header {
-      transition-delay: $delay;
-      margin-top: -56px;
+        transform: translateZ(0px);
+        transition: margin-top $dur ease-out;
+
+        .md-btn--icon {
+            padding: 0;
+        }
+
     }
 
-    .app-content{
-      margin-top: 0;
-    }
+    .app-content {
 
-    .cl-second-header{
-      transition-delay: $delay;
-      margin-top: 0;
     }
 
     & > footer {
-      margin-bottom: -56px;
+        transform: translateZ(0px);
+        background-color: #ffffff;
+        transition: margin-bottom $dur ease-out;
+
+        .md-bottom-nav--fixed {
+            font-size: 0;
+            padding-top: 2px;
+        }
+
+        img {
+            width: 40px;
+            height: 34px;
+            opacity: 0.4;
+            transition: opacity 0.4s;
+        }
+
+        .md-bottom-nav-label {
+            color: #1052a5;
+            font-size: 12px;
+            line-height: 1.1em;
+            color: rgba(0, 0, 0, 0.4);
+            transition: color 0.4s;
+        }
+
+        .footer__button--selected {
+
+            img {
+                opacity: 1;
+            }
+
+            .md-bottom-nav-label {
+                color: #1052a5;
+            }
+
+        }
     }
 
+    // 스크롤해서 위아래 메뉴 치울때,
+    &.cl-app--expand {
 
-    // 커뮤니티
-    .cl-fitted-box{
-      max-height: calc( 100vh - 48px );
+        & > header {
+            transition-delay: $delay;
+            margin-top: -56px;
+        }
+
+        .app-content {
+            margin-top: 0;
+        }
+
+        .cl-second-header {
+            transition-delay: $delay;
+            margin-top: 0;
+        }
+
+        & > footer {
+            margin-bottom: -56px;
+        }
+
+        // 커뮤니티
+        .cl-fitted-box {
+            max-height: calc(100vh - 48px);
+        }
+
+        // 예약
+        .cl-header--reservation + .cl-fitted-box {
+            max-height: 100vh;
+        }
+
     }
-
-    // 예약
-    .cl-header--reservation + .cl-fitted-box{
-      max-height: 100vh;
-    }
-
-
-  }
 
 }
 
 /* SubHeader */
 .cl-second-header {
-  position: fixed;
-  width: 100%;
-  z-index: 10;
-  left: 0;
-  top: 0;
-  margin-top: 56px;
-  transform : translateZ(0px);
-  transition: margin-top $dur ease-out;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    margin-top: 56px;
+    transform: translateZ(0px);
+    transition: margin-top $dur ease-out;
 
-  & + .md-tabs-content {
-    padding-top: 40px;
-  }
+    & + .md-tabs-content {
+        padding-top: 40px;
+    }
 }
 
-.cl-fitted-box{
-  transition: max-height $dur ease-out;
-  max-height: calc( 100vh - 56px*2 - 48px );
-  width: 100%;
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
+.cl-fitted-box {
+    transition: max-height $dur ease-out;
+    max-height: calc(100vh - 56px * 2 - 48px);
+    width: 100%;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
+.cl-header--reservation {
+    min-height: 145px;
+    background-color: #2e3137;
+    color: white;
 
-.cl-header--reservation{
-  min-height: 86px;
-  background-color: #2e3137;
-  color: white;
-
-  &+.cl-fitted-box{
-    padding-top: 86px;
-    max-height: calc( 100vh - 56px*2 );
-  }
+    & + .cl-fitted-box {
+        padding-top: 145px;
+        min-height: calc(100vh - 56px * 2);
+        max-height: calc(100vh - 56px * 2);
+        background-image: url("images/bg-3@2x.png");
+    }
 }
 
-
-.cl-fixed-page{
-  position: fixed;
-  height: 100vh;
-  top: 0;
-  z-index: 100;
+.cl-fixed-page {
+    position: fixed;
+    height: 100vh;
+    top: 0;
+    z-index: 100;
 }
 
-
-.cl-content{
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  margin-top: 56px;
-  height: calc( 100vh - 56px );
-  background-color: white;
+.cl-content {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    margin-top: 56px;
+    height: calc(100vh - 56px);
+    background-color: white;
 }
 
+.react-swipeable-view-container > div[aria-hidden=false] {
+    -webkit-overflow-scrolling: touch;
+}
 
-.react-swipeable-view-container>div[aria-hidden=false]{
-  -webkit-overflow-scrolling: touch;
+.cl-select-with-title {
+    height: 60px;
+    padding: 0 8px;
+
+    h5 {
+        margin: 0;
+        font-size: 13px;
+        font-weight: 500;
+        color: #4a4a4a;
+    }
+}
+
+.cl-select-with-title__select {
+    width: 125px;
+    height: 33px;
+    overflow: hidden;
+    background-image: url("images/cl-select-with-title-select-bullet@2x.png");
+    background-repeat: no-repeat;
+    background-position: 90% 50%;
+    background-size: 12px;
+    background-color: rgba(255,255,255,0.4);
+
+    select {
+        width: 125px;
+        height: 33px;
+        padding: 7px 5px 5px 14px;
+        background: transparent;
+        border: none;
+        font-size: 14px;
+        color: rgba(0, 0, 0, 0.87);
+    }
 }
