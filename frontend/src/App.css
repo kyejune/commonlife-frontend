@@ -5597,6 +5597,29 @@ button, select, input {
       content: "·";
       margin-right: 0.3em; }
 
+.cl-reservation__button--full, .cl-reservation-book__button, .cl-reserved button {
+  text-align: center;
+  font-weight: bold;
+  border-radius: 1px;
+  width: calc( 100% - 32px);
+  margin: 0 15px;
+  padding: 12px 0; }
+
+.cl-reservation-book__button {
+  background-color: #9b9b9b;
+  color: white;
+  margin: 20px 15px; }
+
+.cl-reserved {
+  padding: 1em 0 2em 0; }
+  .cl-reserved button {
+    background-color: rgba(74, 74, 74, 0.5);
+    color: #9b9b9b;
+    margin-bottom: 6px; }
+
+.cl-booked {
+  color: #de4c35; }
+
 .cl-inclusion-ic {
   display: inline-block;
   width: 56px;
