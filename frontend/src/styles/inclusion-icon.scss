@@ -1,0 +1,45 @@
+
+.cl-inclusion-ic{
+
+  display: inline-block;
+  width: 56px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  color: white;
+
+  &:after{
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    font-size: 11px;
+    padding-left: 20px;
+  }
+
+  &.cl-fridge{
+    background-image: url("images/inclusion-icon/fridge@3x.png");
+
+    &:after{
+      content:"냉장고"
+    }
+  }
+
+
+  &.cl-tv{
+    background-image: url("images/inclusion-icon/tv@3x.png");
+
+    &:after{
+      content:"TV"
+    }
+  }
+
+  &.cl-cabinet{
+    background-image: url("images/inclusion-icon/cabinet@3x.png");
+
+    &:after{
+      content:"수납함"
+    }
+  }
+
+}

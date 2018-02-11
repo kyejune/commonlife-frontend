@@ -24,6 +24,11 @@
     align-items: center;
     color: #4a4a4a;
 
+    button{
+      font-size: 14px;
+      color: #5F5F5F;
+    }
+
     .cl-strong{
       color: #5F5F5F;
       font-weight: bolder;
@@ -300,24 +305,6 @@
 }
 
 
-
-
-
-/* Icon */
-.cl-icon{
-
-  &.cl-card-item__rsvp{
-    min-width: 56px;
-    height: 28px;
-    margin: 0;
-    padding: 0;
-    background-image: url("images/rsvp-copy@3x.png");
-    background-size: 66px;
-  }
-
-}
-
-
 /* Like Lisk */
 .cl-like__header {
     height: 10px;
@@ -375,5 +362,38 @@
     }
 }
 
+/* 앞에 동그라미 감싸진 + 버튼이 있는 라벨 버튼*/
+.cl-plus-label__button{
+
+  height: 18px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 18px;
+  color: #000000;
+
+  &:before{
+    content:'';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: transparent url("images/plus-circle@3x.png") no-repeat;
+    background-size: contain;
+    margin-right: 4px;
+    vertical-align: top;
+  }
+}
+
+
+.cl-map__link{
+  width: 24px;
+  height: 24px;
+  background: transparent url("images/map-link@3x.png") no-repeat;
+  background-size: contain;
+  opacity: 0.3;
+}
+
 
 @import "timeScheduler";
+@import "counter";
+@import "reservationDetail";
+@import "inclusion-icon";

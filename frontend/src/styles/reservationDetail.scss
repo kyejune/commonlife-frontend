@@ -1,0 +1,96 @@
+
+
+
+
+.cl-reservation-option{
+
+  background-color: #F4F4F4;
+
+  .cl-opt-sec{
+    border-bottom: 1px solid #E6E6E6;
+    padding: 17px;
+    color: black;
+  }
+
+  .cl-label{
+    font-weight: bold;
+    width: 80px;
+  }
+
+  .cl-opt-sec--title{
+    h3, p{
+      margin: 0;
+    }
+
+    h3{
+      font-size: 19px;
+      font-weight: bold;
+    }
+
+    p{
+      font-size: 12px;
+      color: #9b9b9b;
+    }
+
+  }
+
+  .cl-opt-sec--branch{
+    .cl-label + div {
+      width: calc( 100% - 80px - 24px );
+    }
+  }
+
+}
+
+
+
+
+.cl-reservation-info{
+
+  font-size: 14px;
+  color: rgba( 255, 255, 255, 0.5 );
+
+  p{
+    color: rgba( 255, 255, 255, 0.5 );
+  }
+
+  .cl-label{
+    //font-size: 14px;
+    color: white;
+  }
+
+
+  .cl-credit{
+
+  }
+
+  .cl-credit, .cl-inclusion, .cl-notice{
+    padding: 20px 15px;
+  }
+
+
+  .cl-inclusion, .cl-notice{
+    border-top: 0.5px solid #cfcfcf50;
+  }
+
+  .cl-inclusion{
+    .cl-label{
+      margin-bottom: 1em;
+    }
+
+    .cl-desc{
+      margin-bottom: 1.4em;
+    }
+  }
+
+  .cl-notice{
+    font-size: 12px;
+    li{
+      &:before{
+        content:"·";
+        margin-right: 0.3em;
+      }
+    }
+  }
+
+}

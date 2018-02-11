@@ -25,10 +25,13 @@ class DrawerContentHolder extends Component {
     onClose(){
 
         let paths = this.props.location.pathname.split('/');
+
+        if( paths[1] === 'community' )
             paths.length -= 2;
+        else
+            paths.length -= 1;
+
         this.props.history.replace(paths.join('/'));
-
-
         Store.drawer.pop();
     }
 

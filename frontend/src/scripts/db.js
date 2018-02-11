@@ -26,7 +26,7 @@ export default {
 			} );
     },
 
-    /* 글보기 */
+    /* Community 글보기 */
     getCardContent( type, index, callback ){
         axios.get( './dummy/feed.json' )
             .then( response => {
@@ -39,6 +39,14 @@ export default {
         axios.get( './dummy/likey.json' )
             .then( response => {
             	callback( response.data );
+            } );
+    },
+
+
+    getReservation( id, callback ){
+        axios.get( './dummy/reservation.json' )
+            .then( response => {
+                callback( response.data['0'] );
             } );
     }
 

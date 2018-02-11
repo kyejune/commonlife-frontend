@@ -4417,13 +4417,14 @@ ul {
 li {
   list-style: none; }
 
-button, select {
+button, select, input {
   border: none;
   background-image: none;
   background-color: transparent;
   box-shadow: none;
   -webkit-appearance: none;
-  padding: 0; }
+  padding: 0;
+  font-size: 14px; }
 
 /* clear mobile style */
 /* Text */
@@ -4450,11 +4451,13 @@ button, select {
 .cl-bg--write {
   background-color: rgba(0, 0, 0, 0.3); }
 
-.cl-flex-between, .cl-time-scheduler .cl-time--selected {
+.cl-flex, .cl-flex-between, .cl-time-scheduler .cl-time--selected, .cl-counter {
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
   align-items: center; }
+
+.cl-flex-between, .cl-time-scheduler .cl-time--selected, .cl-counter {
+  justify-content: space-between; }
 
 /* 이미지에 마진이 포함되어 있어서 임시 수정용 */
 .cl-mrn--32 {
@@ -5093,10 +5096,10 @@ button, select {
 .App.cl-app--expand > footer {
   margin-bottom: -56px; }
 
-.App.cl-app--expand .cl-fitted-box {
+.App.cl-app--expand .cl-fitted-box, .App.cl-app--expand .cl-fitted-box--both {
   max-height: calc(100vh - 48px); }
 
-.App.cl-app--expand .cl-header--reservation + .cl-fitted-box {
+.App.cl-app--expand .cl-header--reservation + .cl-fitted-box, .App.cl-app--expand .cl-header--reservation + .cl-fitted-box--both {
   max-height: 100vh; }
 
 /* SubHeader */
@@ -5112,18 +5115,21 @@ button, select {
   .cl-second-header + .md-tabs-content {
     padding-top: 40px; }
 
-.cl-fitted-box {
+.cl-fitted-box, .cl-fitted-box--both {
   transition: max-height 0.4s ease-out;
   max-height: calc(100vh - 56px * 2 - 48px);
   width: 100%;
   overflow: scroll;
   -webkit-overflow-scrolling: touch; }
 
+.cl-fitted-box--both {
+  max-height: calc( 100vh - 56px - 48px); }
+
 .cl-header--reservation {
   min-height: 145px;
   background-color: #2e3137;
   color: white; }
-  .cl-header--reservation + .cl-fitted-box {
+  .cl-header--reservation + .cl-fitted-box, .cl-header--reservation + .cl-fitted-box--both {
     padding-top: 145px;
     min-height: calc(100vh - 56px * 2);
     max-height: calc(100vh - 56px * 2);
@@ -5200,6 +5206,9 @@ button, select {
     padding: 7px 16px;
     align-items: center;
     color: #4a4a4a; }
+    .md-drawer footer button {
+      font-size: 14px;
+      color: #5F5F5F; }
     .md-drawer footer .cl-strong {
       color: #5F5F5F;
       font-weight: bolder; }
@@ -5370,15 +5379,6 @@ button, select {
     padding: 16px;
     min-height: 100px; }
 
-/* Icon */
-.cl-icon.cl-card-item__rsvp {
-  min-width: 56px;
-  height: 28px;
-  margin: 0;
-  padding: 0;
-  background-image: url("images/rsvp-copy@3x.png");
-  background-size: 66px; }
-
 /* Like Lisk */
 .cl-like__header {
   height: 10px; }
@@ -5425,6 +5425,30 @@ button, select {
     position: relative;
     top: 2px; }
 
+/* 앞에 동그라미 감싸진 + 버튼이 있는 라벨 버튼*/
+.cl-plus-label__button {
+  height: 18px;
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 18px;
+  color: #000000; }
+  .cl-plus-label__button:before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    background: transparent url("images/plus-circle@3x.png") no-repeat;
+    background-size: contain;
+    margin-right: 4px;
+    vertical-align: top; }
+
+.cl-map__link {
+  width: 24px;
+  height: 24px;
+  background: transparent url("images/map-link@3x.png") no-repeat;
+  background-size: contain;
+  opacity: 0.3; }
+
 .cl-30mins {
   display: flex;
   overflow: auto;
@@ -5433,7 +5457,7 @@ button, select {
   padding-left: 16px;
   padding-bottom: 10px;
   padding-top: 20px;
-  border-top: 1px solid #cfcfcf; }
+  border-top: 1px solid #E6E6E6; }
   .cl-30mins .cl-30min {
     position: relative;
     list-style: none;
@@ -5461,15 +5485,16 @@ button, select {
   margin-left: -1px; }
 
 .cl-time-scheduler {
-  position: relative;
-  border-top: 1px solid #cfcfcf; }
-  .cl-time-scheduler .cl-time--selected div {
-    width: 50%;
-    text-align: center;
-    padding: 17px 0;
-    font-size: 14px; }
-    .cl-time-scheduler .cl-time--selected div:first-child {
-      border-right: 1px solid #cfcfcf; }
+  position: relative; }
+  .cl-time-scheduler .cl-time--selected {
+    color: black; }
+    .cl-time-scheduler .cl-time--selected div {
+      width: 50%;
+      text-align: center;
+      padding: 17px 0;
+      font-size: 14px; }
+      .cl-time-scheduler .cl-time--selected div:first-child {
+        border-right: 1px solid #EDEDED; }
   .cl-time-scheduler .cl-areas {
     position: absolute;
     top: 0;
@@ -5523,6 +5548,81 @@ button, select {
       opacity: 0.5; }
   .cl-time-scheduler.cl-time-scheduler--incorrect .cl-area--selected {
     background-color: rgba(255, 0, 0, 0.2); }
+
+.cl-counter {
+  margin-top: 1em; }
+  .cl-counter p {
+    margin: 0; }
+  .cl-counter button {
+    opacity: 0.5; }
+
+.cl-reservation-option {
+  background-color: #F4F4F4; }
+  .cl-reservation-option .cl-opt-sec {
+    border-bottom: 1px solid #E6E6E6;
+    padding: 17px;
+    color: black; }
+  .cl-reservation-option .cl-label {
+    font-weight: bold;
+    width: 80px; }
+  .cl-reservation-option .cl-opt-sec--title h3, .cl-reservation-option .cl-opt-sec--title p {
+    margin: 0; }
+  .cl-reservation-option .cl-opt-sec--title h3 {
+    font-size: 19px;
+    font-weight: bold; }
+  .cl-reservation-option .cl-opt-sec--title p {
+    font-size: 12px;
+    color: #9b9b9b; }
+  .cl-reservation-option .cl-opt-sec--branch .cl-label + div {
+    width: calc( 100% - 80px - 24px); }
+
+.cl-reservation-info {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.5); }
+  .cl-reservation-info p {
+    color: rgba(255, 255, 255, 0.5); }
+  .cl-reservation-info .cl-label {
+    color: white; }
+  .cl-reservation-info .cl-credit, .cl-reservation-info .cl-inclusion, .cl-reservation-info .cl-notice {
+    padding: 20px 15px; }
+  .cl-reservation-info .cl-inclusion, .cl-reservation-info .cl-notice {
+    border-top: 0.5px solid #cfcfcf50; }
+  .cl-reservation-info .cl-inclusion .cl-label {
+    margin-bottom: 1em; }
+  .cl-reservation-info .cl-inclusion .cl-desc {
+    margin-bottom: 1.4em; }
+  .cl-reservation-info .cl-notice {
+    font-size: 12px; }
+    .cl-reservation-info .cl-notice li:before {
+      content: "·";
+      margin-right: 0.3em; }
+
+.cl-inclusion-ic {
+  display: inline-block;
+  width: 56px;
+  height: 20px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.5;
+  color: white; }
+  .cl-inclusion-ic:after {
+    display: inline-block;
+    height: 20px;
+    line-height: 20px;
+    font-size: 11px;
+    padding-left: 20px; }
+  .cl-inclusion-ic.cl-fridge {
+    background-image: url("images/inclusion-icon/fridge@3x.png"); }
+    .cl-inclusion-ic.cl-fridge:after {
+      content: "냉장고"; }
+  .cl-inclusion-ic.cl-tv {
+    background-image: url("images/inclusion-icon/tv@3x.png"); }
+    .cl-inclusion-ic.cl-tv:after {
+      content: "TV"; }
+  .cl-inclusion-ic.cl-cabinet {
+    background-image: url("images/inclusion-icon/cabinet@3x.png"); }
+    .cl-inclusion-ic.cl-cabinet:after {
+      content: "수납함"; }
 
 .cl-reservation__credit-wrap {
   height: 90px;

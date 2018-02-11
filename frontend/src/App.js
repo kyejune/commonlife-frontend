@@ -66,7 +66,7 @@ class App extends Component {
                             <Route path="/life" component={LifeInfo}/>
 
 
-                            <Route path="/reservation" component={Reservation}/>
+                            <Route path="/reservation/:id?/:method?" component={Reservation}/>
 
 
                             <Route path="/playground" component={Playground}/>

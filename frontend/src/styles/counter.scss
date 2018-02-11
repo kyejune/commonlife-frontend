@@ -1,0 +1,13 @@
+.cl-counter{
+  @extend .cl-flex-between;
+
+  margin-top: 1em;
+
+  p{
+    margin: 0;
+  }
+
+  button{
+    opacity: 0.5;
+  }
+}

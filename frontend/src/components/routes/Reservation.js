@@ -1,4 +1,9 @@
 import React, {Component} from 'react';
+import Store from "../../scripts/store";
+import ReservationDetail from "components/drawers/ReservationDetail";
+import DrawerContentHolder from "components/drawers/DrawerContentHolder";
+import {Drawer} from 'react-md';
+import { Link } from 'react-router-dom';
 import HeaderOfReservation from 'components/ui/HeaderOfReservation';
 import NoCreditPopup from "components/ui/NoCreditPopup";
 import SelectWithTitle from 'components/ui/SelectWithTitle';
@@ -18,7 +23,36 @@ import ReserveIcNotice from 'images/alert-icon-red@3x.png';
 
 class Reservation extends Component {
 
+    constructor( props ){
+        super( props );
+
+        this.state = {
+            drawer: Store.drawer,
+        }
+    }
+
+    componentDidMount(){
+        this.updateRoute();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location)
+            this.updateRoute();
+    }
+
+    updateRoute(){
+
+        if( this.props.match.params.id  )
+            Store.drawer.push( 'reservation-detail' );
+
+        this.setState({
+            drawer: Store.drawer || [],
+        });
+    }
+
     render() {
+
+
         return <div>
             {/*크레딧 에러 팝업 */}
             {/*<NoCreditPopup/>*/}
@@ -31,7 +65,7 @@ class Reservation extends Component {
 
                 <ul className="cl-reservation__list--group">
                     <li className="cl-reservation__list-item">
-                        <div>
+                        <Link to={ '/reservation/0' }>
                             <div className="cl-flex-between">
                                 <img src={ReserveGroupHome} alt="" className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
@@ -40,7 +74,7 @@ class Reservation extends Component {
                                 </div>
                                 <img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
                             </div>
-                        </div>
+                        </Link>
                     </li>
                     <li className="cl-reservation__list-item">
                         <div>
@@ -161,6 +195,19 @@ class Reservation extends Component {
                 </ul>
 
             </div>
+
+
+
+
+            {/* 예약 상세 화면 */}
+            <Drawer {...Store.customDrawerProps}
+                    visible={this.state.drawer.indexOf( 'reservation-detail' ) >= 0}>
+                <DrawerContentHolder back>
+                    <ReservationDetail/>
+                </DrawerContentHolder>
+            </Drawer>
+
+
         </div>
     }
 

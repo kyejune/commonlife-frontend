@@ -1,0 +1,72 @@
+{
+  "0": {
+    "where": "팻샤워실",
+    "description": "해당 예약콘덴츠에 대한 description입니다.",
+    "branch": "역삼하우징(선릉역)",
+    "map": "맵 링크를 걸 무언가...",
+    "date": {
+      "type": "date",
+      "value": "07/06/2012",
+      "min": "07/01/2012",
+      "max": "07/08/2012",
+      "maxDays": 1
+    },
+    "pictures":[],
+    "available": true,
+    "options": [
+      {
+        "type": "info",
+        "title": "예약가능",
+        "info": "20석 / 총 80석"
+      },
+      {
+        "type": "select",
+        "value": 0,
+        "options": [
+          "소형창고 222m",
+          "중형창고 333m",
+          "대형창고 444m"
+        ]
+      },
+      {
+        "type": "counter",
+        "title": "수량",
+        "value": 1,
+        "min": 1,
+        "max": 3
+      },
+      {
+        "type": "time",
+        "value": 11,
+        "start": 8,
+        "end": 20,
+        "maxWidth": 3,
+        "selected": [
+          {
+            "start": 9,
+            "end": 10
+          },
+          {
+            "start": 12,
+            "end": 14
+          }
+        ]
+      }
+    ],
+    "cost": 2,
+    "balance": 20.2,
+    "inclusion": {
+      "comment": "애견침대, 헤어드라이, 애견용 샴푸, 애견용 욕조, 헤어드라이",
+      "icons": [
+        "fridge",
+        "tv",
+        "cabinet"
+      ]
+    },
+    "notice": [
+      "예약 시작 시간 60분 전까지 이 예약을 취소할 수 있습니다.",
+      "공간에 대한 이용안내 및 주의사항을 입력할 수 있습니다.",
+      "기타 예약관련 주의를 전달 할 수 있습니다."
+    ]
+  }
+}

@@ -120,6 +120,11 @@ $delay: 0.2s;
     -webkit-overflow-scrolling: touch;
 }
 
+.cl-fitted-box--both{
+    @extend .cl-fitted-box;
+    max-height: calc( 100vh - 56px - 48px );
+}
+
 .cl-header--reservation {
     min-height: 145px;
     background-color: #2e3137;

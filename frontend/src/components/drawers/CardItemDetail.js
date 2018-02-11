@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
-import {Button, CardTitle, Avatar} from "react-md";
+import {CardTitle, Avatar} from "react-md";
 import DB from "scripts/db";
 import LikeShareAndSome from "components/ui/LikeShareAndSome";
 
@@ -80,7 +80,7 @@ class CardItemDetailDrawer extends Component {
                     <span className="cl-strong">25</span><span>/50참여</span>
                 </div>
 
-                <Button flat className="cl-icon cl-card-item__rsvp"/>
+                <button className="cl-plus-label__button">참여</button>
             </footer>
         </div>
     }
