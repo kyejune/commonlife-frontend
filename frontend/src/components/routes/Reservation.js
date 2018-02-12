@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Store from "../../scripts/store";
 import ReservationDetail from "components/drawers/ReservationDetail";
+import ReservationHistory from "components/drawers/ReservationHistory";
 import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 import {Drawer} from 'react-md';
 import { Link } from 'react-router-dom';
@@ -216,7 +217,7 @@ class Reservation extends Component {
             <Drawer {...Store.customDrawerProps}
                     visible={this.state.drawer.indexOf( 'reservation-history' ) >= 0}>
                 <DrawerContentHolder back>
-                    <div>히스토리 내용이 되는 컴퍼넌트를 여기에 위치</div>
+                    <ReservationHistory/>
                 </DrawerContentHolder>
             </Drawer>
 
