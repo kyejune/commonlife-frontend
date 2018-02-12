@@ -10,10 +10,6 @@ import ReserveServiceCarwash from 'images/rs-icon-4@3x.png';
 
 class ReservationHistory extends Component{
 
-	constructor( props ) {
-		super( props );
-	}
-
 	componentWillMount(){
 		// ContentHolder에 전달
 		this.props.updateTitle(
