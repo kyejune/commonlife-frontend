@@ -33,4 +33,27 @@ public class ServicePropertiesMapTest {
 
         return;
     }
+
+    @Test
+    public void sampleReadPostPropertiesTest() throws Exception {
+        final String POST_PROP_GROUP = "POST";
+        final String POST_S3_ACCESS_KEY_PROP_KEY = "S3_ACCESS_KEY";
+        final String POST_S3_ACCESS_SECRET_PROP_KEY = "S3_ACCESS_SECRET";
+        final String POST_UP_S3_NAME_PROP_KEY = "UP_S3_NAME";
+        final String POST_UP_S3_KEY_PREFIX_PROP_KEY = "UP_S3_KEY_PREFIX";
+        final String POST_DN_S3_NAME_PROP_KEY = "DN_S3_NAME";
+        final String POST_DN_S3_KEY_PREFIX_PROP_KEY = "DN_S3_KEY_PREFIX";
+
+        KeyValueMap kvm;
+
+        kvm = serviceProp.getByGroup( POST_PROP_GROUP );
+        Assert.assertEquals( kvm.getValue( POST_S3_ACCESS_KEY_PROP_KEY ) , null );
+        Assert.assertEquals( kvm.getValue( POST_S3_ACCESS_SECRET_PROP_KEY ) , null );
+        Assert.assertEquals( kvm.getValue( POST_UP_S3_NAME_PROP_KEY ) , null );
+        Assert.assertEquals( kvm.getValue( POST_UP_S3_KEY_PREFIX_PROP_KEY ) , null );
+        Assert.assertEquals( kvm.getValue( POST_DN_S3_NAME_PROP_KEY ) , null );
+        Assert.assertEquals( kvm.getValue( POST_DN_S3_KEY_PREFIX_PROP_KEY ) , null );
+
+        return;
+    }
 }
