@@ -1,11 +1,13 @@
 package com.kolon.comlife.postFile.model;
 
 import com.kolon.comlife.post.model.PostInfo;
+import org.apache.ibatis.type.Alias;
 
+@Alias("postFileInfo")
 public class PostFileInfo {
 
-    private String fileIdx;
-    private String boardIdx;
+    private int fileIdx;
+    private int boardIdx;
     private String fileType;
     private String fileNm;
     private String fileOrgNm;
@@ -21,19 +23,19 @@ public class PostFileInfo {
     // Relations
     private PostInfo post;
 
-    public String getFileIdx() {
+    public int getFileIdx() {
         return fileIdx;
     }
 
-    public void setFileIdx(String fileIdx) {
+    public void setFileIdx(int fileIdx) {
         this.fileIdx = fileIdx;
     }
 
-    public String getBoardIdx() {
+    public int getBoardIdx() {
         return boardIdx;
     }
 
-    public void setBoardIdx(String boardIdx) {
+    public void setBoardIdx(int boardIdx) {
         this.boardIdx = boardIdx;
     }
 
