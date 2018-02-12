@@ -9,6 +9,7 @@ import com.kolon.comlife.users.model.AgreementInfo;
 import com.kolon.comlife.users.service.RegistrationService;
 import com.kolon.common.http.HttpRequestFailedException;
 import com.kolon.common.http.HttpGetRequester;
+import com.kolon.common.prop.ServicePropertiesMap;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +31,8 @@ import java.util.Map;
 public class RegistrationController {
     private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
 
-    private static final String IOK_MASTER_HOST         = "https://dev-master.smartiok.com";
+    private static final String IOK_MASTER_HOST_PROP_GROUP = "IOK";
+    private static final String IOK_MASTER_HOST_PROP_KEY = "MASTER_HOST";
     private static final String IOK_LIST_DONG_INFO_PATH = "/mobile/controller/MobileUserController/listDongInfo.do";
     private static final String IOK_LIST_HO_INFO_PATH = "/mobile/controller/MobileUserController/listHoInfo.do";
     private static final String IOK_REQ_HAED_CERT_NUM_PATH = "/mobile/controller/MobileUserCertNoController/reqHeadCertNumber.do";
@@ -40,6 +42,8 @@ public class RegistrationController {
     private static final String IOK_CFRM_USER_CERT_NUM_PATH = "/mobile/controller/MobileUserCertNoController/confirmUserCertNumber.do";
     private static final String IOK_REGISTER_USER_PATH = "/mobile/controller/MobileUserController/registerMember.do";
 
+    @Resource(name = "servicePropertiesMap")
+    private ServicePropertiesMap serviceProperties;
 
     @Resource(name = "registrationService")
     private RegistrationService regService;
@@ -99,9 +103,10 @@ public class RegistrationController {
         DataListInfo     retBody;
 
         try {
-            requester = new HttpGetRequester( httpClient,
-                                              IOK_MASTER_HOST,
-                                              IOK_LIST_DONG_INFO_PATH );
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MASTER_HOST_PROP_GROUP, IOK_MASTER_HOST_PROP_KEY),
+                    IOK_LIST_DONG_INFO_PATH );
             requester.setParameter("cmplxId", String.valueOf(id) );
             result = requester.execute();
         }
@@ -157,9 +162,10 @@ public class RegistrationController {
         DataListInfo     retBody;
 
         try {
-            requester = new HttpGetRequester( httpClient,
-                                              IOK_MASTER_HOST,
-                                              IOK_LIST_HO_INFO_PATH );
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MASTER_HOST_PROP_GROUP, IOK_MASTER_HOST_PROP_KEY),
+                    IOK_LIST_HO_INFO_PATH );
             requester.setParameter("cmplxId", String.valueOf(id) );
             requester.setParameter("dong", String.valueOf(dong) );
             result = requester.execute();
@@ -216,7 +222,7 @@ public class RegistrationController {
         try {
             requester = new HttpGetRequester(
                     httpClient,
-                    IOK_MASTER_HOST,
+                    serviceProperties.getByKey(IOK_MASTER_HOST_PROP_GROUP, IOK_MASTER_HOST_PROP_KEY),
                     IOK_REQ_HAED_CERT_NUM_PATH );
             requester
                 .setParameter("cmplxId", request.getParameter("cmplxId"))
@@ -275,7 +281,7 @@ public class RegistrationController {
         try {
             requester = new HttpGetRequester(
                     httpClient,
-                    IOK_MASTER_HOST,
+                    serviceProperties.getByKey(IOK_MASTER_HOST_PROP_GROUP, IOK_MASTER_HOST_PROP_KEY),
                     IOK_CFRM_HAED_CERT_NUM_PATH );
             requester
                     .setParameter("cmplxId", request.getParameter("cmplxId"))
@@ -338,7 +344,7 @@ public class RegistrationController {
         try {
             requester = new HttpGetRequester(
                     httpClient,
-                    IOK_MASTER_HOST,
+                    serviceProperties.getByKey(IOK_MASTER_HOST_PROP_GROUP, IOK_MASTER_HOST_PROP_KEY),
                     IOK_CHECK_USER_ID_PATH );
             requester
                     .setParameter("userId", userId );
@@ -391,7 +397,7 @@ public class RegistrationController {
         try {
             requester = new HttpGetRequester(
                     httpClient,
-                    IOK_MASTER_HOST,
+                    serviceProperties.getByKey(IOK_MASTER_HOST_PROP_GROUP, IOK_MASTER_HOST_PROP_KEY),
                     IOK_REQ_USER_CERT_NUM_PATH );
             requester
                     .setParameter("cmplxId", request.getParameter("cmplxId"))
@@ -452,7 +458,7 @@ public class RegistrationController {
         try {
             requester = new HttpGetRequester(
                     httpClient,
-                    IOK_MASTER_HOST,
+                    serviceProperties.getByKey(IOK_MASTER_HOST_PROP_GROUP, IOK_MASTER_HOST_PROP_KEY),
                     IOK_CFRM_USER_CERT_NUM_PATH );
             requester
                     .setParameter("userCell", request.getParameter("userCell"))
@@ -507,7 +513,7 @@ public class RegistrationController {
         try {
             requester = new HttpGetRequester(
                     httpClient,
-                    IOK_MASTER_HOST,
+                    serviceProperties.getByKey(IOK_MASTER_HOST_PROP_GROUP, IOK_MASTER_HOST_PROP_KEY),
                     IOK_REGISTER_USER_PATH );
             requester
                     .setParameter("cmplxId", request.getParameter("cmplxId"))

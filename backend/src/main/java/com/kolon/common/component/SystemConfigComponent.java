@@ -1,7 +1,7 @@
 package com.kolon.common.component;
 
 import com.kolon.common.helper.ResourceCloseHelper;
-import com.kolon.common.prop.PropertiesMap;
+import com.kolon.common.prop.SystemPropertiesMap;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,13 +19,7 @@ import java.util.Properties;
  * 시스템 설정 컴포넌트 확장
  * @author Cho Sin Deuck
  * @version 1.0
- * @see <pre>
- * << 개정이력(Modification Information) >>
- *
- *   수정일        수정자           수정내용
- *  ----------   --------    ---------------------------
- *   2017-07-07    조신득          최초 생성
- * </pre>
+ * @see <pre> * </pre>
  */
 @Component
 public class SystemConfigComponent {
@@ -41,14 +35,10 @@ public class SystemConfigComponent {
         this.properties = properties;
     }
 
-    public void init()
-            throws ServletException
+    public void init() throws ServletException
     {
         initProperties();
-
-
     }
-
 
     private void initProperties()
     {
@@ -78,7 +68,7 @@ public class SystemConfigComponent {
         InputStream stream = getClass().getClassLoader().getResourceAsStream(propertiesFile);
         Properties props = new Properties();
         props.load(stream);
-        PropertiesMap propMap = PropertiesMap.getInstance();
+        SystemPropertiesMap propMap = SystemPropertiesMap.getInstance();
         this.tempMap = propMap.getProperties();
         if (this.tempMap == null) {
             this.tempMap = new HashMap();

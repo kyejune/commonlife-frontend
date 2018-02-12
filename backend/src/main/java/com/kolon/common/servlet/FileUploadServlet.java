@@ -1,6 +1,6 @@
 package com.kolon.common.servlet;
 
-import com.kolon.common.prop.PropertiesMap;
+import com.kolon.common.prop.SystemPropertiesMap;
 import com.kolon.common.util.DateUtil;
 import com.kolon.common.util.FileUtil;
 import com.kolon.common.util.WebUtil;
@@ -64,8 +64,8 @@ public class FileUploadServlet
         File fichero = null;
         //String uuid = baseUserInfo.getUuid();
         String uuid = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
-        String tempPath = PropertiesMap.getInstance().getValue("system.temp.file.path");
-        String uploadPath = PropertiesMap.getInstance().getValue("system.storage.file.path");
+        String tempPath = SystemPropertiesMap.getInstance().getValue("system.temp.file.path");
+        String uploadPath = SystemPropertiesMap.getInstance().getValue("system.storage.file.path");
         String fileSubPath = DateUtil.getToday().substring(0, 6);
         iter = fileItems.iterator();
         int sttsCode = 0;
@@ -144,7 +144,7 @@ public class FileUploadServlet
     private boolean extCheck(String fileExt)
     {
         boolean returnFlag = true;
-        String fileNotExtension = PropertiesMap.getInstance().getValue("system.file.attch.extsn.lmtt");
+        String fileNotExtension = SystemPropertiesMap.getInstance().getValue("system.file.attch.extsn.lmtt");
         if (StringUtils.isNotBlank(fileNotExtension))
         {
             String[] checkExts = fileNotExtension.split(",");
