@@ -22,6 +22,7 @@ import java.security.Key;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 
 /**
@@ -63,17 +64,16 @@ public class PropertiesController {
             value="/{name}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getPropertiesDataList(@PathVariable("name") String name ) {
-        Map    result;
+        Map    result = new TreeMap();
         String groupKey;
         String key;
         String value;
 
         if ( name.equals(systemProp.getClass().getSimpleName()) ) {
-            result = systemProp.getProperties();
+            result.putAll( systemProp.getProperties() );
             logger.debug( ">>>>> System Properties:" + result);
         } else if( name.equals(serviceProp.getClass().getSimpleName()) ) {
             KeyValueMap groupProp;
-            result = new HashMap();
 
             Iterator<String> groupsItr = serviceProp.keySet().iterator();
             while( groupsItr.hasNext() ) {

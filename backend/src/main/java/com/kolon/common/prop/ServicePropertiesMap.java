@@ -4,9 +4,7 @@ import com.kolon.comlife.properties.model.PropertiesInfo;
 import com.kolon.comlife.properties.service.PropertiesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
