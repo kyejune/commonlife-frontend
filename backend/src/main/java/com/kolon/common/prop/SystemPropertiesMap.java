@@ -9,21 +9,20 @@ import org.apache.commons.collections.IteratorUtils;
 
 import java.util.HashMap;
 
-
-public class PropertiesMap
+public class SystemPropertiesMap
 {
-    private static PropertiesMap propertiesMap;
+    private static SystemPropertiesMap systemPropertiesMap;
     private static HashMap<Object, Object> propertiesValues;
 
-    public static PropertiesMap getInstance()
+    public static SystemPropertiesMap getInstance()
     {
-        synchronized (PropertiesMap.class)
+        synchronized (SystemPropertiesMap.class)
         {
-            if (propertiesMap == null) {
-                propertiesMap = new PropertiesMap();
+            if (systemPropertiesMap == null) {
+                systemPropertiesMap = new SystemPropertiesMap();
             }
         }
-        return propertiesMap;
+        return systemPropertiesMap;
     }
 
     public void setProperties(HashMap<Object, Object> propertiesValues)

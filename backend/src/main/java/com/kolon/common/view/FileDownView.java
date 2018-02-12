@@ -1,6 +1,6 @@
 package com.kolon.common.view;
 
-import com.kolon.common.prop.PropertiesMap;
+import com.kolon.common.prop.SystemPropertiesMap;
 import com.kolon.common.util.FileUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
@@ -29,7 +29,7 @@ public class FileDownView extends AbstractView {
     public static final String FILE_PARAM_FILE_DELETE = "fileDelete";
     public static final String FILE_DELETE_ENABLE = "Y";
     public static final String FOLDER_DELETE_ENABLE = "Y";
-    private String fileDownEncoding = PropertiesMap.getInstance().getValue("system.file.down.encoding");
+    private String fileDownEncoding = SystemPropertiesMap.getInstance().getValue("system.file.down.encoding");
 
     protected void renderMergedOutputModel(Map model, HttpServletRequest request, HttpServletResponse response)
             throws Exception

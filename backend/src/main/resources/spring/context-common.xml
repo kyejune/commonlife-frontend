@@ -10,10 +10,24 @@
 
     <!-- Beginning of Properties -->
     <util:properties id="globals" location="classpath:/properties/globals.properties" />
+
     <util:properties id="prop_jdbc"
                      location="classpath:/properties/#{systemProperties['spring.profiles.active'] == null ? 'default' : systemProperties['spring.profiles.active'] }/jdbc.properties" />
     <util:properties id="prop_dev"
                      location="classpath:/properties/#{systemProperties['spring.profiles.active'] == null ? 'default' : systemProperties['spring.profiles.active'] }/development.properties"
                      ignore-resource-not-found="true"/>
     <!-- End of Properties -->
+
+    <util:properties
+            id="systemprop"
+            location="classpath:/properties/#{systemProperties['spring.profiles.active'] == null ? 'default' : systemProperties['spring.profiles.active'] }/system.properties" />
+    <bean id="systemConfigComponent" class="com.kolon.common.component.SystemConfigComponent" init-method="init">
+        <property name="properties">
+            <list>
+                <value>properties/globals.properties</value>
+                <value>properties/#{systemProperties['spring.profiles.active'] == null ? 'default' : systemProperties['spring.profiles.active'] }/system.properties</value>
+            </list>
+        </property>
+    </bean>
+
 </beans:beans>

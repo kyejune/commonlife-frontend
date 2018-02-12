@@ -4,16 +4,17 @@ import com.kolon.comlife.properties.model.PropertiesInfo;
 import com.kolon.comlife.properties.service.PropertiesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 
-@Component("servicePropertiesMap")
+@Controller
 public class ServicePropertiesMap {
     private static final Logger logger = LoggerFactory.getLogger(ServicePropertiesMap.class);
 
@@ -62,5 +63,9 @@ public class ServicePropertiesMap {
         }
 
         return kvm.getValue(key);
+    }
+
+    public Set<String> keySet() {
+        return this.propGroup.keySet();
     }
 }

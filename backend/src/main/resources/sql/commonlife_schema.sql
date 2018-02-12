@@ -73,3 +73,16 @@ CREATE TABLE `SERVICE_PROPERTIES` (
   `UPD_USERID` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`PROP_KEY`,`PROP_GROUP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+
+---- LIKE -----
+CREATE TABLE `LIKE` (
+  `LIKE_IDX` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `PARENT_TYPE` varchar(31) NOT NULL DEFAULT '',
+  `PARENT_IDX` int(11) unsigned NOT NULL,
+  `USR_IDX` int(11) unsigned NOT NULL,
+  `DEL_YN` char(1) NOT NULL DEFAULT 'N',
+  `REG_DTTM` datetime NOT NULL DEFAULT current_timestamp(),
+  `UPD_DTTM` datetime NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`LIKE_IDX`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8

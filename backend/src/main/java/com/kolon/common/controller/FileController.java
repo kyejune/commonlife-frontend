@@ -1,8 +1,7 @@
 package com.kolon.common.controller;
 
-import com.kolon.common.prop.PropertiesMap;
+import com.kolon.common.prop.SystemPropertiesMap;
 import com.kolon.common.view.FileDownView;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,7 +18,7 @@ import java.util.Map;
  */
 //@Controller
 public class FileController {
-    private String rootPath = PropertiesMap.getInstance().getValue("system.storage.file.path");
+    private String rootPath = SystemPropertiesMap.getInstance().getValue("system.storage.file.path");
 
 
     /**
