@@ -3,6 +3,7 @@ import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
 import moment from 'moment';
 import TimeScheduler from 'components/ui/TimeScheduler';
+import ThumbnailSwiper from 'components/ui/ThumbnailSwiper';
 import Counter from 'components/ui/Counter';
 import DB from "scripts/db";
 import completeSrc from 'images/complete-bt-blueicon@3x.png';
@@ -133,7 +134,7 @@ class ReservationDetail extends Component {
         return <div className="cl-reservation-detail cl-fitted-box--both">
 
             {!this.state.reserved &&
-            <div style={{height: 248, backgroundColor: 'gray'}}>갤러리 출력 부분</div>
+			    <ThumbnailSwiper/>
             }
 
 

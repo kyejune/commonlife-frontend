@@ -1,0 +1,20 @@
+.swiper-slide {
+    padding: 20% 0;
+    text-align: center;
+}
+
+.swiper-slide--1 {
+    @extend .swiper-slide;
+}
+.swiper-slide--2 {
+    @extend .swiper-slide;
+}
+.swiper-slide--3 {
+    @extend .swiper-slide;
+}
+.swiper-slide--4 {
+    @extend .swiper-slide;
+}
+.swiper-slide--5 {
+    @extend .swiper-slide;
+}
