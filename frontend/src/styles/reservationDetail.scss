@@ -40,6 +40,25 @@
     }
   }
 
+
+  .cl-opt-sec--daterange{
+
+    .cl-label + div {
+      position: relative;
+      width: calc( 100% - 80px );
+    }
+
+    input{
+      width: 50%;
+    }
+
+    .cl-center{
+      position: absolute;
+      left: 50%;
+      margin-left: -10%;
+    }
+  }
+
 }
 
 
@@ -125,4 +144,56 @@
 
 .cl-booked{
   color: #de4c35;
+}
+
+.cl-date-range{
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 100;
+  background-color: white;
+}
+
+
+
+
+// DateRange
+.cl-opt-sec--daterange{
+  .cl-daterange-output{
+    @extend .cl-flex;
+
+    .cl-divider{
+      width: 30px;
+      text-align: center;
+    }
+  }
+}
+.cl-date-range {
+
+  font-size: 1.1em;
+
+  .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+    border-radius: 0;
+    background-color: #8EA9D3;
+
+    &.DayPicker-Day--start {
+      border-top-left-radius: 100%;
+      border-bottom-left-radius: 100%;
+      background-color: #1251A5;
+    }
+
+    &.DayPicker-Day--end {
+      border-top-right-radius: 100%;
+      border-bottom-right-radius: 100%;
+      background-color: #1251A5;
+    }
+  }
+
+  .cl-ok{
+    width: 100%;
+    text-align: center;
+    padding: 1em 0;
+    margin-top: -1em;
+  }
 }

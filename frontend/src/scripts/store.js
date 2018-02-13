@@ -24,6 +24,9 @@ const Store = observable({
         position: 'right',
     },
 
+
+    now: new Date(),
+
 });
 
 export default Store;

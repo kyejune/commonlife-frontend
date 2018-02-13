@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
-import moment from 'moment';
 import TimeScheduler from 'components/ui/TimeScheduler';
 import ThumbnailSwiper from 'components/ui/ThumbnailSwiper';
 import Counter from 'components/ui/Counter';
 import DB from "scripts/db";
 import completeSrc from 'images/complete-bt-blueicon@3x.png';
+import DateOne from "components/ui/DateOne";
+import DatePeriod from "components/ui/DatePeriod";
 
 
 class ReservationDetail extends Component {
@@ -26,15 +27,15 @@ class ReservationDetail extends Component {
             data.loaded = true;
 
             // 날짜
-            if (data.date.value) data.date.value = new Date(data.date.value);
-            else data.date.value = new Date();
-
-            // 기간? 날짜?
-            if (data.date.type === 'date') data.dateName = "오늘";
-            else data.dateName = "기간";
-
-
-            console.log(moment(data.date.value).format('YYYY-MM-DD'));
+            // if (data.date.value) data.date.value = new Date(data.date.value);
+            // else data.date.value = new Date();
+            //
+            // // 기간? 날짜?
+            // if (data.date.type === 'date') data.dateName = "오늘";
+            // else data.dateName = "기간";
+            //
+            //
+            // console.log(moment(data.date.value).format('YYYY-MM-DD'));
             this.setState(data);
 
             this.props.updateTitle(data.where); // ContentHolder에 전달
@@ -77,40 +78,51 @@ class ReservationDetail extends Component {
         // 옵션들 추가
         let Options = this.state.options.map((opt, i) => {
 
-            if (opt.type === 'select') {
+            if( opt.type === 'date' )
+            {
+                return <DateOne key="date" {...opt} />
+            }
+            else if( opt.type === 'dateRange')
+            {
+                return <DatePeriod key="date-range" {...opt} />
+            }
+            else if (opt.type === 'select')
+            {
                 let Opts = opt.options.map((o, i) => {
                     return <option value={i} key={i}>{o}</option>
                 });
 
                 return <div className="cl-opt-sec cl-flex" key="select">
-                    <div className="cl-label">옵션</div>
-                    <select name="" id="">
-                        {Opts}
-                    </select>
+                    <div className="cl-label">{opt.title||"옵션"}</div>
+                    <select name="" id="">{Opts}</select>
                 </div>
             }
-            else if (opt.type === 'time') {
+            else if (opt.type === 'time')
+            {
                 return <TimeScheduler // 24시간 기준으로 기입!!
-                    key="timescheduler"
+                    key="time"
                     maxWidth={3} // 최대시간, min-width는 0.5로 고정
                     min={10} // 예약가능한 시작 시간
                     max={20} // 예야가능한 마지막 시간
                     scheduled={[{start: 10, end: 11}, {start: 15, end: 17}]} // 기 예약된 내용
                 />
             }
-            else if (opt.type === 'counter') {
+            else if (opt.type === 'counter')
+            {
                 return <div className="cl-opt-sec" key="counter">
                     <div className="cl-label">{opt.title}</div>
                     <Counter {...opt} />
                 </div>
             }
-            else if (opt.type === 'info') {
+            else if (opt.type === 'info')
+            {
                 return <div className="cl-opt-sec cl-flex" key="info">
                     <div className="cl-label">{opt.title}</div>
                     <div>{opt.info}</div>
                 </div>
             }
-            else {
+            else
+            {
                 return '';
             }
 
@@ -120,13 +132,13 @@ class ReservationDetail extends Component {
         let FooterBtns;
         if (this.state.reserved || this.state.booked) {
             FooterBtns = [
-                <span></span>,
-                <button><img src={completeSrc} alt="완료버튼" width="97" height="36"/></button>
+                <span key="blank"/>,
+                <button key="confirm"><img src={completeSrc} alt="완료버튼" width="97" height="36"/></button>
             ];
         } else {
             FooterBtns = [
-                <button>취소</button>,
-                <button className="cl-plus-label__button" onClick={() => this.reserve()}>예약하기</button>
+                <button key="cancel">취소</button>,
+                <button key="reserve" className="cl-plus-label__button" onClick={() => this.reserve()}>예약하기</button>
             ];
         }
 
@@ -157,13 +169,6 @@ class ReservationDetail extends Component {
                     <div className="cl-label">지점</div>
                     <div>{this.state.branch}</div>
                     <button className="cl-map__link"/>
-                </div>
-
-                <div className="cl-opt-sec cl-flex cl-opt-sec--date">
-                    <div className="cl-label">{this.state.dateName}</div>
-                    <input type="date" name="date"
-                           defaultValue={moment(this.state.date.value).format('YYYY-MM-DD')}
-                    />
                 </div>
 
                 {Options}

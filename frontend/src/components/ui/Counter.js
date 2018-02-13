@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-// import classNames from 'classnames';
 import minusSrc from 'images/ic-minus-24-px@3x.png';
 import plusSrc from 'images/ic-plus-24-px@3x.png';
 

@@ -1,18 +1,28 @@
 {
   "0": {
+    "pictures":[],
     "where": "팻샤워실",
     "description": "해당 예약콘덴츠에 대한 description입니다.",
     "branch": "역삼하우징(선릉역)",
     "map": "맵 링크를 걸 무언가...",
-    "date": {
-      "type": "date",
-      "value": "07/06/2012",
-      "min": "07/01/2012",
-      "max": "07/08/2012",
-      "maxDays": 1
-    },
-    "pictures":[],
     "options": [
+      {
+        "type": "date",
+        "value": "2018-02-15",
+        "min":"2018-02-01",
+        "max":"2018-02-20"
+      },
+
+      {
+        "type": "dateRange",
+        "value": ["2018-02-15","2018-02-17"],
+        "min": "2018-02-02",
+        "max": "2018-02-24",
+        "days": 3,
+        "minDays": 2,
+        "maxDays": 4
+      },
+
       {
         "type": "info",
         "title": "예약가능",
@@ -20,6 +30,7 @@
       },
       {
         "type": "select",
+        "title":"옵션",
         "value": 0,
         "options": [
           "소형창고 222m",
