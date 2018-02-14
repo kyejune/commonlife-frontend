@@ -8,6 +8,7 @@ import DB from "scripts/db";
 import completeSrc from 'images/complete-bt-blueicon@3x.png';
 import DateOne from "components/ui/DateOne";
 import DatePeriod from "components/ui/DatePeriod";
+import { Link } from 'react-router-dom';
 
 
 class ReservationDetail extends Component {
@@ -146,7 +147,9 @@ class ReservationDetail extends Component {
         return <div className="cl-reservation-detail cl-fitted-box--both">
 
             {!this.state.reserved &&
+            <Link to={ '/reservation/thumbnails' }>
 			    <ThumbnailSwiper/>
+            </Link>
             }
 
 
