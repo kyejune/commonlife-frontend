@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mobile.ApplianceMapper">
+
+	<!-- access token, refresh token 조회 -->
+	<select id="getTokenInfo" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getTokenInfo*/ 
+		        HCD.CMPLX_ID
+		        , HCD.HOME_ID
+		        , HCD.ID
+		        , HCD.PW
+		        , HCD.TOKEN_KEY
+		        , HCD.RE_TOKEN_KEY
+		        , HCD.USER_ID_KEY
+		        , VM.VENDOR_ID
+		        , VM.CLIENT_ID
+		        , VM.CERT_KEY
+		        , VM.CERT_METHOD
+		        , VM.CHANNEL_KEY
+		        , VM.CERT_ADDR
+		        , VM.CTRL_ADDR
+		FROM HOME_CLOUD_D HCD
+			INNER JOIN VENDOR_M VM ON HCD.VENDOR_ID = VM.VENDOR_ID
+		WHERE HCD.CMPLX_ID = #{cmplxId} 
+		  AND HCD.VENDOR_ID = 1
+				  AND HCD.HOME_ID = #{homeId}
+				<if test="(vendorId != '' and vendorId != null)">
+				  AND HCD.VENDOR_ID = #{vendorId}
+				</if>
+				<if test="(expireDays != '' and expireDays != null)">
+				  AND HCD.CHG_DT > ADDDATE(NOW(), -${expireDays});
+				</if>
+	</select>
+	
+	<select id="getFutureExpireTokenList" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getFutureExpireTokenList*/ 
+		        HCD.CMPLX_ID
+		        , HCD.HOME_ID
+		        , HCD.ID
+		        , HCD.PW
+		        , HCD.TOKEN_KEY
+		        , HCD.RE_TOKEN_KEY
+		        , HCD.USER_ID_KEY
+		        , VM.VENDOR_ID
+		        , VM.CLIENT_ID
+		        , VM.CERT_KEY
+		        , VM.CERT_METHOD
+		        , VM.CHANNEL_KEY
+		        , VM.CERT_ADDR
+		        , VM.CTRL_ADDR
+		FROM HOME_CLOUD_D HCD
+			INNER JOIN VENDOR_M VM ON HCD.VENDOR_ID = VM.VENDOR_ID
+		WHERE ADDDATE(HCD.CHG_DT, #{expireDays}) <![CDATA[<]]> ADDDATE(NOW(), #{remainDays});
+	</select>
+	
+	<!-- access token, refresh token 생성 -->
+	<insert id="insertToken" parameterType="requestParam">
+		INSERT INTO /*mobile.ApplianceMapper.insertToken*/ 
+			HOME_CLOUD_D
+		(CMPLX_ID, HOME_ID, VENDOR_ID, ID, PW, TOKEN_KEY, RE_TOKEN_KEY, USER_ID_KEY, REG_ID, REG_DT, CHG_ID, CHG_DT)
+		VALUES 
+		(#{cmplxId}, #{homeId}, #{vendorId}, '', '', #{access_token}, #{refresh_token}, #{userIdKey}, 'SYS', NOW(), 'SYS', NOW())
+	</insert>	
+	
+	<!-- access token, refresh token 삭제 -->
+	<delete id="deleteToken" parameterType="requestParam">
+		DELETE FROM HOME_CLOUD_D
+		WHERE 
+		    CMPLX_ID = #{cmplxId} 
+		    AND HOME_ID = #{homeId} 
+		    AND VENDOR_ID = #{vendorId}
+		<if test="(userIdKey != '' and userIdKey != null)"> 
+		    AND USER_ID_KEY = #{userIdKey}  
+		</if>
+	</delete>		
+		
+	<!-- access token, refresh token 수정 -->
+	<update id="updateToken" parameterType="requestParam">
+		UPDATE /*mobile.ApplianceMapper.updateToken*/ 
+			HOME_CLOUD_D
+			SET TOKEN_KEY = #{access_token}, RE_TOKEN_KEY = #{refresh_token}, CHG_DT = NOW()
+		WHERE 1=1
+			<if test="(cmplxId != '' and cmplxId != null)">
+				  AND CMPLX_ID = #{cmplxId}
+			</if>
+			<if test="(homeId != '' and homeId != null)">
+				  AND HOME_ID = #{homeId}
+			</if>
+			<if test="(userIdKey != '' and userIdKey != null)">
+				  AND USER_ID_KEY = #{userIdKey}
+			</if>
+			<if test="(vendorId != '' and vendorId != null)"> 
+				  AND VENDOR_ID = #{vendorId}
+			</if>
+	</update>	
+	
+	<!-- login url 조회 -->
+	<select id="getLoginUrl" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		SELECT /*mobile.ApplianceMapper.getLoginUrl*/ 
+			CONCAT(CONCAT(CONCAT(LOGIN_ADDR, "&serviceID="), CLIENT_ID), "&redirect_uri=") AS LOGIN_URL
+			, CBAK_ADDR
+		FROM VENDOR_M
+		WHERE VENDOR_ID = #{vendorId}
+		]]>
+	</select>
+
+	<!-- 가전 생성 -->
+	<insert id="insertDevice" parameterType="requestParam">
+		<selectKey keyProperty="thingsIdx" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(THINGS_ID)+1, 1) AS thingsIdx FROM THINGS_M WHERE CMPLX_ID = #{cmplxId}
+		</selectKey>	
+		INSERT INTO /*mobile.ApplianceMapper.insertDevice*/ 
+			THINGS_M
+		(THINGS_ID, CMPLX_ID, UP_THINGS_ID, CLNT_ID, THINGS_NM, SP_THINGS_NM, STND_CD, MOD_YN, 
+		 ERR_YN, VENDOR_ID, META_ID, MODEL_ID, HOME_ID, VER, THINGS_CONN_CD, SERIAL_NO, 
+		 KIND_CD, TYPE_CD, DEVICE_YN, SENS_BINARY_YN, SENS_METOR_YN, 
+		 ELCT_APLC_YN, USE_YN, RMK, REG_ID, REG_DT, CHG_ID, CHG_DT)
+		VALUES 
+		(#{thingsIdx}, #{cmplxId}, #{upThingsId}, #{clntId}, #{thingsNm}, #{spThingsNm}, #{stndCd}, #{modYn}, 
+		 #{errYn}, #{vendorId}, #{metaId}, #{modelId}, #{homeId}, #{ver}, #{thingsConnCd}, #{serialNo}, 
+		 #{kindCd}, #{typeCd}, #{deviceYn}, #{sensBinaryYn}, #{sensMetorYn}, 
+		 #{elctApclYn}, #{useYn}, #{rmk}, 'ADMIN', NOW(), 'ADMIN', NOW())
+	</insert>	
+	
+	<!-- 가전 삭제 -->
+	<update id="deleteDevice" parameterType="requestParam">
+		UPDATE /*mobile.ApplianceMapper.deleteDevice*/
+			THINGS_M
+		SET USE_YN = 'N',
+		    DEL_YN = 'N'
+		WHERE CMPLX_ID = #{cmplxId} 
+			AND HOME_ID = #{homeId} 
+			AND VENDOR_ID = #{vendorId} 
+			AND USE_YN = 'Y'
+		  <if test="(serialNo != '' and serialNo != null)">
+		    AND SERIAL_NO = #{serialNo}
+		  </if>			
+	</update>
+	
+	<insert id="insertDeviceSts" parameterType="requestParam">
+		INSERT INTO /*mobile.ApplianceMapper.insertDeviceSts*/
+			THINGS_STS_MAP (THINGS_ID, CMPLX_ID, STS_ID, PRIME_YN, USE_YN, PUSH_YN, SORT_ORDER, REG_ID, REG_DT) 
+		SELECT 
+			T.THINGS_ID,
+		    T.CMPLX_ID,
+		    M.STS_ID,
+		    M.PRIME_YN,
+		    M.USE_YN,
+		    M.PUSH_YN,
+		    M.SORT_ORDER,
+		    M.REG_ID,
+		    NOW() AS REG_DT
+			FROM THINGS_M T
+		    INNER JOIN THINGS_MODEL_STS_MAP M
+				ON T.MODEL_ID = M.MODEL_ID
+		WHERE T.CMPLX_ID = #{cmplxId}
+		
+		<if test="thingsIds != null" >
+			AND T.THINGS_ID IN
+			<foreach item="item" index="index" collection="thingsIds" open="(" separator=", " close=")">
+	          #{item}
+	    	</foreach>
+		</if>		
+	</insert>	
+			
+
+	<select id="getThingsModel" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getThingsModel*/
+		    MODEL.CLNT_ID,
+		    MODEL.THINGS_MODEL_CD,
+		    MODEL.THINGS_NM, 
+		    MODEL.STND_CD, 
+		    IF(MODEL.UP_MODEL_ID <![CDATA[<]]> 0, 'N','Y') AS MOD_YN,
+		    'N' AS ERR_YN, 
+		    MODEL.VENDOR_ID, 
+		    MODEL.META_ID, 
+		    MODEL.MODEL_ID, 
+		    'v.0.0.2' AS VER,
+		    META.KIND_CD, 
+		    MODEL.TYPE_CD, 
+		    META.DEVICE_YN, 
+		    META.SENS_BINARY_YN,
+		    META.SENS_METOR_YN, 
+		    META.ELCT_APLC_YN,
+		    CASE 
+		    	WHEN MODEL.USE_YN = '1'
+		    		THEN 'Y'
+		    	WHEN MODEL.USE_YN = '0'
+		    		THEN 'N'
+		    	ELSE
+		    		MODEL.USE_YN
+		    END AS USE_YN,
+		    MODEL.RMK
+		    FROM (
+				SELECT *
+				FROM THINGS_MODEL_M
+				WHERE THINGS_CONN_CD = #{deviceId}
+					AND UP_MODEL_ID = -1 
+					AND VENDOR_ID = #{vendorId}
+				UNION ALL 
+				SELECT *
+				FROM THINGS_MODEL_M
+				WHERE UP_MODEL_ID IN (SELECT MODEL_ID FROM THINGS_MODEL_M WHERE THINGS_CONN_CD = #{deviceId} AND UP_MODEL_ID = -1)
+						  AND VENDOR_ID = #{vendorId}
+				ORDER BY UP_MODEL_ID
+			) MODEL
+			INNER JOIN THINGS_META_M META
+				ON MODEL.META_ID = META.META_ID	
+	</select>
+	
+	<select id="getGatewayThingsId" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getGatewayThingsId*/
+			THINGS_ID 
+		FROM THINGS_M
+		WHERE CMPLX_ID = #{cmplxId}
+			AND HOME_ID = #{homeId}
+			AND VENDOR_ID = #{vendorId}
+		    AND KIND_CD = 'HW00200'	
+		LIMIT 1
+	</select>
+	
+	<select id="getClientIdPreFix" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getClientIdPreFix*/
+			C.CMPLX_CD,
+		    H.DONG,
+		    H.HO,
+		    CONCAT(CONCAT(CONCAT(CONCAT(LPAD(C.CMPLX_CD, 4, '0'), '-'), LPAD(H.DONG, 4, '0')), '-'), LPAD(H.HO, 4, '0')) AS CLNT_ID_PREFIX
+		FROM COMPLEX_M C
+			INNER JOIN HOME_M H
+				ON C.CMPLX_ID = H.CMPLX_ID
+		WHERE H.CMPLX_ID = #{cmplxId}
+			AND H.HOME_ID = #{homeId}
+		LIMIT 1
+	</select>
+	
+	<insert id="insertRoomThings" parameterType="requestParam">
+		INSERT INTO /*mobile.ApplianceMapper.insertRoomThings*/
+			HOME_ROOM_THINGS_D (CMPLX_ID, HOME_ID, ROOM_ID, THINGS_ID, ROOM_THINGS_NM, ERR_YN, REG_ID, REG_DT, CHG_ID, CHG_DT)
+		SELECT 
+			R.CMPLX_ID,
+		    R.HOME_ID,
+		    R.ROOM_ID,
+		    T.THINGS_ID,
+		    T.THINGS_NM AS ROOM_THINGS_NM,
+		    T.ERR_YN,
+		    'ADMIN' AS REG_ID,
+		    NOW() AS REG_DT,
+		    'ADMIN' AS CHG_ID,
+		    NOW() AS CHG_DT
+			FROM THINGS_M T
+		    INNER JOIN HOME_ROOM_D R
+				ON R.CMPLX_ID = T.CMPLX_ID
+					AND R.HOME_ID = T.HOME_ID
+		            AND R.TYPE_CD = 'AD00303'
+		WHERE T.THINGS_ID = #{thingsIdx} AND T.CMPLX_ID = #{cmplxId}
+		LIMIT 1	
+	</insert>
+	
+	
+	<select id="getClientInfo" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getClientInfo*/
+			C.CLNT_ID,
+		    V.VENDOR_CD,
+		    'actuator' AS ACT_SENS,
+		    T.CLNT_ID AS DEV_TYPE
+			FROM THINGS_M T
+			INNER JOIN THINGS_M C
+				ON T.UP_THINGS_ID = C.THINGS_ID
+					AND T.CMPLX_ID = C.CMPLX_ID
+		            AND T.HOME_ID = C.HOME_ID     
+		            AND T.UP_THINGS_ID > 0
+			INNER JOIN VENDOR_M V
+				ON T.VENDOR_ID = V.VENDOR_ID	
+		WHERE T.CMPLX_ID = #{cmplxId} AND T.VENDOR_ID = #{vendorId}
+		<if test="thingsIds != null" >
+			AND T.THINGS_ID IN
+			<foreach item="item" index="index" collection="thingsIds" open="(" separator=", " close=")">
+	          #{item}
+	    	</foreach>
+		</if>		
+	</select>
+	
+	<select id="getConnectInfo" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getConnectInfo*/
+			B.IOT_ARN_ADDR,
+			B.API_GW_ADDR,
+			B.REGION,
+			B.ACCESS_KEY,
+			B.SECRET_KEY,
+			B.CERT_KEY,
+			B.AUTHORITY_KEY,
+			B.PRIVATE_KEY,
+			B.PUBLIC_KEY,
+			B.CERT_KEY_NM,
+			B.AUTHORITY_KEY_NM,
+			B.PRIVATE_KEY_NM,
+			B.PUBLIC_KEY_NM,
+			B.CERT_KEY_FILE_ID,
+			B.AUTHORITY_KEY_FILE_ID,
+			B.PRIVATE_KEY_FILE_ID,
+			B.PUBLIC_KEY_FILE_ID,
+			A.DEVICE_APL_YN,
+			A.DEVICE_APL_DT,
+			A.SIP_IP,
+			A.SIP_PORT,
+			A.SIP_PROTOCOL,
+			A.SEC_ID,
+			A.ADMIN_ID,
+			A.VIDEO_CALL_YN
+		FROM COMPLEX_M A
+		JOIN AWS_ACCOUNT_M B
+		  ON A.AWS_ID = B.AWS_ID
+		WHERE CMPLX_ID = #{cmplxId}
+		LIMIT 1
+	</select>	
+	
+	<select id="getUserInfo" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getUserInfo*/
+			CMPLX_ID,
+			HOME_ID,
+			VENDOR_ID
+		FROM HOME_CLOUD_D
+		WHERE USER_ID_KEY = #{userId}
+		ORDER BY REG_DT ASC
+		LIMIT 1
+	</select>
+	
+	<!-- 현재 가전 목록 조회 -->
+	<select id="getCurrDevice" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getCurrDevice*/
+			T.SERIAL_NO
+		FROM THINGS_M T
+		INNER JOIN HOME_CLOUD_D C
+			ON C.CMPLX_ID = T.CMPLX_ID
+			AND C.HOME_ID = T.HOME_ID
+		    AND C.VENDOR_ID = T.VENDOR_ID
+		WHERE
+			C.USER_ID_KEY = #{userId}
+		    AND T.MOD_YN = 'Y'
+		    AND T.USE_YN = 'Y'	
+	</select>
+	
+	<select id="getSerialNoToThingsId" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getSerialNoToThingsId*/
+			T.THINGS_ID,
+			T.CMPLX_ID,
+			T.UP_THINGS_ID,
+			T.CLNT_ID,
+			T.THINGS_NM,
+			T.VENDOR_ID
+			FROM THINGS_M T
+		WHERE 1 = 1
+		<if test="serialNos != null" >
+			AND T.SERIAL_NO IN
+			<foreach item="item" index="index" collection="serialNos" open="(" separator=", " close=")">
+	          #{item}
+	    	</foreach>
+		</if>		
+	</select>
+	
+	<!-- 벤더 정보 조회 -->
+	<select id="getVendorInfo" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getVendorInfo*/ 
+			VENDOR_ID,
+		    VENDOR_CD,
+		    VENDOR_NM,
+		    LOGIN_ADDR,
+		    CERT_ADDR,
+		    CERT_METHOD,
+		    CERT_KEY,
+		    PUBLIC_KEY,
+		    PRIVATE_KEY,
+		    CHANNEL_KEY,
+		    APP_KEY,
+		    CLIENT_ID,
+		    CBAK_ADDR,
+		    CBAK_CHG_ADDR,
+		    CBAK_NEW_ADDR,
+		    CTRL_ADDR,
+		    CTRL_METHOD,
+		    GET_METHOD,
+		    EXEC_METHOD,
+		    SUBS_METHOD,
+		    UNSUBS_METHOD,
+		    USER_ID,
+		    USER_PW
+		FROM VENDOR_M
+		WHERE VENDOR_ID = #{vendorId}
+	</select>
+	
+	<!-- 삼성계정 개수 -->
+	<select id="getAccountCnt" parameterType="requestParam"  resultType="int" >
+		SELECT /*mobile.ApplianceMapper.getAccountCnt*/ 
+			COUNT(0) AS ACC_CNT
+		FROM HOME_CLOUD_D
+		WHERE USER_ID_KEY = #{userIdKey}		   
+	</select>
+	
+	<!-- 상태ID 조회 -->
+	<select id="getStsId" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getStsId*/
+			STS_ID
+		FROM THINGS_STS_M
+		WHERE
+			<!-- VENDOR_ID = #{vendorId}-->
+			1 = 1
+			AND PROTC_KEY = #{protcKey}
+		LIMIT 1
+	</select>
+	
+	<!-- 기기ID 조회 -->
+	<select id="getThingsId" parameterType="requestParam" resultType="java.util.HashMap">
+		SELECT /*mobile.ApplianceMapper.getThingsId*/
+			THINGS_ID
+		FROM THINGS_M
+		WHERE
+			CMPLX_ID = #{cmplxId}
+			AND HOME_ID = #{homeId}
+			AND SERIAL_NO = #{serialNo}
+			AND VENDOR_ID = #{vendorId}
+			AND MOD_YN = 'Y'
+		    AND USE_YN = 'Y'
+		    AND UP_THINGS_ID > 0
+		LIMIT 1
+	</select>
+	
+	<insert id="insertStsCurr" parameterType="requestParam">
+		INSERT INTO /*mobile.ApplianceMapper.insertStsCurr*/
+			THINGS_STS_CURR
+		(CMPLX_ID, THINGS_ID, HOME_ID, STS_ID, CURR_STS, REG_ID, REG_DT)
+		VALUES 
+		(#{cmplxId}, #{thingsId}, #{homeId}, #{stsId}, #{currSts}, #{regId}, NOW())
+	</insert>
+	
+</mapper>

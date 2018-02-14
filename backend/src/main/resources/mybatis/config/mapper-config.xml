@@ -9,6 +9,11 @@
     </settings>
 
     <typeAliases>
+        <typeAlias alias="requestParam" type="com.benitware.framework.http.parameter.RequestParameter" />
+        <typeAlias alias="resultSetMap" type="com.benitware.framework.xplaform.domain.ResultSetMap" />
+        <package name="com.benitware" />
+        <package name="com.kolonbenit.benitware.common" />
+        <package name="com.iot" />
         <package name="com.kolon" />
     </typeAliases>
 </configuration>

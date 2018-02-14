@@ -5,7 +5,7 @@ import java.text.DecimalFormat;
 /**
  * Created by agcdDev on 2017-07-07.
  */
-public class NumberUtil
+public class NumberUtils
 {
     public static double round(double d, int p)
     {

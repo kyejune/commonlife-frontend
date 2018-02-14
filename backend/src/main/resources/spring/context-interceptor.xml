@@ -22,6 +22,10 @@
                 <property name="apiKey" value="#{prop_dev['apiKey']}" />
             </bean>
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="mobileSessionCheckInterceptor" class="com.kolon.common.interceptor.MobileSessionCheckInterceptor" />
+        </mvc:interceptor>
     </mvc:interceptors>
 
 </beans>

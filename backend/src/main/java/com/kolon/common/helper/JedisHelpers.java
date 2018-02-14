@@ -8,11 +8,12 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-public class JedisHelper {
+public class JedisHelpers {
 
     // CommonLife 개발
-    protected static final String REDIS_HOST = "cl-dev-redis.sktb1d.0001.apn2.cache.amazonaws.com";
-	
+//    protected static final String REDIS_HOST = "cl-dev-redis.sktb1d.0001.apn2.cache.amazonaws.com";
+
+    protected static final String REDIS_HOST = "127.0.0.1";
 	// 개발
 //	//protected static final String REDIS_HOST = "token-managements.3j2bzt.0001.apn2.cache.amazonaws.com";
 //    protected static final String REDIS_HOST = "iok-info-redis.g4s72o.0001.apn2.cache.amazonaws.com";
@@ -31,7 +32,7 @@ public class JedisHelper {
     /**
      * 제디스 연결풀 생성을 위한 도우미 클래스 내부 생성자. 싱글톤 패턴이므로 외부에서 호출할 수 없다.
      */
-    private JedisHelper() {
+    private JedisHelpers() {
         GenericObjectPoolConfig config = new GenericObjectPoolConfig();
         
         // PRD
@@ -49,7 +50,7 @@ public class JedisHelper {
      */
     private static class LazyHolder {
         @SuppressWarnings("synthetic-access")
-        private static final JedisHelper INSTANCE = new JedisHelper();
+        private static final JedisHelpers INSTANCE = new JedisHelpers();
     }
 
     /**
@@ -58,7 +59,7 @@ public class JedisHelper {
      * @return 제디스 도우미객체
      */
     @SuppressWarnings("synthetic-access")
-    public static JedisHelper getInstance() {
+    public static JedisHelpers getInstance() {
         return LazyHolder.INSTANCE;
     }
 

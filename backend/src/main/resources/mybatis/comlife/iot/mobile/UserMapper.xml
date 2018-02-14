@@ -1,0 +1,1144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mobile.UserMapper">
+
+	<!-- USER LOGIN -->
+	<select id="getHomeId" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		/* mobile.UserMapper.getHomeId*/
+		SELECT USR.USER_ID
+				, USR.USER_NM
+				, HEAD.CMPLX_ID
+				, HEAD.HOME_ID
+				, HEAD.STS
+				, USR.APRV_STS AS APRV_STS
+				, USR.LOGIN_YN
+				, CONCAT(CM.LATI_POS, '') AS LATI_POS
+				, CONCAT(CM.LONG_POS, '') AS LONG_POS
+				, CM.GW_CD
+				, AA.API_GW_ADDR
+				, AA.WAS_ADDR
+				, CONCAT(AA.WAS_ADDR, '/datahandle/getSipInfo.do') AS SIP_API_ADDR
+				, CONCAT(AA.WAS_ADDR
+						 ,'/com/kolonbenit/benitware/common/file/controller/XpFileController/imgView.do?attfileId='
+						 ,CM.LOGO_IMG_SRC
+                         ,'&attfileSeqno=' 
+                         , (SELECT MAX(ATTFILE_SEQNO) FROM CM_ATTFILE_M WHERE ATTFILE_ID = CM.LOGO_IMG_SRC) 
+						 ) AS LOGO_URL
+				, CASE WHEN IFNULL(VOICE_ENGINE_CD,'') = '' THEN 'N' ELSE 'Y' END AS VOICE_USE_YN
+				, H.AWS_USE_YN
+				, IFNULL(HC.HOME_CAM_USE_YN , 'N') AS HOME_CAM_USE_YN
+                , IFNULL(HC.ADR_LINK_INFO , '') AS ADR_LINK_INFO
+                , IFNULL(HC.IOS_LINK_INFO , '') AS IOS_LINK_INFO				
+		  FROM  USR_INFO USR
+		  INNER JOIN  HOME_HEAD_M HEAD ON USR.HEAD_ID = HEAD.HEAD_ID
+		  INNER JOIN  USR_CONT_M CONT ON HEAD.HOME_ID = CONT.HOME_ID AND USR.USR_ID = CONT.USR_ID
+		  INNER JOIN  COMPLEX_M CM ON CONT.CMPLX_ID = CM.CMPLX_ID
+		  INNER JOIN  AWS_ACCOUNT_M AA ON CM.AWS_ID = AA.AWS_ID
+		  INNER JOIN  HOME_M H ON H.CMPLX_ID = HEAD.CMPLX_ID AND H.HOME_ID = HEAD.HOME_ID
+		  LEFT JOIN (
+						SELECT CMPLX_ID
+								,HOME_ID  
+								,CASE WHEN COUNT(*) > 0 THEN 'Y' ELSE 'N' END AS HOME_CAM_USE_YN
+								,MAX(ADR_LINK_INFO) AS ADR_LINK_INFO
+								,MAX(IOS_LINK_INFO) AS IOS_LINK_INFO
+						  FROM THINGS_M
+						  WHERE KIND_CD = 'HW00223'
+							AND UP_THINGS_ID = -1
+							AND USE_YN = 'Y'
+						  GROUP BY  CMPLX_ID
+								,HOME_ID  
+          
+					) HC
+				ON HEAD.CMPLX_ID = HC.CMPLX_ID
+			   AND HEAD.HOME_ID = HC.HOME_ID
+		 WHERE 1=1
+		   AND USR.USER_PW = #{userPw}
+		   AND USR.USER_ID = #{userId}		   
+        ]]>
+	</select>
+
+	<!-- 로그인 내역 -->
+	<insert id="insertUserInfoHist" parameterType="requestParam">
+		<![CDATA[
+		/* mobile.UserMapper */
+		INSERT INTO  USR_INFO_HIST (
+			USR_ID
+			, CLASS
+			, USER_IP
+			, ACC_IP
+			, ACC_DT
+			, REG_ID
+			, REG_DT
+		)
+		SELECT 	IFNULL(USR_ID, 0) AS USR_ID
+				, CLASS
+				, USER_ID
+				, #{accIp} AS ACC_IP
+				, NOW() AS ACC_DT
+				, 'system' AS REG_ID
+				, NOW() AS REG_DT
+		  FROM  USR_INFO
+		 WHERE 1=1
+		   AND USER_ID = #{userId}
+		]]>
+	</insert>
+
+	<!-- 로그인/로그아웃 처리 -->
+	<update id="updateLoginYn" parameterType="requestParam">
+				
+		UPDATE  USR_INFO SET
+			LOGIN_YN = #{loginFlag}
+			<if test="(jsonWebToken != null and jsonWebToken != '')">
+			, TOKEN = #{jsonWebToken}
+			, TOKEN_ISSUE_DT  = #{jsonWebTokenIssueDt}
+			, TOKEN_VALID_DT  = #{jsonWebTokenValidDt}
+			, TOKEN_HEADER    = #{jsonWebTokenHeader}
+			, TOKEN_PAYLOAD   = #{jsonWebTokenPayload}
+			, TOKEN_SIGNATURE = #{jsonWebTokenSignature}			
+			, TOKEN_ENCRYPT   = #{jsonWebTokenEncrypt}
+			, SECRET_KEY      = #{secretKey}
+			</if>
+			, CHG_ID = 'system'
+			, CHG_DT = NOW()
+		 WHERE 1=1
+		   AND USER_ID = #{userId}
+	</update>
+
+	<!-- 중복 로그인 체크 -->
+	<select id="getDuplicateLogin" parameterType="requestParam" resultType="resultSetMap">
+		<![CDATA[
+		/* mobile.UserMapper.getDuplicateLogin */
+		
+		SELECT USR.USER_ID
+				, USR.USER_PW
+				, PUSH.CMPLX_ID
+				, PUSH.HOME_ID
+				, PUSH.DEVICE_ID
+				, PUSH.GCM_REG_ID
+				, (SELECT COMN_CDNM FROM  CM_CO_M WHERE COMN_CD = PUSH.OS_TYPE) AS OS_TYPE
+				, USR.LOGIN_YN
+				, USR.TOKEN_ENCRYPT TOKEN
+		  FROM  USR_INFO USR
+		  INNER JOIN  PUSH_M PUSH ON USR.CMPLX_ID = PUSH.CMPLX_ID AND USR.USR_ID = PUSH.USR_ID
+		 WHERE 1=1
+		   AND USR.USER_ID = #{userId}
+		   AND (USR.LOGIN_YN = 'Y' OR USR.LOGIN_YN = 'A')
+        ]]>
+	</select>
+
+	<!-- 회원가입 > 단지명 리스트 -->
+	<select id="listComplexInfo" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		/* mobile.UserMapper.listComplexInfo */
+		
+		SELECT CMPLX_ID, CMPLX_NM, CMPLX_S_NM
+		  FROM  COMPLEX_M A
+		 WHERE EXISTS (
+		 		SELECT 1 
+		 		  FROM HOME_M
+		 		 WHERE CMPLX_ID = A.CMPLX_ID  
+		 )
+		]]>
+	</select>
+
+	<!-- 회원가입 > 동 리스트 -->
+	<select id="listDongInfo" parameterType="requestParam" resultType="String">
+		<![CDATA[
+		  /* mobile.UserMapper.listDongInfo */
+		  	
+		  SELECT DISTINCT DONG FROM HOME_M
+      	  WHERE CMPLX_ID = #{cmplxId}
+		]]>
+	</select>
+
+	<!-- 회원가입 > 호 리스트 -->
+	<select id="listHoInfo" parameterType="requestParam" resultType="String">
+		<![CDATA[
+		SELECT HO 
+          FROM HOME_M
+         WHERE CMPLX_ID = #{cmplxId}
+           AND DONG = #{dong}
+		]]>
+	</select>
+
+	<!-- 회원가입 > 아이디 중복 확인 -->
+	<select id="checkUserId" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		SELECT USR.USER_ID
+		  FROM  USR_INFO USR
+          INNER JOIN  USR_CONT_M CONT ON USR.USR_ID = CONT.USR_ID
+         WHERE USR.USER_ID = #{userId}
+		]]>
+	</select>
+
+	<!-- ID찾기/PW찾기/회원가입 시, 인증번호 요청 전 검증 -->
+	<!-- select id="checkMember" parameterType="requestParam" resultType="resultSetMap">
+		SELECT HEAD.HEAD_NM
+				, HEAD.CELL
+		  FROM  HOME_HEAD_M HEAD
+		  <if test="cmplxId != '' and dong != '' and ho != ''">
+		  INNER JOIN  HOME_M HOME ON HEAD.CMPLX_ID = HOME.CMPLX_ID AND HEAD.HOME_ID = HOME.HOME_ID
+		    AND HOME.CMPLX_ID = #{cmplxId} AND HOME.DONG = #{dong} AND HOME.HO = #{ho}
+		  </if>
+		  <if test="userId != ''">
+		  INNER JOIN  USR_INFO USR ON HEAD.HEAD_ID = USR.HEAD_ID
+		    AND USR.USER_ID = IFNULL(#{userId}, USR.USER_ID)
+		  </if>
+		 WHERE 1=1
+		   AND HEAD.CELL = #{cell}
+		   AND HEAD.HEAD_NM = IFNULL(#{userNm}, HEAD.HEAD_NM)
+         LIMIT 1
+	</select-->
+	
+	
+	<!-- 세대주 정보 확인 -->
+	<select id="checkHead" parameterType="requestParam" resultType="resultSetMap">
+	
+		SELECT HEAD.HEAD_NM
+				, HEAD.CELL
+	     FROM HOME_HEAD_M HEAD
+	    WHERE HEAD.CELL = #{headCell}
+		  AND HEAD.HEAD_NM = #{headNm}
+		LIMIT 1
+	</select>
+	
+	<!-- 회원 가입시 인증번호발송전 체크-->
+	<select id="checkMember" parameterType="requestParam" resultType="resultSetMap">
+		SELECT HEAD.HEAD_NM
+				, HEAD.CELL
+	   FROM  HOME_HEAD_M HEAD
+       INNER JOIN  HOME_M HOME 
+         ON HEAD.CMPLX_ID = HOME.CMPLX_ID 
+		AND HEAD.HOME_ID = HOME.HOME_ID
+        WHERE 1=1
+		 AND HEAD.CELL = #{headCell}
+		 AND HEAD.HEAD_NM = #{headNm}
+         AND HOME.CMPLX_ID = #{cmplxId} 
+         AND HOME.DONG = #{dong} 
+         AND HOME.HO = #{ho}
+	</select>
+	
+	<!-- ID 찾기시 인증번호발송전 체크 --> 
+	<select id="checkMember2" parameterType="requestParam" resultType="resultSetMap">
+		SELECT HEAD.HEAD_NM
+			 , HEAD.CELL
+		 FROM HOME_HEAD_M HEAD
+		 JOIN USR_INFO USR 
+           ON HEAD.HEAD_ID = USR.HEAD_ID
+		WHERE 1=1
+          AND HEAD.CELL = #{headCell}
+		  AND HEAD.HEAD_NM = #{headNm}
+		  AND USR.USER_NM = #{userNm}
+          AND USR.CELL = #{userCell}
+		LIMIT 1
+	</select>
+	
+	<!-- p/w 찾기시 인증번호발송전 체크 -->
+	<select id="checkMember3" parameterType="requestParam" resultType="resultSetMap">
+		SELECT HEAD.HEAD_NM
+			 , HEAD.CELL
+		 FROM HOME_HEAD_M HEAD
+		 JOIN USR_INFO USR 
+           ON HEAD.HEAD_ID = USR.HEAD_ID
+		WHERE 1=1
+          AND HEAD.CELL = #{headCell}
+		  AND HEAD.HEAD_NM = #{headNm}
+		  AND USR.USER_ID = #{userId}
+          AND USR.CELL = #{userCell}
+		LIMIT 1
+	</select>
+	
+
+	<!-- 로그인 > 아이디 찾기 -->
+	<select id="searchUserId" parameterType="requestParam" resultType="String">
+		<![CDATA[
+		SELECT USR.USER_ID
+		  FROM USR_INFO USR
+		  JOIN HOME_HEAD_M HEAD 
+            ON USR.CMPLX_ID = HEAD.CMPLX_ID 
+		   AND USR.HEAD_ID = HEAD.HEAD_ID
+          JOIN USR_CONT_M CONT 
+            ON USR.USR_ID = CONT.USR_ID
+         WHERE 1=1
+           AND USR.USER_NM = #{userNm}
+		   AND USR.CELL = #{userCell}
+           AND HEAD.HEAD_NM = #{headNm}
+           AND HEAD.CELL = #{headCell}
+		]]>
+	</select>
+
+	<!-- 비밀번호 찾기 시, 임시비밀번호 설정 -->
+	<update id="updateUserTempPw" parameterType="requestParam">
+		<![CDATA[
+		UPDATE  USR_INFO
+		  SET USER_PW = #{tempPw}
+		 WHERE 1=1
+		   AND USER_ID = #{userId}
+		]]>
+	</update>
+
+	<!-- 회원가입 시, 선택한 단지에 해당 동,호가 존재하는지 체크 -->
+	<select id="checkDongHo" parameterType="requestParam" resultType="resultSetMap">
+		<![CDATA[
+		SELECT CD.CMPLX_ID, CD.DONG, CH.HO, HO.HOME_ID, HO.HOME_NM
+		  FROM  COMPLEX_DONG_D CD
+		  JOIN  COMPLEX_HO_D CH ON CD.CMPLX_ID = CH.CMPLX_ID AND CD.DONG_ID = CH.DONG_ID
+		  JOIN  HOME_M HO ON CH.CMPLX_ID = HO.CMPLX_ID AND CD.DONG = HO.DONG AND CH.HO = HO.HO
+		 WHERE 1=1
+		   AND CD.CMPLX_ID = #{cmplxId}
+		   AND CD.DONG = #{dong}
+		   AND CH.HO = #{ho}
+		]]>
+	</select>
+
+	<!-- 회원가입 시, 선택한 단지의 해당 동,호의 가입자 수 -->
+	<select id="checkHomeId" parameterType="requestParam" resultType="Integer">
+		<![CDATA[
+		SELECT COUNT(USR.USR_ID) AS CNT
+		  FROM  USR_INFO USR
+		  INNER JOIN  HOME_HEAD_M HEAD ON USR.HEAD_ID = HEAD.HEAD_ID AND USR.USER_NM = HEAD.HEAD_NM AND USR.CELL = HEAD.CELL
+		  INNER JOIN  USR_CONT_M CONT ON HEAD.CMPLX_ID = CONT.CMPLX_ID AND HEAD.HOME_ID = CONT.HOME_ID AND USR.USR_ID = CONT.USR_ID
+		 WHERE 1=1
+		   AND USR.CMPLX_ID = #{cmplxId}
+		   AND USR.DONG = #{dong}
+		   AND USR.HO = #{ho}
+		   AND USR.APRV_STS = 'AD00404'
+		]]>
+	</select>
+
+	<!-- 회원가입 시, 세대주 가입 여부 체크 -->
+	<select id="checkNewUserId" parameterType="requestParam" resultType="Integer">
+		SELECT COUNT(USR_ID) AS CNT
+		  FROM  USR_INFO
+		 WHERE 1=1
+		   AND USER_ID = #{userId}
+	</select>
+
+	<!-- 회원가입 시, 세대주 정보 체크 (신규 가입) -->
+	<select id="checkHomeHeadNew" parameterType="requestParam" resultType="Integer">
+		<![CDATA[
+		SELECT IFNULL(MAX(HEAD.HEAD_ID), 0) AS HEAD_ID
+		  FROM  HOME_HEAD_M HEAD
+		  INNER JOIN  HOME_M HO ON HEAD.HOME_ID = HO.HOME_ID AND HEAD.CMPLX_ID = HO.CMPLX_ID
+		 WHERE 1=1
+		   AND HEAD.HEAD_NM = #{headNm}
+		   AND HEAD.CELL = #{headCell}
+		   AND HEAD.CMPLX_ID = #{cmplxId}
+		   AND HO.DONG = #{dong}
+		   AND HO.HO = #{ho}
+		]]>
+	</select>
+
+	<!-- 회원가입 시, 세대주 정보 체크 (기 가입) -->
+	<select id="checkHomeHead" parameterType="requestParam" resultType="Integer">
+		<![CDATA[
+		SELECT IFNULL(MAX(HEAD.HEAD_ID), 0) AS HEAD_ID
+		  FROM  HOME_HEAD_M HEAD
+		  INNER JOIN  HOME_M HO ON HEAD.HOME_ID = HO.HOME_ID AND HEAD.CMPLX_ID = HO.CMPLX_ID
+		  INNER JOIN  USR.CONT_M CONT ON HO.CMPLX_ID = CONT.CMPLX_ID AND HO.HOME_ID = CONT.HOME_ID
+		 WHERE 1=1
+		   AND HEAD.HEAD_NM = #{headNm}
+		   AND HEAD.CELL = #{headCell}
+		   AND HEAD.CMPLX_ID = #{cmplxId}
+		   AND HO.DONG = #{dong}
+		   AND HO.HO = #{ho}
+		]]>
+	</select>
+
+	<!-- 회원가입 - USR_INFO -->
+	<insert id="registerMember" parameterType="requestParam">
+		<selectKey keyProperty="USR_ID" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(USR_ID)+1, 1) FROM  USR_INFO
+		</selectKey>
+		<![CDATA[
+			INSERT INTO  USR_INFO (
+				USR_ID
+				, CLASS
+				, USER_ID
+				, USER_PW
+				, USER_NM
+				, CELL
+				, LIVE_YN
+				, SMS_CHK_YN
+				, SMS_CHK_NO
+				, SMS_CHK_DT
+				, APRV_STS
+				, CMPLX_ID
+				, DONG
+				, HO
+				, HEAD_ID
+				, REG_ID
+				, REG_DT
+			) VALUES (
+				#{USR_ID}
+				, (SELECT CASE WHEN #{registNm} = (SELECT HEAD_NM FROM HOME_HEAD_M WHERE HEAD_ID = #{headId}) THEN 'AD00501' ELSE 'AD00502' END)  
+				, #{userId}
+				, #{userPw}
+				, #{userNm}
+				, #{userCell}
+				, 'N'
+				, #{smsChkYN}
+				, #{certNum}
+				, #{smsChkDt}
+				, 'AD00404'
+				, #{cmplxId}
+				, #{dong}
+				, #{ho}
+				, #{headId}
+				, 'system'
+				, NOW()
+			)
+		]]>
+	</insert>
+
+	<!-- 회원가입 시, 계약정보 등록 -->
+	<insert id="insertContM" parameterType="requestParam">
+		<selectKey keyProperty="CONT_ID" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(CONT_ID)+1, 1) FROM  USR_CONT_M WHERE CMPLX_ID = #{cmplxId}
+		</selectKey>
+		<![CDATA[
+		INSERT INTO  USR_CONT_M (
+			CMPLX_ID
+			, CONT_ID
+			, HOME_ID
+			, USR_ID
+			, STS
+			, HEAD_ID
+			, REG_ID
+			, REG_DT
+		) VALUES (
+			#{cmplxId}
+			, #{CONT_ID}
+			, (SELECT HOME_ID FROM  HOME_M WHERE CMPLX_ID = #{cmplxId} AND DONG = #{dong} AND HO = #{ho})
+			, #{USR_ID}
+			, 'AD00404'
+			, #{headId}
+		    , 'system'
+			, NOW()
+		)
+		]]>
+	</insert>
+	
+	<!-- Push 알림 설정 등록 -->
+	<insert id="insertInitPush" parameterType="requestParam">
+		<selectKey keyProperty="SEQ_NO" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(SEQ_NO)+1, 1) FROM HOME_PUSH_D WHERE CMPLX_ID = #{cmplxId} AND HOME_ID = (SELECT HOME_ID FROM  HOME_M WHERE CMPLX_ID = #{cmplxId} AND DONG = #{dong} AND HO = #{ho})
+		</selectKey>
+		<![CDATA[
+		INSERT INTO HOME_PUSH_D (
+			CMPLX_ID
+			, HOME_ID
+			, SEQ_NO
+			, PUSH_CD
+			, USE_YN
+			, USER_ID
+			, REG_ID
+			, REG_DT
+		) SELECT CMPLX_ID
+			  , (SELECT HOME_ID FROM  HOME_M WHERE CMPLX_ID = #{cmplxId} AND DONG = #{dong} AND HO = #{ho})
+	          , @seqNo := @seqNo + 1
+	          , COMN_CD
+	          , USE_YN
+	          , #{userId}
+	          , #{userId}
+	          , NOW()
+	     FROM COMPLEX_INIT_M A
+	     JOIN (SELECT @seqNo := #{SEQ_NO}) B
+	     WHERE CMPLX_ID = #{cmplxId}
+	       AND USE_YN = 'Y'
+	       AND INIT_YN = 'Y'
+		   AND KIND = 'CM014'
+		]]>
+	</insert>
+
+	<!-- 로그인 > GCM토큰 유무 체크 -->
+	<select id="getGcmRegInfo" parameterType="requestParam" resultType="resultSetMap">
+		<![CDATA[
+			SELECT GCM_REG_ID
+					, DEVICE_ID
+			  FROM  PUSH_M
+			 WHERE 1=1
+			   AND CMPLX_ID = #{cmplxId}
+			   AND HOME_ID = #{homeId}
+			   AND USR_ID = (SELECT USR_ID FROM  USR_INFO WHERE 1=1 AND USER_ID = #{userId})
+		]]>
+	</select>
+	<!-- 로그인 > GCM토큰 등록 -->
+	<insert id="insertGcmRegInfo" parameterType="requestParam">
+		<![CDATA[
+		INSERT INTO  PUSH_M (
+			CMPLX_ID
+			, HOME_ID
+			, GCM_REG_ID
+			, DEVICE_ID
+			, USR_ID
+			, OS_TYPE
+			, REG_ID
+			, REG_DT
+		) VALUES (
+			#{cmplxId}
+			, #{homeId}
+			, #{gcmRegId}
+			, #{deviceId}
+			, (SELECT USR_ID FROM  USR_INFO WHERE USER_ID = #{userId})
+			, CONCAT('MB009', LPAD(#{osType}, 2, '0'))
+			, #{userId}
+			, NOW()
+		)
+		]]>
+	</insert>
+	<!-- 로그인 > GCM토큰 수정 -->
+	<update id="updateGcmRegInfo" parameterType="requestParam">
+		<![CDATA[
+			UPDATE  PUSH_M SET
+			  GCM_REG_ID = #{gcmRegId}
+			  , DEVICE_ID = #{deviceId}
+			  , OS_TYPE = CONCAT('MB009', LPAD(#{osType}, 2, '0'))
+			  , REG_DT = NOW()
+			 WHERE 1=1
+			   AND CMPLX_ID = #{cmplxId}
+			   AND HOME_ID = #{homeId}
+			   AND USR_ID = (SELECT USR_ID FROM  USR_INFO WHERE 1=1 AND USER_ID = #{userId})
+		]]>
+	</update>
+
+	<!-- 로그인 > GCM토큰 삭제 -->
+	<delete id="deleteGcmRegInfo" parameterType="requestParam">
+		<![CDATA[
+			DELETE FROM  PUSH_M
+			  WHERE 1=1
+			    AND USR_ID = (SELECT USR_ID FROM  USR_INFO WHERE 1=1 AND USER_ID = #{userId})
+			    AND DEVICE_ID != #{deviceId}
+		]]>
+	</delete>
+	<!-- 로그인 > GCM토큰 삭제 -->
+	<delete id="deleteGcmRegInfo2" parameterType="requestParam">
+		<![CDATA[
+			DELETE FROM  PUSH_M
+			  WHERE 1=1
+			    AND USR_ID != (SELECT USR_ID FROM  USR_INFO WHERE 1=1 AND USER_ID = #{userId})
+			    AND DEVICE_ID = #{deviceId}
+		]]>
+	</delete>
+
+	<!-- 로그인, 로그아웃 > GCM토큰 삭제 -->
+	<delete id="deleteGcmRegInfoLogout" parameterType="requestParam">
+		<![CDATA[
+			DELETE FROM  PUSH_M
+			  WHERE 1=1
+			    AND USR_ID = (SELECT USR_ID FROM  USR_INFO WHERE 1=1 AND USER_ID = #{userId})
+		]]>
+	</delete>
+
+	<!-- 인트로 > GCM토큰 수정 -->
+	<update id="updateGcmRegInfoIntro" parameterType="requestParam">
+		<![CDATA[
+			UPDATE  PUSH_M SET
+			  GCM_REG_ID = #{gcmRegId}
+			  , OS_TYPE = CONCAT('MB009', LPAD(#{osType}, 2, '0'))
+			  , REG_DT = NOW()
+			 WHERE 1=1
+			   AND DEVICE_ID = #{deviceId}
+		]]>
+	</update>
+
+	<!-- 가치정보 유저셋팅 -->
+	<select id="getUserValueList" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+			 SELECT
+				MD.COMN_CD AS MODE_CD,
+				MD.COMN_CDNM AS MODE_NM,
+				UI.COMN_CD AS VALUE_CD,
+				UI.COMN_CDNM AS VALUE_NM,
+				IFNULL(HV.USE_YN,'0') AS USE_YN,
+				#{cmplxId} AS CMPLX_ID,
+				#{homeId} AS HOME_ID,
+				#{userId} AS USER_ID,
+				UI.ATTR2_NM AS IMG_SRC
+			 FROM  CM_CO_M MD
+			 INNER JOIN  CM_CO_M UI
+			 JOIN  COMPLEX_INIT_M CI ON UI.COMN_TP_CD = CI.KIND AND UI.COMN_CD = CI.COMN_CD AND CI.CMPLX_ID = #{cmplxId} AND CI.USE_YN = 'Y'
+			 LEFT JOIN (SELECT MODE,VALUE_CD,USE_YN FROM  HOME_VALUE_D WHERE CMPLX_ID = #{cmplxId} AND HOME_ID = #{homeId} AND USER_ID = #{userId}) HV
+				    ON MD.COMN_CD = HV.MODE AND UI.COMN_CD = HV.VALUE_CD
+			 WHERE UI.COMN_TP_CD ='CM023' AND MD.COMN_TP_CD ='CM011' AND MD.COMN_CD IN ('CM01101','CM01102','CM01103','CM01104','CM01105')
+			ORDER BY MD.COMN_CD
+		]]>
+	</select>
+	<!-- 가치정보 유저셋팅 -->
+	<select id="getUserValueCnt" parameterType="requestParam" resultType="Integer">
+		<![CDATA[
+			SELECT COUNT(*) AS CNT FROM  HOME_VALUE_D
+				WHERE CMPLX_ID = #{cmplxId}
+				AND HOME_ID = #{homeId}
+				AND USER_ID = #{userId}
+				AND MODE = #{modeCd}
+				AND VALUE_CD = #{valueCd}
+		]]>
+	</select>
+	<!-- 가치정보 유저 삭제 -->
+	<delete id="deleteUserValue" parameterType="requestParam" >
+		<![CDATA[
+			DELETE FROM  HOME_VALUE_D
+				WHERE CMPLX_ID = #{cmplxId}
+				AND HOME_ID = #{homeId}
+				AND USER_ID = #{userId}
+				AND MODE = #{modeCd}
+				AND VALUE_CD = #{valueCd}
+		]]>
+	</delete>
+	<!-- 가치정보 유저저장 -->
+	<insert id="insertUserValue" parameterType="requestParam" >
+		<![CDATA[
+			INSERT INTO  HOME_VALUE_D
+			(CMPLX_ID,
+			HOME_ID,
+			SEQ_NO,
+			USER_ID,
+			MODE,
+			VALUE_CD,
+			USE_YN,
+			REG_ID,
+			REG_DT)
+			VALUES (
+			#{cmplxId},
+			#{homeId},
+			(SELECT A.SEQ FROM (SELECT IFNULL(MAX(SEQ_NO)+1,1) AS SEQ from  HOME_VALUE_D WHERE #{cmplxId} AND HOME_ID = #{homeId}) A) ,
+			#{userId},
+			#{modeCd},
+			#{valueCd},
+			#{useYn},
+			'user',
+			now()
+			)
+		]]>
+	</insert>
+
+	<!-- 가치정보 주차 -->
+	<select id="getParkingValue" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT DISTINCT
+			#{CMPLX_ID} AS CMPLX_ID,
+			#{HOME_ID} AS HOME_ID,
+			ATTR1 AS CONTENTS1,
+			'' AS CONTENTS2,
+			'' AS DTL_INFO,
+			'' AS STS_NM1,
+			'' AS STS_NM2,
+			'지하1층 B612' AS STS1,
+			'' AS STS2,
+			'' AS STS_UNIT1,
+			'' AS STS_UNIT2
+			FROM  MSG_HIST
+			WHERE CMPLX_ID = #{CMPLX_ID}
+				AND HOME_ID = #{HOME_ID}
+				AND ATTR2 = 'family'
+				AND MSG_TYPE = 'CM00219'
+		]]>
+	</select>
+
+	<!-- 가치정보 택배 -->
+	<select id="getDeliveryValue" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT
+				#{CMPLX_ID} AS CMPLX_ID,
+				#{HOME_ID} AS HOME_ID,
+			    '' AS CONTENTS1,
+				'' AS CONTENTS2,
+				'' AS DTL_INFO1,
+				'' AS DTL_INFO2,
+			    COUNT(1) AS STS1,
+			    '' AS STS2,
+			    '' AS STS_NM1,
+			    '' AS STS_NM2,
+			    '건' AS STS_UNIT1,
+			    '' AS STS_UNIT2
+				FROM  MSG_HIST
+				WHERE CMPLX_ID = #{CMPLX_ID}
+				AND HOME_ID = #{HOME_ID}
+				AND MSG_TYPE = 'CM00212'
+				AND ATTR1 NOT IN (
+				SELECT ATTR1
+				FROM  MSG_HIST
+				WHERE 1=1
+				AND CMPLX_ID = #{CMPLX_ID}
+				AND HOME_ID = #{HOME_ID}
+				AND MSG_TYPE = 'CM00212'
+				AND ATTR3 = 'out'
+				)
+		]]>
+	</select>
+
+	<!-- 가치정보 기기 -->
+	<select id="getDeviceValue" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+					SELECT X.CMPLX_ID
+									, X.HOME_ID
+									, E.THINGS_ID  AS DTL_INFO1
+									, H.KIND_CD    AS DTL_INFO2
+									, F.STS_NM     AS STS_NM1
+					                , '' AS STS_NM2
+									, E.CURR_STS   AS STS1
+					                , '' AS STS2
+					                , X.ROOM_NM    AS CONTENTS1
+					                , '' AS CONTENTS2
+					                , F.UNIT       AS STS_UNIT1
+					                , '' AS STS_UNIT2
+									FROM (
+											SELECT A.HOME_ID
+											, A.CMPLX_ID
+											, A.THINGS_ID
+					                        , B.ROOM_NM
+											FROM  HOME_ROOM_THINGS_D A JOIN  HOME_ROOM_D B ON A.ROOM_ID = B.ROOM_ID AND A.CMPLX_ID = B.CMPLX_ID AND A.HOME_ID = B.HOME_ID
+									        WHERE 1=1
+						AND A.CMPLX_ID  = #{CMPLX_ID}
+						AND A.HOME_ID   = #{HOME_ID}
+						) X
+				INNER JOIN  THINGS_STS_CURR E ON X.THINGS_ID = E.THINGS_ID
+				AND X.CMPLX_ID = E.CMPLX_ID
+				INNER JOIN  THINGS_M H ON X.THINGS_ID = H.THINGS_ID AND X.CMPLX_ID = H.CMPLX_ID AND X.HOME_ID = H.HOME_ID
+				INNER JOIN  THINGS_STS_M F ON E.STS_ID = F.STS_ID
+				${wherecouse}
+				AND H.USE_YN = 'Y'
+		]]>
+	</select>
+
+<!-- 가치정보 기기(온습도) -->
+	<select id="getTemperatureHumidity" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+					SELECT CMPLX_ID, 
+						HOME_ID, 
+						DTL_INFO1, 
+						DTL_INFO2, 
+						MAX(STS_NM1) AS STS_NM1, 
+						MAX(STS_NM2) AS STS_NM2, 
+						MAX(STS1) AS STS1, 
+						MAX(STS2) AS STS2, 
+						MAX(CONTENTS1) AS CONTENTS1, 
+						MAX(CONTENTS2) AS CONTENTS2, 
+						MAX(STS_UNIT1) AS STS_UNIT1, 
+						MAX(STS_UNIT2) AS STS_UNIT2
+					FROM (
+										SELECT X.CMPLX_ID AS CMPLX_ID
+														, X.HOME_ID AS HOME_ID
+														, E.THINGS_ID  AS DTL_INFO1
+														, H.KIND_CD    AS DTL_INFO2
+														, F.STS_NM     AS STS_NM1
+										                , '' AS STS_NM2
+														, E.CURR_STS   AS STS1
+										                , '' AS STS2
+										                , X.ROOM_NM    AS CONTENTS1
+										                , '' AS CONTENTS2
+										                , F.UNIT       AS STS_UNIT1
+										                , '' AS STS_UNIT2
+														FROM (
+																SELECT A.HOME_ID
+																, A.CMPLX_ID
+																, A.THINGS_ID
+										                        , B.ROOM_NM
+																FROM  HOME_ROOM_THINGS_D A JOIN  HOME_ROOM_D B ON A.ROOM_ID = B.ROOM_ID AND A.CMPLX_ID = B.CMPLX_ID AND A.HOME_ID = B.HOME_ID
+														        WHERE 1=1
+											AND A.CMPLX_ID  = #{CMPLX_ID}
+											AND A.HOME_ID   = #{HOME_ID}
+											) X
+									INNER JOIN  THINGS_STS_CURR E ON X.THINGS_ID = E.THINGS_ID
+									AND X.CMPLX_ID = E.CMPLX_ID
+									INNER JOIN  THINGS_M H ON X.THINGS_ID = H.THINGS_ID AND X.CMPLX_ID = H.CMPLX_ID AND X.HOME_ID = H.HOME_ID
+									INNER JOIN  THINGS_STS_M F ON E.STS_ID = F.STS_ID
+									WHERE F.STS_ID = ${stsId1}
+									AND H.USE_YN = 'Y'
+									UNION ALL
+									SELECT X.CMPLX_ID AS CMPLX_ID 
+														, X.HOME_ID  AS HOME_ID
+														, E.THINGS_ID  AS DTL_INFO1
+														, H.KIND_CD    AS DTL_INFO2
+														, ''     AS STS_NM1
+										                , F.STS_NM AS STS_NM2
+														, '' AS STS1
+										                , E.CURR_STS AS STS2
+										                , ''    	AS CONTENTS1
+										                , X.ROOM_NM AS CONTENTS2
+										                , ''       AS STS_UNIT1
+										                , F.UNIT AS STS_UNIT2
+														FROM (
+																SELECT A.HOME_ID
+																, A.CMPLX_ID
+																, A.THINGS_ID
+										                        , B.ROOM_NM
+																FROM  HOME_ROOM_THINGS_D A JOIN  HOME_ROOM_D B ON A.ROOM_ID = B.ROOM_ID AND A.CMPLX_ID = B.CMPLX_ID AND A.HOME_ID = B.HOME_ID
+														        WHERE 1=1
+											AND A.CMPLX_ID  = #{CMPLX_ID}
+											AND A.HOME_ID   = #{HOME_ID}
+											) X
+									INNER JOIN  THINGS_STS_CURR E ON X.THINGS_ID = E.THINGS_ID
+									AND X.CMPLX_ID = E.CMPLX_ID
+									INNER JOIN  THINGS_M H ON X.THINGS_ID = H.THINGS_ID AND X.CMPLX_ID = H.CMPLX_ID AND X.HOME_ID = H.HOME_ID
+									INNER JOIN  THINGS_STS_M F ON E.STS_ID = F.STS_ID
+									WHERE F.STS_ID = ${stsId2}
+									AND H.USE_YN = 'Y'
+					) A   GROUP BY CMPLX_ID, HOME_ID, DTL_INFO1, DTL_INFO2              
+		]]>
+	</select>
+	
+	<!-- 현재 집모드 조회-->
+	<select id="getAplHomeMode" parameterType="requestParam" resultType="String">
+		<![CDATA[
+		SELECT IFNULL(MODE, 'NONEMODE') AS MODE FROM  HOME_M HO
+		    WHERE HO.CMPLX_ID = #{cmplxId}
+		      AND HO.HOME_ID = #{homeId}
+		]]>
+	</select>
+
+	<!-- 적용유저 가치정보 조회-->
+	<select id="getAplUserValueList" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		SELECT HV.CMPLX_ID, HV.HOME_ID, HV.USER_ID, HV.MODE, HV.VALUE_CD,
+					(SELECT COMN_CDNM FROM  CM_CO_M CO WHERE HV.VALUE_CD  = CO.COMN_CD AND CO.COMN_TP_CD = 'CM023') AS VALUE_NM
+			FROM  HOME_VALUE_D HV
+		    JOIN  HOME_M HO ON HV.MODE = HO.MODE AND HV.CMPLX_ID = HO.CMPLX_ID AND HV.HOME_ID = HO.HOME_ID
+		    WHERE HV.CMPLX_ID = #{cmplxId}
+		      AND HV.HOME_ID = #{homeId}
+		      AND HV.USER_ID = #{userId}
+		]]>
+	</select>
+
+<!-- 기본 가치정보 조회-->
+	<select id="getDefaultValueList" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		SELECT
+			CMPLX_ID,
+			#{homeId} AS HOME_ID,
+			CI.COMN_CD AS VALUE_CD,
+			#{userId} AS USER_ID,
+			(SELECT COMN_CDNM FROM  CM_CO_M CO WHERE CI.COMN_CD  = CO.COMN_CD AND CO.COMN_TP_CD = 'CM023') AS VALUE_NM
+			FROM  COMPLEX_INIT_M CI
+			WHERE CMPLX_ID = #{cmplxId}
+				AND INIT_YN = 'Y'
+				AND USE_YN = 'Y'
+		]]>
+	</select>
+
+	<!-- 유저 버스 정류장 노선 조회-->
+	<select id="getRouteInfo" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+	SELECT 	HU.ROUTE_ID,
+				HU.STATION_ID,
+		        HU.STA_ORDER,
+		        ST.STATION_NM,
+		        RO.ROUTE_NM
+		FROM   HOME_BUS_D HU 	LEFT JOIN  BUS_ROUTE_STATION ST 
+														ON ST.ROUTE_ID = HU.ROUTE_ID AND ST.STATION_ID = HU.STATION_ID AND HU.STA_ORDER = ST.STA_ORDER
+													LEFT JOIN  BUS_ROUTE RO
+														ON RO.ROUTE_ID = ST.ROUTE_ID
+
+        WHERE HU.CMPLX_ID = #{CMPLX_ID}
+          AND HU.HOME_ID = #{HOME_ID}
+          AND HU.USER_ID = #{USER_ID}
+		]]>
+	</select>
+
+	<!-- 정류장조회-->
+	<select id="getStationList" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT DISTINCT ST.STATION_ID, CONCAT('(',ST.REGION_NAME,')',ST.STATION_NM) AS STATION_NM, UPDOWN
+					FROM  BUS_STATION ST
+				    JOIN (SELECT STATION_ID, UPDOWN FROM  BUS_ROUTE_STATION GROUP BY STATION_ID, UPDOWN) RS
+				    	ON ST.STATION_ID = RS.STATION_ID
+    		WHERE ST.STATION_NM LIKE CONCAT('%',#{stationNm},'%')
+    		ORDER BY STATION_ID
+		]]>
+	</select>
+
+	<!-- 버스,정류장조회-->
+	<select id="getRouteList" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT RO.ROUTE_ID,
+				RO.ROUTE_NM,
+		        RS.STATION_ID,
+		        RS.STATION_NM,
+		        UPDOWN,
+		        STA_ORDER
+		        FROM  BUS_ROUTE RO JOIN  BUS_ROUTE_STATION RS ON RO.ROUTE_ID = RS.ROUTE_ID ${whereCouse}
+        ]]>
+     </select>
+
+     <!-- 버스,정류장조회-->
+	<select id="getRouteStationList" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT RO.ROUTE_ID,
+				RO.ROUTE_NM,
+		        RS.STATION_ID,
+		        RS.STATION_NM,
+		        UPDOWN,
+		        RS.STA_ORDER,
+		        '' AS IMG_SRC,
+		        '' AS IMG_SRC2,
+                SUBSTR(CM.POST_NO, 1,2) AS POST_NO,
+                SUBSTR(CM.ADDR1, 1,2) AS ADDR1,
+                SUBSTR(CM.ADDR2, 1,2) AS ADDR2
+		        FROM  BUS_ROUTE RO JOIN  BUS_ROUTE_STATION RS ON RO.ROUTE_ID = RS.ROUTE_ID
+		        								  JOIN  HOME_BUS_D HU ON HU.ROUTE_ID = RO.ROUTE_ID
+                                                  JOIN  COMPLEX_M CM ON HU.CMPLX_ID = CM.CMPLX_ID
+		        ${whereCouse}
+        ]]>
+     </select>
+
+     <!-- 개인별 버스정보 저장 -->
+	<insert id="insertUserBus" parameterType="requestParam" >
+		<![CDATA[
+	    INSERT INTO  HOME_BUS_D (
+		    CMPLX_ID,
+		    HOME_ID,
+		    SEQ_NO,
+		    USER_ID,
+		    ROUTE_ID,
+		    STATION_ID,
+		    STA_ORDER,
+		    USE_YN,
+		    REG_ID,
+		    REG_DT
+		)VALUES(
+			#{cmplxId},
+		    #{homeId},
+		    (SELECT A.SEQ_NO FROM (SELECT IFNULL(MAX(SEQ_NO)+1,1) AS SEQ_NO from  HOME_BUS_D WHERE CMPLX_ID = #{cmplxId} AND HOME_ID = #{homeId}) A) ,
+		    #{userId},
+		    #{routeId},
+		    #{stationId},
+		    #{staOrder},
+		    '1',
+		    'user',
+		    now()
+		)
+		]]>
+	</insert>
+	<!-- 기존 버스데이터삭제 -->
+	<delete id="deleteUserBus" parameterType="requestParam">
+		<![CDATA[
+			DELETE FROM  HOME_BUS_D
+			  WHERE 1=1
+			    AND USER_ID = #{userId}
+			    AND CMPLX_ID = #{cmplxId}
+			    AND HOME_ID = #{homeId}
+		]]>
+	</delete>
+
+	<!-- 정류장조회-->
+	<select id="getUserStationList" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT DISTINCT ST.STATION_ID, CONCAT('(',ST.REGION_NAME,')',ST.STATION_NM) AS STATION_NM, UPDOWN
+				FROM  BUS_STATION ST
+			    JOIN (SELECT STATION_ID, UPDOWN FROM  BUS_ROUTE_STATION GROUP BY STATION_ID, UPDOWN) RS
+			    ON ST.STATION_ID = RS.STATION_ID
+			    JOIN  HOME_BUS_D HU ON RS.STATION_ID = HU.STATION_ID
+			WHERE 1=1
+				AND HU.USER_ID = #{userId}
+				AND HU.CMPLX_ID = #{cmplxId}
+				AND HU.HOME_ID = #{homeId}
+		]]>
+	</select>
+
+	<!-- 버스조회-->
+	<select id="getUserRouteList" parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT RO.ROUTE_ID,
+				RO.ROUTE_NM,
+		        RS.STATION_ID,
+		        RS.STATION_NM,
+				RS.UPDOWN,
+        		RS.STA_ORDER
+        		FROM  BUS_ROUTE RO
+        		JOIN  BUS_ROUTE_STATION RS
+        			ON RO.ROUTE_ID = RS.ROUTE_ID
+        	 	JOIN  HOME_BUS_D HU
+        	 		ON RO.ROUTE_ID = HU.ROUTE_ID
+        	 	  AND RS.STATION_ID = HU.STATION_ID
+        	 	  AND RS.STA_ORDER = HU.STA_ORDER
+			WHERE 1=1
+				AND HU.USER_ID = #{userId}
+				AND HU.CMPLX_ID = #{cmplxId}
+				AND HU.HOME_ID = #{homeId}
+		]]>
+	</select>
+
+	<!-- 단지위치조회-->
+	<select id="getUserLocalList" parameterType="String" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT LATI_POS, LONG_POS, CONCAT(ADDR1,' ',ADDR2) AS ADDR, 
+						SUBSTR(ADDR1, 1,2) AS ADDR1,
+                		SUBSTR(ADDR2, 1,2) AS ADDR2,
+                		SUBSTR(POST_NO, 1,2) AS POST_NO
+                		FROM  COMPLEX_M WHERE CMPLX_ID = #{cmplxId}
+		]]>
+	</select>
+	
+	
+	<select id="getUserBusinfo" parameterType = "String" resultType="java.util.HashMap">
+		<![CDATA[
+			SELECT  STATION_ID, ROUTE_ID FROM  HOME_BUS_D WHERE USER_ID = #{userId}
+		]]>
+	</select>
+	
+	<select id="getCmplxLocInfo"  parameterType="String" resultType="resultSetMap">
+		<![CDATA[
+		SELECT IFNULL(LOC1_NM,'') AS LOC1_NM
+				 , IFNULL(LOC2_NM,'') AS LOC2_NM
+			     , IFNULL(LOC3_NM,'') AS LOC3_NM
+			  FROM COMPLEX_M
+			 WHERE CMPLX_ID = #{cmplxId}
+		]]>
+	</select>
+	
+	<select id="getCmplxLocCd"  parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		SELECT LOC1_NM
+			 , LOC2_NM
+			 , LOC3_NM
+			 , LOC_CD
+			 , LOC_X
+		     , LOC_Y
+		 FROM WEATHER_LOC_INFO
+		WHERE LOC1_NM LIKE CONCAT(#{loc1Nm} , '%')
+		  AND LOC2_NM LIKE CONCAT(#{loc2Nm} , '%')
+		  AND LOC3_NM LIKE CONCAT(#{loc3Nm} , '%')
+		ORDER BY LOC_CD
+		LIMIT 1
+		
+		]]>	
+	</select>
+	
+	<select id="listFamilyLoginInfo"  parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		SELECT B.USER_ID
+			 , B.USER_NM
+		     , IFNULL(B.LOGIN_YN,'N') AS LOGIN_YN
+		     , '' PHOTO_URL #추후 추가
+		 FROM HOME_HEAD_M A
+		 JOIN USR_INFO B
+		   ON A.HEAD_ID = B.HEAD_ID
+		WHERE A.CMPLX_ID = #{cmplxId}
+		  AND A.HOME_ID = #{homeId}
+		  AND B.USER_ID <> #{userId}
+		
+		]]>	
+	</select>
+	
+	<select id="getUserInfoProcess"  parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		
+		SELECT CONCAT(    'https://mobile.smartIok.com/bas/controller/Bas009P01Controller/bas009P01Form.do?policyCd='
+						  ,A.POLICY_CD
+						  ,'&osType='
+						  ,A.OS_KIND
+						  ,'&policyVer='
+						  , A.POLICY_VER) AS URL
+		 FROM MOBILE_POLICY_M A
+		 JOIN (
+				 SELECT POLICY_CD
+					  , OS_KIND
+					  , MAX(POLICY_VER) AS POLICY_VER
+				  FROM MOBILE_POLICY_M
+				 WHERE POLICY_CD = 'MB01302'
+				   AND OS_KIND = #{osType}
+				  GROUP BY POLICY_CD
+						 , OS_KIND
+			  ) B
+		WHERE A.POLICY_CD = B.POLICY_CD
+		  AND A.OS_KIND = B.OS_KIND
+		  AND A.POLICY_VER = B.POLICY_VER
+		
+		]]>	
+	</select>
+	
+	<!-- 인증번호 저장 -->
+	
+	<!-- 가치정보 유저셋팅 -->
+	<select id="countUserCertM" parameterType="requestParam" resultType="Integer">
+		<![CDATA[
+			SELECT COUNT(*) AS CNT 
+			FROM  USER_CERT_M
+			WHERE CERT_TYPE = #{certType}
+			AND HEAD_NM = #{headNm}
+			AND HEAD_CELL = #{headCell}
+			AND USER_CELL = #{userCell}
+			
+		]]>
+	</select>
+	
+	<insert id="insertUserCertM" parameterType="requestParam" >
+		<![CDATA[
+	   		INSERT INTO USER_CERT_M
+	   		(
+	   			CERT_TYPE
+	   		  , HEAD_NM
+	   		  , HEAD_CELL
+	   		  , USER_CELL
+	   		  , CERT_NO
+	   		  , CERT_DT
+	   		  , REG_ID
+	   		  , REG_DT
+	   		  , CHG_ID
+	   		  , CHG_DT
+	   		
+	   		)
+	   		VALUES
+	   		(
+	   			#{certType}
+	   		  , #{headNm}
+	   		  , #{headCell}
+	   		  , #{userCell}
+	   		  , #{certNo}
+	   		  , #{certDt}
+	   		  , 'mobile'
+	   		  , NOW()
+	   		  , 'mobile'
+	   		  , NOW()
+	   		)
+		]]>
+	</insert>
+	
+	
+	<update id="updateUserCertM" parameterType="requestParam" >
+		<![CDATA[
+		
+			UPDATE USER_CERT_M
+			   SET CERT_NO = #{certNo}
+			     , CERT_DT = #{certDt}
+			     , CHG_DT = NOW()
+			 WHERE CERT_TYPE = #{certType}
+			   AND HEAD_NM = #{headNm}
+			   AND HEAD_CELL = #{headCell}
+			   AND USER_CELL = #{userCell}
+		
+		]]>
+	
+	
+	</update>
+	
+	<delete id="deleteUserCertM" parameterType="requestParam" >
+		<![CDATA[
+			DELETE FROM USER_CERT_M
+			WHERE CERT_TYPE = #{certType}
+			  AND HEAD_NM = #{headNm}
+			  AND HEAD_CELL = #{headCell}
+			  AND USER_CELL = #{userCell}
+		
+		]]>
+	
+	</delete>
+	
+	<select id="getUserCertM"  parameterType="requestParam" resultType="java.util.HashMap">
+		<![CDATA[
+		
+			SELECT CERT_NO
+				 , CERT_DT
+			  FROM USER_CERT_M
+			 WHERE CERT_TYPE = #{certType}
+			   AND HEAD_NM = #{headNm}
+			   AND HEAD_CELL = #{headCell}
+			   AND USER_CELL = #{userCell} 
+		
+		]]>	
+	</select>
+</mapper>

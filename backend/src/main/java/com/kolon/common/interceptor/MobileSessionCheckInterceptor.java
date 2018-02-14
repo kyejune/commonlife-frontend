@@ -7,126 +7,91 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kolon.common.util.JwtUtil;
+import com.benitware.framework.xplaform.domain.ResultSetMap;
+import com.kolon.common.util.JwtUtils;
+import com.kolonbenit.benitware.common.util.JwtUtil;
+import com.kolonbenit.benitware.common.util.StringUtil;
+import com.kolonbenit.benitware.common.util.mcache.JedisHelper;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.auth0.jwt.interfaces.Claim;
-// 	import com.benitware.framework.http.parameter.RequestParameter;
+// 	import com.benitware.framework.http.parameter.RequestParameter.java;
 //	import com.benitware.framework.xplaform.domain.ResultSetMap;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 // 	import com.iot.mobile.service.MobileDeviceService;
 //	import com.iot.mobile.service.MobileUserService;
 //	import com.kolonbenit.benitware.common.util.MobileSessionUtils;
-//	import com.kolonbenit.benitware.common.util.StringUtil;
-import com.kolon.common.helper.JedisHelper;
-
-import org.springframework.beans.factory.annotation.Autowired;
+//	import com.kolonbenit.benitware.common.util.StringUtils;
+import com.kolon.common.helper.JedisHelpers;
 
 import redis.clients.jedis.Jedis;
 
 /**
  * 모바일 세션 체크 인터셉터
  */
+
 public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 
-	
-	private final Logger logger = LoggerFactory.getLogger(getClass());	
-	private static final JedisHelper helper = JedisHelper.getInstance();
-	
-	private static String NAMESPACE = "mobile.UserMapper.";
-	
-	@Autowired
-//	private MobileUserService mobileUserService;
-	
+
+	private final Logger logger = LoggerFactory.getLogger(MobileSessionCheckInterceptor.class);
+	private static final JedisHelpers helper = JedisHelpers.getInstance();
+
+
+
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 
 		String url = request.getRequestURI();
-		Map<String, String> mHeader = getHeadersInfo(request);
-		ObjectMapper mapper = new ObjectMapper();
-		
-//		ResultSetMap resMap = new ResultSetMap();
-//		resMap.putNoLowerCase("LOGIN_YN", "N");
-//		String strResJson = new ObjectMapper().writeValueAsString(resMap);
-//		byte[] bResJson = strResJson.getBytes();
-//		String userId = "";
-		
-		
-//		logger.info("/Header Informations-----------------------((( {} )))",mapper.writer().withDefaultPrettyPrinter().writeValueAsString(mHeader));		
-//		logger.info("URL ------------- " + url);
 
-		
-		
-		/*********************************************************************/
-		/* 예외처리                                                                                           */
-		/*********************************************************************/	
-		String[] arrPermitUri = {"MobilePushController"};
-		String[] arrLimitUri  = {"sendPush.do"};
 
-		
+		String[] arrPermitUri = {"MobileUserController", "MobileUserCertNoController"};
+		String[] arrLimitUri = {"mobileUserLogin", "mobileUserLogout", "mobileUserLoginConfirm"};
+
+		System.out.println("URL : " + url);
+
 		for (String sPermitUri : arrPermitUri) {
 			if (url.indexOf(sPermitUri) > -1) {
-				for (String sLimitUri : arrLimitUri) {
-					if (url.indexOf(sLimitUri) > -1) {
-						System.out.println("패스");
-						return true;
-					}
-				}
+
+				System.out.println("sPermitUri : " + sPermitUri);
+//				for (String sLimitUri : arrLimitUri) {
+//					if (url.indexOf(sLimitUri) > -1) {
+
+//						System.out.println("sLimitUri : " + sLimitUri);
+//						System.out.println("url.indexOf(sLimitUri) : " + url.indexOf(sLimitUri));
+				System.out.println("패스");
+				return true;
+//					}
+//				}
 			}
 		}
-		
-//		System.out.println("패스");
-//		System.out.println("패스");
-//		System.out.println("패스");
-		//if(true) return true;
-		
+
+
+
+
+
+		Map<String, String> mHeader = getHeadersInfo(request);
+		ObjectMapper mapper = new ObjectMapper();
+
+		ResultSetMap resMap = new ResultSetMap();
+		resMap.putNoLowerCase("LOGIN_YN", "N");
+		String strResJson = new ObjectMapper().writeValueAsString(resMap);
+		byte[] bResJson = strResJson.getBytes();
+		String userId = "";
+
+
+
 		/*********************************************************************/
 		/* Token  임시로 DB에서 받아오기 */
-		/*********************************************************************/		
+		/*********************************************************************/
 		String sToken = mHeader.get("token");
-		String secretKey  ="";		
-		
-//		logger.info("토큰이다 우하하하하 : " + sToken);
-		if( sToken == null )
-		{
-			Map<String, Object> returnMap = new HashMap<>();
-//			RequestParameter parameter = new RequestParameter();
-//			parameter.put("userId", "ys33");
-	
-			returnMap = null;//mobileUserService.getUserToken(parameter);
-//			logger.info("Step 4. " + url);
-			if (returnMap == null) {
-				
-			}else{
-			logger.info("returnMap" + returnMap);
-				sToken    = returnMap.get("TOKEN_ENCRYPT").toString();
-				secretKey = returnMap.get("SECRET_KEY").toString();
-			}
-		}
-		
-		/*********************************************************************/
-		/* Token 체크                                                                                      */
-		/*********************************************************************/
-		// 1. Header에서 token가져오기
-		//    Token 값이 없으면  쩟화면으로 이동ㅋㅋ
-		if(sToken == null || sToken.equals("")) {
-			logger.info("sToken URL ------------- " + url);	
-			response.setContentType("application/json");
-//			response.getOutputStream().write(bResJson);
-			return false;
-		}else{
-			// 토큰존재
-		}		
-		
-		
-		
+		String secretKey  ="";
+
 		/*********************************************************************/
 		/* Redis Token 게릿                                                                             */
 		/*********************************************************************/
@@ -134,135 +99,219 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		String expireDate ="";
 		String issueDate  ="";
 		String tokenOrg   ="";
-		
-        try {
-        	
-        	logger.info("Step 0. Redis Ready!");
-            jedis = helper.getConnection();
-            logger.info("Step 1. Redis Connected");
-            String tokenString = jedis.get(sToken);
-            logger.info("Step 2. Token");
-//            logger.info("Token ({}) is...({})",sToken, tokenString);
-            
-            if (tokenString == null) {     
-            	logger.info("Token Out!!!" + sToken);
-            	// Connection release
-            	//helper.destoryPool();
-                helper.returnResource(jedis);                
-    			response.setContentType("application/json");
-//    			response.getOutputStream().write(bResJson);
-    			return false;
-            }
-            else {
-                Gson gson = new Gson();
-                JsonObject tokenRedis = gson.fromJson(tokenString, JsonObject.class);
 
-        		// Redis Token Value
-//                secretKey  = StringUtil.replace(tokenRedis.get("SECRET_KEY").toString(),"\"","");
-//                expireDate = StringUtil.replace(tokenRedis.get("EXPIRE_DATE").toString(),"\"","");
-//                issueDate  = StringUtil.replace(tokenRedis.get("ISSUE_DATE").toString(),"\"","");
-//                tokenOrg   = StringUtil.replace(tokenRedis.get("TOKEN_ORG").toString(),"\"","");
-//                userId     = StringUtil.replace(tokenRedis.get("USER_ID").toString(),"\"","");
-                
+		try {
+
+			logger.info("◆◆◆◆  Master  ◆◆◆◆");
+			logger.info("Step 0. Redis Ready!");
+			jedis = helper.getConnection();
+			logger.info("Step 1. Redis Connected");
+			String tokenString = jedis.get(sToken);
+			logger.info("Step 2. Token");
+//            logger.info("Token ({}) is...({})",sToken, tokenString);
+
+			if (tokenString == null) {
+				// Connection release
+				helper.returnResource(jedis);
+
+				logger.info("Token Out!!!" + sToken);
+				response.setContentType("application/json");
+				response.getOutputStream().write(bResJson);
+				return false;
+			}
+			else {
+				Gson gson = new Gson();
+				JsonObject tokenRedis = gson.fromJson(tokenString, JsonObject.class);
+
+				// Redis Token Value
+				secretKey  = StringUtil.replace(tokenRedis.get("SECRET_KEY").toString(),"\"","");
+				expireDate = StringUtil.replace(tokenRedis.get("EXPIRE_DATE").toString(),"\"","");
+				issueDate  = StringUtil.replace(tokenRedis.get("ISSUE_DATE").toString(),"\"","");
+				tokenOrg   = StringUtil.replace(tokenRedis.get("TOKEN_ORG").toString(),"\"","");
+				userId     = StringUtil.replace(tokenRedis.get("USER_ID").toString(),"\"","");
+
 //	                ObjectMapper jmapper = new ObjectMapper(); // create once, reuse
-//	                JsonNode actualObj  = jmapper.readValue(tokenString, JsonNode.class);	                		
+//	                JsonNode actualObj  = jmapper.readValue(tokenString, JsonNode.class);
 //	                logger.info("*************  SECRET_KEY {} ************** ",secretKey);
 //	                logger.info("/EXPIRE_DATE {} ---",expireDate);
 //	                logger.info("/ISSUE_DATE {} ---",issueDate);
 //	                logger.info("/TOKEN_ORG {} ---",tokenOrg);
-	                
-	            // Connection release
-                ///helper.destoryPool();
-	            helper.returnResource(jedis);
-            }
-        }
-        catch (Exception e) {
-        	logger.info("Step 99. Redis Error!!");
-        	
-        	// Connection release
-        	//helper.destoryPool();
-            helper.returnResource(jedis);
+			}
+
+			// Connection release
+			helper.returnResource(jedis);
+		}
+		catch (Exception e) {
+			logger.info("Step 99. Redis Error!!");
+
+			// Connection release
+			helper.returnResource(jedis);
 			response.setContentType("application/json");
-//			response.getOutputStream().write(bResJson);
+			response.getOutputStream().write(bResJson);
 
 			return false;
-        }        
-        finally{
-        	
-        }
+		}
 
 
-        /*********************************************************************/
+		/*********************************************************************/
 		/* 3. Token 검증하기                                                                             */
 		/*********************************************************************/
 //        logger.info("Authorization -> secretKey --- {} ", secretKey); // secretKey.toString());
 //        logger.info("Authorization -> tokenOrg  --- {} ", tokenOrg); //tokenOrg);
-        
-        DecodedJWT decJwt = JwtUtil.decodeJwt(secretKey, tokenOrg);
-        
+
+		DecodedJWT decJwt = JwtUtil.decodeJwt(secretKey, tokenOrg);
+
 		if (decJwt == null) {
-			
-//			logger.info("Decode Error -------------> " + sToken );
-//			// Connection Release
-//	        // helper.returnResource(jedis);
-//			//logger.info("(( {} )) =============> (( {} ))",secretKey, tokenOrg );
-//			response.setContentType("application/json");
-//			response.getOutputStream().write(bResJson);
+			logger.info("(( {} )) =============> (( {} ))",secretKey, tokenOrg );
+
+			// Connection release
+			helper.returnResource(jedis);
+
+			response.setContentType("application/json");
+			response.getOutputStream().write(bResJson);
 			return false;
-//			
+//
 		} else {
 //			//logging
-			// Connection Release
-	        
-			//logger.info("오케이 토큰 -------------> " + sToken );
-			//helper.destoryPool();
-			//helper.returnResource(jedis);
-			
-//			Map<String, Claim> claims = decJwt.getClaims();			
+			logger.info("오케이 토큰 -------------> " + sToken );
+
+//			Map<String, Claim> claims = decJwt.getClaims();
 //			for (Map.Entry<String, Claim> entry : claims.entrySet()) {
 //				logger.info("\t claims key : {}, value : {}", entry.getKey(), entry.getValue().asString());
 //			}
 		}
 
 
-		/*********************************************************************/
-		/* Session Check */
-		/*********************************************************************/		
-//		ResultSetMap userInfo = (ResultSetMap) MobileSessionUtils.getSessionUserInfo();
+
+		//아래 일단 막어
+
+//		/*********************************************************************/
+//		/* JWT AUTH */
+//		/*********************************************************************/
+////		logger.info("Header Informations-------------------------------------");
+//		Map<String, String> mHeader = getHeadersInfo(request);
+//		ObjectMapper mapper = new ObjectMapper();
+//		ResultSetMap resMap = new ResultSetMap();
+//		String strResJson = new ObjectMapper().writeValueAsString(resMap);
+//		byte[] bResJson = strResJson.getBytes();
 //
-//		if(userInfo == null) {
-//			ResultSetMap resMap = new ResultSetMap();
-//			resMap.putNoLowerCase("LOGIN_YN", "N");
+////		logger.info(mapper.writer().withDefaultPrettyPrinter().writeValueAsString(mHeader));
+////		logger.info("/Header Informations-------------------------------------");
 //
-//			String strResJson = new ObjectMapper().writeValueAsString(resMap);
+//		// 1. Header에서 token가져오기
+//		//    Token 값이 없으면 에러
+//		String sToken = mHeader.get("token");
+//		resMap.putNoLowerCase("LOGIN_YN", "N");
+////		if(sToken == null || sToken.equals(""))
+////		{
+////			//sToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE1MDM5MDY5NjgsIlVTRVJfSUQiOiJ5czMzIiwiaXNzIjoic21hcnRpb2sifQ.X5taYgrMtO0qzxPFiC9sRVmnuGyHw_mc021EfNszbeM";
+////		}
 //
-//			byte[] bResJson = strResJson.getBytes();
-//
+//		if(sToken == null || sToken.equals("")) {
 //			response.setContentType("application/json");
 //			response.getOutputStream().write(bResJson);
-////
 //			return false;
 //		}else{
-//			logger.info("<_____________ Session User Info " + MobileSessionUtils.getSessionId());
-//			logger.info("<_____________ Session User Info " + userInfo);
-//		}			
-		
+//			// 토큰존재
+//			logger.info("토큰이 존재해용 ~~~~~>");
+//		}
+//
+//
+//		// 2. Redis에서 값가져오기
+//		Jedis jedis = null;
+//		String secretKey  ="";
+//		String expireDate ="";
+//		String issueDate  ="";
+//		String tokenOrg   ="";
+//
+//        try {
+//            jedis = helper.getConnection();
+//            String tokenString = jedis.get(sToken);
+//
+//            logger.info("토큰 {} 은 말이죠 {}",sToken, tokenString);
+//
+//            if (tokenString == null) {
+//    			response.setContentType("application/json");
+//    			response.getOutputStream().write(bResJson);
+//    			return false;
+//            }
+//            else {
+//	                Gson gson = new Gson();
+//	                JsonObject tokenRedis = gson.fromJson(tokenString, JsonObject.class);
+//
+//            		// Redis Token Value
+//	                secretKey  = StringUtil.replace(tokenRedis.get("SECRET_KEY").toString(),"\"","");
+//	                expireDate = StringUtil.replace(tokenRedis.get("EXPIRE_DATE").toString(),"\"","");
+//	                issueDate  = StringUtil.replace(tokenRedis.get("ISSUE_DATE").toString(),"\"","");
+//	                tokenOrg   = StringUtil.replace(tokenRedis.get("TOKEN_ORG").toString(),"\"","");
+//
+////	                logger.info("/SECRET_KEY {} ---",secretKey);
+////	                logger.info("/EXPIRE_DATE {} ---",expireDate);
+////	                logger.info("/ISSUE_DATE {} ---",issueDate);
+////	                logger.info("/TOKEN_ORG {} ---",tokenOrg);
+//            }
+//        }
+//        catch (Exception e) {
+//            helper.returnResource(jedis);
+//			response.setContentType("application/json");
+//			response.getOutputStream().write(bResJson);
+//			return false;
+//        }
+//
+//
+//        // 3. Token 인증
+////        logger.info("");
+////        logger.info("");
+////        logger.info("/secretKey --- {} ", "a"); // secretKey.toString());
+////        logger.info("/tokenOrg  --- {} ", "b"); //tokenOrg);
+//
+//        DecodedJWT decJwt = JwtUtil.decodeJwt("1","1");//secretKey, tokenOrg);
+//
+//		if (decJwt == null) {
+//			response.setContentType("application/json");
+//			response.getOutputStream().write(bResJson);
+//			return false;
+//		} else {
+//			//logging
+////			Map<String, Claim> claims = decJwt.getClaims();
+////
+////			for (Map.Entry<String, Claim> entry : claims.entrySet()) {
+////				logger.info("\t claims key : {}, value : {}", entry.getKey(), entry.getValue().asString());
+////			}
+//		}
+//
+//
+//		/*********************************************************************/
+//		/* Session Check */
+//		/*********************************************************************/
+//		ResultSetMap userInfo = null; //(ResultSetMap) MobileSessionUtils.getSessionUserInfo();
+//
+//		if(userInfo == null) {
+////			response.setContentType("application/json");
+////			response.getOutputStream().write(bResJson);
+////			return false;
+//		}else{
+////			logger.info("<_____________ Session User Info " + MobileSessionUtils.getSessionId());
+////			logger.info("<_____________ Session User Info " + userInfo);
+//		}
+
+
 		return true;
 
 	}
-	
-    private Map<String, String> getHeadersInfo(HttpServletRequest request) {
 
-        Map<String, String> map = new HashMap<String, String>();
+	private Map<String, String> getHeadersInfo(HttpServletRequest request) {
 
-        Enumeration headerNames = request.getHeaderNames();
-        
-        while (headerNames.hasMoreElements()) {
-            String key = (String) headerNames.nextElement();
-            String value = request.getHeader(key);
-            map.put(key, value);
-        }
+		Map<String, String> map = new HashMap<String, String>();
 
-        return map;
-    }
+		Enumeration headerNames = request.getHeaderNames();
+
+		while (headerNames.hasMoreElements()) {
+			String key = (String) headerNames.nextElement();
+			String value = request.getHeader(key);
+			map.put(key, value);
+		}
+
+		return map;
+	}
 }

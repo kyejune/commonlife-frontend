@@ -2,7 +2,7 @@ package com.kolon.common.exception;
 
 
 import com.kolon.common.model.ErrorInfo;
-import com.kolon.common.util.DateUtil;
+import com.kolon.common.util.DateUtils;
 
 public class UserSysException
         extends Exception
@@ -13,7 +13,7 @@ public class UserSysException
     {
         this.errorVO.setClassName(className);
         this.errorVO.setMethodName(methodName);
-        this.errorVO.setDateTime(DateUtil.getDateTime());
+        this.errorVO.setDateTime(DateUtils.getDateTime());
     }
 
     public UserSysException(String className, String methodName, Exception originException)
@@ -21,7 +21,7 @@ public class UserSysException
         super(originException);
         this.errorVO.setClassName(className);
         this.errorVO.setMethodName(methodName);
-        this.errorVO.setDateTime(DateUtil.getDateTime());
+        this.errorVO.setDateTime(DateUtils.getDateTime());
         this.errorVO.setOriginException(originException);
     }
 

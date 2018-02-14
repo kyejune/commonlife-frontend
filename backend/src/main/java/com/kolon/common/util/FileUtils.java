@@ -1,6 +1,5 @@
 package com.kolon.common.util;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FileUtil extends FileUtils
+public class FileUtils extends org.apache.commons.io.FileUtils
 {
-    protected static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
-    protected static final String CLASS_NAME = "FileUtil";
+    protected static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
+    protected static final String CLASS_NAME = "FileUtils";
     public static final int BUFFER_SIZE = 8192;
     public static final String SEPERATOR = File.separator;
 
@@ -163,7 +162,7 @@ public class FileUtil extends FileUtils
 
     public static String getUniqueFileName(String realPath, String fileName)
     {
-        fileName = StringUtil.replace(fileName, " ", "");
+        fileName = StringUtils.replace(fileName, " ", "");
         File tempFile = new File(realPath, fileName);
         int idx = 0;
         int cnt = 1;

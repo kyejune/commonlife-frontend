@@ -1,7 +1,7 @@
 package com.kolon.common.model;
 
 
-import com.kolon.common.util.StringUtil;
+import com.kolon.common.util.StringUtils;
 
 /**
  */
@@ -21,7 +21,7 @@ public class ErrorInfo {
 
     public void setClassName(String str)
     {
-        this.className = StringUtil.nvl(str);
+        this.className = StringUtils.nvl(str);
     }
 
     public String getMethodName()
@@ -31,7 +31,7 @@ public class ErrorInfo {
 
     public void setMethodName(String str)
     {
-        this.methodName = StringUtil.nvl(str);
+        this.methodName = StringUtils.nvl(str);
     }
 
     public String getErrorCode()
@@ -41,7 +41,7 @@ public class ErrorInfo {
 
     public void setErrorCode(String str)
     {
-        this.errorCode = StringUtil.nvl(str);
+        this.errorCode = StringUtils.nvl(str);
     }
 
     public String getErrorMessage()
@@ -51,7 +51,7 @@ public class ErrorInfo {
 
     public void setErrorMessage(String str)
     {
-        this.errorMessage = StringUtil.nvl(str);
+        this.errorMessage = StringUtils.nvl(str);
     }
 
     public String getDateTime()
@@ -61,7 +61,7 @@ public class ErrorInfo {
 
     public void setDateTime(String str)
     {
-        this.dateTime = StringUtil.nvl(str);
+        this.dateTime = StringUtils.nvl(str);
     }
 
     public Object getParamObj()

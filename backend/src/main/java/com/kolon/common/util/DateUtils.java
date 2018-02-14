@@ -4,7 +4,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-public class DateUtil {
+public class DateUtils {
     public static String getDateTimeByPattern(String pattern)
     {
         SimpleDateFormat formatter = new SimpleDateFormat(pattern, Locale.KOREAN);
