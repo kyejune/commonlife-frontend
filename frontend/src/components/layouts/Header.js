@@ -8,7 +8,7 @@ class Header extends Component {
 
         return (
             <header
-                className="md-paper md-toolbar md-background--primary md-toolbar--text-white md-toolbar--fixed">
+                className="md-paper md-toolbar md-background--primary md-toolbar--text-white">
 
                 <button type="button"
                         className="md-btn md-btn--icon md-pointer--hover md-inline-block md-btn--toolbar md-toolbar--action-left">

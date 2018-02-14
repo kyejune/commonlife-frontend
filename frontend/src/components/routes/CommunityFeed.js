@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {observer} from 'mobx-react';
-import { Button } from 'react-md';
 import WriteDrawer from "components/drawers/WriteDrawer";
 import CardItem from 'components/ui/CardItem';
 import Store from 'scripts/store';
@@ -27,12 +26,6 @@ class CommunityFeed extends Component {
 					} ) }
 				</div>
 
-
-				<Button floating primary
-						iconClassName="fa fa-pencil fa-2x"
-						className="cl-write__button--fixed"
-						onClick={()=> Store.drawer.push('write') }
-				/>
 
                 <BottomDrawer visible={Store.drawer.indexOf('write')>=0}
 							  onVisibilityChange={()=>{}}

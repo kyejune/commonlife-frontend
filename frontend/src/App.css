@@ -5099,10 +5099,11 @@ button, select, input {
 /**/
 .cl-write__button--fixed {
   position: fixed;
-  bottom: 2em;
+  bottom: 5em;
   right: 1em;
   z-index: 9;
-  transform: translateZ(0); }
+  transform: translateZ(0);
+  transition: bottom 0.3s; }
 
 .cl-bg--write {
   background-color: rgba(0, 0, 0, 0.3); }
@@ -5704,91 +5705,60 @@ button, select, input {
 .pl-9em {
   padding-left: 9em; }
 
-.app-content {
-  margin-top: 56px;
-  transition: margin-top 0.4s ease-out; }
-
 /* Header */
-.App > header {
-  transform: translateZ(0px);
-  transition: margin-top 0.4s ease-out; }
-  .App > header .md-btn--icon {
-    padding: 0; }
-
-.App > footer {
-  transform: translateZ(0px);
-  background-color: #ffffff;
-  transition: margin-bottom 0.4s ease-out; }
-  .App > footer .md-bottom-nav--fixed {
-    font-size: 0;
-    padding-top: 2px; }
-  .App > footer img {
-    width: 40px;
-    height: 34px;
-    opacity: 0.4;
-    transition: opacity 0.4s; }
-  .App > footer .md-bottom-nav-label {
-    color: #1052a5;
-    font-size: 12px;
-    line-height: 1.1em;
-    color: rgba(0, 0, 0, 0.4);
-    transition: color 0.4s; }
-  .App > footer .footer__button--selected img {
-    opacity: 1; }
-  .App > footer .footer__button--selected .md-bottom-nav-label {
-    color: #1052a5; }
-
-.App.cl-app--expand > header {
-  transition-delay: 0.2s;
-  margin-top: -56px; }
-
-.App.cl-app--expand .app-content {
-  margin-top: 0; }
-
-.App.cl-app--expand .cl-second-header {
-  transition-delay: 0.2s;
-  margin-top: 0; }
-
-.App.cl-app--expand > footer {
-  margin-bottom: -56px; }
-
-.App.cl-app--expand .cl-fitted-box, .App.cl-app--expand .cl-fitted-box--both {
-  max-height: calc(100vh - 48px); }
-
-.App.cl-app--expand .cl-header--reservation + .cl-fitted-box, .App.cl-app--expand .cl-header--reservation + .cl-fitted-box--both {
-  max-height: 100vh; }
+.App {
+  height: 100vh;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch; }
+  .App > header {
+    transform: translateZ(0px);
+    transition: margin-top 0.4s ease-out; }
+    .App > header .md-btn--icon {
+      padding: 0; }
+  .App > footer {
+    transform: translateZ(0px);
+    background-color: #ffffff;
+    transition: margin-bottom 0.4s ease-out; }
+    .App > footer .md-bottom-nav--fixed {
+      font-size: 0;
+      padding-top: 2px; }
+    .App > footer img {
+      width: 40px;
+      height: 34px;
+      opacity: 0.4;
+      transition: opacity 0.4s; }
+    .App > footer .md-bottom-nav-label {
+      color: #1052a5;
+      font-size: 12px;
+      line-height: 1.1em;
+      color: rgba(0, 0, 0, 0.4);
+      transition: color 0.4s; }
+    .App > footer .footer__button--selected img {
+      opacity: 1; }
+    .App > footer .footer__button--selected .md-bottom-nav-label {
+      color: #1052a5; }
+  .App.cl-app--expand > footer {
+    margin-bottom: -56px; }
+  .App.cl-app--expand .cl-write__button--fixed {
+    bottom: 1.5em; }
 
 /* SubHeader */
 .cl-second-header {
-  position: fixed;
+  position: sticky;
   width: 100%;
   z-index: 10;
   left: 0;
-  top: 0;
-  margin-top: 56px;
-  transform: translateZ(0px);
-  transition: margin-top 0.4s ease-out; }
-  .cl-second-header + .md-tabs-content {
-    padding-top: 40px; }
+  top: 0; }
 
-.cl-fitted-box, .cl-fitted-box--both {
-  transition: max-height 0.4s ease-out;
-  max-height: calc(100vh - 56px * 2 - 48px);
+.cl-fitted-box {
   width: 100%;
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch; }
-
-.cl-fitted-box--both {
-  max-height: calc( 100vh - 56px - 48px); }
+  height: 100%; }
 
 .cl-header--reservation {
   min-height: 145px;
   background-color: #2e3137;
   color: white; }
-  .cl-header--reservation + .cl-fitted-box, .cl-header--reservation + .cl-fitted-box--both {
-    padding-top: 145px;
-    min-height: calc(100vh - 56px * 2);
-    max-height: calc(100vh - 56px * 2);
+  .cl-header--reservation + .cl-fitted-box {
     background-image: url("images/bg-3@2x.png"); }
 
 .cl-fixed-page {
@@ -5837,11 +5807,14 @@ button, select, input {
     color: rgba(0, 0, 0, 0.87); }
 
 /* Drawer */
+.md-drawer {
+  overflow: auto; }
+
+.cl-drawer-content-holder > header {
+  position: sticky; }
+
 .md-drawer--active header h2 {
   font-size: 16px; }
-
-.md-drawer--active .dialogs__content {
-  margin-top: 56px; }
 
 /* Drawer */
 .md-drawer {

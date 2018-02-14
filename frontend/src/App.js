@@ -30,7 +30,7 @@ class App extends Component {
 
         document.addEventListener('scroll', () => {
             // let doc = document.querySelector('.react-swipeable-view-container>div[aria-hidden=false]');
-            let doc = document.querySelector('.cl-fitted-box');
+            let doc = document.querySelector('.App');
             if (doc) {
                 this.setState({
                     scrolled: (doc.scrollTop > 56)
@@ -77,7 +77,6 @@ class App extends Component {
                     </div>
 
                     <Footer/>
-
 
                 </div>
 

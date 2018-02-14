@@ -1,4 +1,14 @@
 /* Drawer */
+.md-drawer{
+  overflow: auto;
+}
+
+.cl-drawer-content-holder{
+  &>header{
+    position: sticky;
+  }
+}
+
 .md-drawer--active{
 
   header{
@@ -11,7 +21,7 @@
 
 
   .dialogs__content{
-    margin-top: 56px;
+    //margin-top: 56px;
   }
 
 }

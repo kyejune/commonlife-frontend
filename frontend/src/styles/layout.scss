@@ -1,13 +1,12 @@
 $dur: 0.4s;
 $delay: 0.2s;
 
-.app-content {
-    margin-top: 56px;
-    transition: margin-top $dur ease-out;
-}
-
 /* Header */
 .App {
+
+    height: 100vh;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 
     & > header {
         transform: translateZ(0px);
@@ -64,66 +63,31 @@ $delay: 0.2s;
     // 스크롤해서 위아래 메뉴 치울때,
     &.cl-app--expand {
 
-        & > header {
-            transition-delay: $delay;
-            margin-top: -56px;
-        }
-
-        .app-content {
-            margin-top: 0;
-        }
-
-        .cl-second-header {
-            transition-delay: $delay;
-            margin-top: 0;
-        }
-
         & > footer {
             margin-bottom: -56px;
         }
 
-        // 커뮤니티
-        .cl-fitted-box {
-            max-height: calc(100vh - 48px);
+        .cl-write__button--fixed{
+            bottom: 1.5em;
         }
-
-        // 예약
-        .cl-header--reservation + .cl-fitted-box {
-            max-height: 100vh;
-        }
-
     }
 
 }
 
 /* SubHeader */
 .cl-second-header {
-    position: fixed;
+    position: sticky;
     width: 100%;
     z-index: 10;
     left: 0;
     top: 0;
-    margin-top: 56px;
-    transform: translateZ(0px);
-    transition: margin-top $dur ease-out;
-
-    & + .md-tabs-content {
-        padding-top: 40px;
-    }
 }
 
 .cl-fitted-box {
-    transition: max-height $dur ease-out;
-    max-height: calc(100vh - 56px * 2 - 48px);
     width: 100%;
-    overflow: scroll;
-    -webkit-overflow-scrolling: touch;
+    height: 100%;
 }
 
-.cl-fitted-box--both{
-    @extend .cl-fitted-box;
-    max-height: calc( 100vh - 56px - 48px );
-}
 
 .cl-header--reservation {
     min-height: 145px;
@@ -131,9 +95,6 @@ $delay: 0.2s;
     color: white;
 
     & + .cl-fitted-box {
-        padding-top: 145px;
-        min-height: calc(100vh - 56px * 2);
-        max-height: calc(100vh - 56px * 2);
         background-image: url("images/bg-3@2x.png");
     }
 }
@@ -191,3 +152,4 @@ $delay: 0.2s;
         color: rgba(0, 0, 0, 0.87);
     }
 }
+
