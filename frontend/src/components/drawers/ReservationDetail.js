@@ -147,7 +147,7 @@ class ReservationDetail extends Component {
         return <div className="cl-reservation-detail cl-fitted-box--both">
 
             {!this.state.reserved &&
-            <Link to={ '/reservation/thumbnails' }>
+            <Link to={ '/reservation/0/thumbnails' }>
 			    <ThumbnailSwiper/>
             </Link>
             }
