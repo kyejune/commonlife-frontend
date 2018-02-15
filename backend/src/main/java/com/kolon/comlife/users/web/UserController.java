@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
-import com.kolon.common.util.IokUtil;
+import com.kolon.comlife.users.util.IokUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.controller.MobileUserController;
 import org.slf4j.Logger;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.print.attribute.standard.Media;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -51,7 +50,7 @@ public class UserController {
         boolean             resFlag;
         String              resType;
 
-        parameter = buildRequestParameter(request);
+        parameter = IokUtil.buildRequestParameter(request);
 
         try {
             // 1. 기존 다른 기기에서의 로그인 여부 확인
@@ -81,7 +80,7 @@ public class UserController {
                 retMsg = "로그인에 성공하였습니다."; // todo: message 옮기기
             }
         } catch( Exception e ) {
-            return convertExceptionToResponse( e );
+            return IokUtil.convertExceptionToResponse( e );
         }
 
         result.put("msg", retMsg);
@@ -107,7 +106,7 @@ public class UserController {
         Map<String, Object> result;
         boolean             resFlag;
 
-        parameter = buildRequestParameter( request );
+        parameter = IokUtil.buildRequestParameter( request );
 
         try {
             result = mobileUserController.modifyGcmRegInfoIntro( parameter, null );
@@ -117,7 +116,7 @@ public class UserController {
                 return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( result );
             }
         } catch( Exception e ) {
-            return convertExceptionToResponse( e );
+            return IokUtil.convertExceptionToResponse( e );
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
@@ -138,7 +137,7 @@ public class UserController {
         boolean             resFlag;
         String              token;
 
-        parameter = buildRequestParameter( request );
+        parameter = IokUtil.buildRequestParameter( request );
         token = request.getHeader( IOK_HEADER_TOKEN_KEY );
         if( token == null ) {
             return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "인증토큰을 포함해야 합니다." );
@@ -153,7 +152,7 @@ public class UserController {
                 return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( result );
             }
         } catch( Exception e ) {
-            return convertExceptionToResponse( e );
+            return IokUtil.convertExceptionToResponse( e );
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
@@ -181,7 +180,7 @@ public class UserController {
         boolean             resFlag;
         String              resType;
 
-        parameter = buildRequestParameter( request );
+        parameter = IokUtil.buildRequestParameter( request );
         try {
             result = mobileUserController.mobileUserLoginStatus( parameter, null );
             // todo: refactoring
@@ -190,7 +189,7 @@ public class UserController {
             result.remove("resType");
             result = IokUtil.lowerMsgKeyName( result );
         } catch( Exception e ) {
-            return convertExceptionToResponse( e );
+            return IokUtil.convertExceptionToResponse( e );
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
@@ -220,13 +219,13 @@ public class UserController {
         boolean             resFlag;
         String              resType;
 
-        parameter = buildRequestParameter( request );
+        parameter = IokUtil.buildRequestParameter( request );
 
         try {
             result = mobileUserController.mobileUserLogout( parameter, null);
             resFlag = IokUtil.getResFlag( result );
         } catch( Exception e ) {
-            return convertExceptionToResponse( e );
+            return IokUtil.convertExceptionToResponse( e );
         }
 
         // todo: message 통합
@@ -234,59 +233,4 @@ public class UserController {
     }
 
 
-    private RequestParameter buildRequestParameter(HttpServletRequest request) {
-        RequestParameter parameter = new RequestParameter();
-        parameter.setRequest(request);
-
-        Iterator e = request.getParameterMap().keySet().iterator();
-        while(e.hasNext()) {
-            String key = (String)e.next();
-            logger.debug("Request.Parameter.KEY: " + key + ", VALUE:" + request.getParameter(key));
-            parameter.put(key, request.getParameter(key));
-        }
-
-        return parameter;
-    }
-
-    private ResponseEntity convertExceptionToResponse( Exception e ) {
-        if( e instanceof UnsupportedEncodingException ) {
-            logger.error( e.getMessage() + ":" + e.getCause() );
-            return ResponseEntity
-                    .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: 적절한 error 값으로 변경 할 것
-        } else if ( e instanceof JsonParseException) {
-            logger.error( e.getMessage() + ":" + e.getCause() );
-            return ResponseEntity
-                    .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: ""
-        } else if ( e instanceof JsonMappingException) {
-            logger.error( e.getMessage() + ":" + e.getCause() );
-            return ResponseEntity
-                    .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: ""
-        } else if ( e instanceof IOException ) {
-            logger.error( e.getMessage() + ":" + e.getCause() );
-            return ResponseEntity
-                    .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: ""
-        }
-
-        logger.error( e.getMessage() + ":" + e.getCause() );
-        StackTraceElement[] elements = e.getStackTrace();
-        StringBuilder strBuilder = new StringBuilder();
-        for( StackTraceElement element : elements ) {
-            strBuilder.append( "\t" );
-            strBuilder.append( element.getClassName() );
-            strBuilder.append( ":" );
-            strBuilder.append( element.getMethodName() );
-            strBuilder.append( ":" );
-            strBuilder.append( element.getLineNumber() );
-            strBuilder.append( "\n" );
-        }
-        logger.debug( strBuilder.toString() );
-
-        return ResponseEntity
-                .status( HttpStatus.SERVICE_UNAVAILABLE )
-                .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: ""
-    }
 }

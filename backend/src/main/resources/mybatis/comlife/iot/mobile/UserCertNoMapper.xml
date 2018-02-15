@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mobile.UserCertNoMapper">
+
+	<!-- USER LOGIN -->
+	<select id="checkHead" parameterType="requestParam" resultType="ResultSetMap">
+		<![CDATA[
+			SELECT HEAD.HEAD_NM
+				, HEAD.CELL
+				, HEAD.HEAD_ID
+	   FROM  HOME_HEAD_M HEAD
+       INNER JOIN  HOME_M HOME 
+         ON HEAD.CMPLX_ID = HOME.CMPLX_ID 
+		AND HEAD.HOME_ID = HOME.HOME_ID
+        WHERE 1=1
+		 AND HEAD.CELL = #{headCell}
+		 AND HEAD.HEAD_NM = #{headNm}
+         AND HOME.CMPLX_ID = #{cmplxId} 
+         AND HOME.DONG = #{dong} 
+         AND HOME.HO = #{ho}	   
+        ]]>
+	</select>
+	
+	
+	<select id="checkHeadCert" parameterType="requestParam" resultType="ResultSetMap">
+		<![CDATA[
+			SELECT HEAD.HEAD_NM
+					, HEAD.CELL
+					, HEAD.HEAD_ID
+		   FROM  HOME_HEAD_M HEAD
+	       INNER JOIN  HOME_M HOME 
+	         ON HEAD.CMPLX_ID = HOME.CMPLX_ID 
+			AND HEAD.HOME_ID = HOME.HOME_ID
+		   INNER JOIN USER_REG_CERT_M REG
+		     ON HEAD.HEAD_ID = REG.HEAD_ID
+	        WHERE 1=1
+			 AND HEAD.CELL = #{headCell}
+			 AND HEAD.HEAD_NM = #{headNm}
+	         AND HOME.CMPLX_ID = #{cmplxId} 
+	         AND HOME.DONG = #{dong} 
+	         AND HOME.HO = #{ho}	   
+	         AND REG.USER_CERT_ID = #{userCertId}
+        ]]>
+	</select>
+	
+	
+	<insert id="insertUserRegCertM" parameterType="requestParam">
+		<selectKey keyProperty="userCertId" resultType="int" order="BEFORE">
+			SELECT IFNULL(MAX(USER_CERT_ID)+1, 1) FROM  USER_REG_CERT_M
+		</selectKey>
+		<![CDATA[
+			
+			INSERT INTO USER_REG_CERT_M
+			(
+				 USER_CERT_ID
+				,HEAD_ID
+				,HEAD_CERT_NO
+				,HEAD_CERT_DT
+				,REG_ID
+				,REG_DT
+			)
+			VALUES
+			(
+				#{userCertId}
+			  , #{headId}
+			  , #{certNo}
+			  , #{certDt}
+			  , 'system'
+			  , NOW()
+			)
+			
+		
+		]]>
+	
+	</insert>
+	
+	<update id="updateUserRegCertM" parameterType="requestParam">
+		<![CDATA[
+		
+			UPDATE USER_REG_CERT_M
+			  SET USER_CELL = #{userCell}
+			  	, USER_CERT_NO = #{certNo}
+			  	, USER_CERT_DT = #{certDt}
+			  	, CHG_ID = 'system'
+			  	, CHG_DT = NOW()
+			 WHERE USER_CERT_ID = #{userCertId}
+		
+		]]>
+	</update>
+	
+	
+	<select id="getHeadCertM"  parameterType="requestParam" resultType="ResultSetMap">
+		<![CDATA[
+		
+			SELECT HEAD_CERT_NO
+				 , HEAD_CERT_DT
+			  FROM USER_REG_CERT_M A
+			  JOIN HOME_HEAD_M B
+			    ON A.HEAD_ID = B.HEAD_ID
+			 WHERE A.USER_CERT_ID = #{userCertId}
+			   AND B.HEAD_NM = #{headNm}
+			   AND B.CELL = #{headCell}
+
+		
+		]]>	
+	</select>
+	
+	<select id="getUserCertM"  parameterType="requestParam" resultType="ResultSetMap">
+		<![CDATA[
+		
+			SELECT USER_CERT_NO
+				 , USER_CERT_DT
+			  FROM USER_REG_CERT_M A
+			 WHERE A.USER_CERT_ID = #{userCertId}
+			   AND A.USER_CELL = #{userCell}
+
+		
+		]]>	
+	</select>
+
+</mapper>
