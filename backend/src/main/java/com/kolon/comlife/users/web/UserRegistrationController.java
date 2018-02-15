@@ -6,15 +6,11 @@ import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.users.model.AgreementInfo;
-import com.kolon.comlife.users.service.RegistrationService;
-import com.kolon.common.http.HttpRequestFailedException;
-import com.kolon.common.http.HttpGetRequester;
-import com.kolon.common.prop.ServicePropertiesMap;
+import com.kolon.comlife.users.service.UserRegistrationService;
 import com.kolon.comlife.users.util.IokUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.controller.MobileUserCertNoController;
 import com.kolonbenit.iot.mobile.controller.MobileUserController;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,31 +18,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sun.misc.Request;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/users/registration/*")
-public class RegistrationController {
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationController.class);
-
-    @Resource(name = "servicePropertiesMap")
-    private ServicePropertiesMap serviceProperties;
+public class UserRegistrationController {
+    private static final Logger logger = LoggerFactory.getLogger(UserRegistrationController.class);
 
     @Resource(name = "registrationService")
-    private RegistrationService regService;
+    private UserRegistrationService regService;
 
     @Resource(name = "complexService")
     private ComplexService complexService;   // todo: replaced with MobileUserController
-
-    @Autowired
-    private CloseableHttpClient httpClient;
 
     @Autowired
     private MobileUserController mobileUserController;
