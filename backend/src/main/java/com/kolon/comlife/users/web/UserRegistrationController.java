@@ -336,9 +336,7 @@ public class UserRegistrationController {
         parameter = IokUtil.buildRequestParameter(request);
 
         try {
-            parameter.put("certNum", request.getParameter("userCertId") ); // 주의!: certNum과 userCertNum이 다름
-            parameter.remove("userCertId");
-            result = mobileUserCertNoController.reqUserCertNumber(parameter, null);
+            result = mobileUserController.registerMember(parameter, null);
         } catch (Exception e) {
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity
@@ -348,7 +346,7 @@ public class UserRegistrationController {
 
         resFlag = IokUtil.getResFlag(result);
         if (!resFlag) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(IokUtil.lowerMsgKeyName(result));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(IokUtil.lowerMsgKeyName(result));
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(IokUtil.lowerMsgKeyName(result));
