@@ -1,11 +1,10 @@
-package com.benitware.framework.xplaform.domain;
+package com.kolonbenit.benitware.framework.xplaform.domain;
 
 
 import java.sql.Clob;
 
+import com.kolonbenit.benitware.framework.util.ClobUtil;
 import org.apache.commons.collections.FastHashMap;
-
-import com.benitware.framework.util.ClobUtil;
 
 /**
  * @description resultset 결과를 Map에 처리하기 위한 클래스

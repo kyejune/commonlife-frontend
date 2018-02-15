@@ -10,6 +10,7 @@ import com.kolon.comlife.users.service.RegistrationService;
 import com.kolon.common.http.HttpRequestFailedException;
 import com.kolon.common.http.HttpGetRequester;
 import com.kolon.common.prop.ServicePropertiesMap;
+import com.kolon.common.util.IokUtil;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -325,7 +326,7 @@ public class RegistrationController {
                     .body( new SimpleErrorInfo((String)result.get("msg")));
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( lowerMsgKeyName(result) );
+        return ResponseEntity.status( HttpStatus.OK ).body( IokUtil.lowerMsgKeyName(result) );
     }
 
 
@@ -377,10 +378,10 @@ public class RegistrationController {
         }
 
         if( !(boolean)result.get("resFlag") ) {
-            return ResponseEntity.status( HttpStatus.CONFLICT ).body( lowerMsgKeyName(result) );
+            return ResponseEntity.status( HttpStatus.CONFLICT ).body( IokUtil.lowerMsgKeyName(result) );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( lowerMsgKeyName(result) );
+        return ResponseEntity.status( HttpStatus.OK ).body( IokUtil.lowerMsgKeyName(result) );
     }
 
 
@@ -493,10 +494,10 @@ public class RegistrationController {
         }
 
         if( !(boolean)result.get("resFlag")) {
-            return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( lowerMsgKeyName(result) );
+            return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( IokUtil.lowerMsgKeyName(result) );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( lowerMsgKeyName(result) );
+        return ResponseEntity.status( HttpStatus.OK ).body( IokUtil.lowerMsgKeyName(result) );
     }
 
 
@@ -557,19 +558,10 @@ public class RegistrationController {
         }
 
         if( !(boolean)result.get("resFlag")) {
-            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( lowerMsgKeyName(result) );
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( IokUtil.lowerMsgKeyName(result) );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( lowerMsgKeyName(result) );
+        return ResponseEntity.status( HttpStatus.OK ).body( IokUtil.lowerMsgKeyName(result) );
     }
 
-    /**
-     * 읿부 IOK의 반환 결과의 Key 값이 'MSG'와 같이 대문자로 반환 됨
-     * 일관성 유지를 위해 따라서, 소문자로 변경함
-     */
-    private Map lowerMsgKeyName(Map map) {
-        map.put("msg", map.get("MSG"));
-        map.remove("MSG");
-        return map;
-    }
 }

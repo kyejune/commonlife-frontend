@@ -8,7 +8,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-public class JedisHelpers {
+public class JedisHelper {
 
     // CommonLife 개발
 //    protected static final String REDIS_HOST = "cl-dev-redis.sktb1d.0001.apn2.cache.amazonaws.com";
@@ -32,7 +32,7 @@ public class JedisHelpers {
     /**
      * 제디스 연결풀 생성을 위한 도우미 클래스 내부 생성자. 싱글톤 패턴이므로 외부에서 호출할 수 없다.
      */
-    private JedisHelpers() {
+    private JedisHelper() {
         GenericObjectPoolConfig config = new GenericObjectPoolConfig();
         
         // PRD
@@ -50,7 +50,7 @@ public class JedisHelpers {
      */
     private static class LazyHolder {
         @SuppressWarnings("synthetic-access")
-        private static final JedisHelpers INSTANCE = new JedisHelpers();
+        private static final JedisHelper INSTANCE = new JedisHelper();
     }
 
     /**
@@ -59,7 +59,7 @@ public class JedisHelpers {
      * @return 제디스 도우미객체
      */
     @SuppressWarnings("synthetic-access")
-    public static JedisHelpers getInstance() {
+    public static JedisHelper getInstance() {
         return LazyHolder.INSTANCE;
     }
 

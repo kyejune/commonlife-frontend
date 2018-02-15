@@ -1,7 +1,7 @@
 package com.kolon.common.view;
 
 import com.kolon.common.prop.SystemPropertiesMap;
-import com.kolon.common.util.FileUtils;
+import com.kolon.common.util.FileUtil;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -104,7 +104,7 @@ public class FileDownView extends AbstractView {
                         new File(filePath + File.separator + uniqFileNM).delete();
                     }
                     if ((folderDelete != null) && ("Y".equalsIgnoreCase(folderDelete))) {
-                        FileUtils.deleteDirectory(new File(filePath));
+                        FileUtil.deleteDirectory(new File(filePath));
                     }
                     return;
                 }
@@ -125,7 +125,7 @@ public class FileDownView extends AbstractView {
                     new File(filePath + File.separator + uniqFileNM).delete();
                 }
                 if ((folderDelete != null) && ("Y".equalsIgnoreCase(folderDelete))) {
-                    FileUtils.deleteDirectory(new File(filePath));
+                    FileUtil.deleteDirectory(new File(filePath));
                 }
                 return;
             }
@@ -191,7 +191,7 @@ public class FileDownView extends AbstractView {
                 new File(filePath + File.separator + uniqFileNM).delete();
             }
             if ((folderDelete != null) && ("Y".equalsIgnoreCase(folderDelete))) {
-                FileUtils.deleteDirectory(new File(filePath));
+                FileUtil.deleteDirectory(new File(filePath));
             }
         }
     }

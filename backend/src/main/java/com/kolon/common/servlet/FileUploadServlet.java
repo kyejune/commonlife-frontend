@@ -1,9 +1,9 @@
 package com.kolon.common.servlet;
 
 import com.kolon.common.prop.SystemPropertiesMap;
-import com.kolon.common.util.DateUtils;
-import com.kolon.common.util.FileUtils;
-import com.kolon.common.util.WebUtils;
+import com.kolon.common.util.DateUtil;
+import com.kolon.common.util.FileUtil;
+import com.kolon.common.util.WebUtil;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -66,7 +66,7 @@ public class FileUploadServlet
         String uuid = UUID.randomUUID().toString().replaceAll("-", "").toUpperCase();
         String tempPath = SystemPropertiesMap.getInstance().getValue("system.temp.file.path");
         String uploadPath = SystemPropertiesMap.getInstance().getValue("system.storage.file.path");
-        String fileSubPath = DateUtils.getToday().substring(0, 6);
+        String fileSubPath = DateUtil.getToday().substring(0, 6);
         iter = fileItems.iterator();
         int sttsCode = 0;
 
@@ -85,7 +85,7 @@ public class FileUploadServlet
                 String fullFileName = actual.getName();
                 String baseFileName = FilenameUtils.getName(fullFileName);
                 String fileExtn = FilenameUtils.getExtension(fullFileName).toLowerCase();
-                String physicalFileName = FileUtils.getPhysicalFileName() + "." + fileExtn;
+                String physicalFileName = FileUtil.getPhysicalFileName() + "." + fileExtn;
 
                 paramMap.put("contentType", actual.getContentType());
                 paramMap.put("orginlFileNm", baseFileName);
@@ -138,7 +138,7 @@ public class FileUploadServlet
         this.logger.info("## fileUploadServlet While End ");
         Map<String, Object> returnParam = new HashMap();
         returnParam.put("atchFileList", paramList);
-        WebUtils.setAjaxAction(response, sttsCode, returnParam);
+        WebUtil.setAjaxAction(response, sttsCode, returnParam);
     }
 
     private boolean extCheck(String fileExt)

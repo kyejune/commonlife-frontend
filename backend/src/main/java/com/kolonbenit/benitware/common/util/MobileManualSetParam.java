@@ -1,7 +1,7 @@
 package com.kolonbenit.benitware.common.util;
 
-import com.benitware.framework.http.parameter.RequestParameter;
-import com.benitware.framework.xplaform.domain.ResultSetMap;
+import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
+import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;

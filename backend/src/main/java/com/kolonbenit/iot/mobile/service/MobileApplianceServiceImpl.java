@@ -1,14 +1,17 @@
-package com.kolon.comlife.users.service.impl;
+package com.kolonbenit.iot.mobile.service;
 
-import com.benitware.framework.http.parameter.RequestParameter;
-import com.benitware.framework.orm.mybatis.BaseIbatisDao;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.kolon.comlife.users.service.MobileApplianceService;
-import com.kolonbenit.benitware.common.util.httpClient.HttpClientUtil;
-import com.kolonbenit.benitware.common.util.httpClient.SSLHttpClientUril;
+//import java.io.IOException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.Random;
+
+import com.kolonbenit.benitware.framework.orm.mybatis.BaseIbatisDao;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
@@ -19,8 +22,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.URLEncoder;
-import java.util.*;
+import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.kolonbenit.benitware.common.util.httpClient.HttpClientUtil;
+import com.kolonbenit.benitware.common.util.httpClient.SSLHttpClientUril;
+
+//import io.netty.util.internal.StringUtil;
 
 @Service
 public class MobileApplianceServiceImpl extends BaseIbatisDao<Object, Object> implements MobileApplianceService {
@@ -30,8 +41,7 @@ public class MobileApplianceServiceImpl extends BaseIbatisDao<Object, Object> im
 	 */
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Autowired
-    @Qualifier("messagesProps")
+	@Autowired @Qualifier("messagesProps")
 	private Properties props;
 	
 	private static String NAMESPACE = "mobile.ApplianceMapper.";

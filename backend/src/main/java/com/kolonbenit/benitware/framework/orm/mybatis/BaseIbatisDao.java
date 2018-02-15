@@ -1,4 +1,4 @@
-package com.benitware.framework.orm.mybatis;
+package com.kolonbenit.benitware.framework.orm.mybatis;
 
 import java.util.List;
 import javax.annotation.Resource;

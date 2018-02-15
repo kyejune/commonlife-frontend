@@ -16,8 +16,8 @@ package com.kolonbenit.benitware.common.util;
  * limitations under the License.
  */
 
-import com.benitware.framework.http.parameter.RequestParameter;
-import com.benitware.framework.xplaform.domain.ResultSetMap;
+import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
+import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
 

@@ -15,7 +15,7 @@
  */
 package com.kolonbenit.benitware.common.util.uuid;
 
-import com.benitware.framework.exception.FrameworkException;
+import com.kolonbenit.benitware.framework.exception.FrameworkException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;

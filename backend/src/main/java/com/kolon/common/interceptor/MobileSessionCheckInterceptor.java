@@ -7,26 +7,24 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.benitware.framework.xplaform.domain.ResultSetMap;
-import com.kolon.common.util.JwtUtils;
+import com.kolon.common.helper.JedisHelper;
+import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
 import com.kolonbenit.benitware.common.util.JwtUtil;
 import com.kolonbenit.benitware.common.util.StringUtil;
-import com.kolonbenit.benitware.common.util.mcache.JedisHelper;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-// 	import com.benitware.framework.http.parameter.RequestParameter.java;
-//	import com.benitware.framework.xplaform.domain.ResultSetMap;
+// 	import RequestParameter.java;
+//	import ResultSetMap;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 // 	import com.iot.mobile.service.MobileDeviceService;
 //	import com.iot.mobile.service.MobileUserService;
 //	import com.kolonbenit.benitware.common.util.MobileSessionUtils;
-//	import com.kolonbenit.benitware.common.util.StringUtils;
-import com.kolon.common.helper.JedisHelpers;
+//	import com.kolonbenit.benitware.common.util.StringUtil;
 
 import redis.clients.jedis.Jedis;
 
@@ -38,7 +36,7 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 
 
 	private final Logger logger = LoggerFactory.getLogger(MobileSessionCheckInterceptor.class);
-	private static final JedisHelpers helper = JedisHelpers.getInstance();
+	private static final JedisHelper helper = JedisHelper.getInstance();
 
 
 

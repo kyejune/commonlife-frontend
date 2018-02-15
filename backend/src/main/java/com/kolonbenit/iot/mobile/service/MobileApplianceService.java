@@ -1,10 +1,10 @@
-package com.kolon.comlife.users.service;
-
-import com.benitware.framework.http.parameter.RequestParameter;
+package com.kolonbenit.iot.mobile.service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 
 public interface MobileApplianceService {
 

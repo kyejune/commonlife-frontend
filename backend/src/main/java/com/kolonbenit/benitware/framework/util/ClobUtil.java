@@ -1,4 +1,4 @@
-package com.benitware.framework.util;
+package com.kolonbenit.benitware.framework.util;
 
 import java.io.Reader;
 import java.io.Writer;

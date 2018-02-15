@@ -15,16 +15,16 @@ public class DateUtil {
      * 증감한다. 년, 월, 일은 가감할 수를 의미하며, 음수를 입력할 경우 감한다.</p>
      * 
      * <pre>
-     * DateUtils.addYearMonthDay("19810828", 0, 0, 19)  = "19810916"
-     * DateUtils.addYearMonthDay("20060228", 0, 0, -10) = "20060218"
-     * DateUtils.addYearMonthDay("20060228", 0, 0, 10)  = "20060310"
-     * DateUtils.addYearMonthDay("20060228", 0, 0, 32)  = "20060401"
-     * DateUtils.addYearMonthDay("20050331", 0, -1, 0)  = "20050228"
-     * DateUtils.addYearMonthDay("20050301", 0, 2, 30)  = "20050531"
-     * DateUtils.addYearMonthDay("20050301", 1, 2, 30)  = "20060531"
-     * DateUtils.addYearMonthDay("20040301", 2, 0, 0)   = "20060301"
-     * DateUtils.addYearMonthDay("20040229", 2, 0, 0)   = "20060228"
-     * DateUtils.addYearMonthDay("20040229", 2, 0, 1)   = "20060301"
+     * DateUtil.addYearMonthDay("19810828", 0, 0, 19)  = "19810916"
+     * DateUtil.addYearMonthDay("20060228", 0, 0, -10) = "20060218"
+     * DateUtil.addYearMonthDay("20060228", 0, 0, 10)  = "20060310"
+     * DateUtil.addYearMonthDay("20060228", 0, 0, 32)  = "20060401"
+     * DateUtil.addYearMonthDay("20050331", 0, -1, 0)  = "20050228"
+     * DateUtil.addYearMonthDay("20050301", 0, 2, 30)  = "20050531"
+     * DateUtil.addYearMonthDay("20050301", 1, 2, 30)  = "20060531"
+     * DateUtil.addYearMonthDay("20040301", 2, 0, 0)   = "20060301"
+     * DateUtil.addYearMonthDay("20040229", 2, 0, 0)   = "20060228"
+     * DateUtil.addYearMonthDay("20040229", 2, 0, 1)   = "20060301"
      * </pre>
      * 
      * @param  dateStr 날짜 문자열(yyyyMMdd, yyyy-MM-dd의 형식)
@@ -61,11 +61,11 @@ public class DateUtil {
      * 증감한다. <code>year</code>는 가감할 수를 의미하며, 음수를 입력할 경우 감한다.</p>
      * 
      * <pre>
-     * DateUtils.addYear("20000201", 62)  = "20620201"
-     * DateUtils.addYear("20620201", -62) = "20000201"
-     * DateUtils.addYear("20040229", 2)   = "20060228"
-     * DateUtils.addYear("20060228", -2)  = "20040228"
-     * DateUtils.addYear("19000101", 200) = "21000101"
+     * DateUtil.addYear("20000201", 62)  = "20620201"
+     * DateUtil.addYear("20620201", -62) = "20000201"
+     * DateUtil.addYear("20040229", 2)   = "20060228"
+     * DateUtil.addYear("20060228", -2)  = "20040228"
+     * DateUtil.addYear("19000101", 200) = "21000101"
      * </pre>
      * 
      * @param  dateStr 날짜 문자열(yyyyMMdd, yyyy-MM-dd의 형식)
@@ -83,12 +83,12 @@ public class DateUtil {
      * 증감한다. <code>month</code>는 가감할 수를 의미하며, 음수를 입력할 경우 감한다.</p>
      * 
      * <pre>
-     * DateUtils.addMonth("20010201", 12)  = "20020201"
-     * DateUtils.addMonth("19800229", 12)  = "19810228"
-     * DateUtils.addMonth("20040229", 12)  = "20050228"
-     * DateUtils.addMonth("20050228", -12) = "20040228"
-     * DateUtils.addMonth("20060131", 1)   = "20060228"
-     * DateUtils.addMonth("20060228", -1)  = "20060128"
+     * DateUtil.addMonth("20010201", 12)  = "20020201"
+     * DateUtil.addMonth("19800229", 12)  = "19810228"
+     * DateUtil.addMonth("20040229", 12)  = "20050228"
+     * DateUtil.addMonth("20050228", -12) = "20040228"
+     * DateUtil.addMonth("20060131", 1)   = "20060228"
+     * DateUtil.addMonth("20060228", -1)  = "20060128"
      * </pre>
      * 
      * @param  dateStr 날짜 문자열(yyyyMMdd, yyyy-MM-dd의 형식)
@@ -109,12 +109,12 @@ public class DateUtil {
      * 있기 때문에 추가된 메서드이다.</p>
      * 
      * <pre>
-     * DateUtils.addDay("19991201", 62) = "20000201"
-     * DateUtils.addDay("20000201", -62) = "19991201"
-     * DateUtils.addDay("20050831", 3) = "20050903"
-     * DateUtils.addDay("20050831", 3) = "20050903"
+     * DateUtil.addDay("19991201", 62) = "20000201"
+     * DateUtil.addDay("20000201", -62) = "19991201"
+     * DateUtil.addDay("20050831", 3) = "20050903"
+     * DateUtil.addDay("20050831", 3) = "20050903"
      * // 2006년 6월 31일은 실제로 존재하지 않는 날짜이다 -> 20060701로 간주된다
-     * DateUtils.addDay("20060631", 1) = "20060702"
+     * DateUtil.addDay("20060631", 1) = "20060702"
      * </pre>
      * 
      * @param  dateStr 날짜 문자열(yyyyMMdd, yyyy-MM-dd의 형식)
@@ -134,11 +134,11 @@ public class DateUtil {
      * 음수를 반환한다. 동일한 경우에는 0을 반환한다.</p>
      * 
      * <pre>
-     * DateUtils.getDaysDiff("20060228","20060310") = 10
-     * DateUtils.getDaysDiff("20060101","20070101") = 365
-     * DateUtils.getDaysDiff("19990228","19990131") = -28
-     * DateUtils.getDaysDiff("20060801","20060802") = 1
-     * DateUtils.getDaysDiff("20060801","20060801") = 0
+     * DateUtil.getDaysDiff("20060228","20060310") = 10
+     * DateUtil.getDaysDiff("20060101","20070101") = 365
+     * DateUtil.getDaysDiff("19990228","19990131") = -28
+     * DateUtil.getDaysDiff("20060801","20060802") = 1
+     * DateUtil.getDaysDiff("20060801","20060801") = 0
      * </pre>
      * 
      * @param  dateStr1 날짜 문자열(yyyyMMdd, yyyy-MM-dd의 형식)
@@ -174,13 +174,13 @@ public class DateUtil {
      * <p>yyyyMMdd 혹은 yyyy-MM-dd 형식의 날짜 문자열을 입력 받아 유효한 날짜인지 검사.</p>
      * 
      * <pre>
-     * DateUtils.checkDate("1999-02-35") = false
-     * DateUtils.checkDate("2000-13-31") = false
-     * DateUtils.checkDate("2006-11-31") = false
-     * DateUtils.checkDate("2006-2-28")  = false
-     * DateUtils.checkDate("2006-2-8")   = false
-     * DateUtils.checkDate("20060228")   = true
-     * DateUtils.checkDate("2006-02-28") = true
+     * DateUtil.checkDate("1999-02-35") = false
+     * DateUtil.checkDate("2000-13-31") = false
+     * DateUtil.checkDate("2006-11-31") = false
+     * DateUtil.checkDate("2006-2-28")  = false
+     * DateUtil.checkDate("2006-2-8")   = false
+     * DateUtil.checkDate("20060228")   = true
+     * DateUtil.checkDate("2006-02-28") = true
      * </pre>
      * 
      * @param  dateStr 날짜 문자열(yyyyMMdd, yyyy-MM-dd의 형식)
@@ -346,9 +346,9 @@ public class DateUtil {
       * <p>입력받은 연도가 윤년인지 아닌지 검사한다.</p>
       * 
       * <pre>
-      * DateUtils.isLeapYear(2004) = false
-      * DateUtils.isLeapYear(2005) = true
-      * DateUtils.isLeapYear(2006) = true
+      * DateUtil.isLeapYear(2004) = false
+      * DateUtil.isLeapYear(2005) = true
+      * DateUtil.isLeapYear(2006) = true
       * </pre>
       * 
       * @param  year 연도

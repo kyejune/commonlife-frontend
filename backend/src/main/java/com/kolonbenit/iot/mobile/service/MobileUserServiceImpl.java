@@ -1,27 +1,34 @@
-package com.kolon.comlife.users.service.impl;
+package com.kolonbenit.iot.mobile.service;
 
-import com.benitware.framework.http.parameter.RequestParameter;
-import com.benitware.framework.orm.mybatis.BaseIbatisDao;
-import com.benitware.framework.xplaform.domain.ResultSetMap;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.kolon.comlife.users.service.MobileUserService;
-import com.kolonbenit.benitware.common.util.CommandUtil;
-import com.kolonbenit.benitware.common.util.FormattingUtil;
-import com.kolonbenit.benitware.common.util.JwtUtil;
-import com.kolonbenit.benitware.common.util.StringUtil;
-import com.kolonbenit.benitware.common.util.cipher.AESCipher;
-import com.kolonbenit.benitware.common.util.cipher.HashFunctionCipherUtil;
-import com.kolon.common.helper.JedisHelpers; 			// import com.kolonbenit.benitware.common.util.mcache.JedisHelpers;
-import com.kolonbenit.benitware.common.util.push.FcmPushUtil;
-import com.kolonbenit.benitware.common.util.token.KeyMaker;
-import com.kolonbenit.benitware.common.util.token.TokenKey;
+//import java.io.BufferedReader;
+//import java.io.IOException;
+//import java.io.InputStream;
+//import java.io.InputStreamReader;
+//import java.net.MalformedURLException;
+//import java.net.URL;
+//import java.net.URLConnection;
+//import java.net.URLEncoder;
+import java.text.MessageFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TimeZone;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
 import org.apache.commons.lang.time.DateUtils;
+//import org.apache.poi.ss.formula.functions.Index;
+//import org.jdom.Document;
+//import org.jdom.Element;
+//import org.jdom.input.SAXBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +37,39 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import redis.clients.jedis.Jedis;
 
-import javax.servlet.http.HttpServletRequest;
-import java.text.MessageFormat;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
+import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
+import com.kolonbenit.benitware.framework.orm.mybatis.BaseIbatisDao;
+import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
+//import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 //import com.iot.mobile.cvnet.ImageMovie;
-//import iot.iot.netty.client.cvnet.telegram.image.vo.ImageMovieRes;
+import com.kolonbenit.benitware.common.util.CommandUtil;
+import com.kolonbenit.benitware.common.util.FormattingUtil;
+import com.kolonbenit.benitware.common.util.JwtUtil;
+//import com.kolonbenit.benitware.common.util.MobileSessionUtils;
+import com.kolonbenit.benitware.common.util.cipher.AESCipher;
+import com.kolonbenit.benitware.common.util.cipher.HashFunctionCipherUtil;
+//import com.kolonbenit.benitware.common.util.httpClient.HttpClientUtil;
+import com.kolonbenit.benitware.common.util.push.FcmPushUtil;
+//import com.kolonbenit.benitware.common.util.xml.XstreamConverterUtil;
 
-@Service("mobileUserService")
+//import iot.iot.netty.client.cvnet.telegram.image.vo.ImageMovieRes;
+//import com.kolonbenit.benitware.common.util.mcache.JedisHelper;
+//import com.kolonbenit.benitware.common.util.JwtUtil;
+import redis.clients.jedis.Jedis;
+import com.kolonbenit.benitware.common.util.token.KeyMaker;
+import com.kolonbenit.benitware.common.util.token.TokenKey;
+import com.kolonbenit.benitware.common.util.StringUtil;
+import com.kolonbenit.benitware.common.util.httpClient.HttpClientUtil;
+
+import redis.clients.jedis.Jedis;
+import com.kolon.common.helper.JedisHelper;
+
+@Service
 public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> implements MobileUserService {
 
 	/**
@@ -48,8 +77,7 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 	 */
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 
-	@Autowired
-    @Qualifier("messagesProps")
+	@Autowired @Qualifier("messagesProps")
 	private Properties props;
 
 	// cipher keydata
@@ -80,7 +108,7 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 	// 개발
 //	private static String PARTNER_URL = "dev-partner.smartiok.com";
 
-	private static final JedisHelpers helper = JedisHelpers.getInstance();
+	private static final JedisHelper helper = JedisHelper.getInstance();
 	
 	
 
@@ -98,8 +126,7 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 		
 		HashFunctionCipherUtil hf = new HashFunctionCipherUtil();
 		AESCipher ac = new AESCipher();
-
-		logger.debug(">>>> parameter.getString(\"userPw\") >>>> " + parameter.getString("userPw"));
+		
 		String strUserPw = parameter.getString("userPw").replaceAll(" ", "+");
 		//String desResult = AESCipher.decodeAES(strUserPw, keyData);
 		parameter.put("userPw", strUserPw);
@@ -901,7 +928,7 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 		return resMap;
 	}
 
-	@Transactional(propagation= Propagation.REQUIRED, rollbackFor={Exception.class})
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor={Exception.class})
 	@Override
 	public Map<String, Object> registerMember(RequestParameter parameter) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();

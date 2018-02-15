@@ -93,11 +93,11 @@ public class StringUtil {
      * </p>
      * 
      * <pre>
-     *  StringUtils.isEmpty(null)      = true
-     *  StringUtils.isEmpty("")        = true
-     *  StringUtils.isEmpty(" ")       = false
-     *  StringUtils.isEmpty("bob")     = false
-     *  StringUtils.isEmpty("  bob  ") = false
+     *  StringUtil.isEmpty(null)      = true
+     *  StringUtil.isEmpty("")        = true
+     *  StringUtil.isEmpty(" ")       = false
+     *  StringUtil.isEmpty("bob")     = false
+     *  StringUtil.isEmpty("  bob  ") = false
      * </pre>
      * 
      * @param str - 체크 대상 스트링오브젝트이며 null을 허용함
@@ -112,10 +112,10 @@ public class StringUtil {
      * <p>기준 문자열에 포함된 모든 대상 문자(char)를 제거한다.</p>
      *
      * <pre>
-     * StringUtils.remove(null, *)       = null
-     * StringUtils.remove("", *)         = ""
-     * StringUtils.remove("queued", 'u') = "qeed"
-     * StringUtils.remove("queued", 'z') = "queued"
+     * StringUtil.remove(null, *)       = null
+     * StringUtil.remove("", *)         = ""
+     * StringUtil.remove("queued", 'u') = "qeed"
+     * StringUtil.remove("queued", 'z') = "queued"
      * </pre>
      *
      * @param str  입력받는 기준 문자열
@@ -140,9 +140,9 @@ public class StringUtil {
      * <p>문자열 내부의 콤마 character(,)를 모두 제거한다.</p>
      *
      * <pre>
-     * StringUtils.removeCommaChar(null)       = null
-     * StringUtils.removeCommaChar("")         = ""
-     * StringUtils.removeCommaChar("asdfg,qweqe") = "asdfgqweqe"
+     * StringUtil.removeCommaChar(null)       = null
+     * StringUtil.removeCommaChar("")         = ""
+     * StringUtil.removeCommaChar("asdfg,qweqe") = "asdfgqweqe"
      * </pre>
      *
      * @param str 입력받는 기준 문자열
@@ -157,9 +157,9 @@ public class StringUtil {
      * <p>문자열 내부의 마이너스 character(-)를 모두 제거한다.</p>
      *
      * <pre>
-     * StringUtils.removeMinusChar(null)       = null
-     * StringUtils.removeMinusChar("")         = ""
-     * StringUtils.removeMinusChar("a-sdfg-qweqe") = "asdfgqweqe"
+     * StringUtil.removeMinusChar(null)       = null
+     * StringUtil.removeMinusChar("")         = ""
+     * StringUtil.removeMinusChar("a-sdfg-qweqe") = "asdfgqweqe"
      * </pre>
      *
      * @param str  입력받는 기준 문자열
@@ -250,13 +250,13 @@ public class StringUtil {
      * <p>입력값 중 <code>null</code>이 있을 경우 <code>-1</code>을 반환.</p>
      *
      * <pre>
-     * StringUtils.indexOf(null, *)          = -1
-     * StringUtils.indexOf(*, null)          = -1
-     * StringUtils.indexOf("", "")           = 0
-     * StringUtils.indexOf("aabaabaa", "a")  = 0
-     * StringUtils.indexOf("aabaabaa", "b")  = 2
-     * StringUtils.indexOf("aabaabaa", "ab") = 1
-     * StringUtils.indexOf("aabaabaa", "")   = 0
+     * StringUtil.indexOf(null, *)          = -1
+     * StringUtil.indexOf(*, null)          = -1
+     * StringUtil.indexOf("", "")           = 0
+     * StringUtil.indexOf("aabaabaa", "a")  = 0
+     * StringUtil.indexOf("aabaabaa", "b")  = 2
+     * StringUtil.indexOf("aabaabaa", "ab") = 1
+     * StringUtil.indexOf("aabaabaa", "")   = 0
      * </pre>
      *
      * @param str  검색 문자열
@@ -278,13 +278,13 @@ public class StringUtil {
      * </p>
      * 
      * <pre>
-     * StringUtils.decode(null, null, "foo", "bar")= "foo"
-     * StringUtils.decode("", null, "foo", "bar") = "bar"
-     * StringUtils.decode(null, "", "foo", "bar") = "bar"
-     * StringUtils.decode("하이", "하이", null, "bar") = null
-     * StringUtils.decode("하이", "하이  ", "foo", null) = null
-     * StringUtils.decode("하이", "하이", "foo", "bar") = "foo"
-     * StringUtils.decode("하이", "하이  ", "foo", "bar") = "bar"
+     * StringUtil.decode(null, null, "foo", "bar")= "foo"
+     * StringUtil.decode("", null, "foo", "bar") = "bar"
+     * StringUtil.decode(null, "", "foo", "bar") = "bar"
+     * StringUtil.decode("하이", "하이", null, "bar") = null
+     * StringUtil.decode("하이", "하이  ", "foo", null) = null
+     * StringUtil.decode("하이", "하이", "foo", "bar") = "foo"
+     * StringUtil.decode("하이", "하이  ", "foo", "bar") = "bar"
      * </pre>
      * 
      * @param sourceStr 비교할 문자열
@@ -317,12 +317,12 @@ public class StringUtil {
      * </p>
      * 
      * <pre>
-     * StringUtils.decode(null, null, "foo") = "foo"
-     * StringUtils.decode("", null, "foo") = ""
-     * StringUtils.decode(null, "", "foo") = null
-     * StringUtils.decode("하이", "하이", "foo") = "foo"
-     * StringUtils.decode("하이", "하이 ", "foo") = "하이"
-     * StringUtils.decode("하이", "바이", "foo") = "하이"
+     * StringUtil.decode(null, null, "foo") = "foo"
+     * StringUtil.decode("", null, "foo") = ""
+     * StringUtil.decode(null, "", "foo") = null
+     * StringUtil.decode("하이", "하이", "foo") = "foo"
+     * StringUtil.decode("하이", "하이 ", "foo") = "하이"
+     * StringUtil.decode("하이", "바이", "foo") = "하이"
      * </pre>
      * 
      * @param sourceStr 비교할 문자열
@@ -423,10 +423,10 @@ public class StringUtil {
      * 모든 공백문자를 제거한다.</p>
      *
      * <pre>
-     * StringUtils.removeWhitespace(null)         = null
-     * StringUtils.removeWhitespace("")           = ""
-     * StringUtils.removeWhitespace("abc")        = "abc"
-     * StringUtils.removeWhitespace("   ab  c  ") = "abc"
+     * StringUtil.removeWhitespace(null)         = null
+     * StringUtil.removeWhitespace("")           = ""
+     * StringUtil.removeWhitespace("abc")        = "abc"
+     * StringUtil.removeWhitespace("   ab  c  ") = "abc"
      * </pre>
      *
      * @param str  공백문자가 제거도어야 할 문자열
@@ -537,9 +537,9 @@ public class StringUtil {
      * <p>{@link String#toLowerCase()}를 이용하여 소문자로 변환한다.</p>
      *
      * <pre>
-     * StringUtils.lowerCase(null)  = null
-     * StringUtils.lowerCase("")    = ""
-     * StringUtils.lowerCase("aBc") = "abc"
+     * StringUtil.lowerCase(null)  = null
+     * StringUtil.lowerCase("")    = ""
+     * StringUtil.lowerCase("aBc") = "abc"
      * </pre>
      *
      * @param str 소문자로 변환되어야 할 문자열
@@ -557,9 +557,9 @@ public class StringUtil {
      * <p>{@link String#toUpperCase()}를 이용하여 대문자로 변환한다.</p>
      *
      * <pre>
-     * StringUtils.upperCase(null)  = null
-     * StringUtils.upperCase("")    = ""
-     * StringUtils.upperCase("aBc") = "ABC"
+     * StringUtil.upperCase(null)  = null
+     * StringUtil.upperCase("")    = ""
+     * StringUtil.upperCase("aBc") = "ABC"
      * </pre>
      *
      * @param str 대문자로 변환되어야 할 문자열
@@ -577,14 +577,14 @@ public class StringUtil {
      * <p>입력된 String의 앞쪽에서 두번째 인자로 전달된 문자(stripChars)를 모두 제거한다.</p>
      *
      * <pre>
-     * StringUtils.stripStart(null, *)          = null
-     * StringUtils.stripStart("", *)            = ""
-     * StringUtils.stripStart("abc", "")        = "abc"
-     * StringUtils.stripStart("abc", null)      = "abc"
-     * StringUtils.stripStart("  abc", null)    = "abc"
-     * StringUtils.stripStart("abc  ", null)    = "abc  "
-     * StringUtils.stripStart(" abc ", null)    = "abc "
-     * StringUtils.stripStart("yxabc  ", "xyz") = "abc  "
+     * StringUtil.stripStart(null, *)          = null
+     * StringUtil.stripStart("", *)            = ""
+     * StringUtil.stripStart("abc", "")        = "abc"
+     * StringUtil.stripStart("abc", null)      = "abc"
+     * StringUtil.stripStart("  abc", null)    = "abc"
+     * StringUtil.stripStart("abc  ", null)    = "abc  "
+     * StringUtil.stripStart(" abc ", null)    = "abc "
+     * StringUtil.stripStart("yxabc  ", "xyz") = "abc  "
      * </pre>
      *
      * @param str 지정된 문자가 제거되어야 할 문자열
@@ -617,14 +617,14 @@ public class StringUtil {
      * <p>입력된 String의 뒤쪽에서 두번째 인자로 전달된 문자(stripChars)를 모두 제거한다.</p>
      *
      * <pre>
-     * StringUtils.stripEnd(null, *)          = null
-     * StringUtils.stripEnd("", *)            = ""
-     * StringUtils.stripEnd("abc", "")        = "abc"
-     * StringUtils.stripEnd("abc", null)      = "abc"
-     * StringUtils.stripEnd("  abc", null)    = "  abc"
-     * StringUtils.stripEnd("abc  ", null)    = "abc"
-     * StringUtils.stripEnd(" abc ", null)    = " abc"
-     * StringUtils.stripEnd("  abcyx", "xyz") = "  abc"
+     * StringUtil.stripEnd(null, *)          = null
+     * StringUtil.stripEnd("", *)            = ""
+     * StringUtil.stripEnd("abc", "")        = "abc"
+     * StringUtil.stripEnd("abc", null)      = "abc"
+     * StringUtil.stripEnd("  abc", null)    = "  abc"
+     * StringUtil.stripEnd("abc  ", null)    = "abc"
+     * StringUtil.stripEnd(" abc ", null)    = " abc"
+     * StringUtil.stripEnd("  abcyx", "xyz") = "  abc"
      * </pre>
      *
      * @param str 지정된 문자가 제거되어야 할 문자열
@@ -656,13 +656,13 @@ public class StringUtil {
      * <p>입력된 String의 앞, 뒤에서 두번째 인자로 전달된 문자(stripChars)를 모두 제거한다.</p>
      * 
      * <pre>
-     * StringUtils.strip(null, *)          = null
-     * StringUtils.strip("", *)            = ""
-     * StringUtils.strip("abc", null)      = "abc"
-     * StringUtils.strip("  abc", null)    = "abc"
-     * StringUtils.strip("abc  ", null)    = "abc"
-     * StringUtils.strip(" abc ", null)    = "abc"
-     * StringUtils.strip("  abcyx", "xyz") = "  abc"
+     * StringUtil.strip(null, *)          = null
+     * StringUtil.strip("", *)            = ""
+     * StringUtil.strip("abc", null)      = "abc"
+     * StringUtil.strip("  abc", null)    = "abc"
+     * StringUtil.strip("abc  ", null)    = "abc"
+     * StringUtil.strip(" abc ", null)    = "abc"
+     * StringUtil.strip("  abcyx", "xyz") = "  abc"
      * </pre>
      *
      * @param str 지정된 문자가 제거되어야 할 문자열

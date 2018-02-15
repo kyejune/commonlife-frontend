@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class WebUtils extends org.springframework.web.util.WebUtils
+public class WebUtil extends org.springframework.web.util.WebUtils
 {
     public static final String ACTION_MESSAGE = "actionMessage";
     public static final String ACTION_STATUS_PARAM = "actionStatus";

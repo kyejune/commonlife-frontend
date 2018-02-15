@@ -1,7 +1,7 @@
 package com.kolon.common.pagination;
 
 import com.kolon.common.model.BaseInfo;
-import com.kolon.common.util.NumberUtils;
+import com.kolon.common.util.NumberUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -53,16 +53,16 @@ public class PaginationInfoExtension<T>
         this.defaultPageSize = defaultPageSize;
 
         this.paramMap = paramMap;
-        setCurrentPageNo(NumberUtils.objToInt(paramMap.get("pageIndex")));
-        if (NumberUtils.objToInt(paramMap.get("recordCountPerPage")) <= 0) {
+        setCurrentPageNo(NumberUtil.objToInt(paramMap.get("pageIndex")));
+        if (NumberUtil.objToInt(paramMap.get("recordCountPerPage")) <= 0) {
             setRecordCountPerPage(this.defaultRecordCountPerPage);
         } else {
-            setRecordCountPerPage(NumberUtils.objToInt(paramMap.get("recordCountPerPage")));
+            setRecordCountPerPage(NumberUtil.objToInt(paramMap.get("recordCountPerPage")));
         }
-        if (NumberUtils.objToInt(paramMap.get("pageSize")) <= 0) {
+        if (NumberUtil.objToInt(paramMap.get("pageSize")) <= 0) {
             setPageSize(this.defaultPageSize);
         } else {
-            setPageSize(NumberUtils.objToInt(paramMap.get("pageSize")));
+            setPageSize(NumberUtil.objToInt(paramMap.get("pageSize")));
         }
     }
 
@@ -88,10 +88,10 @@ public class PaginationInfoExtension<T>
     {
         this.paramMap.put("firstIndex", Integer.valueOf(getFirstRecordIndex()));
         this.paramMap.put("lastIndex", Integer.valueOf(getLastRecordIndex()));
-        if (NumberUtils.objToInt(this.paramMap.get("recordCountPerPage")) <= 0) {
+        if (NumberUtil.objToInt(this.paramMap.get("recordCountPerPage")) <= 0) {
             this.paramMap.put("recordCountPerPage", Integer.valueOf(this.defaultRecordCountPerPage));
         }
-        if (NumberUtils.objToInt(this.paramMap.get("pageSize")) <= 0) {
+        if (NumberUtil.objToInt(this.paramMap.get("pageSize")) <= 0) {
             this.paramMap.put("pageSize", Integer.valueOf(this.defaultPageSize));
         }
         return this.paramMap;
@@ -112,7 +112,7 @@ public class PaginationInfoExtension<T>
         int totalCnt = 0;
         if ((list != null) &&
                 (list.size() > 0)) {
-            totalCnt = NumberUtils.objToInt(((Map)list.get(0)).get("TOT"));
+            totalCnt = NumberUtil.objToInt(((Map)list.get(0)).get("TOT"));
         }
         super.setTotalRecordCount(totalCnt);
     }

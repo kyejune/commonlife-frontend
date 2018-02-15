@@ -4,8 +4,8 @@
  */
 package com.kolonbenit.benitware.common.util;
 
-import com.benitware.framework.web.context.util.SessionUtils;
-import com.benitware.framework.xplaform.domain.ResultSetMap;
+import com.kolonbenit.benitware.framework.web.context.util.SessionUtils;
+import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

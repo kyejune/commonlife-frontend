@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
 /**
  * Created by agcdDev on 2017-07-07.
  */
-public class StringUtils {
+public class StringUtil {
 
     // 이미지 경로 추출
     public static String convertHtmlimg(String img) {

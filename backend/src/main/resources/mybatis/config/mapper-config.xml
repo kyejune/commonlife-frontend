@@ -9,11 +9,11 @@
     </settings>
 
     <typeAliases>
-        <typeAlias alias="requestParam" type="com.benitware.framework.http.parameter.RequestParameter" />
-        <typeAlias alias="resultSetMap" type="com.benitware.framework.xplaform.domain.ResultSetMap" />
-        <package name="com.benitware" />
-        <package name="com.kolonbenit.benitware.common" />
-        <package name="com.iot" />
-        <package name="com.kolon" />
+        <typeAlias alias="requestParam" type="com.kolonbenit.benitware.framework.http.parameter.RequestParameter" />
+        <typeAlias alias="resultSetMap" type="com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap" />
+        <package name="com.kolon.comlife" />
+        <!-- 패키지 com.kolon.common은 추가하지 마시오 -->
+        <package name="com.kolonbenit.iot" />
+        <!-- 패키지 com.konlonbenit.benitware는 추가하지 마시오 -->
     </typeAliases>
 </configuration>

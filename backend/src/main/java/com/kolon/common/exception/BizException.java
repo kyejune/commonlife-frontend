@@ -1,7 +1,7 @@
 package com.kolon.common.exception;
 
 
-import com.kolon.common.util.DateUtils;
+import com.kolon.common.util.DateUtil;
 
 public class BizException
         extends Exception
@@ -20,25 +20,25 @@ public class BizException
 
     public BizException()
     {
-        this.time = DateUtils.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
+        this.time = DateUtil.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
     }
 
     public BizException(String errId)
     {
-        this.time = DateUtils.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
+        this.time = DateUtil.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
         this.errId = errId;
     }
 
     public BizException(String errId, String errMsg)
     {
-        this.time = DateUtils.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
+        this.time = DateUtil.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
         this.errId = errId;
         this.errMsg = errMsg;
     }
 
     public BizException(String calssName, String methodName, int errCod, String errMsg)
     {
-        this.time = DateUtils.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
+        this.time = DateUtil.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
         this.className = calssName;
         this.methodName = methodName;
         this.errCod = errCod;
@@ -48,14 +48,14 @@ public class BizException
     public BizException(String errId, Exception e)
     {
         super(e);
-        this.time = DateUtils.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
+        this.time = DateUtil.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
         this.errId = errId;
         this.ex = e;
     }
 
     public BizException(String className, String methodName, String errId, String pageURL, Object paramObj)
     {
-        this.time = DateUtils.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
+        this.time = DateUtil.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
         this.className = className;
         this.methodName = methodName;
         this.errId = errId;
@@ -65,7 +65,7 @@ public class BizException
 
     public BizException(String className, String methodName, String errId, String pageURL, String modelKey, Object model)
     {
-        this.time = DateUtils.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
+        this.time = DateUtil.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
         this.className = className;
         this.methodName = methodName;
         this.errId = errId;
@@ -77,7 +77,7 @@ public class BizException
     public BizException(String className, String methodName, String errId, String pageURL, Object paramObj, Exception e)
     {
         super(e);
-        this.time = DateUtils.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
+        this.time = DateUtil.getDateTimeByPattern("yyyy-MM-dd-HH:mm");
         this.className = className;
         this.methodName = methodName;
         this.errId = errId;

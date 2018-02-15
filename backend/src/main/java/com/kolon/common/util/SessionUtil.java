@@ -5,7 +5,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Created by agcdDev on 2017-07-07.
  */
-public class SessionUtilsss {
+public class SessionUtil {
     /**
      * SESSION SET
      * @param session

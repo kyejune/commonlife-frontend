@@ -74,13 +74,13 @@ public class JwtUtil {
 			sEncJwt = builder.sign(Algorithm.HMAC256(secret));
 			
 		} catch (IllegalArgumentException e) {
-			logger.error("JwtUtils IllegalArgumentException Occured.");
+			logger.error("JwtUtil IllegalArgumentException Occured.");
 			e.printStackTrace();
 		} catch (JWTCreationException e) {
-			logger.error("JwtUtils JWTCreationException Occured.");
+			logger.error("JwtUtil JWTCreationException Occured.");
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			logger.error("JwtUtils UnsupportedEncodingException Occured.");
+			logger.error("JwtUtil UnsupportedEncodingException Occured.");
 			e.printStackTrace();
 		}
 
@@ -107,11 +107,11 @@ public class JwtUtil {
 			JWT.decode(sEncJwt);
 			logger.info("<-------- 종료");
 		} catch (JWTDecodeException de) {			
-			logger.error("JwtUtils JWTDecodeException Occured.");
+			logger.error("JwtUtil JWTDecodeException Occured.");
 			de.printStackTrace();
 			return decJwt;
 		} catch (Exception e) {
-			logger.error("JwtUtils Exception Occured. [{}]", e.toString());
+			logger.error("JwtUtil Exception Occured. [{}]", e.toString());
 			e.printStackTrace();
 			return decJwt;
 		}
@@ -122,16 +122,16 @@ public class JwtUtil {
 			JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret)).withIssuer(issuer).build();			
 			decJwt = verifier.verify(sEncJwt);			
 		} catch (IllegalArgumentException e) {
-			logger.error("JwtUtils IllegalArgumentException Occured.");
+			logger.error("JwtUtil IllegalArgumentException Occured.");
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			logger.error("JwtUtils UnsupportedEncodingException Occured.");
+			logger.error("JwtUtil UnsupportedEncodingException Occured.");
 			e.printStackTrace();
 		} catch (JWTVerificationException e) {
-			logger.error("JwtUtils JWTVerificationException Occured.");
+			logger.error("JwtUtil JWTVerificationException Occured.");
 			e.printStackTrace();
 		} catch (Exception e) {
-			logger.error("JwtUtils Exception Occured. [{}]", e.toString());
+			logger.error("JwtUtil Exception Occured. [{}]", e.toString());
 			e.printStackTrace();
 		}
 		
@@ -187,16 +187,16 @@ public class JwtUtil {
 			decJwt = verifier.verify(sEncJwt);
 			
 		} catch (IllegalArgumentException e) {
-			logger.error("JwtUtils IllegalArgumentException Occured.");
+			logger.error("JwtUtil IllegalArgumentException Occured.");
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			logger.error("JwtUtils UnsupportedEncodingException Occured.");
+			logger.error("JwtUtil UnsupportedEncodingException Occured.");
 			e.printStackTrace();
 		} catch (JWTVerificationException e) {
-			logger.error("JwtUtils JWTVerificationException Occured.");
+			logger.error("JwtUtil JWTVerificationException Occured.");
 			e.printStackTrace();
 		} catch (Exception e) {
-			logger.error("JwtUtils Exception Occured. [{}]", e.toString());
+			logger.error("JwtUtil Exception Occured. [{}]", e.toString());
 			e.printStackTrace();
 		}
 		

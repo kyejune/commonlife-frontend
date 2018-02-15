@@ -1,26 +1,35 @@
-package com.kolon.comlife.users.web;
+package com.kolonbenit.iot.mobile.controller;
 
-import com.benitware.framework.http.parameter.RequestParameter;
-import com.benitware.framework.xplaform.domain.ResultSetMap;
-import com.kolon.comlife.users.service.MobileApplianceService;
-import com.kolon.comlife.users.service.MobileUserService;
-import com.kolonbenit.benitware.common.util.MobileSessionUtils;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import com.kolonbenit.iot.mobile.service.MobileApplianceService;
+import com.kolonbenit.iot.mobile.service.MobileUserService;
+import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
+import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
+import com.kolonbenit.benitware.common.util.MobileSessionUtils;
+
+//import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@RequestMapping("/mobile/controller/MobileUserController")
+//@RequestMapping("/mobile/controller/MobileUserController")
+//@Slf4j
 public class MobileUserController {
 
 	/**
@@ -57,8 +66,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "modifyGcmRegInfoIntro.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "modifyGcmRegInfoIntro.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> modifyGcmRegInfoIntro(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
 
@@ -99,25 +108,14 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "mobileUserLogin.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-//	public Map<String, Object> mobileUserLogin(RequestParameter parameter, ModelMap model) throws Exception {
-	public Map<String, Object> mobileUserLogin(HttpServletRequest request) throws Exception {
+//	@RequestMapping(value = "mobileUserLogin.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
+	public Map<String, Object> mobileUserLogin(RequestParameter parameter, ModelMap model) throws Exception {
 
-		RequestParameter parameter = new RequestParameter();
-		parameter.setRequest(request);
-
-		Iterator e = request.getParameterMap().keySet().iterator();
-		while(e.hasNext()) {
-			String key = (String)e.next();
-			logger.debug("Request.Parameter.KEY: " + key + ", VALUE:" + request.getParameter(key));
-			parameter.put(key, request.getParameter(key));
+		if ( !(parameter.containsKey("osType")) ) {
+			parameter.put("osType", "1");
 		}
-//		// 안드로이드/아이폰 체크 코드
-//		if ( !(parameter.containsKey("osType")) ) {
-//			parameter.put("osType", "1");
-//		}
-//
+		
 		
 		//  토큰 발행
 		//  기존 로그인되어 있는 서비스 종료
@@ -197,8 +195,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "mobileUserLoginConfirm.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "mobileUserLoginConfirm.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> mobileUserLoginConfirm(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = mobileUserService.mobileUserLoginConfirm(parameter);
 		return resMap;
@@ -220,8 +218,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "mobileUserTokenUpdate.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "mobileUserTokenUpdate.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> mobileUserTokenUpdate(RequestParameter parameter, ModelMap model, @RequestHeader(value="token") String token ) throws Exception {
 		//logger.info("token -----------> {}", token);
 		parameter.put("token", token);
@@ -245,8 +243,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "mobileUserLoginStatus.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "mobileUserLoginStatus.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> mobileUserLoginStatus(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = mobileUserService.mobileUserLoginStatus(parameter);
 		return resMap;
@@ -265,8 +263,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "mobileUserLogout.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "mobileUserLogout.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> mobileUserLogout(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
 
@@ -319,22 +317,8 @@ public class MobileUserController {
 	 */
 	@RequestMapping(value = "listDongInfo.do", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-//	public Map<String, Object> listDongInfo(RequestParameter parameter, ModelMap model) throws Exception {
-	public Map<String, Object> listDongInfo(HttpServletRequest request) throws Exception {
-	    logger.debug(">>>> " );
-		RequestParameter parameter = new RequestParameter();
-		parameter.setRequest(request);
-
+	public Map<String, Object> listDongInfo(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
-
-		Iterator e = request.getParameterMap().keySet().iterator();
-		while(e.hasNext()) {
-			String key = (String)e.next();
-			logger.debug("Request.Parameter.KEY: " + key + ", VALUE:" + request.getParameter(key));
-			parameter.put(key, request.getParameter(key));
-		}
-
-
 		List<Object> list = mobileUserService.listDongInfo(parameter);
 
 		Map<String, Object> dataMap = new HashMap<>();

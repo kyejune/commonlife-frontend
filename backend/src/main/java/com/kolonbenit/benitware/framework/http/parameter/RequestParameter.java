@@ -1,4 +1,4 @@
-package com.benitware.framework.http.parameter;
+package com.kolonbenit.benitware.framework.http.parameter;
 
 import java.math.BigInteger;
 import java.util.HashMap;

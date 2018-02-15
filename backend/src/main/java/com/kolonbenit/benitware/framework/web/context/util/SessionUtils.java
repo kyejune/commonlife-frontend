@@ -3,7 +3,7 @@
 // (powered by Fernflower decompiler)
 //
 
-package com.benitware.framework.web.context.util;
+package com.kolonbenit.benitware.framework.web.context.util;
 
 import org.springframework.web.context.request.RequestContextHolder;
 

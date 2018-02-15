@@ -1,4 +1,292 @@
 package com.kolon.comlife.users.web;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.kolon.comlife.common.model.SimpleErrorInfo;
+import com.kolon.comlife.common.model.SimpleMsgInfo;
+import com.kolon.common.util.IokUtil;
+import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
+import com.kolonbenit.iot.mobile.controller.MobileUserController;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.print.attribute.standard.Media;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Iterator;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/users/")
 public class UserController {
+    private static final String IOK_HEADER_TOKEN_KEY = "token";
+
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    @Autowired
+    protected MobileUserController mobileUserController;
+
+    /**
+     * @description 중복 로그인을 체크하고 모바일 로그인을 처리한다.
+     * @param request
+     * @return
+     */
+    @GetMapping(
+            value="/login",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity loginUser(HttpServletRequest request) {
+
+        RequestParameter    parameter;
+        Map<String, Object> result;
+        String              retMsg;
+        boolean             resFlag;
+        String              resType;
+
+        parameter = buildRequestParameter(request);
+
+        try {
+            // 1. 기존 다른 기기에서의 로그인 여부 확인
+            result = mobileUserController.mobileUserLoginConfirm( parameter, null );
+            resFlag = IokUtil.getResFlag( result );
+            resType = IokUtil.getResType( result );
+
+            if( !(resFlag) && !(resType.equals(IokUtil.IOK_RES_FLAG_ALREADY_LOGGED_IN_STR)) ) {
+                return ResponseEntity
+                        .status( HttpStatus.UNAUTHORIZED )
+                        .body( new SimpleErrorInfo( IokUtil.getMsg(result) ));
+            }
+
+            // 2. 새롭게 로그인
+            result = mobileUserController.mobileUserLogin( parameter, null );
+            resFlag = IokUtil.getResFlag( result );
+            if( !resFlag ) {
+                return ResponseEntity
+                        .status( HttpStatus.UNAUTHORIZED )
+                        .body( new SimpleErrorInfo( IokUtil.getMsg(result) ));
+            }
+
+            if( resType != null && resType.equals(IokUtil.IOK_RES_FLAG_ALREADY_LOGGED_IN_STR) ) {
+                // (resType: "003" == already logged in other device) ==> 바로 로그인 합니다.
+                retMsg = "로그인에 성공하였습니다. 다른 기기는 자동으로 로그아웃 됩니다.";     // todo: message 옮기기
+            } else {
+                retMsg = "로그인에 성공하였습니다."; // todo: message 옮기기
+            }
+        } catch( Exception e ) {
+            return convertExceptionToResponse( e );
+        }
+
+        result.put("msg", retMsg);
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
+    }
+
+
+    /**
+     * @description  모바일에서 푸시 토큰이 갱신될 경우, DB 업데이트 처리한다.
+     *
+     * Params : gcmRegId, deviceId, osType(선택)
+     * Return :
+     *  200 - 업데이트 성공
+     *  404 - 해당하는 deviceId가 없음
+     *  500 - 기타 실패
+     */
+    @PutMapping(
+            value="/pushToken",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateGcmRegId( HttpServletRequest request )
+    {
+        RequestParameter    parameter;
+        Map<String, Object> result;
+        boolean             resFlag;
+
+        parameter = buildRequestParameter( request );
+
+        try {
+            result = mobileUserController.modifyGcmRegInfoIntro( parameter, null );
+            resFlag = IokUtil.getResFlag( result );
+
+            if( !resFlag ) {
+                return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( result );
+            }
+        } catch( Exception e ) {
+            return convertExceptionToResponse( e );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
+    }
+
+
+    /**
+     * @description  모바일 토큰을 업데이트한다. (팝업 띄우기 위함)
+     * Headers : token - 인증 토큰
+     * todo: BUGBUG: 사용 권한 체크 안하나...?
+     */
+    @PutMapping(
+            value="/token",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateUserToken( HttpServletRequest request ) {
+        RequestParameter    parameter;
+        Map<String, Object> result;
+        boolean             resFlag;
+        String              token;
+
+        parameter = buildRequestParameter( request );
+        token = request.getHeader( IOK_HEADER_TOKEN_KEY );
+        if( token == null ) {
+            return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( "인증토큰을 포함해야 합니다." );
+        }
+
+        try {
+            parameter.put( IOK_HEADER_TOKEN_KEY, token );
+            result = mobileUserController.mobileUserTokenUpdate( parameter, null , token);
+            resFlag = IokUtil.getResFlag( result );
+
+            if( !resFlag ) {
+                return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( result );
+            }
+        } catch( Exception e ) {
+            return convertExceptionToResponse( e );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
+    }
+
+    /**
+     * @description  모바일 로그인상태를 체크한다. (팝업 띄우기 위함)
+     * params : userId - 사용자 ID
+     * Return :
+     *   200 - userId에 대한 사용자 정보 상태 반환
+     *       - "msg" 사용자 정보 상태 반환
+     *              e.g. 로그인 됨(0001), 로그아웃 상태(0002),
+     *                   자동 로그아웃 된 상태(0003), 사용자 정보가 없음(0004) or 사용자 정보가 없음(0005)
+     *       - "status" : 사용자 정보 상태 코드: "0001" ~ "0005"
+     *   500 - 그 외의 시스템 문제
+     * todo: BUGBUG: 사용 권한 체크 안하나...?
+     * todo: userID를 PATH로 변경할 것
+     */
+    @GetMapping(
+            value="/status",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getUserLoginStatus( HttpServletRequest request ) {
+        RequestParameter    parameter;
+        Map<String, Object> result;
+        boolean             resFlag;
+        String              resType;
+
+        parameter = buildRequestParameter( request );
+        try {
+            result = mobileUserController.mobileUserLoginStatus( parameter, null );
+            // todo: refactoring
+            resType = IokUtil.getResType( result );
+            result.put("status", resType);
+            result.remove("resType");
+            result = IokUtil.lowerMsgKeyName( result );
+        } catch( Exception e ) {
+            return convertExceptionToResponse( e );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
+    }
+
+    /**
+     * @description  사용자를 로그아웃 합니다.
+     * params : userId - 사용자 ID
+     * Return :
+     *   200 - userId에 대한 사용자 정보 상태 반환
+     *       - "msg" 사용자 정보 상태 반환
+     *              e.g. 로그인 됨(0001), 로그아웃 상태(0002),
+     *                   자동 로그아웃 된 상태(0003), 사용자 정보가 없음(0004) or 사용자 정보가 없음(0005)
+     *       - "status" : 사용자 정보 상태 코드: "0001" ~ "0005"
+     *   500 - 그 외의 시스템 문제
+     * todo: BUGBUG: 사용 권한 체크 안하나...?
+     * todo: userID를 PATH로 변경할 것
+     */
+
+    @GetMapping(
+            value="/logout",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity logoutUser( HttpServletRequest request ) {
+
+        RequestParameter    parameter;
+        Map<String, Object> result;
+        boolean             resFlag;
+        String              resType;
+
+        parameter = buildRequestParameter( request );
+
+        try {
+            result = mobileUserController.mobileUserLogout( parameter, null);
+            resFlag = IokUtil.getResFlag( result );
+        } catch( Exception e ) {
+            return convertExceptionToResponse( e );
+        }
+
+        // todo: message 통합
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("로그아웃 되었습니다."));
+    }
+
+
+    private RequestParameter buildRequestParameter(HttpServletRequest request) {
+        RequestParameter parameter = new RequestParameter();
+        parameter.setRequest(request);
+
+        Iterator e = request.getParameterMap().keySet().iterator();
+        while(e.hasNext()) {
+            String key = (String)e.next();
+            logger.debug("Request.Parameter.KEY: " + key + ", VALUE:" + request.getParameter(key));
+            parameter.put(key, request.getParameter(key));
+        }
+
+        return parameter;
+    }
+
+    private ResponseEntity convertExceptionToResponse( Exception e ) {
+        if( e instanceof UnsupportedEncodingException ) {
+            logger.error( e.getMessage() + ":" + e.getCause() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: 적절한 error 값으로 변경 할 것
+        } else if ( e instanceof JsonParseException) {
+            logger.error( e.getMessage() + ":" + e.getCause() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: ""
+        } else if ( e instanceof JsonMappingException) {
+            logger.error( e.getMessage() + ":" + e.getCause() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: ""
+        } else if ( e instanceof IOException ) {
+            logger.error( e.getMessage() + ":" + e.getCause() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: ""
+        }
+
+        logger.error( e.getMessage() + ":" + e.getCause() );
+        StackTraceElement[] elements = e.getStackTrace();
+        StringBuilder strBuilder = new StringBuilder();
+        for( StackTraceElement element : elements ) {
+            strBuilder.append( "\t" );
+            strBuilder.append( element.getClassName() );
+            strBuilder.append( ":" );
+            strBuilder.append( element.getMethodName() );
+            strBuilder.append( ":" );
+            strBuilder.append( element.getLineNumber() );
+            strBuilder.append( "\n" );
+        }
+        logger.debug( strBuilder.toString() );
+
+        return ResponseEntity
+                .status( HttpStatus.SERVICE_UNAVAILABLE )
+                .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다.")); // todo: ""
+    }
 }

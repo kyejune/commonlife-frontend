@@ -1,4 +1,4 @@
-package com.benitware.framework.exception;
+package com.kolonbenit.benitware.framework.exception;
 
 
 public class FrameworkException extends RuntimeException {

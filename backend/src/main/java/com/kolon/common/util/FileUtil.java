@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FileUtils extends org.apache.commons.io.FileUtils
+public class FileUtil extends org.apache.commons.io.FileUtils
 {
-    protected static final Logger logger = LoggerFactory.getLogger(FileUtils.class);
-    protected static final String CLASS_NAME = "FileUtils";
+    protected static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
+    protected static final String CLASS_NAME = "FileUtil";
     public static final int BUFFER_SIZE = 8192;
     public static final String SEPERATOR = File.separator;
 
@@ -162,7 +162,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils
 
     public static String getUniqueFileName(String realPath, String fileName)
     {
-        fileName = StringUtils.replace(fileName, " ", "");
+        fileName = StringUtil.replace(fileName, " ", "");
         File tempFile = new File(realPath, fileName);
         int idx = 0;
         int cnt = 1;

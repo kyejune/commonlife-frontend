@@ -1,6 +1,6 @@
 package com.kolonbenit.benitware.common.util;
 
-import com.benitware.framework.xplaform.domain.ResultSetMap;
+import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
