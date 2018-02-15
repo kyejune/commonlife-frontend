@@ -10,16 +10,16 @@
 
     <!-- Beginning of IOK Master server integration properties -->
     <!-- Message bean. -->
-    <util:properties id="messagesProps" location="classpath:/properties/i18n/messages.properties"/>
+    <util:properties id="messagesProps" location="classpath:/properties/_iok_/i18n/messages.properties"/>
     <!-- Exception bean. -->
-    <util:properties id="exceptionProps" location="classpath:/properties/i18n/exception.properties"/>
+    <util:properties id="exceptionProps" location="classpath:/properties/_iok_/i18n/exception.properties"/>
     <!-- @Value Annotation Use for Java Beans -->
     <!-- <util:properties id="applicationProps" location="classpath:/properties/config/application-config.properties"/> -->
     <!-- 여러 properties를 읽도록 수정 2012.10.22 by buchan -->
     <bean id="applicationProps" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
         <property name="locations">
             <list>
-                <value>classpath:/properties/config/application-config.properties</value>
+                <value>classpath:/properties/_iok_/config/application-config.properties</value>
             </list>
         </property>
     </bean>
