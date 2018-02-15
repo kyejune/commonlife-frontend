@@ -300,7 +300,7 @@ public class UserRegistrationController {
         parameter = IokUtil.buildRequestParameter(request);
 
         try {
-            result = mobileUserCertNoController.reqUserCertNumber(parameter, null);
+            result = mobileUserCertNoController.confirmUserCertNumber(parameter, null);
         } catch (Exception e) {
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity
