@@ -10,7 +10,7 @@ class ThumbnailDetail extends Component{
 		// ContentHolder에 전달
 		this.props.updateTitle(
 			<h2 className="md-title md-title--toolbar cl-ellipsis">
-				<span>이미지상세보기</span>
+				<span>이미지상세보기 (0/0)</span>
 			</h2>
 		);
 	}

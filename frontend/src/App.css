@@ -6567,5 +6567,35 @@ button, select, input {
     color: #f4ca5c; }
 
 .swiper-slide, .swiper-slide--1, .swiper-slide--2, .swiper-slide--3, .swiper-slide--4, .swiper-slide--5 {
-  padding: 20% 0;
-  text-align: center; }
+  padding: 35% 0;
+  text-align: center;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat; }
+
+.cl-thumbnail-detail .swiper-slide, .cl-thumbnail-detail .swiper-slide--1, .cl-thumbnail-detail .swiper-slide--2, .cl-thumbnail-detail .swiper-slide--3, .cl-thumbnail-detail .swiper-slide--4, .cl-thumbnail-detail .swiper-slide--5 {
+  height: calc(100vh - 56px); }
+
+.swiper-pagination-bullet {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border: 1px solid #ffffff;
+  background-color: transparent;
+  opacity: 0.5; }
+
+.swiper-pagination-bullet-active {
+  opacity: 1; }
+  .swiper-pagination-bullet-active:before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 7px;
+    height: 7px;
+    border-radius: 100%;
+    background-color: #ffffff; }
+
+.swiper-container-horizontal > .swiper-pagination-bullets .swiper-pagination-bullet {
+  margin: 0 3px; }

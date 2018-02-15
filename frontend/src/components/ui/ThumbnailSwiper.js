@@ -15,11 +15,11 @@ class ThumbnailSwiper extends Component {
 
 		return (
 			<Swiper {...params}>
-				<div className="swiper-slide--1">Slide 1</div>
-				<div className="swiper-slide--2">Slide 2</div>
-				<div className="swiper-slide--3">Slide 3</div>
-				<div className="swiper-slide--4">Slide 4</div>
-				<div className="swiper-slide--5">Slide 5</div>
+				<div className="swiper-slide--1" style={{ backgroundImage: `url('https://placeimg.com/640/480/arch')` }}/>
+				<div className="swiper-slide--2" style={{ backgroundImage: `url('https://placeimg.com/480/640/nature')` }}/>
+				<div className="swiper-slide--3" style={{ backgroundImage: `url('https://placeimg.com/300/300/tech')` }}/>
+				<div className="swiper-slide--4" style={{ backgroundImage: `url('https://placeimg.com/640/480/animals')` }}/>
+				<div className="swiper-slide--5" style={{ backgroundImage: `url('https://placeimg.com/640/480/arch')` }}/>
 			</Swiper>
 		)
 	}
