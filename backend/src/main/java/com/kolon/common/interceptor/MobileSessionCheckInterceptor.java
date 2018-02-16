@@ -8,6 +8,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kolon.common.helper.JedisHelper;
+import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.servlet.AuthUserInfoUtil;
+import com.kolon.common.servlet.UserInfoHttpServletRequest;
 import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
 import com.kolonbenit.benitware.common.util.JwtUtil;
 import com.kolonbenit.benitware.common.util.StringUtil;
@@ -37,8 +40,6 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 
 	private final Logger logger = LoggerFactory.getLogger(MobileSessionCheckInterceptor.class);
 	private static final JedisHelper helper = JedisHelper.getInstance();
-
-
 
 
 	@Override
@@ -97,31 +98,34 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		String expireDate ="";
 		String issueDate  ="";
 		String tokenOrg   ="";
+		String cmplxId = "";
 
 		try {
 
-			logger.info("◆◆◆◆  Master  ◆◆◆◆");
-			logger.info("Step 0. Redis Ready!");
+			logger.debug("◆◆◆◆  Master  ◆◆◆◆");
+			logger.debug("Step 0. Redis Ready!");
 			jedis = helper.getConnection();
-			logger.info("Step 1. Redis Connected");
+			logger.debug("Step 1. Redis Connected");
 			String tokenString = jedis.get(sToken);
-			logger.info("Step 2. Token");
+			logger.debug("Step 2. Token");
 //            logger.info("Token ({}) is...({})",sToken, tokenString);
 
 			if (tokenString == null) {
 				// Connection release
 				helper.returnResource(jedis);
 
-				logger.info("Token Out!!!" + sToken);
+				logger.debug("Token Out!!!" + sToken);
 				response.setContentType("application/json");
 				response.getOutputStream().write(bResJson);
 				return false;
 			}
 			else {
+				logger.debug("Step 3. Token exists in Redis!: " + tokenString);
 				Gson gson = new Gson();
 				JsonObject tokenRedis = gson.fromJson(tokenString, JsonObject.class);
 
 				// Redis Token Value
+				cmplxId = StringUtil.replace(tokenRedis.get("CMPLX_ID").toString(),"\"","");
 				secretKey  = StringUtil.replace(tokenRedis.get("SECRET_KEY").toString(),"\"","");
 				expireDate = StringUtil.replace(tokenRedis.get("EXPIRE_DATE").toString(),"\"","");
 				issueDate  = StringUtil.replace(tokenRedis.get("ISSUE_DATE").toString(),"\"","");
@@ -140,7 +144,8 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 			helper.returnResource(jedis);
 		}
 		catch (Exception e) {
-			logger.info("Step 99. Redis Error!!");
+			logger.debug( e.getMessage() );
+			logger.debug("Step 99. Redis Error!!");
 
 			// Connection release
 			helper.returnResource(jedis);
@@ -160,7 +165,7 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		DecodedJWT decJwt = JwtUtil.decodeJwt(secretKey, tokenOrg);
 
 		if (decJwt == null) {
-			logger.info("(( {} )) =============> (( {} ))",secretKey, tokenOrg );
+			logger.debug("(( {} )) =============> (( {} ))",secretKey, tokenOrg );
 
 			// Connection release
 			helper.returnResource(jedis);
@@ -171,7 +176,7 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 //
 		} else {
 //			//logging
-			logger.info("오케이 토큰 -------------> " + sToken );
+			logger.debug("오케이 토큰 -------------> " + sToken );
 
 //			Map<String, Claim> claims = decJwt.getClaims();
 //			for (Map.Entry<String, Claim> entry : claims.entrySet()) {
@@ -293,6 +298,13 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 ////			logger.info("<_____________ Session User Info " + userInfo);
 //		}
 
+
+		logger.debug("Step 4. put into AuthUserInfo");
+		AuthUserInfo userInfo  = new AuthUserInfo(
+				cmplxId, userId, tokenOrg,
+				secretKey, issueDate, expireDate,
+				null,null,null );
+		AuthUserInfoUtil.setAuthUserInfo( request, userInfo );
 
 		return true;
 
