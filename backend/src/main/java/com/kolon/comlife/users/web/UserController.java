@@ -199,11 +199,8 @@ public class UserController {
      * @description  사용자를 로그아웃 합니다.
      * params : userId - 사용자 ID
      * Return :
-     *   200 - userId에 대한 사용자 정보 상태 반환
-     *       - "msg" 사용자 정보 상태 반환
-     *              e.g. 로그인 됨(0001), 로그아웃 상태(0002),
-     *                   자동 로그아웃 된 상태(0003), 사용자 정보가 없음(0004) or 사용자 정보가 없음(0005)
-     *       - "status" : 사용자 정보 상태 코드: "0001" ~ "0005"
+     *   200 - 정상적으로 로그아웃 되었습니다
+     *   401 - 해당하는 사용자 정보가 없습니다
      *   500 - 그 외의 시스템 문제
      * todo: BUGBUG: 사용 권한 체크 안하나...?
      * todo: userID를 PATH로 변경할 것
@@ -217,7 +214,6 @@ public class UserController {
         RequestParameter    parameter;
         Map<String, Object> result;
         boolean             resFlag;
-        String              resType;
 
         parameter = IokUtil.buildRequestParameter( request );
 
@@ -226,6 +222,12 @@ public class UserController {
             resFlag = IokUtil.getResFlag( result );
         } catch( Exception e ) {
             return IokUtil.convertExceptionToResponse( e );
+        }
+
+        if(!resFlag) {
+            return ResponseEntity
+                    .status( HttpStatus.UNAUTHORIZED )
+                    .body( new SimpleErrorInfo("사용자 정보가 없습니다."));
         }
 
         // todo: message 통합

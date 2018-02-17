@@ -3,6 +3,7 @@ package com.kolon.common.helper;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.kolon.common.prop.SystemPropertiesKey;
 import com.kolon.common.prop.SystemPropertiesMap;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
@@ -14,7 +15,9 @@ public class JedisHelper {
     // CommonLife 개발
 //    protected static final String REDIS_HOST = "cl-dev-redis.sktb1d.0001.apn2.cache.amazonaws.com";
 
-    protected static final String REDIS_HOST = "127.0.0.1";
+    protected static final String   REDIS_HOST_DEFAULT = "127.0.0.1";
+    protected static final int      REDIS_PORT_DEFAULT = 6379;
+
 	// 개발
 //	//protected static final String REDIS_HOST = "token-managements.3j2bzt.0001.apn2.cache.amazonaws.com";
 //    protected static final String REDIS_HOST = "iok-info-redis.g4s72o.0001.apn2.cache.amazonaws.com";
@@ -26,7 +29,7 @@ public class JedisHelper {
 //    protected static final String REDIS_HOST = "prod-token-manage.3j2bzt.clustercfg.apn2.cache.amazonaws.com";
 
     	
-    protected static final int REDIS_PORT = 6379;
+
     private final Set<Jedis> connectionList = new HashSet<Jedis>();
     private final JedisPool pool;
 
@@ -35,6 +38,11 @@ public class JedisHelper {
      */
     private JedisHelper() {
         GenericObjectPoolConfig config = new GenericObjectPoolConfig();
+        SystemPropertiesMap     sysProp = SystemPropertiesMap.getInstance();
+        String                  redisHost;
+        String                  redisPortStr;
+        int                     redisPort;
+
         
         // PRD
         config.setMaxTotal(25);
@@ -43,8 +51,17 @@ public class JedisHelper {
 //        config.setMaxTotal(50);
         config.setBlockWhenExhausted(true);
 
-        String redisHost = SystemPropertiesMap.getInstance().getValue( "redis.host");
-        int redisPort = Integer.parseInt( SystemPropertiesMap.getInstance().getValue( "redis.port") );
+        redisHost = sysProp.getValue( SystemPropertiesKey.AUTH_REDIS_HOST );
+        if( redisHost == null ) {
+            redisHost = REDIS_HOST_DEFAULT;
+        }
+
+        redisPortStr = sysProp.getValue( SystemPropertiesKey.AUTH_REDIS_PORT );
+        if( redisPortStr == null ) {
+            redisPort = REDIS_PORT_DEFAULT;
+        } else {
+            redisPort = Integer.parseInt( redisPortStr );
+        }
 
         this.pool = new JedisPool(config, redisHost, redisPort);
     }
