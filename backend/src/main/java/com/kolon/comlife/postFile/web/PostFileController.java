@@ -12,6 +12,8 @@ import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.example.web.ExampleController;
 import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.postFile.service.PostFileService;
+import com.kolon.common.prop.KeyValueMap;
+import com.kolon.common.prop.ServicePropertiesMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -33,13 +35,33 @@ import java.util.HashMap;
 public class PostFileController {
     private static final Logger logger = LoggerFactory.getLogger(ExampleController.class);
 
-    private String s3key = "AKIAJVCEPXZYSTVAITNA";
-    private String s3secret = "08JvYxmY99x7qfOik/ECYQArSzHb+vqTyQY4iMKO";
-    private String writeBucket = "cl.dev.image.origin";
-    private String readBucket = "cl.dev.image.target";
+    private String s3key;
+    private String s3secret;
+    private String writeBucket;
+    private String readBucket;
+
+    private KeyValueMap kvm;
 
     @Resource(name = "postFileService")
     private PostFileService postFileService;
+    @Resource(name = "servicePropertiesMap")
+    ServicePropertiesMap serviceProp;
+
+    /**
+     * Properties 로드
+     *
+     * @return KeyValueMap
+     */
+    private KeyValueMap getKvm() {
+        if( kvm == null ) {
+            kvm = serviceProp.getByGroup( "POST" );
+            s3key = kvm.getValue( "S3_ACCESS_KEY" );
+            s3secret = kvm.getValue( "S3_ACCESS_SECRET" );
+            writeBucket = kvm.getValue( "UP_S3_NAME" );
+            readBucket = kvm.getValue( "DN_S3_NAME" );
+        }
+        return kvm;
+    }
 
     /**
      * AWS S3 Client 객체 생성
@@ -47,7 +69,7 @@ public class PostFileController {
      * @return AmazonS3
      */
     private AmazonS3 getS3Client() {
-        // TODO: key와 secret은 설정으로 이동시켜야 함
+        getKvm();
         AWSCredentials credentials = new BasicAWSCredentials( s3key, s3secret );
         return AmazonS3ClientBuilder
                 .standard()
@@ -56,6 +78,12 @@ public class PostFileController {
                 .build();
     }
 
+    /**
+     * Response Header 생성. 현재는 MIME Type 을 지정하는 역할만을 수행한다.
+     *
+     * @param type
+     * @return HttpHeaders
+     */
     private HttpHeaders getFileTypeHeaders( String type ) {
         final HttpHeaders headers = new HttpHeaders();
         switch ( type ) {
@@ -75,6 +103,13 @@ public class PostFileController {
         return headers;
     }
 
+    /**
+     * 업로드 원본 조회
+     *
+     * @param s3Client
+     * @param postFileInfo
+     * @return ResponseEntity
+     */
     private ResponseEntity getOriginFile( AmazonS3 s3Client, PostFileInfo postFileInfo ) {
         String key = postFileInfo.getFilePath();
         S3Object object = s3Client.getObject( new GetObjectRequest( writeBucket, key ) );
@@ -92,6 +127,14 @@ public class PostFileController {
         }
     }
 
+    /**
+     * 리사이즈 이미지 조회
+     *
+     * @param s3Client
+     * @param postFileInfo
+     * @param size
+     * @return ResponseEntity
+     */
     private ResponseEntity getResizeFile( AmazonS3 s3Client, PostFileInfo postFileInfo, String size ) {
         String key = postFileInfo.getFilePath();
         key = key.replace( "origin/", "resize/" + size + "/" );
@@ -142,7 +185,6 @@ public class PostFileController {
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
         String key = "origin/article/" + timestamp.getTime() + "." + fileType;
 
-        // TODO: bucket 이름은 설정으로 이동시켜야 함
         s3Client.putObject( new PutObjectRequest( writeBucket, key, stream, metadata ) );
 
         PostFileInfo postFile = new PostFileInfo();
