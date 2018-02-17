@@ -26,7 +26,7 @@ public class PostFileDAO {
 
     public PostFileInfo setPostFile( PostFileInfo postFileInfo ) {
         sqlSession.insert( "PostFile.insertPostFile", postFileInfo );
-        return null;
+        return sqlSession.selectOne( "PostFile.selectLatestPostFile" );
     }
 
     public PostFileInfo updatePostFile( int id, PostFileInfo postFileInfo ) {

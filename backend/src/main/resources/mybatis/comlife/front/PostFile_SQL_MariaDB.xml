@@ -61,9 +61,7 @@
         <![CDATA[
         SELECT  *
         FROM    `BOARD_FILE`
-        WHERE   `USE_YN` = 'Y'
-                AND
-                `DEL_YN` = 'N'
+        WHERE   `DEL_YN` = 'N'
         AND
                 `FILE_IDX` = LAST_INSERT_ID()
         ]]>

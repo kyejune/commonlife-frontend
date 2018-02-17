@@ -35,10 +35,80 @@ public class PostFileController {
 
     private String s3key = "AKIAJVCEPXZYSTVAITNA";
     private String s3secret = "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";
-    private String s3bucket = "commonlife-store";
+    private String writeBucket = "cl.dev.image.origin";
+    private String readBucket = "cl.dev.image.target";
 
     @Resource(name = "postFileService")
     private PostFileService postFileService;
+
+    /**
+     * AWS S3 Client 객체 생성
+     *
+     * @return AmazonS3
+     */
+    private AmazonS3 getS3Client() {
+        // TODO: key와 secret은 설정으로 이동시켜야 함
+        AWSCredentials credentials = new BasicAWSCredentials( s3key, s3secret );
+        return AmazonS3ClientBuilder
+                .standard()
+                .withRegion(Regions.AP_NORTHEAST_2)
+                .withCredentials(new AWSStaticCredentialsProvider(credentials))
+                .build();
+    }
+
+    private HttpHeaders getFileTypeHeaders( String type ) {
+        final HttpHeaders headers = new HttpHeaders();
+        switch ( type ) {
+            case "image/png" :
+                headers.setContentType(MediaType.IMAGE_PNG);
+                break;
+            case "image/gif" :
+                headers.setContentType(MediaType.IMAGE_GIF);
+                break;
+            case "image/jpg" :
+            case "image/jpeg" :
+                headers.setContentType(MediaType.IMAGE_JPEG);
+                break;
+            default :
+        }
+
+        return headers;
+    }
+
+    private ResponseEntity getOriginFile( AmazonS3 s3Client, PostFileInfo postFileInfo ) {
+        String key = postFileInfo.getFilePath();
+        S3Object object = s3Client.getObject( new GetObjectRequest( writeBucket, key ) );
+        InputStream objectData = object.getObjectContent();
+        try {
+            byte[] byteArray = IOUtils.toByteArray( objectData );
+
+            // Set headers
+            final HttpHeaders headers = getFileTypeHeaders( postFileInfo.getFileType() );
+
+            return new ResponseEntity<byte[]> (byteArray, headers, HttpStatus.OK);
+        }
+        catch( IOException e ) {
+            return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( null );
+        }
+    }
+
+    private ResponseEntity getResizeFile( AmazonS3 s3Client, PostFileInfo postFileInfo, String size ) {
+        String key = postFileInfo.getFilePath();
+        key = key.replace( "origin/", "resize/" + size + "/" );
+        S3Object object = s3Client.getObject( new GetObjectRequest( readBucket, key ) );
+        InputStream objectData = object.getObjectContent();
+        try {
+            byte[] byteArray = IOUtils.toByteArray( objectData );
+
+            // Set headers
+            final HttpHeaders headers = getFileTypeHeaders( postFileInfo.getFileType() );
+
+            return new ResponseEntity<byte[]> (byteArray, headers, HttpStatus.OK);
+        }
+        catch( IOException e ) {
+            return getOriginFile( s3Client, postFileInfo );
+        }
+    }
 
     @PostMapping(
             value = "/",
@@ -66,20 +136,14 @@ public class PostFileController {
         metadata.setContentLength( imageBytes.length );
         metadata.setContentType( "image/" + fileType );
 
-        // TODO: key와 secret은 설정으로 이동시켜야 함
-        AWSCredentials credentials = new BasicAWSCredentials( s3key, s3secret );
-        AmazonS3 s3Client = AmazonS3ClientBuilder
-                .standard()
-                .withRegion(Regions.AP_NORTHEAST_2)
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .build();
+        AmazonS3 s3Client = getS3Client();
 
         // TODO: 파일 저장 경로에 대한 고민 필요
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String key = timestamp.getTime() + "." + fileType;
+        String key = "origin/article/" + timestamp.getTime() + "." + fileType;
 
         // TODO: bucket 이름은 설정으로 이동시켜야 함
-        s3Client.putObject( new PutObjectRequest( s3bucket, key, stream, metadata ) );
+        s3Client.putObject( new PutObjectRequest( writeBucket, key, stream, metadata ) );
 
         PostFileInfo postFile = new PostFileInfo();
         postFile.setBoardIdx( 0 );
@@ -96,42 +160,15 @@ public class PostFileController {
     )
     public ResponseEntity getPostFile( @PathVariable( "id" ) int id ) {
         PostFileInfo postFileInfo = postFileService.getPostFile( id );
+        return getOriginFile( getS3Client(), postFileInfo );
+    }
 
-        // TODO: key와 secret은 설정으로 이동시켜야 함
-        AWSCredentials credentials = new BasicAWSCredentials( s3key, s3secret );
-        AmazonS3 s3Client = AmazonS3ClientBuilder
-                .standard()
-                .withRegion(Regions.AP_NORTHEAST_2)
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .build();
-        String key = postFileInfo.getFilePath();
-
-        S3Object object = s3Client.getObject( new GetObjectRequest( s3bucket, key ) );
-        InputStream objectData = object.getObjectContent();
-
-        try {
-            byte[] byteArray = IOUtils.toByteArray( objectData );
-
-            // Set headers
-            final HttpHeaders headers = new HttpHeaders();
-            switch ( postFileInfo.getFileType() ) {
-                case "image/png" :
-                    headers.setContentType(MediaType.IMAGE_PNG);
-                    break;
-                case "image/jpg" :
-                case "image/jpeg" :
-                    headers.setContentType(MediaType.IMAGE_JPEG);
-                    break;
-                default :
-            }
-
-            return new ResponseEntity<byte[]> (byteArray, headers, HttpStatus.OK);
-        }
-        catch( IOException e ) {
-
-        }
-
-        return null;
+    @GetMapping(
+            value = "/{id}/{size}"
+    )
+    public ResponseEntity getPostSmallFile( @PathVariable( "id" ) int id, @PathVariable( "size" ) String size ) {
+        PostFileInfo postFileInfo = postFileService.getPostFile( id );
+        return getResizeFile( getS3Client(), postFileInfo, size );
     }
 
     @DeleteMapping(
@@ -140,17 +177,11 @@ public class PostFileController {
     public ResponseEntity deletePostFile( @PathVariable("id") int id ) {
         PostFileInfo postFileInfo = postFileService.getPostFile( id );
 
-        // TODO: key와 secret은 설정으로 이동시켜야 함
-        AWSCredentials credentials = new BasicAWSCredentials( s3key, s3secret );
-        AmazonS3 s3Client = AmazonS3ClientBuilder
-                .standard()
-                .withRegion(Regions.AP_NORTHEAST_2)
-                .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                .build();
+        AmazonS3 s3Client = getS3Client();
 
         String key = postFileInfo.getFilePath();
 
-        s3Client.deleteObject( new DeleteObjectRequest( s3bucket, key ) );
+        s3Client.deleteObject( new DeleteObjectRequest( writeBucket, key ) );
         return null;
     }
 }
