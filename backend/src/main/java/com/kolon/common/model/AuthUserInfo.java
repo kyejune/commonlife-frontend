@@ -7,8 +7,9 @@ package com.kolon.common.model;
 
 public class AuthUserInfo {
 
-    String cmplxId; // 동
-    String userId; // 사용자 ID
+    int cmplxId;     // 현장(table) ID
+    int usrId;       // 사용자(table) ID
+    String userId;   // 사용자 로그인 ID
     String tokenOrg; // Token payload
     String secretKey;
     String issueDate;
@@ -20,10 +21,12 @@ public class AuthUserInfo {
     public AuthUserInfo() {
     }
 
-    public AuthUserInfo(String cmplxId, String userId, String tokenOrg,
-                        String secretKey, String issueDate, String expireDate,
-                        String authorizationDefault, String authorizationUserInfo, String authrizationSystem) {
+    public AuthUserInfo( int cmplxId, int usrId, String userId,
+                         String tokenOrg, String secretKey, String issueDate,
+                         String expireDate, String authorizationDefault, String authorizationUserInfo,
+                         String authorizationSystem) {
         this.cmplxId = cmplxId;
+        this.usrId = usrId;
         this.userId = userId;
         this.tokenOrg = tokenOrg;
         this.secretKey = secretKey;
@@ -31,14 +34,18 @@ public class AuthUserInfo {
         this.expireDate = expireDate;
         this.authorizationDefault = authorizationDefault;
         this.authorizationUserInfo = authorizationUserInfo;
-        this.authorizationSystem = authrizationSystem;
+        this.authorizationSystem = authorizationSystem;
     }
 
-    public String getCmplxId() {
+    public int getUsrId() { return usrId; }
+
+    public void setUsrId(int usrId) { this.usrId = usrId; }
+
+    public int getCmplxId() {
         return cmplxId;
     }
 
-    public void setCmplxId(String cmplxId) {
+    public void setCmplxId(int cmplxId) {
         this.cmplxId = cmplxId;
     }
 

@@ -17,6 +17,7 @@ import com.kolonbenit.benitware.common.util.StringUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
@@ -79,6 +80,10 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 
 		ResultSetMap resMap = new ResultSetMap();
 		resMap.putNoLowerCase("LOGIN_YN", "N");
+		// ykim added
+		resMap.put("msg", "토큰이 더이상 유효하지 않습니다. 다시 로그인 하세요.");  // todo: message 옮길 것
+		response.setStatus( HttpStatus.UNAUTHORIZED.value() );
+		//
 		String strResJson = new ObjectMapper().writeValueAsString(resMap);
 		byte[] bResJson = strResJson.getBytes();
 		String userId = "";
@@ -301,9 +306,16 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 
 		logger.debug("Step 4. put into AuthUserInfo");
 		AuthUserInfo userInfo  = new AuthUserInfo(
-				cmplxId, userId, tokenOrg,
-				secretKey, issueDate, expireDate,
-				null,null,null );
+				Integer.valueOf( cmplxId ),
+				0, // todo: user ID
+				userId,
+				tokenOrg,
+				secretKey,
+				issueDate,
+				expireDate,
+				null,
+				null,
+				null );
 		AuthUserInfoUtil.setAuthUserInfo( request, userInfo );
 
 		return true;

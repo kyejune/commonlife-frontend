@@ -95,7 +95,7 @@ public class UserDebugController {
 
         if( userInfo != null ) {
             logger.debug(">>>>  there are authUserInfo");
-            result.put("cmplxId", userInfo.getCmplxId());
+            result.put("cmplxId", String.valueOf( userInfo.getCmplxId()));
             result.put("userId", userInfo.getUserId());
             result.put("tokenOrg", userInfo.getTokenOrg());
             result.put("secretKey", userInfo.getSecretKey());

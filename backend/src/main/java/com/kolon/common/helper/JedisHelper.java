@@ -3,6 +3,7 @@ package com.kolon.common.helper;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.kolon.common.prop.SystemPropertiesMap;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import redis.clients.jedis.Jedis;
@@ -40,9 +41,12 @@ public class JedisHelper {
         
         //DEV
 //        config.setMaxTotal(50);
-        config.setBlockWhenExhausted(true); 
+        config.setBlockWhenExhausted(true);
 
-        this.pool = new JedisPool(config, REDIS_HOST, REDIS_PORT);
+        String redisHost = SystemPropertiesMap.getInstance().getValue( "redis.host");
+        int redisPort = Integer.parseInt( SystemPropertiesMap.getInstance().getValue( "redis.port") );
+
+        this.pool = new JedisPool(config, redisHost, redisPort);
     }
 
     /**
