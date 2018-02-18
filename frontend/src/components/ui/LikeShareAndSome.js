@@ -7,13 +7,20 @@ import calSrc from 'images/calender-bt-gray@3x.png';
 
 export default class LikeShareAndSome extends Component{
 
-
+	shareItem() {
+		window.plugins.socialsharing.share(
+		    null,
+            null,
+            null,
+            'http://www.x-services.nl'
+        );
+	}
 
     render(){
 
         let Share, Some;
         if( this.props.share )
-            Share = <Button flat inkDisabled className="cl-card-item__button"><span>Share</span></Button>;
+            Share = <Button flat inkDisabled className="cl-card-item__button" onClick={() => this.shareItem()}><span>Share</span></Button>;
 
 
         if( this.props.join )
