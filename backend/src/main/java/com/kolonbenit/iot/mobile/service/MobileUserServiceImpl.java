@@ -372,6 +372,12 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 	        detailToken.put("SECRET_KEY", phomeIdMap.get("SECRET_KEY").toString());
 	        detailToken.put("ISSUE_DATE", phomeIdMap.get("ISSUE_DATE").toString());
 	        detailToken.put("EXPIRE_DATE", phomeIdMap.get("EXPIRE_DATE").toString());
+
+
+	        // CommonLife 용도, 확장 정보
+			detailToken.put("USR_ID", "123");
+			detailToken.put("CMPLX_GRP_TYPE_ID", "123");
+			detailToken.put("HEAD_ID", "123");
 	        
 	        // Token Auth List
 	        authListToken.put("DEFAULT","Y");
