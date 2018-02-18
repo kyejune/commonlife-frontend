@@ -27,6 +27,7 @@ public class LikeController {
     @Resource(name = "userService")
     private UserService userService;
 
+    @CrossOrigin
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE

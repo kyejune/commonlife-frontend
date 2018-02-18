@@ -29,6 +29,7 @@ public class PostController {
     @Resource(name = "userService")
     private UserService userService;
 
+    @CrossOrigin
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)

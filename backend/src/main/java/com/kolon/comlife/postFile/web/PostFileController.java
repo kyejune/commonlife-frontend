@@ -153,6 +153,7 @@ public class PostFileController {
         }
     }
 
+    @CrossOrigin
     @PostMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)

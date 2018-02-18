@@ -24,6 +24,7 @@ public class ExampleController {
     @Resource(name = "exampleService")
     private ExampleService exampleService;
 
+    @CrossOrigin
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
