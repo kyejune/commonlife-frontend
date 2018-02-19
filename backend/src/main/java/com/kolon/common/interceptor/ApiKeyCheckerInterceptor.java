@@ -41,7 +41,13 @@ public class ApiKeyCheckerInterceptor extends HandlerInterceptorAdapter {
             }
             else {
                 logger.debug("API key is mismatched.");
+
                 response.setStatus( HttpServletResponse.SC_UNAUTHORIZED);
+                response.setHeader("Content-type", "application/json");
+                response.getWriter().write("{\"msg\": \"api_key가 잘못되었습니다.\"}");
+                response.getWriter().flush();
+                response.getWriter().close();
+
                 return false;
             }
         }
