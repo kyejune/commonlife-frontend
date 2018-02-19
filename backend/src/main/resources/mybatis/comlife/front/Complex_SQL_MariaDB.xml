@@ -25,7 +25,7 @@
       MNL_SRC -- ??
     FROM
       COMPLEX_M
-      AND
+    WHERE
       COMPLEX_M.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
     ;
   </select>
