@@ -59,6 +59,13 @@
         <property name="supportedMediaTypes" value="application/json" />
     </bean>
 
+    <!-- MessageTag 는 내부적으로 messageSource 인스턴스를 찾으므로 반드시 'messageSource' 로 정의 해야 함 -->
+    <bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource"
+          p:fallbackToSystemLocale="false" p:defaultEncoding="UTF-8" p:cacheSeconds="30" >
+        <property name="basenames" value="/properties/_iok_/i18n/messages" />
+    </bean>
+
+
     <!--<bean id="defaultRenderer" class="com.kolon.common.pagination.DefaultPaginationRenderer" />-->
 
     <!--<bean id="paginationManager" class="com.kolon.common.pagination.DefaultPaginationManager">-->
