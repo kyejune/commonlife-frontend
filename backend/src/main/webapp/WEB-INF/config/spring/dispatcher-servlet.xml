@@ -26,6 +26,10 @@
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
     </context:component-scan>
 
+    <context:component-scan base-package="com.kolonbenit.iot.mobile">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+    </context:component-scan>
+
 
     <!-- todo: CORS 설정을 필요한 api 대해서 제한적으로 오픈합니다. -->
     <mvc:cors>

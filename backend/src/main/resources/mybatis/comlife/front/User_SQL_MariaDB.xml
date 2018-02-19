@@ -29,4 +29,8 @@
         </foreach>
     </select>
 
+    <select id="selectUserRelatedInfo" parameterType="Map" resultType="Map">
+      SELECT
+    </select>
+
 </mapper>

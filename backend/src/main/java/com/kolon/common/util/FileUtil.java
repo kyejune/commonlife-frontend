@@ -1,6 +1,5 @@
 package com.kolon.common.util;
 
-import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class FileUtil extends FileUtils
+public class FileUtil extends org.apache.commons.io.FileUtils
 {
     protected static final Logger logger = LoggerFactory.getLogger(FileUtil.class);
     protected static final String CLASS_NAME = "FileUtil";
