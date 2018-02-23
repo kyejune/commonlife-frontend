@@ -210,7 +210,7 @@ public class RequestParameter extends HashMap<String, Object> {
         String key;
         Object value;
         for(Iterator iterator = this.entrySet().iterator(); iterator.hasNext(); ret.append('\n').append(key).append(": ").append(value)) {
-            Entry<String, Object> entry = (Entry)iterator.next();
+            Map.Entry<String, Object> entry = (Map.Entry)iterator.next();
             key = (String)entry.getKey();
             value = entry.getValue();
             if (value == null) {
