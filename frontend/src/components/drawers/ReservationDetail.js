@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
 import TimeScheduler from 'components/ui/TimeScheduler';
-import ThumbnailSwiper from 'components/ui/ThumbnailSwiper';
+import SwiperViewer from 'components/ui/SwiperViewer';
 import Counter from 'components/ui/Counter';
 import DB from "scripts/db";
 import completeSrc from 'images/complete-bt-blueicon@3x.png';
@@ -21,6 +21,7 @@ class ReservationDetail extends Component {
             available: false,
             booked: false,
             reserved: false,
+
         };
 
         DB.getReservation(this.props.match.params.id, data => {
@@ -148,7 +149,7 @@ class ReservationDetail extends Component {
 
             {!this.state.reserved &&
             <Link to={ '/reservation/0/thumbnails' }>
-			    <ThumbnailSwiper/>
+			    <SwiperViewer thumbnails={this.state.pictures} viewType={'rectangle'}/>
             </Link>
             }
 
