@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
 import {CardTitle, Avatar} from "react-md";
-import DB from "scripts/db";
+import Net from "scripts/net";
 import LikeShareAndSome from "components/ui/LikeShareAndSome";
 
 
@@ -19,7 +19,7 @@ class CardItemDetailDrawer extends Component {
 
     componentWillMount() {
 
-        DB.getCardContent( this.props.match.params.tab, this.props.match.params.id, data => {
+        Net.getCardContent( this.props.match.params.tab, this.props.match.params.id, data => {
 
             this.setState(data);
             this.props.updateTitle(data.content || data.event_title); // ContentHolder에 전달

@@ -3,9 +3,18 @@ import { Button } from 'react-md';
 import { Link } from 'react-router-dom';
 import qaSrc from 'images/contact-bt-gray@3x.png';
 import calSrc from 'images/calender-bt-gray@3x.png';
+import Net from 'scripts/net.js';
 
 
 export default class LikeShareAndSome extends Component{
+
+    constructor( props ){
+        super( props );
+
+        this.state = {
+            count: props.like.count || 0
+        }
+    }
 
 	shareItem() {
 		window.plugins.socialsharing.share(
@@ -15,6 +24,14 @@ export default class LikeShareAndSome extends Component{
             'http://www.x-services.nl'
         );
 	}
+
+	likeItem( id ){
+        Net.setLikey( id, response =>{
+            this.setState({
+                count: response.likeIdx
+            })
+        });
+    }
 
     render(){
 
@@ -34,18 +51,17 @@ export default class LikeShareAndSome extends Component{
         else if( this.props.schedule )
             Some = <button>
                 <img src={calSrc} alt="달력에추가" height="36"/>
-            </button>
+            </button>;
 
 
         return <div className="cl-flex-between">
 
-            <div>
+            <div className="cl-flex">
 
-                <Button flat inkDisabled className="cl-card-item__button"><span>Like</span>
-                    <Link to={this.props.like.to}>
-                        <i>{this.props.like.count||0}</i>
-                    </Link>
-                </Button>
+                <button className="cl-card-item__button" onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }>Like</button>
+                <Link className="cl-counter__button" to={this.props.like.to}>
+                    {this.state.count}
+                </Link>
 
                 {Share}
 

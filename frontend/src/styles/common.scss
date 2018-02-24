@@ -35,6 +35,12 @@ button, select, input{
   -webkit-appearance: none;
   padding: 0;
   font-size: 14px;
+
+  &:active, &:focus{
+    outline: none;
+    border: none;
+    border-style: none;
+  }
 }
 
 //input[type=date]{

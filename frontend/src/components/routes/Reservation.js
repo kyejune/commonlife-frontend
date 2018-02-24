@@ -52,6 +52,10 @@ class Reservation extends Component {
         else if( this.props.match.params.id  )
             Store.drawer.push( 'reservation-detail' );
 
+        else{
+            Store.drawer.length = 0;
+        }
+
         // 썸네일 뷰 추가
         if( this.props.match.params.add === 'thumbnails' )
             Store.drawer.push( 'reservation-thumbnails');
