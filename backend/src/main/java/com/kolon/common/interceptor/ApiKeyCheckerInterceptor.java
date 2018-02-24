@@ -29,6 +29,12 @@ public class ApiKeyCheckerInterceptor extends HandlerInterceptorAdapter {
             throws Exception
     {
 
+        // OPTIONS 요청에 대해 api_key 체크하지 않음
+        if ( request.getMethod().equals("OPTIONS") ) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            return true;
+        }
+
 //        logger.debug( "apiTestYN>>>>>[" + this.apiTestYN + "]" );
         if( "Y".equals(this.apiTestYN) ) {
             logger.debug("API key check: ON");
