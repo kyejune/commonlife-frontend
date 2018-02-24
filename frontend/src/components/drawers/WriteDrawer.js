@@ -18,6 +18,10 @@ class WriteDrawer extends BottomDrawer {
         }
     }
 
+    handleChange(event) {
+        this.setState({content: event.target.value});
+    }
+
 
     selectPicture() {
         let gettedPicture = (base64) => this.gettedPicture(base64);
@@ -33,31 +37,34 @@ class WriteDrawer extends BottomDrawer {
             });
     }
 
-    gettedPicture(base64){
+    gettedPicture(base64) {
 
         this.setState({
             base64Img: 'data:image/jpeg;base64,' + base64
         });
 
         // {
-        //     "fileIdx": 8,
-        //     "boardIdx": 0,
-        //     "fileType": "image/png",
-        //     "fileNm": null,
-        //     "fileOrgNm": null,
-        //     "filePath": "origin/article/1518962448266.png",
-        //     "fileSize": "0",
+        //     "postFileIdx": 3,
+        //     "postIdx": 0,
+        //     "usrId": 0,
+        //     "host": null,
+        //     "mimeType": "image/png",
+        //     "fileName": null,
+        //     "filePath": "origin/article/1519456812764.png",
         //     "delYn": "N",
-        //     "dispOrder": "1",
-        //     "regDttm": "2018-02-18 23:00:48.0",
-        //     "regUserid": null,
-        //     "updDttm": "2018-02-18 23:00:48.0",
-        //     "updUserid": null,
-        //     "post": null
+        //     "regDttm": "2018-02-24 16:20:13.0",
+        //     "updDttm": "2018-02-24 16:20:13.0",
+        //     "post": null,
+        //     "originPath": "/postFiles/3",
+        //     "smallPath": "/postFiles/3/s/",
+        //     "mediumPath": "/postFiles/3/m/",
+        //     "largePath": "/postFiles/3/l/"
         // }
-        Net.uploadImg( this.state.base64Img, data =>{
-            alert('이미지 올라감');
-        } );
+        Net.uploadImg(this.state.base64Img, data => {
+
+            this.imgId = data.postFileIdx;
+
+        }).bind(this);
 
     }
 
@@ -73,12 +80,18 @@ class WriteDrawer extends BottomDrawer {
 
     complete() {
         let data = {
-            "boardType": "feed",
-            "title": "피드 제목.ㄴㅁㅇㄹㅁㄴㅇㄹ",
-            "content": "피드내옹...."
+            postType: "feed",
+            content: this.state.content,
+            postFiles: []
         };
 
-        Net.makePost( data, response =>{
+        if( this.imgId )
+            data.postFiles.push( this.imgId );
+
+        console.log( 'complete:', data );
+
+
+        Net.makePost(data, () => {
             this.props.close();
         });
     }
@@ -89,7 +102,8 @@ class WriteDrawer extends BottomDrawer {
 
             <section className="cl-write-section dialogs__content">
 
-                <textarea name="" id="" cols="30" rows="5" placeholder="새로운 글을 작성해 보세요."/>
+                <textarea name="" id="" cols="30" rows="5" placeholder="새로운 글을 작성해 보세요." value={this.state.content}
+                          onChange={event => this.handleChange(event)}/>
 
 
                 <footer className="cl-flex-between">

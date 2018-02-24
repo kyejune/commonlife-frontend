@@ -37,7 +37,7 @@ export default class LikeShareAndSome extends Component{
 
         let Share, Some;
         if( this.props.share )
-            Share = <Button flat inkDisabled className="cl-card-item__button" onClick={() => this.shareItem()}><span>Share</span></Button>;
+            Share = <button onClick={() => this.shareItem()}>SHARE</button>;
 
 
         if( this.props.join )
@@ -45,7 +45,7 @@ export default class LikeShareAndSome extends Component{
 
         else if( this.props.qa )
             Some = <button>
-                <img src={qaSrc} alt="문의하기" width="118" height="36"/>
+                <img className="ml-1em" src={qaSrc} alt="문의하기" width="118" height="36"/>
             </button>;
 
         else if( this.props.schedule )
@@ -54,11 +54,11 @@ export default class LikeShareAndSome extends Component{
             </button>;
 
 
-        return <div className="cl-flex-between">
+        return <div className="cl-flex-between cl-like-share">
 
             <div className="cl-flex">
 
-                <button className="cl-card-item__button" onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }>Like</button>
+                <button className="cl-card-item__button cl-like__button" onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }>LIKE</button>
                 <Link className="cl-counter__button" to={this.props.like.to}>
                     {this.state.count}
                 </Link>
