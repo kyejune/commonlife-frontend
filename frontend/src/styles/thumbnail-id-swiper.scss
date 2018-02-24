@@ -6,23 +6,7 @@
     background-repeat: no-repeat;
 }
 
-.swiper-slide--1 {
-    @extend .swiper-slide;
-}
-.swiper-slide--2 {
-    @extend .swiper-slide;
-}
-.swiper-slide--3 {
-    @extend .swiper-slide;
-}
-.swiper-slide--4 {
-    @extend .swiper-slide;
-}
-.swiper-slide--5 {
-    @extend .swiper-slide;
-}
-
-.cl-thumbnail-detail {
+.cl-swiper-viewer {
     .swiper-slide {
         height: calc(100vh - 56px);
     }

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	            http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+                http://www.springframework.org/schema/context
+                http://www.springframework.org/schema/context/spring-context-4.3.xsd
+                http://www.springframework.org/schema/util
+                http://www.springframework.org/schema/util/spring-util.xsd
+                http://www.springframework.org/schema/mvc
+                http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+    <context:annotation-config />
+
+    <context:component-scan base-package="com.kolon">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+    </context:component-scan>
+
+    <!-- properties load : begin -->
+    <util:properties id="globals" location="classpath:/properties/globals.properties" />
+    <util:properties id="systemprop" location="classpath:/com/kolon/prop/#{globals['Globals.ServerType']}/system.properties" />
+    <bean id="systemConfigComponent" class="com.kolon.common.component.SystemConfigComponent" init-method="init">
+        <property name="properties">
+            <list>
+                <value>com/kolon/prop/globals.properties</value>
+                <value>com/kolon/prop/#{globals['Globals.ServerType']}/system.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" id="systemproperties">
+        <property name="locations" value="classpath:/com/kolon/prop/#{globals['Globals.ServerType']}/system.properties"/>
+        <property name="fileEncoding" value="UTF-8"/>
+    </bean>
+    <!-- properties load : end -->
+
+    <mvc:resources mapping="/images/**" location="/images/"/>
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <!--<mvc:resources mapping="/upload/**" location="file:#{systemprop['system.storage.file.path']}/" />-->
+    <!--<mvc:resources mapping="/uploadfiles/**" location="file:#{systemprop['system.storage.file.path']}/" />-->
+
+
+    <mvc:annotation-driven>
+        <mvc:path-matching suffix-pattern="false"/>
+    </mvc:annotation-driven>
+
+
+    <!-- MultipartResolver -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="maxUploadSize" value="100000000"/>
+        <property name="maxInMemorySize" value="100000000"/>
+    </bean>
+
+    <!--&lt;!&ndash; File Download View &ndash;&gt;-->
+    <!--<bean id="fileDownView" class="com.kolon.common.view.FileDownView" />-->
+
+    <!-- Tiles ViewResolver  -->
+    <bean id="tilesViewResolver" class="org.springframework.web.servlet.view.tiles3.TilesViewResolver" />
+
+    <!-- jsp ViewResolver -->
+    <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/views/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!-- json View -->
+    <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"
+          p:contentType="application/json;charset=UTF-8" />
+
+    <bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"
+          p:order="0" />
+
+
+    <!-- pagination tag -->
+    <bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes" value="application/json" />
+    </bean>
+
+    <bean id="defaultRenderer" class="com.kolon.common.admin.pagination.DefaultPaginationRenderer" />
+
+    <bean id="paginationManager" class="com.kolon.common.admin.pagination.DefaultPaginationManager">
+        <property name="rendererType">
+            <map>
+                <entry key="default" value-ref="defaultRenderer" />
+            </map>
+        </property>
+    </bean>
+</beans>

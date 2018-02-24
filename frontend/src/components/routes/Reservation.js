@@ -3,7 +3,7 @@ import Store from "../../scripts/store";
 import ReservationDetail from "components/drawers/ReservationDetail";
 import ReservationHistory from "components/drawers/ReservationHistory";
 import DrawerContentHolder from "components/drawers/DrawerContentHolder";
-import ThumbnailDetail from "components/drawers/ThumbnailDetail";
+import DrawerSwiperViewer from "components/drawers/DrawerSwiperViewer";
 import {Drawer} from 'react-md';
 import { Link } from 'react-router-dom';
 import HeaderOfReservation from 'components/ui/HeaderOfReservation';
@@ -235,7 +235,7 @@ class Reservation extends Component {
             <Drawer {...Store.customDrawerProps}
                     visible={this.state.drawer.indexOf( 'reservation-thumbnails' ) >= 0}>
                 <DrawerContentHolder back>
-                    <ThumbnailDetail/>
+                    <DrawerSwiperViewer/>
                 </DrawerContentHolder>
             </Drawer>
 

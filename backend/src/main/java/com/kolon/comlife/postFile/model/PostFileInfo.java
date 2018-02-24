@@ -6,61 +6,63 @@ import org.apache.ibatis.type.Alias;
 @Alias("postFileInfo")
 public class PostFileInfo {
 
-    private int fileIdx;
-    private int boardIdx;
-    private String fileType;
-    private String fileNm;
-    private String fileOrgNm;
+    private int postFileIdx;
+    private int postIdx;
+    private int usrId;
+    private String host;
+    private String mimeType;
+    private String fileName;
     private String filePath;
-    private String fileSize;
     private String delYn;
-    private String dispOrder;
     private String regDttm;
-    private String regUserid;
     private String updDttm;
-    private String updUserid;
 
-    // Relations
-    private PostInfo post;
-
-    public int getFileIdx() {
-        return fileIdx;
+    public int getPostFileIdx() {
+        return postFileIdx;
     }
 
-    public void setFileIdx(int fileIdx) {
-        this.fileIdx = fileIdx;
+    public void setPostFileIdx(int postFileIdx) {
+        this.postFileIdx = postFileIdx;
     }
 
-    public int getBoardIdx() {
-        return boardIdx;
+    public int getPostIdx() {
+        return postIdx;
     }
 
-    public void setBoardIdx(int boardIdx) {
-        this.boardIdx = boardIdx;
+    public void setPostIdx(int postIdx) {
+        this.postIdx = postIdx;
     }
 
-    public String getFileType() {
-        return fileType;
+    public int getUsrId() {
+        return usrId;
     }
 
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
+    public void setUsrId(int usrId) {
+        this.usrId = usrId;
     }
 
-    public String getFileNm() {
-        return fileNm;
+    public String getHost() {
+        return host;
     }
 
-    public void setFileNm(String fileNm) {
-        this.fileNm = fileNm;
+    public void setHost(String host) {
+        this.host = host;
     }
 
-    public String getFileOrgNm() {
-        return fileOrgNm;
+    public String getMimeType() {
+        return mimeType;
     }
 
-    public void setFileOrgNm(String fileOrgNm) {
-        this.fileOrgNm = fileOrgNm;
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public String getFilePath() {
@@ -71,28 +73,12 @@ public class PostFileInfo {
         this.filePath = filePath;
     }
 
-    public String getFileSize() {
-        return fileSize;
-    }
-
-    public void setFileSize(String fileSize) {
-        this.fileSize = fileSize;
-    }
-
     public String getDelYn() {
         return delYn;
     }
 
     public void setDelYn(String delYn) {
         this.delYn = delYn;
-    }
-
-    public String getDispOrder() {
-        return dispOrder;
-    }
-
-    public void setDispOrder(String dispOrder) {
-        this.dispOrder = dispOrder;
     }
 
     public String getRegDttm() {
@@ -103,14 +89,6 @@ public class PostFileInfo {
         this.regDttm = regDttm;
     }
 
-    public String getRegUserid() {
-        return regUserid;
-    }
-
-    public void setRegUserid(String regUserid) {
-        this.regUserid = regUserid;
-    }
-
     public String getUpdDttm() {
         return updDttm;
     }
@@ -119,13 +97,10 @@ public class PostFileInfo {
         this.updDttm = updDttm;
     }
 
-    public String getUpdUserid() {
-        return updUserid;
-    }
-
-    public void setUpdUserid(String updUserid) {
-        this.updUserid = updUserid;
-    }
+    /*
+        Relations
+     */
+    private PostInfo post;
 
     /*
         Relations Getter and Setter
@@ -139,4 +114,19 @@ public class PostFileInfo {
         this.post = post;
     }
 
+    /*
+        이미지 경로
+     */
+    public String getOriginPath() {
+        return "/postFiles/" + this.postFileIdx;
+    }
+    public String getSmallPath() {
+        return "/postFiles/" + this.postFileIdx + "/s/";
+    }
+    public String getMediumPath() {
+        return "/postFiles/" + this.postFileIdx + "/m/";
+    }
+    public String getLargePath() {
+        return "/postFiles/" + this.postFileIdx + "/l/";
+    }
 }

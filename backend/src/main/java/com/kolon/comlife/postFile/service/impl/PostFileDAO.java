@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository("postFileDAO")
@@ -20,8 +21,20 @@ public class PostFileDAO {
 
     public PostFileInfo getPostFile( int id ) {
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "fileIdx", id );
+        selectParams.put( "postFileIdx", id );
         return sqlSession.selectOne( "PostFile.selectPostFile", selectParams );
+    }
+
+    public List<PostFileInfo> getPostFilesByPostId( int id ) {
+        Map<String, Integer> selectParams = new HashMap<String, Integer>();
+        selectParams.put( "postIdx", id );
+        return sqlSession.selectList( "PostFile.selectPostFile", selectParams );
+    }
+
+    public List<PostFileInfo> getPostFilesByPostIds( List<Integer> ids ) {
+        Map<String, List<Integer>> selectParams = new HashMap<String, List<Integer>>();
+        selectParams.put( "postIdxs", ids );
+        return sqlSession.selectList( "PostFile.selectPostFile", selectParams );
     }
 
     public PostFileInfo setPostFile( PostFileInfo postFileInfo ) {
@@ -32,13 +45,21 @@ public class PostFileDAO {
     public PostFileInfo updatePostFile( int id, PostFileInfo postFileInfo ) {
         sqlSession.update( "PostFile.updatePostFile", postFileInfo );
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "fileIdx", id );
+        selectParams.put( "postFileIdx", id );
         return sqlSession.selectOne( "PostFile.selectLatestPostFile" );
+    }
+
+    public List<PostFileInfo> bindPostToPostFiles( int postIdx, List<Integer> postFileIdxs ) {
+        Map<String, Object> params = new HashMap<>();
+        params.put( "postIdx", postIdx );
+        params.put( "postFileIdxs", postFileIdxs );
+        sqlSession.update( "PostFile.bindPostToPostFiles", params );
+        return sqlSession.selectList( "PostFile.selectPostFile", params );
     }
 
     public void deletePostFile( int id ) {
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "fileIdx", id );
+        selectParams.put( "postFileIdx", id );
         sqlSession.delete( "PostFile.deletePostFile", selectParams );
         return;
     }

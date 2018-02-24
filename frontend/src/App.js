@@ -34,6 +34,9 @@ class App extends Component {
             });
         }, true);
 
+        if( this.state.isDevice )
+            document.querySelector('body').classList.add('cl-is-device');
+
     }
 
     render() {
@@ -43,8 +46,7 @@ class App extends Component {
 
                 <div className={classNames({
                     'App': true,
-                    'cl-app--expand': this.state.scrolled,
-                    'cl-is-device': this.state.isDevice
+                    'cl-app--expand': this.state.scrolled
                 })}>
 
                     <Header/>

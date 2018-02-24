@@ -42,7 +42,7 @@ public class PostDAO {
     public PostInfo updatePost(PostInfo post) {
         sqlSession.update( "Post.updatePost", post );
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "boardIdx", post.getBoardIdx() );
+        selectParams.put( "boardIdx", post.getPostIdx() );
         return sqlSession.selectOne( "Post.selectPost", selectParams );
     }
 

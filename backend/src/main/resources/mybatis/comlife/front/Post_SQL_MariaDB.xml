@@ -4,155 +4,95 @@
 <mapper namespace="Post">
 
     <select id="countPostList" resultType="java.lang.Integer">
+    <![CDATA[
         SELECT
                 COUNT( * ) as COUNT
         FROM
-                BOARD
+                `POST`
+    ]]>
     </select>
 
     <select id="selectPostList" parameterType="java.util.Map" resultType="postInfo">
+    <![CDATA[
         /* 공통게시판 리스트 조회 */
         SELECT
-                BOARD_IDX,
-                BOARD_TYPE,
-                TITLE,
-                CONTENT,
-                CONTENT_TYPE,
-                READ_CNT,
-                OPEN_DT,
-                CLOSE_DT,
-                HTML_YN,
-                USE_YN,
-                DEL_YN,
-                WRITE_NM,
-                WRITE_HP,
-                WRITE_EMAIL,
-                ORDERER_DATE_TIME,
-                ORDER_NO,
-                REG_DTTM,
-                REG_USERID,
-                UPD_DTTM,
-                UPD_USERID,
-                USR_ID,
-                CMPLX_ID
+                *
         FROM
-                BOARD
+                `POST`
         WHERE
-                USE_YN = 'Y'
-                AND
-                DEL_YN = 'N'
+                `DEL_YN` = 'N'
         LIMIT
                 #{limit}
         OFFSET
                 #{offset}
+    ]]>
     </select>
 
     <select id="selectPost" parameterType="java.util.Map" resultType="postInfo">
+    <![CDATA[
         SELECT
-                BOARD_IDX,
-                BOARD_TYPE,
-                TITLE,
-                CONTENT,
-                CONTENT_TYPE,
-                READ_CNT,
-                OPEN_DT,
-                CLOSE_DT,
-                HTML_YN,
-                USE_YN,
-                DEL_YN,
-                WRITE_NM,
-                WRITE_HP,
-                WRITE_EMAIL,
-                ORDERER_DATE_TIME,
-                ORDER_NO,
-                REG_DTTM,
-                REG_USERID,
-                UPD_DTTM,
-                UPD_USERID,
-                USR_ID,
-                CMPLX_ID
+                *
         FROM
-                BOARD
+                `POST`
         WHERE
-                USE_YN = 'Y'
+                `DEL_YN` = 'N'
                 AND
-                DEL_YN = 'N'
-                AND
-                BOARD_IDX = #{boardIdx}
+                `POST_IDX` = #{postIdx}
+    ]]>
     </select>
 
     <select id="selectLatestPost" resultType="postInfo">
+    <![CDATA[
         SELECT
-                BOARD_IDX,
-                BOARD_TYPE,
-                TITLE,
-                CONTENT,
-                CONTENT_TYPE,
-                READ_CNT,
-                OPEN_DT,
-                CLOSE_DT,
-                HTML_YN,
-                USE_YN,
-                DEL_YN,
-                WRITE_NM,
-                WRITE_HP,
-                WRITE_EMAIL,
-                ORDERER_DATE_TIME,
-                ORDER_NO,
-                REG_DTTM,
-                REG_USERID,
-                UPD_DTTM,
-                UPD_USERID,
-                USR_ID,
-                CMPLX_ID
+                *
         FROM
-                BOARD
+                `POST`
         WHERE
-                USE_YN = 'Y'
+                `DEL_YN` = 'N'
                 AND
-                DEL_YN = 'N'
-                AND
-                BOARD_IDX = LAST_INSERT_ID()
+                `POST_IDX` = LAST_INSERT_ID()
+    ]]>
     </select>
 
     <insert id="insertPost" parameterType="postInfo">
+    <![CDATA[
         INSERT
-        INTO    BOARD
+        INTO    `POST`
         (
-            BOARD_TYPE,
-            TITLE,
-            CONTENT,
-            USR_ID,
-            CMPLX_ID,
-            REG_DTTM,
-            UPD_DTTM
+            `POST_TYPE`,
+            `CONTENT`,
+            `USR_ID`,
+            `REG_DTTM`,
+            `UPD_DTTM`
         )
         VALUES
         (
-            #{boardType},
-            #{title},
+            #{postType},
             #{content},
             #{usrId},
-            0,
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP
         )
+    ]]>
     </insert>
 
     <update id="updatePost" parameterType="postInfo">
-        update  `BOARD`
-        set     `BOARD_TYPE` =  #{boardType},
-                `TITLE` =       #{title},
+    <![CDATA[
+        UPDATE  `POST`
+        SET     `POST_TYPE` =  #{postType},
                 `CONTENT` =     #{content},
                 `UPD_DTTM` =    CURRENT_TIMESTAMP
-        where   `BOARD_IDX` =   #{boardIdx}
+        WHERE   `POST_IDX` =   #{postIdx}
+    ]]>
     </update>
 
     <update id="deletePost" parameterType="postInfo">
-        update  `BOARD`
-        set     `DEL_YN` =  'Y',
+    <![CDATA[
+        UPDATE  `POST`
+        SET     `DEL_YN` =  'Y',
                 `UPD_DTTM` =    CURRENT_TIMESTAMP
-        where   `BOARD_IDX` =   #{boardIdx}
+        WHERE   `POST_IDX` =   #{postIdx}
+    ]]>
     </update>
 
 </mapper>

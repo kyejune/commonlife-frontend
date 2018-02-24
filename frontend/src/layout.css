@@ -1,9 +1,14 @@
+.cl-is-device .App > header, .cl-is-device .md-drawer--active header {
+  padding-top: 3.90625vh;
+  height: calc( 56px + 3.90625vh); }
+
+body:not(.cl-is-device) {
+  overflow-y: scroll; }
+
 /* Header */
 .App {
   height: 100vh;
   -webkit-overflow-scrolling: touch; }
-  .App:not(.cl-is-device) {
-    overflow: scroll; }
   .App > header {
     transition: margin-top 0.4s ease-out; }
     .App > header .md-btn--icon {
@@ -39,9 +44,6 @@
       color: #1052a5; }
   .App.cl-app--expand #cl-footer {
     bottom: -56px; }
-  .App.cl-is-device > header {
-    padding-top: 3.90625vh;
-    height: calc( 56px + 3.90625vh); }
 
 /* SubHeader */
 .cl-second-header {

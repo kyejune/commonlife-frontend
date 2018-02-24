@@ -1,15 +1,24 @@
 $dur: 0.4s;
 $delay: 0.2s;
 
+.cl-is-device{
+    .App > header, .md-drawer--active header{
+        padding-top: 3.90625vh;
+        height: calc( 56px + 3.90625vh );
+    }
+}
+
+body:not(.cl-is-device){
+    overflow-y: scroll;
+}
+
+
 /* Header */
 .App {
 
     height: 100vh;
     -webkit-overflow-scrolling: touch;
 
-    &:not(.cl-is-device){
-        overflow: scroll;
-    }
 
     & > header {
         transition: margin-top $dur ease-out;
@@ -77,13 +86,6 @@ $delay: 0.2s;
         #cl-footer {
             bottom: -56px;
         }
-    }
-
-    &.cl-is-device{
-         & > header{
-             padding-top: 3.90625vh;
-             height: calc( 56px + 3.90625vh );
-         }
     }
 
 }
