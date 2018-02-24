@@ -70,7 +70,7 @@ class CardItemDetailDrawer extends Component {
 
                     {/*this.props.list + '/like/' + this.props.cardData.index*/}
                     {/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
-                    <LikeShareAndSome like={{to: this.state.likeLink, count: 0}} share
+                    <LikeShareAndSome like={{to: this.state.likeLink, count: this.state.likesCount || 0 }} share
                                       schedule={this.state.type === 'event'} qa={this.state.type !== 'event'}/>
 
                 </div>

@@ -143,7 +143,7 @@ class CardItem extends Component {
 							{/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
 							<LikeShareAndSome
 								like={ { to:this.props.list + '/' + this.data.postIdx + '/like', count:this.data.likesCount } }
-								share={ this.data.postType !== 'feed'?false:{ count:this.data.sharesCount } } />
+								share={this.data.postType !== 'feed' } />
 						</CardActions>
 					</Card>
 				</div>
