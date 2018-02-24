@@ -17,7 +17,6 @@ public class PostInfo {
     private String content;
     private String delYn;
     private int likesCount;
-    private int sharesCount = 0;
     private String regDttm;
     private String updDttm;
 
@@ -87,10 +86,6 @@ public class PostInfo {
 
     public int getLikesCount() {
         return likesCount;
-    }
-
-    public int getSharesCount() {
-        return sharesCount;
     }
 
     /*
