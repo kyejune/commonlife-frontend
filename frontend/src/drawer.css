@@ -1,9 +1,0 @@
-/* Drawer */
-.md-drawer {
-  overflow: auto; }
-
-.cl-drawer-content-holder > header {
-  position: sticky; }
-
-.md-drawer--active header h2 {
-  font-size: 16px; }
