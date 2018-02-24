@@ -25,3 +25,11 @@
   }
 
 }
+
+
+&.cl-is-device{
+  .md-drawer--active header{
+    padding-top: 3.90625vh;
+    height: calc( 56px + 3.90625vh );
+  }
+}

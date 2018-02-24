@@ -5057,10 +5057,10 @@ button, select, input {
 /* Header */
 .App {
   height: 100vh;
-  overflow: scroll;
   -webkit-overflow-scrolling: touch; }
+  .App:not(.cl-is-device) {
+    overflow: scroll; }
   .App > header {
-    transform: translateZ(0px);
     transition: margin-top 0.4s ease-out; }
     .App > header .md-btn--icon {
       padding: 0; }
@@ -5069,10 +5069,10 @@ button, select, input {
     bottom: 0;
     width: 100vw;
     height: 56px;
-    transform: translateZ(0px);
     background-color: #ffffff;
-    transition: margin-bottom 0.4s ease-out; }
+    transition: bottom 0.4s ease-out; }
     .App #cl-footer footer {
+      position: relative;
       width: 100vw;
       background-color: #ffffff; }
     .App #cl-footer .md-bottom-nav--fixed {
@@ -5094,7 +5094,10 @@ button, select, input {
     .App #cl-footer .footer__button--selected .md-bottom-nav-label {
       color: #1052a5; }
   .App.cl-app--expand #cl-footer {
-    margin-bottom: -56px; }
+    bottom: -56px; }
+  .App.cl-is-device > header {
+    padding-top: 3.90625vh;
+    height: calc( 56px + 3.90625vh); }
 
 /* SubHeader */
 .cl-second-header {

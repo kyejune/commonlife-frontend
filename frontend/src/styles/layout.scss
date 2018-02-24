@@ -5,11 +5,13 @@ $delay: 0.2s;
 .App {
 
     height: 100vh;
-    overflow: scroll;
     -webkit-overflow-scrolling: touch;
 
+    &:not(.cl-is-device){
+        overflow: scroll;
+    }
+
     & > header {
-        transform: translateZ(0px);
         transition: margin-top $dur ease-out;
 
         .md-btn--icon {
@@ -27,11 +29,11 @@ $delay: 0.2s;
         bottom: 0;
         width: 100vw;
         height: 56px;
-        transform: translateZ(0px);
         background-color: #ffffff;
-        transition: margin-bottom $dur ease-out;
+        transition: bottom $dur ease-out;
 
         footer{
+            position: relative;
             width: 100vw;
             background-color: #ffffff;
         }
@@ -73,8 +75,15 @@ $delay: 0.2s;
     &.cl-app--expand {
 
         #cl-footer {
-            margin-bottom: -56px;
+            bottom: -56px;
         }
+    }
+
+    &.cl-is-device{
+         & > header{
+             padding-top: 3.90625vh;
+             height: calc( 56px + 3.90625vh );
+         }
     }
 
 }

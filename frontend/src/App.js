@@ -21,7 +21,7 @@ class App extends Component {
 
         this.state = {
             scrolled: false,
-            isDevice: !!window.cordova,
+            isDevice: window.location.protocol === 'file:',
         }
     }
 
@@ -29,14 +29,11 @@ class App extends Component {
     componentWillMount() {
 
         document.addEventListener('scroll', () => {
-            // let doc = document.querySelector('.react-swipeable-view-container>div[aria-hidden=false]');
-            let doc = document.querySelector('.App');
-            if (doc) {
-                this.setState({
-                    scrolled: (doc.scrollTop > 56)
-                });
-            }
+            this.setState({
+                scrolled: (document.querySelector('body').scrollTop > 56 || document.querySelector('.App').scrollTop > 56)
+            });
         }, true);
+
     }
 
     render() {
@@ -51,7 +48,6 @@ class App extends Component {
                 })}>
 
                     <Header/>
-
 
 
                     <div className="app-content">
