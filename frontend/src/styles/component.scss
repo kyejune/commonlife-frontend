@@ -76,6 +76,7 @@
     color: #77787A;
     font-size: 12px;
     text-decoration: underline;
+    margin-left: 0.8em;
   }
 }
 
@@ -283,6 +284,11 @@
     }
   }
 
+  .cl-card-item{
+    padding-bottom: 1em;
+    border-bottom: 1px solid #cfcfcf;
+  }
+
   .cl-content--card{
     padding: 16px;
     min-height: 100px;
@@ -347,6 +353,23 @@
         top: 2px;
     }
 }
+
+
+.cl-like-share{
+
+  button, a{
+    color: #8C8C8C;
+  }
+
+  .cl-like__button, .cl-counter__button{
+    color: #000000;
+  }
+
+  a{
+    text-decoration: none;
+  }
+}
+
 
 /* 앞에 동그라미 감싸진 + 버튼이 있는 라벨 버튼*/
 .cl-plus-label__button{

@@ -7,7 +7,7 @@ import Net from "scripts/net";
 class CommunityNews extends Component {
 
     componentDidMount(){
-        Net.getFeedAll();
+        // Net.getFeedAll();
     }
 
 	render () {

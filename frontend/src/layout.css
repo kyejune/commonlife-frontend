@@ -1,10 +1,15 @@
+.cl-is-device .App > header, .cl-is-device .md-drawer--active header {
+  padding-top: 3.90625vh;
+  height: calc( 56px + 3.90625vh); }
+
+body:not(.cl-is-device) {
+  overflow-y: scroll; }
+
 /* Header */
 .App {
   height: 100vh;
-  overflow: scroll;
   -webkit-overflow-scrolling: touch; }
   .App > header {
-    transform: translateZ(0px);
     transition: margin-top 0.4s ease-out; }
     .App > header .md-btn--icon {
       padding: 0; }
@@ -13,10 +18,10 @@
     bottom: 0;
     width: 100vw;
     height: 56px;
-    transform: translateZ(0px);
     background-color: #ffffff;
-    transition: margin-bottom 0.4s ease-out; }
+    transition: bottom 0.4s ease-out; }
     .App #cl-footer footer {
+      position: relative;
       width: 100vw;
       background-color: #ffffff; }
     .App #cl-footer .md-bottom-nav--fixed {
@@ -38,7 +43,7 @@
     .App #cl-footer .footer__button--selected .md-bottom-nav-label {
       color: #1052a5; }
   .App.cl-app--expand #cl-footer {
-    margin-bottom: -56px; }
+    bottom: -56px; }
 
 /* SubHeader */
 .cl-second-header {
@@ -50,7 +55,8 @@
 
 .cl-fitted-box {
   width: 100%;
-  height: 100%; }
+  height: 100%;
+  padding-bottom: 56px; }
 
 .cl-header--reservation {
   min-height: 145px;

@@ -16,8 +16,6 @@ class CommunityFeed extends Component {
 
 	render () {
 
-    	console.log( 'feed:', Store.feed );
-
 		return (
 			<div className="cl-fitted-box">
 
