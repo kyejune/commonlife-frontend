@@ -118,7 +118,7 @@ public class PostFileController {
             byte[] byteArray = IOUtils.toByteArray( objectData );
 
             // Set headers
-            final HttpHeaders headers = getFileTypeHeaders( postFileInfo.getFileType() );
+            final HttpHeaders headers = getFileTypeHeaders( postFileInfo.getMimeType() );
 
             return new ResponseEntity<byte[]> (byteArray, headers, HttpStatus.OK);
         }
@@ -144,7 +144,7 @@ public class PostFileController {
             byte[] byteArray = IOUtils.toByteArray( objectData );
 
             // Set headers
-            final HttpHeaders headers = getFileTypeHeaders( postFileInfo.getFileType() );
+            final HttpHeaders headers = getFileTypeHeaders( postFileInfo.getMimeType() );
 
             return new ResponseEntity<byte[]> (byteArray, headers, HttpStatus.OK);
         }
@@ -189,9 +189,9 @@ public class PostFileController {
         s3Client.putObject( new PutObjectRequest( writeBucket, key, stream, metadata ) );
 
         PostFileInfo postFile = new PostFileInfo();
-        postFile.setBoardIdx( 0 );
+        postFile.setPostIdx( 0 );
         postFile.setFilePath( key );
-        postFile.setFileType( metadata.getContentType() );
+        postFile.setMimeType( metadata.getContentType() );
 
         PostFileInfo result = postFileService.setPostFile( postFile );
 
