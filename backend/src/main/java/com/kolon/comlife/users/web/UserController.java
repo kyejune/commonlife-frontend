@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -45,6 +46,7 @@ public class UserController {
     public ResponseEntity loginUser(HttpServletRequest request) {
 
         RequestParameter    parameter;
+        Map<String, Object> resultMobileUser;
         Map<String, Object> result;
         String              retMsg;
         boolean             resFlag;
@@ -54,23 +56,23 @@ public class UserController {
 
         try {
             // 1. 기존 다른 기기에서의 로그인 여부 확인
-            result = mobileUserController.mobileUserLoginConfirm( parameter, null );
-            resFlag = IokUtil.getResFlag( result );
-            resType = IokUtil.getResType( result );
+            resultMobileUser = mobileUserController.mobileUserLoginConfirm( parameter, null );
+            resFlag = IokUtil.getResFlag( resultMobileUser );
+            resType = IokUtil.getResType( resultMobileUser );
 
             if( !(resFlag) && !(resType.equals(IokUtil.IOK_RES_FLAG_ALREADY_LOGGED_IN_STR)) ) {
                 return ResponseEntity
                         .status( HttpStatus.UNAUTHORIZED )
-                        .body( new SimpleErrorInfo( IokUtil.getMsg(result) ));
+                        .body( new SimpleErrorInfo( IokUtil.getMsg(resultMobileUser) ));
             }
 
             // 2. 새롭게 로그인
-            result = mobileUserController.mobileUserLogin( parameter, null );
-            resFlag = IokUtil.getResFlag( result );
+            resultMobileUser = mobileUserController.mobileUserLogin( parameter, null );
+            resFlag = IokUtil.getResFlag( resultMobileUser );
             if( !resFlag ) {
                 return ResponseEntity
                         .status( HttpStatus.UNAUTHORIZED )
-                        .body( new SimpleErrorInfo( IokUtil.getMsg(result) ));
+                        .body( new SimpleErrorInfo( IokUtil.getMsg(resultMobileUser) ));
             }
 
             if( resType != null && resType.equals(IokUtil.IOK_RES_FLAG_ALREADY_LOGGED_IN_STR) ) {
@@ -83,8 +85,16 @@ public class UserController {
             return IokUtil.convertExceptionToResponse( e );
         }
 
+
+        result = new HashMap();
         result.put("msg", retMsg);
-        return ResponseEntity.status( HttpStatus.OK ).body( result );
+        result.put("cmplxId", resultMobileUser.get("CMPLX_ID"));
+        result.put("userId", resultMobileUser.get("USER_ID"));
+        result.put("token", resultMobileUser.get("TOKEN"));
+        result.put("issueDate", resultMobileUser.get("ISSUE_DATE"));
+        result.put("expireDate", resultMobileUser.get("EXPIRE_DATE"));
+        result.put("userNm", resultMobileUser.get("USER_NM"));
+        return ResponseEntity.status( HttpStatus.OK ).body( resultMobileUser );
     }
 
 
@@ -125,7 +135,7 @@ public class UserController {
 
     /**
      * @description  모바일 토큰을 업데이트한다. (팝업 띄우기 위함)
-     * Headers : token - 인증 토큰
+     * params : token
      * todo: BUGBUG: 사용 권한 체크 안하나...?
      */
     @PutMapping(
@@ -149,7 +159,7 @@ public class UserController {
             resFlag = IokUtil.getResFlag( result );
 
             if( !resFlag ) {
-                return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( result );
+                return ResponseEntity.status( HttpStatus.UNAUTHORIZED ).body( result );
             }
         } catch( Exception e ) {
             return IokUtil.convertExceptionToResponse( e );
