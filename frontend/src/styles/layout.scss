@@ -22,10 +22,19 @@ $delay: 0.2s;
 
     }
 
-    & > footer {
+    #cl-footer {
+        position: fixed;
+        bottom: 0;
+        width: 100vw;
+        height: 56px;
         transform: translateZ(0px);
         background-color: #ffffff;
         transition: margin-bottom $dur ease-out;
+
+        footer{
+            width: 100vw;
+            background-color: #ffffff;
+        }
 
         .md-bottom-nav--fixed {
             font-size: 0;
@@ -63,12 +72,8 @@ $delay: 0.2s;
     // 스크롤해서 위아래 메뉴 치울때,
     &.cl-app--expand {
 
-        & > footer {
+        #cl-footer {
             margin-bottom: -56px;
-        }
-
-        .cl-write__button--fixed{
-            bottom: 1.5em;
         }
     }
 

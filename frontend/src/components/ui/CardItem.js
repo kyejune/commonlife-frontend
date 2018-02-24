@@ -6,9 +6,10 @@ import LikeShareAndSome from "components/ui/LikeShareAndSome";
 
 class CardItem extends Component {
 
+
 	// 카드 종류
 	cardName = ()=> {
-		if( this.props.cardData.type === 'brand') {
+		if( this.props.cardData.boardType === 'brand') {
 			return 'cl-card-item cl-card-item--brand';
 		}
 		else {
@@ -18,15 +19,15 @@ class CardItem extends Component {
 
 	// 피드, 뉴스 작성자 정보
 	cardAuthorInfo = ()=> {
-		if( this.props.cardData.type !== 'event' ) {
+		if( this.props.cardData.boardType !== 'event' ) {
 			return (
 				<CardTitle
 					// 작성자 이름
-					title={this.props.cardData.author.name}
+					title={this.props.cardData.writeNm}
 					// 작성자 프로필 이미지
-					avatar={<Avatar src={this.props.cardData.author.avatar} role="presentation"/>}
+					avatar={<Avatar src={this.props.cardData.avatar} role="presentation"/>}
 					// 작성 시간
-					subtitle={this.props.cardData.created_at}
+					subtitle={this.props.cardData.regDttm}
 				/>
 			);
 		}
@@ -37,7 +38,7 @@ class CardItem extends Component {
 
 	// 이벤트 썸네일, 제목
 	cardEventTitle = ()=> {
-		if( this.props.cardData.type === "event" ) {
+		if( this.props.cardData.boardType === "event" ) {
 			return (
 				<div>
 					<Media>
@@ -45,14 +46,14 @@ class CardItem extends Component {
 						<MediaOverlay>
 							<CardTitle
 								// 이벤트 제목
-								title={this.props.cardData.event_title}
+								title={this.props.cardData.title}
 							/>
 						</MediaOverlay>
 					</Media>
 				</div>
 			);
 		}
-		if( this.props.cardData.type === "brand" ) {
+		if( this.props.cardData.boardType === "brand" ) {
 			return (
 				<div>
 					<Media>
@@ -60,7 +61,7 @@ class CardItem extends Component {
 						<MediaOverlay>
 							<CardTitle
 								// 이벤트 제목
-								title={this.props.cardData.event_title}
+								title={this.props.cardData.title}
 							/>
 						</MediaOverlay>
 					</Media>
@@ -74,7 +75,7 @@ class CardItem extends Component {
 
 	// 이벤트 장소, 일정
 	cardEventContent = ()=> {
-		if( this.props.cardData.type === "event" ) {
+		if( this.props.cardData.boardType === "event" ) {
 			return (
 				<div className="cl-card-item__event-content">
 					{/*이벤트 장소*/}
@@ -91,7 +92,7 @@ class CardItem extends Component {
 
 	// 피드, 뉴스 컨텐츠
 	cardTextContent = ()=> {
-		if( this.props.cardData.type !== "event" ) {
+		if( this.props.cardData.boardType !== "event" ) {
 			return (
 				<p>
 					{this.props.cardData.content}
@@ -113,7 +114,7 @@ class CardItem extends Component {
 						{/* 작성자 정보 - 피드, 뉴스 */}
 						{this.cardAuthorInfo()}
 
-						<Link to={this.props.list + '/' + this.props.cardData.index + '/view/' }>
+						<Link to={this.props.list + '/' + this.props.cardData.boardIdx + '/view/' }>
 							{/* 이벤트 썸네일, 제목 */}
 							{this.cardEventTitle()}
 
@@ -130,7 +131,7 @@ class CardItem extends Component {
 
 						<CardActions>
 							{/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
-							<LikeShareAndSome like={ { to:this.props.list + '/' + this.props.cardData.index + '/like', count:this.props.cardData.like_count } } share={this.props.cardData.type !== 'feed'} />
+							<LikeShareAndSome like={ { to:this.props.list + '/' + this.props.cardData.boardIdx + '/like', count:this.props.cardData.like_count } } share={this.props.cardData.boardType !== 'feed'} />
 						</CardActions>
 					</Card>
 				</div>

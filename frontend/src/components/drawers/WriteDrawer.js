@@ -1,6 +1,7 @@
 /* WriteDrawer.jsx */
 import React from 'react';
 import {observer} from 'mobx-react';
+import Net from 'scripts/net';
 
 import BottomDrawer from 'components/drawers/BottomDrawer';
 import addSrc from 'images/img-bt-gray@3x.png';
@@ -38,6 +39,26 @@ class WriteDrawer extends BottomDrawer {
             base64Img: 'data:image/jpeg;base64,' + base64
         });
 
+        // {
+        //     "fileIdx": 8,
+        //     "boardIdx": 0,
+        //     "fileType": "image/png",
+        //     "fileNm": null,
+        //     "fileOrgNm": null,
+        //     "filePath": "origin/article/1518962448266.png",
+        //     "fileSize": "0",
+        //     "delYn": "N",
+        //     "dispOrder": "1",
+        //     "regDttm": "2018-02-18 23:00:48.0",
+        //     "regUserid": null,
+        //     "updDttm": "2018-02-18 23:00:48.0",
+        //     "updUserid": null,
+        //     "post": null
+        // }
+        Net.uploadImg( this.state.base64Img, data =>{
+            alert('이미지 올라감');
+        } );
+
     }
 
     failedPicture(message) {
@@ -51,7 +72,15 @@ class WriteDrawer extends BottomDrawer {
     }
 
     complete() {
+        let data = {
+            "boardType": "feed",
+            "title": "피드 제목.ㄴㅁㅇㄹㅁㄴㅇㄹ",
+            "content": "피드내옹...."
+        };
 
+        Net.makePost( data, response =>{
+            this.props.close();
+        });
     }
 
     render() {

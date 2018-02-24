@@ -76,6 +76,7 @@ class DrawerContentHolder extends Component {
         let childrenWithProps = React.Children.map( children, child =>
             React.cloneElement( child, {
                 updateTitle: title=> this.updateTitle(title),
+                close: ()=>this.onClose(),
             })
         );
 

@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {observer} from 'mobx-react';
 import CardItem from 'components/ui/CardItem';
 import Store from "scripts/store";
-import DB from "scripts/db";
+import Net from "scripts/net";
 
 class CommunityEvent extends Component {
 
     componentDidMount(){
-        DB.getEvent();
+        Net.getFeedAll();
     }
 
 	render () {
