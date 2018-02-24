@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PostFile">
+
+    <!--<select id="selectPostFileList" parameterType="String" resultType="postFileInfo">-->
+        <!--/* 공통게시판 리스트 조회 */-->
+        <!--SELECT-->
+                <!--*-->
+        <!--FROM-->
+                <!--BOARD_FILE-->
+        <!--LIMIT-->
+                <!--20-->
+        <!--OFFSET-->
+                <!--0-->
+    <!--</select>-->
+
+    <!--<select id="selectPostFileById" parameterType="String" resultType="postFileInfo">-->
+        <!--/* 공통게시판 리스트 조회 */-->
+        <!--SELECT-->
+                <!--*-->
+        <!--FROM-->
+                <!--BOARD_FILE-->
+        <!--WHERE-->
+                <!--BOARD_IDX-->
+                <!--IN-->
+                <!--()-->
+    <!--</select>-->
+
+    <select id="selectPostFile" parameterType="java.util.Map" resultType="postFileInfo">
+        <![CDATA[
+        SELECT  *
+        FROM    `BOARD_FILE`
+        WHERE   `FILE_IDX` = #{fileIdx}
+        ]]>
+    </select>
+
+    <insert id="insertPostFile" parameterType="postFileInfo">
+        <![CDATA[
+        INSERT
+        INTO    `BOARD_FILE`
+        (
+            `BOARD_IDX`,
+            `FILE_TYPE`,
+            `FILE_PATH`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        )
+        VALUES
+        (
+            0,
+            #{fileType},
+            #{filePath},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+        ]]>
+    </insert>
+
+    <select id="selectLatestPostFile" resultType="postFileInfo">
+        <![CDATA[
+        SELECT  *
+        FROM    `BOARD_FILE`
+        WHERE   `DEL_YN` = 'N'
+        AND
+                `FILE_IDX` = LAST_INSERT_ID()
+        ]]>
+    </select>
+
+    <update id="updatePostFile" parameterType="postFileInfo">
+        <![CDATA[
+        update  `BOARD_FILE`
+        set     `BOARD_IDX` =  #{boardIdx}
+        where   `FILE_IDX` =   #{fileIdx}
+        ]]>
+    </update>
+
+    <delete id="deletePostFile" parameterType="java.util.Map">
+        <![CDATA[
+        update  `BOARD_FILE`
+        set     `DEL_YN` =  'Y',
+                `UPD_DTTM` =    CURRENT_TIMESTAMP
+        where   `FILE_IDX` =   #{fileIdx}
+        ]]>
+    </delete>
+
+</mapper>

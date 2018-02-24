@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Button} from 'react-md';
 import {observer} from 'mobx-react';
 import {TabsContainer, Tabs, Tab, Drawer} from 'react-md';
 import {withRouter} from 'react-router';
@@ -76,13 +75,6 @@ class Community extends Component {
                     </Tabs>
                 </TabsContainer>
 
-                {this.state.tabIndex === 0 &&
-                <Button floating primary
-                        iconClassName="fa fa-pencil fa-2x"
-                        className="cl-write__button--fixed"
-                        onClick={() => Store.drawer.push('write')}
-                />
-                }
 
                 {/* 카드 상세보기 */}
                 <Drawer {...Store.customDrawerProps}

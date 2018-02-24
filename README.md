@@ -8,3 +8,5 @@
 2. /frontend - 사용자앱의 Frontend 프로젝트
 3. /backend - 사용자앱의 Backend 프로젝트 
 
+## Slack
+- https://helloshop-kr.slack.com

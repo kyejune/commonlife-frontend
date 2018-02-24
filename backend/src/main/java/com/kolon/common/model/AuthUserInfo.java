@@ -7,10 +7,10 @@ package com.kolon.common.model;
 
 public class AuthUserInfo {
 
-    int cmplxId;     // 현장(table) ID
-    int usrId;       // 사용자(table) ID
-    String userId;   // 사용자 로그인 ID
-    String tokenOrg; // Token payload
+    int    cmplxId;     // 현장(table) ID
+    int    usrId;       // 사용자(table) ID
+    String userId;      // 사용자 로그인 ID
+    String tokenOrg;    // Token payload
     String secretKey;
     String issueDate;
     String expireDate;

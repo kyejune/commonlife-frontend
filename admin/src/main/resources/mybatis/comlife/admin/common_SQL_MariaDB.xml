@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Common">
+    <sql id="prefixPagination">
+        <if test='pagingEnable != null and pagingEnable == "1"'>SELECT RESULT_LIST.*, ROWNUM AS RNUM FROM(</if>
+    </sql>
+
+    <sql id="suffixPagination">
+        <if test='pagingEnable != null and pagingEnable == "1"'>
+            <!--
+            <![CDATA[) RESULT_LIST WHERE ROWNUM <= #{pageIndex} + #{recordCountPerPage})ZZZ WHERE RNUM > #{pageIndex}]]>
+            -->
+            <![CDATA[) RESULT_LIST WHERE ROWNUM > (#{recordCountPerPage} * (#{pageIndex}-1)) AND ROWNUM <= (#{recordCountPerPage} * ((#{pageIndex}-1) + 1))  ]]>
+        </if>
+    </sql>
+
+    <sql id="orderby">
+
+    </sql>
+
+    <sql id="siblingsby">
+
+    </sql>
+
+</mapper>

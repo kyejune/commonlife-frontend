@@ -194,7 +194,6 @@
 
 .cl-card-item__button {
     position: relative;
-    min-width: 56px;
     height: 28px;
     margin: 0;
     padding: 0;
@@ -202,34 +201,21 @@
     text-align: left;
     color: #8C8C8C;
     transition: all 0.3s ease-in-out;
+    padding: 0 3px 0;
+    //border-bottom: 2px solid #ffffff;
+}
 
-    span {
-        padding: 0 3px 2.5px;
-        border-bottom: 2px solid #ffffff;
-    }
-
-    i {
-        position: absolute;
-        top: 5px;
-        width: 17px;
-        height: 17px;
-        border-radius: 50%;
-        background-color: #f4ca5c;
-        font-size: 9px;
-        font-style: normal;
-        text-align: center;
-        color: #000000;
-        line-height: 17px;
-    }
-
-    &:hover {
-        background: transparent;
-        color: #000000;
-
-        span {
-            border-bottom: 2px solid #f4ca5c;
-        }
-    }
+.cl-counter__button{
+  width: 17px;
+  height: 17px;
+  border-radius: 50%;
+  background-color: #f4ca5c;
+  font-size: 9px;
+  font-style: normal;
+  text-align: center;
+  color: #000000;
+  line-height: 17px;
+  margin-right: 1em;
 }
 
 .cl-card-item--brand {

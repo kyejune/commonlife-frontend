@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Properties">
+    <select id="selectPropertiesSendEmailList" parameterType="propertiesInfo" resultType="propertiesInfo">
+        /* 프로퍼티 SEND EMAIL 리스트 조회 */
+        DECLARE @propGroup VARCHAR(100) SET @propGroup = #{propGroup}
+        DECLARE @propKey VARCHAR(100) SET @propKey = #{propKey}
+
+        SELECT
+            PROP_GROUP,
+            PROP_KEY,
+            PROP_VALUE,
+            PROP_DESC,
+            USE_YN,
+            REG_DTTM,
+            REG_USERID,
+            UPD_DTTM,
+            UPD_USERID,
+            ROW_NUMBER() OVER(ORDER BY PROP_GROUP DESC) ROWNUM,
+            COUNT(1) OVER() AS TOT
+        FROM(
+            SELECT
+                PROP_GROUP,
+                PROP_KEY,
+                PROP_VALUE,
+                PROP_DESC,
+                USE_YN,
+                REG_DTTM,
+                REG_USERID,
+                UPD_DTTM,
+                UPD_USERID,
+                (CASE WHEN LEFT(PROP_KEY, 3) = 'VOC' THEN 1
+                      WHEN LEFT(PROP_KEY, 3) = 'ORD' THEN 2
+                      WHEN LEFT(PROP_KEY, 3) = 'LOC' THEN 3
+                      WHEN LEFT(PROP_KEY, 3) = 'PRO' THEN 4
+                      WHEN LEFT(PROP_KEY, 3) = 'ETC' THEN 5
+                      ELSE 999 END) AS ORDERNO
+            FROM SYS_PROPERTIES WITH(NOLOCK)
+            WHERE 1=1
+                AND ISNULL(USE_YN,'Y') = 'Y'
+                AND ISNULL(PROP_VALUE,'') <![CDATA[<>]]> ''
+
+                <choose>
+                    <when test='propGroup != null'>
+                        AND PROP_GROUP LIKE '%'+@propGroup+'%'
+                    </when>
+                </choose>
+
+                <choose>
+                    <when test='propKey != null'>
+                        AND PROP_KEY LIKE '%'+@propKey+'%'
+                    </when>
+                </choose>
+        )A
+        ORDER BY PROP_GROUP, ORDERNO, PROP_KEY ASC
+    </select>
+
+    <select id="selectPropertiesList" parameterType="propertiesInfo" resultType="propertiesInfo">
+        /* 프로퍼티 리스트 조회 */
+        SELECT
+          PROP_GROUP,
+          PROP_KEY,
+          PROP_VALUE,
+          PROP_DESC,
+          USE_YN,
+          REG_DTTM,
+          REG_USERID,
+          UPD_DTTM,
+          UPD_USERID
+        FROM
+          SERVICE_PROPERTIES
+        WHERE
+          IFNULL(USE_YN,'Y') = 'Y'
+        <choose>
+            <when test='propGroup != null'>
+              AND PROP_GROUP LIKE '%'+#{propGroup}+'%'
+            </when>
+            <when test='propKey != null'>
+              AND PROP_KEY LIKE '%'+#{propKey}+'%'
+            </when>
+        </choose>
+        ;
+    </select>
+
+
+    <select id="selectPropertiesDetail" parameterType="propertiesInfo" resultType="propertiesInfo">
+        /* 프로퍼티 상세 조회 */
+        DECLARE @propGroup VARCHAR(100) SET @propGroup = #{propGroup}
+        DECLARE @propKey VARCHAR(100) SET @propKey = #{propKey}
+
+        SELECT
+            PROP_GROUP,
+            PROP_KEY,
+            PROP_VALUE,
+            PROP_DESC,
+            USE_YN,
+            REG_DTTM,
+            REG_USERID,
+            UPD_DTTM,
+            UPD_USERID
+        FROM SYS_PROPERTIES WITH(NOLOCK)
+        WHERE 1=1
+          AND PROP_GROUP = @propGroup
+          AND PROP_KEY = @propKey
+    </select>
+
+
+
+    <insert id="insertProperties" parameterType="propertiesInfo">
+        /* 프로퍼티 등록 */
+        INSERT INTO SYS_PROPERTIES(PROP_GROUP,
+                                PROP_KEY,
+                                PROP_VALUE,
+                                PROP_DESC,
+                                USE_YN,
+                                REG_DTTM,
+                                REG_USERID,
+                                UPD_DTTM,
+                                UPD_USERID)
+        VALUES(#{propGroup},
+               #{propKey},
+               #{propValue},
+               #{propDesc},
+               #{useYn},
+               CONVERT(DATETIME, GETDATE(), 121),
+               #{regUserId},
+               CONVERT(DATETIME, GETDATE(), 121),
+               #{updUserId})
+    </insert>
+
+    <update id="updateProperties" parameterType="propertiesInfo">
+        /* 프로퍼티 수정 */
+        <![CDATA[
+        UPDATE SYS_PROPERTIES SET
+        ]]>
+
+        <if test='propValue != null and !propValue.equals("")'>
+            PROP_VALUE = #{propValue},
+        </if>
+
+        <if test='propDesc != null and !propDesc.equals("")'>
+            PROP_DESC = #{propDesc},
+        </if>
+
+        <if test='useYn != null and !useYn.equals("")'>
+            USE_YN = #{useYn},
+        </if>
+
+        <![CDATA[
+            UPD_DTTM = CONVERT(DATETIME, GETDATE(), 121),
+            UPD_USERID = #{updUserId}
+        WHERE PROP_GROUP = #{propGroup}
+          AND PROP_KEY = #{propKey}
+        ]]>
+    </update>
+
+</mapper>

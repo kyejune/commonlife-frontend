@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
-import DB from "scripts/db";
+import Net from "scripts/net";
 import LikeList from 'components/drawers/LikeList';
 import {observer} from 'mobx-react';
 
@@ -16,7 +16,7 @@ class People extends Component{
 	}
 
 	componentWillMount(){
-		DB.getLikey( 1, data => {
+		Net.getLikey( 1, data => {
 			this.setState( { likey: data } );
 
             // ContentHolder에 전달

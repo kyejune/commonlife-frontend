@@ -26,7 +26,7 @@ import java.util.TreeMap;
 
 
 /**
- * *중요* 인증된 관리자-서버에서 호출할 수 있도록 접근을 제안해야 합니다!!
+ * todo: *중요* 인증된 관리자-서버에서 호출할 수 있도록 접근을 제안해야 합니다!!
  *
  * Service 및 System Properties Map 정보를 가져오거나 Service Properties Map을 갱신함
  *  - 관리 용도의 API 입니다.

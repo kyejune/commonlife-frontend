@@ -8,32 +8,37 @@
     transition: margin-top 0.4s ease-out; }
     .App > header .md-btn--icon {
       padding: 0; }
-  .App > footer {
+  .App #cl-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    height: 56px;
     transform: translateZ(0px);
     background-color: #ffffff;
     transition: margin-bottom 0.4s ease-out; }
-    .App > footer .md-bottom-nav--fixed {
+    .App #cl-footer footer {
+      width: 100vw;
+      background-color: #ffffff; }
+    .App #cl-footer .md-bottom-nav--fixed {
       font-size: 0;
       padding-top: 2px; }
-    .App > footer img {
+    .App #cl-footer img {
       width: 40px;
       height: 34px;
       opacity: 0.4;
       transition: opacity 0.4s; }
-    .App > footer .md-bottom-nav-label {
+    .App #cl-footer .md-bottom-nav-label {
       color: #1052a5;
       font-size: 12px;
       line-height: 1.1em;
       color: rgba(0, 0, 0, 0.4);
       transition: color 0.4s; }
-    .App > footer .footer__button--selected img {
+    .App #cl-footer .footer__button--selected img {
       opacity: 1; }
-    .App > footer .footer__button--selected .md-bottom-nav-label {
+    .App #cl-footer .footer__button--selected .md-bottom-nav-label {
       color: #1052a5; }
-  .App.cl-app--expand > footer {
+  .App.cl-app--expand #cl-footer {
     margin-bottom: -56px; }
-  .App.cl-app--expand .cl-write__button--fixed {
-    bottom: 1.5em; }
 
 /* SubHeader */
 .cl-second-header {

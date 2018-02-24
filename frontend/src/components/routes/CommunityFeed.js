@@ -3,18 +3,21 @@ import {observer} from 'mobx-react';
 import WriteDrawer from "components/drawers/WriteDrawer";
 import CardItem from 'components/ui/CardItem';
 import Store from 'scripts/store';
-import DB from 'scripts/db';
+import Net from 'scripts/net';
 import BottomDrawer from "components/drawers/BottomDrawer";
 import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 
 class CommunityFeed extends Component {
 
     componentDidMount(){
-		DB.getFeed();
+		Net.getFeedAll();
 	}
 
 
 	render () {
+
+    	console.log( 'feed:', Store.feed );
+
 		return (
 			<div className="cl-fitted-box">
 

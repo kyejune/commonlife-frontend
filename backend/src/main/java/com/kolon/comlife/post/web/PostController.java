@@ -3,6 +3,8 @@ package com.kolon.comlife.post.web;
 import com.kolon.comlife.common.model.PaginateInfo;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.post.service.PostService;
+import com.kolon.comlife.postFile.model.PostFileInfo;
+import com.kolon.comlife.postFile.service.PostFileService;
 import com.kolon.comlife.users.model.UserInfo;
 import com.kolon.comlife.users.service.UserService;
 import org.slf4j.Logger;
@@ -28,6 +30,8 @@ public class PostController {
     private PostService postService;
     @Resource(name = "userService")
     private UserService userService;
+    @Resource(name = "postFileService")
+    private PostFileService postFileService;
 
     @CrossOrigin
     @GetMapping(
@@ -69,6 +73,25 @@ public class PostController {
             }
         }
 
+        // POST_IDX 추출
+        List<Integer> postIdxs = new ArrayList<Integer>();
+        for (PostInfo e : postInfoList) {
+            postIdxs.add( e.getPostIdx() );
+        }
+
+        if( postIdxs.size() > 0 ) {
+            List<PostFileInfo> postFileList = postFileService.getPostFilesByPostIds( postIdxs );
+
+            // Post File 정보 바인딩
+            for( PostInfo post : postInfoList ) {
+                for( PostFileInfo postFile : postFileList ) {
+                    if( post.getPostIdx() == postFile.getPostIdx() ) {
+                        post.getPostFiles().add( postFile );
+                    }
+                }
+            }
+        }
+
         // 페이지네이션 계산
         int countPosts = postService.countPostList();
         double totalPages = Math.ceil( ( double ) countPosts / ( double ) limit );
@@ -84,10 +107,14 @@ public class PostController {
     @PostMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PostInfo> setPost(@RequestBody PostInfo post) {
-        // TODO: USR_ID 는 토큰 등을 통해서 전달받도록 추후 업데이트 필요
-        // TODO: 파일은 S3에 저장할 것인가? 저장 시점은 언제로 할 것인가?
-        PostInfo result = postService.setPost( post );
+    public ResponseEntity<PostInfo> setPost(@RequestBody Map args) {
+        PostInfo newPost = new PostInfo();
+        newPost.setUsrId( 14 );
+        newPost.setPostType( (String) args.get( "postType" ) );
+        newPost.setContent( (String) args.get( "content" ) );
+        PostInfo result = postService.setPost( newPost );
+        List<PostFileInfo> postFiles = postFileService.bindPostToPostFiles( result.getPostIdx(), (List<Integer>) args.get( "postFiles" ) );
+        result.setPostFiles( postFiles );
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
@@ -103,7 +130,7 @@ public class PostController {
             value = "/{id}"
     )
     public ResponseEntity<PostInfo> updatePost( @PathVariable("id") int id, @RequestBody PostInfo post ) {
-        post.setBoardIdx( id );
+        post.setPostIdx( id );
         PostInfo result = postService.updatePost( post );
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }

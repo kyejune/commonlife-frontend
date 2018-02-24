@@ -4,7 +4,7 @@ import {observer} from 'mobx-react';
 import TimeScheduler from 'components/ui/TimeScheduler';
 import SwiperViewer from 'components/ui/SwiperViewer';
 import Counter from 'components/ui/Counter';
-import DB from "scripts/db";
+import DB from "scripts/net";
 import completeSrc from 'images/complete-bt-blueicon@3x.png';
 import DateOne from "components/ui/DateOne";
 import DatePeriod from "components/ui/DatePeriod";
