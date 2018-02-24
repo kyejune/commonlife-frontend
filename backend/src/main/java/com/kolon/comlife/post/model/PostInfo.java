@@ -16,6 +16,8 @@ public class PostInfo {
     private String postType;
     private String content;
     private String delYn;
+    private int likesCount;
+    private int sharesCount = 0;
     private String regDttm;
     private String updDttm;
 
@@ -83,13 +85,19 @@ public class PostInfo {
         this.updDttm = updDttm;
     }
 
+    public int getLikesCount() {
+        return likesCount;
+    }
+
+    public int getSharesCount() {
+        return sharesCount;
+    }
+
     /*
         Relations
      */
     private UserInfo user;
     private List<PostFileInfo> postFiles = new ArrayList<PostFileInfo>();
-    private UserInfo register;
-    private UserInfo updater;
 
     /*
         Relations Getter and Setter
@@ -110,21 +118,4 @@ public class PostInfo {
     public void setUser(UserInfo user) {
         this.user = user;
     }
-
-    public UserInfo getRegister() {
-        return register;
-    }
-
-    public void setRegister(UserInfo register) {
-        this.register = register;
-    }
-
-    public UserInfo getUpdater() {
-        return updater;
-    }
-
-    public void setUpdater(UserInfo updater) {
-        this.updater = updater;
-    }
-
 }
