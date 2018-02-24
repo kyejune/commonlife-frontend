@@ -1,6 +1,17 @@
-.cl-is-device .App > header, .cl-is-device .md-drawer--active header {
-  padding-top: 3.90625vh;
-  height: calc( 56px + 3.90625vh); }
+body.cl-is-device #status-bar {
+  position: fixed;
+  background-color: #1052a5;
+  height: 3.90625vh;
+  width: 100vw;
+  top: 0;
+  z-index: 10; }
+
+body.cl-is-device .cl-second-header {
+  top: 3.90625vh; }
+
+body.cl-is-device .App {
+  height: calc( 100vh - 3.90625vh);
+  margin-top: 3.90625vh; }
 
 body:not(.cl-is-device) {
   overflow-y: scroll; }
@@ -51,7 +62,8 @@ body:not(.cl-is-device) {
   width: 100%;
   z-index: 10;
   left: 0;
-  top: 0; }
+  top: 0;
+  border-top: 0 solid #1052a5; }
 
 .cl-fitted-box {
   width: 100%;

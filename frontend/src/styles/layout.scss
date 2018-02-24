@@ -1,12 +1,26 @@
 $dur: 0.4s;
 $delay: 0.2s;
 
-.cl-is-device{
-    .App > header, .md-drawer--active header{
-        padding-top: 3.90625vh;
-        height: calc( 56px + 3.90625vh );
+body.cl-is-device{
+    #status-bar{
+        position: fixed;
+        background-color: #1052a5;
+        height: 3.90625vh;
+        width: 100vw;
+        top: 0;
+        z-index: 10;
+    }
+
+    .cl-second-header {
+        top: 3.90625vh;
+    }
+
+    .App{
+        height: calc( 100vh - 3.90625vh);
+        margin-top: 3.90625vh;
     }
 }
+
 
 body:not(.cl-is-device){
     overflow-y: scroll;
@@ -18,7 +32,6 @@ body:not(.cl-is-device){
 
     height: 100vh;
     -webkit-overflow-scrolling: touch;
-
 
     & > header {
         transition: margin-top $dur ease-out;
@@ -97,6 +110,7 @@ body:not(.cl-is-device){
     z-index: 10;
     left: 0;
     top: 0;
+    border-top: 0 solid #1052a5;
 }
 
 .cl-fitted-box {
