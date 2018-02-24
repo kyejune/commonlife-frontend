@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+					http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+					http://www.springframework.org/schema/mvc
+					http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd
+					http://www.springframework.org/schema/util
+					http://www.springframework.org/schema/util/spring-util-4.3.xsd" >
+
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="logInterceptor" class="com.kolon.common.interceptor.LogInterceptor" />
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**" />
+            <bean id="apiKeyCheckerInterceptor" class="com.kolon.common.interceptor.ApiKeyCheckerInterceptor" >
+                <property name="apiTestYN" value="#{prop_dev['apiTestYN']}" />
+                <property name="apiKey" value="#{prop_dev['apiKey']}" />
+            </bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/users/debug/authUserInfo" />
+            <bean id="mobileSessionCheckInterceptor" class="com.kolon.common.interceptor.MobileSessionCheckInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>
