@@ -1,34 +1,17 @@
 package com.kolon.common.helper;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.kolon.common.prop.SystemPropertiesKey;
 import com.kolon.common.prop.SystemPropertiesMap;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
-
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class JedisHelper {
-
-    // CommonLife 개발
-//    protected static final String REDIS_HOST = "cl-dev-redis.sktb1d.0001.apn2.cache.amazonaws.com";
-
     protected static final String   REDIS_HOST_DEFAULT = "127.0.0.1";
     protected static final int      REDIS_PORT_DEFAULT = 6379;
-
-	// 개발
-//	//protected static final String REDIS_HOST = "token-managements.3j2bzt.0001.apn2.cache.amazonaws.com";
-//    protected static final String REDIS_HOST = "iok-info-redis.g4s72o.0001.apn2.cache.amazonaws.com";
-    
-    // 운영
-//    protected static final String REDIS_HOST = "token-manage.3j2bzt.clustercfg.apn2.cache.amazonaws.com";
-    
- // 운영
-//    protected static final String REDIS_HOST = "prod-token-manage.3j2bzt.clustercfg.apn2.cache.amazonaws.com";
-
-    	
 
     private final Set<Jedis> connectionList = new HashSet<Jedis>();
     private final JedisPool pool;
@@ -38,7 +21,7 @@ public class JedisHelper {
      */
     private JedisHelper() {
         GenericObjectPoolConfig config = new GenericObjectPoolConfig();
-        SystemPropertiesMap     sysProp = SystemPropertiesMap.getInstance();
+        SystemPropertiesMap sysProp = SystemPropertiesMap.getInstance();
         String                  redisHost;
         String                  redisPortStr;
         int                     redisPort;
