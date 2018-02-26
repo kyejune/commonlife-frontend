@@ -17,27 +17,12 @@
 
     <context:component-scan base-package="com.kolon">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
     </context:component-scan>
 
-    <!-- properties load : begin -->
-    <util:properties id="globals" location="classpath:/properties/globals.properties" />
-    <util:properties id="systemprop" location="classpath:/com/kolon/prop/#{globals['Globals.ServerType']}/system.properties" />
-    <bean id="systemConfigComponent" class="com.kolon.common.component.SystemConfigComponent" init-method="init">
-        <property name="properties">
-            <list>
-                <value>com/kolon/prop/globals.properties</value>
-                <value>com/kolon/prop/#{globals['Globals.ServerType']}/system.properties</value>
-            </list>
-        </property>
-    </bean>
 
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" id="systemproperties">
-        <property name="locations" value="classpath:/com/kolon/prop/#{globals['Globals.ServerType']}/system.properties"/>
-        <property name="fileEncoding" value="UTF-8"/>
-    </bean>
-    <!-- properties load : end -->
+
 
     <mvc:resources mapping="/images/**" location="/images/"/>
     <mvc:resources mapping="/css/**" location="/css/"/>
