@@ -22,7 +22,7 @@ public class AbstractPaginationRenderer implements PaginationRenderer{
         int currentPageNo = paginationInfo.getCurrentPageNo();
         int lastPageNo = paginationInfo.getLastPageNo();
 
-        strBuff.append("<ui class=\"pagination\">");
+        strBuff.append("<ul class=\"pagination\">");
         if (totalPageCount > pageSize) {
             if (firstPageNoOnPageList > pageSize)
             {
@@ -54,7 +54,7 @@ public class AbstractPaginationRenderer implements PaginationRenderer{
                 strBuff.append(MessageFormat.format(this.lastPageLabel, new Object[] { jsFunction, Integer.toString(lastPageNo) }));
             }
         }
-        strBuff.append("</ui>");
+        strBuff.append("</ul>");
         return strBuff.toString();
     }
 }

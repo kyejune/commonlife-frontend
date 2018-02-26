@@ -1,0 +1,63 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                        <span class="clear">
+                            <span class="block m-t-xs">
+                                <strong class="font-bold">{ADMIN NAME}</strong>
+                            </span>
+                            <span class="text-muted text-xs block">
+                                {ADMIN GROUP} <b class="caret"></b>
+                            </span>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                        <li><a href="#">Logout</a></li>
+                    </ul>
+                </div>
+                <div class="logo-element">
+                    IN+
+                </div>
+            </li>
+            <li>
+                <a href="?">
+                    <i class="fa fa-th-large"></i>
+                    <span class="nav-label">Main View</span></a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-table"></i>
+                    <span class="nav-label">현장 그룹 관리</span><span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="/admin/managers/list.do">현장 그룹 관리</a></li>
+                </ul>
+            </li>
+            <li class="active">
+                <a href="#">
+                    <i class="fa fa-table"></i>
+                    <span class="nav-label">관리자 관리</span><span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse in">
+                    <li class="active"><a href="/admin/managers/list.do">목록</a></li>
+                    <li><a href="/admin/managers/list.do">작업 로그</a></li>
+                </ul>
+            </li>
+            <li >
+                <a href="#">
+                    <i class="fa fa-table"></i>
+                    <span class="nav-label">세대주/사용자 관리</span><span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="/admin/managers/list.do">세대주 목록</a></li>
+                    <li><a href="/admin/managers/list.do">사용자 목록</a></li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+</nav>

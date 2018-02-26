@@ -1,5 +1,6 @@
 package com.kolon.comlife.admin.manager.service.impl;
 
+import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.manager.model.ManagerInfo;
 import com.kolon.comlife.admin.manager.service.ManagerService;
 import org.slf4j.Logger;
@@ -32,7 +33,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @param managerInfo
      * @return
      */
-    public List<ManagerInfo> selectManagerList(ManagerInfo managerInfo) {
+    public List<AdminInfo> selectManagerList(AdminInfo managerInfo) {
         return managerDAO.selectManagerList(managerInfo);
     }
 

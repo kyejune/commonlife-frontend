@@ -1,5 +1,6 @@
 package com.kolon.comlife.admin.manager.web;
 
+import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.manager.model.ManagerInfo;
 import com.kolon.comlife.admin.manager.service.ManagerService;
 import com.kolon.common.admin.model.BaseUserInfo;
@@ -27,7 +28,7 @@ import java.util.List;
  * 관리자 컨트롤러
  */
 @Controller("managerController")
-@RequestMapping("/manage/managers/*")
+@RequestMapping("admin/managers/*")
 public class ManagerController {
 
     private static final Logger logger = LoggerFactory.getLogger(ManagerController.class);
@@ -49,20 +50,20 @@ public class ManagerController {
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
-            , @ModelAttribute ManagerInfo managerInfo
+            , @ModelAttribute AdminInfo adminInfo
     ) {
-        if(managerInfo.getSearchKeyword1() == null){
-            managerInfo.setSearchKeyword1("");
+        if(adminInfo.getSearchKeyword1() == null){
+            adminInfo.setSearchKeyword1("");
         }
 
         logger.debug("====================> 관리자 리스트!!!!!!!!!!!!!!!!!!!!!!!!! ");
         logger.debug("====================> request.getParameter('pageIndex')  : " + request.getParameter("pageIndex"));
-        logger.debug("====================> managerInfo.getPageIndex : {} ",managerInfo.getPageIndex());
-        logger.debug("====================> managerInfo.getSearchKeyword1 : {} ",managerInfo.getSearchKeyword1());
+        logger.debug("====================> managerInfo.getPageIndex : {} ",adminInfo.getPageIndex());
+        logger.debug("====================> managerInfo.getSearchKeyword1 : {} ",adminInfo.getSearchKeyword1());
 
-        List<ManagerInfo> managerList = managerService.selectManagerList(managerInfo);
+        List<AdminInfo> managerList = managerService.selectManagerList(adminInfo);
 
-        PaginationInfoExtension pagination = PaginationSupport.setPaginationVO(request, managerInfo, "1", managerInfo.getRecordCountPerPage(), 10);
+        PaginationInfoExtension pagination = PaginationSupport.setPaginationVO(request, adminInfo, "1", adminInfo.getRecordCountPerPage(), 10);
         pagination.setTotalRecordCountVO(managerList);
 
         mav.addObject("managerList", managerList);

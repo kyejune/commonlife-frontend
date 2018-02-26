@@ -1,5 +1,6 @@
 package com.kolon.comlife.admin.manager.service;
 
+import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.manager.model.ManagerInfo;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface ManagerService {
      * @param managerInfo
      * @return
      */
-    List<ManagerInfo> selectManagerList(ManagerInfo managerInfo);
+    List<AdminInfo> selectManagerList(AdminInfo managerInfo);
 
     /**
      * 관리자 상세 조회

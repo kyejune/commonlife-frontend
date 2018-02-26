@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
 @Controller("loginController")
+@RequestMapping("/")
 public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
@@ -22,9 +24,13 @@ public class LoginController {
     private LoginService loginService;
 
 
-    @RequestMapping(value = {"","/", "/loginPage.*","login.*"}, method = RequestMethod.GET)
-    public String loginPage(HttpSession session) {
-        return "manage/loginPage";
+    @RequestMapping(
+            value = {"","/", "/loginPage.*","login.*"},
+            method = RequestMethod.GET)
+    public String loginPage(Model model) {
+        model.addAttribute("time", System.currentTimeMillis());
+        logger.debug("Controller inside! ");
+        return "admin/loginPage";
     }
 
     @RequestMapping(value = "logout", method = RequestMethod.GET)
