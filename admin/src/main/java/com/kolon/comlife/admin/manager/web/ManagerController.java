@@ -58,8 +58,8 @@ public class ManagerController {
 
         logger.debug("====================> 관리자 리스트!!!!!!!!!!!!!!!!!!!!!!!!! ");
         logger.debug("====================> request.getParameter('pageIndex')  : " + request.getParameter("pageIndex"));
-        logger.debug("====================> managerInfo.getPageIndex : {} ",adminInfo.getPageIndex());
-        logger.debug("====================> managerInfo.getSearchKeyword1 : {} ",adminInfo.getSearchKeyword1());
+        logger.debug("====================> adminInfo.getPageIndex : {} ",adminInfo.getPageIndex());
+        logger.debug("====================> adminInfo.getSearchKeyword1 : {} ",adminInfo.getSearchKeyword1());
 
         List<AdminInfo> managerList = managerService.selectManagerList(adminInfo);
 
@@ -85,12 +85,17 @@ public class ManagerController {
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
-            , @ModelAttribute ManagerInfo managerInfo
+            , @ModelAttribute AdminInfo adminInfo
     ) {
-        logger.debug("====================> managerInfo.getMngId : {} ",managerInfo.getMngId());
+        logger.debug("====================> adminInfo.getAdminId: {} ",adminInfo.getAdminId());
 
-        ManagerInfo managerDetail = managerService.selectManagerDetail(managerInfo);
-        PaginationInfoExtension pagination = PaginationSupport.setPaginationVO(request, managerInfo, "1", managerInfo.getRecordCountPerPage(), 10);
+        AdminInfo managerDetail = managerService.selectManagerDetail(adminInfo);
+        PaginationInfoExtension pagination = PaginationSupport.setPaginationVO(
+                request,
+                adminInfo,
+                "1",
+                adminInfo.getRecordCountPerPage(),
+                10);
 
         mav.addObject("managerDetail", managerDetail);
 

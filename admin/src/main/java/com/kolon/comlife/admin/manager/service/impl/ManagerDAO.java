@@ -39,7 +39,7 @@ public class ManagerDAO {
      * @param managerInfo
      * @return
      */
-    public ManagerInfo selectManagerDetail(ManagerInfo managerInfo) {
+    public AdminInfo selectManagerDetail(AdminInfo managerInfo) {
         return sqlSession.selectOne("Manager.selectManagerDetail", managerInfo);
     }
 

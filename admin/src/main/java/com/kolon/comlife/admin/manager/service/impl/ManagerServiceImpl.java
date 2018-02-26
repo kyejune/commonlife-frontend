@@ -42,7 +42,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @param managerInfo
      * @return
      */
-    public ManagerInfo selectManagerDetail(ManagerInfo managerInfo) {
+    public AdminInfo selectManagerDetail(AdminInfo managerInfo) {
         return managerDAO.selectManagerDetail(managerInfo);
     }
 

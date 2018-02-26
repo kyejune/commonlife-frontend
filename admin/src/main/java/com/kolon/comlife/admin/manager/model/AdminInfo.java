@@ -22,11 +22,14 @@ public class AdminInfo extends BaseUserInfo {
     private String adminNm;
     private String adminEmail;
     private int grpId;
+    private String grpNm; // 그룹 이름 (슈퍼관리자 or 현장관리자)
     private String desc;
 
     private int regAdminIdx;
     private int updAdminIdx;
 
+    private int cmplxId; // 현장 ID
+    private String cmplxNm; // 현장관리자의 경우(현장 이름)
 
     private String mngNm;
     private String mngEmail;
@@ -158,6 +161,14 @@ public class AdminInfo extends BaseUserInfo {
         this.grpId = grpId;
     }
 
+    public String getGrpNm() {
+        return grpNm;
+    }
+
+    public void setGrpNm(String grpNm) {
+        this.grpNm = grpNm;
+    }
+
     public String getDesc() {
         return desc;
     }
@@ -180,5 +191,22 @@ public class AdminInfo extends BaseUserInfo {
 
     public void setUpdAdminIdx(int updAdminIdx) {
         this.updAdminIdx = updAdminIdx;
+    }
+
+
+    public int getCmplxId() {
+        return cmplxId;
+    }
+
+    public void setCmplxId(int cmplxId) {
+        this.cmplxId = cmplxId;
+    }
+
+    public String getCmplxNm() {
+        return cmplxNm;
+    }
+
+    public void setCmplxNm(String cmplxNm) {
+        this.cmplxNm = cmplxNm;
     }
 }

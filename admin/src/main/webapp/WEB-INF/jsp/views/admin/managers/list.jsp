@@ -51,7 +51,7 @@
         <form:form name="manageReqForm" id="manageReqForm" method="post" commandName="adminInfo">
             <!--//paging-->
             <form:hidden path="pageIndex"/>
-            <form:hidden path="mngId"/>
+            <form:hidden path="adminId"/>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
@@ -96,7 +96,7 @@
                                                     <c:out value="${pagination.totalRecordCount - (pagination.recordCountPerPage * (pagination.currentPageNo - 1)) - status.count + 1}"/>
                                                 </td>
                                                 <td class="footable-visible footable-last-column">
-                                                    <a href="javascript:void(0)" onclick="managersDetail('${vo.adminIdx}')">
+                                                    <a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}')">
                                                             ${vo.adminId}
                                                     </a>
                                                 </td>
@@ -107,7 +107,7 @@
                                                 <td class="center">{TBA}</td>
                                                 <td class="center" >${vo.useYn}</td>
                                                 <td class="center" >
-                                                    <fmt:parseDate value="${vo.regDttm}" pattern="yyyy-MM-dd hh:mm:ss" var="sysDt"/>
+                                                    <fmt:parseDate value="${vo.regDttm}" pattern="yyyy-MM-dd" var="sysDt"/>
                                                     <fmt:formatDate value="${sysDt}" pattern="yyyy.MM.dd"/>
                                                 </td>
                                             </tr>
@@ -164,8 +164,8 @@
             $("#manageReqForm").submit();
         }
 
-        function managersDetail(mngId){
-            $("#manageReqForm > #mngId").val(mngId);
+        function managersDetail(adminId){
+            $("#manageReqForm > #adminId").val(adminId);
             $("#manageReqForm").attr("action", "/admin/managers/write.do");
             $("#manageReqForm").submit();
         }

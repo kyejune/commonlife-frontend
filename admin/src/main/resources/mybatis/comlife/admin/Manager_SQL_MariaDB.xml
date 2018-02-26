@@ -68,15 +68,30 @@
     </select>
 
 
-    <select id="selectManagerDetail" parameterType="managerInfo" resultType="managerInfo">
+    <select id="selectManagerDetail" parameterType="adminInfo" resultType="adminInfo">
         /* 관리자 상세 조회 */
-        DECLARE @MNG_ID VARCHAR(100) SET @MNG_ID = #{mngId}
-
         SELECT
-            MNG_ID, MNG_NM, MNG_EMAIL, USE_YN,
-            BIGO, REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID
-        FROM MANAGER_INFO WITH(NOLOCK)
-        WHERE 1=1 AND MNG_ID = @MNG_ID
+          `ADMIN_IDX`,
+          `ADMIN_ID`,
+          `ADMIN_NM`,
+          `ADMIN_EMAIL`,
+          `USE_YN`,
+          A_I.`DESC`,
+          A_I.`REG_DTTM`,
+          A_I.`REG_ADMIN_IDX`,
+          A_I.`UPD_DTTM`,
+          A_I.`UPD_ADMIN_IDX`,
+          A_I.`CMPLX_ID`,
+          (SELECT CMPLX_NM FROM COMPLEX_M WHERE CMPLX_ID = A_I.CMPLX_ID) AS `CMPLX_NM`,
+          A_G.`GRP_ID` AS `GRP_ID`,
+          A_G.`GRP_NM` AS `GRP_NM`
+        FROM
+          CL_ADMIN_INFO AS A_I,
+          CL_ADMIN_GRP AS A_G
+        WHERE
+          A_I.GRP_ID = A_G.GRP_ID
+            AND
+          ADMIN_ID = '${adminId}'
     </select>
 
     <insert id="insertManager" parameterType="managerInfo">

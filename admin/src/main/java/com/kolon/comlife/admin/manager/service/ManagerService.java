@@ -28,7 +28,7 @@ public interface ManagerService {
      * @param managerInfo
      * @return
      */
-    ManagerInfo selectManagerDetail(ManagerInfo managerInfo);
+    AdminInfo selectManagerDetail(AdminInfo managerInfo);
 
     /**
      * 관리자 등록
