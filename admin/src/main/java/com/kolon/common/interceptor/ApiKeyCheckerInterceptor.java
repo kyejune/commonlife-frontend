@@ -37,7 +37,8 @@ public class ApiKeyCheckerInterceptor extends HandlerInterceptorAdapter {
         }
 
         // 2. /status 에 대한 요청은 통과
-        if ( request.getPathInfo().contains("/status/") ) {
+        logger.debug(">>>> request path: " + request.getRequestURL());
+        if ( request.getRequestURL().indexOf("/status/") > 0 ) {
             return true;
         }
 
