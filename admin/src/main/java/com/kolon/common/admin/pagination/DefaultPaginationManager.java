@@ -14,7 +14,8 @@ public class DefaultPaginationManager
 
     public PaginationRenderer getRendererType(String type)
     {
-        return (this.rendererType != null) && (this.rendererType.containsKey(type)) ? (PaginationRenderer)this.rendererType.get(type) : new DefaultPaginationRenderer();
+        return (this.rendererType != null) && (this.rendererType.containsKey(type)) ?
+                (PaginationRenderer)this.rendererType.get(type) : new DefaultPaginationRenderer();
     }
 }
 

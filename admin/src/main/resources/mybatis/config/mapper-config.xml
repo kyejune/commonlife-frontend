@@ -8,4 +8,10 @@
         <setting name="mapUnderscoreToCamelCase" value="true" />
     </settings>
 
+
+    <typeAliases>
+        <package name="com.kolon.comlife" />
+        <package name="com.kolon.common.admin.model" />
+        <package name="com.kolon.common.prop" />
+    </typeAliases>
 </configuration>

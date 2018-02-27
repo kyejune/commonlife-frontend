@@ -42,6 +42,6 @@
         <authentication-provider ref="customAuthenticationProvider"/>
     </authentication-manager>
 
-    <beans:bean id="customAuthenticationProvider" class="com.kolon.common.security.CustomAuthenticationProvider"/>
+    <beans:bean id="customAuthenticationProvider" class="com.kolon.common.admin.security.CustomAuthenticationProvider"/>
 
 </beans:beans>
