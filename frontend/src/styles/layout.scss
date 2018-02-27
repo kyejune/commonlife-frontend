@@ -8,7 +8,7 @@ body.cl-is-device{
         height: 3.90625vh;
         width: 100vw;
         top: 0;
-        z-index: 10;
+        z-index: 1000;
     }
 
     .cl-second-header {
@@ -19,6 +19,15 @@ body.cl-is-device{
         height: calc( 100vh - 3.90625vh);
         margin-top: 3.90625vh;
     }
+
+    .cl-drawer-content-holder{
+        margin-top: 3.90625vh;
+
+        &>header{
+            top: 3.90625vh;
+        }
+    }
+
 }
 
 
