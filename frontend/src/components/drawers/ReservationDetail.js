@@ -21,25 +21,20 @@ class ReservationDetail extends Component {
             available: false,
             booked: false,
             reserved: false,
-
         };
 
-        DB.getReservation(this.props.match.params.id, data => {
 
+        DB.getReservation(this.props.match.params.id, data => {
             data.loaded = true;
 
-            // 날짜
-            // if (data.date.value) data.date.value = new Date(data.date.value);
-            // else data.date.value = new Date();
-            //
-            // // 기간? 날짜?
-            // if (data.date.type === 'date') data.dateName = "오늘";
-            // else data.dateName = "기간";
-            //
-            //
-            // console.log(moment(data.date.value).format('YYYY-MM-DD'));
-            this.setState(data);
+            data.options.map( opt => {
+                if (opt.type === 'date')
+                    data.dates = [ new Date( opt.value ), new Date( opt.value ) ];
+                else if( opt.type === 'dateRange')
+                    data.dates = [ new Date( opt.value[0] ), new Date( opt.value[1] ) ];
+            });
 
+            this.setState(data);
             this.props.updateTitle(data.where); // ContentHolder에 전달
         });
     }
@@ -60,7 +55,52 @@ class ReservationDetail extends Component {
         this.setState({booked: true});
     }
 
+    // 타임스케쥴러 업데이트
+    onUpdateTimeSchedule( data ){
+        let { start, end, correct } = data;
+        let starts = start.split(':');
+        let ends = end.split(':');
+
+        this.state.dates[0].setHours( starts[0] );
+        this.state.dates[0].setMinutes( starts[1] );
+
+        this.state.dates[1].setHours( ends[0] );
+        this.state.dates[1].setMinutes( ends[1] );
+    }
+
+    // 날짜 업데이트
+    onUpdateDate( fromTo ){
+
+        for( let i=0; i<2; i++ ){
+            let d = this.state.dates[i];
+            let n = fromTo[i];
+
+            let hour = d.getHours();
+            let minute = d.getMinutes();
+
+            this.state.dates[i].setFullYear( n.getFullYear() );
+            this.state.dates[i].setMonth( n.getMonth() );
+            this.state.dates[i].setDate( n.getDate() );
+            this.state.dates[i].setHours( hour );
+            this.state.dates[i].setMinutes( minute );
+        }
+    }
+
+    // 캘린더에 추가 =
+    addSchedule(){
+
+        if( window.plugins )
+            window.plugins.calendar.createEventInteractively( this.state.where, this.state.branch, this.state.description, this.state.dates[0], this.state.dates[1], this.addedSchedule, null );
+        else
+            this.addedSchedule();
+    }
+
+    addedSchedule(){
+        alert('추가됨');
+    }
+
     render() {
+
 
         if (this.state.loaded === false) {
             return <div>loading..</div>;
@@ -82,11 +122,13 @@ class ReservationDetail extends Component {
 
             if( opt.type === 'date' )
             {
-                return <DateOne key="date" {...opt} />
+                return <DateOne key="date" {...opt}
+                                onUpdate={ data => this.onUpdateDate( [new Date(data), new Date(data)] ) }/>
             }
             else if( opt.type === 'dateRange')
             {
-                return <DatePeriod key="date-range" {...opt} />
+                return <DatePeriod key="date-range" {...opt}
+                                   onUpdate={ (from, to ) => this.onUpdateDate( [new Date(from), new Date(to)] ) } />
             }
             else if (opt.type === 'select')
             {
@@ -107,6 +149,7 @@ class ReservationDetail extends Component {
                     min={10} // 예약가능한 시작 시간
                     max={20} // 예야가능한 마지막 시간
                     scheduled={[{start: 10, end: 11}, {start: 15, end: 17}]} // 기 예약된 내용
+                    onUpdate={ data => this.onUpdateTimeSchedule( data ) }
                 />
             }
             else if (opt.type === 'counter')
@@ -215,7 +258,7 @@ class ReservationDetail extends Component {
 
                 {( this.state.reserved || this.state.booked )&&
                 <div className="cl-reserved">
-                    <button>나의 캘린더에 등록</button>
+                    <button onClick={()=> this.addSchedule() }>나의 캘린더에 등록</button>
                     <button>예약변경 및 취소</button>
                 </div>}
 

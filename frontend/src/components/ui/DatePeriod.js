@@ -12,13 +12,19 @@ class DatePeriod extends Component {
         let now = moment().format('YYYY-MM-DD');
         let start = props.min > now?props.min:now;
 
+        let fromValue = props.value[0]?new Date(props.value[0]):new Date(start);
+        let toValue = props.value[1]?new Date(props.value[1]):moment(start).add( props.minDays, 'd').toDate();
+
         this.state = {
             start: start,
             end: props.max,
             days: props.days||2,
-            from: props.value[0]?new Date(props.value[0]):new Date(start),
-            to: props.value[1]?new Date(props.value[1]):moment(start).add( props.minDays, 'd').toDate(),
+            from: fromValue,
+            to: toValue,
             onCalendar: false,
+            modifiers:{
+                disabledDays:{ after: new Date( props.max ), before: new Date( start ) }
+            }
         }
     }
 
@@ -65,13 +71,13 @@ class DatePeriod extends Component {
 
     confirm(){
         this.setState({ onCalendar:false });
+        if( this.props.onUpdate )
+            this.props.onUpdate( this.state.from, this.state.to );
     }
 
     render() {
 
         const { from, to } = this.state;
-        const modifiers = { start: from, end: to };
-
 
         return <div className="cl-opt-sec cl-flex cl-opt-sec--daterange">
             <div className="cl-label">기간</div>
@@ -85,11 +91,7 @@ class DatePeriod extends Component {
                 <div className="cl-date-range">
                     <DayPicker
                         selectedDays={[from, { from, to }]}
-                        modifiers={modifiers}
-                        disabledDays={[{
-                            before: new Date( this.state.start ),
-                            after: new Date( this.state.end )
-                        }]}
+                        modifiers={ { start:from, end:to,  ...this.state.modifiers } }
                         onDayClick={ day => this.handleDayClick( day ) }
                     />
 

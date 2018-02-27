@@ -3,7 +3,6 @@ import { withRouter } from 'react-router';
 import { Avatar, Card, CardActions, CardText, CardTitle, Media, MediaOverlay } from 'react-md';
 import { Link } from 'react-router-dom';
 import LikeShareAndSome from "components/ui/LikeShareAndSome";
-import Net from 'scripts/net.js';
 import Store from 'scripts/store.js';
 
 class CardItem extends Component {

@@ -27,6 +27,9 @@ class DateOne extends Component {
             yyyymmdd: val,
             label: this.getLabel( val )
         } );
+
+        if( this.props.onUpdate )
+            this.props.onUpdate( val );
     }
 
     getLabel( yyyymmdd ){

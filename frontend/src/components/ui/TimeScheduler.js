@@ -95,6 +95,10 @@ class TimeScheduler extends Component {
         });
 
         this.setState({ incorrect: !available });
+
+        // 변경 알려주기
+        if( this.props.onUpdate )
+            this.props.onUpdate( { start: this.float2Time( this.state.start ), end: this.float2Time( this.state.start + this.state.hour ), correct:available } );
     }
 
     // 버튼으로 시간 조절
@@ -116,13 +120,16 @@ class TimeScheduler extends Component {
 
     // 선택된 오전, 오후 텍스트 출력
     getHHMM( hourStep ){
+        return convertTime( this.float2Time( hourStep ) );
+    }
 
-        if( hourStep.toString().includes('.5') )
-            hourStep = hourStep.toString().replace('.5', ':30');
+    float2Time( float ){
+        if( float.toString().includes('.5') )
+            float = float.toString().replace('.5', ':30');
         else
-            hourStep += ':00';
+            float += ':00';
 
-        return convertTime( hourStep );
+        return float;
     }
 
 

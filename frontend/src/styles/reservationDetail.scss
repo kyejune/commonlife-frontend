@@ -147,7 +147,7 @@
 }
 
 .cl-date-range{
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -160,6 +160,9 @@
 
 // DateRange
 .cl-opt-sec--daterange{
+
+  position: relative;
+
   .cl-daterange-output{
     @extend .cl-flex;
 
@@ -188,6 +191,11 @@
       border-bottom-right-radius: 100%;
       background-color: #1251A5;
     }
+  }
+
+  .DayPicker-Day--disabledDays{
+    opacity: 0.5;
+    pointer-events: none;
   }
 
   .cl-ok{
