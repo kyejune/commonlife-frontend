@@ -18,8 +18,6 @@
 
     <select id="selectManagerList" parameterType="adminInfo" resultType="adminInfo">
         /* 관리자 리스트 조회 */
-
-        <include refid="Common.prefixPagination"/>
         SELECT
           `ADMIN_IDX`,
           `ADMIN_ID`,
@@ -39,7 +37,7 @@
           ) AS `CMPLX_NM`,
           `GRP_ID`,
           `GRP_NM`,
-          ROW_NUMBER() OVER(ORDER BY GRP_ID, ADMIN_ID ASC) ROWNUM,
+          ROW_NUMBER() OVER(ORDER BY GRP_ID, ADMIN_ID ASC) AS RNUM,
           COUNT(1) OVER() AS TOT
         FROM(
             SELECT
@@ -63,19 +61,21 @@
               ON A_I.GRP_ID = A_G.GRP_ID
             WHERE 1=1
             <choose>
+                <when test='searchType1 != null and searchType1.equals("GRP_ID")'>
+                    AND A_I.GRP_ID LIKE #{searchKeyword1}
+                </when>
                 <when test='searchType1 != null and searchType1.equals("ADMIN_ID")'>
-                    AND ADMIN_ID LIKE CONCAT('%', #{searchKeyword1}, '%')
+                    AND A_I.ADMIN_ID LIKE CONCAT('%', #{searchKeyword1}, '%')
                 </when>
                 <when test='searchType1 != null and searchType1.equals("ADMIN_NM")'>
-                    AND ADMIN_NM LIKE CONCAT('%', #{searchKeyword1}, '%')
+                    AND A_I.ADMIN_NM LIKE CONCAT('%', #{searchKeyword1}, '%')
                 </when>
                 <otherwise>
-                    AND (ADMIN_ID LIKE CONCAT('%', #{searchKeyword1}, '%') OR ADMIN_NM LIKE CONCAT('%', #{searchKeyword1}, '%'))
+                    AND (A_I.ADMIN_ID LIKE CONCAT('%', #{searchKeyword1}, '%') OR A_I.ADMIN_NM LIKE CONCAT('%', #{searchKeyword1}, '%'))
                 </otherwise>
             </choose>
         )A
-        <include refid="Common.suffixPagination"/>
-        ORDER BY ROWNUM
+        ORDER BY RNUM
     </select>
 
 

@@ -197,11 +197,16 @@
                 </c:when>
             </c:choose>
 
-            <c:if test="${managerDetail.grpId == adminConst.adminGrpComplex}">
-                $('#cmplxId').val(${managerDetail.cmplxId});
-            </c:if>
-
-            $("#left_li_menu_05").addClass("active");
+            $("#left_admin").addClass("active");
+            <c:choose>
+                <c:when test="${adminConst.adminGrpSuper == managerDetail.grpId}">
+                    $("#left_admin_super").addClass("active");
+                </c:when>
+                <c:when test="${adminConst.adminGrpComplex == managerDetail.grpId}">
+                    $('#cmplxId').val(${managerDetail.cmplxId});
+                    $("#left_admin_complex").addClass("active");
+                </c:when>
+            </c:choose>
         })
 
 
@@ -213,7 +218,7 @@
         }
 
         function refreshList(){
-            $("#managerListForm").attr("action", "/admin/managers/list.do");
+            $("#managerListForm").attr("action", "/admin/managers/list.do?grpId=${managerDetail.grpId}");
             $("#managerListForm").submit();
         }
 

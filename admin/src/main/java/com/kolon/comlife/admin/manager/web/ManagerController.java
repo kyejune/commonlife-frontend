@@ -70,13 +70,43 @@ public class ManagerController {
             , HttpSession session
             , @ModelAttribute AdminInfo adminInfo
     ) {
+        String grpIdStr;
+        int    grpId = -1;
+
         if(adminInfo.getSearchKeyword1() == null){
             adminInfo.setSearchKeyword1("");
+        }
+
+        grpIdStr = request.getParameter("grpId");
+        if( grpIdStr != null ) {
+            try {
+                grpId = Integer.parseInt(request.getParameter("grpId"));
+                switch(grpId) {
+                    case AdminConst.ADMIN_GRP_SUPER:
+                    case AdminConst.ADMIN_GRP_COMPLEX:
+                        adminInfo.setSearchType1("GRP_ID");
+                        adminInfo.setSearchKeyword1(grpIdStr);
+                        break;
+                    default :
+                        throw new NumberFormatException();
+                }
+            } catch( NumberFormatException e ){
+                response.setStatus(HttpStatus.SC_BAD_REQUEST);
+                mav.addObject("msg", "잘못된 입력입니다.");
+                mav.setViewName("/error/400");
+                return mav;
+            }
+        } else {
+            response.setStatus(HttpStatus.SC_FORBIDDEN);
+            mav.addObject("msg", "잘못된 접근입니다.");
+            mav.setViewName("/error/400");
+            return mav;
         }
 
         logger.debug("====================> 관리자 리스트!!!!!!!!!!!!!!!!!!!!!!!!! ");
         logger.debug("====================> request.getParameter('pageIndex')  : " + request.getParameter("pageIndex"));
         logger.debug("====================> adminInfo.getPageIndex : {} ",adminInfo.getPageIndex());
+        logger.debug("====================> adminInfo.getSearchType1: {} ",adminInfo.getSearchType1());
         logger.debug("====================> adminInfo.getSearchKeyword1 : {} ",adminInfo.getSearchKeyword1());
 
         List<AdminInfo> managerList = managerService.selectManagerList(adminInfo);
@@ -84,6 +114,7 @@ public class ManagerController {
         PaginationInfoExtension pagination = PaginationSupport.setPaginationVO(request, adminInfo, "1", adminInfo.getRecordCountPerPage(), 10);
         pagination.setTotalRecordCountVO(managerList);
 
+        mav.addObject("grpId",      grpId);
         mav.addObject("adminConst", adminConst);
         mav.addObject("managerList", managerList);
         mav.addObject("pagination", pagination);
@@ -108,39 +139,45 @@ public class ManagerController {
     ) {
         logger.debug("====================> adminInfo.getAdminId: {} ",adminInfo.getAdminId());
 
+        int grpId = -1;
         AdminInfo managerDetail = null;
         String    paramCreate = request.getParameter("create");
         String    mode; // INS:신규등록 or UPD:업데이트
         List<ComplexSimpleInfo> cmplxList = complexService.getComplexSimpleList();
+
+
+        try {
+            grpId = Integer.parseInt(request.getParameter("grpId"));
+
+        } catch( NumberFormatException e ){
+            // 잘못 된 입력
+            response.setStatus(HttpStatus.SC_BAD_REQUEST);
+            mav.setViewName("/error/400");
+            return mav;
+        }
 
         // 신규 관리자 생성
         if( paramCreate != null && paramCreate.equals("true") )
         {
             managerDetail = new AdminInfo();
             // list.jsp에서 설정한 grpId  검증
-            try {
-                int grpId = Integer.parseInt(request.getParameter("grpId"));
-                switch(grpId) {
-                    case AdminConst.ADMIN_GRP_SUPER:
-                        managerDetail.setGrpId(AdminConst.ADMIN_GRP_SUPER);
-                        break;
-                    case AdminConst.ADMIN_GRP_COMPLEX:
-                        managerDetail.setGrpId(AdminConst.ADMIN_GRP_COMPLEX);
-                        break;
-                    default :
-                        throw new NumberFormatException();
-                }
-                mode = "INS";
-            } catch( NumberFormatException e ){
-                // 잘못 된 입력
-                response.setStatus(HttpStatus.SC_BAD_REQUEST);
-                mav.setViewName("/error/400");
-                return mav;
+
+            switch(grpId) {
+                case AdminConst.ADMIN_GRP_SUPER:
+                    managerDetail.setGrpId(AdminConst.ADMIN_GRP_SUPER);
+                    break;
+                case AdminConst.ADMIN_GRP_COMPLEX:
+                    managerDetail.setGrpId(AdminConst.ADMIN_GRP_COMPLEX);
+                    break;
+                default :
+                    response.setStatus(HttpStatus.SC_BAD_REQUEST);
+                    mav.setViewName("/error/400");
+                    return mav;
             }
+            mode = "INS";
         } else {
             // 기존 사용자 정보 업데이트
-
-            // 이전 사용자 정보 가져오기
+            //   - 이전 사용자 정보 가져오기
             managerDetail = managerService.selectManagerDetail(adminInfo);
 
             if( managerDetail == null ) {
@@ -149,10 +186,10 @@ public class ManagerController {
                 mav.setViewName("/error/404");
                 return mav;
             }
-
             mode = "UPD";
         }
 
+        mav.addObject("grpId", grpId);
         mav.addObject("cmplxList", cmplxList);
         mav.addObject("mode", mode);
         mav.addObject("adminConst", adminConst);

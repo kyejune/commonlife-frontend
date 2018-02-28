@@ -42,26 +42,35 @@
                     </div>
                     <div class="ibox-content" style="">
                         <form class="form-horizontal">
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">
-                                    <button type="button"
-                                            class="btn btn-primary b-r-lg"
-                                            onclick="managerAdd(${adminConst.adminGrpSuper})">
-                                        슈퍼 관리자 생성</button>
-                                </label>
-                                <div class="col-sm-10"> 설명 작성 ... </div>
-                            </div>
-                            <div class="hr-line-dashed"></div>
-                            <div class="form-group">
-                                <label class="col-sm-2 control-label">
-                                    <button type="button"
-                                            class="btn btn-success b-r-lg"
-                                            onclick="managerAdd(${adminConst.adminGrpComplex})">
-                                        현장 관리자 생성</button>
-                                </label>
-                                <div class="col-sm-10"> 설명 작성 ... </div>
-                            </div>
-                            <div class="hr-line-dashed"></div>
+                            <c:choose>
+                                <c:when test="${adminConst.adminGrpSuper == grpId}">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">
+                                            <button type="button"
+                                                    class="btn btn-primary b-r-lg"
+                                                    onclick="managerAdd(${adminConst.adminGrpSuper})">
+                                                슈퍼 관리자 생성</button>
+                                        </label>
+                                        <div class="col-sm-10"> 설명 작성 ... </div>
+                                    </div>
+                                </c:when>
+                                <c:when test="${adminConst.adminGrpComplex == grpId}">
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">
+                                            <button type="button"
+                                                    class="btn btn-success b-r-lg"
+                                                    onclick="managerAdd(${adminConst.adminGrpComplex})">
+                                                현장 관리자 생성</button>
+                                        </label>
+                                        <div class="col-sm-10"> 설명 작성 ... </div>
+                                    </div>
+                                </c:when>
+                                <c:otherwise>
+                                    <span class="badge-plain">
+                                        -
+                                    </span>
+                                </c:otherwise>
+                            </c:choose>
                         </form>
                     </div>
                 </div>
@@ -86,18 +95,18 @@
 
                         <div class="ibox-content" style="">
                             <input type="text" class="form-control input-sm m-b-xs" id="filter" placeholder="Search in table">
-                            <table class="footable table table-stripped tablet breakpoint footable-loaded" data-page-size="8" data-filter="#filter">
+                            <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10" data-filter="#filter">
                                 <thead>
                                     <tr>
-                                        <th class="footable-visible footable-first-column footable-sortable">#<span class="footable-sort-indicator"></span></th>
-                                        <th class="footable-visible footable-first-column footable-sortable">관리자 그룹</th>
-                                        <th class="footable-visible footable-last-column footable-sortable ">관리자 아이디<span class="footable-sort-indicator"></span></th>
-                                        <th class="">이름</th>
-                                        <th class="">Email</th>
-                                        <th class="">담당 현장</th>
-                                        <th class="">설명</th>
-                                        <th class="">사용유무</th>
-                                        <th class="">등록일</th>
+                                        <th data-toggle="true" data-sort-ignore="true">#</th>
+                                        <th data-sort-ignore="true">관리자 그룹</th>
+                                        <th data-sort-ignore="true">관리자 아이디</th>
+                                        <th class="" data-sort-ignore="true">이름</th>
+                                        <th class="" data-sort-ignore="true">Email</th>
+                                        <th class="" data-sort-ignore="true">담당 현장</th>
+                                        <th data-hide="all" data-sort-ignore="true">설명</th>
+                                        <th class="" data-sort-ignore="true">사용유무</th>
+                                        <th class="" data-sort-ignore="true">등록일</th>
                                     </tr>
                                 </thead>
                                 <c:choose>
@@ -111,9 +120,9 @@
                                     <c:otherwise>
                                         <tbody>
                                         <c:forEach var="vo" items="${managerList}" varStatus="status">
-                                            <tr class="gradeA footable-even" style="">
-                                                <td class="footable-visible footable-first-column">
-                                                    <c:out value="${pagination.totalRecordCount - (pagination.recordCountPerPage * (pagination.currentPageNo - 1)) - status.count + 1}"/>
+                                            <tr>
+                                                <td>
+                                                    ${vo.rnum}
                                                 </td>
                                                 <td class="center">
                                                     <c:choose>
@@ -134,7 +143,7 @@
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
-                                                <td class="footable-visible footable-last-column">
+                                                <td>
                                                     <a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}')">
                                                             ${vo.adminId}
                                                     </a>
@@ -142,11 +151,11 @@
                                                 <td class="center">${vo.adminNm}</td>
                                                 <td class="center">${vo.adminEmail}</td>
                                                 <td class="center">${vo.cmplxNm}</td>
-                                                <td class="center">{TBA}</td>
+                                                <td class="center"><p>${vo.desc}</p><br/></td>
                                                 <td class="center" >
                                                     <c:choose>
                                                         <c:when test="${vo.useYn == 'Y'}">
-                                                            <i class="fa fa-check-circle" alt="사용"></i>
+                                                            <i class="fa fa-check-circle text-navy" alt="사용"></i>
                                                         </c:when>
                                                         <c:when test="${vo.useYn == 'N'}">
                                                             <i class="fa fa-times" alt="사용안함"></i>
@@ -170,7 +179,7 @@
                                         <%--</div>--%>
 
                                         <tr>
-                                            <td colspan="9" class="footable-visible">
+                                            <td colspan="8">
                                                 <ui:pagination paginationInfo="${pagination}" jsFunction="fn_link_page"/>
                                             </td>
                                         </tr>
@@ -188,16 +197,17 @@
 <tiles:putAttribute name="js">
     <script type="text/javascript">
         $(function () {
-            // $('#mngList').DataTable({
-            //     'paging'      : false,
-            //     'lengthChange': false,
-            //     'searching'   : false,
-            //     'ordering'    : false,
-            //     'info'        : false,
-            //     'autoWidth'   : true
-            // })
-            //
-            // $("#left_li_menu_05").addClass("active");
+            $('.footable').footable();
+
+            $("#left_admin").addClass("active");
+            <c:choose>
+                <c:when test="${adminConst.adminGrpSuper == grpId}">
+                    $("#left_admin_super").addClass("active");
+                </c:when>
+                <c:when test="${adminConst.adminGrpComplex == grpId}">
+                    $("#left_admin_complex").addClass("active");
+                </c:when>
+            </c:choose>
         })
 
 
@@ -209,13 +219,13 @@
         }
 
         function refreshList(){
-            $("#manageReqForm").attr("action", "/admin/managers/list.do");
+            $("#manageReqForm").attr("action", "/admin/managers/list.do?grpId=${grpId}");
             $("#manageReqForm").submit();
         }
 
         function managersDetail(adminId){
             $("#manageReqForm > #adminId").val(adminId);
-            $("#manageReqForm").attr("action", "/admin/managers/write.do");
+            $("#manageReqForm").attr("action", "/admin/managers/write.do?grpId=${grpId}");
             $("#manageReqForm").submit();
         }
 
