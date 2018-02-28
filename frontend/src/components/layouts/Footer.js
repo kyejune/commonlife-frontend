@@ -13,7 +13,7 @@ import Src3 from 'images/ic-menu-3.png';
 const WriteButton = () => {
     return <Button floating primary
                    iconClassName="fa fa-pencil fa-2x"
-                   className="cl-write__button--fixed"
+                   className="cl-write__button"
                    onClick={() => Store.drawer.push('write')}
     />
 }

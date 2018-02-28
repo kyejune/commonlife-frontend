@@ -5,6 +5,14 @@ $md-light-theme: true; // optional for light theme
 $md-primary-color: #1052a5;
 $md-secondary-color: #f4ca5c;
 
+.color-primary{
+  color: $md-primary-color;
+}
+
+.color-secondary{
+  color: $md-secondary-color;
+}
+
 
 .drawers__content__title--hack {
   color: get-color('secondary', false);

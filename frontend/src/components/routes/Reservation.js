@@ -216,7 +216,7 @@ class Reservation extends Component {
 
 
             {/* 예약 상세 화면 */}
-            <Drawer {...Store.customDrawerProps}
+            <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
                     visible={this.state.drawer.indexOf( 'reservation-detail' ) >= 0}>
                 <DrawerContentHolder back>
                     <ReservationDetail/>
@@ -224,7 +224,7 @@ class Reservation extends Component {
             </Drawer>
 
             {/* 히스토리 */}
-            <Drawer {...Store.customDrawerProps}
+            <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
                     visible={this.state.drawer.indexOf( 'reservation-history' ) >= 0}>
                 <DrawerContentHolder back>
                     <ReservationHistory/>
@@ -232,7 +232,7 @@ class Reservation extends Component {
             </Drawer>
 
 			{/* 이미지상세보기 */}
-            <Drawer {...Store.customDrawerProps}
+            <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
                     visible={this.state.drawer.indexOf( 'reservation-thumbnails' ) >= 0}>
                 <DrawerContentHolder back>
                     <DrawerSwiperViewer/>

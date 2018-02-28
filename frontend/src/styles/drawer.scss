@@ -1,7 +1,12 @@
 /* Drawer */
-.md-drawer{
-  overflow: auto;
+body:not(.cl-is-device){
+
+  .md-drawer{
+    overflow-y: auto;
+    bottom: initial;
+  }
 }
+
 
 .cl-drawer-content-holder{
   &>header{
@@ -9,18 +14,31 @@
   }
 }
 
-.md-drawer--active{
+.md-drawer{
+
+  -webkit-overflow-scrolling: touch;
+  height: 100vh;
 
   header{
 
-    h2{
+    height: 56px;
+
+    h2.md-title--toolbar{
       font-size: 16px;
+      margin-left: -12px;
+      margin-top: 2px;
     }
 
   }
 
   .dialogs__content{
-    //margin-top: 56px;
+    overflow: auto;
+    height: calc( 96.1vh - 56px );
+    margin-top: 3.9vh;
+
+    &>div{
+      height: 100%;
+    }
   }
 
 }

@@ -93,8 +93,8 @@ button, select, input{
 }
 
 /**/
-.cl-write__button--fixed{
-  position: fixed;
+.cl-write__button{
+  position: absolute;
   bottom: 5em;
   right: 1em;
   z-index: 9;
@@ -167,11 +167,11 @@ button, select, input{
   .mb-0#{$i}em { margin-bottom: #{$f}em; }
   .ml-0#{$i}em { margin-left: #{$f}em; }
 
-  .p-0#{$i}em { padding: #{$i}em; }
-  .pt-0#{$i}em { padding-top: #{$i}em; }
-  .pr-0#{$i}em { padding-right: #{$i}em; }
-  .pb-0#{$i}em { padding-bottom: #{$i}em; }
-  .pl-0#{$i}em { padding-left: #{$i}em; }
+  .p-0#{$i}em { padding: #{$f}em; }
+  .pt-0#{$i}em { padding-top: #{$f}em; }
+  .pr-0#{$i}em { padding-right: #{$f}em; }
+  .pb-0#{$i}em { padding-bottom: #{$f}em; }
+  .pl-0#{$i}em { padding-left: #{$f}em; }
 }
 
 @for $i from 0 to 10 {
@@ -186,4 +186,6 @@ button, select, input{
   .pr-#{$i}em { padding-right: #{$i}em; }
   .pb-#{$i}em { padding-bottom: #{$i}em; }
   .pl-#{$i}em { padding-left: #{$i}em; }
+
+  .opacity-#{$i}0 { opacity: $i/10 }
 }

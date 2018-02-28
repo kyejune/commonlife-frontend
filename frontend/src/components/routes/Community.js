@@ -77,7 +77,7 @@ class Community extends Component {
 
 
                 {/* 카드 상세보기 */}
-                <Drawer {...Store.customDrawerProps}
+                <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
                         visible={this.state.drawer.indexOf( 'card-item-detail' ) >= 0 }>
                     <DrawerContentHolder back>
                         <CardItemDetail/>
@@ -85,7 +85,7 @@ class Community extends Component {
                 </Drawer>
 
                 {/* Like 찍은 분들 */}
-                <Drawer {...Store.customDrawerProps}
+                <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
                         visible={this.state.drawer.indexOf( 'people' ) >= 0}>
                     <DrawerContentHolder back>
                         <People title="LIKE"/>
