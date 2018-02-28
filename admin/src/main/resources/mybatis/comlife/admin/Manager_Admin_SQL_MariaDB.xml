@@ -39,7 +39,7 @@
           ) AS `CMPLX_NM`,
           `GRP_ID`,
           `GRP_NM`,
-          ROW_NUMBER() OVER(ORDER BY ADMIN_ID ASC) ROWNUM,
+          ROW_NUMBER() OVER(ORDER BY GRP_ID, ADMIN_ID ASC) ROWNUM,
           COUNT(1) OVER() AS TOT
         FROM(
             SELECT
@@ -73,10 +73,9 @@
                     AND (ADMIN_ID LIKE CONCAT('%', #{searchKeyword1}, '%') OR ADMIN_NM LIKE CONCAT('%', #{searchKeyword1}, '%'))
                 </otherwise>
             </choose>
-            ORDER BY `GRP_ID`, `ADMIN_IDX` DESC
         )A
-        <include refid="Common.orderby"/>
         <include refid="Common.suffixPagination"/>
+        ORDER BY ROWNUM
     </select>
 
 
@@ -131,38 +130,40 @@
                #{cmplxId})
     </insert>
 
-    <update id="updateManager" parameterType="managerInfo">
+    <update id="updateManager" parameterType="adminInfo">
         /* 관리자 수정 */
         <![CDATA[
-        DECLARE @MNG_PW VARCHAR(100) SET @MNG_PW = #{mngPw}
-
-        UPDATE MANAGER_INFO SET
+        UPDATE CL_ADMIN_INFO SET
         ]]>
 
-        <if test='mngPw != null and !mngPw.equals("")'>
-            MNG_PW = HASHBYTES('SHA2_256' , @MNG_PW),
+        <if test='adminPw != null and !adminPw.equals("")'>
+            ADMIN_PW = SHA2(#{adminPw}, 256),
         </if>
 
-        <if test='mngNm != null and !mngNm.equals("")'>
-            MNG_NM = #{mngNm},
+        <if test='adminNm != null and !adminNm.equals("")'>
+            ADMIN_NM = #{adminNm},
         </if>
 
-        <if test='mngEmail != null and !mngEmail.equals("")'>
-            MNG_EMAIL = #{mngEmail},
-        </if>
-
-        <if test='bigo != null and !bigo.equals("")'>
-            BIGO = #{bigo},
+        <if test='adminEmail != null and !adminEmail.equals("")'>
+            ADMIN_EMAIL = #{adminEmail},
         </if>
 
         <if test='useYn != null and !useYn.equals("")'>
             USE_YN = #{useYn},
         </if>
 
+        <if test='desc != null and !desc.equals("")'>
+            `DESC` = #{desc},
+        </if>
+
+        <if test='cmplxId != null and !cmplxId.equals("")'>
+            CMPLX_ID = #{cmplxId},
+        </if>
+
         <![CDATA[
-            UPD_DTTM = CONVERT(DATETIME, GETDATE(), 121),
-            UPD_USERID = #{updUserId}
-        WHERE MNG_ID = #{mngId}
+            UPD_DTTM = CURRENT_TIMESTAMP(),
+            UPD_ADMIN_IDX = #{updAdminIdx}
+        WHERE ADMIN_ID = #{adminId}
         ]]>
     </update>
 </mapper>

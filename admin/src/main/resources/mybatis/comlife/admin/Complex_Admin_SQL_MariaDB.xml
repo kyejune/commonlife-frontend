@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Complex">
+    <select id="selectComplexSimpleInfoDetailList" resultType="ComplexSimpleInfo">
+    SELECT * FROM
+    (
+        SELECT
+            COMPLEX_M.CMPLX_ID,
+            '' AS CMPLX_GRP,
+            COMPLEX_M.CMPLX_NM AS CMPLX_NM, -- COMPLEX NAME
+            COMPLEX_M.ADDR,     -- 일반 주소
+            COMPLEX_M.ADDR_DTL, -- 상세 주소
+            COMPLEX_M.ADDR1,
+            COMPLEX_M.ADDR2,
+            COMPLEX_M_EXT.CL_MAP_SRC,     -- CommonLife's Map Src/Url
+            COMPLEX_M_EXT.CL_LOGO_IMG_SRC, -- CommonLife's LOGO Image Source
+            (SELECT CMPLX_GRP_TYPE FROM CMPLX_GRP_TYPE_M AS CGP LEFT JOIN CMPLX_GRP_M AS CG ON CGP.CMPLX_GRP_TYPE_ID = CG.CMPLX_GRP_TYPE_ID WHERE CG.CMPLX_ID = COMPLEX_M.CMPLX_ID )
+        FROM
+            COMPLEX_M LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
+            COMPLEX_M_EXT JOIN
+        ON
+          COMPLEX_M.CMPLX_ID = COMPLEX_M_EXT.CMPLX_ID
+        WHERE
+          COMPLEX_M.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
+
+    ) AS A
+    ORDER BY
+          CMPLX_NM ASC
+    ;
+    </select>
+
+    <select id="selectComplexSimpleInfoList" resultType="ComplexSimpleInfo">
+    SELECT
+        A.CMPLX_ID AS CMPLX_ID,
+        A.CMPLX_NM AS CMPLX_NM,
+        A.ADDR AS ADDR,
+        B.CMPLX_GRP_TYPE AS CMPLX_GRP,
+        B.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_ID
+    FROM
+    (
+        SELECT
+            CMPLX.CMPLX_ID AS CMPLX_ID,
+            CMPLX.CMPLX_NM AS CMPLX_NM, -- COMPLEX NAME
+            CMPLX.ADDR                  -- 일반 주소
+        FROM
+            COMPLEX_M AS CMPLX
+              LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
+            COMPLEX_M_EXT AS CMPLX_EXT
+        ON
+            CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
+        WHERE
+            CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
+    ) AS A
+      JOIN
+    (
+        SELECT
+            CMPLX_ID,
+            CMPLX_GRP_TYPE,
+            GRP.CMPLX_GRP_TYPE_ID
+        FROM
+          COMPLEX_GRP_TYPE_M AS GRP_TYPE
+            LEFT JOIN
+          COMPLEX_GRP_M AS GRP
+        ON
+          GRP_TYPE.CMPLX_GRP_TYPE_ID = GRP.CMPLX_GRP_TYPE_ID
+    ) AS B
+      ON A.CMPLX_ID = B.CMPLX_ID
+    ORDER BY
+      CMPLX_GRP_TYPE_ID DESC, CMPLX_NM ASC
+    ;
+    </select>
+</mapper>

@@ -1,5 +1,7 @@
 package com.kolon.comlife.admin.manager.web;
 
+import com.kolon.comlife.admin.complexes.model.ComplexSimpleInfo;
+import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.manager.model.AdminConst;
 import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.manager.model.ManagerInfo;
@@ -10,6 +12,7 @@ import com.kolon.common.admin.pagination.PaginationSupport;
 import org.apache.commons.httpclient.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.access.method.P;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -46,6 +49,9 @@ public class ManagerController {
 
     @Resource(name ="adminConst")
     private AdminConst adminConst;
+
+    @Autowired
+    private ComplexService complexService;
 
 
 
@@ -105,6 +111,7 @@ public class ManagerController {
         AdminInfo managerDetail = null;
         String    paramCreate = request.getParameter("create");
         String    mode; // INS:신규등록 or UPD:업데이트
+        List<ComplexSimpleInfo> cmplxList = complexService.getComplexSimpleList();
 
         // 신규 관리자 생성
         if( paramCreate != null && paramCreate.equals("true") )
@@ -146,6 +153,7 @@ public class ManagerController {
             mode = "UPD";
         }
 
+        mav.addObject("cmplxList", cmplxList);
         mav.addObject("mode", mode);
         mav.addObject("adminConst", adminConst);
         mav.addObject("managerDetail", managerDetail);
@@ -175,7 +183,7 @@ public class ManagerController {
 //        managerInfo.setUpdUserId(baseUserInfo.getMngId());
         // todo: 임시로 0으로 설정, 로그인 기능 도입 이후에 로그인 사용자 값에서 가져오도록 변경할 것
         adminInfo.setRegAdminIdx(1);
-        adminInfo.setRegAdminIdx(1);
+        adminInfo.setUpdAdminIdx(1);
 
         // 새로운 관리자 생성
         if( "INS".equals(adminInfo.getMode()) ){

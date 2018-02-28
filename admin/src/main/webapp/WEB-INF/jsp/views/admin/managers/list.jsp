@@ -55,7 +55,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">
                                     <button type="button"
-                                            class="btn btn-primary b-r-lg"
+                                            class="btn btn-success b-r-lg"
                                             onclick="managerAdd(${adminConst.adminGrpComplex})">
                                         현장 관리자 생성</button>
                                 </label>
@@ -115,7 +115,25 @@
                                                 <td class="footable-visible footable-first-column">
                                                     <c:out value="${pagination.totalRecordCount - (pagination.recordCountPerPage * (pagination.currentPageNo - 1)) - status.count + 1}"/>
                                                 </td>
-                                                <td class="center">${vo.grpNm}</td>
+                                                <td class="center">
+                                                    <c:choose>
+                                                        <c:when test="${adminConst.adminGrpSuper == vo.grpId}">
+                                                            <span class="badge-primary">
+                                                                    ${vo.grpNm}
+                                                            </span>
+                                                        </c:when>
+                                                        <c:when test="${adminConst.adminGrpComplex == vo.grpId}">
+                                                            <span class="badge-success">
+                                                                    ${vo.grpNm}
+                                                            </span>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <span class="badge-plain">
+                                                                -
+                                                            </span>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
                                                 <td class="footable-visible footable-last-column">
                                                     <a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}')">
                                                             ${vo.adminId}
@@ -125,7 +143,19 @@
                                                 <td class="center">${vo.adminEmail}</td>
                                                 <td class="center">${vo.cmplxNm}</td>
                                                 <td class="center">{TBA}</td>
-                                                <td class="center" >${vo.useYn}</td>
+                                                <td class="center" >
+                                                    <c:choose>
+                                                        <c:when test="${vo.useYn == 'Y'}">
+                                                            <i class="fa fa-check-circle" alt="사용"></i>
+                                                        </c:when>
+                                                        <c:when test="${vo.useYn == 'N'}">
+                                                            <i class="fa fa-times" alt="사용안함"></i>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            -
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </td>
                                                 <td class="center" >
                                                     <fmt:parseDate value="${vo.regDttm}" pattern="yyyy-MM-dd" var="sysDt"/>
                                                     <fmt:formatDate value="${sysDt}" pattern="yyyy.MM.dd"/>

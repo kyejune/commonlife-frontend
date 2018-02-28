@@ -119,6 +119,20 @@
                                         <input type="text" id="adminEmail" name="adminEmail" class="form-control" placeholder="EMAIL 입력" value="${managerDetail.adminEmail}">
                                     </div>
                                 </div>
+                            <c:if test="${managerDetail.grpId == adminConst.adminGrpComplex}">
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">담당 현장</label>
+                                    <div class="col-sm-10">
+                                        <select class="form-control m-b" name="cmplxId" id="cmplxId"  value="132">
+                                            <c:forEach var="vo" items="${cmplxList}" varStatus="status">
+                                                <option value="${vo.cmplxId}">${vo.cmplxGrp} | ${vo.cmplxNm} / ${vo.cmplxId} / ${vo.cmplxGrpId} </option>
+                                            </c:forEach>
+                                        </select>
+                                        <%--<input type="text" id="cmplxId" name="cmplxId" class="form-control" placeholder="담당 현장 입력" value="${managerDetail.cmplxNm}">--%>
+                                    </div>
+                                </div>
+                            </c:if>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">설명</label>
@@ -128,7 +142,7 @@
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">사용여부</label>
+                                    <label class="col-sm-2 control-label">사용유무</label>
                                     <div class="col-sm-10">
                                         <div class="radio">
                                             <label>
@@ -183,8 +197,11 @@
                 </c:when>
             </c:choose>
 
-            $("#left_li_menu_05").addClass("active");
+            <c:if test="${managerDetail.grpId == adminConst.adminGrpComplex}">
+                $('#cmplxId').val(${managerDetail.cmplxId});
+            </c:if>
 
+            $("#left_li_menu_05").addClass("active");
         })
 
 
