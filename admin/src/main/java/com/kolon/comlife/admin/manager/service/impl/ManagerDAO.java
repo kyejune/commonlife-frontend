@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.sql.SQLException;
 import java.util.List;
 
 
@@ -20,7 +21,7 @@ public class ManagerDAO {
      * @param managerInfo
      * @return
      */
-    public ManagerInfo selectLoginManager(ManagerInfo managerInfo) {
+    public ManagerInfo selectLoginManager(ManagerInfo managerInfo)  {
         return sqlSession.selectOne("Manager.selectLoginManager", managerInfo);
     }
 
@@ -46,20 +47,20 @@ public class ManagerDAO {
 
     /**
      * 관리자 등록
-     * @param managerInfo
+     * @param adminInfo
      * @return
      */
-    public int insertManager(ManagerInfo managerInfo) {
-        return sqlSession.insert("Manager.insertManager", managerInfo);
+    public int insertManager(AdminInfo adminInfo) throws Exception {
+        return sqlSession.insert("Manager.insertManager", adminInfo);
     }
 
     /**
      * 관리자 수정
-     * @param managerInfo
+     * @param adminInfo
      * @return
      */
-    public int updateManager(ManagerInfo managerInfo) {
-        return sqlSession.update("Manager.updateManager", managerInfo);
+    public int updateManager(AdminInfo adminInfo) {
+        return sqlSession.update("Manager.updateManager", adminInfo);
     }
 
 

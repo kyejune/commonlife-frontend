@@ -33,6 +33,41 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-lg-12">
+                <c:choose>
+                    <c:when test="${managerDetail.grpId == adminConst.adminGrpSuper}">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                '슈퍼 관리자' 등록 및 수정
+                            </div>
+                            <div class="ibox-content" style="">
+                                {슈퍼 관리자의 등록과 관련 된 내용을 여기에 입력 합니다.}
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:when test="${managerDetail.grpId == adminConst.adminGrpComplex}">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                                '현장 관리자' 등록 및 수정
+                            </div>
+                            <div class="ibox-content" style="">
+                                {현장 관리자의 등록과 관련 된 내용을 여기에 입력 합니다.}
+                            </div>
+                        </div>
+                    </c:when>
+                    <c:otherwise>
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-title">
+                            </div>
+                            <div class="ibox-content" style="">
+                                --- 미지정 된 관리자 ---
+                            </div>
+                        </div>
+                    </c:otherwise>
+                </c:choose>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
                         <h5>관리자 정보</h5>
@@ -49,11 +84,14 @@
                                     <label class="col-sm-2 control-label">아이디</label>
                                     <div class="col-sm-10">
                                     <c:choose>
-                                        <c:when test="${managerDetail.adminId != null }">
+                                        <c:when test="${mode == 'INS'}">
+                                            <input type="text" id="adminId" name="adminId" class="form-control" placeholder="아이디 입력">
+                                        </c:when>
+                                        <c:when test="${mode == 'UPD'}">
                                             <input type="text" id="adminId" name="adminId" class="form-control" readonly value="${managerDetail.adminId}">
                                         </c:when>
                                         <c:otherwise>
-                                            <input type="text" id="adminId" name="adminId" class="form-control" placeholder="아이디 입력">
+                                            {잘못된 접근 입니다}
                                         </c:otherwise>
                                     </c:choose>
                                     </div>
@@ -62,7 +100,9 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">비밀번호</label>
                                     <div class="col-sm-10">
-                                        <input type="password" id="mngPw" name="mngPw" class="form-control" placeholder="비밀번호 입력">
+                                        {todo:비밀번호 재입력 화면을 추가해야 함}
+                                        <p/>
+                                        <input type="password" id="adminPw" name="adminPw" class="form-control" placeholder="비밀번호 입력">
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
@@ -79,16 +119,30 @@
                                         <input type="text" id="adminEmail" name="adminEmail" class="form-control" placeholder="EMAIL 입력" value="${managerDetail.adminEmail}">
                                     </div>
                                 </div>
+                            <c:if test="${managerDetail.grpId == adminConst.adminGrpComplex}">
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">비고</label>
+                                    <label class="col-sm-2 control-label">담당 현장</label>
                                     <div class="col-sm-10">
-                                        <input type="text" id="desc" name="desc" class="form-control" placeholder="비고 입력" value="${managerDetail.desc}">
+                                        <select class="form-control m-b" name="cmplxId" id="cmplxId"  value="132">
+                                            <c:forEach var="vo" items="${cmplxList}" varStatus="status">
+                                                <option value="${vo.cmplxId}">${vo.cmplxGrp} | ${vo.cmplxNm} / ${vo.cmplxId} / ${vo.cmplxGrpId} </option>
+                                            </c:forEach>
+                                        </select>
+                                        <%--<input type="text" id="cmplxId" name="cmplxId" class="form-control" placeholder="담당 현장 입력" value="${managerDetail.cmplxNm}">--%>
+                                    </div>
+                                </div>
+                            </c:if>
+                                <div class="hr-line-dashed"></div>
+                                <div class="form-group">
+                                    <label class="col-sm-2 control-label">설명</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" id="desc" name="desc" class="form-control" placeholder="해당 관리자에 대한 설명을 입력하세요." value="${managerDetail.desc}">
                                     </div>
                                 </div>
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
-                                    <label class="col-sm-2 control-label">사용여부</label>
+                                    <label class="col-sm-2 control-label">사용유무</label>
                                     <div class="col-sm-10">
                                         <div class="radio">
                                             <label>
@@ -105,28 +159,23 @@
                                 <div class="hr-line-dashed"></div>
                                 <div class="form-group">
                                     <div class="col-sm-4 col-sm-offset-2">
-                                        <input class="btn btn-primary" type="button" value="목록" onclick="refreshList()" />
                                         <c:choose>
-                                            <c:when test="${managerDetail.adminId != null }">
+                                            <c:when test="${mode == 'INS'}">
+                                                <input class="btn btn-primary" type="button" value="등록" onclick="procIns()" />
+                                            </c:when>
+                                            <c:when test="${mode == 'UPD'}">
                                                 <input class="btn btn-primary" type="button" value="수정" onclick="procIns()" />
                                             </c:when>
                                             <c:otherwise>
-                                                <input class="btn btn-primary" type="button" value="등록" onclick="procIns()" />
+                                                <input class="btn btn-danger" type="button" value="{잘못된 접근 입니다}"  />
                                             </c:otherwise>
                                         </c:choose>
+                                        <input class="btn btn-default" type="button" value="취소" onclick="refreshList()" />
                                     </div>
                                 </div>
                             </div>
                             <!-- /.content -->
-                            <c:choose>
-                                <c:when test="${managerDetail.adminId != null }">
-                                    <input type="hidden" name="mode" id="mode" value="UPD">
-                                </c:when>
-                                <c:otherwise>
-                                    <input type="hidden" name="mode" id="mode" value="INS">
-                                    <input type="hidden" name="delYn" id="delYn" value="N">
-                                </c:otherwise>
-                            </c:choose>
+                            <input type="hidden" name="mode" id="mode" value="${mode}">
                         </form:form>
                         <form:form name="managerListForm" id="managerListForm" method="post" commandName="adminInfo">
                             <form:hidden path="pageIndex"/>
@@ -142,13 +191,22 @@
     <script src='/js/common_check.js'></script>
     <script type="text/javascript">
         $(function () {
-
-            <c:if test="${managerDetail != null }">
+            <c:choose>
+                <c:when test="${mode == 'UPD'}">
             $('input:radio[name=useYn]:input[value=${managerDetail.useYn}]').attr("checked", "checked");
-            </c:if>
+                </c:when>
+            </c:choose>
 
-            $("#left_li_menu_05").addClass("active");
-
+            $("#left_admin").addClass("active");
+            <c:choose>
+                <c:when test="${adminConst.adminGrpSuper == managerDetail.grpId}">
+                    $("#left_admin_super").addClass("active");
+                </c:when>
+                <c:when test="${adminConst.adminGrpComplex == managerDetail.grpId}">
+                    $('#cmplxId').val(${managerDetail.cmplxId});
+                    $("#left_admin_complex").addClass("active");
+                </c:when>
+            </c:choose>
         })
 
 
@@ -160,38 +218,38 @@
         }
 
         function refreshList(){
-            $("#managerListForm").attr("action", "/admin/managers/list.do");
+            $("#managerListForm").attr("action", "/admin/managers/list.do?grpId=${managerDetail.grpId}");
             $("#managerListForm").submit();
         }
 
 
 
         function procIns(){
-            var mode        = trim($('#mode').val());
-            var mngId       = trim($('#mngId').val());
-            var mngPw       = trim($('#mngPw').val());
-            var mngNm       = trim($('#mngNm').val());
-            var mngEmail    = trim($('#mngEmail').val());
+            var mode          = trim($('#mode').val());
+            var adminId       = trim($('#adminId').val());
+            var adminPw       = trim($('#adminPw').val());
+            var adminMn       = trim($('#adminMn').val());
+            var adminEmail    = trim($('#adminEmail').val());
             var useYn       = $(':radio[name="useYn"]:checked').val();
 
-            if(mngId == "" || typeof mngId == "undefined"){
+            if(adminId == "" || typeof adminId == "undefined"){
                 alert('아이디를 입력해주세요.');
                 return;
             }
 
             <c:if test="${managerDetail == null }">
-            if(mngPw == "" || typeof mngPw == "undefined"){
+            if(adminPw == "" || typeof adminPw == "undefined"){
                 alert('비밀번호를 입력해주세요.');
                 return;
             }
             </c:if>
 
-            if(mngNm == "" || typeof mngNm == "undefined"){
+            if(adminNm == "" || typeof adminNm == "undefined"){
                 alert('관리자명을 입력해주세요.');
                 return;
             }
 
-            if(mngEmail == "" || typeof mngEmail == "undefined"){
+            if(adminEmail == "" || typeof adminEmail == "undefined"){
                 alert('이메일을 입력해주세요.');
                 return;
             }
@@ -214,12 +272,12 @@
                             alert(modeMsg+" 되었습니다.");
                             refreshList();
                         }else{
-                            alert("실패하였습니다.");
+                            alert(rs.msg);
                         }
                     },
-                    error : function(){
-                        alert('에러가 발생하였습니다.');
-                        console.log('error');
+                    error : function(jqxhr){
+                        alert(modeMsg + "에 실패하였습니다.\n\t" + jqxhr.bodymsg);
+                        console.log('error' + jqxhr.responseText);
                     }
                 });
             }

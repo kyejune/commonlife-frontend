@@ -10,6 +10,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/font-awesome/css/font-awesome.css" rel="stylesheet">
+
+    <!-- FooTable -->
+    <link href="/resources/css/plugins/footable/footable.core.css" rel="stylesheet">
+
     <link href="/resources/css/animate.css" rel="stylesheet">
     <link href="/resources/css/style.css" rel="stylesheet">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -33,6 +37,9 @@
     <script src="/resources/js/bootstrap.min.js"></script>
     <script src="/resources/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="/resources/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+
+    <!-- FooTable -->
+    <script src="/resources/js/plugins/footable/footable.all.min.js"></script>
 
     <!-- Custom and plugin javascript -->
     <script src="/resources/js/inspinia.js"></script>
