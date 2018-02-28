@@ -19,6 +19,7 @@ import org.apache.ibatis.type.Alias;
 public class AdminInfo extends BaseUserInfo {
     private int adminIdx;
     private String adminId;
+    private String adminPw;
     private String adminNm;
     private String adminEmail;
     private int grpId;
@@ -135,6 +136,14 @@ public class AdminInfo extends BaseUserInfo {
 
     public void setAdminId(String adminId) {
         this.adminId = adminId;
+    }
+
+    public String getAdminPw() {
+        return adminPw;
+    }
+
+    public void setAdminPw(String adminPw) {
+        this.adminPw = adminPw;
     }
 
     public String getAdminNm() {

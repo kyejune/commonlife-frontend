@@ -41,8 +41,28 @@
                         </div>
                     </div>
                     <div class="ibox-content" style="">
-                        <button type="button" class="btn btn-primary btn-rounded">슈퍼 관리자 생성</button>
-                        <button type="button" class="btn btn-primary btn-rounded">현장 관리자 생성</button>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    <button type="button"
+                                            class="btn btn-primary b-r-lg"
+                                            onclick="managerAdd(${adminConst.adminGrpSuper})">
+                                        슈퍼 관리자 생성</button>
+                                </label>
+                                <div class="col-sm-10"> 설명 작성 ... </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">
+                                    <button type="button"
+                                            class="btn btn-primary b-r-lg"
+                                            onclick="managerAdd(${adminConst.adminGrpComplex})">
+                                        현장 관리자 생성</button>
+                                </label>
+                                <div class="col-sm-10"> 설명 작성 ... </div>
+                            </div>
+                            <div class="hr-line-dashed"></div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -70,11 +90,11 @@
                                 <thead>
                                     <tr>
                                         <th class="footable-visible footable-first-column footable-sortable">#<span class="footable-sort-indicator"></span></th>
+                                        <th class="footable-visible footable-first-column footable-sortable">관리자 그룹</th>
                                         <th class="footable-visible footable-last-column footable-sortable ">관리자 아이디<span class="footable-sort-indicator"></span></th>
                                         <th class="">이름</th>
                                         <th class="">Email</th>
-                                        <th class="">관리자 그룹</th>
-                                        <th class="">지역관리자 현장</th>
+                                        <th class="">담당 현장</th>
                                         <th class="">설명</th>
                                         <th class="">사용유무</th>
                                         <th class="">등록일</th>
@@ -95,6 +115,7 @@
                                                 <td class="footable-visible footable-first-column">
                                                     <c:out value="${pagination.totalRecordCount - (pagination.recordCountPerPage * (pagination.currentPageNo - 1)) - status.count + 1}"/>
                                                 </td>
+                                                <td class="center">${vo.grpNm}</td>
                                                 <td class="footable-visible footable-last-column">
                                                     <a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}')">
                                                             ${vo.adminId}
@@ -102,8 +123,7 @@
                                                 </td>
                                                 <td class="center">${vo.adminNm}</td>
                                                 <td class="center">${vo.adminEmail}</td>
-                                                <td class="center">${vo.grpId}</td>
-                                                <td class="center">지연관리자 현장</td>
+                                                <td class="center">${vo.cmplxNm}</td>
                                                 <td class="center">{TBA}</td>
                                                 <td class="center" >${vo.useYn}</td>
                                                 <td class="center" >
@@ -136,19 +156,18 @@
     </div>
 </tiles:putAttribute>
 <tiles:putAttribute name="js">
-    <!-- DataTables -->
     <script type="text/javascript">
         $(function () {
-            $('#mngList').DataTable({
-                'paging'      : false,
-                'lengthChange': false,
-                'searching'   : false,
-                'ordering'    : false,
-                'info'        : false,
-                'autoWidth'   : true
-            })
-
-            $("#left_li_menu_05").addClass("active");
+            // $('#mngList').DataTable({
+            //     'paging'      : false,
+            //     'lengthChange': false,
+            //     'searching'   : false,
+            //     'ordering'    : false,
+            //     'info'        : false,
+            //     'autoWidth'   : true
+            // })
+            //
+            // $("#left_li_menu_05").addClass("active");
         })
 
 
@@ -170,8 +189,8 @@
             $("#manageReqForm").submit();
         }
 
-        function managerAdd(){
-            $("#manageReqForm").attr("action", "/admin/managers/write.do");
+        function managerAdd(grpId){
+            $("#manageReqForm").attr("action", "/admin/managers/write.do?create=true&grpId=" + grpId);
             $("#manageReqForm").submit();
         }
 

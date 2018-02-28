@@ -48,21 +48,21 @@ public class ManagerServiceImpl implements ManagerService {
 
     /**
      * 관리자 등록
-     * @param managerInfo
+     * @param adminInfo
      * @return
      */
-    public int insertManager(ManagerInfo managerInfo) {
-        return managerDAO.insertManager(managerInfo);
+    public int insertManager( AdminInfo  adminInfo) throws Exception {
+        return managerDAO.insertManager(adminInfo);
     }
 
 
     /**
      * 관리자 수정
-     * @param managerInfo
+     * @param adminInfo
      * @return
      */
-    public int updateManager(ManagerInfo managerInfo) {
-        return managerDAO.updateManager(managerInfo);
+    public int updateManager( AdminInfo adminInfo) {
+        return managerDAO.updateManager(adminInfo);
     }
 
 }
