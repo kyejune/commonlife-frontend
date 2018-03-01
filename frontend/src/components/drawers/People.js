@@ -11,21 +11,28 @@ class People extends Component{
 		super( props );
 
 		this.state = {
-			likey: [],
+			users: [],
 		}
 	}
 
 	componentWillMount(){
-		Net.getLikey( 1, data => {
-			this.setState( { likey: data } );
+
+		Net.getLikesOfPost( 1, data => {
+			console.log( 'likes', data );
 
             // ContentHolder에 전달
             this.props.updateTitle(
                 <h2 className="md-title md-title--toolbar cl-ellipsis">
-					<span>{this.props.title}</span>
-					<span className="cl-secondary ml-03em">{data.length}</span>
-				</h2>
+                    <span>{this.props.title}</span>
+                    <span className="cl-secondary ml-03em">{data.length}</span>
+                </h2>
 			);
+
+            let users = data.map( data =>{
+            	return data.user;
+            });
+
+            this.setState( { users: users } );
 		});
 	}
 
@@ -33,11 +40,10 @@ class People extends Component{
 
         return (
         	<div>
-                {/*{this.props.match.params.id }번 아이디 게시물의 사람,사람,사람,,, 을 출력해주세여.*/}
 				<div className="cl-like__header"/>
-				{ this.state.likey.map( ( like, index ) => {
+				{ this.state.users.map( ( user, index ) => {
 					return (
-						<LikeList key={index} likeData={like}/>
+						<LikeList key={index} likeData={user}/>
 					)
 				} ) }
 

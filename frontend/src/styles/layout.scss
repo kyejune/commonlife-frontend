@@ -12,25 +12,20 @@ body.cl-is-device{
     }
 
     .cl-second-header {
-        //top: 3.90625vh;
+        top: 3.90625vh;
     }
 
     .App{
         height: calc( 100vh - 3.90625vh);
-        //margin-top: 3.90625vh;
-        //overflow-y: auto;
     }
 
     #root{
         margin-top: 3.90625vh;
     }
 
-    //.cl-drawer-content-holder{
-    //
-    //    &>header{
-    //        top: 3.90625vh;
-    //    }
-    //}
+    .dialogs__content{
+        margin-top: 3.90625vh;
+    }
 }
 
 body:not(.cl-is-device){
@@ -71,12 +66,8 @@ body.cl-dom--added{
         .md-btn--icon {
             padding: 0;
         }
-
     }
 
-    //.app-content {
-    //    padding-bottom: 56px;
-    //}
 
     #cl-footer {
         position: fixed;
@@ -141,7 +132,7 @@ body.cl-dom--added{
     width: 100%;
     z-index: 10;
     left: 0;
-    top: 3.90625vh;
+    top: 0vh;
     border-top: 0 solid #1052a5;
 }
 

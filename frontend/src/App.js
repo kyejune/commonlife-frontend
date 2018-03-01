@@ -30,21 +30,11 @@ class App extends Component {
 
         document.addEventListener('scroll', () => {
 
-            let bodyTop = document.querySelector('body').scrollTop;
+            let bodyTop = document.querySelector('body').scrollTop || document.querySelector('html').scrollTop;
 
             this.setState({
                 scrolled: ( bodyTop > 56 || document.querySelector('.App').scrollTop > 56)
             });
-
-            //3.90625vh
-            // if( this.state.isDevice ){
-            //     let secondHeader = document.querySelector('.cl-is-device .cl-second-header');
-            //     if( secondHeader )
-            //         secondHeader.style.borderTopWidth = ((Math.min(bodyTop, 56)/56)*3.90625) + 'vh';
-            //
-            //     console.log( 'borderTopWidth:', ((Math.min(bodyTop, 56)/56)*3.90625) + 'vh' );
-            // }
-
 
         }, true);
 

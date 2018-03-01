@@ -45,7 +45,6 @@
 
 .cl-write-section{
 
-  //background-image: url("../images/bg-2-dark@2x.png");
   height: calc( 100vh - 56px );
 
   textarea{
@@ -102,32 +101,6 @@
         border: 0;
 
         clip-path: polygon( 15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
-
-        //clip-pa
-
-        //&:before {
-        //    content: '';
-        //    position: absolute;
-        //    top: 0;
-        //    left: -1px;
-        //    width: 0;
-        //    height: 0;
-        //    border-style: solid;
-        //    border-width: 10px 6px 0 0;
-        //    border-color: #ffffff transparent transparent transparent;
-        //}
-        //
-        //&:after {
-        //    content: '';
-        //    position: absolute;
-        //    right: -1px;
-        //    bottom: 0;
-        //    width: 0;
-        //    height: 0;
-        //    border-style: solid;
-        //    border-width: 0 0 10px 6px;
-        //    border-color: transparent transparent #ffffff transparent;
-        //}
     }
 
     .md-card-title {
@@ -328,6 +301,7 @@
     margin-left: 22px;
     border-radius: 0;
     border: 0;
+    background-size: cover;
 
     clip-path: polygon( 15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
 }

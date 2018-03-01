@@ -43,17 +43,24 @@ export default {
     },
 
     /* Likey */
-    getLikey( id, callback ) {
-        axios.get( Store.api + './dummy/likey.json' )
-            .then( response => {
-            	callback( response.data );
-            } );
-    },
+    // getLikey( id, callback ) {
+    //     axios.get( Store.api + './dummy/likey.json' )
+    //         .then( response => {
+    //         	callback( response.data );
+    //         } );
+    // },
 
     setLikey( id, callback ){
         axios.post( Store.api + '/posts/' + id + '/likes/', { usrIdx:1 })
             .then( response => {
                callback( response.data );
+            });
+    },
+
+    getLikesOfPost( postId, callback ){
+        axios.get( Store.api + '/posts/'+ postId +'/likes/' )
+            .then( response => {
+                callback( response.data );
             });
     },
 
