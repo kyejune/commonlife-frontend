@@ -12,13 +12,12 @@ class People extends Component{
 
 		this.state = {
 			users: [],
-		}
+		};
 	}
 
 	componentWillMount(){
 
-		Net.getLikesOfPost( 1, data => {
-			console.log( 'likes', data );
+		Net.getLikesOfPost( this.props.match.params.id, data => {
 
             // ContentHolder에 전달
             this.props.updateTitle(

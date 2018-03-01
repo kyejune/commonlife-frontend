@@ -59,9 +59,11 @@ export default class LikeShareAndSome extends Component{
             <div className="cl-flex">
 
                 <button className="cl-card-item__button cl-like__button" onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }>LIKE</button>
-                <Link className="cl-counter__button" to={this.props.like.to}>
-                    {this.state.count}
-                </Link>
+                {this.state.count > 0 &&
+                    <Link className="cl-counter__button" to={this.props.like.to}>
+                        {this.state.count}
+                    </Link>
+                }
 
                 {Share}
 

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {HashRouter, Route, Switch} from 'react-router-dom';
+import {Drawer} from 'react-md';
 import './App.css';
 import 'font-awesome/fonts/fontawesome-webfont.eot';
 import 'react-md/dist/react-md.min.js';
@@ -13,6 +14,7 @@ import HomeIoT from 'components/routes/HomeIoT';
 import LifeInfo from 'components/routes/LifeInfo';
 import Reservation from 'components/routes/Reservation';
 import Playground from 'components/Playground';
+import DrawerInjector from "./components/drawers/DrawerInjector";
 
 class App extends Component {
 
@@ -46,7 +48,7 @@ class App extends Component {
     render() {
 
         return (
-            <HashRouter>
+            <HashRouter onChange={()=> console.log('change') }>
 
                 <div className={classNames({
                     'App': true,
@@ -57,6 +59,8 @@ class App extends Component {
 
 
                     <div className="app-content">
+
+                        <Route component={DrawerInjector}/>
 
                         <Switch>
                             <Route path="/community/:tab/:id/:drawer" component={Community}/>
@@ -76,6 +80,7 @@ class App extends Component {
 
                             <Route component={Community}/>
                         </Switch>
+
                     </div>
 
                     <Footer/>
