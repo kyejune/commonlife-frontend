@@ -43,6 +43,7 @@
                     <span class="nav-label">관리자 관리</span><span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse in">
+                    <li id="left_admin_all"><a href="/admin/managers/list.do">전체 관리자 목록</a></li>
                     <li id="left_admin_super"><a href="/admin/managers/list.do?grpId=0">슈퍼관리자 관리</a></li>
                     <li id="left_admin_complex"><a href="/admin/managers/list.do?grpId=1">현장관리자 관리</a></li>
                     <li><a href="/admin/managers/log.do">작업 로그</a></li>
