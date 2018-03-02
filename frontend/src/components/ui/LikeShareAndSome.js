@@ -17,12 +17,14 @@ export default class LikeShareAndSome extends Component{
     }
 
 	shareItem() {
-		window.plugins.socialsharing.share(
-		    null,
-            null,
-            null,
-            'http://www.x-services.nl'
-        );
+		let options = {
+			message: 'share this', // not supported on some apps (Facebook, Instagram)
+			subject: 'the subject', // fi. for email
+			url: 'https://www.website.com/foo/#bar?a=b',
+			chooserTitle: 'Pick an app' // Android only, you can override the default share sheet title
+		};
+
+		window.plugins.socialsharing.shareWithOptions(options);
 	}
 
 	likeItem( id ){
