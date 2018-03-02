@@ -103,7 +103,9 @@
                                         <th data-sort-ignore="true">관리자 아이디</th>
                                         <th class="" data-sort-ignore="true">이름</th>
                                         <th class="" data-sort-ignore="true">Email</th>
-                                        <th class="" data-sort-ignore="true">담당 현장</th>
+                                        <c:if test="${grpId != null && adminConst.adminGrpComplex == grpId}">
+                                            <th class="" data-sort-ignore="true">담당 현장</th>
+                                        </c:if>
                                         <th data-hide="all" data-sort-ignore="true">설명</th>
                                         <th class="" data-sort-ignore="true">사용유무</th>
                                         <th class="" data-sort-ignore="true">등록일</th>
@@ -144,13 +146,15 @@
                                                     </c:choose>
                                                 </td>
                                                 <td>
-                                                    <a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}')">
+                                                    <a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}', ${vo.grpId})">
                                                             ${vo.adminId}
                                                     </a>
                                                 </td>
                                                 <td class="center">${vo.adminNm}</td>
                                                 <td class="center">${vo.adminEmail}</td>
-                                                <td class="center">${vo.cmplxNm}</td>
+                                                <c:if test="${adminConst.adminGrpComplex == grpId}">
+                                                    <td class="center">${vo.cmplxNm}</td>
+                                                </c:if>
                                                 <td class="center"><p>${vo.desc}</p><br/></td>
                                                 <td class="center" >
                                                     <c:choose>
@@ -174,14 +178,18 @@
                                         </tbody>
                                         <tfoot>
                                         <!-- paginging -->
-
-                                        <%--<div class="dataTables_paginate paging_simple_numbers" align="center">--%>
-                                        <%--</div>--%>
-
                                         <tr>
-                                            <td colspan="8">
-                                                <ui:pagination paginationInfo="${pagination}" jsFunction="fn_link_page"/>
-                                            </td>
+                                            <c:choose>
+                                                <c:when test="${adminConst.adminGrpComplex == grpId}">
+                                                    <td colspan="8">
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <td colspan="7">
+                                                </c:otherwise>
+                                            </c:choose>
+                                                        <ul class="pagination"></ul>
+                                                    <%--<ui:pagination paginationInfo="${pagination}" jsFunction="fn_link_page"/>--%>
+                                                    </td>
                                         </tr>
                                         </tfoot>
                                     </c:otherwise>
@@ -207,6 +215,9 @@
                 <c:when test="${adminConst.adminGrpComplex == grpId}">
                     $("#left_admin_complex").addClass("active");
                 </c:when>
+                <c:otherwise>
+                    $("#left_admin_all").addClass("active");
+                </c:otherwise>
             </c:choose>
         })
 
@@ -223,9 +234,9 @@
             $("#manageReqForm").submit();
         }
 
-        function managersDetail(adminId){
+        function managersDetail(adminId, grpId){
             $("#manageReqForm > #adminId").val(adminId);
-            $("#manageReqForm").attr("action", "/admin/managers/write.do?grpId=${grpId}");
+            $("#manageReqForm").attr("action", "/admin/managers/write.do?grpId=" + grpId);
             $("#manageReqForm").submit();
         }
 

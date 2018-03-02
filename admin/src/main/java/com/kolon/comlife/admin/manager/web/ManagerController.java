@@ -62,7 +62,7 @@ public class ManagerController {
      * @param mav
      * @return
      */
-    @RequestMapping(value = "list.*", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "list.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView managerList (
             HttpServletRequest request
             , HttpServletResponse response
@@ -78,7 +78,12 @@ public class ManagerController {
         }
 
         grpIdStr = request.getParameter("grpId");
-        if( grpIdStr != null ) {
+        if( grpIdStr == null ) {
+//            response.setStatus(HttpStatus.SC_FORBIDDEN);
+//            mav.addObject("msg", "잘못된 접근입니다.");
+//            mav.setViewName("/error/400");
+//            return mav;
+        } else {
             try {
                 grpId = Integer.parseInt(request.getParameter("grpId"));
                 switch(grpId) {
@@ -96,11 +101,6 @@ public class ManagerController {
                 mav.setViewName("/error/400");
                 return mav;
             }
-        } else {
-            response.setStatus(HttpStatus.SC_FORBIDDEN);
-            mav.addObject("msg", "잘못된 접근입니다.");
-            mav.setViewName("/error/400");
-            return mav;
         }
 
         logger.debug("====================> 관리자 리스트!!!!!!!!!!!!!!!!!!!!!!!!! ");
@@ -111,13 +111,9 @@ public class ManagerController {
 
         List<AdminInfo> managerList = managerService.selectManagerList(adminInfo);
 
-        PaginationInfoExtension pagination = PaginationSupport.setPaginationVO(request, adminInfo, "1", adminInfo.getRecordCountPerPage(), 10);
-        pagination.setTotalRecordCountVO(managerList);
-
         mav.addObject("grpId",      grpId);
         mav.addObject("adminConst", adminConst);
         mav.addObject("managerList", managerList);
-        mav.addObject("pagination", pagination);
 
         return mav;
     }
@@ -129,7 +125,7 @@ public class ManagerController {
      * @param mav
      * @return
      */
-    @RequestMapping(value = "write.*", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "write.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView managerDetail (
             HttpServletRequest request
             , HttpServletResponse response
@@ -205,7 +201,7 @@ public class ManagerController {
                     * @param mav
                     * @return
                     */
-                    @RequestMapping(value = "proc.*", method = {RequestMethod.GET, RequestMethod.POST})
+                    @RequestMapping(value = "proc.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView managerProc (
             Principal principal
             , HttpServletRequest request
@@ -225,11 +221,11 @@ public class ManagerController {
         // 새로운 관리자 생성
         if( "INS".equals(adminInfo.getMode()) ){
             try {
-                rs = managerService.insertManager(adminInfo);
+                rs = managerService.insertManager( adminInfo );
             }catch( Exception e ) {
                 if(e instanceof DuplicateKeyException) {
                     response.setStatus(HttpStatus.SC_CONFLICT);
-                    return managerProcReturn( false, "중복된 아이디 입니다.");
+                    return managerProcReturn( false, "아이디 또는 이메일이 이미 사용 중입니다.");
                 } else {
                     response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
                     return managerProcReturn( false, "내부 오류입니다. 담당자에게 문의하세요.");
@@ -248,7 +244,17 @@ public class ManagerController {
 
         // 기존 관리자 데이터 업데이트
         if( "UPD".equals(adminInfo.getMode()) ) {
-            rs = managerService.updateManager( adminInfo );
+            try {
+                rs = managerService.updateManager( adminInfo );
+            }catch( Exception e ) {
+                if(e instanceof DuplicateKeyException) {
+                    response.setStatus(HttpStatus.SC_CONFLICT);
+                    return managerProcReturn( false, "이메일이 이미 사용 중입니다.");
+                } else {
+                    response.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+                    return managerProcReturn( false, "내부 오류입니다. 담당자에게 문의하세요.");
+                }
+            }
 
             if( rs > 0) {
                 response.setStatus(HttpStatus.SC_OK);

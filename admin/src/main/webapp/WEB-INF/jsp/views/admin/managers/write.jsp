@@ -176,6 +176,7 @@
                             </div>
                             <!-- /.content -->
                             <input type="hidden" name="mode" id="mode" value="${mode}">
+                            <form:hidden path="grpId"/>
                         </form:form>
                         <form:form name="managerListForm" id="managerListForm" method="post" commandName="adminInfo">
                             <form:hidden path="pageIndex"/>
@@ -223,7 +224,6 @@
         }
 
 
-
         function procIns(){
             var mode          = trim($('#mode').val());
             var adminId       = trim($('#adminId').val());
@@ -264,6 +264,7 @@
 
             if (confirm(modeMsg+" 하시겠습니까?")) {
                 $.ajax({
+                    dataType: "json",
                     url : '/admin/managers/proc.do',
                     type : 'post',
                     data: $("#managerReqForm").serialize(),
@@ -276,8 +277,9 @@
                         }
                     },
                     error : function(jqxhr){
-                        alert(modeMsg + "에 실패하였습니다.\n\t" + jqxhr.bodymsg);
-                        console.log('error' + jqxhr.responseText);
+                        var respBody = jQuery.parseJSON(jqxhr.responseText);
+                        console.log(respBody);
+                        alert(modeMsg + "에 실패하였습니다.\n\n - 원인: " + respBody.msg);
                     }
                 });
             }
