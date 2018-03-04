@@ -12,5 +12,7 @@ public interface ComplexService {
     public List<ComplexInfo> getComplexList();
 
     public List<ComplexSimpleInfo> getComplexSimpleList();
+
+    public int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId);
 }
 

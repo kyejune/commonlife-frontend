@@ -32,4 +32,9 @@ public class ComplexServiceImpl implements ComplexService {
 
     @Override
     public List<ComplexSimpleInfo> getComplexSimpleList() { return complexDAO.selectComplexInfoList(); };
+
+    @Override
+    public int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId) {
+        return complexDAO.updateComplexGroupTypeById(cmplxId, cmplxGrpId);
+    }
 }

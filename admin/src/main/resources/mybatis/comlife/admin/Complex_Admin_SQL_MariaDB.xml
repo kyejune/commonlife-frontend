@@ -70,4 +70,140 @@
       CMPLX_GRP_TYPE_ID DESC, CMPLX_NM ASC
     ;
     </select>
+
+
+    <select id="selectComplexList" resultType="ComplexInfo">
+    SELECT
+        A.CMPLX_ID AS CMPLX_ID,
+        A.CMPLX_NM AS CMPLX_NM,
+        A.CMPLX_S_NM AS CMPLX_S_NM,
+        B.CMPLX_GRP_TYPE AS CMPLX_GRP,
+        B.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_ID,
+        A.CL_LOGO_IMG_SRC AS CL_LOGO_IMG_SRC,
+        A.CL_MAP_SRC AS CL_MAP_SRC,
+        A.CMPLX_CD AS CMPLX_CD,
+        A.LATI_POS AS LATI_POS,
+        A.LONG_POS AS LONG_POS,
+        A.UNIT_CNT AS UNIT_CNT,
+        A.ADDR AS ADDR,
+        A.ADDR_DTL AS ADDR_DTL,
+        A.ADDR1 AS ADDR1,
+        A.ADDR2 AS ADDR2,
+        ROW_NUMBER() OVER(ORDER BY CMPLX_GRP, CMPLX_NM ASC) AS RNUM,
+		COUNT(1) OVER() AS TOT
+    FROM
+    (
+        SELECT
+            CMPLX.CMPLX_ID AS CMPLX_ID,
+            CMPLX.CMPLX_CD AS CMPLX_CD,
+            CMPLX.CMPLX_NM AS CMPLX_NM, -- COMPLEX NAME
+            CMPLX.CMPLX_S_NM AS CMPLX_S_NM,
+            CMPLX.LATI_POS AS LATI_POS,
+            CMPLX.LONG_POS AS LONG_POS,
+            CMPLX.UNIT_CNT AS UNIT_CNT,
+            CMPLX.ADDR     AS ADDR, 	-- 일반 주소
+            CMPLX.ADDR_DTL,
+            CMPLX.ADDR1,
+            CMPLX.ADDR2,
+            CMPLX.LOC1_NM,
+            CMPLX.LOC2_NM,
+            CMPLX.POST_NO,
+            CMPLX.IMG_SRC,
+            CMPLX.MAP_SRC,
+            CMPLX.LOGO_IMG_SRC,
+            CMPLX.ADMIN_ID AS IOK_ADMIN_ID,
+            CMPLX.REG_ID AS IOK_REG_ID,
+            CMPLX.REG_DT AS IOK_REG_DT,
+            CMPLX.CHG_ID AS IOK_CHG_ID,
+            CMPLX.CHG_DT AS IOK_CHG_DT,
+            CMPLX_EXT.CL_MAP_SRC AS CL_MAP_SRC,
+            CMPLX_EXT.CL_LOGO_IMG_SRC AS CL_LOGO_IMG_SRC,
+            CMPLX_EXT.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
+            CMPLX_EXT.REG_DT AS REG_DT,
+            CMPLX_EXT.REG_ADMIN_IDX AS REG_ADMIN_IDX,
+            CMPLX_EXT.UPD_DT AS UPD_DT,
+            CMPLX_EXT.UPD_ADMIN_IDX AS UPD_ADMIN_IDX
+        FROM
+            COMPLEX_M AS CMPLX
+              LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
+            COMPLEX_M_EXT AS CMPLX_EXT
+        ON
+            CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
+        WHERE
+            CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
+    ) AS A
+      JOIN
+    (
+        SELECT
+            CMPLX_ID,
+            CMPLX_GRP_TYPE,
+            GRP.CMPLX_GRP_TYPE_ID
+        FROM
+          COMPLEX_GRP_TYPE_M AS GRP_TYPE
+            LEFT JOIN
+          COMPLEX_GRP_M AS GRP
+        ON
+          GRP_TYPE.CMPLX_GRP_TYPE_ID = GRP.CMPLX_GRP_TYPE_ID
+    ) AS B
+      ON A.CMPLX_ID = B.CMPLX_ID
+    ORDER BY RNUM
+    ;
+    </select>
+
+    <select id="selectComplexDetail" resultType="ComplexInfo">
+    BEGIN
+        CALL ADD_IF_NOT_EXIST_COMPLEX_M_EXT(${cmplxId});
+
+        SELECT
+            CMPLX.CMPLX_ID AS CMPLX_ID,
+            CMPLX.CMPLX_CD AS CMPLX_CD,
+            CMPLX.CMPLX_NM AS CMPLX_NM, -- COMPLEX NAME
+            CMPLX.CMPLX_S_NM AS CMPLX_S_NM,
+            CMPLX.LATI_POS AS LATI_POS,
+            CMPLX.LONG_POS AS LONG_POS,
+            CMPLX.UNIT_CNT AS UNIT_CNT,
+            CMPLX.ADDR     AS ADDR, 	-- 일반 주소
+            CMPLX.ADDR_DTL,
+            CMPLX.ADDR1,
+            CMPLX.ADDR2,
+            CMPLX.LOC1_NM,
+            CMPLX.LOC2_NM,
+            CMPLX.POST_NO,
+            CMPLX.IMG_SRC,
+            CMPLX.MAP_SRC,
+            CMPLX.LOGO_IMG_SRC,
+            CMPLX.ADMIN_ID AS IOK_ADMIN_ID,
+            CMPLX.REG_ID AS IOK_REG_ID,
+            CMPLX.REG_DT AS IOK_REG_DT,
+            CMPLX.CHG_ID AS IOK_CHG_ID,
+            CMPLX.CHG_DT AS IOK_CHG_DT,
+            CMPLX_EXT.CL_MAP_SRC AS CL_MAP_SRC,
+            CMPLX_EXT.CL_LOGO_IMG_SRC AS CL_LOGO_IMG_SRC,
+            CMPLX_EXT.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
+            CMPLX_EXT.REG_DT AS REG_DT,
+            CMPLX_EXT.REG_ADMIN_IDX AS REG_ADMIN_IDX,
+            CMPLX_EXT.UPD_DT AS UPD_DT,
+            CMPLX_EXT.UPD_ADMIN_IDX AS UPD_ADMIN_IDX
+        FROM
+            COMPLEX_M AS CMPLX
+              JOIN
+            COMPLEX_M_EXT AS CMPLX_EXT
+        ON
+            CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
+        WHERE
+            CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
+            AND
+            CMPLX.CMPLX_ID = cmplxId
+        ;
+    END
+    </select>
+
+
+    <update id="updateComplexGroupTypeById" parameterType="ComplexInfo">
+      UPDATE COMPLEX_GRP_M
+      SET
+        CMPLX_GRP_TYPE_ID = ${cmplxGrpId}
+      WHERE
+        CMPLX_ID = ${cmplxId};
+    </update>
 </mapper>

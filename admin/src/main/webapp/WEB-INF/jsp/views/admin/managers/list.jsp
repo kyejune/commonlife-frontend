@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/WEB-INF/jsp/views/common/commonHead.jsp" %>
 <tiles:insertDefinition name="admin">
-<tiles:putAttribute name="title">관리자</tiles:putAttribute>
+<tiles:putAttribute name="title">관리자 관리</tiles:putAttribute>
 <tiles:putAttribute name="css">
     <!-- DataTables -->
     <a><!-- --></a>
@@ -10,25 +10,59 @@
     <!-- Section Title -->
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>관리자 관리</h2>
-            <ol class="breadcrumb">
-                <li>
-                    <a href="/">Home</a>
-                </li>
-                <li>
-                    <a>관리자 관리</a>
-                </li>
-                <li class="active">
-                    <strong>목록</strong>
-                </li>
-            </ol>
+        <c:choose>
+            <c:when test="${adminConst.adminGrpSuper == grpId}">
+                <h2>슈퍼관리자 관리</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        관리자 관리
+                    </li>
+                    <li class="active">
+                        <a>슈퍼관리자 관리</a>
+                    </li>
+                </ol>
+            </c:when>
+            <c:when test="${adminConst.adminGrpComplex == grpId}">
+                <h2>현장관리자 관리</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        관리자 관리
+                    </li>
+                    <li class="active">
+                        <a>현장관리자 관리</a>
+                    </li>
+                </ol>
+            </c:when>
+            <c:otherwise>
+                <h2>전체 관리자 목록</h2>
+                <ol class="breadcrumb">
+                    <li>
+                        <a href="/">Home</a>
+                    </li>
+                    <li>
+                        관리자 관리
+                    </li>
+                    <li class="active">
+                        <a>전체 관리자 목록</a>
+                    </li>
+                </ol>
+            </c:otherwise>
+        </c:choose>
         </div>
         <div class="col-lg-2">
-
         </div>
     </div>
 
     <div class="wrapper wrapper-content animated fadeInRight">
+        <c:choose>
+            <c:when test="${grpId == -1}"></c:when>
+            <c:otherwise>
         <div class="row">
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
@@ -76,6 +110,8 @@
                 </div>
             </div>
         </div>
+            </c:otherwise>
+        </c:choose>
 
         <form:form name="manageReqForm" id="manageReqForm" method="post" commandName="adminInfo">
             <!--//paging-->
@@ -99,7 +135,9 @@
                                 <thead>
                                     <tr>
                                         <th data-toggle="true" data-sort-ignore="true">#</th>
-                                        <th data-sort-ignore="true">관리자 그룹</th>
+                                        <c:if test="${adminConst.adminGrpComplex != grpId && adminConst.adminGrpSuper != grpId}">
+                                            <th data-sort-ignore="true">관리자 그룹</th>
+                                        </c:if>
                                         <th data-sort-ignore="true">관리자 아이디</th>
                                         <th class="" data-sort-ignore="true">이름</th>
                                         <th class="" data-sort-ignore="true">Email</th>
@@ -126,6 +164,7 @@
                                                 <td>
                                                     ${vo.rnum}
                                                 </td>
+                                                <c:if test="${adminConst.adminGrpComplex != grpId && adminConst.adminGrpSuper != grpId}">
                                                 <td class="center">
                                                     <c:choose>
                                                         <c:when test="${adminConst.adminGrpSuper == vo.grpId}">
@@ -145,10 +184,18 @@
                                                         </c:otherwise>
                                                     </c:choose>
                                                 </td>
+                                                </c:if>
                                                 <td>
-                                                    <a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}', ${vo.grpId})">
+                                                    <c:choose>
+                                                        <c:when test="${grpId == -1}">
                                                             ${vo.adminId}
-                                                    </a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}', ${vo.grpId})">
+                                                                ${vo.adminId}
+                                                            </a>
+                                                        </c:otherwise>
+                                                    </c:choose>
                                                 </td>
                                                 <td class="center">${vo.adminNm}</td>
                                                 <td class="center">${vo.adminEmail}</td>
@@ -180,11 +227,11 @@
                                         <!-- paginging -->
                                         <tr>
                                             <c:choose>
-                                                <c:when test="${adminConst.adminGrpComplex == grpId}">
-                                                    <td colspan="8">
+                                                <c:when test="${adminConst.adminGrpComplex == grpId || adminConst.adminGrpSuper == grpId}">
+                                                    <td colspan="7">
                                                 </c:when>
                                                 <c:otherwise>
-                                                    <td colspan="7">
+                                                    <td colspan="8">
                                                 </c:otherwise>
                                             </c:choose>
                                                         <ul class="pagination"></ul>
@@ -208,6 +255,7 @@
             $('.footable').footable();
 
             $("#left_admin").addClass("active");
+            $("#left_admin > .nav-second-level").addClass("in");
             <c:choose>
                 <c:when test="${adminConst.adminGrpSuper == grpId}">
                     $("#left_admin_super").addClass("active");
