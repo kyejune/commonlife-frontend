@@ -6,7 +6,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 단지 정보(Complex) DAO
@@ -35,5 +37,12 @@ public class ComplexDAO {
 
     public List<ComplexSimpleInfo> selectComplexInfoList() {
         return sqlSession.selectList( "Complex.selectComplexSimpleInfoList" );
+    }
+
+    public int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId) {
+        ComplexInfo complex = new ComplexInfo();
+        complex.setCmplxId(cmplxId);
+        complex.setCmplxId(cmplxGrpId);
+        return sqlSession.update("Complex.updateComplexGroupTypeById", complex );
     }
 }

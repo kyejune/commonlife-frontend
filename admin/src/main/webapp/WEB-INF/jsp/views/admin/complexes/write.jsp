@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/WEB-INF/jsp/views/common/commonHead.jsp" %>
-<tiles:insertDefinition name="admin">
+<tiles:insertDefinition name="complexes">
 
 <tiles:putAttribute name="title">관리자</tiles:putAttribute>
 <tiles:putAttribute name="css">
@@ -33,37 +33,14 @@
     <div class="wrapper wrapper-content animated fadeInRight">
         <div class="row">
             <div class="col-lg-12">
-                <c:choose>
-                    <c:when test="${managerDetail.grpId == adminConst.adminGrpSuper}">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                '슈퍼 관리자' 등록 및 수정
-                            </div>
-                            <div class="ibox-content" style="">
-                                {슈퍼 관리자의 등록과 관련 된 내용을 여기에 입력 합니다.}
-                            </div>
-                        </div>
-                    </c:when>
-                    <c:when test="${managerDetail.grpId == adminConst.adminGrpComplex}">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                '현장 관리자' 등록 및 수정
-                            </div>
-                            <div class="ibox-content" style="">
-                                {현장 관리자의 등록과 관련 된 내용을 여기에 입력 합니다.}
-                            </div>
-                        </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                            </div>
-                            <div class="ibox-content" style="">
-                                --- 미지정 된 관리자 ---
-                            </div>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        '슈퍼 관리자' 등록 및 수정
+                    </div>
+                    <div class="ibox-content" style="">
+                        {슈퍼 관리자의 등록과 관련 된 내용을 여기에 입력 합니다.}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -78,7 +55,7 @@
                         </div>
                     </div>
                     <div class="ibox-content" style="">
-                        <form:form class="form-horizontal" name="managerReqForm" id="managerReqForm" method="post" commandName="adminInfo">
+                        <form:form class="form-horizontal" name="complexReqForm" id="complexReqForm" method="post" commandName="complexInfo">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">아이디</label>
@@ -179,8 +156,8 @@
                             <input type="hidden" name="mode" id="mode" value="${mode}">
                             <form:hidden path="grpId"/>
                         </form:form>
-                        <form:form name="managerListForm" id="managerListForm" method="post" commandName="adminInfo">
-                            <form:hidden path="pageIndex"/>
+                        <form:form name="complexListForm" id="complexListForm" method="post" commandName="complexInfo">
+                            <%--<form:hidden path="pageIndex"/>--%>
                         </form:form>
                     </div>
                 </div>
@@ -193,25 +170,25 @@
     <script src='/js/common_check.js'></script>
     <script type="text/javascript">
         $(function () {
-            <c:choose>
-                <c:when test="${mode == 'UPD'}">
-            $('input:radio[name=useYn]:input[value=${managerDetail.useYn}]').attr("checked", "checked");
-                </c:when>
-            </c:choose>
+            <%--<c:choose>--%>
+                <%--<c:when test="${mode == 'UPD'}">--%>
+            <%--$('input:radio[name=useYn]:input[value=${managerDetail.useYn}]').attr("checked", "checked");--%>
+                <%--</c:when>--%>
+            <%--</c:choose>--%>
 
-            $("#left_admin").addClass("active");
-            <c:choose>
-                <c:when test="${adminConst.adminGrpSuper == managerDetail.grpId}">
-                    $("#left_admin_super").addClass("active");
-                </c:when>
-                <c:when test="${adminConst.adminGrpComplex == managerDetail.grpId}">
-                    $('#cmplxId').val(${managerDetail.cmplxId});
-                    $("#left_admin_complex").addClass("active");
-                </c:when>
-                <c:otherwise>
-                    $("#left_admin_all").addClass("active");
-                </c:otherwise>
-            </c:choose>
+            <%--$("#left_admin").addClass("active");--%>
+            <%--<c:choose>--%>
+                <%--<c:when test="${adminConst.adminGrpSuper == managerDetail.grpId}">--%>
+                    <%--$("#left_admin_super").addClass("active");--%>
+                <%--</c:when>--%>
+                <%--<c:when test="${adminConst.adminGrpComplex == managerDetail.grpId}">--%>
+                    <%--$('#cmplxId').val(${managerDetail.cmplxId});--%>
+                    <%--$("#left_admin_complex").addClass("active");--%>
+                <%--</c:when>--%>
+                <%--<c:otherwise>--%>
+                    <%--$("#left_admin_all").addClass("active");--%>
+                <%--</c:otherwise>--%>
+            <%--</c:choose>--%>
         })
 
 
@@ -223,8 +200,8 @@
         }
 
         function refreshList(){
-            $("#managerListForm").attr("action", "/admin/managers/list.do?grpId=${managerDetail.grpId}");
-            $("#managerListForm").submit();
+            <%--$("#managerListForm").attr("action", "/admin/managers/list.do?grpId=${managerDetail.grpId}");--%>
+            // $("#managerListForm").submit();
         }
 
 

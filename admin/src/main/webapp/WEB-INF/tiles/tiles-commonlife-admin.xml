@@ -15,53 +15,12 @@
         <!--<put-attribute name="title" expression="${title}" /> -->
     </definition>
 
-
-    <definition name="*/manage" extends="Layout">
-        <put-attribute name="manage.contents" value="/WEB-INF/jsp/views/{1}/{2}.jsp" />
+    <definition name="complexes" extends="Layout">
+        <put-attribute name="contents" value="/WEB-INF/jsp/views/{1}.jsp" />
         <put-attribute name="title" value="" />
         <put-attribute name="js" value="" />
         <put-attribute name="css" value="" />
         <!--<put-attribute name="title" expression="${title}" /> -->
-    </definition>
-
-    <definition name="front" extends="Layout">
-        <put-attribute name="meta" value="" />
-        <put-attribute name="css" value="" />
-        <put-attribute name="title" value="" />
-        <put-attribute name="container" value="/WEB-INF/views/{1}.jsp" />
-        <put-attribute name="js" value="" />
-    </definition>
-
-    <definition name="*/front" extends="Layout">
-        <put-attribute name="meta" value="" />
-        <put-attribute name="css" value="" />
-        <put-attribute name="title" value="" />
-        <put-attribute name="container" value="/WEB-INF/views/{1}/{2}.jsp" />
-        <put-attribute name="js" value="" />
-    </definition>
-
-    <definition name="*/*/front" extends="Layout">
-        <put-attribute name="meta" value="" />
-        <put-attribute name="css" value="" />
-        <put-attribute name="title" value="" />
-        <put-attribute name="container" value="/WEB-INF/views/1}/{2}/{3}.jsp" />
-        <put-attribute name="js" value="" />
-    </definition>
-
-    <definition name="*/*/*/front" extends="Layout">
-        <put-attribute name="meta" value="" />
-        <put-attribute name="css" value="" />
-        <put-attribute name="title" value="" />
-        <put-attribute name="container" value="/WEB-INF/views/{1}/{2}/{3}/{4}.jsp" />
-        <put-attribute name="js" value="" />
-    </definition>
-
-    <definition name="*/*/*/*/front" extends="Layout">
-        <put-attribute name="meta" value="" />
-        <put-attribute name="css" value="" />
-        <put-attribute name="title" value="" />
-        <put-attribute name="container" value="/WEB-INF/views/{1}/{2}/{3}/{4}/{5}.jsp" />
-        <put-attribute name="js" value="" />
     </definition>
 
 </tiles-definitions>

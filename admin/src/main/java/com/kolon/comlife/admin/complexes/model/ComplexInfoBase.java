@@ -1,11 +1,15 @@
 package com.kolon.comlife.admin.complexes.model;
 
-public class ComplexInfoBase {
+import com.kolon.common.admin.model.BaseInfo;
+
+public class ComplexInfoBase extends BaseInfo {
     protected int    cmplxId;            // ID, PK
     protected String cmplxGrp;           // COMPLEX GROUP
     protected int    cmplxGrpId;           // COMPLEX GROUP
     protected String cmplxNm;            // COMPLEX NAME
-    private   String comlifeLogoImgSrc;  // LOGO IMAGE SOURCE
+    protected String clMapSrc;      // CommonLife Only Map Source
+    protected String clLogoImgSrc;  // CommonLife Only Logo Image Source
+
 
     public ComplexInfoBase(int cmplxId, String cmplxGrp, String cmplxNm) {
         this.cmplxId = cmplxId;
@@ -45,11 +49,19 @@ public class ComplexInfoBase {
         this.cmplxGrpId = cmplxGrpId;
     }
 
-    public String getComlifeLogoImgSrc() {
-        return comlifeLogoImgSrc;
+    public String getClMapSrc() {
+        return clMapSrc;
     }
 
-    public void setComlifeLogoImgSrc(String comlifeLogoImgSrc) {
-        this.comlifeLogoImgSrc = comlifeLogoImgSrc;
+    public void setClMapSrc(String clMapSrc) {
+        this.clMapSrc = clMapSrc;
+    }
+
+    public String getClLogoImgSrc() {
+        return clLogoImgSrc;
+    }
+
+    public void setClLogoImgSrc(String clLogoImgSrc) {
+        this.clLogoImgSrc = clLogoImgSrc;
     }
 }

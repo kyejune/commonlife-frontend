@@ -28,13 +28,14 @@
                     <i class="fa fa-th-large"></i>
                     <span class="nav-label">Main View</span></a>
             </li>
-            <li>
+            <li id="left_complex">
                 <a href="#">
                     <i class="fa fa-table"></i>
                     <span class="nav-label">현장 그룹 관리</span><span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
-                    <li><a href="/admin/managers/list.do">현장 그룹 관리</a></li>
+                    <li id="left_complex_list"><a href="/admin/complexes/list.do">현장 목록</a></li>
+                    <li id="left_complex_category"><a href="/admin/complexes/category.do">현장 분류</a></li>
                 </ul>
             </li>
             <li id="left_admin">
@@ -42,7 +43,7 @@
                     <i class="fa fa-table"></i>
                     <span class="nav-label">관리자 관리</span><span class="fa arrow"></span>
                 </a>
-                <ul class="nav nav-second-level collapse in">
+                <ul class="nav nav-second-level collapse">
                     <li id="left_admin_all"><a href="/admin/managers/list.do">전체 관리자 목록</a></li>
                     <li id="left_admin_super"><a href="/admin/managers/list.do?grpId=0">슈퍼관리자 관리</a></li>
                     <li id="left_admin_complex"><a href="/admin/managers/list.do?grpId=1">현장관리자 관리</a></li>

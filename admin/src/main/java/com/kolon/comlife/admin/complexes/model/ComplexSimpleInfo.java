@@ -9,8 +9,6 @@ public class ComplexSimpleInfo extends ComplexInfoBase {
     private String addrDtl;     // Address Detail
     private String addr1;       // Address 1
     private String addr2;       // Address 2
-    private String clMapSrc;      // CommonLife Only Map Source
-    private String clLogoImgSrc;  // CommonLife Only Logo Image Source
 
     public ComplexSimpleInfo() {
         super(0, null, null);
@@ -21,14 +19,12 @@ public class ComplexSimpleInfo extends ComplexInfoBase {
 
     public ComplexSimpleInfo(
             int cmplxId, String cmplxGrp, String cmplxNm, String addr, String addrDtl,
-            String addr1, String addr2, String clMapSrc, String clLogoImgSrc) {
+            String addr1, String addr2 ) {
         super(cmplxId, cmplxGrp, cmplxNm);
         this.addr = addr;
         this.addrDtl = addrDtl;
         this.addr1 = addr1;
         this.addr2 = addr2;
-        this.clMapSrc = clMapSrc;
-        this.clLogoImgSrc = clLogoImgSrc;
     }
 
     public String getAddr() {
@@ -63,19 +59,4 @@ public class ComplexSimpleInfo extends ComplexInfoBase {
         this.addr2 = addr2;
     }
 
-    public String getClMapSrc() {
-        return clMapSrc;
-    }
-
-    public void setClMapSrc(String clMapSrc) {
-        this.clMapSrc = clMapSrc;
-    }
-
-    public String getClLogoImgSrc() {
-        return clLogoImgSrc;
-    }
-
-    public void setClLogoImgSrc(String clLogoImgSrc) {
-        this.clLogoImgSrc = clLogoImgSrc;
-    }
 }
