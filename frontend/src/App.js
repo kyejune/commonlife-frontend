@@ -66,7 +66,7 @@ class App extends Component {
                             <Route path="/community/:tab/:id/:drawer" component={Community}/>
 
 
-                            <Route path="/iot" component={HomeIoT}/>
+                            <Route path="/iot/:action?/:drawer?/:id?" component={HomeIoT}/>
 
 
                             <Route path="/life" component={LifeInfo}/>

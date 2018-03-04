@@ -206,3 +206,10 @@ body.cl-dom--added{
         color: rgba(0, 0, 0, 0.87);
     }
 }
+
+.cl-home-iot {
+    .cl-fitted-box {
+        min-height: calc(100vh - 56px);
+        background-image: url("images/bg-3@2x.png");
+    }
+}

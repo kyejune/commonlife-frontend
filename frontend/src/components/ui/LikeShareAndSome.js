@@ -18,10 +18,10 @@ export default class LikeShareAndSome extends Component{
 
 	shareItem() {
 		let options = {
-			message: 'share this', // not supported on some apps (Facebook, Instagram)
+			message: 'share this', // not supported on Facebook, Instagram
 			subject: 'the subject', // fi. for email
 			url: 'https://www.website.com/foo/#bar?a=b',
-			chooserTitle: 'Pick an app' // Android only, you can override the default share sheet title
+			chooserTitle: 'Pick an app' // Android only
 		};
 
 		window.plugins.socialsharing.shareWithOptions(options);
@@ -61,11 +61,9 @@ export default class LikeShareAndSome extends Component{
             <div className="cl-flex">
 
                 <button className="cl-card-item__button cl-like__button" onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }>LIKE</button>
-                {this.state.count > 0 &&
-                    <Link className="cl-counter__button" to={this.props.like.to}>
-                        {this.state.count}
-                    </Link>
-                }
+                <Link className="cl-counter__button" to={this.props.like.to}>
+                    {this.state.count}
+                </Link>
 
                 {Share}
 
