@@ -42,7 +42,11 @@ public class ComplexDAO {
     public int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId) {
         ComplexInfo complex = new ComplexInfo();
         complex.setCmplxId(cmplxId);
-        complex.setCmplxId(cmplxGrpId);
+        complex.setCmplxGrpId(cmplxGrpId);
         return sqlSession.update("Complex.updateComplexGroupTypeById", complex );
+    }
+
+    public List<HashMap> selectComplexGroupType() {
+        return sqlSession.selectList("Complex.selectComplexGroupType");
     }
 }

@@ -33,65 +33,44 @@
 
     <div class="wrapper wrapper-content animated fadeInRight">
         <form:form name="complexReqForm" id="complexReqForm" method="post" commandName="complexInfo">
-            <!--//paging-->
-            <%--<form:hidden path="pageIndex"/>--%>
-            <div class="row">
-                <!-- Uncategorized -->
-                <div class="col-lg-4">
-                    <div class="ibox">
-                        <div class="ibox-content" style="">
-                            <h3>미분류</h3>
-                            <p class="small"><i class="fa fa-hand-o-up"></i> 현장그룹 간에 현장을 드래그하여 이동하세요.</p>
-                            <ul class="sortable-list connectList agile-list" id="uncategorized" value="${complexConst.grpUncategorizedId}">
-                                <li class="warning-element" id="test_1">
-                                    Simply dummy text of the printing and typesetting industry.
-                                    <div class="agile-detail">
-                                        <a href="#" class="pull-right btn btn-xs btn-white">Tag</a>
-                                        <i class="fa fa-clock-o"></i> 12.10.2015
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- COMMNONLife  -->
-                <div class="col-lg-4">
-                    <div class="ibox">
-                        <div class="ibox-content" style="">
-                            <h3>민간</h3>
-                            <p class="small"><i class="fa fa-hand-o-up"></i> 현장그룹 간에 현장을 드래그하여 이동하세요.</p>
-                            <ul class="sortable-list connectList agile-list" id="mingan" value="${complexConst.grpMinganId}">
-                                <li class="warning-element" id="test_2">
-                                    Simply dummy text of the printing and typesetting industry.
-                                    <div class="agile-detail">
-                                        <a href="#" class="pull-right btn btn-xs btn-white">Tag</a>
-                                        <i class="fa fa-clock-o"></i> 12.10.2015
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- 민간 -->
-                <div class="col-lg-4">
-                    <div class="ibox">
-                        <div class="ibox-content" style="">
-                            <h3>공공</h3>
-                            <p class="small"><i class="fa fa-hand-o-up"></i> 현장그룹 간에 현장을 드래그하여 이동하세요.</p>
-                            <ul class="sortable-list connectList agile-list" id="gonggong" value="${complexConst.grpGonggongId}">
-                                <li class="info-element" id="test_3">
-                                    Simply dummy text of the printing and typesetting industry.
-                                    <div class="agile-detail">
-                                        <a href="#" class="pull-right btn btn-xs btn-white">Tag</a>
-                                        <i class="fa fa-clock-o"></i> 12.10.2015
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
+            <form:hidden path="cmplxId" />
+            <form:hidden path="cmplxGrpId" />
+        </form:form>
+        <div class="row">
+            <!-- Uncategorized -->
+            <div class="col-lg-4">
+                <div class="ibox">
+                    <div class="ibox-content" style="">
+                        <h3>미분류</h3>
+                        <p class="small"><i class="fa fa-hand-o-up"></i> 현장그룹 간에 현장을 드래그하여 이동하세요.</p>
+                        <ul class="sortable-list connectList agile-list" id="srt_list_${complexConst.grpUncategorizedId}" value="${complexConst.grpUncategorizedId}">
+                        </ul>
                     </div>
                 </div>
             </div>
-        </form:form>
+            <!-- COMMNONLife  -->
+            <div class="col-lg-4">
+                <div class="ibox">
+                    <div class="ibox-content" style="">
+                        <h3>민간</h3>
+                        <p class="small"><i class="fa fa-hand-o-up"></i> 현장그룹 간에 현장을 드래그하여 이동하세요.</p>
+                        <ul class="sortable-list connectList agile-list" id="srt_list_${complexConst.grpMinganId}" value="${complexConst.grpMinganId}">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- 민간 -->
+            <div class="col-lg-4">
+                <div class="ibox">
+                    <div class="ibox-content" style="">
+                        <h3>공공</h3>
+                        <p class="small"><i class="fa fa-hand-o-up"></i> 현장그룹 간에 현장을 드래그하여 이동하세요.</p>
+                        <ul class="sortable-list connectList agile-list" id="srt_list_${complexConst.grpGonggongId}" value="${complexConst.grpGonggongId}">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </tiles:putAttribute>
 <tiles:putAttribute name="js">
@@ -130,10 +109,10 @@
                 '<div class="agile-detail">' +
                 '<i class="fa fa-clock-o"></i> ${vo.addr}' +
                 '</div></li>';
-            $("#uncategorized").append(cmplxCard);
+                $("#srt_list_${vo.cmplxGrpId}").append(cmplxCard);
             </c:forEach>
 
-            $("#uncategorized, #mingan, #gonggong").sortable({
+            $("#srt_list_0, #srt_list_1, #srt_list_2").sortable({
                 connectWith: ".connectList",
                 receive: function( event, ui ) {
                     var cmplxGrpId  = $(event.target).attr('value');
@@ -164,7 +143,7 @@
 //         }
 
         function refreshList(){
-            $("#complexReqForm").attr("action", "/admin/complexes/list.do?grpId=${grpId}");
+            $("#complexReqForm").attr("action", "/admin/complexes/category.do");
             $("#complexReqForm").submit();
         }
 
@@ -181,37 +160,41 @@
 
         function procIns(cmplxId, cmplxGrpId){
             if (confirm("업데이트 하시겠습니까?")) {
-                var data = {};
-                data['cmplxId'] = cmplxId;
-                data['cmplxGrpId'] = cmplxGrpId;
+                console.log( cmplxId );
+                console.log( cmplxGrpId );
+                $("#cmplxId").val(cmplxId);
+                $("#cmplxGrpId").val(cmplxGrpId);
 
-                console.log(data);
+                console.log($("#cmplxId").val());
+                console.log($("#cmplxGrpId").val());
 
                 $.ajax({
                     dataType: "json",
                     url : '/admin/complexes/updateCategory.do',
-                    type : 'PUT',
-                    data: data,
+                    type : 'POST',
+                    data: $("#complexReqForm").serialize(),
                     success: function (rs) {
                         if (rs.result) {
                             alert(modeMsg+" 되었습니다.");
-                            refreshList();
                         }else{
                             alert(rs.msg);
                         }
+                        refreshList();
                     },
                     error : function(jqxhr){
-                        var respBody = jQuery.parseJSON(jqxhr.responseText);
-                        console.log(respBody);
-                        alert(modeMsg + "에 실패하였습니다.\n\n - 원인: " + respBody.msg);
+                        console.log(jqxhr);
+                        if( jqxhr.status == 500 ){
+                            alert("내부 오류로 업데이트가 실패하였습니다.");
+                        } else {
+                            alert("업데이트가 실패하였습니다.");
+                        }
+                        refreshList();
                     }
                 });
+            } else {
+                refreshList();
             }
         }
-
-
-
-
     </script>
 </tiles:putAttribute>
 </tiles:insertDefinition>

@@ -11,7 +11,7 @@ public class ComplexConst {
 
     final static public String GRP_UNCATEGORIZED = "uncategorized";
     final static public String GRP_MINGAN        = "mingan";
-    final static public String GRP_GONGONG       = "gonggong";
+    final static public String GRP_GONGGONG       = "gonggong";
 
 
     public ComplexConst() {
@@ -38,7 +38,7 @@ public class ComplexConst {
         return GRP_MINGAN;
     }
 
-    public String getGrpGongong() {
-        return GRP_GONGONG;
+    public String getGrpGonggong() {
+        return GRP_GONGGONG;
     }
 }

@@ -198,6 +198,15 @@
     END
     </select>
 
+    <select id="selectComplexGroupType" resultType="hashmap">
+      SELECT
+        CMPLX_GRP_TYPE_ID,
+        CMPLX_GRP_TYPE,
+        CMPLX_GRP_TYPE_DESC
+      FROM
+        COMPLEX_GRP_TYPE_M;
+    </select>
+
 
     <update id="updateComplexGroupTypeById" parameterType="ComplexInfo">
       UPDATE COMPLEX_GRP_M

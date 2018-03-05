@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Complex Service Implementation
@@ -36,5 +38,10 @@ public class ComplexServiceImpl implements ComplexService {
     @Override
     public int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId) {
         return complexDAO.updateComplexGroupTypeById(cmplxId, cmplxGrpId);
+    }
+
+    @Override
+    public List<HashMap> selectComplexGroupType() {
+        return complexDAO.selectComplexGroupType();
     }
 }

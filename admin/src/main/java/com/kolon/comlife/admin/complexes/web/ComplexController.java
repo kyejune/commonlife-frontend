@@ -7,16 +7,22 @@ import com.kolon.comlife.admin.complexes.service.ComplexService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -110,31 +116,35 @@ public class ComplexController {
         return mav;
     }
 
-    @RequestMapping(value = "updateCategory.do", method= {RequestMethod.PUT})
-    public ModelAndView complexUpdateCategory(  HttpServletRequest request
+    @RequestMapping(value = "updateCategory.do", method= {RequestMethod.POST})
+    public ResponseEntity complexUpdateCategory(HttpServletRequest request
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
-            , @ModelAttribute Map<String, Integer> parameters
+            , @ModelAttribute ComplexInfo complexInfo
     ) {
         logger.debug("====================> 현장 그룹 변경하기!!!!!!!!!!!!!!!!!!!!!!!!! ");
-        logger.debug("====================> complexInfo.getCmplxId : {} ", parameters.get("cmplxId"));
-        logger.debug("====================> complexInfo.getCmplxGrpId : {} ", parameters.get("cmplxGrpId"));
+        logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
+        logger.debug("====================> complexInfo.getCmplxGrpId : {} ", complexInfo.getCmplxGrpId());
 
         ModelMap ret = new ModelMap();
-        int count = complexService.updateComplexGroupTypeById(parameters.get("cmplxId"), parameters.get("cmplxGrpId"));
+
+        int count = complexService.updateComplexGroupTypeById(
+                                        complexInfo.getCmplxId(),
+                                        complexInfo.getCmplxGrpId() );
 
         if( count > 0 ) {
             ret.put("result", true);
             ret.put("msg", "성공");
         } else {
             ret.put("result", false);
-            ret.put("msg", "실패");
+            ret.put("msg", "변경할 값이 없습니다.");
         }
 
-        return new ModelAndView( "jsonView", ret);
-
-
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(ret);
     }
 
 }
