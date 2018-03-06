@@ -1,4 +1,10 @@
 package com.kolon.comlife.iot.model;
 
-public class IotBaseInfo {
+import com.kolon.comlife.common.model.SimpleMsgInfo;
+
+public class IotBaseInfo extends SimpleMsgInfo {
+
+    public IotBaseInfo() {
+        super();
+    }
 }
