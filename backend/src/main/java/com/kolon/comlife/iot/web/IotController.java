@@ -1,16 +1,26 @@
 package com.kolon.comlife.iot.web;
 
+import com.google.common.base.CaseFormat;
+import com.kolon.comlife.common.model.DataListInfo;
+import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.iot.model.*;
 import com.kolon.comlife.iot.service.IotService;
+import com.kolon.common.http.HttpGetRequester;
+import com.kolon.common.http.HttpRequestFailedException;
+import com.kolon.common.prop.ServicePropertiesMap;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,11 +34,23 @@ import java.util.Map;
 public class IotController {
     private static final Logger logger = LoggerFactory.getLogger(IotController.class);
 
+    private static final String IOK_MOBILE_HOST_PROP_GROUP = "IOK";
+    private static final String IOK_MOBILE_HOST_PROP_KEY = "MOBILE_HOST";
+    private static final String IOK_MODES_LIST_PATH = "/iokinterface/scenario/modeInfoList";
+    private static final String IOK_ROOMS_LIST_PATH = "/iokinterface/device/roomList";
+    private static final String IOK_DEVICES_LIST_BY_ROOM_PATH = "/iokinterface/device/roomDeviceList";
+
+    @Resource(name = "servicePropertiesMap")
+    private ServicePropertiesMap serviceProperties;
+
     @Resource(name = "iotService")
     private IotService iotService;
 
+    @Autowired
+    private CloseableHttpClient httpClient;
+
     /**
-     * '모드'의 전체 목록 가져오기 at Dashboard
+     * 1. '모드'의 전체 목록 가져오기 at Dashboard
      */
     @GetMapping(
             path = "/",
@@ -47,13 +69,67 @@ public class IotController {
     @GetMapping(
             path = "/{complexId}/{homeId}/modes",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotModeListInfo> getModesList(
+    public ResponseEntity getModesList(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
         IotModeListInfo modesList = new IotModeListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        DataListInfo retBody;
 
-        modesList.setMsg("목록 가져오기");
+        try {
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                    IOK_MODES_LIST_PATH );
+            requester.setParameter("cmplxId", String.valueOf(complexId) );
+            requester.setParameter("homeId", String.valueOf(homeId) );
+            result = requester.execute();
+        }
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
+        }
+
+        for(Map<String, Object> e : (List<Map<String, Object>>)result.get("DATA") ) {
+            Map mode = new HashMap();
+            for (String s : e.keySet()) {
+                mode.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s),
+                          e.get(s));
+            }
+            modesList.getData().add(mode);
+        }
+
+        if( modesList.getData().isEmpty() )
+        {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND)
+                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
+        }
+
+//        modesList.setMsg("목록 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( modesList );
     }
@@ -167,31 +243,146 @@ public class IotController {
     }
 
     /**
-     * 공간 목록 가져오기 at Quick IOT 제어 > 공간별 보기
+     * 10. 공간 목록 가져오기 at Quick IOT 제어 > 공간별 보기
      */
     @GetMapping(
             value = "/{complexId}/{homeId}/rooms",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotRoomListInfo>  getRoomList(
+    public ResponseEntity getRoomList(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
         IotRoomListInfo roomList = new IotRoomListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        DataListInfo retBody;
+
+        try {
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                    IOK_ROOMS_LIST_PATH );
+            requester.setParameter("cmplxId", String.valueOf(complexId) );
+            requester.setParameter("homeId", String.valueOf(homeId) );
+            result = requester.execute();
+        }
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
+        }
+
+        for(Map<String, Object> e : (List<Map<String, Object>>)result.get("DATA") ) {
+            Map mode = new HashMap();
+            for (String s : e.keySet()) {
+                mode.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s),
+                        e.get(s));
+            }
+            roomList.getData().add(mode);
+        }
+
+        if( roomList.getData().isEmpty() )
+        {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND)
+                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
+        }
+
+        roomList.setMsg("공간 목록 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( roomList );
     }
 
     /**
-     * 공간별 '기기 목록' 가져오기 at Quick IOT 제어 > 공간별 보기
+     * 11. 공간별 '기기 목록' 가져오기 at Quick IOT 제어 > 공간별 보기
      */
     @GetMapping(
-            value = "/{complexId}/{homeId}/rooms/devices",
+            value = "/{complexId}/{homeId}/rooms/{roomId}/devices",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotDeviceListInfo>  getRoomsWithDevicesList(
+    public ResponseEntity getRoomsWithDevicesList(
             @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId )
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("roomId")    int roomId)
     {
         IotDeviceListInfo deviceListInfo = new IotDeviceListInfo();
+
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        DataListInfo retBody;
+
+        try {
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                    IOK_DEVICES_LIST_BY_ROOM_PATH );
+            requester.setParameter("cmplxId", String.valueOf(complexId) );
+            requester.setParameter("homeId", String.valueOf(homeId) );
+            requester.setParameter("roomId", String.valueOf(roomId) );
+            result = requester.execute();
+        }
+        catch (URISyntaxException e) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+        }
+        catch (IOException e) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        }
+        catch (HttpRequestFailedException e) {
+            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
+            if (e.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
+        }
+
+        for(Map<String, Object> e : (List<Map<String, Object>>)result.get("DATA") ) {
+            Map mode = new HashMap();
+            for (String s : e.keySet()) {
+                mode.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s),
+                        e.get(s));
+            }
+            deviceListInfo.getData().add(mode);
+        }
+
+        if( deviceListInfo.getData().isEmpty() )
+        {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND)
+                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
+        }
+
+        deviceListInfo.setMsg("공간별 기기 목록 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( deviceListInfo );
     }

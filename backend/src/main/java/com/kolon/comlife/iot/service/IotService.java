@@ -35,5 +35,4 @@ public interface IotService {
     EnergyInfo createEnergyUsageExceedAlarm(int complexId, int homeId, String  energyType);
     EnergyInfo deleteEnergyUsageExceedAlarm(int complexId, int homeId, String  energyType);
     EnergyInfo setEnergyUsageExceedAlarm(int complexId, int homeId, String  energyType);
-
 }

@@ -89,12 +89,14 @@ public class UserController {
         result = new HashMap();
         result.put("msg", retMsg);
         result.put("cmplxId", resultMobileUser.get("CMPLX_ID"));
+        result.put("homeId", resultMobileUser.get("HOME_ID"));
         result.put("userId", resultMobileUser.get("USER_ID"));
+        result.put("usrId", resultMobileUser.get("USR_ID"));
+        result.put("userNm", resultMobileUser.get("USER_NM"));
         result.put("token", resultMobileUser.get("TOKEN"));
         result.put("issueDate", resultMobileUser.get("ISSUE_DATE"));
         result.put("expireDate", resultMobileUser.get("EXPIRE_DATE"));
-        result.put("userNm", resultMobileUser.get("USER_NM"));
-        return ResponseEntity.status( HttpStatus.OK ).body( resultMobileUser );
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
 

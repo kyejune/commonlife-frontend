@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.kolon.common.helper.JedisHelper;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
-import com.kolon.common.servlet.UserInfoHttpServletRequest;
+//import com.kolon.common.servlet.UserInfoHttpServletRequest;
 import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
 import com.kolonbenit.benitware.common.util.JwtUtil;
 import com.kolonbenit.benitware.common.util.StringUtil;
@@ -104,6 +104,9 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		String issueDate  ="";
 		String tokenOrg   ="";
 		String cmplxId = "";
+		String homeId = "";
+		String userNm = "";
+		String usrId = "";
 
 		try {
 
@@ -135,7 +138,10 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 				expireDate = StringUtil.replace(tokenRedis.get("EXPIRE_DATE").toString(),"\"","");
 				issueDate  = StringUtil.replace(tokenRedis.get("ISSUE_DATE").toString(),"\"","");
 				tokenOrg   = StringUtil.replace(tokenRedis.get("TOKEN_ORG").toString(),"\"","");
+				homeId     = StringUtil.replace(tokenRedis.get("HOME_ID").toString(),"\"","");
 				userId     = StringUtil.replace(tokenRedis.get("USER_ID").toString(),"\"","");
+				userNm     = StringUtil.replace(tokenRedis.get("USER_NM").toString(),"\"","");
+				usrId      = StringUtil.replace(tokenRedis.get("USR_ID").toString(),"\"","");
 
 //	                ObjectMapper jmapper = new ObjectMapper(); // create once, reuse
 //	                JsonNode actualObj  = jmapper.readValue(tokenString, JsonNode.class);
@@ -149,7 +155,7 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 			helper.returnResource(jedis);
 		}
 		catch (Exception e) {
-			logger.debug( e.getMessage() );
+			logger.error( e.getMessage() );
 			logger.debug("Step 99. Redis Error!!");
 
 			// Connection release
@@ -305,10 +311,15 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 
 
 		logger.debug("Step 4. put into AuthUserInfo");
+		logger.debug("cmplxId: " + cmplxId);
+		logger.debug("usrId: " + usrId);
+		logger.debug("homeId: " + homeId);
 		AuthUserInfo userInfo  = new AuthUserInfo(
 				Integer.valueOf( cmplxId ),
-				0, // todo: user ID
+				Integer.valueOf( usrId ),
+				Integer.valueOf( homeId ),
 				userId,
+				userNm,
 				tokenOrg,
 				secretKey,
 				issueDate,
