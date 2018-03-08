@@ -72,7 +72,7 @@ public class IotController {
      * 1. '모드'의 전체 목록 가져오기 at Dashboard
      */
     @GetMapping(
-            path = "/{complexId}/{homeId}/modes",
+            path = "/complexes/{complexId}/homes/{homeId}/modes",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModesList(
             @PathVariable("complexId") int complexId,
@@ -117,10 +117,10 @@ public class IotController {
     }
 
     /**
-     * 현재 적용된 '모드'의 가져오기 at Dashboard
+     * 2. 현재 적용된 '모드'의 가져오기 at Dashboard
      */
     @GetMapping(
-            path = "/{complexId}/{homeId}/modes/active",
+            path = "/complexes/{complexId}/homes/{homeId}/modes/active",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotModeInfo> getActiveMode(
             @PathVariable("complexId") int complexId,
@@ -135,7 +135,7 @@ public class IotController {
      * 3. My IOT의 IOT 버튼 목록 및 정보 가져오기 at Dashboard
      */
     @GetMapping(
-            value = "/{complexId}/{homeId}/myiot",
+            value = "/complexes/{complexId}/homes/{homeId}/myiot",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotButtonList(
             @PathVariable("complexId") int complexId,
@@ -185,10 +185,10 @@ public class IotController {
     }
 
     /**
-     * MyIOT의 IOT 버튼 개별 목록 가져오기 at Dashboard Button
+     * 4. MyIOT의 IOT 버튼 개별 목록 가져오기 at Dashboard Button
      */
     @GetMapping(
-            value = "/{complexId}/{homeId}/myiot/{buttonId}",
+            value = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotButtonInfo>  getMyIotButton(
             @PathVariable("complexId") int complexId,
@@ -201,10 +201,10 @@ public class IotController {
     }
 
     /**
-     * MyIOT 내, 개별 IOT 버튼의 대표 기능 실행 at Dashboard Button
+     * 5. MyIOT 내, 개별 IOT 버튼의 대표 기능 실행 at Dashboard Button
      */
     @PutMapping(
-            value = "/{complexId}/{homeId}/myiot/{buttonId}/action",
+            value = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}/action",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotButtonInfo>  executeMyIotButtonPrimeFunction(
             @PathVariable("complexId") int complexId,
@@ -217,10 +217,10 @@ public class IotController {
     }
 
     /**
-     * 가치정보에서 날씨 화면의 세부 정보 가져오기 at Dashboard Button
+     * 6. 가치정보에서 날씨 화면의 세부 정보 가져오기 at Dashboard Button
      */
     @GetMapping(
-            value = "/{complexId}/valueInfo/weather",
+            value = "/complexes/{complexId}/valueInfo/weather",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map>  getValueInfoOfWeather(
             @PathVariable("complexId") int complexId )
@@ -232,10 +232,10 @@ public class IotController {
 
 //   todo: 에너지사용량은 가치정보가 아닌듯.
 //    /**
-//     * 에너지 사용량 정보 가져오기 at Dashboard Button
+//     * 7. 에너지 사용량 정보 가져오기 at Dashboard Button
 //     */
 //    @GetMapping(
-//            value = "/{complexId}/valueInfo/energy",
+//            value = "/complexes/{complexId}/valueInfo/energy",
 //            produces = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<Map>  getEnergyInfo(
 //            @PathVariable("complexId") int complexId )
@@ -247,10 +247,10 @@ public class IotController {
 
 
     /**
-     * 기기의 대표 기능 수행
+     * 8. 기기의 대표 기능 수행 - AWS Lambda 호출
      */
     @PutMapping(
-            value = "/iot/{complexId}/{homeId}/{deviceId}/action",
+            value = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}/action",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map>  executeDevicePrimeFunction(
             @PathVariable("complexId") int complexId,
@@ -266,7 +266,7 @@ public class IotController {
      * 10. 공간 목록 가져오기 at Quick IOT 제어 > 공간별 보기
      */
     @GetMapping(
-            value = "/{complexId}/{homeId}/rooms",
+            value = "/complexes/{complexId}/homes/{homeId}/rooms",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getRoomList(
             @PathVariable("complexId") int complexId,
@@ -314,7 +314,7 @@ public class IotController {
      * 11. 공간별 '기기 목록' 가져오기 at Quick IOT 제어 > 공간별 보기
      */
     @GetMapping(
-            value = "/{complexId}/{homeId}/rooms/{roomId}/devices",
+            value = "/complexes/{complexId}/homes/{homeId}/rooms/{roomId}/devices",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getRoomsWithDevicesList(
             @PathVariable("complexId") int complexId,
@@ -365,7 +365,7 @@ public class IotController {
      * 12. 기기 상세 정보 가져오기 at Quick IOT 제어 > 공간별 보기 or 기기별 보기
      */
     @GetMapping(
-            value = "/{complexId}/{homeId}/{deviceId}",
+            value = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceInfo(
             @PathVariable("complexId") int complexId,
@@ -416,7 +416,7 @@ public class IotController {
      * 13. 기기 카테고리 가져오기 at Quick IOT 제어 > 기기별 보기
      */
     @GetMapping(
-            value = "/{complexId}/{homeId}/deviceGroup",
+            value = "/complexes/{complexId}/homes/{homeId}/deviceCategory",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceGroupList(
             @PathVariable("complexId") int complexId,
@@ -465,7 +465,7 @@ public class IotController {
      * 14. 카테고리 별 기기 목록 가져오기 at Quick IOT 제어 > 기기별 보기
      */
     @GetMapping(
-            value = "/{complexId}/{homeId}/deviceGroup/{categoryCode}",
+            value = "/complexes/{complexId}/homes/{homeId}/deviceCategory/{categoryCode}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceListByDeviceGroup(
             @PathVariable("complexId") int complexId,
@@ -514,10 +514,10 @@ public class IotController {
     }
 
     /**
-     * 개별 '모드'의 상세 정보 가져오기 at IOT 모드 실행
+     * 16. 개별 '모드'의 상세 정보 가져오기 at IOT 모드 실행
      */
     @GetMapping(
-            path = "/{complexId}/{homeId}/modes/{modeId}",
+            path = "/complexes/{complexId}/homes/{homeId}/modes/{modeId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotModeInfo> getModeInfo(
             @PathVariable("complexId") int complexId,
@@ -530,10 +530,10 @@ public class IotController {
     }
 
     /**
-     * 개별 '모드'로 전환 at IOT 모드 실행
+     * 17. 개별 '모드'로 전환 at IOT 모드 실행
      */
     @PutMapping(
-            path = "/{complexId}/{homeId}/modes/{modeId}/switchTo",
+            path = "/complexes/{complexId}/homes/{homeId}/modes/{modeId}/switchTo",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotModeInfo> switchToMode(
             @PathVariable("complexId") int complexId,
@@ -546,10 +546,10 @@ public class IotController {
     }
 
     /**
-     * '모드' 편집에서, 모드 목록 및 순서를 가져오기 at Mode 내용 편집
+     * 21. '모드' 편집에서, 모드 목록 및 순서를 가져오기 at Mode 내용 편집
      */
     @GetMapping(
-            path = "/{complexId}/{homeId}/modes/order",
+            path = "/complexes/{complexId}/homes/{homeId}/modes/order",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotModeListInfo> getModesOrder(
             @PathVariable("complexId") int complexId,
@@ -561,10 +561,10 @@ public class IotController {
     }
 
     /**
-     * '모드' 편집에서, 모드 목록 및 순서를 가져오기 at Mode 내용 편집
+     * 22. '모드' 편집에서, 모드 목록 및 순서를 가져오기 at Mode 내용 편집
      */
     @PutMapping(
-            path = "/{complexId}/{homeId}/modes/order",
+            path = "/complexes/{complexId}/homes/{homeId}/modes/order",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotModeListInfo> updateModesOrder(
             @PathVariable("complexId") int complexId,
@@ -576,10 +576,10 @@ public class IotController {
     }
 
     /**
-     * '모드' 상세에서 수정한 설정 정보 업데이트하기 at IOT 모드 실행
+     * 23. '모드' 상세에서 수정한 설정 정보 업데이트하기 at IOT 모드 실행
      */
     @PutMapping(
-            path = "/{complexId}/{homeId}/modes/{modeId}",
+            path = "/complexes/{complexId}/homes/{homeId}/modes/{modeId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotModeInfo> updateModeInfo(
             @PathVariable("complexId") int complexId,
@@ -592,10 +592,10 @@ public class IotController {
     }
 
     /**
-     * MyIOT에 추가할 수 있는 모든 기기/가치정보/오토메이션 목록 가져오기 at MyIOT 추가
+     * 24. MyIOT에 추가할 수 있는 모든 기기/가치정보/오토메이션 목록 가져오기 at MyIOT 추가
      */
     @GetMapping(
-            path = "/{complexId}/{homeId}/buttons",
+            path = "/complexes/{complexId}/homes/{homeId}/buttons",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map> getButtons(
             @PathVariable("complexId") int complexId,
@@ -607,10 +607,10 @@ public class IotController {
     }
 
     /**
-     * MyIOT에서 '시나리오/오토메이션'의 상세정보 가져오기 at MyIOT 추가
+     * 28. MyIOT에서 '시나리오/오토메이션'의 상세정보 가져오기 at MyIOT 추가
      */
     @GetMapping(
-            path = "/{complexId}/{homeId}/automations/{automationId}",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotAutomationInfo> getAutomation(
             @PathVariable("complexId") int complexId,
@@ -624,10 +624,10 @@ public class IotController {
 
 
     /**
-     * MyIOT에서 '시나리오/오토메이션' 생성하기 at MyIOT 추가
+     * 29. MyIOT에서 '시나리오/오토메이션' 생성하기 at MyIOT 추가
      */
     @PostMapping(
-            path = "/{complexId}/{homeId}/automations",
+            path = "/complexes/{complexId}/homes/{homeId}/automation",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotAutomationInfo> createAutomation(
             @PathVariable("complexId") int complexId,
@@ -639,10 +639,10 @@ public class IotController {
     }
 
     /**
-     * MyIOT에서 '시나리오/오토메이션' 업데이트하기 at MyIOT 추가
+     * 30. MyIOT에서 '시나리오/오토메이션' 업데이트하기 at MyIOT 추가
      */
     @PutMapping(
-            path = "/{complexId}/{homeId}/automations/{automationId}",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotAutomationInfo> updateAutomation(
             @PathVariable("complexId") int complexId,
@@ -655,10 +655,10 @@ public class IotController {
     }
 
     /**
-     * 특정 시나리오의 '센서' 목록 및 속성 가져오기 at MyIOT 추가
+     * 31. 특정 시나리오의 '센서' 목록 및 속성 가져오기 at MyIOT 추가
      */
     @GetMapping(
-            path = "/{complexId}/{homeId}/automations/{automationId}/sensors",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/sensors",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotSensorListInfo> getSensorsListOnAutomation(
             @PathVariable("complexId") int complexId,
@@ -671,10 +671,10 @@ public class IotController {
     }
 
     /**
-     * 특정 시나리오의 '센서' 목록 및 속성 변경하기 at MyIOT 추가
+     * 32. 특정 시나리오의 '센서' 목록 및 속성 변경하기 at MyIOT 추가
      */
     @PutMapping(
-            path = "/{complexId}/{homeId}/automations/{automationId}/sensors/{sensorId}",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/sensors/{sensorId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotSensorListInfo> updateSensorOnAutomation(
             @PathVariable("complexId") int complexId,
@@ -688,10 +688,10 @@ public class IotController {
     }
 
     /**
-     * 특정 시나리오의 '기기' 목록 및 속성 가져오기 at MyIOT 추가
+     * 33. 특정 시나리오의 '기기' 목록 및 속성 가져오기 at MyIOT 추가
      */
     @GetMapping(
-            path = "/{complexId}/{homeId}/automations/{automationId}/devices",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/devices",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotDeviceListInfo> getDevicesListOnAutomation(
             @PathVariable("complexId") int complexId,
@@ -704,10 +704,10 @@ public class IotController {
     }
 
     /**
-     * 특정 시나리오의 '기기' 목록 및 속성 변경하기 at MyIOT 추가
+     * 34. 특정 시나리오의 '기기' 목록 및 속성 변경하기 at MyIOT 추가
      */
     @PutMapping(
-            path = "/{complexId}/{homeId}/automations/{automationId}/devices/{deviceId}",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/devices/{deviceId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotDeviceInfo> getDevicesListOnAutomation(
             @PathVariable("complexId") int complexId,
@@ -721,10 +721,10 @@ public class IotController {
     }
 
     /**
-     * 에너지 사용량 정보 가져오기 at MyIOT - 에너지사용량 상세 화면
+     * 35. 에너지 사용량 정보 가져오기 at MyIOT - 에너지사용량 상세 화면
      */
     @GetMapping(
-            path = "/{complexId}/{homeId}/energy/{energyType}",
+            path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EnergyInfo> getEnergyUsage(
             @PathVariable("complexId") int complexId,
@@ -737,10 +737,10 @@ public class IotController {
     }
 
     /**
-     * 에너지사용량 초과 알람 설정하기 at MyIOT - 에너지사용량 상세 화면
+     * 36. 에너지사용량 초과 알람 설정하기 at MyIOT - 에너지사용량 상세 화면
      */
     @PostMapping(
-            path = "/{complexId}/{homeId}/energy/{energyType}/exceedAlarm",
+            path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EnergyInfo> createEnergyUsageExceedAlarm(
             @PathVariable("complexId") int complexId,
@@ -753,10 +753,10 @@ public class IotController {
     }
 
     /**
-     * 에너지사용량 초과 알람 삭제하기 at MyIOT - 에너지사용량 상세 화면
+     * 37. 에너지사용량 초과 알람 삭제하기 at MyIOT - 에너지사용량 상세 화면
      */
     @DeleteMapping(
-            path = "/{complexId}/{homeId}/energy/{energyType}/exceedAlarm",
+            path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EnergyInfo> deleteEnergyUsageExceedAlarm(
             @PathVariable("complexId") int complexId,
@@ -769,10 +769,10 @@ public class IotController {
     }
 
     /**
-     * 에너지사용량 알람 변경하기 at MyIOT - 에너지사용량 상세 화면
+     * 38. 에너지사용량 알람 변경하기 at MyIOT - 에너지사용량 상세 화면
      */
     @PutMapping(
-            path = "/{complexId}/{homeId}/energy/{energyType}/exceedAlarm",
+            path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EnergyInfo> setEnergyUsageExceedAlarm(
             @PathVariable("complexId") int complexId,
