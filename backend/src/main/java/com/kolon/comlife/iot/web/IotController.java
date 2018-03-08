@@ -37,8 +37,10 @@ public class IotController {
     private static final String IOK_MOBILE_HOST_PROP_GROUP = "IOK";
     private static final String IOK_MOBILE_HOST_PROP_KEY = "MOBILE_HOST";
     private static final String IOK_MODES_LIST_PATH = "/iokinterface/scenario/modeInfoList";
+    private static final String IOK_MYIOT_LIST_PATH = "/iokinterface/myiot/myiotList";
     private static final String IOK_ROOMS_LIST_PATH = "/iokinterface/device/roomList";
     private static final String IOK_DEVICES_LIST_BY_ROOM_PATH = "/iokinterface/device/roomDeviceList";
+    private static final String IOK_DEVICE_DETAIL_BY_DEVICE_ID_PATH = "/iokinterface/device/deviceDetail";
     private static final String IOK_DEVICES_GROUP_LIST_PATH = "/iokinterface/device/cateList";
     private static final String IOK_DEVICES_LIST_BY_CATEGORY_PATH = "/iokinterface/device/cateDeviceList";
 
@@ -79,7 +81,7 @@ public class IotController {
         IotModeListInfo modesList = new IotModeListInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
-        DataListInfo retBody;
+        
 
         try {
             requester = new HttpGetRequester(
@@ -130,16 +132,54 @@ public class IotController {
     }
 
     /**
-     * MyIOT의 IOT 버튼 목록 가져오기 at Dashboard
+     * 3. My IOT의 IOT 버튼 목록 및 정보 가져오기 at Dashboard
      */
     @GetMapping(
             value = "/{complexId}/{homeId}/myiot",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotButtonListInfo>  getMyIotButtonList(
+    public ResponseEntity getMyIotButtonList(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
         IotButtonListInfo buttonList = new IotButtonListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        
+        String userId;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                    IOK_MYIOT_LIST_PATH );
+            requester.setParameter("cmplxId", String.valueOf(complexId) );
+            requester.setParameter("homeId", String.valueOf(homeId) );
+            requester.setParameter("userId", userId );
+            result = requester.execute();
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        buttonList.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( buttonList.getData().isEmpty() )
+        {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND)
+                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
+        }
+
+        buttonList.setMsg("My IOT의 IOT 버튼 목록 및 정보 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( buttonList );
     }
@@ -235,7 +275,7 @@ public class IotController {
         IotRoomListInfo roomList = new IotRoomListInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
-        DataListInfo retBody;
+        
 
         try {
             requester = new HttpGetRequester(
@@ -285,7 +325,7 @@ public class IotController {
 
         HttpGetRequester requester;
         Map<String, Map> result;
-        DataListInfo retBody;
+        
 
         try {
             requester = new HttpGetRequester(
@@ -322,17 +362,52 @@ public class IotController {
     }
 
     /**
-     * 기기 상세 정보 가져오기 at Quick IOT 제어 > 공간별 보기 or 기기별 보기
+     * 12. 기기 상세 정보 가져오기 at Quick IOT 제어 > 공간별 보기 or 기기별 보기
      */
     @GetMapping(
-            value = "/iot/{complexId}/{homeId}/{deviceId}",
+            value = "/{complexId}/{homeId}/{deviceId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotDeviceInfo>  getDeviceInfo(
+    public ResponseEntity getDeviceInfo(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
-            @PathVariable("deviceId")  int deviceId )
+            @PathVariable("deviceId")  String deviceId )
     {
         IotDeviceInfo deviceInfo = new IotDeviceInfo();
+
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        
+
+        try {
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                    IOK_DEVICE_DETAIL_BY_DEVICE_ID_PATH );
+            requester.setParameter("cmplxId", String.valueOf(complexId) );
+            requester.setParameter("homeId", String.valueOf(homeId) );
+            requester.setParameter("deviceId", String.valueOf(deviceId) );
+            result = requester.execute();
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        deviceInfo.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( deviceInfo.getData().isEmpty() )
+        {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND)
+                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
+        }
+
+        deviceInfo.setMsg("공간별 기기 목록 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( deviceInfo );
     }
@@ -351,7 +426,7 @@ public class IotController {
 
         HttpGetRequester requester;
         Map<String, Map> result;
-        DataListInfo retBody;
+        
 
         try {
             requester = new HttpGetRequester(
@@ -401,7 +476,7 @@ public class IotController {
 
         HttpGetRequester requester;
         Map<String, Map> result;
-        DataListInfo retBody;
+        
 
         try {
             requester = new HttpGetRequester(
