@@ -39,6 +39,9 @@ public class IotController {
     private static final String IOK_MODES_LIST_PATH = "/iokinterface/scenario/modeInfoList";
     private static final String IOK_ROOMS_LIST_PATH = "/iokinterface/device/roomList";
     private static final String IOK_DEVICES_LIST_BY_ROOM_PATH = "/iokinterface/device/roomDeviceList";
+    private static final String IOK_DEVICES_GROUP_LIST_PATH = "/iokinterface/device/cateList";
+    private static final String IOK_DEVICES_LIST_BY_CATEGORY_PATH = "/iokinterface/device/cateDeviceList";
+
 
     @Resource(name = "servicePropertiesMap")
     private ServicePropertiesMap serviceProperties;
@@ -50,7 +53,7 @@ public class IotController {
     private CloseableHttpClient httpClient;
 
     /**
-     * 1. '모드'의 전체 목록 가져오기 at Dashboard
+     * Controller Test Code
      */
     @GetMapping(
             path = "/",
@@ -64,7 +67,7 @@ public class IotController {
     }
 
     /**
-     * '모드'의 전체 목록 가져오기 at Dashboard
+     * 1. '모드'의 전체 목록 가져오기 at Dashboard
      */
     @GetMapping(
             path = "/{complexId}/{homeId}/modes",
@@ -86,41 +89,18 @@ public class IotController {
             requester.setParameter("cmplxId", String.valueOf(complexId) );
             requester.setParameter("homeId", String.valueOf(homeId) );
             result = requester.execute();
-        }
-        catch (URISyntaxException e) {
-            logger.error( "Invalid URI: " + e.getMessage() );
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
-        }
-        catch (IOException e) {
-            logger.error( "Failed to request: " + e.getMessage() );
-            return ResponseEntity
-                    .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
-        }
-        catch (HttpRequestFailedException e) {
-            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
-            if (e.getStatusCode() >= 500 ) {
+        }  catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
-                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
-            }
-            else {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
             }
         }
 
-        for(Map<String, Object> e : (List<Map<String, Object>>)result.get("DATA") ) {
-            Map mode = new HashMap();
-            for (String s : e.keySet()) {
-                mode.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s),
-                          e.get(s));
-            }
-            modesList.getData().add(mode);
-        }
+        modesList.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
 
         if( modesList.getData().isEmpty() )
         {
@@ -129,7 +109,7 @@ public class IotController {
                     .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
         }
 
-//        modesList.setMsg("목록 가져오기");
+        modesList.setMsg("모드 전체 목록 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( modesList );
     }
@@ -265,41 +245,18 @@ public class IotController {
             requester.setParameter("cmplxId", String.valueOf(complexId) );
             requester.setParameter("homeId", String.valueOf(homeId) );
             result = requester.execute();
-        }
-        catch (URISyntaxException e) {
-            logger.error( "Invalid URI: " + e.getMessage() );
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
-        }
-        catch (IOException e) {
-            logger.error( "Failed to request: " + e.getMessage() );
-            return ResponseEntity
-                    .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
-        }
-        catch (HttpRequestFailedException e) {
-            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
-            if (e.getStatusCode() >= 500 ) {
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
-                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
-            }
-            else {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
             }
         }
 
-        for(Map<String, Object> e : (List<Map<String, Object>>)result.get("DATA") ) {
-            Map mode = new HashMap();
-            for (String s : e.keySet()) {
-                mode.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s),
-                        e.get(s));
-            }
-            roomList.getData().add(mode);
-        }
+        roomList.setData(
+            convertListMapDataToCamelCase((List)result.get("DATA")));
 
         if( roomList.getData().isEmpty() )
         {
@@ -339,41 +296,18 @@ public class IotController {
             requester.setParameter("homeId", String.valueOf(homeId) );
             requester.setParameter("roomId", String.valueOf(roomId) );
             result = requester.execute();
-        }
-        catch (URISyntaxException e) {
-            logger.error( "Invalid URI: " + e.getMessage() );
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
-        }
-        catch (IOException e) {
-            logger.error( "Failed to request: " + e.getMessage() );
-            return ResponseEntity
-                    .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
-        }
-        catch (HttpRequestFailedException e) {
-            logger.error( "Failed response[StatusCode:" + e.getStatusCode() + "]:" + e.getMessage() );
-            if (e.getStatusCode() >= 500 ) {
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
-                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
-            }
-            else {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
             }
         }
 
-        for(Map<String, Object> e : (List<Map<String, Object>>)result.get("DATA") ) {
-            Map mode = new HashMap();
-            for (String s : e.keySet()) {
-                mode.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s),
-                        e.get(s));
-            }
-            deviceListInfo.getData().add(mode);
-        }
+        deviceListInfo.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
 
         if( deviceListInfo.getData().isEmpty() )
         {
@@ -404,31 +338,102 @@ public class IotController {
     }
 
     /**
-     * 기기 카테고리 가져오기 at Quick IOT 제어 > 기기별 보기
+     * 13. 기기 카테고리 가져오기 at Quick IOT 제어 > 기기별 보기
      */
     @GetMapping(
-            value = "/iot/{complexId}/{homeId}/deviceGroup",
+            value = "/{complexId}/{homeId}/deviceGroup",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotDeviceGroupListInfo>  getDeviceGroupList(
+    public ResponseEntity getDeviceGroupList(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
         IotDeviceGroupListInfo deviceGroupListInfo = new IotDeviceGroupListInfo();
 
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        DataListInfo retBody;
+
+        try {
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                    IOK_DEVICES_GROUP_LIST_PATH );
+            requester.setParameter("cmplxId", String.valueOf(complexId) );
+            requester.setParameter("homeId", String.valueOf(homeId) );
+            result = requester.execute();
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        deviceGroupListInfo.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( deviceGroupListInfo.getData().isEmpty() )
+        {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND)
+                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
+        }
+
+        deviceGroupListInfo.setMsg("기기 카테고리 가져오기");
+
         return ResponseEntity.status(HttpStatus.OK).body( deviceGroupListInfo );
     }
 
     /**
-     * 카테고리 별 기기 목록 가져오기 at Quick IOT 제어 > 기기별 보기
+     * 14. 카테고리 별 기기 목록 가져오기 at Quick IOT 제어 > 기기별 보기
      */
     @GetMapping(
-            value = "/iot/{complexId}/{homeId}/deviceGroup/devices",
+            value = "/{complexId}/{homeId}/deviceGroup/{categoryCode}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotDeviceListInfo>  getDeviceListByDeviceGroup(
+    public ResponseEntity getDeviceListByDeviceGroup(
             @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId )
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("categoryCode")    String categoryCode)
     {
         IotDeviceListInfo deviceListInfo = new IotDeviceListInfo();
+
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        DataListInfo retBody;
+
+        try {
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                    IOK_DEVICES_LIST_BY_CATEGORY_PATH );
+            requester.setParameter("cmplxId", String.valueOf(complexId) );
+            requester.setParameter("homeId", String.valueOf(homeId) );
+            requester.setParameter("cateCd", String.valueOf(categoryCode) );
+
+            result = requester.execute();
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        deviceListInfo.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( deviceListInfo.getData().isEmpty() )
+        {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND)
+                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
+        }
+
+        deviceListInfo.setMsg("카테고리 별 기기 목록 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( deviceListInfo );
     }
@@ -703,4 +708,49 @@ public class IotController {
 
         return ResponseEntity.status(HttpStatus.OK).body( energyInfo );
     }
+
+    private ResponseEntity commonExceptionHandler(Exception e) throws Exception {
+        if( e instanceof  URISyntaxException ) {
+            logger.error( "Invalid URI: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+        } else if( e instanceof IOException ) {
+            logger.error( "Failed to request: " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+        } else if( e instanceof HttpRequestFailedException ) {
+            HttpRequestFailedException httpException = (HttpRequestFailedException)e;
+            logger.error( "Failed response[StatusCode:" + httpException.getStatusCode() + "]:" + e.getMessage() );
+            if (httpException.getStatusCode() >= 500 ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
+            }
+            else {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
+            }
+        } else {
+            // 공통적으로 처리되지 않는 Exception은 별도 처리
+            throw e;
+        }
+    }
+
+    private List convertListMapDataToCamelCase(List inputDataList) {
+        List outputDataList = new ArrayList();
+
+        for(Map<String, Object> e : (List<Map<String, Object>>)inputDataList ) {
+            Map element = new HashMap();
+            for (String s : e.keySet()) {
+                element.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s), e.get(s));
+            }
+            outputDataList.add(element);
+        }
+        return outputDataList;
+    }
+
+
 }
