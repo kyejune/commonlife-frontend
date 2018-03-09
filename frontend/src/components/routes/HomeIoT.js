@@ -1,20 +1,21 @@
 /* HomeIoT.jsx */
 import React, { Component } from 'react';
-import Store from "../../scripts/store";
+import Store from 'scripts/store';
+import Net from 'scripts/net';
 import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 import { Drawer } from 'react-md';
 import { Link } from 'react-router-dom';
 import DrawerIotControlList from "components/drawers/DrawerIotControlList";
 import DrawerIotEditList from "components/drawers/DrawerIotEditList";
 import WithTitle from 'components/ui/WithTitle';
+import IotBtnLg from 'components/ui/IotBtnLg';
 
 import IotIcAddMode from 'images/combined-shape@3x.png';
 import IotIcModeOut from 'images/io-t-icon-1@3x.png'; // 외출모드
 import IotIcModeSleep from 'images/io-t-icon-2@3x.png'; // 취침모드
 import IotIcModeHoliday from 'images/io-t-icon-3@3x.png'; // 휴가모드
 import IotIcModeSave from 'images/io-t-icon-14@3x.png'; // 절약모드
-import IotIcAlert from 'images/alert-icon-black@3x.png';
-import IotIcSet from 'images/io-t-i-con-b-copy@3x.png';
+
 import IotIcAdd from 'images/combined-shape-plus@3x.png';
 
 class HomeIoT extends Component {
@@ -37,6 +38,7 @@ class HomeIoT extends Component {
 	}
 
 	componentDidMount () {
+		Net.getIot( data =>{} );
 		this.updateRoute();
 	}
 
@@ -158,155 +160,31 @@ class HomeIoT extends Component {
 					<div className="cl-my-iot">
 						<ul className="h-group cl-my-iot__list">
 							<li className="col cl-my-iot__list-item">
-								<button type="button" className="cl-my-iot__button cl-my-iot__button--default">
-									<i className="cl-my-iot__ic-alert"><img src={IotIcAlert} alt=""/></i>
-									<h3 className="cl-my-iot__title"><span>12</span>Kw</h3>
-									<p className="cl-my-iot__paragraph">에너지 사용량</p>
-									<div className="cl-my-iot__icons">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-bottom">
-													<img src={IotIcModeSave} alt=""/>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div className="cl-my-iot__bottom">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-middle">
-													<h4 className="cl-my-iot__label">
-														표준
-													</h4>
-												</div>
-												<div className="cell right vertical-middle text-right">
-													<span className="cl-my-iot__text">금월예상 340Kw</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</button>
+								<IotBtnLg IotBtnType="typeDefault"
+								          IotBtnTitle="12"
+								          IotBtnParagraph="에너지 사용량"
+								          IotBtnLabel="표준"
+								          IotBtnText="340"/>
 							</li>
 							<li className="col cl-my-iot__list-item">
-								<button type="button" className="cl-my-iot__button cl-my-iot__button--toggle">
-									<h3 className="cl-my-iot__title"><span>거실조명</span></h3>
-									<p className="cl-my-iot__paragraph">조명이 켜져있습니다</p>
-									<div className="cl-my-iot__icons">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-bottom">
-													<img src={IotIcModeSave} alt=""/>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div className="cl-my-iot__bottom">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-middle">
-													<h4 className="cl-my-iot__label">
-														스위치
-													</h4>
-												</div>
-												<div
-													className="cell right vertical-middle text-right cl-my-iot__bullet-toggle-wrap">
-													<i className="cl-my-iot__bullet-toggle"/>
-												</div>
-											</div>
-										</div>
-									</div>
-								</button>
+								<IotBtnLg IotBtnType="typeToggle"
+								          IotBtnTitle="거실조명"
+										  IotBtnParagraph="조명이 켜져있습니다"
+										  IotBtnLabel="스위치"
+										  IotBtnText="Active"/>
 							</li>
 							<li className="col cl-my-iot__list-item">
-								<button type="button"
-										className="cl-my-iot__button cl-my-iot__button--custom cl-my-iot__button--toggle cl-my-iot__button--toggle-active">
-									<h3 className="cl-my-iot__title"><span>거실조명<br/>모드</span></h3>
-									<div className="cl-my-iot__icons">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-bottom">
-													<img src={IotIcModeSave} alt=""/>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div className="cl-my-iot__bottom">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-middle">
-													<h4 className="cl-my-iot__label">
-														스위치
-													</h4>
-												</div>
-												<div
-													className="cell right vertical-middle text-right cl-my-iot__bullet-toggle-wrap">
-													<i className="cl-my-iot__bullet-toggle"/>
-												</div>
-											</div>
-										</div>
-									</div>
-								</button>
+								<IotBtnLg IotBtnType="typeCustom"
+								          IotBtnTitle="둘만의시간"
+										  IotBtnLabel="스위치"
+										  IotBtnText="Active"/>
 							</li>
 							<li className="col cl-my-iot__list-item">
-								<button type="button"
-										className="cl-my-iot__button cl-my-iot__button--toggle cl-my-iot__button--toggle-active">
-									<h3 className="cl-my-iot__title"><span>거실조명</span></h3>
-									<p className="cl-my-iot__paragraph">조명이 켜져있습니다</p>
-									<div className="cl-my-iot__icons">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-bottom">
-													<img src={IotIcModeSave} alt=""/>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div className="cl-my-iot__bottom">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-middle">
-													<h4 className="cl-my-iot__label">
-														스위치
-													</h4>
-												</div>
-												<div
-													className="cell right vertical-middle text-right cl-my-iot__bullet-toggle-wrap">
-													<i className="cl-my-iot__bullet-toggle"/>
-												</div>
-											</div>
-										</div>
-									</div>
-								</button>
-							</li>
-							<li className="col cl-my-iot__list-item">
-								<button type="button" className="cl-my-iot__button cl-my-iot__button--set">
-									<h3 className="cl-my-iot__title"><span>안방보일러</span></h3>
-									<p className="cl-my-iot__paragraph">설정온도 30℃</p>
-									<div className="cl-my-iot__icons">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-bottom">
-													<img src={IotIcModeSave} alt=""/>
-												</div>
-											</div>
-										</div>
-									</div>
-									<div className="cl-my-iot__bottom">
-										<div className="tablize">
-											<div className="table-row">
-												<div className="cell vertical-middle">
-													<h4 className="cl-my-iot__label">
-														높음
-													</h4>
-												</div>
-												<div className="cell right vertical-middle text-right">
-													<i className="cl-my-iot__bullet"><img src={IotIcSet} alt=""/></i>
-													<span className="cl-my-iot__text">30℃</span>
-												</div>
-											</div>
-										</div>
-									</div>
-								</button>
+								<IotBtnLg IotBtnType="typeSet"
+								          IotBtnTitle="안방보일러"
+										  IotBtnParagraph="설정온도 30℃"
+										  IotBtnLabel="높음"
+										  IotBtnText="34"/>
 							</li>
 							<li className="col cl-my-iot__list-item">
 								<Link to={'/iot/control'}>

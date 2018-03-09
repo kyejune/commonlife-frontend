@@ -4,7 +4,7 @@ import { Drawer } from 'react-md';
 let host = 'https://clback.cyville.net';
 if( window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' )
     host = 'http://localhost:8080';
-
+    
 // 디바이스 테스트용 주소
 if( window.location.protocol === 'file:' && window.location.pathname.includes('CoreSimulator') )
     host = 'http://192.168.0.100:8080';
@@ -24,6 +24,9 @@ const Store = observable({
 
 	/* likey */
 	likey: [],
+
+    /* IoT */
+    iot: [],
 
     /* 현재 열려있는 Drawer */
     drawer: [],

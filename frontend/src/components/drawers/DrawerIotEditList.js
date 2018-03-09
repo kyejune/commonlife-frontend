@@ -16,7 +16,7 @@ class DrawerIotControlMode extends Component{
 
 		return (
 			<div>
-				editList
+				asdf
 			</div>
 		)
 	}

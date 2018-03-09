@@ -223,7 +223,6 @@
 }
 
 .cl-my-iot__button--custom {
-    background-color: #F6F4E9;
 
     .cl-my-iot__title {
         padding-top: 1px;
@@ -233,6 +232,10 @@
         .cell {
             height: 66px;
         }
+    }
+
+    &.cl-iot-mode__button--active {
+        background-color: #F6F4E9;
     }
 }
 

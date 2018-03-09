@@ -1,0 +1,88 @@
+[
+    {
+        "index": "1",
+        "user_id": "1",
+        "my_iot": {
+            "out": {
+                "status": "off",
+                "selected": "selected"
+            },
+            "sleep": {
+                "status": "off",
+                "selected": "selected"
+            },
+            "holiday": {
+                "status": "on",
+                "selected": "selected"
+            },
+            "save": {
+                "status": "off",
+                "selected": "selected"
+            }
+        },
+        "mode": [
+            {
+                "type": "default",
+                "category": "energy",
+                "title": "12",
+                "paragraph": "에너지 사용량",
+                "icon": "",
+                "label": "표준",
+                "text": "340"
+            },
+            {
+                "type": "default",
+                "category": "weather",
+                "title": "2",
+                "paragraph": "서울 성북구",
+                "icon": "",
+                "label": "맑음",
+                "text": "20"
+            },
+            {
+                "type": "toggle",
+                "category": "",
+                "space": "거실",
+                "device": "조명",
+                "title": "",
+                "paragraph": "조명이 켜져있습니다",
+                "icon": "",
+                "label": "스위치",
+                "text": "on"
+            },
+            {
+                "type": "set",
+                "category": "",
+                "space": "안방",
+                "device": "보일러",
+                "title": "",
+                "paragraph": "32",
+                "icon": "",
+                "label": "높음",
+                "text": "30"
+            },
+            {
+                "type": "custom",
+                "category": "",
+                "space": "",
+                "device": "",
+                "title": "둘만의 시간",
+                "paragraph": "",
+                "icon": "",
+                "label": "조혜윤",
+                "text": "active"
+            },
+            {
+                "type": "toggle",
+                "category": "",
+                "space": "거실",
+                "device": "조명",
+                "title": "",
+                "paragraph": "조명이 꺼져있습니다",
+                "icon": "",
+                "label": "스위치",
+                "text": "off"
+            }
+        ]
+    }
+]
