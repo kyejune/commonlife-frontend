@@ -1,7 +1,7 @@
 /* HomeIoT.jsx */
 import React, { Component } from 'react';
 import Store from 'scripts/store';
-import Net from 'scripts/net';
+import Iot from 'scripts/iot';
 import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 import { Drawer } from 'react-md';
 import { Link } from 'react-router-dom';
@@ -38,7 +38,7 @@ class HomeIoT extends Component {
 	}
 
 	componentDidMount () {
-		Net.getIot( data =>{} );
+		Iot.getIot( data =>{} );
 		this.updateRoute();
 	}
 
