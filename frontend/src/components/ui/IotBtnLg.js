@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Devices} from "../../scripts/iot";
 
 import IotIcAlert from 'images/alert-icon-black@3x.png';
 // import IotIcModeOut from 'images/io-t-icon-1@3x.png'; // 외출모드
@@ -6,11 +7,19 @@ import IotIcAlert from 'images/alert-icon-black@3x.png';
 // import IotIcModeHoliday from 'images/io-t-icon-3@3x.png'; // 휴가모드
 import IotIcModeSave from 'images/io-t-icon-14@3x.png'; // 절약모드
 import IotIcSet from 'images/io-t-i-con-b-copy@3x.png';
+import Store from "../../scripts/store";
 
 class IotBtnLg extends Component {
 
 	constructor ( props ) {
 		super( props );
+	}
+
+	viewProgress( deviceInfo ){
+		console.log('모달로 진행률 보기');
+		Store.ipo = deviceInfo;
+
+		console.log( 'store.ipo:', Store.ipo );
 	}
 
 	IotBtnType = ()=> {
@@ -115,7 +124,7 @@ class IotBtnLg extends Component {
 		}
 		else if( this.props.IotBtnType === 'typeToggle' ) {
 			return (
-				<div className="cell right vertical-middle text-right cl-my-iot__bullet-toggle-wrap">
+				<div className="cell right vertical-middle text-right cl-my-iot__bullet-toggle-wrap" onClick={ ()=> this.viewProgress( Devices.living1 ) }>
 					<i className="cl-my-iot__bullet-toggle"/>
 				</div>
 			)
@@ -129,7 +138,7 @@ class IotBtnLg extends Component {
 		}
 		else {
 			return (
-				<div className="cell right vertical-middle text-right">
+				<div className="cell right vertical-middle text-right" onClick={()=> this.viewProgress( Devices.boiler1 )}>
 					<i className="cl-my-iot__bullet"><img src={IotIcSet} alt=""/></i>
 					<span className="cl-my-iot__text">{this.props.IotBtnText}℃</span>
 				</div>

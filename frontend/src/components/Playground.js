@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import TimeScheduler from 'components/ui/TimeScheduler';
+import Store from "../scripts/store";
 
 
 class Playground extends Component{
@@ -17,7 +18,6 @@ class Playground extends Component{
                 max={20} // 예야가능한 마지막 시간
                 scheduled={ [{ start:10, end:11}, {start:15, end:17}] } // 기 예약된 내용
             />
-
 
         </div>
 

@@ -26,6 +26,13 @@ body.cl-is-device{
     .dialogs__content{
         margin-top: 3.90625vh;
     }
+
+    #modal{
+        &>div {
+            margin-top: 3.90625vh;
+            height: calc(100vh - 3.90625vh);
+        }
+    }
 }
 
 body:not(.cl-is-device){
@@ -50,6 +57,20 @@ body.cl-keyboard--open{
 body.cl-dom--added{
     .App{
         overflow: hidden;
+    }
+}
+
+
+
+#modal{
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    &>div{
+        width: 100vw;
+        height: 100vh;
+        background-color: rgba( 0, 0, 0, 0.85 );
     }
 }
 

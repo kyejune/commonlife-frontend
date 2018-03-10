@@ -9,6 +9,7 @@ import DrawerIotControlList from "components/drawers/DrawerIotControlList";
 import DrawerIotEditList from "components/drawers/DrawerIotEditList";
 import WithTitle from 'components/ui/WithTitle';
 import IotBtnLg from 'components/ui/IotBtnLg';
+import Modal from 'components/overlay/Modal';
 
 import IotIcAddMode from 'images/combined-shape@3x.png';
 import IotIcModeOut from 'images/io-t-icon-1@3x.png'; // 외출모드
@@ -17,6 +18,7 @@ import IotIcModeHoliday from 'images/io-t-icon-3@3x.png'; // 휴가모드
 import IotIcModeSave from 'images/io-t-icon-14@3x.png'; // 절약모드
 
 import IotIcAdd from 'images/combined-shape-plus@3x.png';
+import IotProgressOverlay from "../overlay/IotProgressOverlay";
 
 class HomeIoT extends Component {
 
@@ -28,7 +30,7 @@ class HomeIoT extends Component {
 			isModeOut: false,
 			isModeSleep: false,
 			isModeHoliday: false,
-			isModeSave: false
+			isModeSave: false,
 		}
 
 		this.modeOutSelect = this.modeOutSelect.bind( this );
@@ -79,7 +81,7 @@ class HomeIoT extends Component {
 			isModeOut: !this.state.isModeOut,
 			isModeSleep: false,
 			isModeHoliday: false,
-			isModeSave: false
+			isModeSave: false,
 		} );
 	}
 

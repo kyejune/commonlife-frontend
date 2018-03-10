@@ -4,6 +4,9 @@ import Store from "../../scripts/store";
 import {Drawer} from 'react-md';
 import DrawerContentHolder from 'components/drawers/DrawerContentHolder';
 import Profile from "components/drawers/Profile";
+import Modal from "../overlay/Modal";
+import IotProgressOverlay from "../overlay/IotProgressOverlay";
+import {observer} from "mobx-react";
 
 
 
@@ -30,9 +33,6 @@ class DrawerInjector extends Component{
             Store.drawer.push( 'profile' );
 
 
-
-
-
         this.setState({
             drawer: Store.drawer,
         });
@@ -41,6 +41,10 @@ class DrawerInjector extends Component{
 
 
     render(){
+
+        let ipo = Store.ipo;
+
+        console.log( 'render of injector', ipo );
 
         return <div className="drawerInjector">
 
@@ -53,10 +57,19 @@ class DrawerInjector extends Component{
             </Drawer>
 
 
+
+            {/* 모달 */}
+            {Store.ipo&&
+            <Modal>
+                <IotProgressOverlay { ...Store.ipo }  />
+            </Modal>
+            }
+
+
         </div>
     }
 
 }
 
 
-export default withRouter(DrawerInjector)
+export default observer(withRouter(DrawerInjector))
