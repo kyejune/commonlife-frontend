@@ -276,3 +276,93 @@
     text-decoration: underline;
     color: rgba(0, 0, 0, 0.5);
 }
+
+
+
+/* Iot Vertical List Common */
+.cl-iot-vertical-list{
+
+    padding: 8px;
+
+    p, h4{
+        margin: 0;
+        line-height: 1em;
+    }
+
+    li{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        padding: 12px 18px 12px 12px;
+        background-color: #f4f4f4;
+        box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+        margin-bottom: 5px;
+    }
+
+    .cl__thumb{
+        width: 45px;
+        margin-right: 10px;
+    }
+
+    .cl__thumb--rounded{
+        @extend .cl__thumb;
+        border-radius: 50%;
+        background-color: #f3f3f3;
+        border: 1px solid #DBDBDB;
+    }
+
+    .cl__title{
+        font-size: 17px;
+        color: rgba( 0, 0, 0, 0.87 );
+        font-weight: 600;
+
+        & + .cl__desc{
+            margin-top: 7px;
+        }
+    }
+
+    .cl__desc{
+        font-size: 12px;
+        color: rgba( 0, 0, 0, 0.5 );
+    }
+
+    .cl__handle{
+
+    }
+
+    .cl-next__button{
+        width: 24px;
+        height: 24px;
+        background-image: url("images/ic-favorite-24-px-blue@3x.png");
+        background-size: contain;
+    }
+
+
+    // 검은배경 위에..
+    &.cl-bg--dark{
+        color: #D1D1D2;
+
+        li{
+            background-color: transparent;
+            border-bottom: 1px solid #373A3F;
+            padding-right: 7px;
+        }
+
+        .cl__title, .cl__desc{
+            color: #fafafa;
+            opacity: 0.5;
+        }
+
+        .cl__thumb--rounded{
+            background-color: white;
+        }
+
+        .cl__thumb--rounded--off{
+            @extend .cl__thumb--rounded;
+            background-color: #C0C1C3;
+        }
+    }
+
+}
+
