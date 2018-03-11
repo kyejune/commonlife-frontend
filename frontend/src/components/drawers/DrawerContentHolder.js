@@ -107,4 +107,4 @@ class DrawerContentHolder extends Component {
     }
 }
 
-export default observer( withRouter(DrawerContentHolder) );
+export default withRouter(DrawerContentHolder);

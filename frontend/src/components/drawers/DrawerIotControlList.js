@@ -23,4 +23,4 @@ class DrawerIotControlList extends Component{
 }
 
 
-export default observer(withRouter(DrawerIotControlList));
+export default withRouter(DrawerIotControlList);

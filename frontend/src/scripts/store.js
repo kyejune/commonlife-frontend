@@ -1,4 +1,4 @@
-import { observable } from 'mobx';
+import {observable} from 'mobx';
 import { Drawer } from 'react-md';
 
 let host = 'https://clback.cyville.net';
@@ -10,7 +10,7 @@ if( window.location.protocol === 'file:' && window.location.pathname.includes('C
     host = 'http://192.168.0.100:8080';
 
 
-// host = 'https://clback.cyville.net';
+host = 'https://clback.cyville.net';
 
 
 const Store = observable({

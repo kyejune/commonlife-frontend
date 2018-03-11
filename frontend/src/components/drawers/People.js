@@ -53,4 +53,4 @@ class People extends Component{
 }
 
 
-export default observer(withRouter(People));
+export default withRouter(People);

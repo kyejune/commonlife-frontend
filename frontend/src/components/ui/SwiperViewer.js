@@ -30,4 +30,4 @@ class SwiperViewer extends Component {
 }
 
 
-export default observer( withRouter( SwiperViewer ) );
+export default withRouter( SwiperViewer );

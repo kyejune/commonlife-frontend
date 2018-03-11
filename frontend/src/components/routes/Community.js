@@ -96,4 +96,4 @@ class Community extends Component {
     }
 }
 
-export default observer(withRouter(Community));
+export default withRouter(Community);

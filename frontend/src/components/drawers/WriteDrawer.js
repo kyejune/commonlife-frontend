@@ -136,7 +136,7 @@ class WriteDrawer extends BottomDrawer {
     }
 }
 
-export default observer(WriteDrawer);
+export default WriteDrawer;
 
 
 

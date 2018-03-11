@@ -40,4 +40,4 @@ class DrawerSwiperViewer extends Component{
 }
 
 
-export default observer(withRouter(DrawerSwiperViewer));
+export default withRouter(DrawerSwiperViewer);

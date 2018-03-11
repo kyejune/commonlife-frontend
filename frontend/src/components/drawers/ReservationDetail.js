@@ -272,4 +272,4 @@ class ReservationDetail extends Component {
 }
 
 
-export default observer(withRouter(ReservationDetail));
+export default withRouter(ReservationDetail);

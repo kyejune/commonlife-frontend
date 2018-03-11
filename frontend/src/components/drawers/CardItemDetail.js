@@ -96,4 +96,4 @@ class CardItemDetailDrawer extends Component {
 }
 
 
-export default observer(withRouter(CardItemDetailDrawer));
+export default withRouter(CardItemDetailDrawer);

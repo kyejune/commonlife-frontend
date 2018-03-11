@@ -90,4 +90,4 @@ class ReservationHistory extends Component{
 }
 
 
-export default observer(withRouter(ReservationHistory));
+export default withRouter(ReservationHistory);

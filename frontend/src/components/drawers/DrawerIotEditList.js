@@ -23,4 +23,4 @@ class DrawerIotControlMode extends Component{
 }
 
 
-export default observer(withRouter(DrawerIotControlMode));
+export default withRouter(DrawerIotControlMode);
