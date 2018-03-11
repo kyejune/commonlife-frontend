@@ -25,9 +25,6 @@ export const Devices = {
 	// 계속해서 추가해야함다...
 }
 
-window.devices = Devices;
-
-
 
 export default {
 
@@ -38,6 +35,15 @@ export default {
 				console.log( response );
 				callback( response );
 			} );
+	},
+
+
+	/* Iot장비의 값을 변경 */
+	setIotDevice( deviceName, value, callback ){
+
+		console.log(`${deviceName}의 값을 ${value}로 변경`);
+		setTimeout( ()=> callback(), 4000 );
+
 	}
 
 

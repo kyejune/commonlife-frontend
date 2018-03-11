@@ -42,12 +42,7 @@ class DrawerInjector extends Component{
 
     render(){
 
-        let ipo = Store.ipo;
-
-        console.log( 'render of injector', ipo );
-
         return <div className="drawerInjector">
-
 
             <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
                     visible={this.state.drawer.indexOf('profile') >= 0}>
@@ -72,4 +67,4 @@ class DrawerInjector extends Component{
 }
 
 
-export default observer(withRouter(DrawerInjector))
+export default withRouter(observer(DrawerInjector))

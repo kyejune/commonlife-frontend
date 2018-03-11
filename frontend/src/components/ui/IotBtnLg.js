@@ -16,10 +16,7 @@ class IotBtnLg extends Component {
 	}
 
 	viewProgress( deviceInfo ){
-		console.log('모달로 진행률 보기');
-		Store.ipo = deviceInfo;
-
-		console.log( 'store.ipo:', Store.ipo, Store.set );
+		Store.ipo = { targetValue:true, ...deviceInfo };
 	}
 
 	IotBtnType = ()=> {

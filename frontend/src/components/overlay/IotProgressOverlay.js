@@ -1,5 +1,6 @@
 import React,{Component} from 'react';
-
+import Iot from 'scripts/iot';
+import Store from "../../scripts/store";
 
 
 
@@ -8,7 +9,12 @@ import React,{Component} from 'react';
 class IotProgressOverlay extends Component{
 
     componentDidMount(){
-        console.log( 'IotProgressOverlay', this.props );
+        let { cmd, name, type, targetValue } = this.props;
+
+        Iot.setIotDevice( name, targetValue, ()=>{
+            Store.ipo = null;
+        });
+
     }
 
 

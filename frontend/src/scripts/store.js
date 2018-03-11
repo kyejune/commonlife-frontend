@@ -1,4 +1,4 @@
-import {observable} from 'mobx';
+import {observable, isObservable} from 'mobx';
 import { Drawer } from 'react-md';
 
 let host = 'https://clback.cyville.net';
@@ -50,6 +50,7 @@ const Store = observable({
     now: new Date(),
 
 });
+
 
 export default Store;
 
