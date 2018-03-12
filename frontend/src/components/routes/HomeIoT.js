@@ -8,14 +8,11 @@ import { Link } from 'react-router-dom';
 import DrawerIotControlList from "components/drawers/DrawerIotControlList";
 import DrawerIotEditList from "components/drawers/DrawerIotEditList";
 import WithTitle from 'components/ui/WithTitle';
+import IotBtnMode from 'components/ui/IotBtnMode';
 import IotBtnLg from 'components/ui/IotBtnLg';
 import Modal from 'components/overlay/Modal';
 
 import IotIcAddMode from 'images/combined-shape@3x.png';
-import IotIcModeOut from 'images/io-t-icon-1@3x.png'; // 외출모드
-import IotIcModeSleep from 'images/io-t-icon-2@3x.png'; // 취침모드
-import IotIcModeHoliday from 'images/io-t-icon-3@3x.png'; // 휴가모드
-import IotIcModeSave from 'images/io-t-icon-14@3x.png'; // 절약모드
 
 import IotIcAdd from 'images/combined-shape-plus@3x.png';
 import IotProgressOverlay from "../overlay/IotProgressOverlay";
@@ -27,15 +24,16 @@ class HomeIoT extends Component {
 
 		this.state = {
 			drawer: Store.drawer,
-			isModeOut: false,
-			isModeSleep: false,
-			isModeHoliday: false,
-			isModeSave: false,
+			mode: [],
 		}
 	}
 
 	componentDidMount () {
-		Iot.getIot( data =>{} );
+		Iot.getIot( data =>{
+			let mode = data.mode;
+			this.setState( { mode: mode } );
+			console.log( data.mode );
+		} );
 		this.updateRoute();
 	}
 
@@ -71,43 +69,6 @@ class HomeIoT extends Component {
 		} );
 	}
 
-	modeOutSelect = ()=> {
-		this.setState( {
-			isModeOut: !this.state.isModeOut,
-			isModeSleep: false,
-			isModeHoliday: false,
-			isModeSave: false,
-		} );
-	};
-
-	modeSleepSelect = ()=> {
-		this.setState( {
-			isModeOut: false,
-			isModeSleep: !this.state.isModeSleep,
-			isModeHoliday: false,
-			isModeSave: false
-		} );
-	};
-
-	modeHolidaySelect = ()=> {
-		this.setState( {
-			isModeOut: false,
-			isModeSleep: false,
-			isModeHoliday: !this.state.isModeHoliday,
-			isModeSave: false
-		} );
-	};
-
-	modeSaveSelect = ()=> {
-		this.setState( {
-			isModeOut: false,
-			isModeSleep: false,
-			isModeHoliday: false,
-			isModeSave: !this.state.isModeSave
-		} );
-	};
-
-
 	render () {
 		return <div>
 			<div className="cl-home-iot">
@@ -116,34 +77,13 @@ class HomeIoT extends Component {
 
 					<div className="cl-iot-mode">
 						<ul className="cl-iot-mode__list">
-							<li className="cl-iot-mode__list-item">
-								<button type="button" onClick={ this.modeOutSelect }
-										className={( this.state.isModeOut ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
-									<img src={IotIcModeOut} alt=""/>
-									<span>외출모드</span>
-								</button>
-							</li>
-							<li className="cl-iot-mode__list-item">
-								<button type="button" onClick={ this.modeSleepSelect }
-										className={( this.state.isModeSleep ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
-									<img src={IotIcModeSleep} alt=""/>
-									<span>취침모드</span>
-								</button>
-							</li>
-							<li className="cl-iot-mode__list-item">
-								<button type="button" onClick={ this.modeHolidaySelect }
-										className={( this.state.isModeHoliday ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
-									<img src={IotIcModeHoliday} alt=""/>
-									<span>휴가모드</span>
-								</button>
-							</li>
-							<li className="cl-iot-mode__list-item">
-								<button type="button" onClick={ this.modeSaveSelect }
-										className={( this.state.isModeSave ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
-									<img src={IotIcModeSave} alt=""/>
-									<span>절약모드</span>
-								</button>
-							</li>
+							{ this.state.mode.map( ( mode, index ) => {
+								return (
+									<li className="cl-iot-mode__list-item">
+										<IotBtnMode key={index} modeData={mode}/>
+									</li>
+								)
+							} ) }
 							<li className="cl-iot-mode__list-item">
 								<Link to={'/iot/control-mode'} className="cl-iot-mode__button cl-iot-mode__add-mode-button">
 									<img src={IotIcAddMode} alt=""/>

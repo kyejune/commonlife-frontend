@@ -32,8 +32,7 @@ export default {
 	getIot( callback ){
 		axios.get( './dummy/iot.json' )
 			.then( response => {
-				console.log( response );
-				callback( response );
+				callback( response.data );
 			} );
 	},
 
