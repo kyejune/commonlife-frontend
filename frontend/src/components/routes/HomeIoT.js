@@ -117,28 +117,28 @@ class HomeIoT extends Component {
 					<div className="cl-iot-mode">
 						<ul className="cl-iot-mode__list">
 							<li className="cl-iot-mode__list-item">
-								<button type="button" onClick={ this.modeOutSelect() }
+								<button type="button" onClick={ this.modeOutSelect }
 										className={( this.state.isModeOut ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
 									<img src={IotIcModeOut} alt=""/>
 									<span>외출모드</span>
 								</button>
 							</li>
 							<li className="cl-iot-mode__list-item">
-								<button type="button" onClick={ this.modeSleepSelect() }
+								<button type="button" onClick={ this.modeSleepSelect }
 										className={( this.state.isModeSleep ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
 									<img src={IotIcModeSleep} alt=""/>
 									<span>취침모드</span>
 								</button>
 							</li>
 							<li className="cl-iot-mode__list-item">
-								<button type="button" onClick={ this.modeHolidaySelect() }
+								<button type="button" onClick={ this.modeHolidaySelect }
 										className={( this.state.isModeHoliday ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
 									<img src={IotIcModeHoliday} alt=""/>
 									<span>휴가모드</span>
 								</button>
 							</li>
 							<li className="cl-iot-mode__list-item">
-								<button type="button" onClick={ this.modeSaveSelect() }
+								<button type="button" onClick={ this.modeSaveSelect }
 										className={( this.state.isModeSave ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
 									<img src={IotIcModeSave} alt=""/>
 									<span>절약모드</span>
