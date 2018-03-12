@@ -23,7 +23,11 @@ export const Devices = {
     main2:{ cmd:'', name:'안방 조명2', type:0 },
     boiler1:{ cmd:'', name:'중앙 보일러', type:1 },
 	// 계속해서 추가해야함다...
-}
+};
+
+export const ModeChanges = {
+	outMode:{ cmd:'', name:'외출모드', type:0 },
+};
 
 
 export default {
@@ -43,6 +47,16 @@ export default {
 		console.log(`${deviceName}의 값을 ${value}로 변경`);
 		setTimeout( ()=> callback(), 4000 );
 
+	},
+
+	/* Iot모드의 값을 변경 */
+	setIotMode( modeName, value ){
+		console.log(`${modeName}의 값을 ${value}로 변경`);
+	},
+
+	changeIotMode( modeName, value, callback ){
+		console.log(`${modeName}의 값을 ${value}로 변경`);
+		setTimeout( ()=> callback(), 3000 );
 	}
 
 

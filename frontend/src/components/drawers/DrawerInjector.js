@@ -6,6 +6,7 @@ import DrawerContentHolder from 'components/drawers/DrawerContentHolder';
 import Profile from "components/drawers/Profile";
 import Modal from "../overlay/Modal";
 import IotProgressOverlay from "../overlay/IotProgressOverlay";
+import IotModeChange from "../overlay/IotModeChange";
 import {observer} from "mobx-react";
 
 
@@ -53,10 +54,17 @@ class DrawerInjector extends Component{
 
 
 
-            {/* 모달 */}
+            {/* 모달 - IotProgressOverlay */}
             {Store.ipo&&
             <Modal>
                 <IotProgressOverlay { ...Store.ipo }  />
+            </Modal>
+            }
+
+			{/* 모달 - IotModeChange */}
+            {Store.imc&&
+            <Modal>
+                <IotModeChange { ...Store.imc }  />
             </Modal>
             }
 
