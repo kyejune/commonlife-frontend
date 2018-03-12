@@ -114,28 +114,28 @@ class IotBtnLg extends Component {
 	IotBtnText = ()=> {
 		if( this.props.IotBtnType === 'typeDefault' ) {
 			return (
-				<div className="cell right vertical-middle text-right">
+				<div className="cl-my-iot__status">
 					<span className="cl-my-iot__text">금월예상 {this.props.IotBtnText}Kw</span>
 				</div>
 			)
 		}
 		else if( this.props.IotBtnType === 'typeToggle' ) {
 			return (
-				<div className="cell right vertical-middle text-right cl-my-iot__bullet-toggle-wrap" onClick={ ()=> this.viewProgress( Devices.living1 ) }>
+				<div className="cl-my-iot__status cl-my-iot__bullet-toggle-wrap" onClick={ ()=> this.viewProgress( Devices.living1 ) }>
 					<i className="cl-my-iot__bullet-toggle"/>
 				</div>
 			)
 		}
 		else if( this.props.IotBtnType === 'typeCustom' ) {
 			return (
-				<div className="cell right vertical-middle text-right cl-my-iot__bullet-toggle-wrap">
+				<div className="cl-my-iot__status cl-my-iot__bullet-toggle-wrap">
 					<i className="cl-my-iot__bullet-toggle"/>
 				</div>
 			)
 		}
 		else {
 			return (
-				<div className="cell right vertical-middle text-right" onClick={()=> this.viewProgress( Devices.boiler1 )}>
+				<div className="cl-my-iot__status" onClick={()=> this.viewProgress( Devices.boiler1 )}>
 					<i className="cl-my-iot__bullet"><img src={IotIcSet} alt=""/></i>
 					<span className="cl-my-iot__text">{this.props.IotBtnText}℃</span>
 				</div>
@@ -152,25 +152,13 @@ class IotBtnLg extends Component {
 				<h3 className="cl-my-iot__title">{this.IotBtnTitle()}</h3>
 				{this.IotBtnParagraph()}
 				<div className="cl-my-iot__icons">
-					<div className="tablize">
-						<div className="table-row">
-							<div className="cell vertical-bottom">
-								<img src={IotIcModeSave} alt=""/>
-							</div>
-						</div>
-					</div>
+					<img src={IotIcModeSave} alt=""/>
 				</div>
 				<div className="cl-my-iot__bottom">
-					<div className="tablize">
-						<div className="table-row">
-							<div className="cell vertical-middle">
-								<h4 className="cl-my-iot__label">
-									{this.IotBtnLabel()}
-								</h4>
-							</div>
-							{this.IotBtnText()}
-						</div>
-					</div>
+					<h4 className="cl-my-iot__label">
+						{this.IotBtnLabel()}
+					</h4>
+					{this.IotBtnText()}
 				</div>
 			</button>
 
