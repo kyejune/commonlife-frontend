@@ -1,11 +1,13 @@
 package com.kolon.comlife.iot.web;
 
 import com.google.common.base.CaseFormat;
-import com.kolon.comlife.common.model.DataListInfo;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
-import com.kolon.comlife.complexes.model.ComplexInfo;
+import com.kolon.comlife.iot.exception.IotControlOperationFailedException;
+import com.kolon.comlife.iot.exception.IotControlTimeoutException;
+import com.kolon.comlife.iot.exception.IotInfoNoDataException;
 import com.kolon.comlife.iot.model.*;
-import com.kolon.comlife.iot.service.IotService;
+import com.kolon.comlife.iot.service.IotControlService;
+import com.kolon.comlife.iot.service.IotInfoService;
 import com.kolon.common.http.HttpGetRequester;
 import com.kolon.common.http.HttpRequestFailedException;
 import com.kolon.common.prop.ServicePropertiesMap;
@@ -48,8 +50,11 @@ public class IotController {
     @Resource(name = "servicePropertiesMap")
     private ServicePropertiesMap serviceProperties;
 
-    @Resource(name = "iotService")
-    private IotService iotService;
+    @Resource(name = "iotControlService")
+    private IotControlService iotControlService;
+
+    @Autowired
+    private IotInfoService iotInfoService;
 
     @Autowired
     private CloseableHttpClient httpClient;
@@ -78,10 +83,38 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        IotModeListInfo modesList;
+
+        try {
+            modesList = iotInfoService.getModeList(complexId, homeId);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( modesList );
+    }
+
+    /**
+     * 2. 현재 적용된 '모드'의 가져오기 at Dashboard
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/modes/active",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getActiveMode(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId )
+    {
         IotModeListInfo modesList = new IotModeListInfo();
+        IotModeListInfo activeModeList = new IotModeListInfo();
+        List            foundData = new ArrayList();
         HttpGetRequester requester;
         Map<String, Map> result;
-        
 
         try {
             requester = new HttpGetRequester(
@@ -101,34 +134,31 @@ public class IotController {
             }
         }
 
-        modesList.setData(
-                convertListMapDataToCamelCase((List)result.get("DATA")));
+        // 현재 적용상태인 모드를 검색
+        for(Map<String, Object>e : (List<Map<String, Object>>)result.get("DATA")) {
+            String value = (String)e.get("EXEC_YN");
+            if(value != null) {
+                if(value.toUpperCase().equals("Y")) {
+                    logger.debug(">>>> found EXEC_YN == Y");
+                    foundData.add(e);
+                    break;
+                }
+            }
+        }
 
-        if( modesList.getData().isEmpty() )
+        if( foundData.isEmpty() )
         {
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
+                    .body(new SimpleErrorInfo("현재 적용된 모드가 없습니다."));
         }
 
-        modesList.setMsg("모드 전체 목록 가져오기");
+        activeModeList.setData(
+                convertListMapDataToCamelCase(foundData));
 
-        return ResponseEntity.status(HttpStatus.OK).body( modesList );
-    }
+        activeModeList.setMsg("현재 동작중인 모드 가져오기");
 
-    /**
-     * 2. 현재 적용된 '모드'의 가져오기 at Dashboard
-     */
-    @GetMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/modes/active",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotModeInfo> getActiveMode(
-            @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId )
-    {
-        IotModeInfo activeMode = new IotModeInfo();
-
-        return ResponseEntity.status(HttpStatus.OK).body( activeMode );
+        return ResponseEntity.status(HttpStatus.OK).body( activeModeList );
     }
 
     /**
@@ -176,7 +206,7 @@ public class IotController {
         {
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
+                    .body(new SimpleErrorInfo("가져올 버튼 정보가 없습니다."));
         }
 
         buttonList.setMsg("My IOT의 IOT 버튼 목록 및 정보 가져오기");
@@ -535,14 +565,40 @@ public class IotController {
     @PutMapping(
             path = "/complexes/{complexId}/homes/{homeId}/modes/{modeId}/switchTo",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotModeInfo> switchToMode(
+    public ResponseEntity switchToMode(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
-            @PathVariable("modeId")    int modeId )
+            @PathVariable("modeId")    String modeId )
     {
-        IotModeInfo modeInfo = new IotModeInfo();
+        IotModeListInfo changedMode;
 
-        return ResponseEntity.status(HttpStatus.OK).body( modeInfo );
+        try {
+            changedMode = iotControlService.switchToMode( complexId, homeId, modeId );
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( IotControlTimeoutException timoutEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.REQUEST_TIMEOUT)
+                        .body(new SimpleErrorInfo("동작 시간이 초과하였습니다."));
+            } catch( IotControlOperationFailedException failEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo(failEx.getMessage()));
+            } catch( IotInfoNoDataException nodataEx ) {
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(new SimpleErrorInfo("모드 변경이 가능하지 않습니다. 잠시후에 다시 시도하세요."));
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        changedMode.setMsg("개별 '모드' 전환");
+
+        return ResponseEntity.status(HttpStatus.OK).body( changedMode );
     }
 
     /**
@@ -808,8 +864,13 @@ public class IotController {
                         .status(HttpStatus.BAD_REQUEST)
                         .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
             }
+        } else if( e instanceof IotInfoNoDataException) {
+            logger.error( "No data : " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND )
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } else {
-            // 공통적으로 처리되지 않는 Exception은 별도 처리
+            // 공통적으로 처리되지 않는 exception은 별도 처리
             throw e;
         }
     }
@@ -826,6 +887,5 @@ public class IotController {
         }
         return outputDataList;
     }
-
 
 }

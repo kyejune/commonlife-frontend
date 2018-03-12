@@ -12,8 +12,8 @@ import javax.annotation.Resource;
 @ContextConfiguration(locations = {"classpath*:spring/**/context-*.xml", "classpath*:spring/**/test-context-*.xml"})
 public class MobileUserServiceTest {
 
-    @Resource(name = "mobileUserService")
-    MobileUserService mobileUserService;
+//    @Resource(name = "mobileUserService")
+//    MobileUserService mobileUserService;
 
     @Test
     public void unitTestSampleTest(){

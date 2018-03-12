@@ -4,13 +4,10 @@ import com.kolon.comlife.iot.model.*;
 
 import java.util.Map;
 
-public interface IotService {
+public interface IotControlService {
 
-    IotModeListInfo getModesList(int complexId, int homeId);
-    IotModeInfo getActiveMode(int complexId, int homeId);
-    IotButtonListInfo getMyIotButtonList(int complexId, int homeId);
-    IotButtonInfo getMyIotButton(int complexId, int homeId);
     IotButtonInfo executeMyIotButtonPrimeFunction(int complexId, int homeId, int buttonId);
+
     Map getValueInfoOfWeather(int complexId);
     Map executeDevicePrimeFunction( int complexId, int homeId, int deviceId);
     IotRoomListInfo getRoomList(int complexId, int homeId);
@@ -19,7 +16,9 @@ public interface IotService {
     IotDeviceGroupListInfo getDeviceGroupList(int complexId, int homeId);
     IotDeviceListInfo getDeviceListByDeviceGroup(int complexId, int homeId);
     IotModeInfo getModeInfo(int complexId, int homeId, int modeId);
-    IotModeInfo switchToMode(int complexId, int homeId, int modeId);
+
+    IotModeListInfo switchToMode(int complexId, int homeId, String modeId) throws Exception;
+
     IotModeListInfo getModesOrder(int complexId, int homeId);
     IotModeListInfo updateModesOrder(int complexId, int homeId);
     IotModeInfo updateModeInfo(int complexId, int homeId, int modeId);
