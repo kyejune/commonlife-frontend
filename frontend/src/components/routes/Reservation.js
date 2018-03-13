@@ -69,8 +69,6 @@ class Reservation extends Component {
 
     render() {
 
-        console.log('render reservation');
-
 
         return <div>
             {/*크레딧 에러 팝업 */}

@@ -1,0 +1,53 @@
+{
+    "msg": "모드 전체 목록 가져오기",
+    "data": [
+        {
+            "mode": "CM01101",
+            "seqNo": 4,
+            "execYn": "N",
+            "sortOrder": 1,
+            "modeNm": "취침모드",
+            "useYn": "Y",
+            "cmplxId": 125,
+            "homeId": 1,
+            "imgSrc": "sub_icon_23_1_1",
+            "scnaId": 102
+        },
+        {
+            "mode": "CM01104",
+            "seqNo": 10,
+            "execYn": "N",
+            "sortOrder": 2,
+            "modeNm": "귀가모드",
+            "useYn": "Y",
+            "cmplxId": 125,
+            "homeId": 1,
+            "imgSrc": "sub_icon_26_1_1",
+            "scnaId": 127
+        },
+        {
+            "mode": "CM01102",
+            "seqNo": 5,
+            "execYn": "Y",
+            "sortOrder": 3,
+            "modeNm": "기상모드",
+            "useYn": "Y",
+            "cmplxId": 125,
+            "homeId": 1,
+            "imgSrc": "sub_icon_24_1_1",
+            "scnaId": 106
+        },
+        {
+            "mode": "CM01103",
+            "seqNo": 9,
+            "execYn": "N",
+            "sortOrder": 4,
+            "modeNm": "외출모드",
+            "useYn": "Y",
+            "cmplxId": 125,
+            "homeId": 1,
+            "imgSrc": "sub_icon_25_1_1",
+            "scnaId": 123
+        }
+    ]
+}

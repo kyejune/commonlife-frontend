@@ -31,9 +31,10 @@ class HomeIoT extends Component {
 
 	componentDidMount () {
 		Iot.getIot( data =>{
-			let mode = data.mode;
-			this.setState( { mode: mode } );
+			this.setState( { mode: data.mode } );
 		} );
+
+
 		this.updateRoute();
 	}
 
@@ -44,7 +45,7 @@ class HomeIoT extends Component {
 
 	updateRoute () {
 
-		console.log('update router:', this.props.match.params );
+		// console.log('update router:', this.props.match.params );
 
 		// id위치에 특정 단어가 들어올때 처리
 		if( this.props.match.params.id === 'control' )
@@ -60,16 +61,10 @@ class HomeIoT extends Component {
         else
             Store.clearDrawer();
 
-		// this.setState( {
-		// 	drawer: Store.drawer || [],
-		// } );
+
 	}
 
 	render () {
-
-		{
-			Store.drawer&&<div>abc</div>
-		}
 
 		return <div>
 			<div className="cl-home-iot">
@@ -150,7 +145,7 @@ class HomeIoT extends Component {
 			<Drawer {...Store.customDrawerProps} renderNode={document.querySelector( '.App' )}
 					visible={Store.hasDrawer( 'iot-control-list' )}>
 				<DrawerContentHolder back title="IoT 제어">
-					<DrawerIotControlList/>
+					<DrawerIotControlList drawerName="iot-control-list"/>
 				</DrawerContentHolder>
 			</Drawer>
 

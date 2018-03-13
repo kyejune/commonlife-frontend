@@ -33,7 +33,7 @@ const Store = observable({
     lastDrawerName: null,
 
     hasDrawer: key => {
-        console.log('hasDrawer:', key, Store.drawer[key] !== undefined );
+        // console.log('hasDrawer:', key, Store.drawer[key] !== undefined );
         return Store.drawer[key] !== undefined;
     },
 
@@ -44,11 +44,11 @@ const Store = observable({
             obj[key] = data || null;
         Store.drawer = obj;
 
-        console.log( 'Push Drawer:', key, data, Store.drawer );
+        // console.log( 'Push Drawer:', key, data, Store.drawer );
     },
 
     popDrawer: () =>{
-        console.log( 'pop drawer:', Store.lastDrawerName );
+        // console.log( 'pop drawer:', Store.lastDrawerName );
         let obj = Object.assign( {}, Store.drawer );
         delete obj[Store.lastDrawerName];
 
