@@ -33,6 +33,9 @@ public class IotControlServiceImpl implements IotControlService {
 
     private static final int IOK_CONTROL_TIMEOUT_SEC = 10; // 10초
 
+    // IOK에 기기 작동하고 폴링하는 시간 = IOK_CONTROL_RETRY_INTERVAL_MSEC * IOK_CONTROL_RETRY_COUNT
+    private static final int IOK_CONTROL_RETRY_COUNT = 4;  // 반드시 1 보다 커야함
+    private static final int IOK_CONTROL_RETRY_INTERVAL_MSEC =  200; // ms
 
     private static final String IOK_CONTROL_HOST_PROP_GROUP = "IOK";
     private static final String IOK_CONTROL_HOST_PROP_KEY = "IOT_CONTROL_HOST";
@@ -113,6 +116,7 @@ public class IotControlServiceImpl implements IotControlService {
         Map<String, Map> result;
         IotModeListInfo  activeModeList;
         String           changedModeId;
+        int retryCount = IOK_CONTROL_RETRY_COUNT;
 
         // 1. '모드 변경' 수행
         try {
@@ -135,23 +139,34 @@ public class IotControlServiceImpl implements IotControlService {
             throw e;
         }
 
-        // 1. 변경한 모드 값이 확인되면 수행
-        try {
-            activeModeList = iotInfoService.getActiveMode(complexId, homeId);
-            changedModeId = (String)activeModeList.getData().get(0).get("mode");
+        while(true) {
+            // 1. 변경한 모드 값이 확인되면 수행
+            try {
+                activeModeList = iotInfoService.getActiveMode(complexId, homeId);
+                changedModeId = (String)activeModeList.getData().get(0).get("mode");
 
-            if( modeId.equals(changedModeId) ) {
-                // 변경 성공 --> do nothing
-            } else {
-                // 변경 실패
-                throw new IotControlOperationFailedException("모드 변경이 실패하였습니다. 잠시 후에 다시 시도하세요.");
+                if( modeId.equals(changedModeId) ) {
+                    // 변경 성공 --> do nothing
+                    break;
+                } else {
+                    // 변경 값이 아직 바뀌지 않은 경우
+                    if( retryCount > 0 ) {
+                        // Retry
+                        retryCount--;
+                        Thread.sleep(IOK_CONTROL_RETRY_INTERVAL_MSEC);
+                        continue;
+                    } else {
+                        throw new IotControlOperationFailedException("모드 변경이 실패하였습니다. 잠시 후에 다시 시도하세요.");
+                    }
+                }
+            } catch( IotInfoNoDataException e ) {
+                // 모드가 변경되지 않음
+                throw e;
+            } catch( Exception e ) {
+                throw e;
             }
-        } catch( IotInfoNoDataException e ) {
-            // 모드가 변경되지 않음
-            throw e;
-        } catch( Exception e ) {
-            throw e;
         }
+
 
         return activeModeList;
     }
