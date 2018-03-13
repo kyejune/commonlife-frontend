@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import {Devices} from "../../scripts/iot";
 
 import IotIcAlert from 'images/alert-icon-black@3x.png';
-// import IotIcModeOut from 'images/io-t-icon-1@3x.png'; // 외출모드
-// import IotIcModeSleep from 'images/io-t-icon-2@3x.png'; // 취침모드
-// import IotIcModeHoliday from 'images/io-t-icon-3@3x.png'; // 휴가모드
 import IotIcModeSave from 'images/io-t-icon-14@3x.png'; // 절약모드
 import IotIcSet from 'images/io-t-i-con-b-copy@3x.png';
 import Store from "../../scripts/store";

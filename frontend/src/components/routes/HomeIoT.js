@@ -32,7 +32,6 @@ class HomeIoT extends Component {
 		Iot.getIot( data =>{
 			let mode = data.mode;
 			this.setState( { mode: mode } );
-			console.log( data.mode );
 		} );
 		this.updateRoute();
 	}
@@ -79,8 +78,8 @@ class HomeIoT extends Component {
 						<ul className="cl-iot-mode__list">
 							{ this.state.mode.map( ( mode, index ) => {
 								return (
-									<li className="cl-iot-mode__list-item">
-										<IotBtnMode key={index} modeData={mode}/>
+									<li className="cl-iot-mode__list-item" key={index}>
+										<IotBtnMode modeData={mode}/>
 									</li>
 								)
 							} ) }

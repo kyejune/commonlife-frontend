@@ -2,7 +2,9 @@ package com.kolon.common.http;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.http.MediaType;
@@ -14,26 +16,28 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HttpGetRequester {
+public class HttpPutRequester {
     final static private String CONTENT_TYPE = "Content-Type";
+    final static private String ACCEPT = "Accept";
 
     private CloseableHttpClient httpClient;
     private URIBuilder          uriBuilder;
     private TimerTask           timedOutTask;
+    private String              jsonBody;
 
-    public HttpGetRequester(CloseableHttpClient httpClient, String host, String path)
+    public HttpPutRequester(CloseableHttpClient httpClient, String host, String path)
                 throws URISyntaxException {
         this.httpClient = httpClient;
         this.uriBuilder = new URIBuilder(host);
         this.uriBuilder.setPath(path);
     }
 
-    public HttpGetRequester setParameter(String param , String value ) {
+    public HttpPutRequester setParameter(String param , String value ) {
         this.uriBuilder.setParameter(param, value);
         return this;
     }
 
-    public HttpGetRequester setParameter(Map<String,String> paramMap) {
+    public HttpPutRequester setParameter(Map<String,String> paramMap) {
         Iterator<String> e = paramMap.keySet().iterator();
         while(e.hasNext()) {
             String key = e.next();
@@ -42,14 +46,22 @@ public class HttpGetRequester {
         return this;
     }
 
+    public void setBody(String jsonBody) {
+        this.jsonBody = jsonBody;
+    }
+
     public Map execute() throws URISyntaxException, IOException, HttpRequestFailedException {
         Map result = null;
         ObjectMapper mapper = null;
-        HttpGet httpGet = new HttpGet(this.uriBuilder.build());
-        httpGet.addHeader( CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
+        HttpPut httpPut = new HttpPut(this.uriBuilder.build());
+        httpPut.addHeader( CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
+        httpPut.addHeader( ACCEPT, MediaType.APPLICATION_JSON_VALUE );
+        if( this.jsonBody != null ) {
+            httpPut.setEntity(new StringEntity(this.jsonBody));
+        }
 
         // Execute
-        HttpResponse response = httpClient.execute( httpGet );
+        HttpResponse response = httpClient.execute( httpPut );
         if( response.getStatusLine().getStatusCode() >= 400 ) {
             throw new HttpRequestFailedException(
                     response.getStatusLine().getStatusCode(),
@@ -63,16 +75,16 @@ public class HttpGetRequester {
         return result;
     }
 
-    private class TimedOutHttpGetAbortTimerTask extends TimerTask {
-        private HttpGet  timedOutHttpGet;
+    private class timedOutHttpPutAbortTimerTask extends TimerTask {
+        private HttpPut  timedOutHttpPut;
 
-        public TimedOutHttpGetAbortTimerTask(HttpGet timedOutHttpGet) {
-            this.timedOutHttpGet = timedOutHttpGet;
+        public timedOutHttpPutAbortTimerTask(HttpPut timedOutHttpPut) {
+            this.timedOutHttpPut = timedOutHttpPut;
         }
 
         public void run() {
-            if (timedOutHttpGet != null) {
-                timedOutHttpGet.abort();
+            if (timedOutHttpPut != null) {
+                timedOutHttpPut.abort();
             }
         }
     };
@@ -80,14 +92,14 @@ public class HttpGetRequester {
     public Map executeWithTimeout(int hardTimeout) throws URISyntaxException, IOException, HttpRequestFailedException {
         Map result = null;
         ObjectMapper mapper = null;
-        HttpGet timedOutHttpGet = new HttpGet(this.uriBuilder.build());
-        timedOutHttpGet.addHeader( CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
+        HttpPut timedOutHttpPut = new HttpPut(this.uriBuilder.build());
+        timedOutHttpPut.addHeader( CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
 
-        TimedOutHttpGetAbortTimerTask task = new TimedOutHttpGetAbortTimerTask( timedOutHttpGet );
+        timedOutHttpPutAbortTimerTask task = new timedOutHttpPutAbortTimerTask( timedOutHttpPut );
         new Timer(true).schedule(task, hardTimeout * 1000);
 
         // Execute
-        HttpResponse response = httpClient.execute( timedOutHttpGet );
+        HttpResponse response = httpClient.execute( timedOutHttpPut );
         if( response.getStatusLine().getStatusCode() >= 400 ) {
             throw new HttpRequestFailedException(
                     response.getStatusLine().getStatusCode(),

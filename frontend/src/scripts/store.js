@@ -35,6 +35,7 @@ const Store = observable({
 
     /* 모달 생성용 */
     ipo: null, // { name:'모달이름', data:'prpos에 넘길 데이터'}
+    imc: null, // { name:'모달이름', data:'prpos에 넘길 데이터'}
 
 
     /* Drawer에 기본적으로 넘겨주는 파라미터 */

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Store from "../../scripts/store";
+import {ModeChanges} from "../../scripts/iot";
 
 import IotIcModeOut from 'images/io-t-icon-1@3x.png'; // 외출모드
 import IotIcModeSleep from 'images/io-t-icon-2@3x.png'; // 취침모드
@@ -11,6 +13,10 @@ class IotBtnLg extends Component {
 		super( props );
 	}
 
+	viewProgress( modeInfo ){
+		Store.imc = { targetValue:true, ...modeInfo };
+	}
+
 	IotIcMode = () => {
 		const srcMap = { out:IotIcModeOut, sleep: IotIcModeSleep, holiday: IotIcModeHoliday, save: IotIcModeSave };
 
@@ -21,7 +27,8 @@ class IotBtnLg extends Component {
 
 		return (
 
-			<button type="button" onClick={ this.modeOutSelect }
+			<button type="button"
+					onClick={ ()=> this.viewProgress( ModeChanges.outMode ) }
 					className={( this.props.modeData.status === "on" ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
 				{this.IotIcMode()}
 				<span>{this.props.modeData.name}</span>

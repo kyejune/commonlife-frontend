@@ -546,6 +546,72 @@
 }
 
 
-.cl-ctrl__button{
+.cl-ctrl__button {
     //ic-bar-light@3x.png
+}
+
+
+//IotModeChange
+.cl-iot-mode-progress {
+    position: relative;
+}
+
+.cl-iot-mode-progress__top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 52px;
+    background-color: #1654A3;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+
+    h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+        color: #fafafa;
+    }
+}
+
+.cl-iot-mode-progress__content {
+    background-color: #F5F5F5;
+    height: 100vh;
+    padding: 52px 15px 60px;
+}
+
+.cl-iot-mode-progress__bottom {
+    display: flex;
+    position: absolute;
+    width: calc(100vw - 30px);
+    bottom: 20px;
+}
+
+.cl-iot-mode-progress__btn {
+    padding: 8px 30px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
+}
+
+.cl-iot-mode-progress__btn-link {
+    @extend .cl-iot-mode-progress__btn;
+
+    color: #4a4a4a;
+}
+
+.cl-iot-mode-progress__btn-primary {
+    @extend .cl-iot-mode-progress__btn;
+
+    margin-left: auto;
+    border-radius: 2px;
+    background-color: #1654A3;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24), 0 0 1px 0 rgba(0, 0, 0, 0.12);
+    color: #ffffff;
+
+    &:disabled {
+        opacity: 0.2;
+    }
 }
