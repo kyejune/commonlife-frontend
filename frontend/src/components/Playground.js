@@ -33,7 +33,13 @@ export default class Playground extends Component{
                         <p className="cl__desc mt-05em">스위치 | OFF</p>
                     </div>
 
-                    <div className="ml-auto">토글 버튼</div>
+                    <div className="ml-auto">
+						{/* IoT 스위치 토글버튼 */}
+                        <label className="cl-iot-switch">
+                            <input type="checkbox"/>
+                            <span className="cl-iot-switch-slider"/>
+                        </label>
+                    </div>
                 </li>
 
                 {/* 센서 추가 */}
@@ -61,7 +67,13 @@ export default class Playground extends Component{
                         전원 <span className="color-primary">ON</span>
                     </h4>
 
-                    <div className="ml-auto">토글 버튼</div>
+                    <div className="ml-auto">
+						{/* IoT 스위치 토글버튼 */}
+                        <label className="cl-iot-switch">
+                            <input type="checkbox"/>
+                            <span className="cl-iot-switch-slider"/>
+                        </label>
+                    </div>
                 </li>
 
                 <li>
@@ -82,7 +94,13 @@ export default class Playground extends Component{
                         <p className="cl__desc mt-05em">스위치 | OFF</p>
                     </div>
 
-                    <div className="ml-auto">토글 버튼</div>
+                    <div className="ml-auto">
+						{/* IoT 스위치 토글버튼 */}
+                        <label className="cl-iot-switch">
+                            <input type="checkbox"/>
+                            <span className="cl-iot-switch-slider"/>
+                        </label>
+                    </div>
                 </li>
 
                 <li>
