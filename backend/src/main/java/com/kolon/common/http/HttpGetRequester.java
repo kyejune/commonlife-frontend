@@ -65,13 +65,19 @@ public class HttpGetRequester {
 
     private class TimedOutHttpGetAbortTimerTask extends TimerTask {
         private HttpGet  timedOutHttpGet;
+        private boolean  stopFlag;
 
         public TimedOutHttpGetAbortTimerTask(HttpGet timedOutHttpGet) {
+            this.stopFlag = false;
             this.timedOutHttpGet = timedOutHttpGet;
         }
 
+        public void stop() {
+            this.stopFlag = true;
+        }
+
         public void run() {
-            if (timedOutHttpGet != null) {
+            if (timedOutHttpGet != null && !stopFlag ) {
                 timedOutHttpGet.abort();
             }
         }
@@ -82,12 +88,17 @@ public class HttpGetRequester {
         ObjectMapper mapper = null;
         HttpGet timedOutHttpGet = new HttpGet(this.uriBuilder.build());
         timedOutHttpGet.addHeader( CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
+        Timer timer;
 
         TimedOutHttpGetAbortTimerTask task = new TimedOutHttpGetAbortTimerTask( timedOutHttpGet );
-        new Timer(true).schedule(task, hardTimeout * 1000);
+        timer = new Timer(true);
+        timer.schedule(task, hardTimeout * 1000);
 
         // Execute
         HttpResponse response = httpClient.execute( timedOutHttpGet );
+        task.stop();
+        timer.cancel();
+
         if( response.getStatusLine().getStatusCode() >= 400 ) {
             throw new HttpRequestFailedException(
                     response.getStatusLine().getStatusCode(),
