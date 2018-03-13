@@ -188,6 +188,8 @@ button, select, input{
   .pl-#{$i}em { padding-left: #{$i}em; }
 
   .opacity-#{$i}0 { opacity: $i/10 }
+
+  .w-#{$i}00 { width: percentage($i); }
 }
 
 .ml-auto{ margin-left: auto; }

@@ -9,3 +9,5 @@ plugins/
 hooks/
 platforms/
 src/App.css
+
+.DS_Store
