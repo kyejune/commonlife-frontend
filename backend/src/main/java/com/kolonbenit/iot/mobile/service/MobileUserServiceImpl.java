@@ -159,110 +159,110 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 				// 세대주가 입주 상태이고, 사용자 계정이 입주완료인 경우만 로그인 가능
 					if ( "AD00901".equals((String) homeIdMap.get("STS")) && "AD00404".equals((String) homeIdMap.get("APRV_STS")) ) {
 						isSuccess = true;
-	
+
 						HttpServletRequest request = parameter.getRequest();
 						String sReqIp = request.getHeader("X-FORWARDED-FOR");
 						if (sReqIp == null) {
 							sReqIp = request.getRemoteAddr();
 						}
 						parameter.put("accIp", sReqIp);
-	
-						// 중복 로그인 처리					
+
+						// 중복 로그인 처리
 	//					logger.info("Step 1.3 dup login Check");
-						ResultSetMap loginMap = (ResultSetMap) this.getBySqlId(NAMESPACE+"getDuplicateLogin", parameter);					
+						ResultSetMap loginMap = (ResultSetMap) this.getBySqlId(NAMESPACE+"getDuplicateLogin", parameter);
 						if ( loginMap != null ) {
-							
+
 							String sParamDeviceId = parameter.getString("deviceId");
 							String sLogindedDeviceId = (String) loginMap.get("deviceId");
-							
+
 							logger.info("sParamDeviceId    : " + sParamDeviceId);
 							logger.info("sLogindedDeviceId : " + sLogindedDeviceId);
-							logger.info("loginMap          : " + loginMap.toString());							
-	
+							logger.info("loginMap          : " + loginMap.toString());
+
 							// 디바이스ID 비교
 							if ( !sParamDeviceId.equals(sLogindedDeviceId) ) {
 								// 푸시 메시지 구성
 								ObjectNode json = this.setJsonMsg(parameter, loginMap);
-	
+
 								String regId = (String) loginMap.get("gcmRegId");
 								String osType = (String) loginMap.get("osType");
-	
+
 								List<String> regIdList = new ArrayList<>();
 								regIdList.add(regId);
-	
+
 	//							logger.info("=-=-=-=-=-= Push 시작 -=-=-=-=-=-=-=-=-=");
 								// 기 로그인 되어 있는 폰에 푸시 발송
 								logger.info("killing token : " + (String) loginMap.get("token"));
 								tokenDestory((String) loginMap.get("token"));
-								
+
 								FcmPushUtil.sendPush(regIdList, json.toString(), osType);
 	//							logger.info("=-=-=-=-=-= Push 아웃 -=-=-=-=-=-=-=-=-=");
-	
+
 								// 디바이스ID, GCM토큰이 항상 내려온다는 보장이 없어서 삭제 처리 후 진행
-	//							logger.info("Step 1.4 this.deleteBySqlId(NAMESPACE+deleteGcmRegInfoLogout, parameter);");								
+	//							logger.info("Step 1.4 this.deleteBySqlId(NAMESPACE+deleteGcmRegInfoLogout, parameter);");
 								this.deleteBySqlId(NAMESPACE+"deleteGcmRegInfoLogout", parameter);
 							}
 						}
-	
+
 						Map<String, String> claims = new HashMap<String, String>();
-						claims.put("USER_ID", String.valueOf(homeIdMap.get("USER_ID")));					
-						
+						claims.put("USER_ID", String.valueOf(homeIdMap.get("USER_ID")));
+
 					    // Time Create
 						Calendar startCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
 						Calendar endCal = Calendar.getInstance(TimeZone.getTimeZone("Asia/Seoul"));
 				        SimpleDateFormat sdf = new SimpleDateFormat();
 				        sdf.applyPattern("yyyy-MM-dd HH:mm:ss");
-				        
-				        
+
+
 				        // 120분 10초
 				        endCal.add( Calendar.MINUTE, 24000 );  // 30분
 				        endCal.add( Calendar.SECOND, 30 );  // 10초
-//				        
+//
 				        // 120분 10초
 //				        endCal.add( Calendar.MINUTE, 120 );  // 30분
 //				        endCal.add( Calendar.SECOND, 30 );  // 10초
-				        
+
 				        // 30분 10초
 //				        endCal.add( Calendar.MINUTE, 30 );  // 30분
 //				        endCal.add( Calendar.SECOND, 10 );  // 10초
-				        
+
 				        // 10분 30초
 //				        endCal.add( Calendar.MINUTE, 10 );
 //				        endCal.add( Calendar.SECOND, 30 );
-				        
-				        String nowDate  = sdf.format(startCal.getTime());			        
+
+				        String nowDate  = sdf.format(startCal.getTime());
 				        String nextDate = sdf.format(endCal.getTime()) ;
-				        
-				        
+
+
 				        logger.info("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
 				        logger.info("■ Token Time  :  {} ~  {}", nowDate, nextDate );
 				        logger.info("■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■");
-				        
-				        
+
+
 				        // Create Token.
-				        long issueDate = System.currentTimeMillis() / 1000;	  
+				        long issueDate = System.currentTimeMillis() / 1000;
 						KeyMaker tokenKey = new TokenKey(homeIdMap.get("USER_ID").toString(), issueDate);
 						String secretKey  = tokenKey.getKey();
-						
-						
+
+
 	//					logger.info("Start JWT Encode");
 						String sEncJwt = JwtUtil.encodeJwt(secretKey, claims);
 	//					logger.info("{}'s JWT : {}", homeIdMap.get("USER_ID"), sEncJwt);
-						
+
 						homeIdMap.put("TOKEN_ORG", sEncJwt);
 						homeIdMap.put("SECRET_KEY" , secretKey);
 						homeIdMap.put("ISSUE_DATE" , nowDate);
 						homeIdMap.put("EXPIRE_DATE", nextDate);
-						
+
 						String[] sArrayJwt = StringUtil.split(sEncJwt, ".");
-	
-						
-						
-						
+
+
+
+
 	//					logger.info("Step 2. ac.encodeAES(hf.hashingMD5(sArrayJwt[1]),keyData)");
 						// Encoded "Not Encoded";//
 						String encPayload = ac.encodeAES(hf.hashingMD5(sArrayJwt[1]),keyData);
-						
+
 						//JWT 처리
 						parameter.put("secretKey",             secretKey);
 						parameter.put("jsonWebToken",          sEncJwt);
@@ -273,28 +273,28 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 						parameter.put("jsonWebTokenIssueDt",   nowDate);
 						parameter.put("jsonWebTokenValidDt",   nextDate);
 						parameter.put("loginFlag", "Y");
-						
-						
-						// JWT 
+
+
+						// JWT
 						parameter.put("jsonWebToken", sEncJwt);
 						homeIdMap.put("TOKEN", encPayload);
-						
-						// 로그인,로그아웃 여부 처리		
+
+						// 로그인,로그아웃 여부 처리
 	//					logger.info("Step 3. this.updateBySqlId(NAMESPACE+updateLoginYn, parameter); ");
 						this.updateBySqlId(NAMESPACE+"updateLoginYn", parameter);
-	
+
 						// 로그인 내역 처리
 	//					logger.info("Step 4. this.getBySqlId(NAMESPACE+insertUserInfoHist, parameter);");
 						this.getBySqlId(NAMESPACE+"insertUserInfoHist", parameter);
-						
+
 						// 디바이스ID, GCM토큰 처리
 	//					logger.info("Step 5. this.syncroPushRegKey(parameter, homeIdMap)");
-						this.syncroPushRegKey(parameter, homeIdMap);					
+						this.syncroPushRegKey(parameter, homeIdMap);
 						// Token 처리
 						//this.prcssToken(homeIdMap);
 	//					logger.info("step 6. this.tokenIssue(homeIdMap)");
 						this.tokenIssue(homeIdMap);
-						
+
 						// Secret Key는
 						homeIdMap.remove("SECRET_KEY");
 						homeIdMap.remove("TOKEN_ORG");
@@ -368,6 +368,7 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 	        // Token List
 	        detailToken.put("CMPLX_ID", phomeIdMap.get("CMPLX_ID").toString());
 	        detailToken.put("USER_ID", phomeIdMap.get("USER_ID").toString());
+			detailToken.put("HOME_ID", phomeIdMap.get("HOME_ID").toString());
 	        detailToken.put("TOKEN_ORG", phomeIdMap.get("TOKEN_ORG").toString());
 	        detailToken.put("SECRET_KEY", phomeIdMap.get("SECRET_KEY").toString());
 	        detailToken.put("ISSUE_DATE", phomeIdMap.get("ISSUE_DATE").toString());
@@ -375,9 +376,10 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 
 
 	        // CommonLife 용도, 확장 정보
-			detailToken.put("USR_ID", "123");
-			detailToken.put("CMPLX_GRP_TYPE_ID", "123");
-			detailToken.put("HEAD_ID", "123");
+			detailToken.put("USR_ID", phomeIdMap.get("USR_ID").toString());
+			detailToken.put("USER_NM", phomeIdMap.get("USER_NM").toString());
+			detailToken.put("CMPLX_GRP_TYPE_ID", phomeIdMap.get("CMPLX_GRP_TYPE_ID").toString());
+			detailToken.put("HEAD_ID", phomeIdMap.get("HEAD_ID").toString());
 	        
 	        // Token Auth List
 	        authListToken.put("DEFAULT","Y");
@@ -437,6 +439,8 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 		String tokenOrg   ="";
 		String cmplxId    ="";
 		String userId = "";
+		String usrId = "";
+		String userNm = "";
 		long issueDate;
 		
 		// Time Create
@@ -492,6 +496,8 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
             		// Redis Token Value
 	                userId  = StringUtil.replace(tokenRedis.get("USER_ID").toString(),"\"","");
 	                cmplxId = StringUtil.replace(tokenRedis.get("CMPLX_ID").toString(),"\"","");
+					usrId = StringUtil.replace(tokenRedis.get("USR_ID").toString(),"\"","");
+					userNm = StringUtil.replace(tokenRedis.get("USER_NM").toString(),"\"","");
             }
            
             
@@ -530,6 +536,8 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
             //================================
 	        paramToken.put("CMPLX_ID",    cmplxId);
 	        paramToken.put("USER_ID",     userId);
+			paramToken.put("USR_ID",      usrId);
+			paramToken.put("USER_NM",     userNm);
 	        paramToken.put("TOKEN",       sToken);
 	        paramToken.put("TOKEN_ORG",   sEncJwt);
 	        paramToken.put("SECRET_KEY",  secretKey);
@@ -555,10 +563,6 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 		return rtnMap;
 	}
 
-	
-
-
-	
 	/**
 	 * @description  Token을 검증한다. (로그인 세션 유지)
 	 * @param RequestParameter parameter, ModelMap model

@@ -8,9 +8,9 @@
 	                       http://www.springframework.org/schema/util
 	                       http://www.springframework.org/schema/util/spring-util.xsd">
     <beans:bean id="requestConfigBuilder" class="org.apache.http.client.config.RequestConfig" factory-method="custom" >
-        <property name="socketTimeout" value="10000" />
-        <property name="connectTimeout" value="12000" />
-        <property name="connectionRequestTimeout" value="12000" />
+        <property name="socketTimeout" value="5000" />
+        <property name="connectTimeout" value="5000" />
+        <property name="connectionRequestTimeout" value="5000" />
     </beans:bean>
 
     <beans:bean id="requestConfig" factory-bean="requestConfigBuilder" factory-method="build" />
