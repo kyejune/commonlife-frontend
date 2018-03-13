@@ -1,7 +1,9 @@
 package com.kolon.comlife.iot.service.impl;
 
 import com.google.common.base.CaseFormat;
+import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;
+import com.kolon.comlife.iot.model.IotButtonListInfo;
 import com.kolon.comlife.iot.model.IotModeListInfo;
 import com.kolon.comlife.iot.service.IotControlService;
 import com.kolon.comlife.iot.service.IotInfoService;
@@ -11,6 +13,8 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -46,6 +50,9 @@ public class IotInfoServiceImpl implements IotInfoService {
     private CloseableHttpClient httpClient;
 
 
+    /**
+     * 1. '모드'의 전체 목록 가져오기 at Dashboard
+     */
     public IotModeListInfo getModeList(int complexId, int homeId) throws Exception {
 
         IotModeListInfo modesList = new IotModeListInfo();
@@ -73,6 +80,9 @@ public class IotInfoServiceImpl implements IotInfoService {
         return modesList;
     }
 
+    /**
+     * 2. 현재 적용된 '모드'의 가져오기 at Dashboard
+     */
     public IotModeListInfo getActiveMode(int complexId, int homeId) throws Exception {
         IotModeListInfo activeModeList = new IotModeListInfo();
         List            foundData = new ArrayList();
@@ -112,6 +122,67 @@ public class IotInfoServiceImpl implements IotInfoService {
         return activeModeList;
     }
 
+    /**
+     * 3. My IOT의 IOT 버튼 목록 및 정보 가져오기 at Dashboard
+     */
+    public IotButtonListInfo getMyIotButtonList(int complexId, int homeId, String userId) throws Exception {
+        IotButtonListInfo buttonList = new IotButtonListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MYIOT_LIST_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("userId", userId );
+        result = requester.execute();
+
+        buttonList.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( buttonList.getData().isEmpty() )
+        {
+            throw new IotInfoNoDataException( "가져올 버튼 정보가 없습니다." );
+        }
+
+        buttonList.setMsg("My IOT의 IOT 버튼 목록 및 정보 가져오기");
+
+        return buttonList;
+    }
+
+
+    /**
+     * 4. My IOT의 IOT 버튼 개별 정보 가져오기
+     */
+    public IotButtonListInfo getMyIotButtonListById(int complexId, int homeId, String userId, int buttonId) throws Exception {
+        IotButtonListInfo buttonList = new IotButtonListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MYIOT_LIST_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("userId", userId );
+        requester.setParameter("seqNo", String.valueOf(buttonId) );
+        result = requester.execute();
+
+        buttonList.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( buttonList.getData().isEmpty() )
+        {
+            throw new IotInfoNoDataException( "가져올 버튼 정보가 없습니다." );
+        }
+
+        buttonList.setMsg("My IOT의 IOT 버튼 개별 정보 가져오기");
+
+        return buttonList;
+    }
 
 
     private List convertListMapDataToCamelCase(List inputDataList) {

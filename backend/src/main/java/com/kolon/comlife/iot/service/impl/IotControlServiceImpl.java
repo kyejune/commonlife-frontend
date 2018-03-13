@@ -1,6 +1,5 @@
 package com.kolon.comlife.iot.service.impl;
 
-import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.iot.exception.IotControlOperationFailedException;
 import com.kolon.comlife.iot.exception.IotControlTimeoutException;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;

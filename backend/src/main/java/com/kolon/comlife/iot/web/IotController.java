@@ -110,21 +110,12 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
-        IotModeListInfo modesList = new IotModeListInfo();
         IotModeListInfo activeModeList = new IotModeListInfo();
-        List            foundData = new ArrayList();
-        HttpGetRequester requester;
-        Map<String, Map> result;
+        List            listData;
 
         try {
-            requester = new HttpGetRequester(
-                    httpClient,
-                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
-                    IOK_MODES_LIST_PATH );
-            requester.setParameter("cmplxId", String.valueOf(complexId) );
-            requester.setParameter("homeId", String.valueOf(homeId) );
-            result = requester.execute();
-        }  catch( Exception e ) {
+            activeModeList = iotInfoService.getActiveMode(complexId, homeId);
+        } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
@@ -134,30 +125,7 @@ public class IotController {
             }
         }
 
-        // 현재 적용상태인 모드를 검색
-        for(Map<String, Object>e : (List<Map<String, Object>>)result.get("DATA")) {
-            String value = (String)e.get("EXEC_YN");
-            if(value != null) {
-                if(value.toUpperCase().equals("Y")) {
-                    logger.debug(">>>> found EXEC_YN == Y");
-                    foundData.add(e);
-                    break;
-                }
-            }
-        }
-
-        if( foundData.isEmpty() )
-        {
-            return ResponseEntity
-                    .status( HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo("현재 적용된 모드가 없습니다."));
-        }
-
-        activeModeList.setData(
-                convertListMapDataToCamelCase(foundData));
-
         activeModeList.setMsg("현재 동작중인 모드 가져오기");
-
         return ResponseEntity.status(HttpStatus.OK).body( activeModeList );
     }
 
@@ -171,24 +139,14 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
-        IotButtonListInfo buttonList = new IotButtonListInfo();
-        HttpGetRequester requester;
-        Map<String, Map> result;
-        
-        String userId;
+        IotButtonListInfo buttonList;
+        String            userId;
 
         // todo: userId is retrieved from the user's token.
         userId = "baek";
 
         try {
-            requester = new HttpGetRequester(
-                    httpClient,
-                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
-                    IOK_MYIOT_LIST_PATH );
-            requester.setParameter("cmplxId", String.valueOf(complexId) );
-            requester.setParameter("homeId", String.valueOf(homeId) );
-            requester.setParameter("userId", userId );
-            result = requester.execute();
+            buttonList = iotInfoService.getMyIotButtonList(complexId, homeId, userId);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -199,18 +157,6 @@ public class IotController {
             }
         }
 
-        buttonList.setData(
-                convertListMapDataToCamelCase((List)result.get("DATA")));
-
-        if( buttonList.getData().isEmpty() )
-        {
-            return ResponseEntity
-                    .status( HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo("가져올 버튼 정보가 없습니다."));
-        }
-
-        buttonList.setMsg("My IOT의 IOT 버튼 목록 및 정보 가져오기");
-
         return ResponseEntity.status(HttpStatus.OK).body( buttonList );
     }
 
@@ -220,14 +166,30 @@ public class IotController {
     @GetMapping(
             value = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotButtonInfo>  getMyIotButton(
+    public ResponseEntity getMyIotButton(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("buttonId")  int buttonId )
     {
-        IotButtonInfo buttonInfo = new IotButtonInfo();
+        IotButtonListInfo buttonList;
+        String            userId;
 
-        return ResponseEntity.status(HttpStatus.OK).body( buttonInfo );
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+            buttonList = iotInfoService.getMyIotButtonListById(complexId, homeId, userId, buttonId);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( buttonList );
     }
 
     /**
