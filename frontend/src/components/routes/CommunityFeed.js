@@ -28,7 +28,7 @@ class CommunityFeed extends Component {
 				</div>
 
 
-                <BottomDrawer visible={Store.drawer.indexOf('write')>=0} renderNode={document.querySelector('.App')}
+                <BottomDrawer visible={Store.hasDrawer('write')} renderNode={document.querySelector('.App')}
 							  onVisibilityChange={()=>{}}
 							  portal={true}>
                     <DrawerContentHolder title="새글쓰기">

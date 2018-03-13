@@ -16,9 +16,9 @@ class DrawerInjector extends Component{
     constructor(props){
         super(props);
 
-        this.state = {
-            drawer:[],
-        };
+        // this.state = {
+        //     drawer:[],
+        // };
 
         setTimeout( ()=> this.updateRoute(), 0 );
     }
@@ -31,12 +31,12 @@ class DrawerInjector extends Component{
 
         // 프로필 페이지
         if( this.props.location.pathname.match(/\/profile\/\d/) )
-            Store.drawer.push( 'profile' );
+            Store.pushDrawer( 'profile' );
 
 
-        this.setState({
-            drawer: Store.drawer,
-        });
+        // this.setState({
+        //     drawer: Store.drawer,
+        // });
 
     }
 
@@ -46,7 +46,7 @@ class DrawerInjector extends Component{
         return <div className="drawerInjector">
 
             <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                    visible={this.state.drawer.indexOf('profile') >= 0}>
+                    visible={Store.hasDrawer('profile')}>
                 <DrawerContentHolder back title="프로필">
                     <Profile/>
                 </DrawerContentHolder>

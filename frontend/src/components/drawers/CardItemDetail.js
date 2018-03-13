@@ -14,7 +14,7 @@ class CardItemDetailDrawer extends Component {
 
         let match = this.props.match.params;
         this.state = {
-            likeLink: '/community/' + match.tab + '/' + match.index + '/like'
+            likeLink: '/community/' + match.tab + '/' + match.id + '/like'
         }
     }
 

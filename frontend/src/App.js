@@ -63,7 +63,7 @@ class App extends Component {
                         <Route component={DrawerInjector}/>
 
                         <Switch>
-                            <Route path="/community/:tab/:id/:drawer" component={Community}/>
+                            <Route path="/community/:tab/:id/:drawer?" component={Community}/>
 
 
                             <Route path="/iot/:action?/:drawer?/:id?" component={HomeIoT}/>

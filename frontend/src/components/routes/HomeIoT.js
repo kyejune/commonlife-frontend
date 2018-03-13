@@ -16,6 +16,7 @@ import IotIcAddMode from 'images/combined-shape@3x.png';
 
 import IotIcAdd from 'images/combined-shape-plus@3x.png';
 import IotProgressOverlay from "../overlay/IotProgressOverlay";
+import {observer} from "mobx-react";
 
 class HomeIoT extends Component {
 
@@ -23,7 +24,7 @@ class HomeIoT extends Component {
 		super( props );
 
 		this.state = {
-			drawer: Store.drawer,
+			// drawer: Store.drawer,
 			mode: [],
 		}
 	}
@@ -43,32 +44,33 @@ class HomeIoT extends Component {
 
 	updateRoute () {
 
+		console.log('update router:', this.props.match.params );
+
 		// id위치에 특정 단어가 들어올때 처리
 		if( this.props.match.params.id === 'control' )
-			Store.drawer.push( 'iot-control-list' );
-
-		// id위치에 일반적으로 숫자가 들어오면 상세보기
-		// else if( this.props.match.params.id  )
-		// 	Store.drawer.push( 'reservation-detail' );
-
-		else {
-			Store.drawer.length = 0;
-		}
+			Store.pushDrawer( 'iot-control-list' );
 
 		// IoT 기기제어 목록
-		if( this.props.match.params.action === 'control' )
-			Store.drawer.push( 'iot-control-list' );
+		else if( this.props.match.params.action === 'control' )
+			Store.pushDrawer( 'iot-control-list' );
 
 		// IoT Mode 편집
-		if( this.props.match.params.action === 'control-mode' )
-			Store.drawer.push( 'iot-control-mode' );
+		else if( this.props.match.params.action === 'edit-mode' )
+			Store.pushDrawer( 'iot-edit-mode' );
+        else
+            Store.clearDrawer();
 
-		this.setState( {
-			drawer: Store.drawer || [],
-		} );
+		// this.setState( {
+		// 	drawer: Store.drawer || [],
+		// } );
 	}
 
 	render () {
+
+		{
+			Store.drawer&&<div>abc</div>
+		}
+
 		return <div>
 			<div className="cl-home-iot">
 				<div className="cl-fitted-box">
@@ -84,7 +86,7 @@ class HomeIoT extends Component {
 								)
 							} ) }
 							<li className="cl-iot-mode__list-item">
-								<Link to={'/iot/control-mode'} className="cl-iot-mode__button cl-iot-mode__add-mode-button">
+								<Link to={'/iot/edit-mode'} className="cl-iot-mode__button cl-iot-mode__add-mode-button">
 									<img src={IotIcAddMode} alt=""/>
 								</Link>
 							</li>
@@ -138,15 +140,15 @@ class HomeIoT extends Component {
 
 			{/* IoT Mode 편집 */}
 			<Drawer {...Store.customDrawerProps} renderNode={document.querySelector( '.App' )}
-					visible={this.state.drawer.indexOf( 'iot-control-mode' ) >= 0}>
+					visible={Store.hasDrawer( 'iot-edit-mode' )}>
 				<DrawerContentHolder back title="Mode 편집">
 					<DrawerIotEditList/>
 				</DrawerContentHolder>
 			</Drawer>
 
-			{/* IoT 기기제어 목록 */}
+			{/* IoT 기기제어, 기기추가 목록 */}
 			<Drawer {...Store.customDrawerProps} renderNode={document.querySelector( '.App' )}
-					visible={this.state.drawer.indexOf( 'iot-control-list' ) >= 0}>
+					visible={Store.hasDrawer( 'iot-control-list' )}>
 				<DrawerContentHolder back title="IoT 제어">
 					<DrawerIotControlList/>
 				</DrawerContentHolder>
@@ -156,4 +158,4 @@ class HomeIoT extends Component {
 	}
 }
 
-export default HomeIoT;
+export default observer( HomeIoT );

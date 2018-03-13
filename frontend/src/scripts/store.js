@@ -29,8 +29,35 @@ const Store = observable({
     iot: [],
 
     /* 현재 열려있는 Drawer */
-    drawer: [],
-    drawerOptions: null,
+    drawer: {'test':{data:'value'}},
+    lastDrawerName: null,
+
+    hasDrawer: key => {
+        console.log('hasDrawer:', key, Store.drawer[key] !== undefined );
+        return Store.drawer[key] !== undefined;
+    },
+
+    pushDrawer: (key, data)=> {
+        Store.lastDrawerName = key;
+
+        let obj = Object.assign( {}, Store.drawer );
+            obj[key] = data || null;
+        Store.drawer = obj;
+
+        console.log( 'Push Drawer:', key, data, Store.drawer );
+    },
+
+    popDrawer: () =>{
+        console.log( 'pop drawer:', Store.lastDrawerName );
+        let obj = Object.assign( {}, Store.drawer );
+        delete obj[Store.lastDrawerName];
+
+        Store.drawer = obj;
+    },
+
+    clearDrawer: () =>{
+        Store.drawer = {}
+    },
 
 
     /* 모달 생성용 */
@@ -51,6 +78,9 @@ const Store = observable({
     now: new Date(),
 
 });
+
+
+window.Store = Store;
 
 
 export default Store;

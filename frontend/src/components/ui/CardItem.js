@@ -123,7 +123,7 @@ class CardItem extends Component {
 						{/* 작성자 정보 - 피드, 뉴스 */}
 						{this.cardAuthorInfo()}
 
-						<Link to={this.props.list + '/' + this.data.postIdx + '/view/' }>
+						<Link to={this.props.list + '/' + this.data.postIdx }>
 							{/* 이벤트 썸네일, 제목 */}
 							{this.cardEventTitle()}
 

@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import {Button, Toolbar} from 'react-md';
 import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
+import {HashRouter} from 'react-router-dom';
 import Store from "scripts/store";
 import closeSrc from 'images/back@3x.jpg';
 
@@ -15,10 +16,14 @@ class DrawerContentHolder extends Component {
         this.state = {
             title: props.title,
         }
+
+        console.log('create drawer:', document.querySelectorAll('.App aside').length );
     }
 
     componentDidMount(){
-        ReactDOM.findDOMNode(this).parentNode.style.zIndex = (Store.drawer.length + 100).toString();
+        console.log('added drawer:', document.querySelectorAll('.App aside').length );
+
+        ReactDOM.findDOMNode(this).parentNode.style.zIndex = ( document.querySelectorAll('.App aside').length + 100 ).toString();
 
         document.querySelector('body').classList.add('cl-dom--added');
     }
@@ -30,15 +35,21 @@ class DrawerContentHolder extends Component {
 
     onClose(){
 
-        let paths = this.props.location.pathname.split('/');
+        // let paths = this.props.location.pathname.split('/');
+        //
+        // if( paths[1] === 'community' )
+        //     paths.length -= 2;
+        // else
+        //     paths.length -= 1;
+        //
+        // this.props.history.replace(paths.join('/'));
 
-        if( paths[1] === 'community' )
-            paths.length -= 2;
-        else
-            paths.length -= 1;
+       // HashRouter.goBack();
+        Store.popDrawer();
+        this.props.history.goBack();
+        // console.log( 'Router:', HashRouter.backHistory() );
+        // HashRouter.history.back();
 
-        this.props.history.replace(paths.join('/'));
-        Store.drawer.pop();
     }
 
     updateTitle( title ){

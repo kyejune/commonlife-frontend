@@ -19,6 +19,7 @@ import ReserveServiceCleaning from 'images/rs-icon-2@3x.png';
 import ReserveServiceFood from 'images/rs-icon-3@3x.png';
 import ReserveServiceCarwash from 'images/rs-icon-4@3x.png';
 import ReserveIcPlus from 'images/page-1@3x.png';
+import {observer} from "mobx-react";
 // import ReserveIcTimeNext from 'images/shape-time-next@3x.png';
 // import ReserveIcTimePlus from 'images/shape-time-plus@3x.png';
 // import ReserveIcNotice from 'images/alert-icon-red@3x.png';
@@ -28,9 +29,9 @@ class Reservation extends Component {
     constructor( props ){
         super( props );
 
-        this.state = {
-            drawer: Store.drawer,
-        }
+        // this.state = {
+        //     drawer: Store.drawer,
+        // }
     }
 
     componentDidMount(){
@@ -44,29 +45,31 @@ class Reservation extends Component {
 
     updateRoute(){
 
+        console.log('updateRoute', Store.drawer);
+
         // id위치에 특정 단어가 들어올때 처리
         if( this.props.match.params.id  === 'history' )
-            Store.drawer.push( 'reservation-history' );
+            Store.pushDrawer( 'reservation-history' );
 
         // id위치에 일반적으로 숫자가 들어오면 상세보기
         else if( this.props.match.params.id  )
-            Store.drawer.push( 'reservation-detail' );
-
+            Store.pushDrawer( 'reservation-detail' );
         else{
-            Store.drawer.length = 0;
+            Store.clearDrawer();
         }
 
         // 썸네일 뷰 추가
         if( this.props.match.params.add === 'thumbnails' )
-            Store.drawer.push( 'reservation-thumbnails');
+            Store.pushDrawer( 'reservation-thumbnails');
 
 
-        this.setState({
-            drawer: Store.drawer || [],
-        });
+        setTimeout( ()=> this.render(), 1000 );
+        // this.render();
     }
 
     render() {
+
+        console.log('render reservation');
 
 
         return <div>
@@ -212,12 +215,9 @@ class Reservation extends Component {
 
             </div>
 
-
-
-
             {/* 예약 상세 화면 */}
             <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                    visible={this.state.drawer.indexOf( 'reservation-detail' ) >= 0}>
+                    visible={Store.hasDrawer( 'reservation-detail' )}>
                 <DrawerContentHolder back>
                     <ReservationDetail/>
                 </DrawerContentHolder>
@@ -225,7 +225,7 @@ class Reservation extends Component {
 
             {/* 히스토리 */}
             <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                    visible={this.state.drawer.indexOf( 'reservation-history' ) >= 0}>
+                    visible={Store.hasDrawer( 'reservation-history' )}>
                 <DrawerContentHolder back>
                     <ReservationHistory/>
                 </DrawerContentHolder>
@@ -233,7 +233,7 @@ class Reservation extends Component {
 
 			{/* 이미지상세보기 */}
             <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                    visible={this.state.drawer.indexOf( 'reservation-thumbnails' ) >= 0}>
+                    visible={Store.hasDrawer( 'reservation-thumbnails' )}>
                 <DrawerContentHolder back>
                     <DrawerSwiperViewer/>
                 </DrawerContentHolder>
@@ -244,4 +244,4 @@ class Reservation extends Component {
 
 }
 
-export default Reservation;
+export default observer(Reservation);

@@ -20,7 +20,7 @@ class Community extends Component {
             name: 'community',
             tabs: ['feed', 'event', 'news'],
             tabIndex: 0,
-            drawer: Store.drawer,
+            // drawer: Store.drawer,
         }
     }
 
@@ -40,14 +40,19 @@ class Community extends Component {
 
     updateRoute(){
 
+        console.log('community:', this.props.match.params );
+
         let paths = this.props.location.pathname.match(/\w+/g)||['community','feed'];
 
-        const drawers = { view:'card-item-detail', like:'people' };
-        if( drawers[paths[3]]  )
-            Store.drawer.push( drawers[paths[3]] );
+        if( this.props.match.params.id )
+            Store.pushDrawer( 'card-item-detail' );
+        else
+            Store.clearDrawer();
+
+        if( this.props.match.params.drawer === 'like' )
+            setTimeout( ()=> Store.pushDrawer( 'people' ), 0 );
 
         this.setState({
-            drawer: Store.drawer || [],
             tabIndex: this.state.tabs.indexOf( paths[1] || 'feed' )
         });
     }
@@ -78,7 +83,7 @@ class Community extends Component {
 
                 {/* 카드 상세보기 */}
                 <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                        visible={this.state.drawer.indexOf( 'card-item-detail' ) >= 0 }>
+                        visible={Store.hasDrawer( 'card-item-detail' )}>
                     <DrawerContentHolder back>
                         <CardItemDetail/>
                     </DrawerContentHolder>
@@ -86,7 +91,7 @@ class Community extends Component {
 
                 {/* Like 찍은 분들 */}
                 <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                        visible={this.state.drawer.indexOf( 'people' ) >= 0}>
+                        visible={Store.hasDrawer( 'people' )}>
                     <DrawerContentHolder back>
                         <People title="LIKE"/>
                     </DrawerContentHolder>
@@ -96,4 +101,4 @@ class Community extends Component {
     }
 }
 
-export default withRouter(Community);
+export default withRouter( observer(Community) );
