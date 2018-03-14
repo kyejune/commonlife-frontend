@@ -140,7 +140,7 @@ public class IotControlServiceImpl implements IotControlService {
         }
 
         while(true) {
-            // 1. 변경한 모드 값이 확인되면 수행
+            // 2. 변경한 모드 값이 확인되면 수행
             try {
                 activeModeList = iotInfoService.getActiveMode(complexId, homeId);
                 changedModeId = (String)activeModeList.getData().get(0).get("mode");
@@ -166,7 +166,6 @@ public class IotControlServiceImpl implements IotControlService {
                 throw e;
             }
         }
-
 
         return activeModeList;
     }
