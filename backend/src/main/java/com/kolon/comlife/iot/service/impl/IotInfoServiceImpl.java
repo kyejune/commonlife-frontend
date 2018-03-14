@@ -3,8 +3,7 @@ package com.kolon.comlife.iot.service.impl;
 import com.google.common.base.CaseFormat;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;
-import com.kolon.comlife.iot.model.IotButtonListInfo;
-import com.kolon.comlife.iot.model.IotModeListInfo;
+import com.kolon.comlife.iot.model.*;
 import com.kolon.comlife.iot.service.IotControlService;
 import com.kolon.comlife.iot.service.IotInfoService;
 import com.kolon.common.http.HttpGetRequester;
@@ -235,13 +234,166 @@ public class IotInfoServiceImpl implements IotInfoService {
         return buttonList;
     }
 
+    /**
+     * 10. 공간 목록 가져오기 at Quick IOT 제어 > 공간별 보기
+     */
+    public IotRoomListInfo getRoomList(int complexId, int homeId) throws Exception {
+        IotRoomListInfo roomList = new IotRoomListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_ROOMS_LIST_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        result = requester.execute();
+
+        roomList.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( roomList.getData().isEmpty() )
+        {
+            throw new IotInfoNoDataException( "공간 정보가 없습니다." );
+        }
+
+        roomList.setMsg("공간 목록 가져오기");
+
+        return roomList;
+    }
+
+    /**
+     * 11. 공간별 '기기 목록' 가져오기 at Quick IOT 제어 > 공간별 보기
+     */
+    public IotDeviceListInfo getRoomsWithDevicesList(int complexId, int homeId, int roomId) throws Exception {
+        IotDeviceListInfo deviceListInfo = new IotDeviceListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_DEVICES_LIST_BY_ROOM_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("roomId", String.valueOf(roomId) );
+        result = requester.execute();
+
+        deviceListInfo.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( deviceListInfo.getData().isEmpty() )
+        {
+            throw new IotInfoNoDataException( "해당 공간에 기기가 없습니다." );
+        }
+
+        deviceListInfo.setMsg("공간별 기기 목록 가져오기");
+
+        return deviceListInfo;
+    }
+
+    /**
+     * 12. 기기 상세 정보 가져오기 at Quick IOT 제어 > 공간별 보기 or 기기별 보기
+     */
+    public IotDeviceListInfo getDeviceInfo(int complexId, int homeId, String deviceId) throws Exception {
+        IotDeviceListInfo deviceListInfo = new IotDeviceListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_DEVICE_DETAIL_BY_DEVICE_ID_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("deviceId", String.valueOf(deviceId) );
+        result = requester.execute();
+
+        deviceListInfo.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+
+        if( deviceListInfo.getData().isEmpty() )
+        {
+            throw new IotInfoNoDataException( "기기 정보가 없습니다." );
+        }
+
+        deviceListInfo.setMsg("기기 상세 정보 가져오기");
+
+        return deviceListInfo;
+    }
+
+    /**
+     * 13. 기기 카테고리 가져오기 at Quick IOT 제어 > 기기별 보기
+     */
+    public IotDeviceGroupListInfo getDeviceGroupList(int complexId, int homeId ) throws Exception
+    {
+        IotDeviceGroupListInfo deviceGroupListInfo = new IotDeviceGroupListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_DEVICES_GROUP_LIST_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        result = requester.execute();
+
+        deviceGroupListInfo.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( deviceGroupListInfo.getData().isEmpty() )
+        {
+            throw new IotInfoNoDataException( "카테고리 정보가 없습니다." );
+        }
+
+        deviceGroupListInfo.setMsg("기기 카테고리 가져오기");
+
+        return deviceGroupListInfo;
+    }
+
+
+    /**
+     * 14. 카테고리 별 기기 목록 가져오기 at Quick IOT 제어 > 기기별 보기
+     */
+    public IotDeviceListInfo getDeviceListByDeviceGroup(int complexId, int homeId, String categoryCode) throws Exception
+    {
+        IotDeviceListInfo deviceListInfo = new IotDeviceListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_DEVICES_LIST_BY_CATEGORY_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("cateCd", String.valueOf(categoryCode) );
+
+        result = requester.execute();
+
+        deviceListInfo.setData(
+                convertListMapDataToCamelCase((List)result.get("DATA")));
+
+        if( deviceListInfo.getData().isEmpty() )
+        {
+            throw new IotInfoNoDataException( "기기 정보가 없습니다." );
+        }
+
+        deviceListInfo.setMsg("카테고리 별 기기 목록 가져오기");
+
+        return deviceListInfo;
+    }
+
 
     private List convertListMapDataToCamelCase(List inputDataList) {
         List outputDataList = new ArrayList();
 
         for(Map<String, Object> e : (List<Map<String, Object>>)inputDataList ) {
 //            Map element = new HashMap();
-            Map element = new TreeMap(); // for DEBUG : 결과 값이 key값 기준으로 ABC.. 정렬되어 표시   
+            Map element = new TreeMap(); // for DEBUG : 결과 값이 key값 기준으로 ABC.. 정렬되어 표시
             for (String s : e.keySet()) {
                 element.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s), e.get(s));
             }

@@ -264,19 +264,10 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
-        IotRoomListInfo roomList = new IotRoomListInfo();
-        HttpGetRequester requester;
-        Map<String, Map> result;
-        
+        IotRoomListInfo roomList;
 
         try {
-            requester = new HttpGetRequester(
-                    httpClient,
-                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
-                    IOK_ROOMS_LIST_PATH );
-            requester.setParameter("cmplxId", String.valueOf(complexId) );
-            requester.setParameter("homeId", String.valueOf(homeId) );
-            result = requester.execute();
+            roomList = iotInfoService.getRoomList(complexId, homeId);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -286,18 +277,6 @@ public class IotController {
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
             }
         }
-
-        roomList.setData(
-            convertListMapDataToCamelCase((List)result.get("DATA")));
-
-        if( roomList.getData().isEmpty() )
-        {
-            return ResponseEntity
-                    .status( HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
-        }
-
-        roomList.setMsg("공간 목록 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( roomList );
     }
@@ -313,21 +292,10 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("roomId")    int roomId)
     {
-        IotDeviceListInfo deviceListInfo = new IotDeviceListInfo();
-
-        HttpGetRequester requester;
-        Map<String, Map> result;
-        
+        IotDeviceListInfo deviceListInfo;
 
         try {
-            requester = new HttpGetRequester(
-                    httpClient,
-                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
-                    IOK_DEVICES_LIST_BY_ROOM_PATH );
-            requester.setParameter("cmplxId", String.valueOf(complexId) );
-            requester.setParameter("homeId", String.valueOf(homeId) );
-            requester.setParameter("roomId", String.valueOf(roomId) );
-            result = requester.execute();
+            deviceListInfo = iotInfoService.getRoomsWithDevicesList(complexId, homeId, roomId);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -337,18 +305,6 @@ public class IotController {
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
             }
         }
-
-        deviceListInfo.setData(
-                convertListMapDataToCamelCase((List)result.get("DATA")));
-
-        if( deviceListInfo.getData().isEmpty() )
-        {
-            return ResponseEntity
-                    .status( HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
-        }
-
-        deviceListInfo.setMsg("공간별 기기 목록 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( deviceListInfo );
     }
@@ -364,21 +320,10 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("deviceId")  String deviceId )
     {
-        IotDeviceInfo deviceInfo = new IotDeviceInfo();
-
-        HttpGetRequester requester;
-        Map<String, Map> result;
-        
+        IotDeviceListInfo deviceListInfo;
 
         try {
-            requester = new HttpGetRequester(
-                    httpClient,
-                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
-                    IOK_DEVICE_DETAIL_BY_DEVICE_ID_PATH );
-            requester.setParameter("cmplxId", String.valueOf(complexId) );
-            requester.setParameter("homeId", String.valueOf(homeId) );
-            requester.setParameter("deviceId", String.valueOf(deviceId) );
-            result = requester.execute();
+            deviceListInfo = iotInfoService.getDeviceInfo(complexId, homeId, deviceId);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -389,19 +334,7 @@ public class IotController {
             }
         }
 
-        deviceInfo.setData(
-                convertListMapDataToCamelCase((List)result.get("DATA")));
-
-        if( deviceInfo.getData().isEmpty() )
-        {
-            return ResponseEntity
-                    .status( HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
-        }
-
-        deviceInfo.setMsg("공간별 기기 목록 가져오기");
-
-        return ResponseEntity.status(HttpStatus.OK).body( deviceInfo );
+        return ResponseEntity.status(HttpStatus.OK).body( deviceListInfo );
     }
 
     /**
@@ -414,20 +347,10 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
-        IotDeviceGroupListInfo deviceGroupListInfo = new IotDeviceGroupListInfo();
-
-        HttpGetRequester requester;
-        Map<String, Map> result;
-        
+        IotDeviceGroupListInfo deviceGroupListInfo;
 
         try {
-            requester = new HttpGetRequester(
-                    httpClient,
-                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
-                    IOK_DEVICES_GROUP_LIST_PATH );
-            requester.setParameter("cmplxId", String.valueOf(complexId) );
-            requester.setParameter("homeId", String.valueOf(homeId) );
-            result = requester.execute();
+            deviceGroupListInfo = iotInfoService.getDeviceGroupList(complexId, homeId);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -437,18 +360,6 @@ public class IotController {
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
             }
         }
-
-        deviceGroupListInfo.setData(
-                convertListMapDataToCamelCase((List)result.get("DATA")));
-
-        if( deviceGroupListInfo.getData().isEmpty() )
-        {
-            return ResponseEntity
-                    .status( HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
-        }
-
-        deviceGroupListInfo.setMsg("기기 카테고리 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( deviceGroupListInfo );
     }
@@ -464,22 +375,10 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("categoryCode")    String categoryCode)
     {
-        IotDeviceListInfo deviceListInfo = new IotDeviceListInfo();
-
-        HttpGetRequester requester;
-        Map<String, Map> result;
-        
+        IotDeviceListInfo deviceListInfo;
 
         try {
-            requester = new HttpGetRequester(
-                    httpClient,
-                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
-                    IOK_DEVICES_LIST_BY_CATEGORY_PATH );
-            requester.setParameter("cmplxId", String.valueOf(complexId) );
-            requester.setParameter("homeId", String.valueOf(homeId) );
-            requester.setParameter("cateCd", String.valueOf(categoryCode) );
-
-            result = requester.execute();
+            deviceListInfo = iotInfoService.getDeviceListByDeviceGroup(complexId, homeId, categoryCode);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -489,18 +388,6 @@ public class IotController {
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
             }
         }
-
-        deviceListInfo.setData(
-                convertListMapDataToCamelCase((List)result.get("DATA")));
-
-        if( deviceListInfo.getData().isEmpty() )
-        {
-            return ResponseEntity
-                    .status( HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo("정의된 모드가 없습니다."));
-        }
-
-        deviceListInfo.setMsg("카테고리 별 기기 목록 가져오기");
 
         return ResponseEntity.status(HttpStatus.OK).body( deviceListInfo );
     }
@@ -836,18 +723,4 @@ public class IotController {
             throw e;
         }
     }
-
-    private List convertListMapDataToCamelCase(List inputDataList) {
-        List outputDataList = new ArrayList();
-
-        for(Map<String, Object> e : (List<Map<String, Object>>)inputDataList ) {
-            Map element = new HashMap();
-            for (String s : e.keySet()) {
-                element.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s), e.get(s));
-            }
-            outputDataList.add(element);
-        }
-        return outputDataList;
-    }
-
 }
