@@ -29,34 +29,37 @@ const Store = observable({
     iot: [],
 
     /* 현재 열려있는 Drawer */
-    drawer: {'test':{data:'value'}},
-    lastDrawerName: null,
+    drawer: [],
 
     hasDrawer: key => {
-        // console.log('hasDrawer:', key, Store.drawer[key] !== undefined );
-        return Store.drawer[key] !== undefined;
+        let has = Store.drawer.some( drawerInfo => {
+            return drawerInfo.key === key;
+        });
+
+        return has;
+    },
+
+    getDrawerIndex: key => {
+        let idx = -1;
+        Store.drawer.some( ( drawerInfo, index ) => {
+            let match = (drawerInfo.key === key);
+            if( match ) idx = index;
+            return match;
+        });
+
+        return idx;
     },
 
     pushDrawer: (key, data)=> {
-        Store.lastDrawerName = key;
-
-        let obj = Object.assign( {}, Store.drawer );
-            obj[key] = data || null;
-        Store.drawer = obj;
-
-        // console.log( 'Push Drawer:', key, data, Store.drawer );
+        Store.drawer.push( { key:key, data:data } );
     },
 
     popDrawer: () =>{
-        // console.log( 'pop drawer:', Store.lastDrawerName );
-        let obj = Object.assign( {}, Store.drawer );
-        delete obj[Store.lastDrawerName];
-
-        Store.drawer = obj;
+        Store.drawer.pop();
     },
 
     clearDrawer: () =>{
-        Store.drawer = {}
+        Store.drawer.length = 0;
     },
 
 

@@ -17,7 +17,7 @@ class IconLoader extends Component {
 
     render() {
         return (
-            <img src={ this.state.src } alt="아이콘이미지" onError={ this.loadFail }/>
+            <img src={ this.state.src } alt="아이콘이미지" onError={ this.loadFail } className={ this.props.className }/>
         );
     }
 }

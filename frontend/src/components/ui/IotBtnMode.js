@@ -12,21 +12,9 @@ import IconLoader from "./IconLoader";
 
 class IotBtnLg extends Component {
 
-	constructor ( props ) {
-		super( props );
-
-        console.log( props.modeData );
-	}
-
 	viewProgress( modeInfo ){
 		Store.imc = { targetValue:true, ...modeInfo };
 	}
-
-	// IotIcMode = () => {
-	// 	const srcMap = { "CM01101":IotIcModeSleep, "CM01102":IotIcModeHoliday, "CM01103": IotIcModeOut, "CM01104": IotIcModeSave };
-    //
-	// 	return <img src={srcMap[this.props.modeData.type]} alt=""/>;
-	// };
 
 	render () {
 

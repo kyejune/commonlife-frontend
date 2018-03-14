@@ -16,15 +16,10 @@ class DrawerContentHolder extends Component {
         this.state = {
             title: props.title,
         }
-
-        console.log('create drawer:', document.querySelectorAll('.App aside').length );
     }
 
     componentDidMount(){
-        console.log('added drawer:', document.querySelectorAll('.App aside').length );
-
-        ReactDOM.findDOMNode(this).parentNode.style.zIndex = ( document.querySelectorAll('.App aside').length + 100 ).toString();
-
+        ReactDOM.findDOMNode(this).parentNode.style.zIndex = ( Store.getDrawerIndex( this.props.drawer ) + 100 ).toString();
         document.querySelector('body').classList.add('cl-dom--added');
     }
 
@@ -46,7 +41,10 @@ class DrawerContentHolder extends Component {
 
        // HashRouter.goBack();
         Store.popDrawer();
-        this.props.history.goBack();
+
+        if( !this.props.close )
+            this.props.history.goBack();
+
         // console.log( 'Router:', HashRouter.backHistory() );
         // HashRouter.history.back();
 
@@ -96,6 +94,7 @@ class DrawerContentHolder extends Component {
                 close: ()=>this.onClose(),
             })
         );
+
 
         return <div className="cl-drawer-content-holder">
 

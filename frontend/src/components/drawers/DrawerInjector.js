@@ -8,6 +8,7 @@ import Modal from "../overlay/Modal";
 import IotProgressOverlay from "../overlay/IotProgressOverlay";
 import IotModeChange from "../overlay/IotModeChange";
 import {observer} from "mobx-react";
+import DrawerWrapper from "./DrawerWrapper";
 
 
 
@@ -32,25 +33,18 @@ class DrawerInjector extends Component{
         // 프로필 페이지
         if( this.props.location.pathname.match(/\/profile\/\d/) )
             Store.pushDrawer( 'profile' );
-
-
-        // this.setState({
-        //     drawer: Store.drawer,
-        // });
-
     }
 
 
     render(){
 
+        // console.log('---------------------------:', Store.hasDrawer('profile') );
+
         return <div className="drawerInjector">
 
-            <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                    visible={Store.hasDrawer('profile')}>
-                <DrawerContentHolder back title="프로필">
-                    <Profile/>
-                </DrawerContentHolder>
-            </Drawer>
+            <DrawerWrapper drawer="profile" title="프로필">
+                <Profile/>
+            </DrawerWrapper>
 
 
 

@@ -18,6 +18,13 @@ const WriteButton = () => {
     />
 }
 
+
+const IotButton = () => {
+    return <button className="cl-iot-run__button md-background--primary"
+                   onClick={() => Store.pushDrawer('iot-run')}
+    />
+}
+
 class Footer extends Component {
 
 
@@ -32,6 +39,8 @@ class Footer extends Component {
                     <Route path="/" component={WriteButton} exact />
                     <Route path="/community" component={WriteButton} exact />
                     <Route path="/community/feed" component={WriteButton}/>
+
+                    <Route path="/iot" component={IotButton}/>
                 </Switch>
 
 

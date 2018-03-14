@@ -17,6 +17,8 @@ import IotIcAddMode from 'images/combined-shape@3x.png';
 import IotIcAdd from 'images/combined-shape-plus@3x.png';
 import IotProgressOverlay from "../overlay/IotProgressOverlay";
 import {observer} from "mobx-react";
+import DrawerWrapper from "../drawers/DrawerWrapper";
+import IotDeviceDetail from "../drawers/iot/IotDeviceDetail";
 
 class HomeIoT extends Component {
 
@@ -43,25 +45,36 @@ class HomeIoT extends Component {
 			this.updateRoute();
 	}
 
-	updateRoute () {
+	updateRoute ( data ) {
 
-		// console.log('update router:', this.props.match.params );
+        // "/iot/:action?/:drawer?/:id?"
+		const { action, drawer, id } = this.props.match.params;
+
+		console.log('params:', this.props.match );
+
+		for( var p in this.props.match.params ){
+			console.log( p );
+		}
 
 		// id위치에 특정 단어가 들어올때 처리
-		if( this.props.match.params.id === 'control' )
-			Store.pushDrawer( 'iot-control-list' );
+		if( action === 'control' )
+		{
+            Store.pushDrawer('iot-control-list');
 
+        }
 		// IoT 기기제어 목록
-		else if( this.props.match.params.action === 'control' )
-			Store.pushDrawer( 'iot-control-list' );
-
+		else if( action === 'control' )
+		{
+            Store.pushDrawer('iot-control-list');
+        }
 		// IoT Mode 편집
-		else if( this.props.match.params.action === 'edit-mode' )
-			Store.pushDrawer( 'iot-edit-mode' );
-        else
+		else if( action === 'edit-mode' )
+		{
+            Store.pushDrawer('iot-edit-mode');
+        }
+        else{
             Store.clearDrawer();
-
-
+		}
 	}
 
 	render () {
@@ -134,20 +147,21 @@ class HomeIoT extends Component {
 			</div>
 
 			{/* IoT Mode 편집 */}
-			<Drawer {...Store.customDrawerProps} renderNode={document.querySelector( '.App' )}
-					visible={Store.hasDrawer( 'iot-edit-mode' )}>
-				<DrawerContentHolder back title="Mode 편집">
-					<DrawerIotEditList/>
-				</DrawerContentHolder>
-			</Drawer>
+            <DrawerWrapper drawer="iot-edit-mode" title="Mode 편집">
+                <DrawerIotEditList/>
+			</DrawerWrapper>
+
 
 			{/* IoT 기기제어, 기기추가 목록 */}
-			<Drawer {...Store.customDrawerProps} renderNode={document.querySelector( '.App' )}
-					visible={Store.hasDrawer( 'iot-control-list' )}>
-				<DrawerContentHolder back title="IoT 제어">
-					<DrawerIotControlList drawerName="iot-control-list"/>
-				</DrawerContentHolder>
-			</Drawer>
+            <DrawerWrapper drawer="iot-control-list" title="IoT 제어">
+                <DrawerIotControlList/>
+            </DrawerWrapper>
+
+
+			{/* 기기 상세 */}
+            <DrawerWrapper drawer="iot-device-detail" title="상세 제어">
+                <IotDeviceDetail/>
+            </DrawerWrapper>
 
 		</div>
 	}
