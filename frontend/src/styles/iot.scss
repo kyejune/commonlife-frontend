@@ -616,3 +616,61 @@
         opacity: 0.2;
     }
 }
+
+// 슬라이더 스위치
+.cl-iot-switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 14px;
+
+    input {
+        display: none;
+    }
+
+    input:checked + .cl-iot-switch-slider {
+        background-color: #AAC6E6;
+    }
+
+    input:checked + .cl-iot-switch-slider:before {
+        background-color: #1754A3;
+        box-shadow: 0 0.5px 0.5px 0 rgba(0, 0, 0, 0.24), 0 0 0.5px 0 rgba(0, 0, 0, 0.12);;
+    }
+
+    input:focus + .cl-iot-switch-slider {
+        box-shadow: 0 0 1px #AAC6E6;
+    }
+
+    input:checked + .cl-iot-switch-slider:before {
+        -webkit-transform: translateX(20px);
+        -ms-transform: translateX(20px);
+        transform: translateX(20px);
+    }
+}
+
+.cl-iot-switch-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 34px;
+    background-color: #B5B4B4;
+    -webkit-transition: .3s;
+    transition: .3s;
+
+    &:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: -3px;
+        bottom: -2.5px;
+        border-radius: 50%;
+        background-color: #F8F8F8;
+        box-shadow: 0 0.5px 0.5px 0 rgba(0, 0, 0, 0.24), 0 0 0.5px 0 rgba(0, 0, 0, 0.12);
+        -webkit-transition: .3s;
+        transition: .3s;
+    }
+}

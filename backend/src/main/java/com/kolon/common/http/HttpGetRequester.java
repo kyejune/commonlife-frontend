@@ -50,6 +50,7 @@ public class HttpGetRequester {
 
         // Execute
         HttpResponse response = httpClient.execute( httpGet );
+        httpGet.releaseConnection();
         if( response.getStatusLine().getStatusCode() >= 400 ) {
             throw new HttpRequestFailedException(
                     response.getStatusLine().getStatusCode(),
@@ -98,6 +99,7 @@ public class HttpGetRequester {
         HttpResponse response = httpClient.execute( timedOutHttpGet );
         task.stop();
         timer.cancel();
+        timedOutHttpGet.releaseConnection();
 
         if( response.getStatusLine().getStatusCode() >= 400 ) {
             throw new HttpRequestFailedException(

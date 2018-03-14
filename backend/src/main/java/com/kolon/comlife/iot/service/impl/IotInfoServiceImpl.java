@@ -18,10 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("iotInfoService")
 public class IotInfoServiceImpl implements IotInfoService {
@@ -122,6 +119,54 @@ public class IotInfoServiceImpl implements IotInfoService {
         return activeModeList;
     }
 
+    private void replaceMapKey(Map map, String oldKey, String newKey) {
+        String v = (String) map.remove(oldKey);
+        map.put(newKey, v);
+    }
+
+    private void convertResultMyIotButtonList(Map<String, Map> result) {
+        String v;
+        for(Map<String, Object>e : (List<Map<String, Object>>)result.get("DATA")) {
+            replaceMapKey(e, "TITLE", "BT_TITLE");
+            replaceMapKey(e, "SUB_TITLE", "BT_SUB_TITLE");
+            replaceMapKey(e, "IMG_SRC", "BT_IMG_SRC");
+
+            // BT_TYPE(btType) 정의
+            v = (String)e.remove("MY_IOT_GB_CD");
+            switch(v) {
+                case "MB01701":
+                    e.put("BT_TYPE", "device");
+                    break;
+                case "MB01702":
+                    e.put("BT_TYPE", "automation");
+                    break;
+                case "MB01703":
+                    e.put("BT_TYPE", "information");
+                    break;
+                default:
+                    e.put("BT_TYPE", "unknown");
+                    break;
+            }
+            // BT_RIGHT_ICON_TYPE(btRightIconType) 결정
+
+            if((e.get("BINARY_YN") != null) && (e.get("BINARY_YN").equals("Y"))) {
+                if (e.get("STS_CNT").equals("1")) {
+                    e.put("BT_RIGHT_ICON_TYPE", "button");
+                } else {
+                    e.put("BT_RIGHT_ICON_TYPE", "detail");
+                }
+            } else {
+                e.put("BT_RIGHT_ICON_TYPE", "button");
+            }
+
+            // 사용하지 않은 값 삭제
+            e.remove("CMPLX_ID");
+            e.remove("HOME_ID");
+            e.remove("BINARY_YN");
+            e.remove("MY_IOT_GB_CD");
+        }
+    }
+
     /**
      * 3. My IOT의 IOT 버튼 목록 및 정보 가져오기 at Dashboard
      */
@@ -138,6 +183,9 @@ public class IotInfoServiceImpl implements IotInfoService {
         requester.setParameter("homeId", String.valueOf(homeId) );
         requester.setParameter("userId", userId );
         result = requester.execute();
+
+        // 반환값을 COMMONLife에 맞게 변환
+        this.convertResultMyIotButtonList(result);
 
         buttonList.setData(
                 convertListMapDataToCamelCase((List)result.get("DATA")));
@@ -171,6 +219,9 @@ public class IotInfoServiceImpl implements IotInfoService {
         requester.setParameter("seqNo", String.valueOf(buttonId) );
         result = requester.execute();
 
+        // 반환값을 COMMONLife에 맞게 변환
+        this.convertResultMyIotButtonList(result);
+
         buttonList.setData(
                 convertListMapDataToCamelCase((List)result.get("DATA")));
 
@@ -189,7 +240,8 @@ public class IotInfoServiceImpl implements IotInfoService {
         List outputDataList = new ArrayList();
 
         for(Map<String, Object> e : (List<Map<String, Object>>)inputDataList ) {
-            Map element = new HashMap();
+//            Map element = new HashMap();
+            Map element = new TreeMap(); // for DEBUG : 결과 값이 key값 기준으로 ABC.. 정렬되어 표시   
             for (String s : e.keySet()) {
                 element.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s), e.get(s));
             }

@@ -62,6 +62,7 @@ public class HttpPutRequester {
 
         // Execute
         HttpResponse response = httpClient.execute( httpPut );
+        httpPut.releaseConnection();
         if( response.getStatusLine().getStatusCode() >= 400 ) {
             throw new HttpRequestFailedException(
                     response.getStatusLine().getStatusCode(),
@@ -100,6 +101,7 @@ public class HttpPutRequester {
 
         // Execute
         HttpResponse response = httpClient.execute( timedOutHttpPut );
+        timedOutHttpPut.releaseConnection();
         if( response.getStatusLine().getStatusCode() >= 400 ) {
             throw new HttpRequestFailedException(
                     response.getStatusLine().getStatusCode(),
