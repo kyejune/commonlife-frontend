@@ -274,7 +274,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         // 1. result data 리맵핑
         try {
-            this.remapResultDataList( (List)result.get("DATA") );
+            this.remapResultDeviceDetailList( (List)result.get("DATA") );
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -313,7 +313,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         // 1. result data 리맵핑
         try {
-            this.remapResultDataList( (List)result.get("DATA") );
+            this.remapResultDeviceDetailList( (List)result.get("DATA") );
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -394,7 +394,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         // 1. result data 리맵핑
         try {
-            this.remapResultDataList( (List)result.get("DATA") );
+            this.remapResultDeviceDetailList( (List)result.get("DATA") );
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -521,6 +521,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     /**
      * 결과 값을 CommonLife 용도로 변환합니다. 사용하지 않는 값은 제거하고, 의미에 따라 값을 생성하거나 맵핑을 수행합니다.
      */
+    /////// 공통 메소드 - 결과값 remap ////////////////////////////////////////////////////////////////
     private void remapResultDataList(List<Map<String, Object>> resultData) {
         String v;
 
@@ -581,10 +582,24 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
     }
 
+    private void remapResultDeviceDetailList(List<Map<String, Object>> resultData) {
+        for (Map<String, Object> e : resultData) {
+            // MO_THINGS_NM --> DEVICE_NM로 변환
+            this.replaceMapKeyIfExisted(e, "MO_THINGS_NM", "DEVICE_NM" );
+            // MO_THINGS_ID --> DEVICE_ID로 변환
+            this.replaceMapKeyIfExisted(e, "MO_THINGS_ID", "DEVICE_ID" );
+            // MOD_ID --> DEVICE_ID로 변환
+            this.replaceMapKeyIfExisted(e, "MOD_ID", "DEVICE_ID" );
 
-    /**
-     * 결과 값을 CommonLife 용도로 변환합니다. 사용하지 않는 값은 제거하고, 의미에 따라 값을 생성하거나 맵핑을 수행합니다.
-     */
+            this.removeMapKeyIfExisted(e, "CMPLX_ID");
+            this.removeMapKeyIfExisted(e, "HOME_ID");
+            this.removeMapKeyIfExisted(e, "CLNT_ID");
+            this.removeMapKeyIfExisted(e, "MO_CLNT_ID");
+            this.removeMapKeyIfExisted(e, "KIND_CD");
+            this.removeMapKeyIfExisted(e, "THINGS_ID");
+        }
+    }
+
     private void remapResultDeviceCategoryList(List<Map<String, Object>> resultData) {
         for (Map<String, Object> e : resultData) {
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
@@ -592,9 +607,6 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
     }
 
-    /**
-     * 결과 값을 CommonLife 용도로 변환합니다. 사용하지 않는 값은 제거하고, 의미에 따라 값을 생성하거나 맵핑을 수행합니다.
-     */
     private void remapResultScenarioDetail(List<Map<String, Object>> resultData) {
         String v;
 
@@ -619,9 +631,6 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
     }
 
-    /**
-     * 결과 값을 CommonLife 용도로 변환합니다. 사용하지 않는 값은 제거하고, 의미에 따라 값을 생성하거나 맵핑을 수행합니다.
-     */
     private void remapResultDeviceUsageHistory(List<Map<String, Object>> resultData) {
         String v;
 
