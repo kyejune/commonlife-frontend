@@ -13,4 +13,6 @@ public interface IotInfoService {
     IotDeviceListInfo getDeviceInfo(int complexId, int homeId, String deviceId) throws Exception;
     IotDeviceGroupListInfo getDeviceGroupList(int complexId, int homeId ) throws Exception;
     IotDeviceListInfo getDeviceListByDeviceGroup(int complexId, int homeId, String categoryCode) throws Exception;
+    IotDeviceListInfo getDevicesUsageHistory(int complexId, int homeId, int pageNo, int pageRow) throws Exception;
+    IotModeInfo getModeDetail(int complexId, int homeId, int modeId) throws Exception;
 }

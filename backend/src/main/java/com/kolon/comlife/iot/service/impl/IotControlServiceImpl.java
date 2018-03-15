@@ -41,6 +41,8 @@ public class IotControlServiceImpl implements IotControlService {
     private static final String IOK_CONTROL_HOST_PROP_KEY = "IOT_CONTROL_HOST";
 
     private static final String IOK_CONTROL_MODE_SWITCH_FMT_PATH = "/iok/mode/%s/cmplx/%d/home/%d";
+    private static final String IOK_CONTROL_SCENARIO_EXECUTE_FMT_PATH = "/iok/scenario/%d/cmplx/%d/home/%d";
+
 
     @Resource(name = "servicePropertiesMap")
     private ServicePropertiesMap serviceProperties;
@@ -54,63 +56,82 @@ public class IotControlServiceImpl implements IotControlService {
     public IotControlServiceImpl() {
     }
 
-    public IotModeListInfo getModesList(int complexId, int homeId) {
-        return null;
-    }
 
-    public IotModeInfo getActiveMode(int complexId, int homeId) {
-        return null;
-    }
+    // 5. 개별 IOT 버튼의 대표 기능 실행
+    public IotButtonListInfo executeMyIotButtonPrimeFunction(int complexId, int homeId, String userId, int buttonId) throws Exception {
+        HttpPutRequester    requester;
+        Map<String, Map>    result;
+        IotButtonListInfo   buttonInfo;
+        Map<String, Object> datum;
+        Integer             scnaId;
 
-    public IotButtonListInfo getMyIotButtonList(int complexId, int homeId) {
-        return null;
-    }
+        buttonInfo = iotInfoService.getMyIotButtonListById(complexId, homeId, userId, buttonId);
 
-    public IotButtonInfo getMyIotButton(int complexId, int homeId) {
-        return null;
-    }
+        // button의 종류를 확인하여, 1) 기기-주요기능 , 2) 시나리오 인지 구분
+        datum = buttonInfo.getData().get(0); // 1개의 값만 갖고 있음
+        String btType = (String) datum.get("btType");
+        String iconType = (String) datum.get("btRightIconType");
 
-    public IotButtonInfo executeMyIotButtonPrimeFunction(int complexId, int homeId, int buttonId) {
-        return null;
-    }
+        switch(btType) {
+            case "device":
+                // todo: 작업중
+                if( iconType != null && iconType.equals("button") ) {
+                    // do!
+                    // 주기능 실행 ... 그리고, 해당 기능이 바뀌었는지 확인
+                    // todo: 장비 기능 실행하는 명령이 추가되면 ... 여기에 적용해야겠다.
+                    throw new IotControlOperationFailedException("(DEV) 현재 지원하지 않는 기능입니다.");
+                } else {
+                    throw new IotControlOperationFailedException("지원하지 않는 기능입니다.");
+                }
+            case "automation":
+                // do!
+                scnaId = (Integer)datum.get("scnaId");
+                if( scnaId == null ) {
+                    throw new IotControlOperationFailedException("오토메이션을 실행 할 수 없습니다.");
+                }
 
-    public Map getValueInfoOfWeather(int complexId) {
-        return null;
+                try {
+                    String execUrl = String.format(
+                            IOK_CONTROL_SCENARIO_EXECUTE_FMT_PATH,
+                            scnaId.intValue(),
+                            complexId,
+                            homeId );
+                    logger.debug(" URL PATH: switchToMode(): " + execUrl);
+                    requester = new HttpPutRequester(
+                            httpClient,
+                            serviceProperties.getByKey(IOK_CONTROL_HOST_PROP_GROUP, IOK_CONTROL_HOST_PROP_KEY),
+                            execUrl);
+                    result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
+                    logger.debug(" >>>> RESULT >>> " + result.toString());
+                    // todo: exception handling
+                } catch( SocketException se ) {
+                    // socket is closed
+                    if( "Socket closed".equals(se.getMessage())) {
+                        throw new IotControlTimeoutException("'오토메이션 실행 시간이 초과하였습니다.");
+                    } else {
+                        throw se;
+                    }
+                } catch( Exception e) {
+                    throw e;
+                }
+
+                break;
+            case "information":
+                throw new IotControlOperationFailedException("지원하지 않는 기능입니다.");
+            default:
+                throw new IotControlOperationFailedException("입력값이 잘못 되었습니다.");
+        }
+
+        buttonInfo.setMsg("MyIOT의 개별 IOT 버튼의 대표 기능 실행 - 성공");
+
+        return buttonInfo;
     }
     
     public Map executeDevicePrimeFunction(int complexId, int homeId, int deviceId) {
         return null;
     }
 
-    public IotRoomListInfo getRoomList(int complexId, int homeId) {
-        return null;
-    }
-    
-    public IotDeviceListInfo getRoomsWithDevicesList(int complexId, int homeId) {
-        return null;
-    }
-
-    
-    public IotDeviceInfo getDeviceInfo(int complexId, int homeId, int deviceId) {
-        return null;
-    }
-
-    
-    public IotDeviceGroupListInfo getDeviceGroupList(int complexId, int homeId) {
-        return null;
-    }
-
-    
-    public IotDeviceListInfo getDeviceListByDeviceGroup(int complexId, int homeId) {
-        return null;
-    }
-
-    
-    public IotModeInfo getModeInfo(int complexId, int homeId, int modeId) {
-        return null;
-    }
-
-    
+    // 17. 18. '모드' 변경 수행
     public IotModeListInfo switchToMode(int complexId, int homeId, String modeId) throws Exception {
         HttpPutRequester requester;
         Map<String, Map> result;
@@ -128,10 +149,11 @@ public class IotControlServiceImpl implements IotControlService {
                     execUrl);
             result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
             logger.debug(" >>>> RESULT >>> " + result.toString());
+            // todo: exception handling
         } catch( SocketException se ) {
             // socket is closed
             if( "Socket closed".equals(se.getMessage())) {
-                throw new IotControlTimeoutException("'모드 변경' 요청 시간 초과");
+                throw new IotControlTimeoutException("'모드 변경'시간이 초과하였습니다.");
             } else {
                 throw se;
             }
@@ -169,12 +191,9 @@ public class IotControlServiceImpl implements IotControlService {
 
         return activeModeList;
     }
-    
-    public IotModeListInfo getModesOrder(int complexId, int homeId) {
-        return null;
-    }
 
-    
+
+
     public IotModeListInfo updateModesOrder(int complexId, int homeId) {
         return null;
     }
@@ -183,17 +202,6 @@ public class IotControlServiceImpl implements IotControlService {
     public IotModeInfo updateModeInfo(int complexId, int homeId, int modeId) {
         return null;
     }
-
-    
-    public Map getButtons(int complexId, int homeId) {
-        return null;
-    }
-
-    
-    public IotAutomationInfo getAutomation(int complexId, int homeId, int automationId) {
-        return null;
-    }
-
     
     public IotAutomationInfo createAutomation(int complexId, int homeId) {
         return null;
@@ -204,31 +212,7 @@ public class IotControlServiceImpl implements IotControlService {
         return null;
     }
 
-    
-    public IotSensorListInfo getSensorsListOnAutomation(int complexId, int homeId, int automationId) {
-        return null;
-    }
-
-    
-    public IotSensorListInfo updateSensorOnAutomation(int complexId, int homeId, int automationId, int sensorId) {
-        return null;
-    }
-
-    
-    public IotDeviceListInfo getDevicesListOnAutomation(int complexId, int homeId, int automationId) {
-        return null;
-    }
-
-    
-    public IotDeviceInfo getDevicesListOnAutomation(int complexId, int homeId, int automationId, int deviceId) {
-        return null;
-    }
-
-    
-    public EnergyInfo getEnergyUsage(int complexId, int homeId, String energyType) {
-        return null;
-    }
-
+    public IotSensorListInfo updateSensorOnAutomation(int complexId, int homeId, int automationId, int sensorId) { return null; };
     
     public EnergyInfo createEnergyUsageExceedAlarm(int complexId, int homeId, String energyType) {
         return null;
@@ -243,36 +227,4 @@ public class IotControlServiceImpl implements IotControlService {
     public EnergyInfo setEnergyUsageExceedAlarm(int complexId, int homeId, String energyType) {
         return null;
     }
-
-
-//    private IotBaseInfo commonExceptionHandler(Exception e) throws Exception {
-//        if( e instanceof URISyntaxException) {
-//            logger.error( "Invalid URI: " + e.getMessage() );
-//            return ResponseEntity
-//                    .status( HttpStatus.BAD_REQUEST )
-//                    .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
-//        } else if( e instanceof IOException) {
-//            logger.error( "Failed to request: " + e.getMessage() );
-//            return ResponseEntity
-//                    .status( HttpStatus.SERVICE_UNAVAILABLE )
-//                    .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
-//        } else if( e instanceof HttpRequestFailedException) {
-//            HttpRequestFailedException httpException = (HttpRequestFailedException)e;
-//            logger.error( "Failed response[StatusCode:" + httpException.getStatusCode() + "]:" + e.getMessage() );
-//            if (httpException.getStatusCode() >= 500 ) {
-//                return ResponseEntity
-//                        .status(HttpStatus.SERVICE_UNAVAILABLE)
-//                        .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
-//            }
-//            else {
-//                return ResponseEntity
-//                        .status(HttpStatus.BAD_REQUEST)
-//                        .body(new SimpleErrorInfo("경로 또는 입력값이 잘못 되었습니다."));
-//            }
-//        } else {
-//            // 공통적으로 처리되지 않는 Exception은 별도 처리
-//            throw e;
-//        }
-//    }
-
 }
