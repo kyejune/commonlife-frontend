@@ -3,7 +3,7 @@ package com.kolon.comlife.iot.model;
 import java.util.List;
 import java.util.Map;
 
-public class IotModeInfo extends IotBaseInfo {
+public class IotModeAutomationInfo extends IotBaseInfo {
     private List<Map<String, Object>> scnaIfThings; // 기기의 상태 속성
     private List<Map<String, Object>> scnaIfSpc;    // ??
     private List<Map<String, Object>> scnaIfAply;  // 시간
@@ -12,7 +12,7 @@ public class IotModeInfo extends IotBaseInfo {
     private List<Map<String, Object>> scna; // 조건에서 사용하는 옵션 종류 e.g. < > =  ...
 
 
-    public IotModeInfo() {
+    public IotModeAutomationInfo() {
         super();
     }
 

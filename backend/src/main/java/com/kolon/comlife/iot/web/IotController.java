@@ -1,6 +1,5 @@
 package com.kolon.comlife.iot.web;
 
-import com.google.common.base.CaseFormat;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.iot.exception.IotControlOperationFailedException;
 import com.kolon.comlife.iot.exception.IotControlTimeoutException;
@@ -8,11 +7,8 @@ import com.kolon.comlife.iot.exception.IotInfoNoDataException;
 import com.kolon.comlife.iot.model.*;
 import com.kolon.comlife.iot.service.IotControlService;
 import com.kolon.comlife.iot.service.IotInfoService;
-import com.kolon.common.http.HttpGetRequester;
 import com.kolon.common.http.HttpRequestFailedException;
-import com.kolon.common.prop.ServicePropertiesMap;
 import com.kolon.common.util.StringUtil;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -447,10 +440,10 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("modeId")    int modeId )
     {
-        IotModeInfo modeInfo;
+        IotModeAutomationInfo modeInfo;
 
         try {
-            modeInfo = iotInfoService.getModeDetail(complexId, homeId, modeId);
+            modeInfo = iotInfoService.getModeOrAutomationDetail(complexId, homeId, modeId, true);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -542,12 +535,12 @@ public class IotController {
     @PutMapping(
             path = "/complexes/{complexId}/homes/{homeId}/modes/{modeId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotModeInfo> updateModeInfo(
+    public ResponseEntity<IotModeAutomationInfo> updateModeInfo(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("modeId")    int modeId )
     {
-        IotModeInfo modeInfo = new IotModeInfo();
+        IotModeAutomationInfo modeInfo = new IotModeAutomationInfo();
 
         return ResponseEntity.status(HttpStatus.OK).body( modeInfo );
     }
@@ -573,16 +566,27 @@ public class IotController {
     @GetMapping(
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotAutomationInfo> getAutomation(
+    public ResponseEntity getAutomation(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
     {
-        IotAutomationInfo automationInfo = new IotAutomationInfo();
+        IotModeAutomationInfo automationInfo;
+
+        try {
+            automationInfo = iotInfoService.getModeOrAutomationDetail(complexId, homeId, automationId, false);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( automationInfo );
     }
-
 
     /**
      * 29. MyIOT에서 '시나리오/오토메이션' 생성하기 at MyIOT 추가

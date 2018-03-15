@@ -14,7 +14,7 @@ public interface IotControlService {
     IotModeListInfo switchToMode(int complexId, int homeId, String modeId) throws Exception;
 
     IotModeListInfo updateModesOrder(int complexId, int homeId);
-    IotModeInfo updateModeInfo(int complexId, int homeId, int modeId);
+    IotModeAutomationInfo updateModeInfo(int complexId, int homeId, int modeId);
 
     IotAutomationInfo createAutomation(int complexId, int homeId);
     IotAutomationInfo updateAutomation(int complexId, int homeId, int automationId);

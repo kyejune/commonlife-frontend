@@ -1,7 +1,6 @@
 package com.kolon.comlife.iot.service;
 
 import com.kolon.comlife.iot.model.*;
-import org.springframework.http.ResponseEntity;
 
 public interface IotInfoService {
     IotModeListInfo getModeList(int complexId, int homeId) throws Exception;
@@ -14,5 +13,5 @@ public interface IotInfoService {
     IotDeviceGroupListInfo getDeviceGroupList(int complexId, int homeId ) throws Exception;
     IotDeviceListInfo getDeviceListByDeviceGroup(int complexId, int homeId, String categoryCode) throws Exception;
     IotDeviceListInfo getDevicesUsageHistory(int complexId, int homeId, int pageNo, int pageRow) throws Exception;
-    IotModeInfo getModeDetail(int complexId, int homeId, int modeId) throws Exception;
+    IotModeAutomationInfo getModeOrAutomationDetail(int complexId, int homeId, int modeId, boolean modeFlag) throws Exception;
 }

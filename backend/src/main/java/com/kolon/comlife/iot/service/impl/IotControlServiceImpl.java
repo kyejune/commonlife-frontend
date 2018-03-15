@@ -6,24 +6,16 @@ import com.kolon.comlife.iot.exception.IotInfoNoDataException;
 import com.kolon.comlife.iot.model.*;
 import com.kolon.comlife.iot.service.IotControlService;
 import com.kolon.comlife.iot.service.IotInfoService;
-import com.kolon.comlife.iot.web.IotController;
-import com.kolon.common.http.HttpGetRequester;
 import com.kolon.common.http.HttpPutRequester;
-import com.kolon.common.http.HttpRequestFailedException;
 import com.kolon.common.prop.ServicePropertiesMap;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.IOException;
 import java.net.SocketException;
-import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
 
 @Service("iotControlService")
@@ -199,7 +191,7 @@ public class IotControlServiceImpl implements IotControlService {
     }
 
     
-    public IotModeInfo updateModeInfo(int complexId, int homeId, int modeId) {
+    public IotModeAutomationInfo updateModeInfo(int complexId, int homeId, int modeId) {
         return null;
     }
     

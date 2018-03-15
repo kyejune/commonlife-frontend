@@ -34,8 +34,6 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String IOK_DEVICES_USAGE_HISTORY_PATH = "/iokinterface/device/deviceHistList";
     private static final String IOK_MODE_DETAIL_PATH = "/iokinterface/scenario/scnaDetail";
 
-
-
     @Resource(name = "servicePropertiesMap")
     private ServicePropertiesMap serviceProperties;
 
@@ -456,8 +454,10 @@ public class IotInfoServiceImpl implements IotInfoService {
 
     // 16. 개별 '모드'의 상세 정보
     // modeId == scnaId
-    public IotModeInfo getModeDetail(int complexId, int homeId, int modeId) throws Exception {
-        IotModeInfo      modeInfo = new IotModeInfo();
+    // (modeFlag == true) ==>  Mode
+    // (modeFlag == false ) ==> Automation
+    public IotModeAutomationInfo getModeOrAutomationDetail(int complexId, int homeId, int modeId, boolean modeFlag) throws Exception {
+        IotModeAutomationInfo modeAutoInfo = new IotModeAutomationInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
 
@@ -484,16 +484,20 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
 
         // 2. camelCase로 변환
-        modeInfo.setScnaIfThings( convertListMapDataToCamelCase((List)result.get("SCNA_IF_THINGS")) );
-        modeInfo.setScnaIfSpc( convertListMapDataToCamelCase((List)result.get("SCNA_IF_SPC")) );
-        modeInfo.setScnaIfAply( convertListMapDataToCamelCase((List)result.get("SCNA_IF_APLY")) );
-        modeInfo.setScnaIfOption( convertListMapDataToCamelCase((List)result.get("SCNA_IF_OPTION")) );
-        modeInfo.setScnaThings( convertListMapDataToCamelCase((List)result.get("SCNA_THINGS")) );
-        modeInfo.setScna( convertListMapDataToCamelCase((List)result.get("SCNA")) );
+        modeAutoInfo.setScnaIfThings( convertListMapDataToCamelCase((List)result.get("SCNA_IF_THINGS")) );
+        modeAutoInfo.setScnaIfSpc( convertListMapDataToCamelCase((List)result.get("SCNA_IF_SPC")) );
+        modeAutoInfo.setScnaIfAply( convertListMapDataToCamelCase((List)result.get("SCNA_IF_APLY")) );
+        modeAutoInfo.setScnaIfOption( convertListMapDataToCamelCase((List)result.get("SCNA_IF_OPTION")) );
+        modeAutoInfo.setScnaThings( convertListMapDataToCamelCase((List)result.get("SCNA_THINGS")) );
+        modeAutoInfo.setScna( convertListMapDataToCamelCase((List)result.get("SCNA")) );
 
-        modeInfo.setMsg("개별 '모드'의 상세 정보");
+        if( modeFlag ) {
+            modeAutoInfo.setMsg("개별 '모드'의 상세 정보");
+        } else {
+            modeAutoInfo.setMsg("'오토메이션'의 상세 정보");
+        }
 
-        return modeInfo;
+        return modeAutoInfo;
     }
 
     /////// 공통 메소드 //////////////////////////////////////////////////////////////////////////////
@@ -516,7 +520,6 @@ public class IotInfoServiceImpl implements IotInfoService {
             map.remove(oldKey);
         }
     }
-
 
     /**
      * 결과 값을 CommonLife 용도로 변환합니다. 사용하지 않는 값은 제거하고, 의미에 따라 값을 생성하거나 맵핑을 수행합니다.
