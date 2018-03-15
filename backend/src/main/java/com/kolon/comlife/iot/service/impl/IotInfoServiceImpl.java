@@ -353,7 +353,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         // 1. result data 리맵핑
         try {
-            this.remapResultDataList( (List)result.get("DATA") );
+            this.remapResultDeviceCategoryList( (List)result.get("DATA") );
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -497,6 +497,13 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     /////// 공통 메소드 //////////////////////////////////////////////////////////////////////////////
+    private void removeMapKeyIfExisted(Map map, String key) {
+        Object v = map.get(key);
+        if( v != null ) {
+            map.remove(key);
+        }
+    }
+
     private void replaceMapKey(Map map, String oldKey, String newKey) {
         Object v = map.remove(oldKey);
         map.put(newKey, v);
@@ -542,14 +549,16 @@ public class IotInfoServiceImpl implements IotInfoService {
             }
 
             // BT_RIGHT_ICON_TYPE(btRightIconType) 결정
-            if( (e.get("BINARY_YN") != null) && (e.get("BINARY_YN").equals("Y")) ) {
-                if( e.get("STS_CNT").equals(new Integer(1)) ) {
-                    e.put("BT_RIGHT_ICON_TYPE", "button");
+            if( e.get("BT_TYPE") != null && e.get("BT_TYPE").equals("device") ) {
+                if( (e.get("BINARY_YN") != null) && (e.get("BINARY_YN").equals("Y")) ) {
+                    if( e.get("STS_CNT").equals(new Integer(1)) ) {
+                        e.put("BT_RIGHT_ICON_TYPE", "button");
+                    } else {
+                        e.put("BT_RIGHT_ICON_TYPE", "detail");
+                    }
                 } else {
                     e.put("BT_RIGHT_ICON_TYPE", "detail");
                 }
-            } else {
-                e.put("BT_RIGHT_ICON_TYPE", "button");
             }
 
             // MO_THINGS_NM --> DEVICE_NM로 변환
@@ -560,16 +569,26 @@ public class IotInfoServiceImpl implements IotInfoService {
             this.replaceMapKeyIfExisted(e, "MOD_ID", "DEVICE_ID" );
 
             // 사용하지 않은 값 삭제
-            e.remove("CMPLX_ID");
-            e.remove("HOME_ID");
-            e.remove("BINARY_YN");
-            e.remove("MY_IOT_GB_CD");
-            e.remove("CLNT_ID");
-            e.remove("KIND_CD");
-            e.remove("MO_CLNT_ID");
-            e.remove("THINGS_ID");
-            e.remove("THINGS_NM");
-            e.remove("USER_ID");
+            this.removeMapKeyIfExisted(e, "CMPLX_ID");
+            this.removeMapKeyIfExisted(e, "HOME_ID");
+            this.removeMapKeyIfExisted(e, "BINARY_YN");
+            this.removeMapKeyIfExisted(e, "MY_IOT_GB_CD");
+            this.removeMapKeyIfExisted(e, "KIND_CD");
+            this.removeMapKeyIfExisted(e, "MO_CLNT_ID");
+            this.removeMapKeyIfExisted(e, "THINGS_ID");
+            this.removeMapKeyIfExisted(e, "THINGS_NM");
+            this.removeMapKeyIfExisted(e, "USER_ID");
+        }
+    }
+
+
+    /**
+     * 결과 값을 CommonLife 용도로 변환합니다. 사용하지 않는 값은 제거하고, 의미에 따라 값을 생성하거나 맵핑을 수행합니다.
+     */
+    private void remapResultDeviceCategoryList(List<Map<String, Object>> resultData) {
+        for (Map<String, Object> e : resultData) {
+            this.removeMapKeyIfExisted(e, "CMPLX_ID");
+            this.removeMapKeyIfExisted(e, "HOME_ID");
         }
     }
 
@@ -588,15 +607,15 @@ public class IotInfoServiceImpl implements IotInfoService {
             this.replaceMapKeyIfExisted(e, "MOD_ID", "DEVICE_ID" );
 
             // 사용하지 않은 값 삭제
-            e.remove("CMPLX_ID");
-            e.remove("HOME_ID");
-            e.remove("MY_IOT_GB_CD");
-            e.remove("CLNT_ID");
-            e.remove("KIND_CD");
-            e.remove("MO_CLNT_ID");
-            e.remove("THINGS_ID");
-            e.remove("THINGS_NM");
-            e.remove("USER_ID");
+            this.removeMapKeyIfExisted(e, "CMPLX_ID");
+            this.removeMapKeyIfExisted(e, "HOME_ID");
+            this.removeMapKeyIfExisted(e, "MY_IOT_GB_CD");
+            this.removeMapKeyIfExisted(e, "KIND_CD");
+            this.removeMapKeyIfExisted(e, "MO_CLNT_ID");
+            this.removeMapKeyIfExisted(e, "THINGS_ID");
+            this.removeMapKeyIfExisted(e, "THINGS_NM");
+            this.removeMapKeyIfExisted(e, "USER_ID");
+            this.removeMapKeyIfExisted(e, "CLNT_ID");
         }
     }
 
@@ -608,11 +627,11 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         for(Map<String, Object>e : resultData) {
             // 사용하지 않은 값 삭제
-            e.remove("CMPLX_ID");
-            e.remove("HOME_ID");
-            e.remove("THINGS_NM");
-            e.remove("CURR_STS");
-            e.remove("STS_NM");
+            this.removeMapKeyIfExisted(e, "CMPLX_ID");
+            this.removeMapKeyIfExisted(e, "HOME_ID");
+            this.removeMapKeyIfExisted(e, "THINGS_NM");
+            this.removeMapKeyIfExisted(e, "CURR_STS");
+            this.removeMapKeyIfExisted(e, "STS_NM");
         }
     }
 

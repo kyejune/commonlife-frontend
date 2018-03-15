@@ -377,7 +377,7 @@ public class IotController {
      * 14. 카테고리 별 기기 목록 가져오기 at Quick IOT 제어 > 기기별 보기
      */
     @GetMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/deviceCategory/{categoryCode}",
+            value = "/complexes/{complexId}/homes/{homeId}/deviceCategory/{categoryCode}/devices",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceListByDeviceGroup(
             @PathVariable("complexId") int complexId,
