@@ -308,7 +308,7 @@ public class IotInfoServiceImpl implements IotInfoService {
                 IOK_DEVICE_DETAIL_BY_DEVICE_ID_PATH );
         requester.setParameter("cmplxId", String.valueOf(complexId) );
         requester.setParameter("homeId", String.valueOf(homeId) );
-        requester.setParameter("deviceId", String.valueOf(deviceId) );
+        requester.setParameter("moThingsId", String.valueOf(deviceId) ); // !! deviceId ==> moThingsId
         result = requester.execute();
 
         // 1. result data 리맵핑
