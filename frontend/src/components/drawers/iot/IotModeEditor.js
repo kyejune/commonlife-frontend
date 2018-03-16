@@ -3,6 +3,8 @@ import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
 import {Link} from "react-router-dom";
 
+
+/* 모드 목록 (편집용) */
 class IotModeEditor extends Component {
 
     constructor(props) {

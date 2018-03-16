@@ -7,16 +7,19 @@ class IotModeSetting extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {}
-
-
+        this.props.updateTitle( props.match.params.action==='mode'?'Mode 설정 변경':'시나리오 생성' );
     }
 
     render() {
 
+        const { action, option1 } = this.props.match.params;
+
         return (
             <div>
-                무슨무슨 모드.... 어쩌고 <br/>
+
+                <h4>
+                    { option1 }번 모드
+                </h4>
 
 
                 <div>
