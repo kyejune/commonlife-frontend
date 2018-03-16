@@ -51,6 +51,7 @@ const Store = observable({
     },
 
     pushDrawer: (key, data)=> {
+        console.log( 'pushDrawer:', key, data );
         Store.drawer.push( { key:key, data:data } );
     },
 

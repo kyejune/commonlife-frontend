@@ -8,6 +8,7 @@ import Src0 from 'images/ic-menu-0.png';
 import Src1 from 'images/ic-menu-1.png';
 import Src2 from 'images/ic-menu-2.png';
 import Src3 from 'images/ic-menu-3.png';
+import Link from "react-router-dom/es/Link";
 
 
 const WriteButton = () => {
@@ -20,8 +21,7 @@ const WriteButton = () => {
 
 
 const IotButton = () => {
-    return <button className="cl-iot-run__button md-background--primary"
-                   onClick={() => Store.pushDrawer('iot-run')}
+    return <Link className="cl-iot-run__button md-background--primary" to="/iot/ctrl"
     />
 }
 

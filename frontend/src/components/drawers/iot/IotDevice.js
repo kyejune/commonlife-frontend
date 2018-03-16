@@ -6,7 +6,7 @@ import IconLoader from 'components/ui/IconLoader';
 * 상세제어,
 * 진입경로: MyIot, MyIot추가,
 * */
-class IotDeviceDetail extends Component {
+class IotDevice extends Component {
     render() {
         return <div>
             <div className="cl-flex">
@@ -39,4 +39,4 @@ class IotDeviceDetail extends Component {
 }
 
 
-export default IotDeviceDetail;
+export default IotDevice;

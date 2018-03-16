@@ -2,11 +2,10 @@
 import React, { Component } from 'react';
 import Store from 'scripts/store';
 import Iot from 'scripts/iot';
-import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 import { Drawer } from 'react-md';
 import { Link } from 'react-router-dom';
 import DrawerIotControlList from "components/drawers/DrawerIotControlList";
-import DrawerIotEditList from "components/drawers/DrawerIotEditList";
+import IotModeEditor from "components/drawers/iot/IotModeEditor";
 import WithTitle from 'components/ui/WithTitle';
 import IotBtnMode from 'components/ui/IotBtnMode';
 import IotBtnLg from 'components/ui/IotBtnLg';
@@ -15,10 +14,14 @@ import Modal from 'components/overlay/Modal';
 import IotIcAddMode from 'images/combined-shape@3x.png';
 
 import IotIcAdd from 'images/combined-shape-plus@3x.png';
-import IotProgressOverlay from "../overlay/IotProgressOverlay";
 import {observer} from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
-import IotDeviceDetail from "../drawers/iot/IotDeviceDetail";
+import IotDevice from "../drawers/iot/IotDevice";
+import IotModeSetting from "../drawers/iot/IotModeSetting";
+import IotSensor from "../drawers/iot/IotSensor";
+import ChooseAddingIot from "../drawers/iot/ChooseAddingIot";
+import IotDeviceCategory from "../drawers/iot/IotDeviceCategory";
+import IotDeviceList from "../drawers/iot/IotDeviceList";
 
 class HomeIoT extends Component {
 
@@ -47,33 +50,51 @@ class HomeIoT extends Component {
 
 	updateRoute ( data ) {
 
-        // "/iot/:action?/:drawer?/:id?"
-		const { action, drawer, id } = this.props.match.params;
+		const params = this.props.match.params;
+		const compMap = {
 
-		console.log('params:', this.props.match );
+			// Mode 추가 버튼 클릭
+			mode:{
+                mode:'iot-mode',
+                sensor:'iot-sensor',
+                device:'iot-device'
+			},
 
-		for( var p in this.props.match.params ){
-			console.log( p );
-		}
+			// MyIot중 상세 제어 페이지가 있는 녀석 클릭
+			run:{
+				run:'iot-device-detail',
+			},
 
-		// id위치에 특정 단어가 들어올때 처리
-		if( action === 'control' )
-		{
-            Store.pushDrawer('iot-control-list');
+			// MyIot추가 버튼 클릭
+			add:{
+				add:'iot-add',
+				scenario:'iot-mode-detail',
+                sensor:'iot-sensor',
+                device:'iot-device',
+				category:'iot-device-category',
+			},
 
-        }
-		// IoT 기기제어 목록
-		else if( action === 'control' )
-		{
-            Store.pushDrawer('iot-control-list');
-        }
-		// IoT Mode 편집
-		else if( action === 'edit-mode' )
-		{
-            Store.pushDrawer('iot-edit-mode');
-        }
-        else{
-            Store.clearDrawer();
+			// Footer에 붙어있는 파란 ctrl버튼 클릭
+			ctrl:{
+				ctrl:'iot-device-category',
+				device:'iot-device'
+			}
+		};
+
+
+		const action = this.props.match.params.action;
+		const map = compMap[action];
+
+		Store.clearDrawer();
+		if( action === undefined ) return;
+
+
+		let prevSeg = params[p];
+		for( var p in params ){
+			let d = map[params[p]];
+			if( !isNaN(params[p]) ) d = map[prevSeg] + '-detail';
+			if( d ) Store.pushDrawer( d );
+            prevSeg = params[p];
 		}
 	}
 
@@ -94,7 +115,7 @@ class HomeIoT extends Component {
 								)
 							} ) }
 							<li className="cl-iot-mode__list-item">
-								<Link to={'/iot/edit-mode'} className="cl-iot-mode__button cl-iot-mode__add-mode-button">
+								<Link to={'/iot/mode'} className="cl-iot-mode__button cl-iot-mode__add-mode-button">
 									<img src={IotIcAddMode} alt=""/>
 								</Link>
 							</li>
@@ -126,14 +147,16 @@ class HomeIoT extends Component {
 										  IotBtnText="Active"/>
 							</li>
 							<li className="col cl-my-iot__list-item">
+								<Link to="/iot/run/11">
 								<IotBtnLg IotBtnType="typeSet"
 								          IotBtnTitle="안방보일러"
 										  IotBtnParagraph="설정온도 30℃"
 										  IotBtnLabel="높음"
 										  IotBtnText="34"/>
+								</Link>
 							</li>
 							<li className="col cl-my-iot__list-item">
-								<Link to={'/iot/control'}>
+                                <Link to={ { pathname:'/iot/add' } } >
 									<div className="cl-my-iot__button cl-my-iot__button--add">
 										<img src={IotIcAdd} alt=""/>
 									</div>
@@ -147,20 +170,45 @@ class HomeIoT extends Component {
 			</div>
 
 			{/* IoT Mode 편집 */}
-            <DrawerWrapper drawer="iot-edit-mode" title="Mode 편집">
-                <DrawerIotEditList/>
+            <DrawerWrapper drawer="iot-mode" title="Mode 편집" back >
+                <IotModeEditor/>
 			</DrawerWrapper>
+
+            {/* IoT 모드 설정 변경 || 모드 추가 > 시나리오 */}
+            <DrawerWrapper drawer="iot-mode-detail" title="생성/설정 변경" back >
+                <IotModeSetting/>
+            </DrawerWrapper>
 
 
 			{/* IoT 기기제어, 기기추가 목록 */}
-            <DrawerWrapper drawer="iot-control-list" title="IoT 제어">
-                <DrawerIotControlList/>
+            {/*<DrawerWrapper drawer="iot-control-list" title="IoT 제어" back >*/}
+                {/*<DrawerIotControlList/>*/}
+            {/*</DrawerWrapper>*/}
+
+            {/* 기기 카테고리 목록 */}
+            <DrawerWrapper drawer="iot-device-category" title="기기 카테고리" back >
+                <IotDeviceCategory/>
+            </DrawerWrapper>
+
+            {/* 기기 카테고리 리스트 */}
+            <DrawerWrapper drawer="iot-device-category-detail" title="기기 리스트" back >
+                <IotDeviceList/>
             </DrawerWrapper>
 
 
 			{/* 기기 상세 */}
-            <DrawerWrapper drawer="iot-device-detail" title="상세 제어">
-                <IotDeviceDetail/>
+            <DrawerWrapper drawer="iot-device-detail" title="기기" back >
+                <IotDevice/>
+            </DrawerWrapper>
+
+			{/* 센서 상세 */}
+            <DrawerWrapper drawer="iot-sensor-detail" title="센서" back >
+                <IotSensor/>
+            </DrawerWrapper>
+
+            {/* Iot 추가 */}
+            <DrawerWrapper drawer="iot-add" title="추가" back >
+                <ChooseAddingIot/>
             </DrawerWrapper>
 
 		</div>
