@@ -1,5 +1,6 @@
 package com.kolon.comlife.iot.service.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kolon.comlife.iot.exception.IotControlOperationFailedException;
 import com.kolon.comlife.iot.exception.IotControlTimeoutException;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.net.SocketException;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service("iotControlService")
@@ -34,6 +36,7 @@ public class IotControlServiceImpl implements IotControlService {
 
     private static final String IOK_CONTROL_MODE_SWITCH_FMT_PATH = "/iok/mode/%s/cmplx/%d/home/%d";
     private static final String IOK_CONTROL_SCENARIO_EXECUTE_FMT_PATH = "/iok/scenario/%d/cmplx/%d/home/%d";
+    private static final String IOK_CONTROL_DEVICE_EXECUTE_FMT_PATH = "/iok/device/%s"; // CLNT_ID
 
 
     @Resource(name = "servicePropertiesMap")
@@ -118,9 +121,118 @@ public class IotControlServiceImpl implements IotControlService {
 
         return buttonInfo;
     }
-    
-    public Map executeDevicePrimeFunction(int complexId, int homeId, int deviceId) {
-        return null;
+
+    // 8. 기기의 기능 수행
+    public IotDeviceListInfo executeDeviceFunction(
+            int complexId, int homeId, int deviceId, IotDeviceControlMsg ctrlMsg) throws Exception {
+
+        HttpPutRequester requester;
+        Map<String, Map> result;
+        String           clientId = null;
+        String           mid = null;
+        IotDeviceListInfo deviceInfo;
+        IotDeviceControlInfo deviceCtrlInfo = new IotDeviceControlInfo();
+        int retryCount = IOK_CONTROL_RETRY_COUNT;
+        Map msgAttributes = new HashMap();
+        Map msgInformation = new HashMap();
+        boolean noDataFlag = true; // TRUE == NO DATA!
+
+        // 1-1. deviceId(moThingsId) 로 부터 client_id, mid 가져오기
+        deviceInfo = iotInfoService.getDeviceInfo(complexId, homeId, deviceId);
+        logger.debug(" deviceInfo: " + deviceInfo);
+        logger.debug(" deviceInfo.geData(): " + deviceInfo.getData());
+        logger.debug(" deviceInfo.geData().size(): " + deviceInfo.getData().size());
+
+        // 1-2. 세부 정보에서 CLIENT_ID, MID 값 찾기
+        for( Map data : deviceInfo.getData() ) {
+            clientId = (String)data.get("clntId");
+            mid      = (String)data.get("moClntId");
+
+            // CLIENT_ID 및 MO_CLIENT_ID가 있는 경우에만 데이터 처리
+            if( (clientId != null && !clientId.equals("")) &&
+                (mid != null      && !mid.equals("")) )
+            {
+                logger.debug(">>>>    Client ID: " + clientId);
+                logger.debug(">>>> MO Client ID: " + mid);
+                logger.debug(">>>> attributes:protcKey: " + ctrlMsg.getProtcKey());
+                logger.debug(">>>> attributes:val: " + ctrlMsg.getValue());
+                noDataFlag = false; // data exist!
+                break;
+            }
+        }
+
+        if( noDataFlag ) {
+            throw new IotInfoNoDataException("해당 기기 정보가 없습니다.");
+        }
+
+        // 2. 기기 제어 메시지 셋팅
+        msgAttributes.put(ctrlMsg.getProtcKey(), ctrlMsg.getValue());
+        msgInformation.put("attributes", msgAttributes);
+        msgInformation.put("mid", mid);
+        deviceCtrlInfo.getInformations().add(msgInformation);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonInString = mapper.writeValueAsString(deviceCtrlInfo);
+        logger.debug(">>>>>> JSON STR: " + jsonInString );
+
+        // 3. 기기 명령 수행.
+        try {
+            String execUrl = String.format( IOK_CONTROL_DEVICE_EXECUTE_FMT_PATH, clientId );
+            logger.debug(" URL PATH: switchToMode(): " + execUrl);
+            requester = new HttpPutRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_CONTROL_HOST_PROP_GROUP, IOK_CONTROL_HOST_PROP_KEY),
+                    execUrl);
+            // Set body
+            requester.setBody(jsonInString);
+            result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
+            logger.debug(" >>>> RESULT >>> " + result.toString());
+            // todo: exception handling
+        } catch( SocketException se ) {
+            // socket is closed
+            if( "Socket closed".equals(se.getMessage())) {
+                throw new IotControlTimeoutException("'기기 명령 실행'시간이 초과하였습니다.");
+            } else {
+                throw se;
+            }
+        } catch( Exception e) {
+            throw e;
+        }
+
+        //
+        deviceInfo.setMsg("기기의 기능 수행");
+
+        return deviceInfo;
+
+//        while(true) {
+//            // 2. 변경한 모드 값이 확인되면 수행
+//            try {
+//                activeModeList = iotInfoService.getActiveMode(complexId, homeId);
+//                changedModeId = (String)activeModeList.getData().get(0).get("mode");
+//
+//                if( modeId.equals(changedModeId) ) {
+//                    // 변경 성공 --> do nothing
+//                    break;
+//                } else {
+//                    // 변경 값이 아직 바뀌지 않은 경우
+//                    if( retryCount > 0 ) {
+//                        // Retry
+//                        retryCount--;
+//                        Thread.sleep(IOK_CONTROL_RETRY_INTERVAL_MSEC);
+//                        continue;
+//                    } else {
+//                        throw new IotControlOperationFailedException("모드 변경이 실패하였습니다. 잠시 후에 다시 시도하세요.");
+//                    }
+//                }
+//            } catch( IotInfoNoDataException e ) {
+//                // 모드가 변경되지 않음
+//                throw e;
+//            } catch( Exception e ) {
+//                throw e;
+//            }
+//        }
+//
+//        return activeModeList;
     }
 
     // 17. 18. '모드' 변경 수행

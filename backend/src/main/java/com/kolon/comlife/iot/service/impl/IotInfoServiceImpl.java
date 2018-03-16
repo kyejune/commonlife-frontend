@@ -22,17 +22,22 @@ public class IotInfoServiceImpl implements IotInfoService {
     // todo: IotController에서 IotInfoService로 옮길 것
     private static final Logger logger = LoggerFactory.getLogger(IotInfoService.class);
 
-    private static final String IOK_MOBILE_HOST_PROP_GROUP = "IOK";
-    private static final String IOK_MOBILE_HOST_PROP_KEY = "MOBILE_HOST";
-    private static final String IOK_MODES_LIST_PATH = "/iokinterface/scenario/modeInfoList";
-    private static final String IOK_MYIOT_LIST_PATH = "/iokinterface/myiot/myiotList";
-    private static final String IOK_ROOMS_LIST_PATH = "/iokinterface/device/roomList";
-    private static final String IOK_DEVICES_LIST_BY_ROOM_PATH = "/iokinterface/device/roomDeviceList";
+    private static final String IOK_MOBILE_HOST_PROP_GROUP  = "IOK";
+    private static final String IOK_MOBILE_HOST_PROP_KEY    = "MOBILE_HOST";
+
+    private static final String IOK_MODES_LIST_PATH                 = "/iokinterface/scenario/modeInfoList";
+    private static final String IOK_MYIOT_LIST_PATH                 = "/iokinterface/myiot/myiotList";
+    private static final String IOK_ROOMS_LIST_PATH                 = "/iokinterface/device/roomList";
+    private static final String IOK_DEVICES_LIST_BY_ROOM_PATH       = "/iokinterface/device/roomDeviceList";
     private static final String IOK_DEVICE_DETAIL_BY_DEVICE_ID_PATH = "/iokinterface/device/deviceDetail";
-    private static final String IOK_DEVICES_GROUP_LIST_PATH = "/iokinterface/device/cateList";
-    private static final String IOK_DEVICES_LIST_BY_CATEGORY_PATH = "/iokinterface/device/cateDeviceList";
-    private static final String IOK_DEVICES_USAGE_HISTORY_PATH = "/iokinterface/device/deviceHistList";
-    private static final String IOK_MODE_DETAIL_PATH = "/iokinterface/scenario/scnaDetail";
+    private static final String IOK_DEVICES_GROUP_LIST_PATH         = "/iokinterface/device/cateList";
+    private static final String IOK_DEVICES_LIST_BY_CATEGORY_PATH   = "/iokinterface/device/cateDeviceList";
+    private static final String IOK_DEVICES_USAGE_HISTORY_PATH      = "/iokinterface/device/deviceHistList";
+    private static final String IOK_MODE_DETAIL_PATH                = "/iokinterface/scenario/scnaDetail";
+    private static final String IOK_MODE_DETAIL_CONDITONS_PATH      = "/iokinterface/scenario/scnaIfDetail";
+    private static final String IOK_MODE_DETAIL_ACTORS_PATH         = "/iokinterface/scenario/scnaThingsDetail";
+    private static final String IOK_MODE_DETAIL_CONDITONS_AVAILABLE_PATH = "/iokinterface/scenario/scnaIfAddList";
+    private static final String IOK_MODE_DETAIL_ACTORS_AVAILABLE_PATH    = "/iokinterface/scenario/scnaThingsAddList";
 
     @Resource(name = "servicePropertiesMap")
     private ServicePropertiesMap serviceProperties;
@@ -190,7 +195,7 @@ public class IotInfoServiceImpl implements IotInfoService {
         requester.setParameter("cmplxId", String.valueOf(complexId) );
         requester.setParameter("homeId", String.valueOf(homeId) );
         requester.setParameter("userId", userId );
-        requester.setParameter("seqNo", String.valueOf(buttonId) );
+        requester.setParameter("seqNo", String.valueOf(buttonId) ); // !! seqNo <-- buttonId
         result = requester.execute();
 
         // 1. result data 리맵핑
@@ -295,7 +300,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     /**
      * 12. 기기 상세 정보 가져오기 at Quick IOT 제어 > 공간별 보기 or 기기별 보기
      */
-    public IotDeviceListInfo getDeviceInfo(int complexId, int homeId, String deviceId) throws Exception {
+    public IotDeviceListInfo getDeviceInfo(int complexId, int homeId, int deviceId) throws Exception {
         IotDeviceListInfo deviceListInfo = new IotDeviceListInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
@@ -453,10 +458,11 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     // 16. 개별 '모드'의 상세 정보
-    // modeId == scnaId
+    // modeOrAutomationId == scnaId
     // (modeFlag == true) ==>  Mode
     // (modeFlag == false ) ==> Automation
-    public IotModeAutomationInfo getModeOrAutomationDetail(int complexId, int homeId, int modeId, boolean modeFlag) throws Exception {
+    public IotModeAutomationInfo getModeOrAutomationDetail(
+            int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception {
         IotModeAutomationInfo modeAutoInfo = new IotModeAutomationInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
@@ -467,7 +473,7 @@ public class IotInfoServiceImpl implements IotInfoService {
                 IOK_MODE_DETAIL_PATH );
         requester.setParameter("cmplxId", String.valueOf(complexId) );
         requester.setParameter("homeId", String.valueOf(homeId) );
-        requester.setParameter("scnaId", String.valueOf(modeId) );
+        requester.setParameter("scnaId", String.valueOf(modeOrAutomationId) );
         result = requester.execute();
 
         // 1. result data 리맵핑
@@ -492,12 +498,169 @@ public class IotInfoServiceImpl implements IotInfoService {
         modeAutoInfo.setScna( convertListMapDataToCamelCase((List)result.get("SCNA")) );
 
         if( modeFlag ) {
-            modeAutoInfo.setMsg("개별 '모드'의 상세 정보");
+            modeAutoInfo.setMsg("개별 '모드'의 조건 정보");
         } else {
-            modeAutoInfo.setMsg("'오토메이션'의 상세 정보");
+            modeAutoInfo.setMsg("'오토메이션'의 조건 정보");
         }
 
         return modeAutoInfo;
+    }
+
+    // 31. 특정 시나리오의 '조건(IF)' 목록 및 속성 가져오기
+    public IotModeAutomationInfo getModeOrAutomationConditions(
+            int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception {
+        IotModeAutomationInfo conditionsInfo = new IotModeAutomationInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MODE_DETAIL_CONDITONS_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("scnaId", String.valueOf(modeOrAutomationId) );
+        result = requester.execute();
+
+        // 1. result data 리맵핑
+        try {
+            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_THINGS") );
+            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_SPC") );
+            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_APLY") );
+            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_OPTION") );
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+
+        // 2. camelCase로 변환
+        conditionsInfo.setScnaIfThings( convertListMapDataToCamelCase((List)result.get("SCNA_IF_THINGS")) );
+        conditionsInfo.setScnaIfSpc( convertListMapDataToCamelCase((List)result.get("SCNA_IF_SPC")) );
+        conditionsInfo.setScnaIfAply( convertListMapDataToCamelCase((List)result.get("SCNA_IF_APLY")) );
+        conditionsInfo.setScnaIfOption( convertListMapDataToCamelCase((List)result.get("SCNA_IF_OPTION")) );
+
+        if( modeFlag ) {
+            conditionsInfo.setMsg("개별 '모드'의 조건(IF) 정보");
+        } else {
+            conditionsInfo.setMsg("'오토메이션'의 조건(IF) 정보");
+        }
+
+        return conditionsInfo;
+    }
+
+    // 33. 특정 시나리오의 '작동기기(ACTOR)' 목록 및 속성 가져오기
+    public IotModeAutomationInfo getModeOrAutomationActors(
+            int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception {
+        IotModeAutomationInfo actorsInfo = new IotModeAutomationInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MODE_DETAIL_ACTORS_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("scnaId", String.valueOf(modeOrAutomationId) );
+        result = requester.execute();
+
+        // 1. result data 리맵핑
+        try {
+            this.remapResultScenarioDetail( (List)result.get("SCNA_THINGS") );
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+
+        // 2. camelCase로 변환
+        actorsInfo.setScnaThings( convertListMapDataToCamelCase((List)result.get("SCNA_THINGS")) );
+
+        if( modeFlag ) {
+            actorsInfo.setMsg("개별 '모드'의 작동기기(ACTOR) 정보");
+        } else {
+            actorsInfo.setMsg("'오토메이션'의 작동기기(ACTOR) 정보");
+        }
+
+        return actorsInfo;
+    }
+
+    // 39. 특정 시나리오에서 추가조건(IF) 목록(리스트)를 가져오기 at MyIOT 추가
+    public IotModeAutomationInfo getModeOrAutomationConditionsAvailable(
+            int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception {
+        IotModeAutomationInfo conditionsInfo = new IotModeAutomationInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MODE_DETAIL_CONDITONS_AVAILABLE_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("scnaId", String.valueOf(modeOrAutomationId) );
+        result = requester.execute();
+
+        // 1. result data 리맵핑
+        try {
+            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_THINGS") );
+            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_SPC") );
+            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_APLY") );
+            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_OPTION") );
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+
+        // 2. camelCase로 변환
+        conditionsInfo.setScnaIfThings( convertListMapDataToCamelCase((List)result.get("SCNA_IF_THINGS")) );
+        conditionsInfo.setScnaIfSpc( convertListMapDataToCamelCase((List)result.get("SCNA_IF_SPC")) );
+        conditionsInfo.setScnaIfAply( convertListMapDataToCamelCase((List)result.get("SCNA_IF_APLY")) );
+        conditionsInfo.setScnaIfOption( convertListMapDataToCamelCase((List)result.get("SCNA_IF_OPTION")) );
+
+        if( modeFlag ) {
+            conditionsInfo.setMsg("개별 '모드'의 추가조건(IF) 목록 정보");
+        } else {
+            conditionsInfo.setMsg("'오토메이션'의 추가조건(IF) 목록 정보");
+        }
+
+        return conditionsInfo;
+    }
+
+
+    // 40. 특정 시나리오에서 추가작동기기(ACTOR) 목록(리스트)를 가져오기 at MyIOT 추가
+    public IotModeAutomationInfo getModeOrAutomationActorsAvailable(
+            int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception {
+        IotModeAutomationInfo actorsInfo = new IotModeAutomationInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MODE_DETAIL_ACTORS_AVAILABLE_PATH);
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("scnaId", String.valueOf(modeOrAutomationId) );
+        result = requester.execute();
+
+        // 1. result data 리맵핑
+        try {
+            this.remapResultScenarioDetail( (List)result.get("SCNA_THINGS") );
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+
+        // 2. camelCase로 변환
+        actorsInfo.setScnaThings( convertListMapDataToCamelCase((List)result.get("SCNA_THINGS")) );
+
+        if( modeFlag ) {
+            actorsInfo.setMsg("개별 '모드'의 추가작동기기 목록 정보");
+        } else {
+            actorsInfo.setMsg("'오토메이션'의 추가작동기기 목록 정보");
+        }
+
+        return actorsInfo;
     }
 
     /////// 공통 메소드 //////////////////////////////////////////////////////////////////////////////
@@ -573,6 +736,7 @@ public class IotInfoServiceImpl implements IotInfoService {
             this.replaceMapKeyIfExisted(e, "MOD_ID", "DEVICE_ID" );
 
             // 사용하지 않은 값 삭제
+            this.removeMapKeyIfExisted(e, "CLNT_ID");
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
             this.removeMapKeyIfExisted(e, "BINARY_YN");
@@ -596,8 +760,6 @@ public class IotInfoServiceImpl implements IotInfoService {
 
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
-            this.removeMapKeyIfExisted(e, "CLNT_ID");
-            this.removeMapKeyIfExisted(e, "MO_CLNT_ID");
             this.removeMapKeyIfExisted(e, "KIND_CD");
             this.removeMapKeyIfExisted(e, "THINGS_ID");
         }
@@ -611,7 +773,9 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultScenarioDetail(List<Map<String, Object>> resultData) {
-        String v;
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
 
         for(Map<String, Object>e : resultData) {
             // MO_THINGS_NM --> DEVICE_NM로 변환
@@ -648,7 +812,13 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private List convertListMapDataToCamelCase(List inputDataList) {
-        List outputDataList = new ArrayList();
+        List outputDataList;
+
+        if( inputDataList == null ) {
+            return null;
+        }
+
+        outputDataList = new ArrayList();
 
         for(Map<String, Object> e : (List<Map<String, Object>>)inputDataList ) {
 //            Map element = new HashMap();

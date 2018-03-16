@@ -12,6 +12,7 @@ import com.kolon.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -239,21 +240,45 @@ public class IotController {
 //        return ResponseEntity.status(HttpStatus.OK).body( weatherInfo );
 //    }
 
-
     /**
      * 8. 기기의 대표 기능 수행 - AWS Lambda 호출
      */
     @PutMapping(
             value = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}/action",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map>  executeDevicePrimeFunction(
+    public ResponseEntity  executeDevicePrimeFunction(
+            HttpServletRequest request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("deviceId")  int deviceId )
     {
-        Map ret = new HashMap();
+        IotDeviceControlMsg ctrlInfo = new IotDeviceControlMsg();
+        IotDeviceListInfo        deviceInfo;
+        String protcKey;
+        Object value;
 
-        return ResponseEntity.status(HttpStatus.OK).body( ret );
+        protcKey = request.getParameter("protcKey");
+        value = request.getParameter("value");
+        logger.debug("> > > protcKey: " + protcKey);
+        logger.debug("> > > value   : " + value);
+
+        ctrlInfo.setProtcKey(protcKey);
+        ctrlInfo.setValue(value);
+
+        try {
+            deviceInfo = iotControlService.executeDeviceFunction(complexId, homeId, deviceId, ctrlInfo);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                unhandledEx.printStackTrace();
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( deviceInfo );
     }
 
     /**
@@ -320,7 +345,7 @@ public class IotController {
     public ResponseEntity getDeviceInfo(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
-            @PathVariable("deviceId")  String deviceId )
+            @PathVariable("deviceId")  int deviceId )
     {
         IotDeviceListInfo deviceListInfo;
 
@@ -620,28 +645,40 @@ public class IotController {
     }
 
     /**
-     * 31. 특정 시나리오의 '센서' 목록 및 속성 가져오기 at MyIOT 추가
+     * 31. 특정 시나리오의 '조건(IF)' 목록 및 속성 가져오기 MyIOT 추가
      */
     @GetMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/sensors",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/conditions",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotSensorListInfo> getSensorsListOnAutomation(
+    public ResponseEntity getModeOrAutomationConditions(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
     {
-        IotSensorListInfo sensorsList = new IotSensorListInfo();
+        IotModeAutomationInfo conditionInfo;
 
-        return ResponseEntity.status(HttpStatus.OK).body( sensorsList );
+        try {
+            conditionInfo = iotInfoService.getModeOrAutomationConditions(complexId, homeId, automationId, false);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( conditionInfo );
     }
 
     /**
-     * 32. 특정 시나리오의 '센서' 목록 및 속성 변경하기 at MyIOT 추가
+     * 32. 특정 시나리오의 '조건(IF)' 목록 및 속성 변경하기 at MyIOT 추가
      */
     @PutMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/sensors/{sensorId}",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/conditions",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotSensorListInfo> updateSensorOnAutomation(
+    public ResponseEntity<IotSensorListInfo> updateModeOrAutomationConditions(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId,
@@ -653,28 +690,40 @@ public class IotController {
     }
 
     /**
-     * 33. 특정 시나리오의 '기기' 목록 및 속성 가져오기 at MyIOT 추가
+     * 33. 특정 시나리오의 '작동기기(ACTOR)' 목록 및 속성 가져오기 at MyIOT 추가
      */
     @GetMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/devices",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/actors",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotDeviceListInfo> getDevicesListOnAutomation(
+    public ResponseEntity getModeOrAutomationActors(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
     {
-        IotDeviceListInfo deviceList = new IotDeviceListInfo();
+        IotModeAutomationInfo actorsInfo;
 
-        return ResponseEntity.status(HttpStatus.OK).body( deviceList );
+        try {
+            actorsInfo = iotInfoService.getModeOrAutomationActors(complexId, homeId, automationId, false);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( actorsInfo );
     }
 
     /**
      * 34. 특정 시나리오의 '기기' 목록 및 속성 변경하기 at MyIOT 추가
      */
     @PutMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/devices/{deviceId}",
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/actors",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotDeviceInfo> getDevicesListOnAutomation(
+    public ResponseEntity<IotDeviceInfo> updateModeOrAutomationActors(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId,
@@ -747,6 +796,65 @@ public class IotController {
         EnergyInfo energyInfo = new EnergyInfo();
 
         return ResponseEntity.status(HttpStatus.OK).body( energyInfo );
+    }
+
+    /**
+     * 39. 특정 시나리오에서 추가조건(IF) 목록(리스트)를 가져오기 at MyIOT 추가
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/conditions/available",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getModeOrAutomationConditionsAvailable(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("automationId") int automationId )
+    {
+        IotModeAutomationInfo actorsInfo;
+
+        try {
+            actorsInfo = iotInfoService.getModeOrAutomationConditionsAvailable(complexId, homeId, automationId, false);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                e.printStackTrace();
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( actorsInfo );
+    }
+
+
+    /**
+     * 40. 특정 시나리오에서 추가작동기기(ACTOR) 목록(리스트)를 가져오기 at MyIOT 추가
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/actors/available",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getModeOrAutomationActorsAvailable(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("automationId") int automationId )
+    {
+        IotModeAutomationInfo actorsInfo;
+
+        try {
+            actorsInfo = iotInfoService.getModeOrAutomationActorsAvailable(complexId, homeId, automationId, false);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                e.printStackTrace();
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( actorsInfo );
     }
 
     private ResponseEntity commonExceptionHandler(Exception e) throws Exception {
