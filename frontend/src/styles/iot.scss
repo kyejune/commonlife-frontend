@@ -674,3 +674,32 @@
         transition: .3s;
     }
 }
+
+// 슬라이더
+.cl-iot-slider {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+
+    .cl-slider {
+        width: 78%;
+    }
+}
+
+.cl-iot-slider__num {
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 12px;
+}
+
+.cl-iot-slider__min {
+    @extend .cl-iot-slider__num;
+    width: 10%;
+    text-align: left;
+}
+
+.cl-iot-slider__max {
+    @extend .cl-iot-slider__num;
+    width: 12%;
+    text-align: right;
+}

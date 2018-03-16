@@ -4,6 +4,7 @@ import SampleSrc from 'images/io-t-icon-1@3x.png';
 import Checkbox from "./ui/Checkbox";
 import {SortableContainer, SortableElement, arrayMove, SortableHandle} from 'react-sortable-hoc';
 import EditableList from "./ui/EditableList";
+import IotSlider from "./ui/IotSlider";
 
 
 
@@ -81,7 +82,9 @@ export default class Playground extends Component{
                         설정온도 <span className="color-primary">30°C</span>
                     </h4>
 
-                    <div className="w-100 mt-3em text-center">슬라이드 컴퍼넌트</div>
+                    <div className="w-100 mt-3em mr-04em ml-04em text-center">
+                        <IotSlider/>
+                    </div>
                 </li>
             </ul>
 

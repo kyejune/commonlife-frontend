@@ -380,3 +380,62 @@
 .DayPicker-Day--disabled{
   pointer-events: none;
 }
+
+
+// 슬라이더 레이아웃
+.cl-slider {
+    .rc-slider-rail {
+        height: 2px;
+        background-color: #ACACAC;
+    }
+
+    .rc-slider-track {
+        height: 2px;
+        margin-left: 0;
+        background-color: #0F3E78;
+    }
+    .rc-slider-step {
+        height: 2px;
+        margin-left: -1px;
+    }
+
+    .rc-slider-handle {
+        margin-left: 0;
+        margin-top: 0;
+        width: 2px;
+        height: 2px;
+        border-radius: 0;
+        border: transparent;
+        background-color: #565656;
+    }
+
+    .rc-slider-dot {
+        bottom: 0;
+        margin-left: 0;
+        width: 2px;
+        height: 2px;
+        border: transparent;
+        background-color: #565656;
+        border-radius: 0;
+    }
+}
+
+.rc-slider-tooltip {
+    .rc-slider-tooltip-inner {
+        padding: 0;
+        min-width: 28px;
+        height: 28px;
+        font-size: 10px;
+        line-height: 28px;
+        background-color: #1654A3;
+        border-radius: 50%;
+    }
+
+    .rc-slider-tooltip-arrow {
+        bottom: 3px;
+        left: 50%;
+        margin-left: -11px;
+        border-width: 10px 11px 0;
+        border-top-color: #1654A3;
+    }
+}
