@@ -258,7 +258,18 @@ public class IotController {
         Object value;
 
         protcKey = request.getParameter("protcKey");
+        if(protcKey == null || protcKey.equals("")) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("잘못된 파라미터입니다. protcKey 값을 확인하세요."));
+        }
+
         value = request.getParameter("value");
+        if(value == null || value.equals("")) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("잘못된 파라미터입니다. value 값을 확인하세요."));
+        }
         logger.debug("> > > protcKey: " + protcKey);
         logger.debug("> > > value   : " + value);
 
@@ -270,6 +281,14 @@ public class IotController {
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
+            } catch( IotControlTimeoutException timeoutEx) {
+                return ResponseEntity
+                        .status(HttpStatus.REQUEST_TIMEOUT)
+                        .body(new SimpleErrorInfo(timeoutEx.getMessage()));
+            } catch( IotControlOperationFailedException iotEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo(iotEx.getMessage()));
             } catch( Exception unhandledEx ) {
                 unhandledEx.printStackTrace();
                 return ResponseEntity
