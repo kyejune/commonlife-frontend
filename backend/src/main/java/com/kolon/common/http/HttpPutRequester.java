@@ -1,22 +1,29 @@
 package com.kolon.common.http;
 
+import org.apache.commons.lang.CharSet;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class HttpPutRequester {
+    final static private Logger logger = LoggerFactory.getLogger( HttpPutRequester.class );
+
     final static private String CONTENT_TYPE = "Content-Type";
     final static private String ACCEPT = "Accept";
 
@@ -55,9 +62,10 @@ public class HttpPutRequester {
         ObjectMapper mapper = null;
         HttpPut httpPut = new HttpPut(this.uriBuilder.build());
         httpPut.addHeader( CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
-        httpPut.addHeader( ACCEPT, MediaType.APPLICATION_JSON_VALUE );
+
         if( this.jsonBody != null ) {
-            httpPut.setEntity(new StringEntity(this.jsonBody));
+            logger.debug(">>jsonBody: " + this.jsonBody);
+            httpPut.setEntity(new StringEntity(this.jsonBody, ContentType.APPLICATION_JSON));
         }
 
         // Execute
@@ -95,6 +103,11 @@ public class HttpPutRequester {
         ObjectMapper mapper = null;
         HttpPut timedOutHttpPut = new HttpPut(this.uriBuilder.build());
         timedOutHttpPut.addHeader( CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
+
+        if( this.jsonBody != null ) {
+            logger.debug(">>jsonBody: " + this.jsonBody);
+            timedOutHttpPut.setEntity(new StringEntity(this.jsonBody, ContentType.APPLICATION_JSON));
+        }
 
         timedOutHttpPutAbortTimerTask task = new timedOutHttpPutAbortTimerTask( timedOutHttpPut );
         new Timer(true).schedule(task, hardTimeout * 1000);

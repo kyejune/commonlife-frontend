@@ -10,6 +10,7 @@ import DrawerContentHolder from 'components/drawers/DrawerContentHolder';
 import CardItemDetail from "../drawers/CardItemDetail";
 import People from "../drawers/People";
 import Store from "scripts/store";
+import DrawerWrapper from "components/drawers/DrawerWrapper";
 
 class Community extends Component {
 
@@ -50,7 +51,8 @@ class Community extends Component {
             Store.clearDrawer();
 
         if( this.props.match.params.drawer === 'like' )
-            setTimeout( ()=> Store.pushDrawer( 'people' ), 0 );
+            Store.pushDrawer( 'people' );
+            // setTimeout( ()=> Store.pushDrawer( 'people' ), 0 );
 
         this.setState({
             tabIndex: this.state.tabs.indexOf( paths[1] || 'feed' )
@@ -82,20 +84,13 @@ class Community extends Component {
 
 
                 {/* 카드 상세보기 */}
-                <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                        visible={Store.hasDrawer( 'card-item-detail' )}>
-                    <DrawerContentHolder back>
-                        <CardItemDetail/>
-                    </DrawerContentHolder>
-                </Drawer>
+                <DrawerWrapper drawer="card-item-detail">
+                    <CardItemDetail/>
+                </DrawerWrapper>
 
-                {/* Like 찍은 분들 */}
-                <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                        visible={Store.hasDrawer( 'people' )}>
-                    <DrawerContentHolder back>
-                        <People title="LIKE"/>
-                    </DrawerContentHolder>
-                </Drawer>
+                <DrawerWrapper drawer="people" title="LIKE">
+                    <People/>
+                </DrawerWrapper>
             </div>
         )
     }

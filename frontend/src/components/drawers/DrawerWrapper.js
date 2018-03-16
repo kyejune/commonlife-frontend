@@ -1,26 +1,21 @@
 import React, {Component} from 'react';
-import Drawer from "react-md/src/js/Drawers/Drawer";
-import Store from "../../scripts/store";
+import DrawerContentHolder from "components/drawers/DrawerContentHolder";
+import Store from "scripts/store";
+import {Drawer} from "react-md";
+import {observer} from "mobx-react";
 
-class DrawerWrapper extends Drawer {
-
-    constructor(props) {
-
-        let obj = {...Store.customDrawerProps};
-        obj.renderNode = document.querySelector('.App');
-        obj.visible = Store.hasDrawer(props.drawer);
-
-
-        super(obj);
-    }
-
+class DrawerWrapper extends Component {
 
     render() {
-        return <DrawerContentHolder back>
-            드로어 테스트...
-        </DrawerContentHolder>
+        return <Drawer {...Store.customDrawerProps}
+                       renderNode={document.querySelector('.App')}
+                       visible={Store.hasDrawer(this.props.drawer)}>
+            <DrawerContentHolder {...this.props} >
+                {this.props.children}
+            </DrawerContentHolder>
+        </Drawer>
     }
 }
 
 
-export default DrawerWrapper;
+export default observer( DrawerWrapper );

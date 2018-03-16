@@ -20,6 +20,7 @@ import ReserveServiceFood from 'images/rs-icon-3@3x.png';
 import ReserveServiceCarwash from 'images/rs-icon-4@3x.png';
 import ReserveIcPlus from 'images/page-1@3x.png';
 import {observer} from "mobx-react";
+import DrawerWrapper from "../drawers/DrawerWrapper";
 // import ReserveIcTimeNext from 'images/shape-time-next@3x.png';
 // import ReserveIcTimePlus from 'images/shape-time-plus@3x.png';
 // import ReserveIcNotice from 'images/alert-icon-red@3x.png';
@@ -68,8 +69,6 @@ class Reservation extends Component {
     }
 
     render() {
-
-        console.log('render reservation');
 
 
         return <div>
@@ -216,28 +215,19 @@ class Reservation extends Component {
             </div>
 
             {/* 예약 상세 화면 */}
-            <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                    visible={Store.hasDrawer( 'reservation-detail' )}>
-                <DrawerContentHolder back>
-                    <ReservationDetail/>
-                </DrawerContentHolder>
-            </Drawer>
+            <DrawerWrapper drawer="reservation-detail">
+                <ReservationDetail/>
+            </DrawerWrapper>
 
             {/* 히스토리 */}
-            <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                    visible={Store.hasDrawer( 'reservation-history' )}>
-                <DrawerContentHolder back>
-                    <ReservationHistory/>
-                </DrawerContentHolder>
-            </Drawer>
+            <DrawerWrapper drawer="reservation-history">
+                <ReservationHistory/>
+            </DrawerWrapper>
 
 			{/* 이미지상세보기 */}
-            <Drawer {...Store.customDrawerProps} renderNode={document.querySelector('.App')}
-                    visible={Store.hasDrawer( 'reservation-thumbnails' )}>
-                <DrawerContentHolder back>
-                    <DrawerSwiperViewer/>
-                </DrawerContentHolder>
-            </Drawer>
+            <DrawerWrapper drawer="reservation-thumbnails">
+                <DrawerSwiperViewer/>
+            </DrawerWrapper>
 
         </div>
     }

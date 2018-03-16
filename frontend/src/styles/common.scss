@@ -93,13 +93,16 @@ button, select, input{
 }
 
 /**/
-.cl-write__button{
+.cl-write__button, .cl-iot-run__button{
   position: absolute;
   bottom: 5em;
   right: 1em;
   z-index: 9;
   transform: translateZ(0);
   transition: bottom 0.3s;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
 }
 
 
@@ -193,4 +196,4 @@ button, select, input{
 }
 
 .ml-auto{ margin-left: auto; }
-
+.mr-auto{ margin-right: auto; }

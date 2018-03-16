@@ -22,7 +22,7 @@ class People extends Component{
             // ContentHolder에 전달
             this.props.updateTitle(
                 <h2 className="md-title md-title--toolbar cl-ellipsis">
-                    <span>{this.props.title}</span>
+                    <span>LIKE</span>
                     <span className="cl-secondary ml-03em">{data.length}</span>
                 </h2>
 			);

@@ -8,6 +8,7 @@ import Src0 from 'images/ic-menu-0.png';
 import Src1 from 'images/ic-menu-1.png';
 import Src2 from 'images/ic-menu-2.png';
 import Src3 from 'images/ic-menu-3.png';
+import Link from "react-router-dom/es/Link";
 
 
 const WriteButton = () => {
@@ -15,6 +16,12 @@ const WriteButton = () => {
                    iconClassName="fa fa-pencil fa-2x"
                    className="cl-write__button"
                    onClick={() => Store.pushDrawer('write')}
+    />
+}
+
+
+const IotButton = () => {
+    return <Link className="cl-iot-run__button md-background--primary" to="/iot/ctrl"
     />
 }
 
@@ -32,6 +39,8 @@ class Footer extends Component {
                     <Route path="/" component={WriteButton} exact />
                     <Route path="/community" component={WriteButton} exact />
                     <Route path="/community/feed" component={WriteButton}/>
+
+                    <Route path="/iot" component={IotButton}/>
                 </Switch>
 
 

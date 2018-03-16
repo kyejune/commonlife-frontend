@@ -30,14 +30,43 @@ export const ModeChanges = {
 };
 
 
+const sortBySortOrder = ( a, b )=>{
+    return a.sortOrder - b.sortOrder;
+}
+
+
+
 export default {
+
+//     axios.all([
+//     axios.get('http://google.com'),
+//     axios.get('http://apple.com')
+// ])
+//     .then(axios.spread((googleRes, appleRes) => {
+//         // do something with both responses
+//     });
 
 	/* Iot */
 	getIot( callback ){
-		axios.get( './dummy/iot.json' )
-			.then( response => {
-				callback( response.data );
-			} );
+
+		axios.all([
+			axios.get('./dummy/iot-mode.json' ),
+			axios.get('./dummy/iot-my.json')
+		]).then( axios.spread( ( modeRes, iotRes ) => {
+
+			// 편의상 순서 맞추는건 이쪽에서 해서 보내줌
+			modeRes.data.data.sort( sortBySortOrder );
+            iotRes.data.data.sort( sortBySortOrder );
+
+			callback( { mode:modeRes.data.data, iot:iotRes.data.data } );
+        }));
+
+
+
+		// axios.get( './dummy/iot.json' ) // 서버 예제 적용 버전
+		// 	.then( response => {
+		// 		callback( response.data );
+		// 	} );
 	},
 
 

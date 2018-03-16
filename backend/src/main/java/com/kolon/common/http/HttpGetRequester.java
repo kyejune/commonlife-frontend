@@ -5,6 +5,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 
 import java.io.IOException;
@@ -15,11 +17,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HttpGetRequester {
-    final static private String CONTENT_TYPE = "Content-Type";
+    private static final Logger logger = LoggerFactory.getLogger(HttpGetRequester.class);
+    private static final String CONTENT_TYPE = "Content-Type";
 
     private CloseableHttpClient httpClient;
     private URIBuilder          uriBuilder;
-    private TimerTask           timedOutTask;
 
     public HttpGetRequester(CloseableHttpClient httpClient, String host, String path)
                 throws URISyntaxException {
@@ -49,17 +51,21 @@ public class HttpGetRequester {
         httpGet.addHeader( CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE );
 
         // Execute
-        HttpResponse response = httpClient.execute( httpGet );
-        httpGet.releaseConnection();
-        if( response.getStatusLine().getStatusCode() >= 400 ) {
-            throw new HttpRequestFailedException(
-                    response.getStatusLine().getStatusCode(),
-                    response.getStatusLine().getReasonPhrase());
-        }
+        try
+        {
+            HttpResponse response = httpClient.execute( httpGet );
+            if( response.getStatusLine().getStatusCode() >= 400 ) {
+                throw new HttpRequestFailedException(
+                        response.getStatusLine().getStatusCode(),
+                        response.getStatusLine().getReasonPhrase());
+            }
 
-        // Mapping result
-        mapper = new ObjectMapper();
-        result = mapper.readValue( response.getEntity().getContent(),  Map.class );
+            // Mapping result
+            mapper = new ObjectMapper();
+            result = mapper.readValue( response.getEntity().getContent(),  Map.class );
+        } finally {
+            httpGet.releaseConnection();
+        }
 
         return result;
     }
@@ -95,21 +101,24 @@ public class HttpGetRequester {
         timer = new Timer(true);
         timer.schedule(task, hardTimeout * 1000);
 
-        // Execute
-        HttpResponse response = httpClient.execute( timedOutHttpGet );
-        task.stop();
-        timer.cancel();
-        timedOutHttpGet.releaseConnection();
+        try {
+            // Execute
+            HttpResponse response = httpClient.execute(timedOutHttpGet);
+            task.stop();
+            timer.cancel();
 
-        if( response.getStatusLine().getStatusCode() >= 400 ) {
-            throw new HttpRequestFailedException(
-                    response.getStatusLine().getStatusCode(),
-                    response.getStatusLine().getReasonPhrase());
+            if (response.getStatusLine().getStatusCode() >= 400) {
+                throw new HttpRequestFailedException(
+                        response.getStatusLine().getStatusCode(),
+                        response.getStatusLine().getReasonPhrase());
+            }
+
+            // Mapping result
+            mapper = new ObjectMapper();
+            result = mapper.readValue(response.getEntity().getContent(), Map.class);
+        } finally {
+            timedOutHttpGet.releaseConnection();
         }
-
-        // Mapping result
-        mapper = new ObjectMapper();
-        result = mapper.readValue( response.getEntity().getContent(),  Map.class );
 
         return result;
     }

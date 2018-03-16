@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import DB from "scripts/net";
 import SwiperViewer from 'components/ui/SwiperViewer';
-import {observer} from 'mobx-react';
 
 
 class DrawerSwiperViewer extends Component{
