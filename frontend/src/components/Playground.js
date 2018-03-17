@@ -5,6 +5,7 @@ import Checkbox from "./ui/Checkbox";
 import {SortableContainer, SortableElement, arrayMove, SortableHandle} from 'react-sortable-hoc';
 import EditableList from "./ui/EditableList";
 import IotSlider from "./ui/IotSlider";
+// import IotProgressOverlay from "./overlay/IotProgressOverlay";
 
 
 
@@ -15,6 +16,12 @@ export default class Playground extends Component{
         return <div>
 
             <h1>컴퍼넌트 테스트 페이지</h1>
+
+            {/*<div>*/}
+
+                {/*<IotProgressOverlay/>*/}
+
+            {/*</div>*/}
 
 
             <h3>Iot탭에 있는 세로 리스트들</h3>
