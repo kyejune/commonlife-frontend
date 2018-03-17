@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import {observer} from 'mobx-react';
 import {Link} from "react-router-dom";
+import EditableList from "../../ui/EditableList";
 
 
 /* 모드 목록 (편집용) */
@@ -17,15 +18,21 @@ class IotModeEditor extends Component {
 
         return (
             <div>
-                <ul>
-                    <li>
-                        <Link to="/iot/mode/0">
-                            체크박스, 썸네일, --모드
-                        </Link>
-                    </li>
-                </ul>
+                {/*<ul>*/}
+                    {/*<li>*/}
+                        {/*<Link to="/iot/mode/0">*/}
+                            {/*체크박스, 썸네일, --모드*/}
+                        {/*</Link>*/}
+                    {/*</li>*/}
+                {/*</ul>*/}
 
-                <p>드래그로 순서 바꾸기 기능 포함</p>
+                <EditableList
+                    items={[
+                        {img:'', name:'외출모드', to:"/iot/mode/0" },
+                        {img:'', name:'취침모드', to:"/iot/mode/1"},
+                        {img:'', name:'휴가모드', to:"/iot/mode/2"},
+                        {img:'', name:'절약모드', to:"/iot/mode/3"}]}
+                />
 
                 <footer>
                     <button>상세</button>
