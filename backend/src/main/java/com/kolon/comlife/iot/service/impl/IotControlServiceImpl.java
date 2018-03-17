@@ -61,20 +61,44 @@ public class IotControlServiceImpl implements IotControlService {
         Map<String, Object> datum;
         Integer             scnaId;
 
-        buttonInfo = iotInfoService.getMyIotButtonListById(complexId, homeId, userId, buttonId);
+        buttonInfo = iotInfoService.getMyIotButtonListById(complexId, homeId, userId, buttonId, false);
 
         // button의 종류를 확인하여, 1) 기기-주요기능 , 2) 시나리오 인지 구분
         datum = buttonInfo.getData().get(0); // 1개의 값만 갖고 있음
         String btType = (String) datum.get("btType");
         String iconType = (String) datum.get("btRightIconType");
 
+
         switch(btType) {
             case "device":
                 // todo: 작업중
                 if( iconType != null && iconType.equals("button") ) {
-                    // do!
-                    // 주기능 실행 ... 그리고, 해당 기능이 바뀌었는지 확인
-                    // todo: 장비 기능 실행하는 명령이 추가되면 ... 여기에 적용해야겠다.
+                    int                 deviceId = -1;
+                    IotDeviceControlMsg msg = new IotDeviceControlMsg();
+
+                    logger.debug(">> myiotPrimeButton: protcKey: " + datum.get("protcKey"));
+                    logger.debug(">> myiotPrimeButton: currSts: " + datum.get("currSts"));
+                    logger.debug(">> myiotPrimeButton: moThingsId: " + datum.get("moThingsId"));
+
+                    msg.setProtcKey((String)datum.get("protcKey"));
+                    // 현재 상태의 반대 값 셋팅
+                    if( datum.get("currSts").equals(datum.get("maxVlu")) ) {
+                        msg.setValue((String)datum.get("minVlu"));
+                    } else {
+                        msg.setValue((String)datum.get("maxVlu"));
+                    }
+
+                    if (datum.get("moThingsId") != null && datum.get("moThingsId") instanceof Integer) {
+                        deviceId = ((Integer) datum.get("moThingsId")).intValue();
+                    } else if (datum.get("moThingsId") != null &&  datum.get("moThingsId") instanceof String) {
+                        deviceId = Integer.parseInt((String)datum.get("moThingsId"));
+                    } else {
+                        throw new IotControlOperationFailedException("잘못된 입력으로 해당 명령을 수행할 수 없습니다.");
+                    }
+
+                    // 명령 수행 , todo: 세부 기능 private method로 분리 할 것
+                    this.executeDeviceFunction( complexId, homeId, deviceId, msg);
+
                     throw new IotControlOperationFailedException("(DEV) 현재 지원하지 않는 기능입니다.");
                 } else {
                     throw new IotControlOperationFailedException("지원하지 않는 기능입니다.");

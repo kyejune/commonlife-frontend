@@ -12,7 +12,6 @@ import com.kolon.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -124,7 +123,7 @@ public class IotController {
         userId = "baek";
 
         try {
-            buttonList = iotInfoService.getMyIotButtonList(complexId, homeId, userId);
+            buttonList = iotInfoService.getMyIotButtonList(complexId, homeId, userId, true);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -156,7 +155,7 @@ public class IotController {
         userId = "baek";
 
         try {
-            buttonList = iotInfoService.getMyIotButtonListById(complexId, homeId, userId, buttonId);
+            buttonList = iotInfoService.getMyIotButtonListById(complexId, homeId, userId, buttonId, true);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );

@@ -143,8 +143,11 @@ public class IotInfoServiceImpl implements IotInfoService {
 
     /**
      * 3. My IOT의 IOT 버튼 목록 및 정보 가져오기 at Dashboard
+     *
+     * resultSimplify == true ==> 사용자에게 필요 없는 결과는 삭제하고 반환 (FRONT에 필요한 최소 결과 반환)
      */
-    public IotButtonListInfo getMyIotButtonList(int complexId, int homeId, String userId) throws Exception {
+    public IotButtonListInfo getMyIotButtonList
+                (int complexId, int homeId, String userId, boolean resultSimplify) throws Exception {
         IotButtonListInfo buttonList = new IotButtonListInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
@@ -161,6 +164,9 @@ public class IotInfoServiceImpl implements IotInfoService {
         // 1. result data 리맵핑
         try {
             this.remapResultMyIotButtonDataList( (List)result.get("DATA") );
+            if( resultSimplify ) {
+                this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA") );
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -184,7 +190,8 @@ public class IotInfoServiceImpl implements IotInfoService {
     /**
      * 4. My IOT의 IOT 버튼 개별 정보 가져오기
      */
-    public IotButtonListInfo getMyIotButtonListById(int complexId, int homeId, String userId, int buttonId) throws Exception {
+    public IotButtonListInfo getMyIotButtonListById
+                (int complexId, int homeId, String userId, int buttonId, boolean resultSimplify) throws Exception {
         IotButtonListInfo buttonList = new IotButtonListInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
@@ -202,6 +209,9 @@ public class IotInfoServiceImpl implements IotInfoService {
         // 1. result data 리맵핑
         try {
             this.remapResultMyIotButtonDataList( (List)result.get("DATA") );
+            if( resultSimplify ) {
+                this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA") );
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -766,7 +776,13 @@ public class IotInfoServiceImpl implements IotInfoService {
 //            this.replaceMapKeyIfExisted(e, "MO_THINGS_ID", "DEVICE_ID" );
 //            // MOD_ID --> DEVICE_ID로 변환
 //            this.replaceMapKeyIfExisted(e, "MOD_ID", "DEVICE_ID" );
+        }
+    }
 
+    private void deleteUnusedResultMyIotButtonDataList(List<Map<String, Object>> resultData) {
+        String v;
+
+        for(Map<String, Object>e : resultData) {
             // 사용하지 않은 값 삭제
             this.removeMapKeyIfExisted(e, "CLNT_ID");
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
@@ -799,6 +815,7 @@ public class IotInfoServiceImpl implements IotInfoService {
             this.removeMapKeyIfExisted(e, "MIN_LINK_PROTC_KEY");
         }
     }
+
 
     private void remapResultModeDataList(List<Map<String, Object>> resultData) {
         String v;

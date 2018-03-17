@@ -10,10 +10,10 @@ public interface IotInfoService {
             (int complexId, int homeId) throws Exception;
 
     IotButtonListInfo getMyIotButtonList
-            (int complexId, int homeId, String userId) throws Exception;
+            (int complexId, int homeId, String userId, boolean resultSimplify) throws Exception;
 
     IotButtonListInfo getMyIotButtonListById
-            (int complexId, int homeId, String userId, int buttonId) throws Exception;
+            (int complexId, int homeId, String userId, int buttonId, boolean resultSimplify) throws Exception;
 
     IotButtonListInfo getMyIotButtonListAvailable
             (int complexId, int homeId, String userId) throws Exception;
