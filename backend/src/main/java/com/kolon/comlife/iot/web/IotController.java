@@ -544,18 +544,9 @@ public class IotController {
 
     /**
      * 21. '모드' 편집에서, 모드 목록 및 순서를 가져오기 at Mode 내용 편집
+     *  ===> 1. 번과 동일
      */
-    @GetMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/modes/order",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotModeListInfo> getModesOrder(
-            @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId )
-    {
-        IotModeListInfo modeListInfo = new IotModeListInfo();
 
-        return ResponseEntity.status(HttpStatus.OK).body( modeListInfo );
-    }
 
     /**
      * 22. '모드' 편집에서, 모드 목록 및 순서를 가져오기 at Mode 내용 편집
