@@ -171,6 +171,16 @@ body.cl-dom--added{
     background-image: url("images/bg-2-dark@2x.png");
 }
 
+.cl-bg--darkgray{
+    background-color: #D2D2D2;
+    color: #000000;
+
+}
+
+.cl-bg--lightgray{
+    background-color: #F5F5F5;
+    color: rgba( 0, 0, 0, 0.7 );
+}
 
 .cl-header--reservation {
     min-height: 145px;

@@ -11,18 +11,41 @@ class EditableList extends Component {
         super(props);
 
         this.state = {
-            items: this.props.items,
+            items: props.items.slice(),
+            checkeds:[],
         }
+
+        console.log( props.items );
     }
 
     onSortEnd = ({oldIndex, newIndex}) => {
         this.setState({
             items: arrayMove(this.state.items, oldIndex, newIndex),
         });
+
+        if( this.props.onAlign ) {
+            this.props.onAlign( this.state.items );
+        }
     }
 
-    onCheckboxChange =( value, index )=>{
-        console.log( value, index );
+    onCheckboxChange =( bool, index )=>{
+        let a;
+
+        if( this.props.radio ) a = [];
+        else                   a = this.state.checkeds.slice();
+
+        a[index] = bool;
+        this.setState( { checkeds: a } );
+
+
+        if( this.props.onCheck ) {
+            let cks = [];
+            this.props.items.forEach( (item, idx)=>{
+                if( a[idx] ) cks.push( item );
+            });
+
+            this.props.onCheck( cks );
+        }
     }
 
 
@@ -32,9 +55,9 @@ class EditableList extends Component {
             <span className="ml-auto cl__handle"/>
         );
 
-        const SortableItem = SortableElement(({value }) =>
+        const SortableItem = SortableElement(({ value }) =>
             <li>
-                <Checkbox className="mr-1em" onCheckboxChange={ this.onCheckboxChange }/>
+                <Checkbox className="mr-1em" index={value.idx} value={ this.state.checkeds[value.idx] } onChange={ this.onCheckboxChange }/>
                 {/*<Link to={value.to} className="cl-flex">*/}
                     <img className="cl__thumb--rounded" src={SampleSrc}/>
                     <div>
