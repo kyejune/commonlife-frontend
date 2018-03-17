@@ -1,83 +1,80 @@
 /* Drawer */
-.md-drawer{
+.md-drawer {
 
-  background-image: url("images/bg-2-dark@2x.png");
-  color: white;
+    background-image: url("images/bg-2-dark@2x.png");
+    color: white;
 
-  a{
-    color: #BDA45E;
-    text-decoration: underline;
-  }
-
-  img{
-    vertical-align: middle;
-  }
-
-  footer{
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    z-index: 20;
-    height: 50px;
-    background-color: #eeeeee;
-    padding: 7px 16px;
-    align-items: center;
-    color: #4a4a4a;
-
-    button{
-      font-size: 14px;
-      color: #5F5F5F;
+    a {
+        color: #BDA45E;
+        text-decoration: underline;
     }
 
-    .cl-strong{
-      color: #5F5F5F;
-      font-weight: bolder;
+    img {
+        vertical-align: middle;
     }
-  }
+
+    footer {
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        z-index: 20;
+        height: 50px;
+        background-color: #eeeeee;
+        padding: 7px 16px;
+        align-items: center;
+        color: #4a4a4a;
+
+        button {
+            font-size: 14px;
+            color: #5F5F5F;
+        }
+
+        .cl-strong {
+            color: #5F5F5F;
+            font-weight: bolder;
+        }
+    }
 }
-
-
 
 /* 새글 쓰기 */
-.cl-write{
-  height: 100vh;
+.cl-write {
+    height: 100vh;
 }
 
-.cl-write-section{
+.cl-write-section {
 
-  height: calc( 100vh - 56px );
+    height: calc(100vh - 56px);
 
-  textarea{
-    padding: 1em;
-    width: 100%;
-    border: none;
-    font-size: 18px;
-    color: white;
-    background-color: transparent;
-  }
+    textarea {
+        padding: 1em;
+        width: 100%;
+        border: none;
+        font-size: 18px;
+        color: white;
+        background-color: transparent;
+    }
 }
 
-.cl-preview-holder{
+.cl-preview-holder {
 
-  position: absolute;
-  padding-left: 15px;
-  padding-bottom: 20px;
-  bottom: 50px;
-  left: 0;
+    position: absolute;
+    padding-left: 15px;
+    padding-bottom: 20px;
+    bottom: 50px;
+    left: 0;
 
-  img, button{
-    display: inline-block;
-    vertical-align: middle;
-  }
+    img, button {
+        display: inline-block;
+        vertical-align: middle;
+    }
 
-  button{
-    color: #77787A;
-    font-size: 12px;
-    text-decoration: underline;
-    margin-left: 0.8em;
-  }
+    button {
+        color: #77787A;
+        font-size: 12px;
+        text-decoration: underline;
+        margin-left: 0.8em;
+    }
 }
-
 
 /*
  * 카드아이템
@@ -100,7 +97,7 @@
         border-radius: 0;
         border: 0;
 
-        clip-path: polygon( 15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
+        clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
     }
 
     .md-card-title {
@@ -178,17 +175,17 @@
     //border-bottom: 2px solid #ffffff;
 }
 
-.cl-counter__button{
-  width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  background-color: #f4ca5c;
-  font-size: 9px;
-  font-style: normal;
-  text-align: center;
-  color: #000000;
-  line-height: 17px;
-  margin-right: 1em;
+.cl-counter__button {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    background-color: #f4ca5c;
+    font-size: 9px;
+    font-style: normal;
+    text-align: center;
+    color: #000000;
+    line-height: 17px;
+    margin-right: 1em;
 }
 
 .cl-card-item--brand {
@@ -229,45 +226,41 @@
 }
 
 /* Content Holder */
-.cl-back__button{
-  padding: 0;
-  text-align: left;
+.cl-back__button {
+    padding: 0;
+    text-align: left;
 }
-
-
-
 
 /* Card Item Detail */
-.cl-card-detail{
+.cl-card-detail {
 
-  height: calc( 100vh - 106px );
-  overflow: auto;
+    height: calc(100vh - 106px);
+    overflow: auto;
 
-  .cl-info{
-    background-color: #F4F4F4;
-    padding: 16px;
-    padding-bottom: 10px;
+    .cl-info {
+        background-color: #F4F4F4;
+        padding: 16px;
+        padding-bottom: 10px;
 
-    &>h3{
-      border-bottom: 1px solid #cfcfcf;
-      padding-bottom: 34px;
-      font-weight: bold;
-      color: #000000;
+        & > h3 {
+            border-bottom: 1px solid #cfcfcf;
+            padding-bottom: 34px;
+            font-weight: bold;
+            color: #000000;
+        }
     }
-  }
 
-  .cl-card-item{
-    padding-bottom: 1em;
-    border-bottom: 1px solid #cfcfcf;
-  }
+    .cl-card-item {
+        padding-bottom: 1em;
+        border-bottom: 1px solid #cfcfcf;
+    }
 
-  .cl-content--card{
-    padding: 16px;
-    min-height: 100px;
-  }
+    .cl-content--card {
+        padding: 16px;
+        min-height: 100px;
+    }
 
 }
-
 
 /* Like Lisk */
 .cl-like__header {
@@ -303,7 +296,7 @@
     border: 0;
     background-size: cover;
 
-    clip-path: polygon( 15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
+    clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
 }
 
 .cl-like__name {
@@ -327,60 +320,53 @@
     }
 }
 
+.cl-like-share {
 
-.cl-like-share{
+    button, a {
+        color: #8C8C8C;
+    }
 
-  button, a{
-    color: #8C8C8C;
-  }
+    .cl-like__button, .cl-counter__button {
+        color: #000000;
+    }
 
-  .cl-like__button, .cl-counter__button{
-    color: #000000;
-  }
-
-  a{
-    text-decoration: none;
-  }
+    a {
+        text-decoration: none;
+    }
 }
-
 
 /* 앞에 동그라미 감싸진 + 버튼이 있는 라벨 버튼*/
-.cl-plus-label__button{
+.cl-plus-label__button {
 
-  height: 18px;
-  font-size: 14px;
-  font-weight: bold;
-  line-height: 18px;
-  color: #000000;
-
-  &:before{
-    content:'';
-    display: inline-block;
-    width: 18px;
     height: 18px;
-    background: transparent url("images/plus-circle@3x.png") no-repeat;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 18px;
+    color: #000000;
+
+    &:before {
+        content: '';
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        background: transparent url("images/plus-circle@3x.png") no-repeat;
+        background-size: contain;
+        margin-right: 4px;
+        vertical-align: top;
+    }
+}
+
+.cl-map__link {
+    width: 24px;
+    height: 24px;
+    background: transparent url("images/map-link@3x.png") no-repeat;
     background-size: contain;
-    margin-right: 4px;
-    vertical-align: top;
-  }
+    opacity: 0.3;
 }
 
-
-.cl-map__link{
-  width: 24px;
-  height: 24px;
-  background: transparent url("images/map-link@3x.png") no-repeat;
-  background-size: contain;
-  opacity: 0.3;
+.DayPicker-Day--disabled {
+    pointer-events: none;
 }
-
-
-
-
-.DayPicker-Day--disabled{
-  pointer-events: none;
-}
-
 
 // 슬라이더 레이아웃
 .cl-slider {
@@ -437,5 +423,197 @@
         margin-left: -11px;
         border-width: 10px 11px 0;
         border-top-color: #1654A3;
+    }
+}
+
+// dim progress
+
+.cl-iot-connect-progress {
+    position: relative;
+    width: 195px;
+    height: 48px;
+    transform: rotate(90deg);
+
+    span {
+        display: block;
+        background-color: #9B9B9B;
+        overflow: hidden;
+        transition: 500ms linear;
+        -webkit-transition: 500ms linear;
+
+        &:after {
+            content: "";
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+            position: absolute;
+            overflow: hidden;
+            background-image: -webkit-linear-gradient(135deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+            background-image: linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
+        }
+    }
+}
+
+.cl-iot-connect-progress__box {
+    position: absolute;
+    width: 130px;
+    height: 4px;
+    top: 50%;
+    left: 40px;
+    margin-top: -2px;
+
+    &:after {
+        background-size: 17px;
+        //animation: stripes-move 2s linear infinite;
+        //-webkit-animation: stripes-move 2s linear infinite;
+        animation: stripes-move 1500ms ease-in-out;
+        -webkit-animation: stripes-move 1500ms ease-in-out;
+    }
+
+}
+
+@-webkit-keyframes stripes-move {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+@keyframes stripes-move {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 50px 50px;
+    }
+}
+
+.cl-iot-connect-progress__icon-start {
+    position: absolute;
+    top: 3px;
+    left: 1px;
+    z-index: 99;
+    width: 42px;
+    height: 42px;
+    background-size: 42px;
+    background-image: url("images/iot-ic-connect-bullet@3x.png");
+    transform: rotate(-90deg);
+    transition: 300ms ease-in-out;
+    -webkit-transition: 300ms ease-in-out;
+    animation: move-connect-ic 300ms ease-in-out;
+    -webkit-animation: move-connect-ic 300ms ease-in-out;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes move-connect-ic {
+    0% {
+        background-image: url("images/iot-ic-connect-bullet@3x.png");
+    }
+    100% {
+        background-image: url("images/iot-ic-connect-bullet-grey@3x.png");
+    }
+}
+
+.cl-iot-connect-progress__icon-done {
+    position: absolute;
+    top: 3px;
+    left: 152px;
+    z-index: 99;
+    width: 42px;
+    height: 42px;
+    background-size: 42px;
+    background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
+    transform: rotate(-90deg);
+    transition: 300ms ease-in-out;
+    -webkit-transition: 300ms ease-in-out;
+    animation: connect-done-ic 300ms ease-in-out;
+    -webkit-animation: connect-done-ic 300ms ease-in-out;
+    animation-delay: 1300ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes connect-done-ic {
+    0% {
+        background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
+    }
+    100% {
+        background-image: url("images/iot-ic-connect-check-bullet@3x.png");
+    }
+}
+
+.cl-iot-connect-progress__text {
+    position: absolute;
+    width: 80px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    transform: rotate(-90deg);
+}
+
+.cl-iot-connect-progress__text-start {
+    @extend .cl-iot-connect-progress__text;
+
+    top: -55px;
+    left: -19px;
+    opacity: 1;
+
+    animation: connect-start-text 100ms linear;
+    -webkit-animation: connect-start-text 100ms linear;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes connect-start-text {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+
+.cl-iot-connect-progress__text-done {
+    @extend .cl-iot-connect-progress__text;
+
+    top: -55px;
+    left: 131px;
+    opacity: 0;
+
+    animation: connect-done-text 100ms linear;
+    -webkit-animation: connect-done-text 100ms linear;
+    animation-delay: 1300ms;
+    animation-fill-mode: forwards;
+}
+
+@keyframes connect-done-text {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+// connection dim dark
+
+.cl-iot-progress-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0,0,0,0.85);
+
+    .cl-iot-connect-progress {
+        position: relative;
+        /* top: 65%; */
+        left: 50%;
+        margin-left: -97.5px;
     }
 }
