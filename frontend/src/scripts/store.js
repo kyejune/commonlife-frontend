@@ -1,4 +1,4 @@
-import {observable, isObservable} from 'mobx';
+import {observable} from 'mobx';
 import { Drawer } from 'react-md';
 
 let host = 'https://clback.cyville.net';

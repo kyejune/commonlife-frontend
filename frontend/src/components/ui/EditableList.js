@@ -21,6 +21,10 @@ class EditableList extends Component {
         });
     }
 
+    onCheckboxChange =( value, index )=>{
+        console.log( value, index );
+    }
+
 
     render() {
 
@@ -28,16 +32,16 @@ class EditableList extends Component {
             <span className="ml-auto cl__handle"/>
         );
 
-        const SortableItem = SortableElement(({value}) =>
+        const SortableItem = SortableElement(({value }) =>
             <li>
-                <Checkbox className="mr-1em"/>
-                <Link to={value.to} className="cl-flex">
+                <Checkbox className="mr-1em" onCheckboxChange={ this.onCheckboxChange }/>
+                {/*<Link to={value.to} className="cl-flex">*/}
                     <img className="cl__thumb--rounded" src={SampleSrc}/>
                     <div>
                         <h4 className="cl__title">{value.name}</h4>
                         {value.desc && <span className="cl__desc">{value.desc}</span>}
                     </div>
-                </Link>
+                {/*</Link>*/}
                 <Handle/>
             </li>
         );

@@ -18,14 +18,6 @@ class IotModeEditor extends Component {
 
         return (
             <div>
-                {/*<ul>*/}
-                    {/*<li>*/}
-                        {/*<Link to="/iot/mode/0">*/}
-                            {/*체크박스, 썸네일, --모드*/}
-                        {/*</Link>*/}
-                    {/*</li>*/}
-                {/*</ul>*/}
-
                 <EditableList
                     items={[
                         {img:'', name:'외출모드', to:"/iot/mode/0" },

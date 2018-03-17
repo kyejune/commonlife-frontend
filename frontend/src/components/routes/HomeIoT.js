@@ -1,15 +1,13 @@
 /* HomeIoT.jsx */
 import React, { Component } from 'react';
 import Store from 'scripts/store';
-import Iot from 'scripts/iot';
+import Iot, { Modes, MyIots } from 'scripts/iot';
 import { Drawer } from 'react-md';
 import { Link } from 'react-router-dom';
-import DrawerIotControlList from "components/drawers/DrawerIotControlList";
 import IotModeEditor from "components/drawers/iot/IotModeEditor";
 import WithTitle from 'components/ui/WithTitle';
 import IotBtnMode from 'components/ui/IotBtnMode';
 import IotBtnLg from 'components/ui/IotBtnLg';
-import Modal from 'components/overlay/Modal';
 
 import IotIcAddMode from 'images/combined-shape@3x.png';
 
@@ -28,18 +26,14 @@ class HomeIoT extends Component {
 	constructor ( props ) {
 		super( props );
 
-		this.state = {
-			// drawer: Store.drawer,
-			mode: [],
-		}
+		// this.state = {
+		// 	// drawer: Store.drawer,
+		// 	// mode: [],
+		// }
 	}
 
 	componentDidMount () {
-		Iot.getIot( data =>{
-			this.setState( { mode: data.mode } );
-		} );
-
-
+		Iot.getIot();
 		this.updateRoute();
 	}
 
@@ -107,10 +101,10 @@ class HomeIoT extends Component {
 
 					<div className="cl-iot-mode">
 						<ul className="cl-iot-mode__list">
-							{ this.state.mode.map( ( mode, index ) => {
+							{ Modes.map( ( m, index ) => {
 								return (
 									<li className="cl-iot-mode__list-item" key={index}>
-										<IotBtnMode modeData={mode}/>
+										<IotBtnMode modeData={m}/>
 									</li>
 								)
 							} ) }

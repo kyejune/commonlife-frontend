@@ -1,9 +1,10 @@
 // import Store from 'scripts/store.js';
 import axios from 'axios';
-import SimpleJsonFilter from 'simple-json-filter/index';
+import {observable} from 'mobx';
+// import SimpleJsonFilter from 'simple-json-filter/index';
 
 
-let sjf = new SimpleJsonFilter();
+// let sjf = new SimpleJsonFilter();
 
 
 // axios.defaults.baseURL = 'http://localhost:8080'// host;
@@ -35,19 +36,14 @@ const sortBySortOrder = ( a, b )=>{
 }
 
 
+export let Modes = observable([]);
+export let MyIots = observable([]);
+
 
 export default {
 
-//     axios.all([
-//     axios.get('http://google.com'),
-//     axios.get('http://apple.com')
-// ])
-//     .then(axios.spread((googleRes, appleRes) => {
-//         // do something with both responses
-//     });
-
 	/* Iot */
-	getIot( callback ){
+	getIot(){
 
 		axios.all([
 			axios.get('./dummy/iot-mode.json' ),
@@ -58,15 +54,10 @@ export default {
 			modeRes.data.data.sort( sortBySortOrder );
             iotRes.data.data.sort( sortBySortOrder );
 
-			callback( { mode:modeRes.data.data, iot:iotRes.data.data } );
+            Modes.replace( modeRes.data.data );
+            MyIots.replace( iotRes.data.data );
         }));
 
-
-
-		// axios.get( './dummy/iot.json' ) // 서버 예제 적용 버전
-		// 	.then( response => {
-		// 		callback( response.data );
-		// 	} );
 	},
 
 
