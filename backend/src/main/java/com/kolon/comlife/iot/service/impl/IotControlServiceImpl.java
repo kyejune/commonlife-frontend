@@ -53,7 +53,8 @@ public class IotControlServiceImpl implements IotControlService {
 
 
     // 5. 개별 IOT 버튼의 대표 기능 실행
-    public IotButtonListInfo executeMyIotButtonPrimeFunction(int complexId, int homeId, String userId, int buttonId) throws Exception {
+    public IotButtonListInfo executeMyIotButtonPrimeFunction
+            (int complexId, int homeId, String userId, int buttonId) throws Exception {
         HttpPutRequester    requester;
         Map<String, Map>    result;
         IotButtonListInfo   buttonInfo;
