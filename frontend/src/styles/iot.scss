@@ -561,6 +561,7 @@
 //IotModeChange
 .cl-iot-mode-progress {
     position: relative;
+    height: 100%;
 }
 
 .cl-iot-mode-progress__top {
@@ -585,7 +586,7 @@
 
 .cl-iot-mode-progress__content {
     background-color: #F5F5F5;
-    height: 100vh;
+    height: 100%;
     padding: 52px 15px 60px;
 }
 
