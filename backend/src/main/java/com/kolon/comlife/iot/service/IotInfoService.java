@@ -15,6 +15,9 @@ public interface IotInfoService {
     IotButtonListInfo getMyIotButtonListById
             (int complexId, int homeId, String userId, int buttonId, boolean resultSimplify) throws Exception;
 
+    IotButtonListInfo deleteMyIotButtonListById
+            (int complexId, int homeId, String userId, int buttonId, boolean resultSimplify) throws Exception;
+
     IotButtonListInfo getMyIotButtonListAvailable
             (int complexId, int homeId, String userId) throws Exception;
 

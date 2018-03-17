@@ -3,17 +3,17 @@ package com.kolon.comlife.iot.service.impl;
 import com.google.common.base.CaseFormat;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;
 import com.kolon.comlife.iot.model.*;
-import com.kolon.comlife.iot.service.IotControlService;
 import com.kolon.comlife.iot.service.IotInfoService;
+import com.kolon.common.http.HttpDeleteRequester;
 import com.kolon.common.http.HttpGetRequester;
 import com.kolon.common.prop.ServicePropertiesMap;
 import org.apache.http.impl.client.CloseableHttpClient;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.util.*;
 
 @Service("iotInfoService")
@@ -28,6 +28,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String IOK_MODES_LIST_PATH                 = "/iokinterface/scenario/modeInfoList";
     private static final String IOK_MYIOT_LIST_PATH                 = "/iokinterface/myiot/myiotList";
     private static final String IOK_MYIOT_AVAILABLE_LIST_PATH       = "/iokinterface/myiot/myiotSetList";
+    private static final String IOK_MYIOT_DELETE_PATH               = "/iokinterface/myiot/saveMyIot";
     private static final String IOK_ROOMS_LIST_PATH                 = "/iokinterface/device/roomList";
     private static final String IOK_DEVICES_LIST_BY_ROOM_PATH       = "/iokinterface/device/roomDeviceList";
     private static final String IOK_DEVICE_DETAIL_BY_DEVICE_ID_PATH = "/iokinterface/device/deviceDetail";
@@ -40,11 +41,8 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String IOK_MODE_DETAIL_CONDITONS_AVAILABLE_PATH = "/iokinterface/scenario/scnaIfAddList";
     private static final String IOK_MODE_DETAIL_ACTORS_AVAILABLE_PATH    = "/iokinterface/scenario/scnaThingsAddList";
 
-    @Resource(name = "servicePropertiesMap")
+    @Autowired
     private ServicePropertiesMap serviceProperties;
-
-    @Resource(name = "iotControlService")
-    private IotControlService iotControlService;
 
     @Autowired
     private CloseableHttpClient httpClient;
@@ -187,11 +185,13 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
 
+
     /**
-     * 4. My IOT의 IOT 버튼 개별 정보 가져오기
+     * My IOT의 IOT 버튼 개별 정보 가져오기 (Internal/private)
      */
-    public IotButtonListInfo getMyIotButtonListById
-                (int complexId, int homeId, String userId, int buttonId, boolean resultSimplify) throws Exception {
+    private IotButtonListInfo getMyIotButtonListByIdInternal
+            (int complexId, int homeId, String userId, int buttonId, boolean resultSimplify) throws Exception
+    {
         IotButtonListInfo buttonList = new IotButtonListInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
@@ -226,10 +226,22 @@ public class IotInfoServiceImpl implements IotInfoService {
             throw new IotInfoNoDataException( "가져올 버튼 정보가 없습니다." );
         }
 
+        return buttonList;
+    }
+
+    /**
+     * 4. My IOT의 IOT 버튼 개별 정보 가져오기
+     */
+    public IotButtonListInfo getMyIotButtonListById
+                (int complexId, int homeId, String userId, int buttonId, boolean resultSimplify) throws Exception {
+        IotButtonListInfo buttonList = new IotButtonListInfo();
+
+        buttonList = this.getMyIotButtonListByIdInternal(complexId, homeId, userId, buttonId, resultSimplify);
         buttonList.setMsg("My IOT의 IOT 버튼 개별 정보 가져오기");
 
         return buttonList;
     }
+
 
     /**
      * 10. 공간 목록 가져오기 at Quick IOT 제어 > 공간별 보기
@@ -546,6 +558,49 @@ public class IotInfoServiceImpl implements IotInfoService {
         return buttonListInfo;
     }
 
+    // 27. MyIOT 편집 화면에서 '기기/시나리오/정보'를 목록에서 제거하기
+    public IotButtonListInfo deleteMyIotButtonListById
+            (int complexId, int homeId, String userId, int buttonId, boolean resultSimplify) throws Exception
+    {
+        IotButtonListInfo   buttonListInfo;
+        HttpDeleteRequester requester;
+        Map<String, String> result;
+        String bodyStr;
+
+        try {
+            buttonListInfo = getMyIotButtonListByIdInternal(complexId, homeId, userId, buttonId, resultSimplify);
+        } catch( IotInfoNoDataException e ) {
+            // 예외 메시지 변환
+            throw new IotInfoNoDataException("해당하는 MyIOT의 항목이 없습니다.");
+        }
+
+        requester = new HttpDeleteRequester(
+            httpClient,
+            serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+            IOK_MYIOT_DELETE_PATH );
+
+        Map msg = new HashMap();
+        msg.put("cmplxId", String.valueOf(complexId));
+        msg.put("homeId", String.valueOf(homeId));
+        msg.put("userId", userId);
+        msg.put("seqNo", buttonId); // buttonId == seqNo
+
+        ObjectMapper mapper = new ObjectMapper();
+        List msgList = new ArrayList();
+        msgList.add(msg);
+        bodyStr = mapper.writeValueAsString(msgList);
+        logger.debug(">>> msg:" + bodyStr);
+
+        requester.setBody(bodyStr);
+        result = requester.execute();
+        logger.debug(">>> msg: " + result.get("msg"));
+        logger.debug(">>> resFlag: " + result.get("resFlag"));  // BUGBUG: 항상 false로 반환 됨
+
+        buttonListInfo.setMsg("MyIOT의 버튼 삭제하기 : " + result.get("msg"));
+
+        return buttonListInfo;
+    }
+
     // 31. 특정 시나리오의 '조건(IF)' 목록 및 속성 가져오기
     public IotModeAutomationInfo getModeOrAutomationConditions(
             int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception {
@@ -731,6 +786,10 @@ public class IotInfoServiceImpl implements IotInfoService {
     private void remapResultMyIotButtonDataList(List<Map<String, Object>> resultData) {
         String v;
 
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
+
         for(Map<String, Object>e : resultData) {
             replaceMapKeyIfExisted(e, "SEQ_NO", "BT_ID"); // !! SEQ_NO 를 BT_ID로 변환
             replaceMapKeyIfExisted(e, "TITLE", "BT_TITLE");
@@ -780,7 +839,9 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void deleteUnusedResultMyIotButtonDataList(List<Map<String, Object>> resultData) {
-        String v;
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
 
         for(Map<String, Object>e : resultData) {
             // 사용하지 않은 값 삭제
@@ -818,7 +879,9 @@ public class IotInfoServiceImpl implements IotInfoService {
 
 
     private void remapResultModeDataList(List<Map<String, Object>> resultData) {
-        String v;
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
 
         for(Map<String, Object>e : resultData) {
             // 사용하지 않은 값 삭제
@@ -829,6 +892,10 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultDeviceDetailList(List<Map<String, Object>> resultData) {
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
+
         for (Map<String, Object> e : resultData) {
             // MO_THINGS_NM --> DEVICE_NM로 변환
             this.replaceMapKeyIfExisted(e, "MO_THINGS_NM", "DEVICE_NM" );
@@ -845,6 +912,10 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultRoomOrDeviceCategoryList(List<Map<String, Object>> resultData) {
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
+
         for (Map<String, Object> e : resultData) {
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
@@ -878,7 +949,9 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultDeviceUsageHistory(List<Map<String, Object>> resultData) {
-        String v;
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
 
         for(Map<String, Object>e : resultData) {
             // 사용하지 않은 값 삭제

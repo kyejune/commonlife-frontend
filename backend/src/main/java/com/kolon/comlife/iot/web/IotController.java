@@ -110,7 +110,7 @@ public class IotController {
      * 3. My IOT의 IOT 버튼 목록 및 정보 가져오기 at Dashboard
      */
     @GetMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/myiot",
+            path = "/complexes/{complexId}/homes/{homeId}/myiot",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotButtonList(
             @PathVariable("complexId") int complexId,
@@ -141,7 +141,7 @@ public class IotController {
      * 4. MyIOT의 IOT 버튼 개별 목록 가져오기 at Dashboard Button
      */
     @GetMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}",
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotButton(
             @PathVariable("complexId") int complexId,
@@ -173,7 +173,7 @@ public class IotController {
      * 5. MyIOT 내, 개별 IOT 버튼의 대표 기능 실행 at Dashboard Button
      */
     @PutMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}/action",
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}/action",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity executeMyIotButtonPrimeFunction(
             @PathVariable("complexId") int complexId,
@@ -214,7 +214,7 @@ public class IotController {
      * 6. 가치정보에서 날씨 화면의 세부 정보 가져오기 at Dashboard Button
      */
     @GetMapping(
-            value = "/complexes/{complexId}/valueInfo/weather",
+            path = "/complexes/{complexId}/valueInfo/weather",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map>  getValueInfoOfWeather(
             @PathVariable("complexId") int complexId )
@@ -229,7 +229,7 @@ public class IotController {
 //     * 7. 에너지 사용량 정보 가져오기 at Dashboard Button
 //     */
 //    @GetMapping(
-//            value = "/complexes/{complexId}/valueInfo/energy",
+//            path = "/complexes/{complexId}/valueInfo/energy",
 //            produces = MediaType.APPLICATION_JSON_VALUE)
 //    public ResponseEntity<Map>  getEnergyInfo(
 //            @PathVariable("complexId") int complexId )
@@ -243,7 +243,7 @@ public class IotController {
      * 8. 기기의 대표 기능 수행 - AWS Lambda 호출
      */
     @PutMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}/action",
+            path = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}/action",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity  executeDevicePrimeFunction(
             HttpServletRequest request,
@@ -303,7 +303,7 @@ public class IotController {
      * 10. 공간 목록 가져오기 at Quick IOT 제어 > 공간별 보기
      */
     @GetMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/rooms",
+            path = "/complexes/{complexId}/homes/{homeId}/rooms",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getRoomList(
             @PathVariable("complexId") int complexId,
@@ -330,7 +330,7 @@ public class IotController {
      * 11. 공간별 '기기 목록' 가져오기 at Quick IOT 제어 > 공간별 보기
      */
     @GetMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/rooms/{roomId}/devices",
+            path = "/complexes/{complexId}/homes/{homeId}/rooms/{roomId}/devices",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getRoomsWithDevicesList(
             @PathVariable("complexId") int complexId,
@@ -358,7 +358,7 @@ public class IotController {
      * 12. 기기 상세 정보 가져오기 at Quick IOT 제어 > 공간별 보기 or 기기별 보기
      */
     @GetMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}",
+            path = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceInfo(
             @PathVariable("complexId") int complexId,
@@ -386,7 +386,7 @@ public class IotController {
      * 13. 기기 카테고리 가져오기 at Quick IOT 제어 > 기기별 보기
      */
     @GetMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/deviceCategory",
+            path = "/complexes/{complexId}/homes/{homeId}/deviceCategory",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceGroupList(
             @PathVariable("complexId") int complexId,
@@ -413,7 +413,7 @@ public class IotController {
      * 14. 카테고리 별 기기 목록 가져오기 at Quick IOT 제어 > 기기별 보기
      */
     @GetMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/deviceCategory/{categoryCode}/devices",
+            path = "/complexes/{complexId}/homes/{homeId}/deviceCategory/{categoryCode}/devices",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceListByDeviceGroup(
             @PathVariable("complexId") int complexId,
@@ -441,7 +441,7 @@ public class IotController {
      * 15-a. 기기의 '사용내역' 정보 가져오기
      */
     @GetMapping(
-            value = "/complexes/{complexId}/homes/{homeId}/devices/usageHistory",
+            path = "/complexes/{complexId}/homes/{homeId}/devices/usageHistory",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDevicesUsageHistory(
             HttpServletRequest             request,
@@ -610,6 +610,41 @@ public class IotController {
 
         return ResponseEntity.status(HttpStatus.OK).body( buttonsList );
     }
+
+
+    /**
+     * 27. MyIOT 편집 화면에서 '기기/시나리오/정보'를 목록에서 제거하기 at MyIOT 추가
+     */
+    @DeleteMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity deleteMyIotButton(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("buttonId")    int buttonId)
+
+    {
+        IotButtonListInfo buttonList;
+        String            userId;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+            buttonList = iotInfoService.deleteMyIotButtonListById(complexId, homeId, userId, buttonId, true);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( buttonList );
+    }
+
 
     /**
      * 28. MyIOT에서 '시나리오/오토메이션'의 상세정보 가져오기 at MyIOT 추가
