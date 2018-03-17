@@ -7,10 +7,14 @@ class IotConnectionProgress extends Component {
 		return (
 
 			<div className="cl-iot-connect-progress">
+				{/* 시작 */}
 				<div className="cl-iot-connect-progress__icon-start"/>
 				<p className="cl-iot-connect-progress__text-start">Connecting…</p>
+
+				{/* 프로그레스바 */}
 				<span className="cl-iot-connect-progress__box"/>
-				<span className="cl-iot-connect-progress__circle-end"/>
+
+				{/* 완료 */}
 				<div className="cl-iot-connect-progress__icon-done"/>
 				<p className="cl-iot-connect-progress__text-done">Complete!</p>
 			</div>
