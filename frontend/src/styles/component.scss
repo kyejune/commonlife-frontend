@@ -608,12 +608,84 @@
     z-index: 9;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0,0,0,0.85);
+    //background-color: rgba(0,0,0,0.85);
 
     .cl-iot-connect-progress {
         position: relative;
-        /* top: 65%; */
+        top: 188px;
         left: 50%;
         margin-left: -97.5px;
     }
+}
+.cl-iot-progress-overlay__content {
+    min-height: 488px;
+    position: fixed;
+    width: 100%;
+    top: 50%;
+    margin-top: -244px;
+}
+
+.cl-iot-progress-overlay__top {
+    padding-bottom: 60px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+}
+
+.cl-iot-progress-overlay__icon {
+    display: flex;
+    align-items: center;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    border-radius: 50%;
+
+    img {
+        margin: 0 auto;
+    }
+}
+
+.cl-iot-progress-overlay__info-text {
+    margin: 17px 0 0;
+    font-size: 17px;
+    font-weight: 500;
+    text-align: center;
+    color: #ffffff;
+
+    span {
+        color: #f4ca5c;
+    }
+}
+
+.cl-iot-progress-overlay__alert-text {
+    position: absolute;
+    top: 215px;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+    text-align: center;
+    color: rgba(255,255,255,0.7);
+}
+
+.cl-iot-progress-overlay__alert-text-start {
+    @extend .cl-iot-progress-overlay__alert-text;
+
+    opacity: 1;
+
+    animation: connect-start-text 100ms linear;
+    -webkit-animation: connect-start-text 100ms linear;
+    animation-delay: 1s;
+    animation-fill-mode: forwards;
+}
+
+.cl-iot-progress-overlay__alert-text-done {
+    @extend .cl-iot-progress-overlay__alert-text;
+
+    opacity: 0;
+
+    animation: connect-done-text 100ms linear;
+    -webkit-animation: connect-done-text 100ms linear;
+    animation-delay: 1300ms;
+    animation-fill-mode: forwards;
 }
