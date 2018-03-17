@@ -593,15 +593,32 @@ public class IotController {
      * 24. MyIOT에 추가할 수 있는 모든 기기/가치정보/오토메이션 목록 가져오기 at MyIOT 추가
      */
     @GetMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/buttons",
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map> getButtons(
+    public ResponseEntity getMyIotButtonListAvailable(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
-        Map list = new HashMap();
+        IotButtonListInfo buttonsList;
+        String            userId;
 
-        return ResponseEntity.status(HttpStatus.OK).body( list );
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+            buttonsList = iotInfoService.getMyIotButtonListAvailable(complexId, homeId, userId );
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body( buttonsList );
     }
 
     /**

@@ -27,6 +27,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
     private static final String IOK_MODES_LIST_PATH                 = "/iokinterface/scenario/modeInfoList";
     private static final String IOK_MYIOT_LIST_PATH                 = "/iokinterface/myiot/myiotList";
+    private static final String IOK_MYIOT_AVAILABLE_LIST_PATH       = "/iokinterface/myiot/myiotSetList";
     private static final String IOK_ROOMS_LIST_PATH                 = "/iokinterface/device/roomList";
     private static final String IOK_DEVICES_LIST_BY_ROOM_PATH       = "/iokinterface/device/roomDeviceList";
     private static final String IOK_DEVICE_DETAIL_BY_DEVICE_ID_PATH = "/iokinterface/device/deviceDetail";
@@ -506,6 +507,35 @@ public class IotInfoServiceImpl implements IotInfoService {
         return modeAutoInfo;
     }
 
+    // 24. MyIOT에 추가가능한 모든 버튼 목록 가져오기
+    public IotButtonListInfo getMyIotButtonListAvailable (int complexId, int homeId, String userId) throws Exception {
+        IotButtonListInfo   buttonListInfo = new IotButtonListInfo();
+        HttpGetRequester    requester;
+        Map<String, Map>    result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MYIOT_AVAILABLE_LIST_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId));
+        requester.setParameter("homeId", String.valueOf(homeId));
+        requester.setParameter("userId", userId);
+        result = requester.execute();
+
+        try {
+            this.remapResultDataList( (List)result.get("DATA") );
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+
+        buttonListInfo.setData( convertListMapDataToCamelCase((List)result.get("DATA")) );
+
+        buttonListInfo.setMsg("MyIOT에 추가가능한 모든 버튼 목록 가져오기");
+
+        return buttonListInfo;
+    }
+
     // 31. 특정 시나리오의 '조건(IF)' 목록 및 속성 가져오기
     public IotModeAutomationInfo getModeOrAutomationConditions(
             int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception {
@@ -693,6 +723,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         for(Map<String, Object>e : resultData) {
             replaceMapKeyIfExisted(e, "TITLE", "BT_TITLE");
+            replaceMapKeyIfExisted(e, "TITLE_UNIT", "BT_TITLE_UNIT");
             replaceMapKeyIfExisted(e, "SUB_TITLE", "BT_SUB_TITLE");
             replaceMapKeyIfExisted(e, "IMG_SRC", "BT_IMG_SRC");
 
