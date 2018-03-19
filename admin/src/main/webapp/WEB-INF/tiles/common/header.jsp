@@ -60,6 +60,15 @@
                     <li><a href="/admin/managers/list.do">사용자 목록</a></li>
                 </ul>
             </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-calendar"></i>
+                    <span class="nav-label">예약 관리<span class="fa arrow"></span></span>
+                </a>
+                <ul class="nav nav-second-level callapse">
+                    <li><a href="/admin/reservation-schemes/list.do">예약 형식 관리</a></li>
+                </ul>
+            </li>
         </ul>
 
     </div>

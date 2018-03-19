@@ -113,8 +113,10 @@ public class PostController {
         newPost.setPostType( (String) args.get( "postType" ) );
         newPost.setContent( (String) args.get( "content" ) );
         PostInfo result = postService.setPost( newPost );
-        List<PostFileInfo> postFiles = postFileService.bindPostToPostFiles( result.getPostIdx(), (List<Integer>) args.get( "postFiles" ) );
-        result.setPostFiles( postFiles );
+        if( args.get( "postFiles" ) != null ) {
+            List<PostFileInfo> postFiles = postFileService.bindPostToPostFiles( result.getPostIdx(), (List<Integer>) args.get( "postFiles" ) );
+            result.setPostFiles( postFiles );
+        }
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
