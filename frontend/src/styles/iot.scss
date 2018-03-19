@@ -36,6 +36,10 @@
     font-weight: 500;
     color: rgba(0, 0, 0, 0.87);
 
+    &.cl-iot-mode__button--expand{
+        width: 235px;
+    }
+
     img {
         display: inline-block;
         width: 45px;
@@ -44,10 +48,16 @@
         vertical-align: bottom;
     }
 
-    span {
+    span, .cl-name {
         position: absolute;
         top: 50%;
-        margin-top: -11px;
+        transform: translateY(-50%);
+        width: calc( 100% - 65px );
+        font-size: 17px;
+    }
+
+    input.cl-name{
+        text-align: center;
     }
 }
 
@@ -286,104 +296,6 @@
     color: rgba(0, 0, 0, 0.5);
 }
 
-
-
-/* Iot Vertical List Common */
-//.abs-item__list--common{
-//    display: flex;
-//    flex-wrap: wrap;
-//    flex-direction: row;
-//    align-items: center;
-//    width: 100%;
-//    padding: 12px 18px 12px 12px;
-//    background-color: #E9E9E9;
-//    box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
-//    margin-bottom: 5px;
-//
-//    .cl__thumb{
-//        width: 45px;
-//        margin-right: 10px;
-//    }
-//
-//    .cl__thumb--rounded{
-//        @extend .cl__thumb;
-//        border-radius: 50%;
-//        background-color: #f3f3f3;
-//        border: 1px solid #DBDBDB;
-//    }
-//
-//    .cl__title{
-//        font-size: 17px;
-//        color: rgba( 0, 0, 0, 0.87 );
-//        font-weight: 600;
-//    }
-//
-//    .cl__desc{
-//        font-size: 12px;
-//        color: rgba( 0, 0, 0, 0.5 );
-//    }
-//
-//    .cl__handle{
-//
-//    }
-//
-//    .cl-next__button{
-//        width: 24px;
-//        height: 24px;
-//        background-image: url("images/ic-favorite-24-px-blue@3x.png");
-//        background-size: contain;
-//    }
-//
-//    &.cl-bg--light{
-//        background-color: #f4f4f4;
-//    }
-//
-//
-//    // 검은배경 위에..
-//    &.cl-bg--dark{
-//        color: #D1D1D2;
-//
-//        li{
-//            background-color: transparent;
-//            border-bottom: 1px solid #373A3F;
-//            padding-right: 7px;
-//        }
-//
-//        .cl__title, .cl__desc{
-//            color: #fafafa;
-//            opacity: 0.5;
-//        }
-//
-//        .cl__thumb--rounded{
-//            background-color: white;
-//        }
-//
-//        .cl__thumb--rounded--off{
-//            @extend .cl__thumb--rounded;
-//            background-color: #C0C1C3;
-//        }
-//    }
-//
-//
-//    // 꽉찬 화면
-//    &.cl--full{
-//        padding: 0;
-//
-//        li {
-//            padding: 27px 14px;
-//            //background-color: #EEEEEE;
-//            margin-bottom: 0;
-//
-//            .cl__thumb{
-//                width: 56px;
-//            }
-//        }
-//    }
-//}
-
-
-
-
 /* Iot Vertical List */
 .abs__list--common{
     display: flex;
@@ -475,6 +387,10 @@
 
     li{
         @extend .abs__list--common;
+
+        &:last-child{
+            margin-bottom: 2em;
+        }
     }
 
     // 약간 큰 사이즈
@@ -709,4 +625,51 @@
     @extend .cl-iot-slider__num;
     width: 12%;
     text-align: right;
+}
+
+
+
+
+// 하단 옵션용 푸터
+footer.cl-opts__footer{
+    padding: 10px 10px 8px 20px;
+    transition: bottom 0.3s ease-out;
+    box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.24), 0 0 4px 0 rgba(0, 0, 0, 0.12);
+
+    &.cl-opts__footer--hide{
+        bottom: -50px;
+    }
+
+    .name--strong{
+        font-size: 16px;
+        font-weight: 700;
+        color: rgba( 0, 0, 0, 0.6 );
+    }
+}
+
+
+// 모드 설정 변경, 및 시나리오 생성 페이지
+header.cl-mode-setting__header{
+    @extend .cl-bg--lightgray;
+    padding: 30px 15px 18px 15px;
+    height: auto;
+
+    .cl-iot-mode__button{
+        display: block;
+        margin: 0 auto 18px auto;
+        opacity: 1;
+
+        span{
+            color: rgba(0, 0, 0, 0.9);
+            font-weight: 500;
+            letter-spacing: -0.1em;
+        }
+    }
+
+    .desc{
+        font-size: 16px;
+        text-align: left;
+        opacity: 0.7;
+        line-height: 1.38em;
+    }
 }
