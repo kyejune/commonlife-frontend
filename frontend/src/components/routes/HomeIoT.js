@@ -21,6 +21,8 @@ import ChooseAddingIot from "../drawers/iot/ChooseAddingIot";
 import IotDeviceCategory from "../drawers/iot/IotDeviceCategory";
 import IotDeviceList from "../drawers/iot/IotDeviceList";
 import IotSensorEditor from "../drawers/iot/IotSensorEditor";
+import IotDeviceEditor from "../drawers/iot/IotDeviceEditor";
+import IotSensorList from "../drawers/iot/IotSensorList";
 
 class HomeIoT extends Component {
 
@@ -68,6 +70,9 @@ class HomeIoT extends Component {
                 device:'iot-device',
 				category:'iot-device-category',
 				'edit-sensor':'iot-sensor-editor',
+				'edit-device':'iot-device-editor',
+				'add-device':'iot-device-category',
+				'add-sensor':'iot-sensor-list',
 			},
 
 			// Footer에 붙어있는 파란 ctrl버튼 클릭
@@ -88,7 +93,7 @@ class HomeIoT extends Component {
 		let prevSeg = params[p];
 		for( var p in params ){
 			let d = map[params[p]];
-			if( !isNaN(params[p]) ) d = map[prevSeg] + '-detail';
+			if( RegExp(/\d+/).test(params[p])  ) d = map[prevSeg] + '-detail';
 			if( d ) Store.pushDrawer( d );
             prevSeg = params[p];
 		}
@@ -175,12 +180,6 @@ class HomeIoT extends Component {
                 <IotModeSetting/>
             </DrawerWrapper>
 
-
-			{/* IoT 기기제어, 기기추가 목록 */}
-            {/*<DrawerWrapper drawer="iot-control-list" title="IoT 제어" back >*/}
-                {/*<DrawerIotControlList/>*/}
-            {/*</DrawerWrapper>*/}
-
             {/* 기기 카테고리 목록 */}
             <DrawerWrapper drawer="iot-device-category" title="기기 카테고리" back >
                 <IotDeviceCategory/>
@@ -189,6 +188,11 @@ class HomeIoT extends Component {
             {/* 기기 카테고리 리스트 */}
             <DrawerWrapper drawer="iot-device-category-detail" title="기기 리스트" back >
                 <IotDeviceList/>
+            </DrawerWrapper>
+
+            {/* Iot 센서 목록 */}
+            <DrawerWrapper drawer="iot-sensor-list" title="IoT 센서 추가" back >
+                <IotSensorList/>
             </DrawerWrapper>
 
 
@@ -211,6 +215,11 @@ class HomeIoT extends Component {
 			<DrawerWrapper drawer="iot-sensor-editor" title="센서 편집" >
 				<IotSensorEditor/>
 			</DrawerWrapper>
+
+            {/* 기기 편집 */}
+            <DrawerWrapper drawer="iot-device-editor" title="기기 편집" >
+                <IotDeviceEditor/>
+            </DrawerWrapper>
 
 		</div>
 	}

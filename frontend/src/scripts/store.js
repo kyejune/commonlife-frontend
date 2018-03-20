@@ -16,6 +16,8 @@ host = 'https://clback.cyville.net';
 const Store = observable({
 
     api:host,
+    cmplxId:'125',
+    homeId:'1',
 
     /* Community별 CardItem 데이터 */
     feed: [],

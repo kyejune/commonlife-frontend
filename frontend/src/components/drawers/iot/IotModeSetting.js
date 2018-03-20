@@ -46,20 +46,6 @@ class IotModeSetting extends Component {
             deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
         }
 
-        // let Header;
-        // if( action === 'mode' ){
-        //     Header = [
-        //         <span className="desc">
-        //             모드 설정시 실내온도를 26도로 유지하며, 모든 전등을 소등하여 전력소모를 최소화 합니다.
-        //         </span>
-        //     ]
-        // }else{
-        //     Header = <div className="cl-iot-mode__button">
-        //         <IconLoader src={undefined} />
-        //         <input type="text" placeholder="시나리오 쓰고 있네" value={this.state.name} onChange={this.onChangeName}/>
-        //     </div>
-        // }
-
         return (
             <div className="cl-bg--darkgray">
 

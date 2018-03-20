@@ -1,13 +1,29 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import {Link} from "react-router-dom";
+import Iot from 'scripts/iot';
+
 
 class IotDeviceCategory extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {}
+        const dId = props.match.params.option2;
+
+        const isRoom = !isNaN(dId); // 숫자형이면 룸별 목록, 문자 조합이면 공간별 목록으로 구분
+        this.state = {
+            isRoom: isRoom,
+        }
+
+        console.log( isRoom, dId );
+
+        props.updateTitle( isRoom?'공간별 기기목록':'기기별 기기목록');
+
+        // 목록 가져오기
+        Iot.getDevicesByCategory( isRoom, dId, data => {
+            console.log( '기기목록:', data );
+        });
     }
 
     render() {

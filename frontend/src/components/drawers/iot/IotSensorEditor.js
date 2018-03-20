@@ -3,6 +3,8 @@ import checkSrc from 'images/ic-check@3x.png';
 import addSrc from 'images/add-light@3x.png';
 import RightArrowSrc from "images/ic-arrow-right@3x.png";
 import CheckRowList from "../../ui/CheckRowList";
+import Link from "react-router-dom/es/Link";
+import {withRouter} from 'react-router';
    
 class IotSensorEditor extends Component {
 
@@ -22,6 +24,8 @@ class IotSensorEditor extends Component {
     }
 
     render() {
+        const { pathname } = this.props.location;
+
         return (
             <div className="cl-bg--dark">
 
@@ -32,16 +36,16 @@ class IotSensorEditor extends Component {
 
 
 
-                <button className="cl-iot-add__button--light">
+                <Link to={`${pathname}/add-sensor`} className="cl-iot-add__button--light">
                     <img src={addSrc} alt="센서추가" width="40" height="40"/>
-                    <p>IoT센서추가</p>
-                </button>
+                    <p>IoT 센서 추가</p>
+                </Link>
 
                 {this.state.isMultipleCheck ?
 
                     <footer className="cl-opts__footer cl-flex">
                         <span className="name--strong">삭제</span>
-                        <img className="ml-auto opacity-70" src={RightArrowSrc} alt=">" width="30"/>
+                        {/*<img className="ml-auto opacity-70" src={RightArrowSrc} alt=">" width="30"/>*/}
                     </footer>
                     :<footer className="cl-opts__footer">
                         <button className="ml-auto cl-flex mr-1em">
@@ -56,4 +60,4 @@ class IotSensorEditor extends Component {
 }
 
     
-export default IotSensorEditor;
+export default withRouter(IotSensorEditor);
