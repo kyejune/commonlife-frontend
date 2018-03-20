@@ -20,6 +20,7 @@ import IotSensor from "../drawers/iot/IotSensor";
 import ChooseAddingIot from "../drawers/iot/ChooseAddingIot";
 import IotDeviceCategory from "../drawers/iot/IotDeviceCategory";
 import IotDeviceList from "../drawers/iot/IotDeviceList";
+import IotSensorEditor from "../drawers/iot/IotSensorEditor";
 
 class HomeIoT extends Component {
 
@@ -66,6 +67,7 @@ class HomeIoT extends Component {
                 sensor:'iot-sensor',
                 device:'iot-device',
 				category:'iot-device-category',
+				'edit-sensor':'iot-sensor-editor',
 			},
 
 			// Footer에 붙어있는 파란 ctrl버튼 클릭
@@ -204,6 +206,11 @@ class HomeIoT extends Component {
             <DrawerWrapper drawer="iot-add" title="추가" back >
                 <ChooseAddingIot/>
             </DrawerWrapper>
+
+			{/* 센서 편집 */}
+			<DrawerWrapper drawer="iot-sensor-editor" title="센서 편집" >
+				<IotSensorEditor/>
+			</DrawerWrapper>
 
 		</div>
 	}
