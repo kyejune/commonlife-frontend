@@ -775,3 +775,16 @@ header.cl-mode-setting__header{
         line-height: 1.38em;
     }
 }
+
+.cl-iot-add__button--light{
+
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+
+    p{
+        color: #6E7074;
+        font-size: 12px;
+        margin-top: 0.4em;
+    }
+}
