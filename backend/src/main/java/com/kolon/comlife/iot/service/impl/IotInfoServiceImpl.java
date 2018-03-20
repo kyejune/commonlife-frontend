@@ -1,11 +1,17 @@
 package com.kolon.comlife.iot.service.impl;
 
+import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.common.base.CaseFormat;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.kolon.comlife.iot.exception.IotInfoGeneralException;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;
+import com.kolon.comlife.iot.exception.IotInfoUpdateFailedException;
 import com.kolon.comlife.iot.model.*;
 import com.kolon.comlife.iot.service.IotInfoService;
 import com.kolon.common.http.HttpDeleteRequester;
 import com.kolon.common.http.HttpGetRequester;
+import com.kolon.common.http.HttpPostRequester;
 import com.kolon.common.prop.ServicePropertiesMap;
 import org.apache.http.impl.client.CloseableHttpClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,10 +42,17 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String IOK_DEVICES_LIST_BY_CATEGORY_PATH   = "/iokinterface/device/cateDeviceList";
     private static final String IOK_DEVICES_USAGE_HISTORY_PATH      = "/iokinterface/device/deviceHistList";
     private static final String IOK_MODE_DETAIL_PATH                = "/iokinterface/scenario/scnaDetail";
+    private static final String IOK_MODE_ORDER_CHANGE_PATH          = "/iokinterface/scenario/modeModify";
+    private static final String IOK_MODE_DETAIL_SAVE_PATH           = "/iokinterface/scenario/saveScnaDetail";
     private static final String IOK_MODE_DETAIL_CONDITONS_PATH      = "/iokinterface/scenario/scnaIfDetail";
     private static final String IOK_MODE_DETAIL_ACTORS_PATH         = "/iokinterface/scenario/scnaThingsDetail";
     private static final String IOK_MODE_DETAIL_CONDITONS_AVAILABLE_PATH = "/iokinterface/scenario/scnaIfAddList";
     private static final String IOK_MODE_DETAIL_ACTORS_AVAILABLE_PATH    = "/iokinterface/scenario/scnaThingsAddList";
+
+    private static final String IOK_AUTOMATION_DETAIL_PATH          = "/iokinterface/scenario/scnaDetail";
+    private static final String IOK_AUTOMATION_DETAIL_SAVE_PATH     = "/iokinterface/scenario/saveScnaDetail";
+
+    private static final String IOK_DEVICE_NAME_UPDATE_PATH = "/iokinterface/device/updateDevice";
 
     @Autowired
     private ServicePropertiesMap serviceProperties;
@@ -163,7 +176,7 @@ public class IotInfoServiceImpl implements IotInfoService {
         try {
             this.remapResultMyIotButtonDataList( (List)result.get("DATA") );
             if( resultSimplify ) {
-                this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA") );
+                this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA"), true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,7 +223,7 @@ public class IotInfoServiceImpl implements IotInfoService {
         try {
             this.remapResultMyIotButtonDataList( (List)result.get("DATA") );
             if( resultSimplify ) {
-                this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA") );
+                this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA"), true);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -241,7 +254,6 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         return buttonList;
     }
-
 
     /**
      * 10. 공간 목록 가져오기 at Quick IOT 제어 > 공간별 보기
@@ -529,6 +541,41 @@ public class IotInfoServiceImpl implements IotInfoService {
         return modeAutoInfo;
     }
 
+    // 22. '모드' 편집에서, 모드 목록의 순서를 변경하기
+    public IotModeListInfo updateModesOrder(int complexId, int homeId, IotModeListInfo modeList) throws Exception {
+        HttpPostRequester         requester;
+        List<Map<String, Object>> data = modeList.getData();
+        Map<String, String>       result;  // e.g. { "msg":"...", "resFlag": "false or true" }
+        ObjectMapper              mapper = new ObjectMapper();
+
+        // Populate the body of request
+        for(Map<String, Object> e : data) {
+            e.put("cmplxId", String.valueOf(complexId));
+            e.put("homeId", String.valueOf(homeId));
+        }
+
+        // Send a POST request to...
+        String reqBodyStr = mapper.writeValueAsString(data);
+        logger.debug(">>>>> " +reqBodyStr);
+        requester = new HttpPostRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MODE_ORDER_CHANGE_PATH );
+        requester.setBody(reqBodyStr);
+        result = requester.execute();
+
+        logger.debug(">>>> " + result.toString());
+        if( result.get("msg") == null || !result.get("msg").equals("설정이 완료되었습니다.") ) {
+            throw new IotInfoUpdateFailedException("모드의 순서 변경이 실패하였습니다.");
+        }
+
+        modeList.setMsg((result.get("msg")));
+
+        return modeList;
+    }
+
+
+
     // 24. MyIOT에 추가가능한 모든 버튼 목록 가져오기
     public IotButtonListInfo getMyIotButtonListAvailable (int complexId, int homeId, String userId) throws Exception {
         IotButtonListInfo   buttonListInfo = new IotButtonListInfo();
@@ -546,6 +593,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         try {
             this.remapResultMyIotButtonDataList( (List)result.get("DATA") );
+            this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA"), true);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -556,6 +604,11 @@ public class IotInfoServiceImpl implements IotInfoService {
         buttonListInfo.setMsg("MyIOT에 추가가능한 모든 버튼 목록 가져오기");
 
         return buttonListInfo;
+    }
+
+    public IotButtonListInfo simplifyMyIotButtonListResult( IotButtonListInfo result ) throws Exception {
+        this.deleteUnusedResultMyIotButtonDataList( (List)result.getData(), false);
+        return result;
     }
 
     // 27. MyIOT 편집 화면에서 '기기/시나리오/정보'를 목록에서 제거하기
@@ -600,6 +653,82 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         return buttonListInfo;
     }
+
+    // 29. MyIOT에서 '시나리오/오토메이션' 생성하기
+    public IotModeAutomationInfo createAutomation(
+            int complexId, int homeId, IotModeAutomationInfo automationInfo) throws Exception
+    {
+        HttpPostRequester       requester;
+        Map<String, Map>        result;
+        ObjectMapper mapper = new ObjectMapper();
+
+        // validation
+        if( automationInfo.getScna().size() < 1 ) {
+            throw new IotInfoUpdateFailedException("자동화 입력값이 잘못되었습니다. 입력 내용을 다시 확인하세요.");
+        }
+
+        if( automationInfo.getScnaIfSpc() != null && automationInfo.getScnaIfAply() != null ) {
+            // IfSpc && IfAply는 같이 사용할 수 없음
+            throw new IotInfoGeneralException("'특정시간'조건과 '구간시간' 조건은 같이 사용할 수 없습니다.");
+        }
+
+        // population
+        if(automationInfo.getScnaIfSpc() == null) {
+            automationInfo.setScnaIfSpc(new ArrayList<Map<String, Object>>());
+        }
+
+        if(automationInfo.getScnaIfAply() == null) {
+            automationInfo.setScnaIfAply(new ArrayList<Map<String, Object>>());
+        }
+
+        if(automationInfo.getScnaIfThings() == null) {
+            automationInfo.setScnaIfThings(new ArrayList<Map<String, Object>>());
+        }
+
+        if(automationInfo.getScnaThings() == null) {
+            automationInfo.setScnaThings(new ArrayList<Map<String, Object>>());
+        }
+
+        // 사용자 시나리오/오토메이션 생성시, "mode":"CM01199"를 전달해야 함
+        automationInfo.getScna().get(0).put("mode", "CMO01199");
+        automationInfo.getScna().get(0).put("useYn", "Y");
+
+        Map populateData = new HashMap();
+        populateData.put("cmplxId", String.valueOf(complexId));
+        populateData.put("homeId", String.valueOf(homeId));
+
+        this.remapResultScenarioDetailReverse(automationInfo.getScna(), populateData);
+        this.remapResultScenarioDetailReverse(automationInfo.getScnaIfThings(), populateData);
+        this.remapResultScenarioDetailReverse(automationInfo.getScnaThings(), populateData);
+
+        final GsonBuilder builder = new GsonBuilder();
+        final Gson gson = builder.create();
+        String gsonout = gson.toJson(automationInfo);
+        logger.debug( ">>>>>> " + gsonout);
+
+        // call!
+        requester = new HttpPostRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_AUTOMATION_DETAIL_SAVE_PATH );
+        requester.setBody( gsonout );
+        result = requester.execute();
+
+        IotModeAutomationInfo ret = new IotModeAutomationInfo();
+        Map scnaMap = new TreeMap();
+        scnaMap.put("msg", result.get("get"));
+        scnaMap.put("scnaId", result.get("scnaId"));
+
+        List retList = new ArrayList();
+        retList.add(scnaMap);
+        ret.setScna(retList);
+
+        return ret;
+    }
+
+
+    // 30. MyIOT에서 '시나리오/오토메이션' 업데이트하기
+
 
     // 31. 특정 시나리오의 '조건(IF)' 목록 및 속성 가져오기
     public IotModeAutomationInfo getModeOrAutomationConditions(
@@ -758,6 +887,35 @@ public class IotInfoServiceImpl implements IotInfoService {
         return actorsInfo;
     }
 
+
+    // 42. 관련장비 이름 수정
+    public IotDeviceListInfo updateDeviceDesc
+        (int complexId, int homeId, int deviceId, String description) throws Exception {
+        IotDeviceListInfo deviceInfo = new IotDeviceListInfo();
+        HttpGetRequester          requester;
+        Map<String, String>       result;  // e.g. { "msg":"...", "resFlag": "false or true" }
+        ObjectMapper              mapper = new ObjectMapper();
+
+        // Send a POST request to...
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_DEVICE_NAME_UPDATE_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId));
+        requester.setParameter("moThingsId", String.valueOf(deviceId)); // !! deviceId ==> moThingsId
+        requester.setParameter("dvcNm", String.valueOf(description));
+        result = requester.execute();
+
+        logger.debug(">>>> " + result.toString());
+        if( result.get("msg") == null || !result.get("msg").equals("설정이 완료되었습니다.") ) {
+            throw new IotInfoUpdateFailedException("모드의 순서 변경이 실패하였습니다.");
+        }
+
+        deviceInfo.setMsg((result.get("msg")));
+
+        return deviceInfo;
+    }
+
     /////// 공통 메소드 //////////////////////////////////////////////////////////////////////////////
     private void removeMapKeyIfExisted(Map map, String key) {
         Object v = map.get(key);
@@ -838,42 +996,86 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
     }
 
-    private void deleteUnusedResultMyIotButtonDataList(List<Map<String, Object>> resultData) {
+    /**
+     *
+     * @param resultData
+     * @param resultKeyUnderscore
+     *         == true: resultData에 포함된 Map의 모든 키는 대문자+underscore로 표현
+     *         == false: resultData에 포함된 Map의 모든 키는 소문자+camelCase로 표현
+     *
+     */
+    private void deleteUnusedResultMyIotButtonDataList
+            (List<Map<String, Object>> resultData, boolean resultKeyUnderscore) {
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
         }
 
-        for(Map<String, Object>e : resultData) {
-            // 사용하지 않은 값 삭제
-            this.removeMapKeyIfExisted(e, "CLNT_ID");
-            this.removeMapKeyIfExisted(e, "CMPLX_ID");
-            this.removeMapKeyIfExisted(e, "HOME_ID");
-            this.removeMapKeyIfExisted(e, "BINARY_YN");
-            this.removeMapKeyIfExisted(e, "MY_IOT_GB_CD");
-            this.removeMapKeyIfExisted(e, "KIND_CD");
-            this.removeMapKeyIfExisted(e, "MO_CLNT_ID");
-            this.removeMapKeyIfExisted(e, "THINGS_ID");
-            this.removeMapKeyIfExisted(e, "THINGS_NM");
-            this.removeMapKeyIfExisted(e, "MO_THINGS_ID");
-            this.removeMapKeyIfExisted(e, "MO_THINGS_NM");
-            this.removeMapKeyIfExisted(e, "USER_ID");
-            this.removeMapKeyIfExisted(e, "CURR_STS");
-            this.removeMapKeyIfExisted(e, "MAX_LINK_YN");
-            this.removeMapKeyIfExisted(e, "MAX_VLU");
-            this.removeMapKeyIfExisted(e, "MIN_LINK_YN");
-            this.removeMapKeyIfExisted(e, "MIN_VLU");
-            this.removeMapKeyIfExisted(e, "PROTC_KEY");
-            this.removeMapKeyIfExisted(e, "SORT_ORDER");
-            this.removeMapKeyIfExisted(e, "STS_CNT");
-            this.removeMapKeyIfExisted(e, "STS_ID");
-            this.removeMapKeyIfExisted(e, "STS_NM");
-            this.removeMapKeyIfExisted(e, "SCNA_ID");
-            this.removeMapKeyIfExisted(e, "SCNA_NM");
-            this.removeMapKeyIfExisted(e, "VALUE_CD");
-            this.removeMapKeyIfExisted(e, "MAX_CURR_STS");
-            this.removeMapKeyIfExisted(e, "MAX_LINK_PROTC_KEY");
-            this.removeMapKeyIfExisted(e, "MIN_CURR_STS");
-            this.removeMapKeyIfExisted(e, "MIN_LINK_PROTC_KEY");
+        if( resultKeyUnderscore ) {
+            for(Map<String, Object>e : resultData) {
+                // 사용하지 않은 값 삭제
+                this.removeMapKeyIfExisted(e, "CLNT_ID");
+                this.removeMapKeyIfExisted(e, "CMPLX_ID");
+                this.removeMapKeyIfExisted(e, "HOME_ID");
+                this.removeMapKeyIfExisted(e, "BINARY_YN");
+                this.removeMapKeyIfExisted(e, "MY_IOT_GB_CD");
+                this.removeMapKeyIfExisted(e, "KIND_CD");
+                this.removeMapKeyIfExisted(e, "MO_CLNT_ID");
+                this.removeMapKeyIfExisted(e, "THINGS_ID");
+                this.removeMapKeyIfExisted(e, "THINGS_NM");
+                this.removeMapKeyIfExisted(e, "MO_THINGS_ID");
+                this.removeMapKeyIfExisted(e, "MO_THINGS_NM");
+                this.removeMapKeyIfExisted(e, "USER_ID");
+                this.removeMapKeyIfExisted(e, "CURR_STS");
+                this.removeMapKeyIfExisted(e, "MAX_LINK_YN");
+                this.removeMapKeyIfExisted(e, "MAX_VLU");
+                this.removeMapKeyIfExisted(e, "MIN_LINK_YN");
+                this.removeMapKeyIfExisted(e, "MIN_VLU");
+                this.removeMapKeyIfExisted(e, "PROTC_KEY");
+                this.removeMapKeyIfExisted(e, "SORT_ORDER");
+                this.removeMapKeyIfExisted(e, "STS_CNT");
+                this.removeMapKeyIfExisted(e, "STS_ID");
+                this.removeMapKeyIfExisted(e, "STS_NM");
+                this.removeMapKeyIfExisted(e, "SCNA_ID");
+                this.removeMapKeyIfExisted(e, "SCNA_NM");
+                this.removeMapKeyIfExisted(e, "VALUE_CD");
+                this.removeMapKeyIfExisted(e, "MAX_CURR_STS");
+                this.removeMapKeyIfExisted(e, "MAX_LINK_PROTC_KEY");
+                this.removeMapKeyIfExisted(e, "MIN_CURR_STS");
+                this.removeMapKeyIfExisted(e, "MIN_LINK_PROTC_KEY");
+            }
+        } else {
+            for (Map<String, Object> e : resultData) {
+                // 사용하지 않은 값 삭제
+                this.removeMapKeyIfExisted(e, "clntId");
+                this.removeMapKeyIfExisted(e, "cmplxId");
+                this.removeMapKeyIfExisted(e, "homeId");
+                this.removeMapKeyIfExisted(e, "binaryYn");
+                this.removeMapKeyIfExisted(e, "myIotGbCd");
+                this.removeMapKeyIfExisted(e, "kindCd");
+                this.removeMapKeyIfExisted(e, "moClntId");
+                this.removeMapKeyIfExisted(e, "thingsId");
+                this.removeMapKeyIfExisted(e, "thingsNm");
+                this.removeMapKeyIfExisted(e, "moThingsId");
+                this.removeMapKeyIfExisted(e, "moThingsNm");
+                this.removeMapKeyIfExisted(e, "userId");
+                this.removeMapKeyIfExisted(e, "currSts");
+                this.removeMapKeyIfExisted(e, "maxLinkYn");
+                this.removeMapKeyIfExisted(e, "maxVlu");
+                this.removeMapKeyIfExisted(e, "minLinkYn");
+                this.removeMapKeyIfExisted(e, "minVlu");
+                this.removeMapKeyIfExisted(e, "protcKey");
+                this.removeMapKeyIfExisted(e, "sortOrder");
+                this.removeMapKeyIfExisted(e, "stsCnt");
+                this.removeMapKeyIfExisted(e, "stsId");
+                this.removeMapKeyIfExisted(e, "stsNm");
+                this.removeMapKeyIfExisted(e, "scnaId");
+                this.removeMapKeyIfExisted(e, "scnaNm");
+                this.removeMapKeyIfExisted(e, "valueCd");
+                this.removeMapKeyIfExisted(e, "maxCurrSts");
+                this.removeMapKeyIfExisted(e, "maxLinkProtcKey");
+                this.removeMapKeyIfExisted(e, "minCurrSts");
+                this.removeMapKeyIfExisted(e, "minLinkProtcKey");
+            }
         }
     }
 
@@ -941,10 +1143,23 @@ public class IotInfoServiceImpl implements IotInfoService {
             this.removeMapKeyIfExisted(e, "MY_IOT_GB_CD");
             this.removeMapKeyIfExisted(e, "KIND_CD");
             this.removeMapKeyIfExisted(e, "MO_CLNT_ID");
-            this.removeMapKeyIfExisted(e, "THINGS_ID");
             this.removeMapKeyIfExisted(e, "THINGS_NM");
             this.removeMapKeyIfExisted(e, "USER_ID");
             this.removeMapKeyIfExisted(e, "CLNT_ID");
+        }
+    }
+
+    private void remapResultScenarioDetailReverse(List<Map<String, Object>> resultData, Map<String, Object> addSet) {
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
+
+        for(Map<String, Object>e : resultData) {
+            // MOD_ID --> DEVICE_ID로 변환
+            this.replaceMapKeyIfExisted(e, "deviceId", "modId");
+            for( String key : addSet.keySet()) {
+                e.put(key, addSet.get(key));
+            }
         }
     }
 

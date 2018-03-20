@@ -1,9 +1,7 @@
 package com.kolon.comlife.iot.web;
 
 import com.kolon.comlife.common.model.SimpleErrorInfo;
-import com.kolon.comlife.iot.exception.IotControlOperationFailedException;
-import com.kolon.comlife.iot.exception.IotControlTimeoutException;
-import com.kolon.comlife.iot.exception.IotInfoNoDataException;
+import com.kolon.comlife.iot.exception.*;
 import com.kolon.comlife.iot.model.*;
 import com.kolon.comlife.iot.service.IotControlService;
 import com.kolon.comlife.iot.service.IotInfoService;
@@ -21,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -191,14 +190,6 @@ public class IotController {
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler(e);
-            } catch( IotInfoNoDataException nodataEx ) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new SimpleErrorInfo( nodataEx.getMessage() ));
-            } catch( IotControlOperationFailedException opfailEx ) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new SimpleErrorInfo( opfailEx.getMessage() ));
             } catch( Exception unhandledEx ) {
                 e.printStackTrace();
                 return ResponseEntity
@@ -280,14 +271,6 @@ public class IotController {
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
-            } catch( IotControlTimeoutException timeoutEx) {
-                return ResponseEntity
-                        .status(HttpStatus.REQUEST_TIMEOUT)
-                        .body(new SimpleErrorInfo(timeoutEx.getMessage()));
-            } catch( IotControlOperationFailedException iotEx ) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new SimpleErrorInfo(iotEx.getMessage()));
             } catch( Exception unhandledEx ) {
                 unhandledEx.printStackTrace();
                 return ResponseEntity
@@ -518,18 +501,6 @@ public class IotController {
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
-            } catch( IotControlTimeoutException timoutEx ) {
-                return ResponseEntity
-                        .status(HttpStatus.REQUEST_TIMEOUT)
-                        .body(new SimpleErrorInfo("동작 시간이 초과하였습니다."));
-            } catch( IotControlOperationFailedException failEx ) {
-                return ResponseEntity
-                        .status(HttpStatus.BAD_REQUEST)
-                        .body(new SimpleErrorInfo(failEx.getMessage()));
-            } catch( IotInfoNoDataException nodataEx ) {
-                    return ResponseEntity
-                            .status(HttpStatus.BAD_REQUEST)
-                            .body(new SimpleErrorInfo("모드 변경이 가능하지 않습니다. 잠시후에 다시 시도하세요."));
             } catch( Exception unhandledEx ) {
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
@@ -549,16 +520,58 @@ public class IotController {
 
 
     /**
-     * 22. '모드' 편집에서, 모드 목록 및 순서를 가져오기 at Mode 내용 편집
+     * 22. '모드' 편집에서, 모드 목록의 순서를 변경하기 at Mode 내용 편집
      */
-    @PutMapping(
+    @PostMapping(
             path = "/complexes/{complexId}/homes/{homeId}/modes/order",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotModeListInfo> updateModesOrder(
-            @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId )
+    public ResponseEntity updateModesOrder(
+            HttpServletRequest                request,
+            @PathVariable("complexId") int    complexId,
+            @PathVariable("homeId")    int    homeId,
+            @RequestBody               List<Map<String, Object>> body)
     {
         IotModeListInfo modeListInfo = new IotModeListInfo();
+
+        logger.debug(">>> " + body.toString());
+        logger.debug(">>> " + body.size());
+        logger.debug(">>> " + body.get(0).get("seqNo"));
+        logger.debug(">>> " + body.get(0).get("sortOrder"));
+
+        // validation
+        if( body.size() < 1 ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("입력값이 잘못되었습니다. 입력값을 다시 확인하세요."));
+        }
+
+        for(Map<String, Object> e: body) {
+            if( e.get("seqNo") == null ) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("입력값이 잘못되었습니다. 모드를 다시 확인하세요."));
+            }
+            if( e.get("sortOrder") == null ) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body(new SimpleErrorInfo("입력값이 잘못되었습니다. 정렬순서를 다시 확인하세요."));
+            }
+        }
+
+        // Populate data
+        modeListInfo.setData(body);
+
+        try {
+            modeListInfo = iotInfoService.updateModesOrder(complexId, homeId, modeListInfo);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( modeListInfo );
     }
@@ -611,6 +624,40 @@ public class IotController {
         return ResponseEntity.status(HttpStatus.OK).body( buttonsList );
     }
 
+    /**
+     * 26. MyIOT 편집 화면에서 '기기/시나리오/정보'의 순서를 변경 및 신규등록 at MyIOT 추가
+     * todo: 구현해야 함... 구현 중 ...
+     */
+    @PostMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity addMyIotButton(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("buttonId")  int buttonId)
+
+    {
+        IotButtonListInfo buttonList = null;
+        String            userId;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+//            buttonList = iotInfoService.addMyIotButtonListById(complexId, homeId, userId, buttonId, true);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body( new SimpleErrorInfo("개발 중...") );
+    }
+
 
     /**
      * 27. MyIOT 편집 화면에서 '기기/시나리오/정보'를 목록에서 제거하기 at MyIOT 추가
@@ -621,7 +668,7 @@ public class IotController {
     public ResponseEntity deleteMyIotButton(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
-            @PathVariable("buttonId")    int buttonId)
+            @PathVariable("buttonId")  int buttonId)
 
     {
         IotButtonListInfo buttonList;
@@ -680,11 +727,58 @@ public class IotController {
     @PostMapping(
             path = "/complexes/{complexId}/homes/{homeId}/automation",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotAutomationInfo> createAutomation(
+    public ResponseEntity createAutomation(
             @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId )
+            @PathVariable("homeId")    int homeId,
+            @RequestBody               Map<String, Object> body)
     {
-        IotAutomationInfo automationInfo = new IotAutomationInfo();
+        IotModeAutomationInfo automationInfo = new IotModeAutomationInfo();
+
+        body.get("scnaIfAply");
+        body.get("scnaIfSpc");
+        body.get("scnaIfThings");
+        body.get("scnaThings");
+
+        if( body.get("scna") != null && body.get("scna") instanceof List ) {
+            automationInfo.setScna((List)body.get("scna"));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("자동화 기본정보가 잘못되었습니다. 입력값을 다시 확인하세요."));
+        }
+
+        if( body.get("scnaIfThings") != null && body.get("scnaIfThings") instanceof List ) {
+            automationInfo.setScnaIfThings((List)body.get("scnaIfThings"));
+        }
+
+        if( body.get("scnaThings") != null && body.get("scnaThings") instanceof List ) {
+            automationInfo.setScnaThings((List)body.get("scnaThings"));
+        }
+
+        if( body.get("scnaIfAply") != null && body.get("scnaIfAply") instanceof List ) {
+            automationInfo.setScnaIfAply((List)body.get("scnaIfAply"));
+        }
+
+        if( body.get("scnaIfSpc") != null && body.get("scnaIfSpc") instanceof List ) {
+            automationInfo.setScnaIfSpc((List)body.get("scnaIfSpc"));
+        }
+
+        try {
+            automationInfo = iotInfoService.createAutomation(complexId, homeId, automationInfo);
+        } catch ( IotInfoGeneralException e ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        } catch ( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                unhandledEx.printStackTrace();
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( automationInfo );
     }
@@ -918,6 +1012,39 @@ public class IotController {
         return ResponseEntity.status(HttpStatus.OK).body( actorsInfo );
     }
 
+
+    /**
+     * 42. 특정 시나리오에서 추가작동기기(ACTOR) 목록(리스트)를 가져오기 at MyIOT 추가
+     */
+    @PostMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}/desc",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateDeviceDesc(
+            HttpServletRequest             request,
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("deviceId")  int deviceId )
+    {
+        IotDeviceListInfo deviceInfo;
+        String description = request.getParameter("value");
+        logger.debug(">>> Param.value: " + description);
+
+        try {
+            deviceInfo = iotInfoService.updateDeviceDesc(complexId, homeId, deviceId, description);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                e.printStackTrace();
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( deviceInfo );
+    }
+
     private ResponseEntity commonExceptionHandler(Exception e) throws Exception {
         if( e instanceof  URISyntaxException ) {
             logger.error( "Invalid URI: " + e.getMessage() );
@@ -946,6 +1073,19 @@ public class IotController {
             logger.error( "No data : " + e.getMessage() );
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND )
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        } else if( e instanceof IotInfoUpdateFailedException) {
+            logger.error( "Update failed : " + e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        } else if( e instanceof  IotControlOperationFailedException) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo( e.getMessage() ));
+        } else if( e instanceof  IotControlOperationFailedException ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
                     .body(new SimpleErrorInfo(e.getMessage()));
         } else {
             // 공통적으로 처리되지 않는 exception은 별도 처리

@@ -21,6 +21,8 @@ public interface IotInfoService {
     IotButtonListInfo getMyIotButtonListAvailable
             (int complexId, int homeId, String userId) throws Exception;
 
+    IotButtonListInfo simplifyMyIotButtonListResult( IotButtonListInfo result ) throws Exception;
+
     IotRoomListInfo getRoomList
             (int complexId, int homeId) throws Exception;
 
@@ -54,5 +56,10 @@ public interface IotInfoService {
     IotModeAutomationInfo getModeOrAutomationActorsAvailable(
             int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception;
 
+    IotModeListInfo updateModesOrder(int complexId, int homeId, IotModeListInfo modeList) throws Exception;
+
+    IotModeAutomationInfo createAutomation(int complexId, int homeId, IotModeAutomationInfo automationInfo) throws Exception;
+
+    IotDeviceListInfo updateDeviceDesc(int complexId, int homeId, int deviceId, String description) throws Exception;
 
 }

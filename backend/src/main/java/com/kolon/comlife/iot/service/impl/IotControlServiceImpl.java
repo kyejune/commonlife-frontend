@@ -29,14 +29,14 @@ public class IotControlServiceImpl implements IotControlService {
 
     // IOK에 기기 작동하고 폴링하는 시간 = IOK_CONTROL_RETRY_INTERVAL_MSEC * IOK_CONTROL_RETRY_COUNT
     private static final int IOK_CONTROL_RETRY_COUNT = 4;  // 반드시 1 보다 커야함
-    private static final int IOK_CONTROL_RETRY_INTERVAL_MSEC =  300; // ms
+    private static final int IOK_CONTROL_RETRY_INTERVAL_MSEC =  200; // ms
 
-    private static final String IOK_CONTROL_HOST_PROP_GROUP = "IOK";
-    private static final String IOK_CONTROL_HOST_PROP_KEY = "IOT_CONTROL_HOST";
+    private static final String IOK_CONTROL_HOST_PROP_GROUP           = "IOK";
+    private static final String IOK_CONTROL_HOST_PROP_KEY             = "IOT_CONTROL_HOST";
 
-    private static final String IOK_CONTROL_MODE_SWITCH_FMT_PATH = "/iok/mode/%s/cmplx/%d/home/%d";
+    private static final String IOK_CONTROL_MODE_SWITCH_FMT_PATH      = "/iok/mode/%s/cmplx/%d/home/%d";
     private static final String IOK_CONTROL_SCENARIO_EXECUTE_FMT_PATH = "/iok/scenario/%d/cmplx/%d/home/%d";
-    private static final String IOK_CONTROL_DEVICE_EXECUTE_FMT_PATH = "/iok/device/%s"; // CLNT_ID
+    private static final String IOK_CONTROL_DEVICE_EXECUTE_FMT_PATH   = "/iok/device/%s"; // CLNT_ID
 
 
     @Resource(name = "servicePropertiesMap")
@@ -50,7 +50,6 @@ public class IotControlServiceImpl implements IotControlService {
 
     public IotControlServiceImpl() {
     }
-
 
     // 5. 개별 IOT 버튼의 대표 기능 실행
     public IotButtonListInfo executeMyIotButtonPrimeFunction
@@ -116,7 +115,7 @@ public class IotControlServiceImpl implements IotControlService {
                             scnaId.intValue(),
                             complexId,
                             homeId );
-                    logger.debug(" URL PATH: switchToMode(): " + execUrl);
+                    logger.debug(" URL PATH: execute Scenario/Automation: " + execUrl);
                     requester = new HttpPutRequester(
                             httpClient,
                             serviceProperties.getByKey(IOK_CONTROL_HOST_PROP_GROUP, IOK_CONTROL_HOST_PROP_KEY),
@@ -142,6 +141,8 @@ public class IotControlServiceImpl implements IotControlService {
                 throw new IotControlOperationFailedException("입력값이 잘못 되었습니다.");
         }
 
+
+        buttonInfo = iotInfoService.simplifyMyIotButtonListResult( buttonInfo );
         buttonInfo.setMsg("MyIOT의 개별 IOT 버튼의 대표 기능 실행 - 성공");
 
         return buttonInfo;
@@ -160,7 +161,7 @@ public class IotControlServiceImpl implements IotControlService {
         String           nextProtcKey = null;
         IotDeviceListInfo deviceInfo;
         IotDeviceControlInfo deviceCtrlInfo = new IotDeviceControlInfo();
-        int retryCount = IOK_CONTROL_RETRY_COUNT;
+        int retryCount = 0;
         Map msgAttributes = new HashMap();
         Map msgInformation = new HashMap();
         boolean noDataFlag = true; // TRUE == NO DATA!
@@ -228,6 +229,7 @@ public class IotControlServiceImpl implements IotControlService {
         }
 
         String expectedStatus = null;
+        retryCount = 0;
         while(true) {
             // 3. 기기의 상태 값이 정상적으로 바뀌었는지 확인
             try {
@@ -268,10 +270,10 @@ public class IotControlServiceImpl implements IotControlService {
                     break;
                 } else {
                     // 변경 값이 아직 바뀌지 않은 경우
-                    if( retryCount > 0 ) {
+                    if( retryCount < IOK_CONTROL_RETRY_COUNT ) {
                         // Retry
-                        retryCount--;
-                        Thread.sleep(IOK_CONTROL_RETRY_INTERVAL_MSEC);
+                        retryCount++;
+                        Thread.sleep(IOK_CONTROL_RETRY_INTERVAL_MSEC * retryCount);
                         continue;
                     } else {
                         throw new IotControlOperationFailedException("기기 속성 변경이 실패하였습니다. 잠시 후에 다시 시도하세요.");
@@ -296,7 +298,7 @@ public class IotControlServiceImpl implements IotControlService {
         Map<String, Map> result;
         IotModeListInfo  activeModeList;
         String           changedModeId;
-        int retryCount = IOK_CONTROL_RETRY_COUNT;
+        int retryCount = 0;
 
         // 1. '모드 변경' 수행
         try {
@@ -320,6 +322,7 @@ public class IotControlServiceImpl implements IotControlService {
             throw e;
         }
 
+        retryCount = 0;
         while(true) {
             // 2. 변경한 모드 값이 확인되면 수행
             try {
@@ -331,10 +334,10 @@ public class IotControlServiceImpl implements IotControlService {
                     break;
                 } else {
                     // 변경 값이 아직 바뀌지 않은 경우
-                    if( retryCount > 0 ) {
+                    if( retryCount < IOK_CONTROL_RETRY_COUNT ) {
                         // Retry
-                        retryCount--;
-                        Thread.sleep(IOK_CONTROL_RETRY_INTERVAL_MSEC);
+                        retryCount++;
+                        Thread.sleep(IOK_CONTROL_RETRY_INTERVAL_MSEC * retryCount);
                         continue;
                     } else {
                         throw new IotControlOperationFailedException("모드 변경이 실패하였습니다. 잠시 후에 다시 시도하세요.");
@@ -342,7 +345,7 @@ public class IotControlServiceImpl implements IotControlService {
                 }
             } catch( IotInfoNoDataException e ) {
                 // 모드가 변경되지 않음
-                throw e;
+                throw new IotControlOperationFailedException("모드 변경이 가능하지 않습니다. 잠시후에 다시 시도하세요.");
             } catch( Exception e ) {
                 throw e;
             }
@@ -351,11 +354,6 @@ public class IotControlServiceImpl implements IotControlService {
         return activeModeList;
     }
 
-
-
-    public IotModeListInfo updateModesOrder(int complexId, int homeId) {
-        return null;
-    }
 
     
     public IotModeAutomationInfo updateModeInfo(int complexId, int homeId, int modeId) {
