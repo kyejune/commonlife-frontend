@@ -546,6 +546,100 @@
     }
 }
 
+.cl-iot-mode-progress__on-bullet {
+    .cl-iot-connect-progress {
+        width: 265px;
+        margin: 0 auto;
+    }
+
+    .cl-iot-connect-progress__text-start,
+    .cl-iot-connect-progress__text-done {
+        color: rgba(0,0,0,0.5);
+    }
+
+    .cl-iot-connect-progress__text-done {
+        left: 198px;
+    }
+
+    .cl-iot-connect-progress__icon-start {
+        background-image: url("images/iot-ic-connect-bullet-blue@3x.png") !important;
+    }
+
+    .cl-iot-connect-progress__icon-done {
+        left: 218px;
+        background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
+    }
+
+    @keyframes move-connect-ic {
+        0% {
+            background-image: url("images/iot-ic-connect-bullet-blue@3x.png") !important;
+        }
+        100% {
+            background-image: url("images/iot-ic-connect-bullet-grey@3x.png");
+        }
+    }
+
+    @keyframes connect-done-ic {
+        0% {
+            background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
+        }
+        100% {
+            background-image: url("images/iot-ic-connect-check-bullet-orange@3x.png") !important;
+        }
+    }
+
+    .cl-iot-connect-progress__box {
+        width: 180px;
+    }
+}
+
+.cl-iot-mode-progress__off-bullet {
+    .cl-iot-connect-progress {
+        width: 265px;
+        margin: 0 auto;
+    }
+
+    .cl-iot-connect-progress__text-start,
+    .cl-iot-connect-progress__text-done {
+        color: rgba(0,0,0,0.5);
+    }
+
+    .cl-iot-connect-progress__text-done {
+        left: 198px;
+    }
+
+    .cl-iot-connect-progress__icon-start {
+        background-image: url("images/iot-ic-connect-bullet-dark@3x.png") !important;
+    }
+
+    .cl-iot-connect-progress__icon-done {
+        left: 218px;
+        background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
+    }
+
+    @keyframes move-connect-ic {
+        0% {
+            background-image: url("images/iot-ic-connect-bullet-dark@3x.png") !important;
+        }
+        100% {
+            background-image: url("images/iot-ic-connect-bullet-grey@3x.png");
+        }
+    }
+
+    @keyframes connect-done-ic {
+        0% {
+            background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
+        }
+        100% {
+            background-image: url("images/iot-ic-connect-check-bullet-dark@3x.png");
+        }
+    }
+
+    .cl-iot-connect-progress__box {
+        width: 180px;
+    }
+}
+
 .cl-iot-connect-progress__text {
     position: absolute;
     width: 80px;

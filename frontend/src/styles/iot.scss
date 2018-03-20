@@ -40,6 +40,18 @@
         width: 235px;
     }
 
+    &.cl-iot-mode-progress__button {
+        display: block;
+        margin: 0 auto;
+        opacity: 1;
+        border: 1px solid #CCCCCC;
+        box-shadow: none;
+
+        &.cl-iot-mode__button--active {
+            border: 1px solid #4C4C4C;
+        }
+    }
+
     img {
         display: inline-block;
         width: 45px;
@@ -74,6 +86,23 @@
         width: 32px;
         height: 32px;
         background-image: url("images/io-t-on-bt@3x.png");
+        background-size: 32px;
+    }
+}
+
+.cl-iot-mode__button--inactive {
+    @extend .cl-iot-mode__button;
+
+    opacity: 1;
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: -14px;
+        right: -7px;
+        width: 32px;
+        height: 32px;
+        background-image: url("images/io-t-on-bt-off@3x.png");
         background-size: 32px;
     }
 }
@@ -489,7 +518,6 @@
     left: 0;
     width: 100vw;
     height: 52px;
-    background-color: #1654A3;
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
 
     h3 {
@@ -498,6 +526,18 @@
         font-weight: 500;
         color: #fafafa;
     }
+}
+
+.cl-iot-mode-progress__top-on {
+    @extend .cl-iot-mode-progress__top;
+
+    background-color: #1654A3;
+}
+
+.cl-iot-mode-progress__top-off {
+    @extend .cl-iot-mode-progress__top;
+
+    background-color: #000000;
 }
 
 .cl-iot-mode-progress__content {
@@ -538,6 +578,68 @@
     &:disabled {
         opacity: 0.2;
     }
+}
+
+.cl-iot-mode-progress__btn-primary--disabled {
+    @extend .cl-iot-mode-progress__btn-primary;
+
+    opacity: 0.2;
+}
+
+.cl-iot-mode-progress__btn-dark {
+    @extend .cl-iot-mode-progress__btn;
+
+    margin-left: auto;
+    border-radius: 2px;
+    background-color: #000000;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24), 0 0 1px 0 rgba(0, 0, 0, 0.12);
+    color: #ffffff;
+
+    &:disabled {
+        opacity: 0.2;
+    }
+}
+
+.cl-iot-mode-progress__btn-dark--disabled {
+    @extend .cl-iot-mode-progress__btn-dark;
+
+    opacity: 0.2;
+}
+
+.cl-iot-mode-progress__ready {
+    .cl-iot-mode-progress__middle {
+        position: absolute;
+        top: 50%;
+        width: calc(100% - 30px);
+        transform: translateY(-50%);
+    }
+}
+
+.cl-iot-mode-progress__progress,
+.cl-iot-mode-progress__done {
+    .cl-iot-mode-progress__middle {
+        height: 422px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: calc(100% - 30px);
+    }
+
+    .cl-iot-connect-progress {
+        width: 265px;
+        margin: 139px auto;
+    }
+}
+
+.cl-iot-mode-progress__paragraph {
+    margin-top: 20px;
+    opacity: 0.7;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+    text-align: center;
+    color: #000000;
 }
 
 // 슬라이더 스위치

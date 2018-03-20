@@ -7,7 +7,12 @@ import IconLoader from "./IconLoader";
 class IotBtnLg extends Component {
 
 	viewProgress( modeInfo ){
-		Store.imc = { targetValue:true, ...modeInfo };
+		Store.imc = {
+			targetValue:( this.props.modeData.execYn !== "Y" ),
+			targetName: (this.props.modeData.modeNm),
+			targetIcon: (this.props.modeData.imgSrc),
+			...modeInfo
+		};
 	}
 
 	render () {
