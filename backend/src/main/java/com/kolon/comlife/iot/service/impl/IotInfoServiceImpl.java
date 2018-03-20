@@ -2,6 +2,8 @@ package com.kolon.comlife.iot.service.impl;
 
 import com.fasterxml.jackson.databind.util.JSONPObject;
 import com.google.common.base.CaseFormat;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.kolon.comlife.iot.exception.IotInfoGeneralException;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;
 import com.kolon.comlife.iot.exception.IotInfoUpdateFailedException;
@@ -49,6 +51,8 @@ public class IotInfoServiceImpl implements IotInfoService {
 
     private static final String IOK_AUTOMATION_DETAIL_PATH          = "/iokinterface/scenario/scnaDetail";
     private static final String IOK_AUTOMATION_DETAIL_SAVE_PATH     = "/iokinterface/scenario/saveScnaDetail";
+
+    private static final String IOK_DEVICE_NAME_UPDATE_PATH = "/iokinterface/device/updateDevice";
 
     @Autowired
     private ServicePropertiesMap serviceProperties;
@@ -685,12 +689,29 @@ public class IotInfoServiceImpl implements IotInfoService {
             automationInfo.setScnaThings(new ArrayList<Map<String, Object>>());
         }
 
+        // 사용자 시나리오/오토메이션 생성시, "mode":"CM01199"를 전달해야 함
+        automationInfo.getScna().get(0).put("mode", "CMO01199");
+        automationInfo.getScna().get(0).put("useYn", "Y");
+
+        Map populateData = new HashMap();
+        populateData.put("cmplxId", String.valueOf(complexId));
+        populateData.put("homeId", String.valueOf(homeId));
+
+        this.remapResultScenarioDetailReverse(automationInfo.getScna(), populateData);
+        this.remapResultScenarioDetailReverse(automationInfo.getScnaIfThings(), populateData);
+        this.remapResultScenarioDetailReverse(automationInfo.getScnaThings(), populateData);
+
+        final GsonBuilder builder = new GsonBuilder();
+        final Gson gson = builder.create();
+        String gsonout = gson.toJson(automationInfo);
+        logger.debug( ">>>>>> " + gsonout);
+
         // call!
         requester = new HttpPostRequester(
                 httpClient,
                 serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
                 IOK_AUTOMATION_DETAIL_SAVE_PATH );
-        requester.setBody(mapper.writeValueAsString(automationInfo));
+        requester.setBody( gsonout );
         result = requester.execute();
 
         IotModeAutomationInfo ret = new IotModeAutomationInfo();
@@ -864,6 +885,35 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
 
         return actorsInfo;
+    }
+
+
+    // 42. 관련장비 이름 수정
+    public IotDeviceListInfo updateDeviceDesc
+        (int complexId, int homeId, int deviceId, String description) throws Exception {
+        IotDeviceListInfo deviceInfo = new IotDeviceListInfo();
+        HttpGetRequester          requester;
+        Map<String, String>       result;  // e.g. { "msg":"...", "resFlag": "false or true" }
+        ObjectMapper              mapper = new ObjectMapper();
+
+        // Send a POST request to...
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_DEVICE_NAME_UPDATE_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId));
+        requester.setParameter("moThingsId", String.valueOf(deviceId)); // !! deviceId ==> moThingsId
+        requester.setParameter("dvcNm", String.valueOf(description));
+        result = requester.execute();
+
+        logger.debug(">>>> " + result.toString());
+        if( result.get("msg") == null || !result.get("msg").equals("설정이 완료되었습니다.") ) {
+            throw new IotInfoUpdateFailedException("모드의 순서 변경이 실패하였습니다.");
+        }
+
+        deviceInfo.setMsg((result.get("msg")));
+
+        return deviceInfo;
     }
 
     /////// 공통 메소드 //////////////////////////////////////////////////////////////////////////////
@@ -1096,6 +1146,20 @@ public class IotInfoServiceImpl implements IotInfoService {
             this.removeMapKeyIfExisted(e, "THINGS_NM");
             this.removeMapKeyIfExisted(e, "USER_ID");
             this.removeMapKeyIfExisted(e, "CLNT_ID");
+        }
+    }
+
+    private void remapResultScenarioDetailReverse(List<Map<String, Object>> resultData, Map<String, Object> addSet) {
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
+
+        for(Map<String, Object>e : resultData) {
+            // MOD_ID --> DEVICE_ID로 변환
+            this.replaceMapKeyIfExisted(e, "deviceId", "modId");
+            for( String key : addSet.keySet()) {
+                e.put(key, addSet.get(key));
+            }
         }
     }
 

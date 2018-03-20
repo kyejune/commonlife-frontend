@@ -1012,6 +1012,39 @@ public class IotController {
         return ResponseEntity.status(HttpStatus.OK).body( actorsInfo );
     }
 
+
+    /**
+     * 42. 특정 시나리오에서 추가작동기기(ACTOR) 목록(리스트)를 가져오기 at MyIOT 추가
+     */
+    @PostMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}/desc",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateDeviceDesc(
+            HttpServletRequest             request,
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("deviceId")  int deviceId )
+    {
+        IotDeviceListInfo deviceInfo;
+        String description = request.getParameter("value");
+        logger.debug(">>> Param.value: " + description);
+
+        try {
+            deviceInfo = iotInfoService.updateDeviceDesc(complexId, homeId, deviceId, description);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                e.printStackTrace();
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( deviceInfo );
+    }
+
     private ResponseEntity commonExceptionHandler(Exception e) throws Exception {
         if( e instanceof  URISyntaxException ) {
             logger.error( "Invalid URI: " + e.getMessage() );
