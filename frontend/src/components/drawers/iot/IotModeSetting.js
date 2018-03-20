@@ -42,8 +42,8 @@ class IotModeSetting extends Component {
             sensorMore = <span className="ml-auto">설정불가</span>;
             deviceMore = <span className="ml-auto">설정가능</span>;
         } else {
-            sensorMore = <Link className="ml-auto" to={pathname}>센서편집</Link>;
-            deviceMore = <Link className="ml-auto" to={pathname}>기기편집</Link>;
+            sensorMore = <Link className="ml-auto" to={`${pathname}/edit-sensor`}>센서편집</Link>;
+            deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
         }
 
         // let Header;
