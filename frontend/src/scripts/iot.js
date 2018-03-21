@@ -44,7 +44,7 @@ export let MyIots = observable([]);
 export default {
 
     /* Iot */
-    getIot() {
+    getIotAll() {
 
         axios.all([
             axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes`),
@@ -58,8 +58,16 @@ export default {
             Modes.replace(modeRes.data.data);
             MyIots.replace(iotRes.data.data);
         }));
-
     },
+
+    getMode(){
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes`)
+            .then( response=>{
+                response.data.data.sort(sortBySortOrder);
+                Modes.replace(response.data.data);
+            });
+    },
+
 
     /* 공간별, 기기별 카테고리 출력 */
     getDeviceCategories(callback) {
@@ -71,11 +79,11 @@ export default {
         }));
     },
 
-    /* 공간별( true, roomId), 기기별( true, cateCd )에 카테고리에 따른 기기 목록 */
-    getDevicesByCategory( isRoom, cateId, callback ){
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${isRoom?'rooms':'deviceCategory'}/${cateId}/devices`)
-            .then( response => {
-                callback( response.data.data );
+    /* 공간별( true, roomId), 기기별( false, cateCd )에 카테고리에 따른 기기 목록 */
+    getDevicesByCategory(isRoom, cateId, callback) {
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${isRoom ? 'rooms' : 'deviceCategory'}/${cateId}/devices`)
+            .then(response => {
+                callback(response.data.data);
             });
     },
 
@@ -84,25 +92,46 @@ export default {
 
     },
 
+    /* 모드 버튼 클릭시 on/off 변경 */
+    changeIotMode( modeId, value, callback) {
+        console.log(`changeIotMode: ${modeId}의 값을 ${value}로 변경`);
+
+        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${modeId}/switchTo`)
+            .then( response =>{
+               callback();
+            });
+    },
+
+    /* 모드 정렬 변경 */
+    reAlignIotMode( map, callback ){
+      axios.post(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/order`, map )
+          .then( response => {
+             callback();
+          });
+    },
+    
+    /* 모드 상세 가져오기 */
+    getModeDetail( mode, callback ){
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${mode}`)
+            .then( response => {
+               callback( response.data );
+            });
+    },
+
+
     /* Iot장비의 값을 변경 */
     setIotDevice(deviceName, value, callback) {
 
         console.log(`${deviceName}의 값을 ${value}로 변경`);
         setTimeout(() => callback(), 4000);
 
-    }
-    ,
+    },
 
-    /* Iot모드의 값을 변경 */
-    setIotMode(modeName, value) {
-        console.log(`${modeName}의 값을 ${value}로 변경`);
-    }
-    ,
-
-    changeIotMode(modeName, value, callback) {
-        console.log(`${modeName}의 값을 ${value}로 변경`);
-        setTimeout(() => callback(), 3000);
-    }
+    // /* Iot모드의 값을 변경 */
+    // setIotMode(modeName, value) {
+    //     console.log(`${modeName}의 값을 ${value}로 변경`);
+    // }
+    // ,
 
 
 }

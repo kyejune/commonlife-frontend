@@ -5,7 +5,7 @@ import IconLoader from "../../ui/IconLoader";
 import IotBtnMode from "../../ui/IotBtnMode";
 import LiOfCtrl from "./LiOfCtrl";
 import LiOfToggle from "./LiOfToggle";
-import {ModeChanges} from "../../../scripts/iot";
+import Iot from "../../../scripts/iot";
 import checkSrc from 'images/ic-check@3x.png';
 import classNames from 'classnames';
 
@@ -14,17 +14,32 @@ class IotModeSetting extends Component {
     constructor(props) {
         super(props);
 
-        const {action} = props.match.params;
+        const {action, option1} = props.match.params;
         this.props.updateTitle(action === 'mode' ? 'Mode 설정 변경' : '시나리오 생성');
 
-        // 시나리오 추가의 경우
-        if (action === 'add') {
-            this.state = {
-                name: '',
-            }
+        this.state = {
+            isMode: action === 'mode',
+
+            // mode 상태
+            modeName: option1,
+            modeData: null,
+
+            // add 시나리오 상태
+            name:'',
+
         }
 
-        console.log('props:', this.props);
+    }
+
+
+    // Mode 편집 상태일경우 데이터 불러오기
+    componentDidMount(){
+        if( !this.state.isMode ) return;
+
+        Iot.getModeDetail( this.state.modeName, data=>{
+            console.log( '모드 상세정보:', data );
+            this.setState( { modeData:  data });
+        });
     }
 
     onChangeName = (event) => {
@@ -34,33 +49,74 @@ class IotModeSetting extends Component {
 
     render() {
 
-        const {action, option1} = this.props.match.params;
+        const { isMode, modeData, name } = this.state;
+
+        if( isMode && modeData === null ) return <div/>
+
+
+        const scna = modeData.scna[0];
         const {pathname} = this.props.location;
+        let Sensors;
 
         let sensorMore, deviceMore;
-        if (action === 'mode') {
+        if ( isMode ) {
             sensorMore = <span className="ml-auto">설정불가</span>;
             deviceMore = <span className="ml-auto">설정가능</span>;
+
+
+            // 일반 센서추가
+            Sensors = modeData.scnaIfThings.map( (item, index)=>{
+                if( item.deviceType && item.deviceType === 'button')
+                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.stsNm} to={`${pathname}/sensor/0`}/>
+                else
+                    return <LiOfCtrl key={index} icon={item.imgSrc} name={item.stsNm} to={`${pathname}/sensor/0`}/>
+            });
+
+            // 임시로 시간데이터 더미 추가
+            modeData.scnaIfSpc = [{
+                "spcTime": "12:00",
+                "monYn": "Y",
+                "tueYn": "Y",
+                "wedYn": "Y",
+                "thuYn": "Y",
+                "friYn": "Y",
+                "satYn": "N",
+                "sunYn": "N"
+            }];
+
+            // 특정 시간 있으면 추가
+            Sensors = Sensors.concat( modeData.scnaIfSpc.map( item => {
+                return <LiOfCtrl key="time" icon={undefined} name="특정 시간" desc={ item.spcTime }/>
+            }));
+
+            // 시간 구간 조건 추가
+            Sensors = Sensors.concat( modeData.scnaIfAply.map( item =>{
+                return <LiOfCtrl key="time-range" icon={undefined} name="구간 시간" desc={ `${item.aplyStartTime} ~ ${item.aplyEndTime}` }/>
+            }));
+
+
         } else {
             sensorMore = <Link className="ml-auto" to={`${pathname}/edit-sensor`}>센서편집</Link>;
             deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
+
+            Sensors = <div>시나리오 센서목록</div>
         }
 
         return (
             <div className="cl-bg--darkgray">
 
                 <header className="cl-mode-setting__header">
-                    <div className={classNames("cl-iot-mode__button", {"cl-iot-mode__button--expand": action==='add'} )}>
+                    <div className={classNames("cl-iot-mode__button", {"cl-iot-mode__button--expand": !isMode } )}>
                         <IconLoader src={undefined}/>
-                        {action === 'mode' ?
-                            <span className="cl-name">무슨무슨모드</span> :
-                            <input className="cl-name pr-04em" type="text" placeholder="시나리오" value={this.state.name}
+                        { isMode ?
+                            <span className="cl-name">{scna.scnaNm}</span> :
+                            <input className="cl-name pr-04em" type="text" placeholder="시나리오" value={name}
                                        onChange={this.onChangeName}/>
                         }
                     </div>
 
-                    {action === 'mode' ?
-                        <span className="desc">모드 설정시 실내온도를 26도로 유지하며, 모든 전등을 소등하여 전력소모를 최소화 합니다.</span> :
+                    { this.state.isMode ?
+                        <span className="desc">{ scna.msg }</span> :
 
                         <div>
                             <h5>사용자 Automation</h5>
@@ -72,28 +128,37 @@ class IotModeSetting extends Component {
                 <div className="pb-5em cl-bg--darkgray">
                     <div className="pt-05em bb--gray">
                         <div className="cl-flex fs-14 ml-1em mr-1em mt-1em mb-1em">
-                            <h5 className="fs-14 cl-bold">사용된 센서 <span className="color-primary">5</span></h5>
+                            <h5 className="fs-14 cl-bold">사용된 센서 <span className="color-primary">{ Sensors.length }</span></h5>
                             {sensorMore}
                         </div>
 
                         <ul className="cl-iot-vertical-list">
-                            <LiOfCtrl icon={undefined} name="뭐뭐센서" desc="센서 설명" to={`${pathname}/sensor/0`}/>
-                            <LiOfCtrl icon={undefined} name="뭐뭐센서" desc="센서 설명" to={`${pathname}/sensor/0`}/>
+                            {Sensors}
+                            {/*<LiOfCtrl icon={undefined} name="뭐뭐센서" desc="센서 설명" to={`${pathname}/sensor/0`}/>*/}
+                            {/*<LiOfCtrl icon={undefined} name="뭐뭐센서" desc="센서 설명" to={`${pathname}/sensor/0`}/>*/}
                         </ul>
                     </div>
 
                     <div>
                         <div className="cl-flex fs-14 ml-1em mr-1em mt-1em mb-1em">
-                            <h5 className="fs-14 cl-bold">사용된 기기 <span className="color-primary">5</span></h5>
+                            <h5 className="fs-14 cl-bold">사용된 기기 <span className="color-primary">{ modeData.scnaThings.length }</span></h5>
                             {deviceMore}
                         </div>
 
                         <ul className="cl-iot-vertical-list">
+                            {
+                                modeData.scnaThings.map( (item, index)=>{
+                                    if( item.deviceType && item.deviceType === 'button')
+                                        return <LiOfToggle key={index} src={undefined} name={item.deviceNm} />
+                                    else
+                                        return <LiOfCtrl key={index} src={undefined} name={item.deviceNm} />
+                                })
+                            }
 
-                            <LiOfToggle src={undefined} name="무슨무슨기기" desc="기기설명"/>
-                            <LiOfCtrl icon={undefined} name="뭐뭐기기" desc="기기설명"
-                                      to={`${pathname}/device/0`}
-                            />
+                            {/*<LiOfToggle src={undefined} name="무슨무슨기기" desc="기기설명"/>*/}
+                            {/*<LiOfCtrl icon={undefined} name="뭐뭐기기" desc="기기설명"*/}
+                                      {/*to={`${pathname}/device/0`}*/}
+                            {/*/>*/}
                         </ul>
                     </div>
                 </div>
