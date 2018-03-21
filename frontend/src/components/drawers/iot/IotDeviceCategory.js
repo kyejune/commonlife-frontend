@@ -21,9 +21,6 @@ class IotDeviceTabList extends Component {
 				tabIndex: 0,
 				tabData: [ byPlace, byType ]
 			} );
-
-			// console.log( '공간별 카테고리 목록:', byPlace );
-			// console.log( '기기별 카테고리 목록:', byType );
 		} );
 	}
 
@@ -33,17 +30,15 @@ class IotDeviceTabList extends Component {
 
 	render () {
 
-		// console.log( this.state );
-
 		if( this.state.tabIndex === undefined ) return <div>00</div>;
-
-		// console.log( 'list:', this.state.tabData[ this.state.tabIndex ] );
 
 		const List = this.state.tabData[ this.state.tabIndex ].map( ( data, index )=> {
 			return <li key={index}>
-				<img className="cl__thumb" src={SampleSrc}/>
-				<h4 className="cl__title">{data.cateNm || data.roomNm}</h4>
-				<div className="cl-next__button ml-auto"/>
+				<Link className="cl-flex" to={( this.state.tabIndex === 0 ? { pathname: `${this.props.location.pathname}/${data.roomId}` } : { pathname: `${this.props.location.pathname}/${data.cateCd}` } )}>
+					<img className="cl__thumb" src={SampleSrc}/>
+					<h4 className="cl__title">{data.cateNm || data.roomNm}</h4>
+					<div className="cl-next__button ml-auto"/>
+				</Link>
 			</li>
 		} );
 
@@ -60,21 +55,8 @@ class IotDeviceTabList extends Component {
 					</button>
 				</div>
 
-				<ul className="cl-iot-vertical-list cl-bg--light">
+				<ul className="cl-iot-vertical-list cl-bg--light cl-iot-control-list">
 					{List}
-				</ul>
-
-				{/* Link to에 공간별은 roomId를, 기기별은 cateCd를 넣어주세요.*/}
-				<ul>
-					<li>
-						<Link to={{ pathname: `${this.props.location.pathname}/2` }}>카테고리 목록 0</Link>
-					</li>
-					<li>
-						<Link to={{ pathname: `${this.props.location.pathname}/HW00201` }}>카테고리 목록 1</Link>
-					</li>
-					<li>
-						<Link to={{ pathname: `${this.props.location.pathname}/HW00202` }}>카테고리 목록 2</Link>
-					</li>
 				</ul>
 			</div>
 		)
