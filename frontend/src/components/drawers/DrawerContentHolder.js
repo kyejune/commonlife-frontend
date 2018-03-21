@@ -24,7 +24,8 @@ class DrawerContentHolder extends Component {
     }
 
     componentWillUnmount(){
-        document.querySelector('body').classList.remove('cl-dom--added');
+        if( Store.drawer.length )
+            document.querySelector('body').classList.remove('cl-dom--added');
     }
 
 

@@ -25,6 +25,7 @@ body.cl-is-device{
 
     .dialogs__content{
         margin-top: 3.90625vh;
+        height: calc( 100vh - 3.90625vh - 56px );
     }
 
     #modal{
