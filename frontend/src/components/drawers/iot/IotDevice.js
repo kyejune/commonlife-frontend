@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import IconLoader from 'components/ui/IconLoader';
 import LiOfToggle from "./LiOfToggle";
 import IotSlider from "../../ui/IotSlider";
+import CheckBoxes from "../../ui/CheckBoxes";
 
 
 /*
@@ -19,7 +20,7 @@ class IotDevice extends Component {
             </div>
 
             {/* 적용되는 옵션들을 밑에 주르륵....*/}
-            <ul className="cl-iot-vertical-list cl--full">
+            <ul className="cl-iot-vertical-list cl--full cl-iot-options">
 
                 {/* 전원이 있으면, */}
                 <li className="cl-bg--inner">
@@ -45,8 +46,44 @@ class IotDevice extends Component {
                 </li>
 
                 <li>
-                    등등
+                    <h4 className="cl__title ml-03em">
+                        복수체크 가능 <span className="color-primary">VALUE</span>
+
+                        <CheckBoxes items={[ {label:"label1", value:0}, {label:"label2", value:1}, {label:"label3", value:2}, {label:"label4", value:3} ]}/>
+                    </h4>
                 </li>
+
+                <li>
+                    <h4 className="cl__title ml-03em">
+                        하나만 체크가능 <span className="color-primary">VALUE</span>
+
+                        <CheckBoxes radio items={[ {label:"label1", value:0}, {label:"label2", value:1}, {label:"label3", value:2}, {label:"label4", value:3} ]}/>
+                    </h4>
+                </li>
+
+                <li>
+                    <h4 className="cl__title ml-03em">
+                        인풋텍스트 <span className="color-primary">VALUE</span>
+                    </h4>
+
+                    <input type="text" className="mt-2em ml-03em mr-03em" placeholder="TEXT를 입력해주세요."/>
+                </li>
+
+
+                <li>
+                    <h4 className="cl__title ml-03em">
+                        콤보박스 <span className="color-primary">VALUE</span>
+                    </h4>
+
+                    <select name="cl-options">
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                    </select>
+                </li>
+
+
+                <li style={{height:'160px'}}/>
             </ul>
 
 

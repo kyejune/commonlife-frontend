@@ -9,6 +9,7 @@ class DrawerWrapper extends Component {
     render() {
         return <Drawer {...Store.customDrawerProps}
                        renderNode={document.querySelector('.App')}
+                       className={this.props.className}
                        visible={Store.hasDrawer(this.props.drawer)}>
             <DrawerContentHolder {...this.props} >
                 {this.props.children}

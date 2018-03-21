@@ -24,31 +24,17 @@ class DrawerContentHolder extends Component {
     }
 
     componentWillUnmount(){
-        if( Store.drawer.length )
+        if( Store.drawer.length === 0 )
             document.querySelector('body').classList.remove('cl-dom--added');
     }
 
 
     onClose(){
 
-        // let paths = this.props.location.pathname.split('/');
-        //
-        // if( paths[1] === 'community' )
-        //     paths.length -= 2;
-        // else
-        //     paths.length -= 1;
-        //
-        // this.props.history.replace(paths.join('/'));
-
-       // HashRouter.goBack();
         Store.popDrawer();
 
         if( !this.props.close )
             this.props.history.goBack();
-
-        // console.log( 'Router:', HashRouter.backHistory() );
-        // HashRouter.history.back();
-
     }
 
     updateTitle( title ){

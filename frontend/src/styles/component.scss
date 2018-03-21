@@ -2,6 +2,11 @@
 .md-drawer {
 
     background-image: url("images/bg-2-dark@2x.png");
+
+    &.cl-bg--light{
+        background-image: url("images/bg-3@2x.png");
+    }
+
     color: white;
 
     a {
@@ -845,4 +850,38 @@
 
     border-bottom: 2px solid #f4ca5c !important;
     color: #ffffff;
+}
+
+
+
+
+/* Checkboxes */
+.cl-checkboxes{
+
+    @extend .cl-flex;
+
+    input[type=checkbox], input[type=radio]{
+        width: 18px;
+        height: 18px;
+        border: 2px solid #6B6B6B;
+        border-radius: 2px;
+
+        &:checked{
+            border: none;
+            background: $md-primary-color url('images/ic-iot-checked-blue@3x.png') no-repeat;
+            background-size: contain;
+            background-position: center;
+        }
+
+        margin-right: 13px;
+    }
+
+    label{
+        @extend .cl-flex;
+        width: 50%;
+        font-size: 14px;
+        color: rgba( 0, 0, 0, .87 );
+        margin-top: 26px;
+        font-weight: lighter;
+    }
 }

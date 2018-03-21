@@ -181,12 +181,12 @@ class HomeIoT extends Component {
             </DrawerWrapper>
 
             {/* 기기 카테고리 목록 */}
-            <DrawerWrapper drawer="iot-device-category" title="기기 카테고리" back >
+            <DrawerWrapper drawer="iot-device-category" title="기기 카테고리" back className="cl-bg--light">
                 <IotDeviceCategory/>
             </DrawerWrapper>
 
             {/* 기기 카테고리 리스트 */}
-            <DrawerWrapper drawer="iot-device-category-detail" title="기기 리스트" back >
+            <DrawerWrapper drawer="iot-device-category-detail" title="기기 리스트" back className="cl-bg--light">
                 <IotDeviceList/>
             </DrawerWrapper>
 

@@ -8,6 +8,7 @@ import Src0 from 'images/ic-menu-0.png';
 import Src1 from 'images/ic-menu-1.png';
 import Src2 from 'images/ic-menu-2.png';
 import Src3 from 'images/ic-menu-3.png';
+import IotSrc from 'images/iot-run@3x.png';
 import Link from "react-router-dom/es/Link";
 
 
@@ -22,7 +23,9 @@ const WriteButton = () => {
 
 const IotButton = () => {
     return <Link className="cl-iot-run__button md-background--primary" to="/iot/ctrl"
-    />
+    >
+        <img src={IotSrc} alt="IoT제어" width="20" height="20"/>
+    </Link>
 }
 
 class Footer extends Component {

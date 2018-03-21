@@ -33,7 +33,6 @@ class IotSlider extends Component {
         const {min, max, unit} = this.props;
         const {value} = this.state;
         const tl = (value - min) / (max - min) * 100 + '%';
-        console.log('tl:', min, max, value, tl);
 
         return <div className={"cl-iot-slider cl-flex " + this.props.className}>
             <div className="cl-iot-slider__min">{min}°C</div>
