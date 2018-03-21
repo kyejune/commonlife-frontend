@@ -916,6 +916,7 @@ public class IotInfoServiceImpl implements IotInfoService {
         return deviceInfo;
     }
 
+
     /////// 공통 메소드 //////////////////////////////////////////////////////////////////////////////
     private void removeMapKeyIfExisted(Map map, String key) {
         Object v = map.get(key);
@@ -1089,7 +1090,6 @@ public class IotInfoServiceImpl implements IotInfoService {
             // 사용하지 않은 값 삭제
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
-            this.removeMapKeyIfExisted(e, "SCNA_ID");
         }
     }
 

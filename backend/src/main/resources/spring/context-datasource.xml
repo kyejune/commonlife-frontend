@@ -23,6 +23,7 @@
         <property name="removeAbandoned" value="#{prop_jdbc['Jdbc.RemoveAbandoned']}" />
         <property name="removeAbandonedTimeout" value="#{prop_jdbc['Jdbc.RemoveAbandonedTimeout']}" />
         <property name="validationQuery" value="SELECT 1" />
+        <property name="defaultAutoCommit" value="false" />
     </beans:bean>
 
 </beans:beans>

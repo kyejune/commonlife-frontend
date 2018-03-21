@@ -42,7 +42,7 @@ public interface IotInfoService {
             (int complexId, int homeId, int pageNo, int pageRow) throws Exception;
 
     IotModeAutomationInfo getModeOrAutomationDetail
-            (int complexId, int homeId, int modeId, boolean modeFlag) throws Exception;
+            (int complexId, int homeId, int modeOrAutomationId , boolean modeFlag) throws Exception;
 
     IotModeAutomationInfo getModeOrAutomationActors(
             int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception;
@@ -60,6 +60,6 @@ public interface IotInfoService {
 
     IotModeAutomationInfo createAutomation(int complexId, int homeId, IotModeAutomationInfo automationInfo) throws Exception;
 
-    IotDeviceListInfo updateDeviceDesc(int complexId, int homeId, int deviceId, String description) throws Exception;
+    IotDeviceListInfo updateDeviceDesc(int complexId, int homeId, int deviceId, String desc) throws Exception;
 
 }
