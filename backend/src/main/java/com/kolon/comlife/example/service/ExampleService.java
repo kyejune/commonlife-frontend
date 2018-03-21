@@ -5,7 +5,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
 public interface ExampleService {
 
     public ExampleInfo getExample( String name );
@@ -18,7 +17,6 @@ public interface ExampleService {
 
     public void deleteExample(ExampleInfo example);
 
-    @Transactional
     public void transactionTestExample(ExampleInfo example, boolean txFailedFlag ) throws Exception;
 
 }

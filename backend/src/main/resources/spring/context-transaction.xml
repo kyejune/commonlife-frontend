@@ -12,6 +12,9 @@
     <!-- ================================================================================== -->
     <!-- = LOCAL SYSTEM DB -->
     <!-- ================================================================================== -->
+
+    <tx:annotation-driven transaction-manager="txManager"/>
+
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
@@ -23,8 +26,10 @@
     </tx:advice>
 
     <aop:config>
+        <aop:pointcut id="exmpaleTx" expression="execution(* com.kolon.comlife.example.service.impl.ExampleServiceImpl.*(..))" />
         <aop:pointcut id="requiredTx"  expression="execution(* com.kolon..service..*Service*.*(..))"/>
         <aop:pointcut id="requiredTx2"  expression="execution(* com.kolonbenit..service..*Service*.*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="exmpaleTx" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="requiredTx" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="requiredTx2" />
     </aop:config>

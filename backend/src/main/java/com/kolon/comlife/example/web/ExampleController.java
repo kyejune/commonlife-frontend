@@ -10,6 +10,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -107,6 +108,7 @@ public class ExampleController {
         return ResponseEntity.status(HttpStatus.OK).body( null );
     }
 
+    @Transactional
     @GetMapping(
             value = "/tx/failed/{flag}",
             produces = MediaType.APPLICATION_JSON_VALUE)
