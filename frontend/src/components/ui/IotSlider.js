@@ -1,61 +1,60 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 // import Tooltip from 'rc-tooltip';
 import Tooltip from 'rc-tooltip';
-import Slider, { Handle, createSliderWithTooltip } from 'rc-slider';
+import Slider, {Handle, createSliderWithTooltip} from 'rc-slider';
+import classNames from 'classnames';
 
-// const SliderWithTooltip = createSliderWithTooltip(Slider);
-
-// const Handle = Slider.Handle;
-
-// const handle = (props) => {
-// 	const { value, dragging, index, ...restProps } = props;
-// 	return (
-// 		<div>A</div>
-// 	);
-// };
 
 class IotSlider extends Component {
 
-	constructor(props){
-		super(props);
-		this.state = {
-			value: 3,
-			max: 20,
-			min: 0,
-		}
-	}
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: this.props.value,
+            isDragging: false,
+        }
+    }
 
-	onBeforeChange = ()=>{
-		console.log( 'drag start');
-	}
+    onBeforeChange = () => {
+        this.setState({ isDragging: true });
+    }
 
-	onChange = ( value )=>{
-		this.setState( { value: value });
-	}
+    onChange = (value) => {
+        this.setState({value: value});
+    }
 
-    onAfterChange = ()=>{
-        console.log( 'drag end');
+    onAfterChange = () => {
+        this.setState({ isDragging: false });
     }
 
 
     render() {
 
-		const { min, max, value } = this.state;
-		const tl = value/( max - min )*100 + '%';
+        const {min, max, unit} = this.props;
+        const {value} = this.state;
+        const tl = (value - min) / (max - min) * 100 + '%';
+        console.log('tl:', min, max, value, tl);
 
-		return <div className="cl-iot-slider">
-			<div className="cl-iot-slider__min">{min}°C</div>
-			<Slider dots step={1} min={ this.state.min } max={ this.state.max } defaultValue={ this.state.value }
-					className="cl-slider"
-                    onBeforeChange={ this.onBeforeChange }
-					onChange={ this.onChange }
-                	onAfterChange={ this.onAfterChange }>
-				<span style={{ position:'absolute', left: tl }}>TIP{this.state.value}</span>
-			</Slider>
-			<div className="cl-iot-slider__max">{max}°C</div>
-		</div>
+        return <div className={"cl-iot-slider cl-flex " + this.props.className}>
+            <div className="cl-iot-slider__min">{min}°C</div>
 
-	}
+            <Slider dots step={1} min={min} max={max} defaultValue={value}
+                    className="cl-slider"
+                    onBeforeChange={this.onBeforeChange}
+                    onChange={this.onChange}
+                    onAfterChange={this.onAfterChange}>
+				<span className="cl-handle" style={{left: tl }}>
+					<span className={ classNames( 'cl-handle-mark', { 'cl--hide': !this.state.isDragging } ) } >
+					    <span className="cl-handle-mark-bg"/>
+					    <span className="cl-handle-mark-value">{this.state.value}</span>
+					</span>
+				</span>
+            </Slider>
+
+            <div className="cl-iot-slider__max">{max}°C</div>
+        </div>
+
+    }
 }
 
 export default IotSlider;

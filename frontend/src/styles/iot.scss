@@ -378,6 +378,13 @@
     }
 }
 
+.cl-iot__li--expand{
+    @extend .abs__list--common;
+    padding-top: 26px;
+    padding-bottom: 26px;
+    margin-bottom: 0;
+}
+
 .abs__list--dark{
     color: #D1D1D2;
     background-color: transparent;
@@ -416,6 +423,12 @@
 
     li{
         @extend .abs__list--common;
+
+        &.cl-bg--inner{
+            @extend .cl-bg--darkgray;
+            box-shadow: inset 1px 0 2px 0 rgba(0, 0, 0, 0.12),
+                        inset 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+        }
 
         &:last-child{
             margin-bottom: 2em;
@@ -702,10 +715,6 @@
 
 // 슬라이더
 .cl-iot-slider {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    align-items: center;
 
     .cl-slider {
         width: 78%;

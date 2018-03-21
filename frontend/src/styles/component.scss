@@ -404,6 +404,44 @@
         background-color: #565656;
         border-radius: 0;
     }
+
+
+    .cl-handle{
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background-color: $md-primary-color;
+        margin-top: -5px;
+        margin-left: -6px;
+
+
+        .cl-handle-mark{
+            &.cl--hide{
+                display: none;
+            }
+        }
+
+        .cl-handle-mark-bg{
+            position: absolute;
+            bottom: 20px;
+            width: 26px;
+            height: 26px;
+            border-radius: 50% 50% 50% 0;
+            background: $md-primary-color;
+            transform: rotate(-44deg);
+            margin-left: -6px;
+        }
+
+        .cl-handle-mark-value{
+            color: white;
+            font-size: 10px;
+            text-align: center;
+            position: absolute;
+            bottom: 25px;
+            width: 15px;
+        }
+    }
 }
 
 .rc-slider-tooltip {

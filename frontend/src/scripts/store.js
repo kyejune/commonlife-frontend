@@ -19,6 +19,12 @@ const Store = observable({
     cmplxId:'125',
     homeId:'1',
 
+
+    auth:{
+      name: '아무개',
+    },
+
+
     /* Community별 CardItem 데이터 */
     feed: [],
     event: [],
