@@ -17,14 +17,9 @@ class IotModeChange extends Component {
 
 	setProgress () {
 		this.setState( { step: 'progress' } );
-
-		console.log( this.state.step );
-
 		let { cmd, name, type, targetValue } = this.props;
 
-		console.log( Store.imc.targetValue );
-
-		Iot.changeIotMode( name, targetValue, ()=> {
+		Iot.changeIotMode( Store.imc.mode, targetValue, ()=> {
 			this.setState( { step: 'done' } );
 		} );
 	}
@@ -32,7 +27,7 @@ class IotModeChange extends Component {
 	doneProgress () {
 		Store.imc = null;
 
-		Iot.getIot();
+		Iot.getMode();
 	}
 
 	closeProgress () {
