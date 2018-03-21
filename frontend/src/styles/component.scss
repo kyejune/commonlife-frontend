@@ -783,3 +783,28 @@
     animation-delay: 1300ms;
     animation-fill-mode: forwards;
 }
+
+// 카테고리 (공간별/기기별) 탭
+.cl-iot-control-tab {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+    border-top: 1px solid #3e94ff;
+    box-shadow: 0 4px 5px 0 rgba(0, 0, 0, 0.14), 0 1px 10px 0 rgba(0, 0, 0, 0.12), 0 2px 4px -1px rgba(0, 0, 0, 0.4);
+}
+
+.cl-iot-control-tab__item {
+    width: 50%;
+    padding: 13px 0 15px;
+    border-bottom: 2px solid #1654A3;
+    background-color: #1654A3;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.cl-iot-control-tab__item--active {
+    @extend .cl-iot-control-tab__item;
+
+    border-bottom: 2px solid #f4ca5c !important;
+    color: #ffffff;
+}
