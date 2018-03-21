@@ -753,6 +753,7 @@ public class IotController {
             @RequestBody               Map<String, Object> body)
     {
         IotModeAutomationInfo automationInfo = new IotModeAutomationInfo();
+        IotAutomationIdInfo  createdAutomationInfo;
 
         body.get("scnaIfAply");
         body.get("scnaIfSpc");
@@ -784,7 +785,7 @@ public class IotController {
         }
 
         try {
-            automationInfo = iotInfoService.createAutomation(complexId, homeId, automationInfo);
+            createdAutomationInfo = iotInfoService.createAutomation(complexId, homeId, automationInfo);
         } catch ( IotInfoGeneralException e ) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -800,7 +801,7 @@ public class IotController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body( automationInfo );
+        return ResponseEntity.status(HttpStatus.OK).body( createdAutomationInfo );
     }
 
     /**
@@ -809,12 +810,12 @@ public class IotController {
     @PutMapping(
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotAutomationInfo> updateAutomation(
+    public ResponseEntity<IotAutomationIdInfo> updateAutomation(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
     {
-        IotAutomationInfo automationInfo = new IotAutomationInfo();
+        IotAutomationIdInfo automationInfo = new IotAutomationIdInfo();
 
         return ResponseEntity.status(HttpStatus.OK).body( automationInfo );
     }
@@ -1063,6 +1064,62 @@ public class IotController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body( deviceInfo );
+    }
+
+
+    /**
+     * 45. 시나리오에서 생성시, 추가조건(IF) 목록(리스트)를 가져오기
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/automation/conditions",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getModeOrAutomationAllConditions(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId)
+    {
+        IotModeAutomationInfo conditionInfo;
+
+        try {
+            conditionInfo = iotInfoService.getModeOrAutomationAllConditions(complexId, homeId, false);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( conditionInfo );
+    }
+
+
+    /**
+     * 46. 특정 시나리오의 '조건(IF)' 목록 및 속성 가져오기 MyIOT 추가
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/automation/actors",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getModeOrAutomationAllActors(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId)
+    {
+        IotModeAutomationInfo conditionInfo;
+
+        try {
+            conditionInfo = iotInfoService.getModeOrAutomationAllActors(complexId, homeId, false);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( conditionInfo );
     }
 
     private ResponseEntity commonExceptionHandler(Exception e) throws Exception {
