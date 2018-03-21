@@ -12,7 +12,6 @@ import java.util.List;
 
 /**
  */
-@Transactional
 @Service("exampleService")
 public class ExampleServiceImpl implements ExampleService {
     public static final Logger logger = LoggerFactory.getLogger(ExampleServiceImpl.class);
@@ -47,7 +46,6 @@ public class ExampleServiceImpl implements ExampleService {
     }
 
     @Override
-    @Transactional
     public void transactionTestExample(ExampleInfo info, boolean txFailedFlag ) throws Exception {
         logger.debug(">>>>> set example data.... ");
         info = this.setExample(info);

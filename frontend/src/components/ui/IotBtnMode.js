@@ -11,7 +11,8 @@ class IotBtnLg extends Component {
 			targetValue:( this.props.modeData.execYn !== "Y" ),
 			targetName: (this.props.modeData.modeNm),
 			targetIcon: (this.props.modeData.imgSrc),
-			...modeInfo
+			...modeInfo,
+			...this.props.modeData
 		};
 	}
 

@@ -36,7 +36,7 @@ class HomeIoT extends Component {
 	}
 
 	componentDidMount () {
-		Iot.getIot();
+		Iot.getIotAll();
 		this.updateRoute();
 	}
 
