@@ -360,12 +360,12 @@ public class IotControlServiceImpl implements IotControlService {
         return null;
     }
     
-    public IotAutomationInfo createAutomation(int complexId, int homeId) {
+    public IotAutomationIdInfo createAutomation(int complexId, int homeId) {
         return null;
     }
 
     
-    public IotAutomationInfo updateAutomation(int complexId, int homeId, int automationId) {
+    public IotAutomationIdInfo updateAutomation(int complexId, int homeId, int automationId) {
         return null;
     }
 
