@@ -1,5 +1,7 @@
 package com.kolon.comlife.example.web;
 
+import com.kolon.comlife.common.model.SimpleErrorInfo;
+import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.example.model.ExampleInfo;
 import com.kolon.comlife.example.service.ExampleService;
 import org.slf4j.Logger;
@@ -103,6 +105,26 @@ public class ExampleController {
         ExampleInfo example = exampleService.getExample( name );
         exampleService.deleteExample(example);
         return ResponseEntity.status(HttpStatus.OK).body( null );
+    }
+
+    @GetMapping(
+            value = "/tx/failed/{flag}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity transactionFailed(@PathVariable("flag") boolean flag) throws Exception {
+        ExampleInfo info = new ExampleInfo();
+
+        info.setName("tx failed test");
+
+        exampleService.transactionTestExample(info, flag);
+//        try {
+//
+//        } catch (org.springframework.dao.DuplicateKeyException dupKeyEx) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+//        } catch( Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new SimpleErrorInfo("with fail, done!"));
+//        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(new SimpleMsgInfo("Done with success!"));
     }
 
 }

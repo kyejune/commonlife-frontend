@@ -293,7 +293,7 @@ public class IotControlServiceImpl implements IotControlService {
     }
 
     // 17. 18. '모드' 변경 수행
-    public IotModeListInfo switchToMode(int complexId, int homeId, String modeId) throws Exception {
+    public IotModeListInfo switchToMode(int complexId, int homeId, String mode) throws Exception {
         HttpPutRequester requester;
         Map<String, Map> result;
         IotModeListInfo  activeModeList;
@@ -302,7 +302,7 @@ public class IotControlServiceImpl implements IotControlService {
 
         // 1. '모드 변경' 수행
         try {
-            String execUrl = String.format( IOK_CONTROL_MODE_SWITCH_FMT_PATH, modeId, complexId, homeId );
+            String execUrl = String.format( IOK_CONTROL_MODE_SWITCH_FMT_PATH, mode, complexId, homeId );
             logger.debug(" URL PATH: switchToMode(): " + execUrl);
             requester = new HttpPutRequester(
                     httpClient,
@@ -329,7 +329,7 @@ public class IotControlServiceImpl implements IotControlService {
                 activeModeList = iotInfoService.getActiveMode(complexId, homeId);
                 changedModeId = (String)activeModeList.getData().get(0).get("mode");
 
-                if( modeId.equals(changedModeId) ) {
+                if( mode.equals(changedModeId) ) {
                     // 변경 성공 --> do nothing
                     break;
                 } else {

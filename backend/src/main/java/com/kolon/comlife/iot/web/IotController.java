@@ -459,21 +459,41 @@ public class IotController {
      * modeId == scnaId
      */
     @GetMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/modes/{modeId}",
+            path = "/complexes/{complexId}/homes/{homeId}/modes/{mode}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModeInfo(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
-            @PathVariable("modeId")    int modeId )
+            @PathVariable("mode")    String mode )
     {
         IotModeAutomationInfo modeInfo;
+        IotModeListInfo       modeList;
+        int                   automationId = -1;
 
         try {
-            modeInfo = iotInfoService.getModeOrAutomationDetail(complexId, homeId, modeId, true);
+            modeList = iotInfoService.getModeList(complexId, homeId);
+            for( Map e : modeList.getData()) {
+                if( e.get("mode").equals(mode) ) {
+                    if( e.get("scnaId") instanceof Integer ) {
+                        automationId = ((Integer)e.get("scnaId")).intValue();
+                    } else if( e.get("scnaId") instanceof String ) {
+                        automationId = Integer.valueOf((String)e.get("scnaId")).intValue();
+                    }
+                    break;
+                }
+            }
+            if( automationId == -1 ) {
+                return ResponseEntity
+                        .status(HttpStatus.NOT_FOUND)
+                        .body(new SimpleErrorInfo("모드 값이 잘못되었습니다. 모드를 확인하세요."));
+            }
+
+            modeInfo = iotInfoService.getModeOrAutomationDetail(complexId, homeId, automationId, true);
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                unhandledEx.printStackTrace();
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -487,17 +507,17 @@ public class IotController {
      * 17. 개별 '모드'로 전환 at IOT 모드 실행
      */
     @PutMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/modes/{modeId}/switchTo",
+            path = "/complexes/{complexId}/homes/{homeId}/modes/{mode}/switchTo",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity switchToMode(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
-            @PathVariable("modeId")    String modeId )
+            @PathVariable("modeId")    String mode )
     {
         IotModeListInfo changedMode;
 
         try {
-            changedMode = iotControlService.switchToMode( complexId, homeId, modeId );
+            changedMode = iotControlService.switchToMode( complexId, homeId, mode );
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -585,7 +605,7 @@ public class IotController {
     public ResponseEntity<IotModeAutomationInfo> updateModeInfo(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
-            @PathVariable("modeId")    int modeId )
+            @PathVariable("modeId")    String modeId )
     {
         IotModeAutomationInfo modeInfo = new IotModeAutomationInfo();
 
