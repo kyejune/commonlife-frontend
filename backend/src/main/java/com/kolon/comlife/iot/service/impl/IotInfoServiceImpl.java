@@ -1137,6 +1137,18 @@ public class IotInfoServiceImpl implements IotInfoService {
             // MOD_ID --> DEVICE_ID로 변환
             this.replaceMapKeyIfExisted(e, "MOD_ID", "DEVICE_ID" );
 
+
+            if( (e.get("BINARY_YN") != null) && (e.get("STS_CNT") != null) ) {
+                if( e.get("BINARY_YN").equals("Y") &&
+                        e.get("STS_CNT").equals(new Integer(1)) )
+                {
+                    e.put("DEVICE_TYPE", "button");
+                } else {
+                    e.put("DEVICE_TYPE", "detail");
+                }
+            }
+
+
             // 사용하지 않은 값 삭제
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
