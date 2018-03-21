@@ -12,7 +12,7 @@ class IotDeviceTabList extends Component {
 
 		this.state = {
 			controlTab: true,
-			controlType: false
+			controlType: false,
 		};
 
 		Iot.getDeviceCategories( ( byPlace, byType )=> {
@@ -30,7 +30,7 @@ class IotDeviceTabList extends Component {
 
 	render () {
 
-		if( this.state.tabIndex === undefined ) return <div>00</div>;
+		if( this.state.tabIndex === undefined ) return <div/>;
 
 		const List = this.state.tabData[ this.state.tabIndex ].map( ( data, index )=> {
 			return <li key={index}>
