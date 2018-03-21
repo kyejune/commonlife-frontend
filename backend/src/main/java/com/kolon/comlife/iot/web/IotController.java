@@ -510,9 +510,9 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/modes/{mode}/switchTo",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity switchToMode(
-            @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId,
-            @PathVariable("modeId")    String mode )
+            @PathVariable("complexId") int    complexId,
+            @PathVariable("homeId")    int    homeId,
+            @PathVariable("mode")      String mode )
     {
         IotModeListInfo changedMode;
 
