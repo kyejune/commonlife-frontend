@@ -8,6 +8,8 @@ import LiOfToggle from "./LiOfToggle";
 import Iot from "../../../scripts/iot";
 import checkSrc from 'images/ic-check@3x.png';
 import classNames from 'classnames';
+import moment from 'moment';
+import Store from 'scripts/store';
 
 class IotModeSetting extends Component {
 
@@ -53,13 +55,17 @@ class IotModeSetting extends Component {
 
         if( isMode && modeData === null ) return <div/>
 
-
-        const scna = modeData.scna[0];
         const {pathname} = this.props.location;
-        let Sensors;
+        let scna;
+        let Sensors = [];
+        let Devices = [];
 
         let sensorMore, deviceMore;
+
+        // 모드 편집 모드
         if ( isMode ) {
+            scna = modeData.scna[0];
+
             sensorMore = <span className="ml-auto">설정불가</span>;
             deviceMore = <span className="ml-auto">설정가능</span>;
 
@@ -86,7 +92,7 @@ class IotModeSetting extends Component {
 
             // 특정 시간 있으면 추가
             Sensors = Sensors.concat( modeData.scnaIfSpc.map( item => {
-                return <LiOfCtrl key="time" icon={undefined} name="특정 시간" desc={ item.spcTime }/>
+                return <LiOfCtrl key="time" icon={undefined} name="특정 시간(더미)" desc={ item.spcTime }/>
             }));
 
             // 시간 구간 조건 추가
@@ -95,11 +101,21 @@ class IotModeSetting extends Component {
             }));
 
 
+            //// 디바이스 추가
+            Devices = modeData.scnaThings.map( (item, index)=>{
+                if( item.deviceType && item.deviceType === 'button')
+                    return <LiOfToggle key={index} src={undefined} name={item.deviceNm} />
+                else
+                    return <LiOfCtrl key={index} src={undefined} name={item.deviceNm} />
+            })
+
+
+        // 시나리오 생성모드
         } else {
             sensorMore = <Link className="ml-auto" to={`${pathname}/edit-sensor`}>센서편집</Link>;
             deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
 
-            Sensors = <div>시나리오 센서목록</div>
+            // Sensors = <div></div>
         }
 
         return (
@@ -120,7 +136,7 @@ class IotModeSetting extends Component {
 
                         <div>
                             <h5>사용자 Automation</h5>
-                            <span className="desc">2017년 2월 28일 | 조성우 생성</span>
+                            <span className="desc">{ moment().format('YYYY년 MM월 DD일 | ') + Store.auth.name }</span>
                         </div>
                     }
                 </header>
@@ -141,19 +157,12 @@ class IotModeSetting extends Component {
 
                     <div>
                         <div className="cl-flex fs-14 ml-1em mr-1em mt-1em mb-1em">
-                            <h5 className="fs-14 cl-bold">사용된 기기 <span className="color-primary">{ modeData.scnaThings.length }</span></h5>
+                            <h5 className="fs-14 cl-bold">사용된 기기 <span className="color-primary">{ Devices.length }</span></h5>
                             {deviceMore}
                         </div>
 
                         <ul className="cl-iot-vertical-list">
-                            {
-                                modeData.scnaThings.map( (item, index)=>{
-                                    if( item.deviceType && item.deviceType === 'button')
-                                        return <LiOfToggle key={index} src={undefined} name={item.deviceNm} />
-                                    else
-                                        return <LiOfCtrl key={index} src={undefined} name={item.deviceNm} />
-                                })
-                            }
+                            {Devices}
 
                             {/*<LiOfToggle src={undefined} name="무슨무슨기기" desc="기기설명"/>*/}
                             {/*<LiOfCtrl icon={undefined} name="뭐뭐기기" desc="기기설명"*/}
@@ -164,7 +173,7 @@ class IotModeSetting extends Component {
                 </div>
 
 
-                <footer className="cl-flex cl-opts__footer">
+                <footer className={ classNames("cl-flex", "cl-opts__footer", { "cl-opts__footer--hide": ( Sensors.length + Devices.length === 0 ) } ) }>
                     <button>취소</button>
                     <button className="ml-auto cl-flex mr-1em">
                         <img src={checkSrc} alt="확인" width="28" height="28"/>
