@@ -17,8 +17,8 @@ public interface IotControlService {
 
     IotModeAutomationInfo updateModeInfo(int complexId, int homeId, int modeId);
 
-    IotAutomationIdInfo createAutomation(int complexId, int homeId);
-    IotAutomationIdInfo updateAutomation(int complexId, int homeId, int automationId);
+    IotModeAutomationIdInfo createAutomation(int complexId, int homeId);
+    IotModeAutomationIdInfo updateAutomation(int complexId, int homeId, int automationId);
 
 
     IotSensorListInfo updateSensorOnAutomation(int complexId, int homeId, int automationId, int sensorId);

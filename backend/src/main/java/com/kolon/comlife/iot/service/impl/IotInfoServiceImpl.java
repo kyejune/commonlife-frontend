@@ -678,12 +678,12 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     // 29. MyIOT에서 '시나리오/오토메이션' 생성하기
-    public IotAutomationIdInfo createAutomation(
+    public IotModeAutomationIdInfo createAutomation(
             int complexId, int homeId, String userId, IotModeAutomationInfo automationInfo) throws Exception
     {
         HttpPostRequester    requester;
         Map<String, String>  result;
-        IotAutomationIdInfo  createdAutomationInfo = new IotAutomationIdInfo();
+        IotModeAutomationIdInfo createdAutomationInfo = new IotModeAutomationIdInfo();
         Map<String, String>  scnaInfo;
 
         // validation
@@ -759,24 +759,37 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     // 30. MyIOT에서 '시나리오/오토메이션' 업데이트하기
-    public IotAutomationIdInfo updateAutomation(
-            int complexId, int homeId, int automationId, String userId, IotModeAutomationInfo automationInfo) throws Exception
+    public IotModeAutomationIdInfo updateAutomation(
+            int                     complexId,
+            int                     homeId,
+            int                     automationId,
+            String                  userId,
+            IotModeAutomationInfo   automationInfo,
+            boolean                 modeFlag            ) throws Exception
     {
         HttpPostRequester    requester;
         Map<String, String>  result;
-        IotAutomationIdInfo  createdAutomationInfo = new IotAutomationIdInfo();
+        IotModeAutomationIdInfo createdAutomationInfo = new IotModeAutomationIdInfo();
         Map<String, String>  scnaInfo;
 
         // validation
         if( (automationInfo.getScna() ==  null) || (automationInfo.getScna().size() < 1) ) {
-            throw new IotInfoGeneralException("'자동화' 기본정보가 입력되지 않았습니다. 입력을 다시 확인하세요.");
+            if( modeFlag ) {
+                throw new IotInfoGeneralException("'모드' 기본정보가 입력되지 않았습니다. 입력을 다시 확인하세요.");
+            } else {
+                throw new IotInfoGeneralException("'자동화' 기본정보가 입력되지 않았습니다. 입력을 다시 확인하세요.");
+            }
         }
         scnaInfo = (Map)automationInfo.getScna().get(0);
 
         if( scnaInfo.get("mode") != null ) {
             // 업데이트 시에는 모드 값이 없어야 함
             // mode값이 들어오면 IOK-API에서 시나리오 !생성!하기 때문
-            throw new IotInfoGeneralException("'자동화' 기본정보 입력이 잘못되었습니다. 입력값을 다시 확인하세요.");
+            if( modeFlag ) {
+                throw new IotInfoGeneralException("'모드' 기본정보 입력이 잘못되었습니다. 입력값을 다시 확인하세요.");
+            } else {
+                throw new IotInfoGeneralException("'자동화' 기본정보 입력이 잘못되었습니다. 입력값을 다시 확인하세요.");
+            }
         }
 
         logger.debug(">>> automationId: " + automationId);
@@ -843,7 +856,11 @@ public class IotInfoServiceImpl implements IotInfoService {
         if( result.get("scnaId") != null && (result.get("scnaId") instanceof String) ) {
             // Success
             createdAutomationInfo.setAutomationId( Integer.parseInt((String)result.get("scnaId")) );
-            createdAutomationInfo.setMsg("'자동화'를 업데이트하였습니다.");
+            if( modeFlag ) {
+                createdAutomationInfo.setMsg("'모드'를 업데이트하였습니다.");
+            } else {
+                createdAutomationInfo.setMsg("'자동화'를 업데이트하였습니다.");
+            }
         }
 
         return createdAutomationInfo;

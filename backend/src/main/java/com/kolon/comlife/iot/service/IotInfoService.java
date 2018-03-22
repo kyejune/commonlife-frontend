@@ -58,11 +58,11 @@ public interface IotInfoService {
 
     IotModeListInfo updateModesOrder(int complexId, int homeId, IotModeListInfo modeList) throws Exception;
 
-    IotAutomationIdInfo createAutomation(
+    IotModeAutomationIdInfo createAutomation(
             int complexId, int homeId, String userId, IotModeAutomationInfo automationInfo) throws Exception;
 
-    IotAutomationIdInfo updateAutomation(
-            int complexId, int homeId, int automationId, String userId, IotModeAutomationInfo automationInfo) throws Exception;
+    IotModeAutomationIdInfo updateAutomation(
+            int complexId, int homeId, int automationId, String userId, IotModeAutomationInfo automationInfo, boolean modeFlag) throws Exception;
 
     IotDeviceListInfo updateDeviceDesc(int complexId, int homeId, int deviceId, String desc) throws Exception;
 

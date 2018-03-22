@@ -1,9 +1,9 @@
 package com.kolon.comlife.iot.model;
 
-public class IotAutomationIdInfo extends IotBaseInfo {
+public class IotModeAutomationIdInfo extends IotBaseInfo {
     private int automationId;
 
-    public IotAutomationIdInfo() {
+    public IotModeAutomationIdInfo() {
         super();
         this.automationId = -1;
     }
