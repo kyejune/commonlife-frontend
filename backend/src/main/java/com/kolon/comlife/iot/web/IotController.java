@@ -60,7 +60,7 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
-        IotModeListInfo modesList;
+        IotModeOrAutomationListInfo modesList;
 
         try {
             modesList = iotInfoService.getModeList(complexId, homeId);
@@ -87,7 +87,7 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
-        IotModeListInfo activeModeList;
+        IotModeOrAutomationListInfo activeModeList;
 
         try {
             activeModeList = iotInfoService.getActiveMode(complexId, homeId);
@@ -467,7 +467,7 @@ public class IotController {
             @PathVariable("mode")    String mode )
     {
         IotModeAutomationInfo modeInfo;
-        IotModeListInfo       modeList;
+        IotModeOrAutomationListInfo modeList;
         int                   automationId = -1;
 
         try {
@@ -514,7 +514,7 @@ public class IotController {
             @PathVariable("homeId")    int    homeId,
             @PathVariable("mode")      String mode )
     {
-        IotModeListInfo changedMode;
+        IotModeOrAutomationListInfo changedMode;
 
         try {
             changedMode = iotControlService.switchToMode( complexId, homeId, mode );
@@ -551,7 +551,7 @@ public class IotController {
             @PathVariable("homeId")    int    homeId,
             @RequestBody               List<Map<String, Object>> body)
     {
-        IotModeListInfo modeListInfo = new IotModeListInfo();
+        IotModeOrAutomationListInfo modeListInfo = new IotModeOrAutomationListInfo();
 
         logger.debug(">>> " + body.toString());
         logger.debug(">>> " + body.size());
@@ -638,7 +638,7 @@ public class IotController {
             @RequestBody               Map<String, Object> body)
     {
         IotModeAutomationInfo   modeInfo;
-        IotModeListInfo         modeList;
+        IotModeOrAutomationListInfo modeList;
         IotModeAutomationIdInfo updateModeInfo;
         int                     modeAutomationId = -1;
         String                  userId       = "baek"; // todo : authInfo에서 가져올 것
@@ -1158,6 +1158,32 @@ public class IotController {
         return ResponseEntity.status(HttpStatus.OK).body( deviceInfo );
     }
 
+    /**
+     * 44. 전체 시나리오 리스트 조회
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/automation",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getAutomationAll(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId)
+    {
+        IotModeOrAutomationListInfo automationList;
+
+        try {
+            automationList = iotInfoService.getAutomationAll(complexId, homeId);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( automationList );
+    }
 
     /**
      * 45. 시나리오에서 생성시, 추가조건(IF) 목록(리스트)를 가져오기
@@ -1213,6 +1239,7 @@ public class IotController {
 
         return ResponseEntity.status(HttpStatus.OK).body( conditionInfo );
     }
+
 
     private ResponseEntity commonExceptionHandler(Exception e) throws Exception {
         if( e instanceof  URISyntaxException ) {

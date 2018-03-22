@@ -1,6 +1,6 @@
 package com.kolon.comlife.iot;
 
-import com.kolon.comlife.iot.model.IotModeListInfo;
+import com.kolon.comlife.iot.model.IotModeOrAutomationListInfo;
 import com.kolon.comlife.iot.service.IotControlService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,7 +32,7 @@ public class IotControlServiceTest {
     public void iotControlServiceTest() throws Exception {
         logger.info(">>> Run iotControlServiceTest()");
 
-        IotModeListInfo result;
+        IotModeOrAutomationListInfo result;
 
         result = iotControlService.switchToMode(125, 1 , "CM01103") ;
         logger.info(">>> >>> result: " + result);

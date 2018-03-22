@@ -5,11 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class IotModeListInfo extends IotBaseInfo {
+public class IotModeOrAutomationListInfo extends IotBaseInfo {
 
     private List<Map<String, Object>> data;
 
-    public IotModeListInfo() {
+    public IotModeOrAutomationListInfo() {
         super();
         this.data = new ArrayList();
     }

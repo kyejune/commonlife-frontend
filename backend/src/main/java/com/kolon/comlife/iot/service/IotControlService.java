@@ -12,16 +12,8 @@ public interface IotControlService {
     IotDeviceListInfo executeDeviceFunction
             ( int complexId, int homeId, int deviceId, IotDeviceControlMsg ctrlMsg)  throws Exception;
 
-    IotModeListInfo switchToMode
+    IotModeOrAutomationListInfo switchToMode
             (int complexId, int homeId, String modeId) throws Exception;
-
-    IotModeAutomationInfo updateModeInfo(int complexId, int homeId, int modeId);
-
-    IotModeAutomationIdInfo createAutomation(int complexId, int homeId);
-    IotModeAutomationIdInfo updateAutomation(int complexId, int homeId, int automationId);
-
-
-    IotSensorListInfo updateSensorOnAutomation(int complexId, int homeId, int automationId, int sensorId);
 
     EnergyInfo createEnergyUsageExceedAlarm(int complexId, int homeId, String  energyType);
 

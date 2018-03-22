@@ -3,10 +3,10 @@ package com.kolon.comlife.iot.service;
 import com.kolon.comlife.iot.model.*;
 
 public interface IotInfoService {
-    IotModeListInfo getModeList
+    IotModeOrAutomationListInfo getModeList
             (int complexId, int homeId) throws Exception;
 
-    IotModeListInfo getActiveMode
+    IotModeOrAutomationListInfo getActiveMode
             (int complexId, int homeId) throws Exception;
 
     IotButtonListInfo getMyIotButtonList
@@ -56,7 +56,7 @@ public interface IotInfoService {
     IotModeAutomationInfo getModeOrAutomationActorsAvailable(
             int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception;
 
-    IotModeListInfo updateModesOrder(int complexId, int homeId, IotModeListInfo modeList) throws Exception;
+    IotModeOrAutomationListInfo updateModesOrder(int complexId, int homeId, IotModeOrAutomationListInfo modeList) throws Exception;
 
     IotModeAutomationIdInfo createAutomation(
             int complexId, int homeId, String userId, IotModeAutomationInfo automationInfo) throws Exception;
@@ -65,6 +65,8 @@ public interface IotInfoService {
             int complexId, int homeId, int automationId, String userId, IotModeAutomationInfo automationInfo, boolean modeFlag) throws Exception;
 
     IotDeviceListInfo updateDeviceDesc(int complexId, int homeId, int deviceId, String desc) throws Exception;
+
+    IotModeOrAutomationListInfo getAutomationAll(int complexId, int homeId) throws Exception;
 
     IotModeAutomationInfo getModeOrAutomationAllConditions(
             int complexId, int homeId, boolean modeFlag) throws Exception;

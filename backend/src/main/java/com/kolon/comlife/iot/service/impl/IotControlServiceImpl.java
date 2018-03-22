@@ -293,10 +293,10 @@ public class IotControlServiceImpl implements IotControlService {
     }
 
     // 17. 18. '모드' 변경 수행
-    public IotModeListInfo switchToMode(int complexId, int homeId, String mode) throws Exception {
+    public IotModeOrAutomationListInfo switchToMode(int complexId, int homeId, String mode) throws Exception {
         HttpPutRequester requester;
         Map<String, Map> result;
-        IotModeListInfo  activeModeList;
+        IotModeOrAutomationListInfo activeModeList;
         String           changedModeId;
         int retryCount = 0;
 
@@ -354,23 +354,6 @@ public class IotControlServiceImpl implements IotControlService {
         return activeModeList;
     }
 
-
-    
-    public IotModeAutomationInfo updateModeInfo(int complexId, int homeId, int modeId) {
-        return null;
-    }
-    
-    public IotModeAutomationIdInfo createAutomation(int complexId, int homeId) {
-        return null;
-    }
-
-    
-    public IotModeAutomationIdInfo updateAutomation(int complexId, int homeId, int automationId) {
-        return null;
-    }
-
-    public IotSensorListInfo updateSensorOnAutomation(int complexId, int homeId, int automationId, int sensorId) { return null; };
-    
     public EnergyInfo createEnergyUsageExceedAlarm(int complexId, int homeId, String energyType) {
         return null;
     }

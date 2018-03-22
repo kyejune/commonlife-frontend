@@ -47,18 +47,14 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String IOK_MODE_DETAIL_ACTORS_PATH         = "/iokinterface/scenario/scnaThingsDetail";
     private static final String IOK_MODE_DETAIL_CONDITONS_AVAILABLE_PATH = "/iokinterface/scenario/scnaIfAddList";
     private static final String IOK_MODE_DETAIL_ACTORS_AVAILABLE_PATH    = "/iokinterface/scenario/scnaThingsAddList";
-
+    private static final String IOK_AUTOMATION_LIST_PATH            = "/iokinterface/scenario/scnaList";
     private static final String IOK_AUTOMATION_DETAIL_PATH          = "/iokinterface/scenario/scnaDetail";
     private static final String IOK_AUTOMATION_DETAIL_SAVE_PATH     = "/iokinterface/scenario/saveScnaDetail";
-
-    private static final String IOK_DEVICE_NAME_UPDATE_PATH = "/iokinterface/device/updateDevice";
-
+    private static final String IOK_DEVICE_NAME_UPDATE_PATH         = "/iokinterface/device/updateDevice";
 
     private static final String USER_SCENARIO_MODE_CODE = "CM01199";
 
-    private static final String AUTOMATION_DEFUALT_ICON = "cl_icon_default";
-
-
+    private static final String AUTOMATION_DEFUALT_ICON = "cl_icon_default"; // todo: IMG/ICON Mapper로 옮길 것
 
     @Autowired
     private ServicePropertiesMap serviceProperties;
@@ -70,9 +66,8 @@ public class IotInfoServiceImpl implements IotInfoService {
     /**
      * 1. '모드'의 전체 목록 가져오기 at Dashboard
      */
-    public IotModeListInfo getModeList(int complexId, int homeId) throws Exception {
-
-        IotModeListInfo modesList = new IotModeListInfo();
+    public IotModeOrAutomationListInfo getModeList(int complexId, int homeId) throws Exception {
+        IotModeOrAutomationListInfo modesList = new IotModeOrAutomationListInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
 
@@ -85,12 +80,8 @@ public class IotInfoServiceImpl implements IotInfoService {
         result = requester.execute();
 
         // 1. result data 리맵핑
-        try {
-            this.remapResultModeDataList( (List)result.get("DATA") );
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }
+        this.remapResultModeDataList( (List)result.get("DATA") );
+
 
         // 2. camelCase로 변환
         modesList.setData(
@@ -110,8 +101,8 @@ public class IotInfoServiceImpl implements IotInfoService {
     /**
      * 2. 현재 적용된 '모드'의 가져오기 at Dashboard
      */
-    public IotModeListInfo getActiveMode(int complexId, int homeId) throws Exception {
-        IotModeListInfo activeModeList = new IotModeListInfo();
+    public IotModeOrAutomationListInfo getActiveMode(int complexId, int homeId) throws Exception {
+        IotModeOrAutomationListInfo activeModeList = new IotModeOrAutomationListInfo();
         List            foundData = new ArrayList();
         HttpGetRequester requester;
         Map<String, Map> result;
@@ -137,12 +128,7 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
 
         // 1. result data 리맵핑
-        try {
-            this.remapResultModeDataList( foundData );
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-        }
+        this.remapResultModeDataList( foundData );
 
         if( foundData.isEmpty() )
         {
@@ -565,7 +551,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     // 22. '모드' 편집에서, 모드 목록의 순서를 변경하기
-    public IotModeListInfo updateModesOrder(int complexId, int homeId, IotModeListInfo modeList) throws Exception {
+    public IotModeOrAutomationListInfo updateModesOrder(int complexId, int homeId, IotModeOrAutomationListInfo modeList) throws Exception {
         HttpPostRequester         requester;
         List<Map<String, Object>> data = modeList.getData();
         Map<String, String>       result;  // e.g. { "msg":"...", "resFlag": "false or true" }
@@ -1052,6 +1038,40 @@ public class IotInfoServiceImpl implements IotInfoService {
         return deviceInfo;
     }
 
+    // 44. 전체 시나리오 리스트 조회
+    public IotModeOrAutomationListInfo getAutomationAll(
+            int complexId, int homeId) throws Exception {
+        IotModeOrAutomationListInfo automationList = new IotModeOrAutomationListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_AUTOMATION_LIST_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        result = requester.execute();
+
+        // 1. result data 리맵핑
+        this.remapResultModeDataList( (List)result.get("DATA") );
+
+        // 2. camelCase로 변환
+        automationList.setData(
+                convertListMapDataToCamelCase( (List)result.get("DATA") ));
+
+        if( automationList.getData().isEmpty() )
+        {
+            throw new IotInfoNoDataException( "정의된 '자동화'가 없습니다." );
+        }
+
+        // 3. 결과 정보 입력
+        automationList.setMsg("'자동화' 전체 목록 가져오기");
+
+        return automationList;
+
+    }
+
     // 45. 시나리오에서 생성시, 추가조건(IF) 목록(리스트)를 가져오기
     public IotModeAutomationInfo getModeOrAutomationAllConditions(
             int complexId, int homeId, boolean modeFlag) throws Exception {
@@ -1364,7 +1384,6 @@ public class IotInfoServiceImpl implements IotInfoService {
                 }
             }
 
-
             // 사용하지 않은 값 삭제
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
@@ -1417,7 +1436,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         for(Map<String, Object> e : (List<Map<String, Object>>)inputDataList ) {
 //            Map element = new HashMap();
-            Map element = new TreeMap(); // for DEBUG : 결과 값이 key값 기준으로 ABC.. 정렬되어 표시
+            Map element = new TreeMap(); // todo:DEBUG: 결과 값이 key값 기준으로 ABC.. 정렬되어 표시
             for (String s : e.keySet()) {
                 element.put( CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, s), e.get(s));
             }
