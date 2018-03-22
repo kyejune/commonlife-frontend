@@ -1159,6 +1159,40 @@ public class IotController {
     }
 
     /**
+     * 43. '시나리오/오토메이션' 삭제하기
+     */
+    @DeleteMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity deleteAutomation(
+            @PathVariable("complexId")    int complexId,
+            @PathVariable("homeId")       int homeId,
+            @PathVariable("automationId") int automationId)
+    {
+        IotModeAutomationIdInfo updateAutomationInfo;
+        String                userId = "baek"; // todo : authInfo에서 가져올 것
+
+        try {
+            updateAutomationInfo = iotInfoService.deleteAutomation(complexId, homeId, automationId);
+        } catch ( IotInfoGeneralException e ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        } catch ( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                unhandledEx.printStackTrace();
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( updateAutomationInfo );
+    }
+
+    /**
      * 44. 전체 시나리오 리스트 조회
      */
     @GetMapping(

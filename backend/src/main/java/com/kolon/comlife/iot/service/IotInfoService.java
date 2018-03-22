@@ -65,6 +65,8 @@ public interface IotInfoService {
             int complexId, int homeId, int automationId, String userId, IotModeAutomationInfo automationInfo, boolean modeFlag) throws Exception;
 
     IotDeviceListInfo updateDeviceDesc(int complexId, int homeId, int deviceId, String desc) throws Exception;
+    
+    IotModeAutomationIdInfo deleteAutomation(int complexId, int homeId, int automationId) throws Exception;
 
     IotModeOrAutomationListInfo getAutomationAll(int complexId, int homeId) throws Exception;
 

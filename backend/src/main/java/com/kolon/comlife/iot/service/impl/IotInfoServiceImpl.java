@@ -11,6 +11,7 @@ import com.kolon.comlife.iot.service.IotInfoService;
 import com.kolon.common.http.HttpDeleteRequester;
 import com.kolon.common.http.HttpGetRequester;
 import com.kolon.common.http.HttpPostRequester;
+import com.kolon.common.http.methods.HttpDeleteWithBody;
 import com.kolon.common.prop.ServicePropertiesMap;
 import org.apache.http.impl.client.CloseableHttpClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,6 +51,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String IOK_AUTOMATION_LIST_PATH            = "/iokinterface/scenario/scnaList";
     private static final String IOK_AUTOMATION_DETAIL_PATH          = "/iokinterface/scenario/scnaDetail";
     private static final String IOK_AUTOMATION_DETAIL_SAVE_PATH     = "/iokinterface/scenario/saveScnaDetail";
+    private static final String IOK_AUTOMATION_DELETE_PATH          = "/iokinterface/scenario/saveScnaDetail";
     private static final String IOK_DEVICE_NAME_UPDATE_PATH         = "/iokinterface/device/updateDevice";
 
     private static final String USER_SCENARIO_MODE_CODE = "CM01199";
@@ -1036,6 +1038,45 @@ public class IotInfoServiceImpl implements IotInfoService {
         deviceInfo.setMsg((result.get("msg")));
 
         return deviceInfo;
+    }
+
+
+    // 43. '시나리오/오토메이션' 삭제하기
+    public IotModeAutomationIdInfo deleteAutomation(int complexId, int homeId, int automationId) throws Exception {
+        IotModeAutomationIdInfo   automationIdInfo = new IotModeAutomationIdInfo();
+        HttpDeleteRequester requester;
+        Map<String, String> result;
+        String bodyStr;
+
+
+        requester = new HttpDeleteRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_AUTOMATION_DELETE_PATH );
+
+        Map msg = new HashMap();
+        Map scnaMsg = new HashMap();
+        scnaMsg.put("cmplxId", String.valueOf(complexId));
+        scnaMsg.put("homeId", String.valueOf(homeId));
+        scnaMsg.put("scnaId", String.valueOf(automationId));
+
+        ObjectMapper mapper = new ObjectMapper();
+        List msgList = new ArrayList();
+        msgList.add(scnaMsg);
+        msg.put("SCNA", msgList);
+        bodyStr = mapper.writeValueAsString(msg);
+        logger.debug(">>> msg:" + bodyStr);
+        requester.setBody(bodyStr);
+
+        result = requester.execute();
+
+        logger.debug(">>> msg: " + result.get("msg"));
+        logger.debug(">>> resFlag: " + result.get("resFlag"));  // BUGBUG: 항상 false로 반환 됨
+
+        automationIdInfo.setAutomationId(automationId);
+        automationIdInfo.setMsg("'자동화'가 삭제되었습니다.");
+
+        return automationIdInfo;
     }
 
     // 44. 전체 시나리오 리스트 조회
