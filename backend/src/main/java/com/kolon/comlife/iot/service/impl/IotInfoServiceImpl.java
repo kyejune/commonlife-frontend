@@ -53,6 +53,13 @@ public class IotInfoServiceImpl implements IotInfoService {
 
     private static final String IOK_DEVICE_NAME_UPDATE_PATH = "/iokinterface/device/updateDevice";
 
+
+    private static final String USER_SCENARIO_MODE_CODE = "CM01199";
+
+    private static final String AUTOMATION_DEFUALT_ICON = "cl_icon_default";
+
+
+
     @Autowired
     private ServicePropertiesMap serviceProperties;
 
@@ -500,6 +507,7 @@ public class IotInfoServiceImpl implements IotInfoService {
         IotModeAutomationInfo modeAutoInfo = new IotModeAutomationInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
+        Map<String, Object> scnaInfo;
 
         requester = new HttpGetRequester(
                 httpClient,
@@ -510,7 +518,7 @@ public class IotInfoServiceImpl implements IotInfoService {
         requester.setParameter("scnaId", String.valueOf(modeOrAutomationId) );
         result = requester.execute();
 
-        // 0. Validation
+        // Validation
 
         if(result.get("SCNA") == null || ((List)result.get("SCNA")).size() < 1) {
             if( modeFlag ) {
@@ -518,10 +526,16 @@ public class IotInfoServiceImpl implements IotInfoService {
             } else {
                 throw new IotInfoNoDataException("해당 '자동화' 정보가 없습니다.");
             }
+        }
+        scnaInfo = (Map)((List)result.get("SCNA")).get(0);
 
+        // Population & mapping
+
+        // 아이콘 체크
+        if( scnaInfo.get("icon") == null || "".equals( scnaInfo.get("icon") )) {
+            scnaInfo.put("icon", AUTOMATION_DEFUALT_ICON);
         }
 
-        // 1. result data 리맵핑
         try {
             this.remapResultScenarioDetail( (List)result.get("SCNA_IF_THINGS") );
             this.remapResultScenarioDetail( (List)result.get("SCNA_IF_SPC") );
@@ -534,7 +548,6 @@ public class IotInfoServiceImpl implements IotInfoService {
             logger.error(e.getMessage());
         }
 
-        // 2. camelCase로 변환
         modeAutoInfo.setScnaIfThings( convertListMapDataToCamelCase((List)result.get("SCNA_IF_THINGS")) );
         modeAutoInfo.setScnaIfSpc( convertListMapDataToCamelCase((List)result.get("SCNA_IF_SPC")) );
         modeAutoInfo.setScnaIfAply( convertListMapDataToCamelCase((List)result.get("SCNA_IF_APLY")) );
@@ -666,15 +679,23 @@ public class IotInfoServiceImpl implements IotInfoService {
 
     // 29. MyIOT에서 '시나리오/오토메이션' 생성하기
     public IotAutomationIdInfo createAutomation(
-            int complexId, int homeId, IotModeAutomationInfo automationInfo) throws Exception
+            int complexId, int homeId, String userId, IotModeAutomationInfo automationInfo) throws Exception
     {
-        HttpPostRequester       requester;
-        Map<String, String>     result;
-        IotAutomationIdInfo createdAutomationInfo = new IotAutomationIdInfo();
+        HttpPostRequester    requester;
+        Map<String, String>  result;
+        IotAutomationIdInfo  createdAutomationInfo = new IotAutomationIdInfo();
+        Map<String, String>  scnaInfo;
 
         // validation
-        if( automationInfo.getScna().size() < 1 ) {
+        if( automationInfo.getScna() == null || automationInfo.getScna().size() < 1 ) {
             throw new IotInfoUpdateFailedException("자동화 입력값이 잘못되었습니다. 입력 내용을 다시 확인하세요.");
+        }
+
+        scnaInfo =(Map)automationInfo.getScna().get(0);
+
+        // 시나리오 생성시에 scna.scnaId 값이 설정되어있으면 IOK api는 생성 대신, 업데이트로 동작합니다. 따라서, scnaId가 입력되면 에러를 반환합니다.
+        if( scnaInfo.get("scnaId") != null ) {
+            throw new IotInfoGeneralException("입력된 정보가 잘못되었습니다. 새로운 자동화를 생성할 때, ID를 포함하면 안됩니다.");
         }
 
         if( automationInfo.getScnaIfSpc() != null && automationInfo.getScnaIfAply() != null ) {
@@ -700,8 +721,12 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
 
         // 사용자 시나리오/오토메이션 생성시, "mode":"CM01199"를 전달해야 함
-        automationInfo.getScna().get(0).put("mode", "CM01199");
-        automationInfo.getScna().get(0).put("useYn", "Y");
+        scnaInfo.put("mode", USER_SCENARIO_MODE_CODE);
+        scnaInfo.put("useYn", "Y");
+        scnaInfo.put("userId", (userId != null) ? userId : "");
+        if( scnaInfo.get("icon") == null ) {
+            scnaInfo.put("icon", AUTOMATION_DEFUALT_ICON);
+        }
 
         Map populateData = new HashMap();
         populateData.put("cmplxId", String.valueOf(complexId));
@@ -733,9 +758,96 @@ public class IotInfoServiceImpl implements IotInfoService {
         return createdAutomationInfo;
     }
 
-
     // 30. MyIOT에서 '시나리오/오토메이션' 업데이트하기
+    public IotAutomationIdInfo updateAutomation(
+            int complexId, int homeId, int automationId, String userId, IotModeAutomationInfo automationInfo) throws Exception
+    {
+        HttpPostRequester    requester;
+        Map<String, String>  result;
+        IotAutomationIdInfo  createdAutomationInfo = new IotAutomationIdInfo();
+        Map<String, String>  scnaInfo;
 
+        // validation
+        if( (automationInfo.getScna() ==  null) || (automationInfo.getScna().size() < 1) ) {
+            throw new IotInfoGeneralException("'자동화' 기본정보가 입력되지 않았습니다. 입력을 다시 확인하세요.");
+        }
+        scnaInfo = (Map)automationInfo.getScna().get(0);
+
+        if( scnaInfo.get("mode") != null ) {
+            // 업데이트 시에는 모드 값이 없어야 함
+            // mode값이 들어오면 IOK-API에서 시나리오 !생성!하기 때문
+            throw new IotInfoGeneralException("'자동화' 기본정보 입력이 잘못되었습니다. 입력값을 다시 확인하세요.");
+        }
+
+        logger.debug(">>> automationId: " + automationId);
+        logger.debug(">>> automationInfo.getScna().size(): " + automationInfo.getScna().size());
+        logger.debug(">>> automationInfo.getScnaIfSpc(): " + automationInfo.getScnaIfSpc());
+        logger.debug(">>> automationInfo.getScnaIfAply(): " + automationInfo.getScnaIfAply());
+        logger.debug(">>> getScna().size(): " + automationInfo.getScna().size());
+
+        if( (automationInfo.getScnaIfSpc() != null) && (automationInfo.getScnaIfSpc().size() > 0) &&
+            (automationInfo.getScnaIfAply() != null) && (automationInfo.getScnaIfAply().size() > 0) ){
+            logger.debug(">>> automationInfo.getScnaIfSpc().size(): " + automationInfo.getScnaIfSpc().size());
+            logger.debug(">>> automationInfo.getScnaIfAply().size(): " + automationInfo.getScnaIfAply().size());
+            logger.debug(">>> automationInfo.getScnaIfSpc().get(0).get(\"chk\"): " + automationInfo.getScnaIfSpc().get(0).get("chk"));
+            logger.debug(">>> automationInfo.getScnaIfAply().get(0).get(\"chk\"): " + automationInfo.getScnaIfAply().get(0).get("chk"));
+
+            throw new IotInfoGeneralException("'특정시간'조건과 '구간시간' 조건은 같이 사용할 수 없습니다.");
+        }
+
+        // population
+        // 시나리오 아이디 셋팅
+        scnaInfo.put("scnaId", String.valueOf(automationId));
+        scnaInfo.put("userId", (userId != null) ? userId : "");
+
+        if(automationInfo.getScnaIfSpc() == null) {
+            automationInfo.setScnaIfSpc(new ArrayList<Map<String, Object>>());
+        }
+
+        if(automationInfo.getScnaIfAply() == null) {
+            automationInfo.setScnaIfAply(new ArrayList<Map<String, Object>>());
+        }
+
+        if(automationInfo.getScnaIfThings() == null) {
+            automationInfo.setScnaIfThings(new ArrayList<Map<String, Object>>());
+        }
+
+        if(automationInfo.getScnaThings() == null) {
+            automationInfo.setScnaThings(new ArrayList<Map<String, Object>>());
+        }
+
+        scnaInfo.put("useYn", "Y");
+
+        Map populateData = new HashMap();
+        populateData.put("cmplxId", String.valueOf(complexId));
+        populateData.put("homeId", String.valueOf(homeId));
+        populateData.put("scnaId", String.valueOf(automationId));
+
+        this.remapResultScenarioDetailReverse(automationInfo.getScna(), populateData);
+        this.remapResultScenarioDetailReverse(automationInfo.getScnaIfThings(), populateData);
+        this.remapResultScenarioDetailReverse(automationInfo.getScnaThings(), populateData);
+
+        final GsonBuilder builder = new GsonBuilder();
+        final Gson gson = builder.create();
+        String gsonout = gson.toJson(automationInfo);
+        logger.debug( ">>>>>> " + gsonout);
+
+        // execution
+        requester = new HttpPostRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_AUTOMATION_DETAIL_SAVE_PATH );
+        requester.setBody( gsonout );
+        result = requester.execute();
+
+        if( result.get("scnaId") != null && (result.get("scnaId") instanceof String) ) {
+            // Success
+            createdAutomationInfo.setAutomationId( Integer.parseInt((String)result.get("scnaId")) );
+            createdAutomationInfo.setMsg("'자동화'를 업데이트하였습니다.");
+        }
+
+        return createdAutomationInfo;
+    }
 
     // 31. 특정 시나리오의 '조건(IF)' 목록 및 속성 가져오기
     public IotModeAutomationInfo getModeOrAutomationConditions(

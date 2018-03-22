@@ -754,6 +754,7 @@ public class IotController {
     {
         IotModeAutomationInfo automationInfo = new IotModeAutomationInfo();
         IotAutomationIdInfo  createdAutomationInfo;
+        String userId = "baek"; // todo: autoInfo 값에서 가져올 것
 
         body.get("scnaIfAply");
         body.get("scnaIfSpc");
@@ -785,7 +786,7 @@ public class IotController {
         }
 
         try {
-            createdAutomationInfo = iotInfoService.createAutomation(complexId, homeId, automationInfo);
+            createdAutomationInfo = iotInfoService.createAutomation(complexId, homeId, userId, automationInfo);
         } catch ( IotInfoGeneralException e ) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -810,14 +811,63 @@ public class IotController {
     @PutMapping(
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotAutomationIdInfo> updateAutomation(
-            @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId,
-            @PathVariable("automationId") int automationId )
+    public ResponseEntity updateAutomation(
+            @PathVariable("complexId")    int complexId,
+            @PathVariable("homeId")       int homeId,
+            @PathVariable("automationId") int automationId,
+            @RequestBody                  Map<String, Object> body)
     {
-        IotAutomationIdInfo automationInfo = new IotAutomationIdInfo();
+        IotModeAutomationInfo automationInfo = new IotModeAutomationInfo();
+        IotAutomationIdInfo  updateAutomationInfo;
+        String userId = "baek"; // todo : authInfo에서 가져올 것
 
-        return ResponseEntity.status(HttpStatus.OK).body( automationInfo );
+        body.get("scnaIfAply");
+        body.get("scnaIfSpc");
+        body.get("scnaIfThings");
+        body.get("scnaThings");
+
+        if( body.get("scna") != null && body.get("scna") instanceof List ) {
+            automationInfo.setScna((List)body.get("scna"));
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("자동화 기본정보가 잘못되었습니다. 입력값을 다시 확인하세요."));
+        }
+
+        if( body.get("scnaIfThings") != null && body.get("scnaIfThings") instanceof List ) {
+            automationInfo.setScnaIfThings((List)body.get("scnaIfThings"));
+        }
+
+        if( body.get("scnaThings") != null && body.get("scnaThings") instanceof List ) {
+            automationInfo.setScnaThings((List)body.get("scnaThings"));
+        }
+
+        if( body.get("scnaIfAply") != null && body.get("scnaIfAply") instanceof List ) {
+            automationInfo.setScnaIfAply((List)body.get("scnaIfAply"));
+        }
+
+        if( body.get("scnaIfSpc") != null && body.get("scnaIfSpc") instanceof List ) {
+            automationInfo.setScnaIfSpc((List)body.get("scnaIfSpc"));
+        }
+
+        try {
+            updateAutomationInfo = iotInfoService.updateAutomation(complexId, homeId, automationId, userId, automationInfo);
+        } catch ( IotInfoGeneralException e ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        } catch ( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                unhandledEx.printStackTrace();
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( updateAutomationInfo );
     }
 
     /**
