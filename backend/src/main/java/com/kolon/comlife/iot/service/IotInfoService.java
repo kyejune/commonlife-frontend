@@ -2,6 +2,9 @@ package com.kolon.comlife.iot.service;
 
 import com.kolon.comlife.iot.model.*;
 
+import java.util.List;
+import java.util.Map;
+
 public interface IotInfoService {
     IotModeOrAutomationListInfo getModeList
             (int complexId, int homeId) throws Exception;
@@ -20,6 +23,18 @@ public interface IotInfoService {
 
     IotButtonListInfo getMyIotButtonListAvailable
             (int complexId, int homeId, String userId) throws Exception;
+
+    IotButtonListInfo getMyIotAutomationListAvailable
+            (int complexId, int homeId, String userId) throws Exception;
+
+    IotButtonListInfo getMyIotDevicesListAvailable
+            (int complexId, int homeId, String userId) throws Exception;
+
+    IotButtonListInfo getMyIotValueInfoListAvailable
+            (int complexId, int homeId, String userId) throws Exception;
+
+    IotButtonListInfo addMyIotButtonByMyIotID
+            (int complexId, int homeId, String userId, List<Map<String, Object>> myIotIdList) throws Exception;
 
     IotButtonListInfo simplifyMyIotButtonListResult( IotButtonListInfo result ) throws Exception;
 
