@@ -3,6 +3,7 @@ package com.kolon.comlife.iot.service.impl;
 import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.iot.exception.IotInfoGeneralException;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;
 import com.kolon.comlife.iot.exception.IotInfoUpdateFailedException;
@@ -11,7 +12,6 @@ import com.kolon.comlife.iot.service.IotInfoService;
 import com.kolon.common.http.HttpDeleteRequester;
 import com.kolon.common.http.HttpGetRequester;
 import com.kolon.common.http.HttpPostRequester;
-import com.kolon.common.http.methods.HttpDeleteWithBody;
 import com.kolon.common.prop.ServicePropertiesMap;
 import org.apache.http.impl.client.CloseableHttpClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +34,11 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String IOK_MODES_LIST_PATH                 = "/iokinterface/scenario/modeInfoList";
     private static final String IOK_MYIOT_LIST_PATH                 = "/iokinterface/myiot/myiotList";
     private static final String IOK_MYIOT_AVAILABLE_LIST_PATH       = "/iokinterface/myiot/myiotSetList";
+    private static final String IOK_MYIOT_AUTOMATION_AVAILABLE_LIST_PATH  = "/iokinterface/myiot/myiotSetScnaList";
+    private static final String IOK_MYIOT_DEVICES_AVAILABLE_LIST_PATH     = "/iokinterface/myiot/myiotSetThingsList";
+    private static final String IOK_MYIOT_VALUE_INFO_AVAILABLE_LIST_PATH  = "/iokinterface/myiot/myiotSetValueList";
+    private static final String IOK_MYIOT_ADD_PATH                  = "/iokinterface/myiot/saveMyIot";
+    private static final String IOK_MYIOT_UPDATE_PATH               = "/iokinterface/myiot/saveMyIot";
     private static final String IOK_MYIOT_DELETE_PATH               = "/iokinterface/myiot/saveMyIot";
     private static final String IOK_ROOMS_LIST_PATH                 = "/iokinterface/device/roomList";
     private static final String IOK_DEVICES_LIST_BY_ROOM_PATH       = "/iokinterface/device/roomDeviceList";
@@ -586,9 +591,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
 
-
-    // 24. MyIOT에 추가가능한 모든 버튼 목록 가져오기
-    public IotButtonListInfo getMyIotButtonListAvailable (int complexId, int homeId, String userId) throws Exception {
+    private IotButtonListInfo getMyIotButtonListAvailableInternal(int complexId, int homeId, String userId) throws Exception {
         IotButtonListInfo   buttonListInfo = new IotButtonListInfo();
         HttpGetRequester    requester;
         Map<String, Map>    result;
@@ -612,10 +615,171 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         buttonListInfo.setData( convertListMapDataToCamelCase((List)result.get("DATA")) );
 
+        return buttonListInfo;
+    }
+
+
+    // 24. MyIOT에 추가가능한 모든 버튼 목록 가져오기
+    public IotButtonListInfo getMyIotButtonListAvailable (int complexId, int homeId, String userId) throws Exception {
+        IotButtonListInfo   buttonListInfo;
+
+        buttonListInfo = getMyIotButtonListAvailableInternal(complexId, homeId, userId);
+
+        buttonListInfo.setMsg("MyIOT에 추가가능한 모든 버튼 목록 가져오기");
+        return buttonListInfo;
+    }
+
+    // 24-2. MyIOT내, 추가 가능한 시나리오 목록 가져오기
+    public IotButtonListInfo getMyIotAutomationListAvailable
+            (int complexId, int homeId, String userId) throws Exception {
+        IotButtonListInfo   buttonListInfo = new IotButtonListInfo();
+        HttpGetRequester    requester;
+        Map<String, Map>    result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MYIOT_AUTOMATION_AVAILABLE_LIST_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId));
+        requester.setParameter("homeId", String.valueOf(homeId));
+        requester.setParameter("userId", userId);
+        result = requester.execute();
+
+        try {
+            this.remapResultMyIotButtonDataList( (List)result.get("DATA") );
+            this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA"), true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+
+        buttonListInfo.setData( convertListMapDataToCamelCase((List)result.get("DATA")) );
+
+        buttonListInfo.setMsg("MyIOT에 추가가능한 자동화 목록 가져오기");
+
+        return buttonListInfo;
+    }
+
+    // 24-3. MyIOT내, 추가 가능한 기기(공간+카테고리 정보 포함) 목록 가져오기
+    public IotButtonListInfo getMyIotDevicesListAvailable
+            (int complexId, int homeId, String userId) throws Exception {
+        IotButtonListInfo   buttonListInfo = new IotButtonListInfo();
+        HttpGetRequester    requester;
+        Map<String, Map>    result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MYIOT_DEVICES_AVAILABLE_LIST_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId));
+        requester.setParameter("homeId", String.valueOf(homeId));
+        requester.setParameter("userId", userId);
+        result = requester.execute();
+
+        try {
+            this.remapResultMyIotButtonDataList( (List)result.get("DATA") );
+            this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA"), true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+
+        buttonListInfo.setData( convertListMapDataToCamelCase((List)result.get("DATA")) );
+
+        buttonListInfo.setMsg("MyIOT에 추가가능한 기기 목록 가져오기");
+
+        return buttonListInfo;
+    }
+
+    // 24-4. MyIOT내, 추가 가능한 가치정보 목록 가져오기
+    public IotButtonListInfo getMyIotValueInfoListAvailable
+            (int complexId, int homeId, String userId) throws Exception {
+        IotButtonListInfo   buttonListInfo = new IotButtonListInfo();
+        HttpGetRequester    requester;
+        Map<String, Map>    result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MYIOT_VALUE_INFO_AVAILABLE_LIST_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId));
+        requester.setParameter("homeId", String.valueOf(homeId));
+        requester.setParameter("userId", userId);
+        result = requester.execute();
+
+        try {
+            this.remapResultMyIotButtonDataList( (List)result.get("DATA") );
+            this.deleteUnusedResultMyIotButtonDataList( (List)result.get("DATA"), true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+
+        buttonListInfo.setData( convertListMapDataToCamelCase((List)result.get("DATA")) );
+
         buttonListInfo.setMsg("MyIOT에 추가가능한 모든 버튼 목록 가져오기");
 
         return buttonListInfo;
     }
+
+
+    // 26. MyIOT 편집 화면에서 '기기/시나리오/정보'의 신규등록
+    public IotButtonListInfo addMyIotButtonByMyIotID
+            (int complexId, int homeId, String userId, List<Map<String, Object>> myIotIdList) throws Exception {
+        IotButtonListInfo   addedButtonList = new IotButtonListInfo();
+        IotButtonListInfo   availableButtonList;
+        HttpPostRequester   requester;
+        Map<String, Map>    result;
+
+        Map<String, String> mapperMidToGcCode = new HashMap<>();
+
+        // 1.
+        availableButtonList = getMyIotButtonListAvailableInternal(complexId, homeId, userId);
+        for(Map<String, Object> e : availableButtonList.getData()) {
+            logger.debug(">>>> mId/myIotGbCd: " + e.get("mId") + "/" + e.get("myIotGbCd"));
+            mapperMidToGcCode.put( (String)e.get("mId"), (String)e.get("myIotGbCd"));
+        }
+
+        Iterator<Map<String, Object>> iter = myIotIdList.iterator();
+        while( iter.hasNext() )
+        {
+            Map<String, Object> e = iter.next();
+
+            e.put("cmplxId", String.valueOf(complexId));
+            e.put("homeId", String.valueOf(homeId));
+            e.put("userId", userId);
+            if( mapperMidToGcCode.get(e.get("myIotId")) == null ) {
+                // 이미 추가된 기기/시나리오의 경우, 무시함
+                iter.remove();
+                continue;
+            }
+            e.put("myIotGbCd", mapperMidToGcCode.get(String.valueOf(e.get("myIotId"))));
+            e.put("mid", e.get("myIotId"));  // !! myIotId ---> mid
+            e.remove("myIotId");
+            e.put("seqNo", "");    // 생성시 => ":
+        }
+
+        final GsonBuilder builder = new GsonBuilder();
+        final Gson gson = builder.create();
+        String gsonout = gson.toJson(myIotIdList);
+        logger.debug( ">>>>>> " + gsonout);
+
+        // 2.
+        requester = new HttpPostRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MYIOT_ADD_PATH );
+        requester.setBody(gsonout);
+        result = requester.execute();
+        logger.debug(">>> msg: " + result.get("msg"));
+        logger.debug(">>> resFlag: " + result.get("resFlag"));  // BUGBUG: 항상 false로 반환 됨
+
+        addedButtonList.setData(myIotIdList);
+        addedButtonList.setMsg("MyIOT에 선택 항목을 추가하였습니다.");
+
+        return addedButtonList;
+    }
+
 
     public IotButtonListInfo simplifyMyIotButtonListResult( IotButtonListInfo result ) throws Exception {
         this.deleteUnusedResultMyIotButtonDataList( (List)result.getData(), false);
@@ -1239,12 +1403,29 @@ public class IotInfoServiceImpl implements IotInfoService {
                 switch(v) {
                     case "MB01701":
                         e.put("BT_TYPE", "device");
+                        e.put("MY_IOT_ID", String.valueOf(e.get("M_ID")));
                         break;
                     case "MB01702":
                         e.put("BT_TYPE", "automation");
+                        if( e.get("M_ID") == null ) {
+                            e.put("MY_IOT_ID", String.valueOf(e.get("SCNA_ID")));
+                        } else {
+                            e.put("MY_IOT_ID", String.valueOf(e.get("M_ID")));
+                        }
+                        if( e.get("M_NM") == null ) {
+                            e.put("M_NM", e.get("SCNA_NM"));
+                        }
                         break;
                     case "MB01703":
                         e.put("BT_TYPE", "information");
+                        if( e.get("M_ID") == null ) {
+                            e.put("MY_IOT_ID", e.get("VALUE_CD"));
+                        } else {
+                            e.put("MY_IOT_ID", String.valueOf(e.get("M_ID")));
+                        }
+                        if( e.get("M_NM") == null ) {
+                            e.put("M_NM", e.get("VALUE_NM"));
+                        }
                         break;
                     default:
                         e.put("BT_TYPE", "unknown");
@@ -1264,13 +1445,6 @@ public class IotInfoServiceImpl implements IotInfoService {
                     e.put("BT_RIGHT_ICON_TYPE", "detail");
                 }
             }
-
-//            // MO_THINGS_NM --> DEVICE_NM로 변환
-//            this.replaceMapKeyIfExisted(e, "MO_THINGS_NM", "DEVICE_NM" );
-//            // MO_THINGS_ID --> DEVICE_ID로 변환
-//            this.replaceMapKeyIfExisted(e, "MO_THINGS_ID", "DEVICE_ID" );
-//            // MOD_ID --> DEVICE_ID로 변환
-//            this.replaceMapKeyIfExisted(e, "MOD_ID", "DEVICE_ID" );
         }
     }
 
@@ -1295,7 +1469,6 @@ public class IotInfoServiceImpl implements IotInfoService {
                 this.removeMapKeyIfExisted(e, "CMPLX_ID");
                 this.removeMapKeyIfExisted(e, "HOME_ID");
                 this.removeMapKeyIfExisted(e, "BINARY_YN");
-                this.removeMapKeyIfExisted(e, "MY_IOT_GB_CD");
                 this.removeMapKeyIfExisted(e, "KIND_CD");
                 this.removeMapKeyIfExisted(e, "MO_CLNT_ID");
                 this.removeMapKeyIfExisted(e, "THINGS_ID");
@@ -1328,7 +1501,6 @@ public class IotInfoServiceImpl implements IotInfoService {
                 this.removeMapKeyIfExisted(e, "cmplxId");
                 this.removeMapKeyIfExisted(e, "homeId");
                 this.removeMapKeyIfExisted(e, "binaryYn");
-                this.removeMapKeyIfExisted(e, "myIotGbCd");
                 this.removeMapKeyIfExisted(e, "kindCd");
                 this.removeMapKeyIfExisted(e, "moClntId");
                 this.removeMapKeyIfExisted(e, "thingsId");

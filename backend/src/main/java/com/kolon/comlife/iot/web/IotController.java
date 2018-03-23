@@ -68,6 +68,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -95,6 +96,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -127,6 +129,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -159,6 +162,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -191,7 +195,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler(e);
             } catch( Exception unhandledEx ) {
-                e.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -272,7 +276,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
-                unhandledEx.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -300,6 +304,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -328,6 +333,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -356,6 +362,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -383,6 +390,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -411,6 +419,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -444,6 +453,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -493,7 +503,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
-                unhandledEx.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -522,6 +532,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -587,6 +598,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -620,7 +632,6 @@ public class IotController {
         if( reqBody.get("scnaIfSpc") != null && reqBody.get("scnaIfSpc") instanceof List ) {
             automationInfo.setScnaIfSpc((List)reqBody.get("scnaIfSpc"));
         }
-
 
         return automationInfo;
     }
@@ -671,7 +682,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
-                unhandledEx.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -704,6 +715,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -715,37 +727,147 @@ public class IotController {
     }
 
     /**
-     * 26. MyIOT 편집 화면에서 '기기/시나리오/정보'의 순서를 변경 및 신규등록 at MyIOT 추가
-     * todo: 구현해야 함... 구현 중 ...
+     * 24-2. MyIOT내, 추가 가능한 자동화/시나리오 목록 가져오기
      */
-    @PostMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/",
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/automation/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity addMyIotButton(
+    public ResponseEntity getMyIotAutomationListAvailable(
             @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId,
-            @PathVariable("buttonId")  int buttonId)
-
+            @PathVariable("homeId")    int homeId )
     {
-        IotButtonListInfo buttonList = null;
+        IotButtonListInfo buttonsList;
         String            userId;
 
         // todo: userId is retrieved from the user's token.
         userId = "baek";
 
         try {
-//            buttonList = iotInfoService.addMyIotButtonListById(complexId, homeId, userId, buttonId, true);
+            buttonsList = iotInfoService.getMyIotAutomationListAvailable(complexId, homeId, userId );
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
             }
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body( new SimpleErrorInfo("개발 중...") );
+
+        return ResponseEntity.status(HttpStatus.OK).body( buttonsList );
+    }
+
+    /**
+     * 24-3. MyIOT내, 추가 가능한 기기(공간+카테고리 정보 포함) 목록 가져오기
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/devices/available",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getMyIotDevicesListAvailable(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId )
+    {
+        IotButtonListInfo buttonsList;
+        String            userId;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+            buttonsList = iotInfoService.getMyIotDevicesListAvailable(complexId, homeId, userId );
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body( buttonsList );
+    }
+
+    /**
+     * 24-4. MyIOT내, 추가 가능한 가치정보 목록 가져오기
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/valueInfo/available",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getMyIotValueInfoListAvailable(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId )
+    {
+        IotButtonListInfo buttonsList;
+        String            userId;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+            buttonsList = iotInfoService.getMyIotValueInfoListAvailable(complexId, homeId, userId );
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+
+        return ResponseEntity.status(HttpStatus.OK).body( buttonsList );
+    }
+
+
+    /**
+     * 26. MyIOT 편집 화면에서 '기기/시나리오/정보'의 순서를 신규등록 at MyIOT 추가
+     * todo: 구현해야 함... 구현 중 ...
+     */
+    @PostMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity addMyIotButton(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @RequestBody               Map<String, List> body)
+
+    {
+        IotButtonListInfo         addedButtonList = null;
+        String                    userId;
+        String                    myIotId;
+        List<Map<String, Object>> myIotIdList;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        myIotIdList = (List<Map<String, Object>>)body.get("data");
+        if( myIotIdList == null ) {
+            ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( new SimpleErrorInfo("추가 할 수 없는 IOT 정보/기기입니다.") );
+        }
+
+        try {
+            addedButtonList = iotInfoService.addMyIotButtonByMyIotID(complexId, homeId, userId, myIotIdList);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(addedButtonList);
     }
 
 
@@ -773,6 +895,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -802,6 +925,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -865,7 +989,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
-                unhandledEx.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -902,7 +1026,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
-                unhandledEx.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -931,6 +1055,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -976,6 +1101,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -1085,7 +1211,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
-                e.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -1115,7 +1241,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
-                e.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -1148,7 +1274,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
-                e.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -1182,7 +1308,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
-                unhandledEx.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -1210,6 +1336,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -1237,6 +1364,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
@@ -1265,6 +1393,7 @@ public class IotController {
             try {
                 return this.commonExceptionHandler( e );
             } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
                 return ResponseEntity
                         .status(HttpStatus.SERVICE_UNAVAILABLE)
                         .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
