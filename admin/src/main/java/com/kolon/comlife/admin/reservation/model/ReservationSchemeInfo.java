@@ -17,7 +17,6 @@ public class ReservationSchemeInfo {
     private String endDt;
     private String endTime;
     private String availableInWeekend;
-    private String availableInHoliday;
     private int point;
     private int amount;
     private int inStock;
@@ -131,14 +130,6 @@ public class ReservationSchemeInfo {
 
     public void setAvailableInWeekend(String availableInWeekend) {
         this.availableInWeekend = availableInWeekend;
-    }
-
-    public String getAvailableInHoliday() {
-        return availableInHoliday;
-    }
-
-    public void setAvailableInHoliday(String availableInHoliday) {
-        this.availableInHoliday = availableInHoliday;
     }
 
     public int getPoint() {
