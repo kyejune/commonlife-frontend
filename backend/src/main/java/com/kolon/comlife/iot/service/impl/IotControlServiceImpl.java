@@ -70,7 +70,6 @@ public class IotControlServiceImpl implements IotControlService {
 
         switch(btType) {
             case "device":
-                // todo: 작업중
                 if( iconType != null && iconType.equals("button") ) {
                     int                 deviceId = -1;
                     IotDeviceControlMsg msg = new IotDeviceControlMsg();
@@ -98,7 +97,6 @@ public class IotControlServiceImpl implements IotControlService {
                     // 명령 수행 , todo: 세부 기능 private method로 분리 할 것
                     this.executeDeviceFunction( complexId, homeId, deviceId, msg);
 
-                    throw new IotControlOperationFailedException("(DEV) 현재 지원하지 않는 기능입니다.");
                 } else {
                     throw new IotControlOperationFailedException("지원하지 않는 기능입니다.");
                 }
@@ -304,18 +302,18 @@ public class IotControlServiceImpl implements IotControlService {
         try {
             String execUrl = String.format( IOK_CONTROL_MODE_SWITCH_FMT_PATH, mode, complexId, homeId );
             logger.debug(" URL PATH: switchToMode(): " + execUrl);
-            requester = new HttpPutRequester(
-                    httpClient,
-                    serviceProperties.getByKey(IOK_CONTROL_HOST_PROP_GROUP, IOK_CONTROL_HOST_PROP_KEY),
-                    execUrl);
-            result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
-            logger.debug(" >>>> RESULT >>> " + result.toString());
-            // todo: exception handling
-        } catch( SocketException se ) {
-            // socket is closed
-            if( "Socket closed".equals(se.getMessage())) {
-                throw new IotControlTimeoutException("'모드 변경'시간이 초과하였습니다.");
-            } else {
+                requester = new HttpPutRequester(
+                        httpClient,
+                        serviceProperties.getByKey(IOK_CONTROL_HOST_PROP_GROUP, IOK_CONTROL_HOST_PROP_KEY),
+                        execUrl);
+                result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
+                logger.debug(" >>>> RESULT >>> " + result.toString());
+                // todo: exception handling
+            } catch( SocketException se ) {
+                // socket is closed
+                if( "Socket closed".equals(se.getMessage())) {
+                    throw new IotControlTimeoutException("'모드 변경'시간이 초과하였습니다.");
+                } else {
                 throw se;
             }
         } catch( Exception e) {

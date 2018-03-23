@@ -306,7 +306,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         // 1. result data 리맵핑
         try {
-            this.remapResultDeviceDetailList( (List)result.get("DATA") );
+            this.remapResultDeviceList( (List)result.get("DATA") );
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -426,7 +426,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         // 1. result data 리맵핑
         try {
-            this.remapResultDeviceDetailList( (List)result.get("DATA") );
+            this.remapResultDeviceList( (List)result.get("DATA") );
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
@@ -1357,7 +1357,6 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
     }
 
-
     private void remapResultModeDataList(List<Map<String, Object>> resultData) {
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
@@ -1367,6 +1366,39 @@ public class IotInfoServiceImpl implements IotInfoService {
             // 사용하지 않은 값 삭제
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
+        }
+    }
+
+    private void remapResultDeviceList(List<Map<String, Object>> resultData) {
+        if( (resultData == null) || !(resultData instanceof List) ) {
+            return;
+        }
+
+        for (Map<String, Object> e : resultData) {
+            // MO_THINGS_NM --> DEVICE_NM로 변환
+            this.replaceMapKeyIfExisted(e, "MO_THINGS_NM", "DEVICE_NM" );
+            // MO_THINGS_ID --> DEVICE_ID로 변환
+            this.replaceMapKeyIfExisted(e, "MO_THINGS_ID", "DEVICE_ID" );
+            // MOD_ID --> DEVICE_ID로 변환
+            this.replaceMapKeyIfExisted(e, "MOD_ID", "DEVICE_ID" );
+
+            this.removeMapKeyIfExisted(e, "CMPLX_ID");
+            this.removeMapKeyIfExisted(e, "HOME_ID");
+            this.removeMapKeyIfExisted(e, "KIND_CD");
+            this.removeMapKeyIfExisted(e, "THINGS_ID");
+
+            if( (e.get("BINARY_YN") != null) && (e.get("STS_CNT") != null) ) {
+                if( e.get("BINARY_YN").equals("Y") &&
+                        e.get("STS_CNT").equals(new Integer(1)) )
+                {
+                    e.put("DEVICE_TYPE", "button");
+                } else {
+                    e.put("DEVICE_TYPE", "detail");
+                }
+            } else {
+                e.put("DEVICE_TYPE", "detail");
+            }
+
         }
     }
 
