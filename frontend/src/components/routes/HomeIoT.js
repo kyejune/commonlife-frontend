@@ -126,36 +126,14 @@ class HomeIoT extends Component {
 					<WithTitle titleName="My IoT"/>
 
 					<div className="cl-my-iot">
-						<ul className="h-group cl-my-iot__list">
-							<li className="col cl-my-iot__list-item">
-								<IotBtnLg IotBtnType="typeDefault"
-								          IotBtnTitle="12"
-								          IotBtnParagraph="에너지 사용량"
-								          IotBtnLabel="표준"
-								          IotBtnText="340"/>
-							</li>
-							<li className="col cl-my-iot__list-item">
-								<IotBtnLg IotBtnType="typeToggle"
-								          IotBtnTitle="거실조명"
-										  IotBtnParagraph="조명이 켜져있습니다"
-										  IotBtnLabel="스위치"
-										  IotBtnText="Active"/>
-							</li>
-							<li className="col cl-my-iot__list-item">
-								<IotBtnLg IotBtnType="typeCustom"
-								          IotBtnTitle="둘만의시간"
-										  IotBtnLabel="스위치"
-										  IotBtnText="Active"/>
-							</li>
-							<li className="col cl-my-iot__list-item">
-								<Link to="/iot/run/11">
-								<IotBtnLg IotBtnType="typeSet"
-								          IotBtnTitle="안방보일러"
-										  IotBtnParagraph="설정온도 30℃"
-										  IotBtnLabel="높음"
-										  IotBtnText="34"/>
-								</Link>
-							</li>
+						<ul className="cl-my-iot__list">
+							{ MyIots.map(( iot, index )=>{
+                                	return <li key={index} className="col cl-my-iot__list-item">
+										<IotBtnLg {...iot }/>
+									</li>
+                                })
+							}
+
 							<li className="col cl-my-iot__list-item">
                                 <Link to={ { pathname:'/iot/add' } } >
 									<div className="cl-my-iot__button cl-my-iot__button--add">
