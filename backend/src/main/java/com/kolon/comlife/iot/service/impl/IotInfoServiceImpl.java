@@ -1434,6 +1434,9 @@ public class IotInfoServiceImpl implements IotInfoService {
                         if(e.get("BT_IMG_SRC") == null) {
                             e.put("BT_IMG_SRC", iconService.getIconAutomationDefault());
                         }
+                        // 자동화는 모두 버튼 모양
+                        e.put("BT_RIGHT_ICON_TYPE", "button");
+                        e.put("BT_RIGHT_TEXT", "실행");
                         break;
                     case "MB01703":
                         e.put("BT_TYPE", "information");
