@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { Link } from "react-router-dom";
 import Iot from 'scripts/iot';
-import Checkbox from "../../ui/Checkbox";
-
-import SampleSrc from 'images/io-t-icon-1@3x.png';
 import LiOfCheck from "./LiOfCheck";
 import LiOfToggle from "./LiOfToggle";
 import LiOfCtrl from "./LiOfCtrl";
@@ -23,7 +19,7 @@ class IotDeviceCategory extends Component {
 		this.state = {
 			isRoom: isRoom,
 			cateId: dId,
-			deviceData: []
+			deviceData: [],
 		};
 
 		props.updateTitle( isRoom ? '공간별 기기목록' : '기기별 기기목록' );
@@ -35,7 +31,9 @@ class IotDeviceCategory extends Component {
 	loadData(){
         // 목록 가져오기
         Iot.getDevicesByCategory( this.state.isRoom, this.state.cateId, data=> {
-            this.setState( { deviceData: data } );
+            this.setState( {
+				deviceData: data
+            } );
         } );
 	}
 

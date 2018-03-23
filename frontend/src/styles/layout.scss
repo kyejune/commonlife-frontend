@@ -34,6 +34,12 @@ body.cl-is-device{
             height: calc(100vh - 3.90625vh);
         }
     }
+
+    ul.cl-iot-vertical-list {
+        &.cl-bg--iot {
+            min-height: calc( 100vh - 3.90625vh - 97px - 50px );
+        }
+    }
 }
 
 body:not(.cl-is-device){

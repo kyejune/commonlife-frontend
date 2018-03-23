@@ -422,6 +422,19 @@
     padding: 8px;
     background-color: #d2d2d2;
     min-height: 100%;
+    
+    &.cl-bg--iot{
+        background-color: #EEEEEE;
+        min-height: calc( 100vh - 97px - 50px );
+        padding-bottom: 50px !important;
+
+        &>li{
+            &:last-child{
+                box-shadow: none;
+                border-top: 1px solid #E2E2E2;
+            }
+        }
+    }
 
     p, h4{
         margin-bottom: 0;
@@ -724,7 +737,8 @@
 .cl-iot-slider {
 
     .cl-slider {
-        width: 78%;
+        width: 70%;
+        margin-left: 3%;
     }
 }
 

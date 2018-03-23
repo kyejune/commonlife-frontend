@@ -197,7 +197,7 @@ class HomeIoT extends Component {
 
 
 			{/* 기기 상세 */}
-            <DrawerWrapper drawer="iot-device-detail" title="기기" back >
+            <DrawerWrapper drawer="iot-device-detail" title="기기 상세" back >
                 <IotDevice/>
             </DrawerWrapper>
 

@@ -10,7 +10,7 @@ class IotSlider extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: this.props.value,
+            value: Number(this.props.value),
             isDragging: false,
         }
     }
@@ -25,17 +25,22 @@ class IotSlider extends Component {
 
     onAfterChange = () => {
         this.setState({ isDragging: false });
+
+        if( this.props.onChange )
+            this.props.onChange( this.state.value, this.props );
     }
 
 
     render() {
 
-        const {min, max, unit} = this.props;
+        let { min, max, unit} = this.props;
+        min = Number(min);
+        max = Number(max);
         const {value} = this.state;
         const tl = (value - min) / (max - min) * 100 + '%';
 
         return <div className={"cl-iot-slider cl-flex " + this.props.className}>
-            <div className="cl-iot-slider__min">{min}°C</div>
+            <div className="cl-iot-slider__min">{min + unit}</div>
 
             <Slider dots step={1} min={min} max={max} defaultValue={value}
                     className="cl-slider"

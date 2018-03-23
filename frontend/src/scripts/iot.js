@@ -159,7 +159,7 @@ export default {
         console.log('deviceInfo:', deviceId);
         axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}`)
             .then(response => {
-                callback(response.data);
+                callback(response.data.data);
             });
     },
 

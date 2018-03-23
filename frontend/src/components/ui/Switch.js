@@ -13,15 +13,23 @@ class Switch extends Component {
         console.log('S:', props );
     }
 
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            checked: this.props.defaultValue || false,
+            offOnly: this.props.offOnly || false,
+        });
+    }
+
     onChange=()=>{
         if( this.state.offOnly && this.state.checked === false ) return;
 
+        const newChecked = !this.state.checked;
         this.setState({
-            checked: !this.state.checked,
+            checked: newChecked,
         });
 
         if( this.props.onChange )
-            this.props.onChange( this.state.checked, this.props );
+            this.props.onChange( newChecked, this.props );
     }
 
 

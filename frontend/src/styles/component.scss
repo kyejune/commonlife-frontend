@@ -514,7 +514,7 @@
 
     &:after {
         background-size: 17px;
-        animation: stripes-move 1500ms ease-in-out;
+        animation: stripes-move 1500ms infinite;
     }
 }
 
