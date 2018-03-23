@@ -497,6 +497,11 @@
             background-image: linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, .2) 50%, rgba(255, 255, 255, .2) 75%, transparent 75%, transparent);
         }
     }
+
+
+    &.cl--done{
+
+    }
 }
 
 .cl-iot-connect-progress__box {
@@ -509,12 +514,8 @@
 
     &:after {
         background-size: 17px;
-        //animation: stripes-move 2s linear infinite;
-        //-webkit-animation: stripes-move 2s linear infinite;
         animation: stripes-move 1500ms ease-in-out;
-        -webkit-animation: stripes-move 1500ms ease-in-out;
     }
-
 }
 
 @-webkit-keyframes stripes-move {
@@ -545,12 +546,6 @@
     background-size: 42px;
     background-image: url("images/iot-ic-connect-bullet@3x.png");
     transform: rotate(-90deg);
-    transition: 300ms ease-in-out;
-    -webkit-transition: 300ms ease-in-out;
-    animation: move-connect-ic 300ms ease-in-out;
-    -webkit-animation: move-connect-ic 300ms ease-in-out;
-    animation-delay: 1s;
-    animation-fill-mode: forwards;
 }
 
 @keyframes move-connect-ic {
@@ -573,11 +568,6 @@
     background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
     transform: rotate(-90deg);
     transition: 300ms ease-in-out;
-    -webkit-transition: 300ms ease-in-out;
-    animation: connect-done-ic 300ms ease-in-out;
-    -webkit-animation: connect-done-ic 300ms ease-in-out;
-    animation-delay: 1300ms;
-    animation-fill-mode: forwards;
 }
 
 @keyframes connect-done-ic {
@@ -613,23 +603,23 @@
         background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
     }
 
-    @keyframes move-connect-ic {
-        0% {
-            background-image: url("images/iot-ic-connect-bullet-blue@3x.png") !important;
-        }
-        100% {
-            background-image: url("images/iot-ic-connect-bullet-grey@3x.png");
-        }
-    }
-
-    @keyframes connect-done-ic {
-        0% {
-            background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
-        }
-        100% {
-            background-image: url("images/iot-ic-connect-check-bullet-orange@3x.png") !important;
-        }
-    }
+    //@keyframes move-connect-ic {
+    //    0% {
+    //        background-image: url("images/iot-ic-connect-bullet-blue@3x.png") !important;
+    //    }
+    //    100% {
+    //        background-image: url("images/iot-ic-connect-bullet-grey@3x.png");
+    //    }
+    //}
+    //
+    //@keyframes connect-done-ic {
+    //    0% {
+    //        background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
+    //    }
+    //    100% {
+    //        background-image: url("images/iot-ic-connect-check-bullet-orange@3x.png") !important;
+    //    }
+    //}
 
     .cl-iot-connect-progress__box {
         width: 180px;
@@ -693,15 +683,19 @@
 
 .cl-iot-connect-progress__text-start {
     @extend .cl-iot-connect-progress__text;
-
     top: -55px;
     left: -19px;
     opacity: 1;
+}
 
-    animation: connect-start-text 100ms linear;
-    -webkit-animation: connect-start-text 100ms linear;
-    animation-delay: 1s;
-    animation-fill-mode: forwards;
+.cl--done{
+    .cl-iot-connect-progress__text-start{
+        opacity: 0;
+    }
+
+    .cl-iot-connect-progress__text-done{
+        opacity: 1;
+    }
 }
 
 @keyframes connect-start-text {
@@ -716,15 +710,9 @@
 
 .cl-iot-connect-progress__text-done {
     @extend .cl-iot-connect-progress__text;
-
     top: -55px;
     left: 131px;
     opacity: 0;
-
-    animation: connect-done-text 100ms linear;
-    -webkit-animation: connect-done-text 100ms linear;
-    animation-delay: 1300ms;
-    animation-fill-mode: forwards;
 }
 
 @keyframes connect-done-text {
@@ -805,31 +793,13 @@
     color: rgba(255,255,255,0.7);
 }
 
-.cl-iot-progress-overlay__alert-text-start {
+.cl-iot-progress-overlay__text {
     @extend .cl-iot-progress-overlay__alert-text;
-
-    opacity: 1;
-
-    animation: connect-start-text 100ms linear;
-    -webkit-animation: connect-start-text 100ms linear;
-    animation-delay: 1s;
-    animation-fill-mode: forwards;
-}
-
-.cl-iot-progress-overlay__alert-text-done {
-    @extend .cl-iot-progress-overlay__alert-text;
-
-    opacity: 0;
-
-    animation: connect-done-text 100ms linear;
-    -webkit-animation: connect-done-text 100ms linear;
-    animation-delay: 1300ms;
-    animation-fill-mode: forwards;
 }
 
 // 카테고리 (공간별/기기별) 탭
 .cl-iot-control-tab {
-    position: sticky;
+    position: relative;
     top: 0;
     z-index: 99;
     border-top: 1px solid #2167BE;

@@ -13,7 +13,7 @@ class CheckBoxes extends Component {
 
         return (
 
-            <div className="cl-checkboxes">
+            <div className="cl-checkboxes w-100">
                 {
                     items.map((item, index) => {
                         return <label key={index}> <input type={this.props.radio?'radio':'checkbox'} name={n} /> { item.label } </label>

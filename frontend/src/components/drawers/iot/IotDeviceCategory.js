@@ -11,8 +11,7 @@ class IotDeviceTabList extends Component {
 		super( props );
 
 		this.state = {
-			controlTab: true,
-			controlType: false,
+
 		};
 
 		Iot.getDeviceCategories( ( byPlace, byType )=> {

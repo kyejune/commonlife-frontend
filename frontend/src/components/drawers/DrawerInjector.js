@@ -38,7 +38,7 @@ class DrawerInjector extends Component{
 
     render(){
 
-        // console.log('---------------------------:', Store.hasDrawer('profile') );
+        console.log('--------------------------- DrawerInjector ReDrawer' );
 
         return <div className="drawerInjector">
 

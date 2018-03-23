@@ -376,6 +376,12 @@
         background-image: url("images/ic-favorite-24-px-blue@3x.png");
         background-size: contain;
     }
+
+
+    &.cl-iot-device__li--checkbox{
+        padding-top: 22px;
+        padding-bottom: 22px;
+    }
 }
 
 .cl-iot__li--expand{
@@ -800,7 +806,8 @@ header.cl-mode-setting__header{
 }
 
 .cl-iot-control-list {
-    a {
+    li>a {
+        @extend .cl-flex;
         width: 100%;
     }
 }

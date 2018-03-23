@@ -73,8 +73,16 @@ const Store = observable({
 
 
     /* 모달 생성용 */
+
+    // 기기제어용 모달
     ipo: null, // { name:'모달이름', data:'prpos에 넘길 데이터'}
+    hideIpo:()=>{
+        setTimeout( function(){ Store.ipo = null }, 2000 );
+    },
+
+    // 모든 변경용 모달 정보
     imc: null, // { name:'모달이름', data:'prpos에 넘길 데이터'}
+
 
 
     /* Drawer에 기본적으로 넘겨주는 파라미터 */

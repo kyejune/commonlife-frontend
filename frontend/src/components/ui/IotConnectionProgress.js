@@ -6,8 +6,9 @@ class IotConnectionProgress extends Component {
 
 		return (
 
-			<div className="cl-iot-connect-progress">
+			<div className={ 'cl-iot-connect-progress ' + this.props.className }>
 				{/* 시작 */}
+
 				<div className="cl-iot-connect-progress__icon-start"/>
 				<p className="cl-iot-connect-progress__text-start">Connecting…</p>
 
@@ -16,7 +17,7 @@ class IotConnectionProgress extends Component {
 
 				{/* 완료 */}
 				<div className="cl-iot-connect-progress__icon-done"/>
-				<p className="cl-iot-connect-progress__text-done">Complete!</p>
+                <p className="cl-iot-connect-progress__text-done">Complete!</p>
 			</div>
 
 		)

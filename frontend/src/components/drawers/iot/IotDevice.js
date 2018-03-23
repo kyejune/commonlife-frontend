@@ -3,6 +3,8 @@ import IconLoader from 'components/ui/IconLoader';
 import LiOfToggle from "./LiOfToggle";
 import IotSlider from "../../ui/IotSlider";
 import CheckBoxes from "../../ui/CheckBoxes";
+import Iot from "../../../scripts/iot";
+import {withRouter} from "react-router-dom";
 
 
 /*
@@ -10,6 +12,16 @@ import CheckBoxes from "../../ui/CheckBoxes";
 * 진입경로: MyIot, MyIot추가,
 * */
 class IotDevice extends Component {
+
+
+    componentWillMount(){
+        const { action, option3 } = this.props.match.params;
+        Iot.getDeviceInfo( option3, data=>{
+            console.log( data );
+        });
+    }
+
+
     render() {
         return <div className="cl-bg--lightgray">
 
@@ -48,17 +60,16 @@ class IotDevice extends Component {
                 <li>
                     <h4 className="cl__title ml-03em">
                         복수체크 가능 <span className="color-primary">VALUE</span>
-
-                        <CheckBoxes items={[ {label:"label1", value:0}, {label:"label2", value:1}, {label:"label3", value:2}, {label:"label4", value:3} ]}/>
                     </h4>
+                    <CheckBoxes items={[ {label:"label1", value:0}, {label:"label2", value:1}, {label:"label3", value:2}, {label:"label4", value:3} ]}/>
                 </li>
 
                 <li>
                     <h4 className="cl__title ml-03em">
                         하나만 체크가능 <span className="color-primary">VALUE</span>
-
-                        <CheckBoxes radio items={[ {label:"label1", value:0}, {label:"label2", value:1}, {label:"label3", value:2}, {label:"label4", value:3} ]}/>
                     </h4>
+
+                    <CheckBoxes radio items={[ {label:"label1", value:0}, {label:"label2", value:1}, {label:"label3", value:2}, {label:"label4", value:3} ]}/>
                 </li>
 
                 <li>
@@ -87,7 +98,7 @@ class IotDevice extends Component {
             </ul>
 
 
-            <footer>
+            <footer className="cl-opts__footer">
                 <button className="ml-auto">확인</button>
             </footer>
 
@@ -96,4 +107,4 @@ class IotDevice extends Component {
 }
 
 
-export default IotDevice;
+export default withRouter( IotDevice );

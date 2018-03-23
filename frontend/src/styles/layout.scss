@@ -67,6 +67,7 @@ body.cl-dom--added{
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 9999;
 
     &>div{
         width: 100vw;

@@ -12,6 +12,22 @@ import Store from "./store";
 axios.defaults.headers.common['api_key'] = 'acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70';
 axios.defaults.headers.common['Content-Type'] = 'application/json; charset=UTF-8';
 
+axios.interceptors.response.use(null, function(err) {
+    console.log( err.response );
+    if(err.response.status !== 200) {
+
+        if( Store.ipo !== null ){
+            let obj = Store.ipo;
+                obj.status = 2;
+                obj.error = err.response.data.msg;
+            Store.ipo = Object.assign( {}, obj );
+            Store.hideIpo();
+        }
+    }
+
+    return Promise.reject(err);
+});
+
 
 /*
 * name: 출력할 이름
@@ -60,9 +76,9 @@ export default {
         }));
     },
 
-    getMode(){
+    getMode() {
         axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes`)
-            .then( response=>{
+            .then(response => {
                 response.data.data.sort(sortBySortOrder);
                 Modes.replace(response.data.data);
             });
@@ -93,38 +109,58 @@ export default {
     },
 
     /* 모드 버튼 클릭시 on/off 변경 */
-    changeIotMode( modeId, value, callback) {
+    changeIotMode(modeId, value, callback) {
         console.log(`changeIotMode: ${modeId}의 값을 ${value}로 변경`);
 
         axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${modeId}/switchTo`)
-            .then( response =>{
-               callback();
+            .then(response => {
+                callback();
             });
     },
 
     /* 모드 정렬 변경 */
-    reAlignIotMode( map, callback ){
-      axios.post(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/order`, map )
-          .then( response => {
-             callback();
-          });
+    reAlignIotMode(map, callback) {
+        axios.post(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/order`, map)
+            .then(response => {
+                callback();
+            });
     },
-    
+
     /* 모드 상세 가져오기 */
-    getModeDetail( mode, callback ){
+    getModeDetail(mode, callback) {
         axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${mode}`)
-            .then( response => {
-               callback( response.data );
+            .then(response => {
+                callback(response.data);
             });
     },
 
 
     /* Iot장비의 값을 변경 */
-    setIotDevice(deviceName, value, callback) {
+    setIotToggleDevice(data, bool, callback) {
 
-        console.log(`${deviceName}의 값을 ${value}로 변경`);
-        setTimeout(() => callback(), 4000);
+        const {deviceId, protcKey, maxVlu, minVlu} = data;
 
+        const value = bool ? maxVlu : minVlu;
+        Store.ipo = { status:0, name:data.thingsNm, value: value.toUpperCase() };
+
+        console.log( data, `의 값을 ${value}로 변경`, Store.ipo );
+        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}/action?protcKey=${encodeURIComponent(protcKey)}&value=${value}`)
+            .then(response => {
+                callback( true );
+                Store.ipo = { status:1, name:data.thingsNm, value: value.toUpperCase() };
+                Store.hideIpo();
+            })
+            .catch(error=>{
+               callback( false );
+            });
+    },
+
+    getDeviceInfo( deviceId, callback) {
+        console.log('deviceInfo:', deviceId);
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}`)
+            .then(response => {
+                callback(response.data);
+            });
     },
 
     // /* Iot모드의 값을 변경 */
@@ -134,5 +170,4 @@ export default {
     // ,
 
 
-}
-;
+};
