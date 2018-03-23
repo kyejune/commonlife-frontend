@@ -73,6 +73,7 @@ public class IotControlServiceImpl implements IotControlService {
                 if( iconType != null && iconType.equals("button") ) {
                     int                 deviceId = -1;
                     IotDeviceControlMsg msg = new IotDeviceControlMsg();
+                    IotDeviceListInfo  executedDevice;
 
                     logger.debug(">> myiotPrimeButton: protcKey: " + datum.get("protcKey"));
                     logger.debug(">> myiotPrimeButton: currSts: " + datum.get("currSts"));
@@ -94,9 +95,8 @@ public class IotControlServiceImpl implements IotControlService {
                         throw new IotControlOperationFailedException("잘못된 입력으로 해당 명령을 수행할 수 없습니다.");
                     }
 
-                    // 명령 수행 , todo: 세부 기능 private method로 분리 할 것
-                    this.executeDeviceFunction( complexId, homeId, deviceId, msg);
-
+                    // 명령 수행
+                    executedDevice = this.executeDeviceFunctionInternal( complexId, homeId, deviceId, msg);
                 } else {
                     throw new IotControlOperationFailedException("지원하지 않는 기능입니다.");
                 }
@@ -120,7 +120,6 @@ public class IotControlServiceImpl implements IotControlService {
                             execUrl);
                     result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
                     logger.debug(" >>>> RESULT >>> " + result.toString());
-                    // todo: exception handling
                 } catch( SocketException se ) {
                     // socket is closed
                     if( "Socket closed".equals(se.getMessage())) {
@@ -146,10 +145,7 @@ public class IotControlServiceImpl implements IotControlService {
         return buttonInfo;
     }
 
-    // 8. 기기의 기능 수행
-    public IotDeviceListInfo executeDeviceFunction(
-            int complexId, int homeId, int deviceId, IotDeviceControlMsg ctrlMsg) throws Exception {
-
+    private IotDeviceListInfo executeDeviceFunctionInternal(int complexId, int homeId, int deviceId, IotDeviceControlMsg ctrlMsg ) throws Exception {
         HttpPutRequester requester;
         Map<String, Map> result;
         String           clientId = null;
@@ -177,7 +173,7 @@ public class IotControlServiceImpl implements IotControlService {
 
             // CLIENT_ID 및 MO_CLIENT_ID가 있는 경우에만 데이터 처리
             if( (clientId != null && !clientId.equals("")) &&
-                (mid != null      && !mid.equals("")) )
+                    (mid != null      && !mid.equals("")) )
             {
                 logger.debug(">>>>    Client ID: " + clientId);
                 logger.debug(">>>> MO Client ID: " + mid);
@@ -214,7 +210,6 @@ public class IotControlServiceImpl implements IotControlService {
             requester.setBody(jsonInString);
             result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
             logger.debug(" >>>> RESULT >>> " + result.toString());
-            // todo: exception handling
         } catch( SocketException se ) {
             // socket is closed
             if( "Socket closed".equals(se.getMessage())) {
@@ -285,6 +280,16 @@ public class IotControlServiceImpl implements IotControlService {
             }
         }
 
+        return deviceInfo;
+    }
+
+    // 8. 기기의 기능 수행
+    public IotDeviceListInfo executeDeviceFunction(
+            int complexId, int homeId, int deviceId, IotDeviceControlMsg ctrlMsg) throws Exception {
+
+        IotDeviceListInfo deviceInfo;
+
+        deviceInfo = this.executeDeviceFunctionInternal(complexId, homeId, deviceId, ctrlMsg);
         deviceInfo.setMsg("기기의 기능 수행");
 
         return deviceInfo;
@@ -308,7 +313,6 @@ public class IotControlServiceImpl implements IotControlService {
                         execUrl);
                 result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
                 logger.debug(" >>>> RESULT >>> " + result.toString());
-                // todo: exception handling
             } catch( SocketException se ) {
                 // socket is closed
                 if( "Socket closed".equals(se.getMessage())) {

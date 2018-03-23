@@ -8,6 +8,7 @@ import com.kolon.comlife.iot.exception.IotInfoGeneralException;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;
 import com.kolon.comlife.iot.exception.IotInfoUpdateFailedException;
 import com.kolon.comlife.iot.model.*;
+import com.kolon.comlife.iot.service.IotIconMapperService;
 import com.kolon.comlife.iot.service.IotInfoService;
 import com.kolon.common.http.HttpDeleteRequester;
 import com.kolon.common.http.HttpGetRequester;
@@ -62,6 +63,10 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String USER_SCENARIO_MODE_CODE = "CM01199";
 
     private static final String AUTOMATION_DEFUALT_ICON = "cl_icon_default"; // todo: IMG/ICON Mapper로 옮길 것
+
+
+    @Autowired
+    private IotIconMapperService iconService;
 
     @Autowired
     private ServicePropertiesMap serviceProperties;
@@ -1379,6 +1384,7 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
     }
 
+
     /**
      * 결과 값을 CommonLife 용도로 변환합니다. 사용하지 않는 값은 제거하고, 의미에 따라 값을 생성하거나 맵핑을 수행합니다.
      */
@@ -1395,15 +1401,25 @@ public class IotInfoServiceImpl implements IotInfoService {
             replaceMapKeyIfExisted(e, "TITLE", "BT_TITLE");
             replaceMapKeyIfExisted(e, "TITLE_UNIT", "BT_TITLE_UNIT");
             replaceMapKeyIfExisted(e, "SUB_TITLE", "BT_SUB_TITLE");
-            replaceMapKeyIfExisted(e, "IMG_SRC", "BT_IMG_SRC");
 
-            // BT_TYPE(btType) 정의
+            // 아이콘/이미지 맵핑
+            replaceMapKeyIfExisted(e, "IMG_SRC", "BT_IMG_SRC");
+            if( e.get("BT_IMG_SRC") != null ) {
+                String icon;
+                icon = iconService.getIok2ClIcon( (String)e.get("BT_IMG_SRC") );
+                e.put("BT_IMG_SRC", icon);
+            }
+
+            // 기기별 속성 설정
             v = (String) e.get("MY_IOT_GB_CD");
             if( v != null ) {
                 switch(v) {
                     case "MB01701":
                         e.put("BT_TYPE", "device");
                         e.put("MY_IOT_ID", String.valueOf(e.get("M_ID")));
+                        if(e.get("BT_IMG_SRC") == null) {
+                            e.put("BT_IMG_SRC", iconService.getIotDefaultIcon());
+                        }
                         break;
                     case "MB01702":
                         e.put("BT_TYPE", "automation");
@@ -1415,6 +1431,9 @@ public class IotInfoServiceImpl implements IotInfoService {
                         if( e.get("M_NM") == null ) {
                             e.put("M_NM", e.get("SCNA_NM"));
                         }
+                        if(e.get("BT_IMG_SRC") == null) {
+                            e.put("BT_IMG_SRC", iconService.getIconAutomationDefault());
+                        }
                         break;
                     case "MB01703":
                         e.put("BT_TYPE", "information");
@@ -1425,6 +1444,9 @@ public class IotInfoServiceImpl implements IotInfoService {
                         }
                         if( e.get("M_NM") == null ) {
                             e.put("M_NM", e.get("VALUE_NM"));
+                        }
+                        if(e.get("BT_IMG_SRC") == null) {
+                            e.put("BT_IMG_SRC", iconService.getIconInformationDefault());
                         }
                         break;
                     default:
