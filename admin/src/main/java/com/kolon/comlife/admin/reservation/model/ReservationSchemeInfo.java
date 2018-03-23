@@ -7,7 +7,7 @@ public class ReservationSchemeInfo {
     private int idx;
     private int parentIdx;
     private String code;
-    private String type;
+    private String reservationType;
     private String title;
     private String summary;
     private String description;
@@ -16,7 +16,15 @@ public class ReservationSchemeInfo {
     private String startTime;
     private String endDt;
     private String endTime;
-    private String amount;
+    private String availableInWeekend;
+    private String availableInHoliday;
+    private int point;
+    private int amount;
+    private int inStock;
+    private int maxQty;
+    private String activateDuration;
+    private String maintenanceStartAt;
+    private String maintenanceEndAt;
     private String delYn;
     private String regDttm;
     private String updDttm;
@@ -45,12 +53,12 @@ public class ReservationSchemeInfo {
         this.code = code;
     }
 
-    public String getType() {
-        return type;
+    public String getReservationType() {
+        return reservationType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setReservationType(String reservationType) {
+        this.reservationType = reservationType;
     }
 
     public String getTitle() {
@@ -117,12 +125,76 @@ public class ReservationSchemeInfo {
         this.endTime = endTime;
     }
 
-    public String getAmount() {
+    public String getAvailableInWeekend() {
+        return availableInWeekend;
+    }
+
+    public void setAvailableInWeekend(String availableInWeekend) {
+        this.availableInWeekend = availableInWeekend;
+    }
+
+    public String getAvailableInHoliday() {
+        return availableInHoliday;
+    }
+
+    public void setAvailableInHoliday(String availableInHoliday) {
+        this.availableInHoliday = availableInHoliday;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public int getInStock() {
+        return inStock;
+    }
+
+    public void setInStock(int inStock) {
+        this.inStock = inStock;
+    }
+
+    public int getMaxQty() {
+        return maxQty;
+    }
+
+    public void setMaxQty(int maxQty) {
+        this.maxQty = maxQty;
+    }
+
+    public String getActivateDuration() {
+        return activateDuration;
+    }
+
+    public void setActivateDuration(String activateDuration) {
+        this.activateDuration = activateDuration;
+    }
+
+    public String getMaintenanceStartAt() {
+        return maintenanceStartAt;
+    }
+
+    public void setMaintenanceStartAt(String maintenanceStartAt) {
+        this.maintenanceStartAt = maintenanceStartAt;
+    }
+
+    public String getMaintenanceEndAt() {
+        return maintenanceEndAt;
+    }
+
+    public void setMaintenanceEndAt(String maintenanceEndAt) {
+        this.maintenanceEndAt = maintenanceEndAt;
     }
 
     public String getDelYn() {

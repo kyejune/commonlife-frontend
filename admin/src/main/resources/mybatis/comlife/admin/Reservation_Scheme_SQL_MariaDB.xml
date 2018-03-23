@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReservationScheme">
+    <select id="list" resultType="reservationSchemeInfo">
+        <![CDATA[
+            SELECT
+                    *
+            FROM
+                    `RESERVATION_SCHEMES`
+        ]]>
+    </select>
+    <select id="get" parameterType="java.util.Map">
+        <![CDATA[
+            SELECT
+                    *
+            FROM
+                    `RESERVATION_SCHEMES`
+            WHERE
+                    `idx` = #{idx}
+        ]]>
+    </select>
+    <insert id="create" parameterType="reservationSchemeInfo">
+        <![CDATA[
+            INSERT INTO `RESERVATION_SCHEMES`
+                        (`PARENT_IDX`,
+                         `CODE`,
+                         `RESERVATION_TYPE`,
+                         `TITLE`,
+                         `SUMMARY`,
+                         `DESCRIPTION`,
+                         `IS_OPEN`,
+                         `START_DT`,
+                         `START_TIME`,
+                         `END_DT`,
+                         `END_TIME`,
+                         `AVAILABLE_IN_WEEKEND`,
+                         `AVAILABLE_IN_HOLIDAY`,
+                         `POINT`,
+                         `AMOUNT`,
+                         `IN_STOCK`,
+                         `MAX_QTY`,
+                         `ACTIVATE_DURATION`,
+                         `MAINTENANCE_START_AT`,
+                         `MAINTENANCE_END_AT`,
+                         `DEL_YN`,
+                         `REG_DTTM`,
+                         `UPD_DTTM`)
+            VALUES      (#{parentIdx},
+                         #{code},
+                         #{reservationType},
+                         #{title},
+                         #{summary},
+                         #{description},
+                         #{isOpen},
+                         #{startDt},
+                         #{startTime},
+                         #{endDt},
+                         #{endTime},
+                         #{availableInWeekend},
+                         #{availableInHoliday},
+                         #{point},
+                         #{amount},
+                         #{inStock},
+                         #{maxQty},
+                         #{activateDuration},
+                         #{maintenanceStartAt},
+                         #{maintenanceEndAt},
+                         #{delYn},
+                         CURRENT_TIMESTAMP,
+                         CURRENT_TIMESTAMP);
+        ]]>
+    </insert>
+</mapper>

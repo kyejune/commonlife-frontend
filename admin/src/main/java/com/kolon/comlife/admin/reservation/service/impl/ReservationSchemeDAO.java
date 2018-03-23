@@ -20,8 +20,8 @@ public class ReservationSchemeDAO {
         return null;
     }
 
-    public ReservationSchemeInfo createReserverationScheme() {
-        return null;
+    public int createReserverationScheme( ReservationSchemeInfo info ) {
+        return sqlSession.insert( "ReservationScheme.create", info );
     }
 
     public ReservationSchemeInfo updateReservationScheme() {

@@ -37,10 +37,10 @@
                             <form action="" method="post">
                                 <div class="form-group">
                                     <label>예약 유형</label>
-                                    <select name="type" class="form-control">
-                                        <option value="A">예약 A</option>
-                                        <option value="B">예약 B</option>
-                                        <option value="C">예약 C</option>
+                                    <select name="reservationType" class="form-control">
+                                        <option value="A">예약 A: 시간 단위 대여</option>
+                                        <option value="B">예약 B: 일자 단위 대여</option>
+                                        <option value="C">예약 C: 장기 대여</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
@@ -56,31 +56,84 @@
                                     <textarea name="description" rows="6" class="form-control"></textarea>
                                 </div>
                                 <div class="form-group">
-                                    <label>화면에 표시</label>
-                                    <div>
-                                        <input type="checkbox" name="is_open" value="Y">
+                                    <label>예약 가능일</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            오늘로부터
+                                        </span>
+                                        <input type="number" name="activateDuration" class="form-control" value="7">
+                                        <span class="input-group-addon">
+                                            일 까지
+                                        </span>
                                     </div>
                                 </div>
+
                                 <div class="form-group">
-                                    <label>이미지</label>
-                                    <div>
-                                        <input type="file">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label>최대 수량</label>
-                                    <input type="number" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label>사용 크레딧</label>
-                                    <input type="number" class="form-control">
+                                    <label>사용 포인트</label>
+                                    <input type="number" name="point" class="form-control" value="0">
                                 </div>
                                 <div class="form-group">
                                     <label>금액</label>
-                                    <input type="number" class="form-control">
+                                    <input type="number" name="amount" class="form-control" value="0">
+                                    <p class="text-info">* 0으로 설정하면 금액 청구 비활성</p>
                                 </div>
                                 <div class="form-group">
-                                    <label>예약 시작일</label>
+                                    <label>예약 개시일</label>
+                                    <input type="date" name="startDt" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>예약 개시 시각</label>
+                                    <input type="time" name="startTime" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>예약 마감일</label>
+                                    <input type="date" name="endDt" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>예약 마감 시각</label>
+                                    <input type="time" name="endTime" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label>주말 예약 가능</label>
+                                    <div>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="availableInWeekend" value="Y" checked>
+                                            예
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="availableInWeekend" value="N">
+                                            아니오
+                                        </label>
+                                    </div>
+                                </div>
+
+                                    <%--타입 A, B에서만 입력하는 필드들--%>
+                                <div class="type-group type-group-a type-group-b">
+                                    <div class="form-group">
+                                        <label>재고</label>
+                                        <input type="number" name="inStock" class="form-control" value="0">
+                                        <p class="text-info">* 0으로 설정하면 재고 체크 안함</p>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>최대 예약 수량</label>
+                                    <input type="number" name="maxQty" class="form-control" value="0">
+                                    <p class="text-info">* 0으로 설정하면 체크 안함</p>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>화면에 표시</label>
+                                    <div>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="delYn" value="N" checked>
+                                            예
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="delYn" value="Y">
+                                            아니오
+                                        </label>
+                                    </div>
                                 </div>
                                 <div>
                                     <button class="btn btn-primary">전송</button>
@@ -91,5 +144,21 @@
                 </div>
             </div>
         </div>
+    </tiles:putAttribute>
+    <tiles:putAttribute name="js">
+        <script>
+            $( function() {
+                $( '.type-group' ).hide();
+                $( '.type-group-a' ).show();
+
+                $( 'select[name=reservationType]' ).on( 'change', function( event ) {
+                    var $select = $( event.currentTarget );
+                    var type = $select.val().toLowerCase();
+
+                    $( '.type-group' ).hide();
+                    $( '.type-group-' + type ).show();
+                } );
+            } );
+        </script>
     </tiles:putAttribute>
 </tiles:insertDefinition>
