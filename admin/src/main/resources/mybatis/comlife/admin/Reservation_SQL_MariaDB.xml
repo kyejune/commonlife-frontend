@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Reservation">
+    <select id="index" resultType="reservationInfo">
+        <![CDATA[
+            SELECT
+                    *
+            FROM
+                    `RESERVATIONS`
+        ]]>
+    </select>
+    <select id="get" parameterType="java.util.Map">
+        <![CDATA[
+            SELECT
+                    *
+            FROM
+                    `RESERVATIONS`
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </select>
+    <insert id="create" parameterType="reservationInfo">
+        <![CDATA[
+            INSERT INTO `RESERVATIONS`
+                        (`PARENT_IDX`,
+                         `USR_ID`,
+                         `STATUS`,
+                         `START_DT`,
+                         `START_TIME`,
+                         `END_DT`,
+                         `END_TIME`,
+                         `POINT`,
+                         `AMOUNT`,
+                         `QTY`,
+                         `REG_DTTM`,
+                         `UPD_DTTM`)
+            VALUES      (#{parentIdx},
+                         #{usrID},
+                         #{status},
+                         #{startDt},
+                         #{startTime},
+                         #{endDt},
+                         #{endTime},
+                         #{point},
+                         #{amount},
+                         #{qty},
+                         CURRENT_TIMESTAMP,
+                         CURRENT_TIMESTAMP);
+        ]]>
+    </insert>
+</mapper>
