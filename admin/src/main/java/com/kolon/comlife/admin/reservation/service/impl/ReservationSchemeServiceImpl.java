@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Map;
 
 @Service("reservationSchemeService")
 public class ReservationSchemeServiceImpl implements ReservationSchemeService {
@@ -13,8 +14,8 @@ public class ReservationSchemeServiceImpl implements ReservationSchemeService {
     ReservationSchemeDAO dao;
 
     @Override
-    public List<ReservationSchemeInfo> index() {
-        return dao.index();
+    public List<ReservationSchemeInfo> index( Map params ) {
+        return dao.index( params );
     }
 
     @Override

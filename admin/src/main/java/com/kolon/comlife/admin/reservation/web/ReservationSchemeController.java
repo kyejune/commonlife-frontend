@@ -13,6 +13,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller("reservationSchemeController")
@@ -30,7 +31,7 @@ public class ReservationSchemeController {
             , ModelAndView mav
             , HttpSession session
     ) {
-        List<ReservationSchemeInfo> schemes = service.index();
+        List<ReservationSchemeInfo> schemes = service.index( new HashMap() );
         mav.addObject( "schemes", schemes );
 
         return mav;

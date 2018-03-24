@@ -7,14 +7,15 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository("reservationSchemeDAO")
 public class ReservationSchemeDAO {
     @Resource
     private SqlSession sqlSession;
 
-    public List<ReservationSchemeInfo> index() {
-        return sqlSession.selectList("ReservationScheme.index");
+    public List<ReservationSchemeInfo> index(Map params) {
+        return sqlSession.selectList("ReservationScheme.index", params);
     }
 
     public ReservationSchemeInfo show(int idx) {
