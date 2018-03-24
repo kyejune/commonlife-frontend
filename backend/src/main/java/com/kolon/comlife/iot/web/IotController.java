@@ -861,7 +861,6 @@ public class IotController {
 
     /**
      * 26. MyIOT 편집 화면에서 '기기/시나리오/정보'의 순서를 신규등록 at MyIOT 추가
-     * todo: 구현해야 함... 구현 중 ...
      */
     @PostMapping(
             path = "/complexes/{complexId}/homes/{homeId}/myiot",
@@ -902,6 +901,50 @@ public class IotController {
 
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(addedButtonList);
     }
+
+    /**
+     * 26-2. MyIOT 편집 화면에서 '기기/시나리오/정보'의 순서를 변경하기 at MyIOT 추가
+     */
+    @PutMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateMyIotButtonOrder(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @RequestBody               Map<String, List> body)
+
+    {
+        IotButtonListInfo         currentButtonList = null;
+        String                    userId;
+        String                    myIotId;
+        List<Map<String, Object>> myIotIdOrderList;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        myIotIdOrderList = (List<Map<String, Object>>)body.get("data");
+        if( myIotIdOrderList == null ) {
+            ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( new SimpleErrorInfo("입력된 정보가 없습니다.") );
+        }
+
+        try {
+            currentButtonList = iotInfoService.updateMyIotButtonOrder(complexId, homeId, userId, myIotIdOrderList);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(currentButtonList);
+    }
+
 
 
     /**

@@ -36,6 +36,9 @@ public interface IotInfoService {
     IotButtonListInfo addMyIotButtonByMyIotID
             (int complexId, int homeId, String userId, List<Map<String, Object>> myIotIdList) throws Exception;
 
+    IotButtonListInfo updateMyIotButtonOrder
+            (int complexId, int homeId, String userId, List<Map<String, Object>> myIotIdOrderList) throws Exception;
+
     IotButtonListInfo simplifyMyIotButtonListResult( IotButtonListInfo result ) throws Exception;
 
     IotRoomListInfo getRoomList

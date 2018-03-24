@@ -52,6 +52,26 @@
                                         <option value="ADMIN_CANCELED">관리자가 취소함</option>
                                     </select>
                                 </div>
+                                <div class="form-group">
+                                    <label>예약일</label>
+                                    <input type="text" name="startDt" class="form-control datepicker" data-format="YYYY-MM-DD">
+                                </div>
+                                <div class="form-group">
+                                    <label>시작 시각</label>
+                                    <input type="text" name="startTime" class="form-control datepicker" data-format="HH:ss">
+                                </div>
+                                <div class="form-group">
+                                    <label>예약 종료일</label>
+                                    <input type="text" name="endDt" class="form-control datepicker" data-format="YYYY-MM-DD">
+                                </div>
+                                <div class="form-group">
+                                    <label>종료 시각</label>
+                                    <input type="text" name="endTime" class="form-control datepicker" data-format="HH:ss">
+                                </div>
+                                <div class="form-group">
+                                    <label>예약 수량</label>
+                                    <input type="number" name="qty" class="form-control">
+                                </div>
                                 <div>
                                     <button class="btn btn-primary">전송</button>
                                 </div>
@@ -61,5 +81,19 @@
                 </div>
             </div>
         </div>
+    </tiles:putAttribute>
+    <tiles:putAttribute name="js">
+        <script>
+            $( function() {
+                $( '.datepicker' ).each( function( index, element ) {
+                    var $element = $( element );
+                    var params = {};
+                    if( $element.data( 'format' ) ) {
+                        params.format = $element.data( 'format' );
+                    }
+                    $element.datetimepicker( params );
+                } );
+            } );
+        </script>
     </tiles:putAttribute>
 </tiles:insertDefinition>

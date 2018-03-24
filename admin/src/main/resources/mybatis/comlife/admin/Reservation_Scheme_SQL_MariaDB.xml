@@ -10,7 +10,7 @@
                     `RESERVATION_SCHEMES`
         ]]>
     </select>
-    <select id="get" parameterType="java.util.Map">
+    <select id="show" parameterType="java.util.Map" resultType="reservationSchemeInfo">
         <![CDATA[
             SELECT
                     *

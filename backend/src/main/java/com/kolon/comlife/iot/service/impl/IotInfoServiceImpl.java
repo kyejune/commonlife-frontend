@@ -39,7 +39,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String IOK_MYIOT_DEVICES_AVAILABLE_LIST_PATH     = "/iokinterface/myiot/myiotSetThingsList";
     private static final String IOK_MYIOT_VALUE_INFO_AVAILABLE_LIST_PATH  = "/iokinterface/myiot/myiotSetValueList";
     private static final String IOK_MYIOT_ADD_PATH                  = "/iokinterface/myiot/saveMyIot";
-    private static final String IOK_MYIOT_UPDATE_PATH               = "/iokinterface/myiot/saveMyIot";
+    private static final String IOK_MYIOT_UPDATE_ORDER_PATH         = "/iokinterface/myiot/saveMyIot";
     private static final String IOK_MYIOT_DELETE_PATH               = "/iokinterface/myiot/saveMyIot";
     private static final String IOK_ROOMS_LIST_PATH                 = "/iokinterface/device/roomList";
     private static final String IOK_DEVICES_LIST_BY_ROOM_PATH       = "/iokinterface/device/roomDeviceList";
@@ -157,13 +157,9 @@ public class IotInfoServiceImpl implements IotInfoService {
         return activeModeList;
     }
 
-    /**
-     * 3. My IOT의 IOT 버튼 목록 및 정보 가져오기 at Dashboard
-     *
-     * resultSimplify == true ==> 사용자에게 필요 없는 결과는 삭제하고 반환 (FRONT에 필요한 최소 결과 반환)
-     */
-    public IotButtonListInfo getMyIotButtonList
-                (int complexId, int homeId, String userId, boolean resultSimplify) throws Exception {
+
+    private IotButtonListInfo getMyIotButtonListInternal
+            (int complexId, int homeId, String userId, boolean resultSimplify) throws Exception {
         IotButtonListInfo buttonList = new IotButtonListInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
@@ -196,6 +192,20 @@ public class IotInfoServiceImpl implements IotInfoService {
         {
             throw new IotInfoNoDataException( "가져올 버튼 정보가 없습니다." );
         }
+
+        return buttonList;
+    }
+
+    /**
+     * 3. My IOT의 IOT 버튼 목록 및 정보 가져오기 at Dashboard
+     *
+     * resultSimplify == true ==> 사용자에게 필요 없는 결과는 삭제하고 반환 (FRONT에 필요한 최소 결과 반환)
+     */
+    public IotButtonListInfo getMyIotButtonList
+                (int complexId, int homeId, String userId, boolean resultSimplify) throws Exception {
+        IotButtonListInfo buttonList;
+
+        buttonList = this.getMyIotButtonListInternal(complexId, homeId, userId, resultSimplify);
 
         buttonList.setMsg("My IOT의 IOT 버튼 목록 및 정보 가져오기");
 
@@ -784,6 +794,65 @@ public class IotInfoServiceImpl implements IotInfoService {
         addedButtonList.setMsg("MyIOT에 선택 항목을 추가하였습니다.");
 
         return addedButtonList;
+    }
+
+    // 26-2. MyIOT 편집 화면에서 '기기/시나리오/정보'의 순서를 변경하기
+    public IotButtonListInfo updateMyIotButtonOrder
+            (int complexId, int homeId, String userId, List<Map<String, Object>> myIotIdOrderList) throws Exception {
+        IotButtonListInfo   buttonList;
+        IotButtonListInfo   availableButtonList;
+        HttpPostRequester   requester;
+        Map<String, Map>    result;
+        Map<String, String> mapperMidToGcCode = new HashMap<>();
+
+        // 1. 전체 목록 가져오기
+        buttonList = this.getMyIotButtonListInternal(complexId, homeId, userId, false);
+        for(Map<String, Object> e : buttonList.getData()) {
+            logger.debug(">>>> seqNo/myIotGbCd: " + e.get("btId") + "/" + e.get("myIotGbCd"));
+            mapperMidToGcCode.put( String.valueOf(e.get("btId")), (String)e.get("myIotGbCd"));
+        }
+
+        Iterator<Map<String, Object>> iter = myIotIdOrderList.iterator();
+        while( iter.hasNext() )
+        {
+            String btId;
+            String myIotGbCd;
+            Map<String, Object> e = iter.next();
+
+            e.put("cmplxId", String.valueOf(complexId));
+            e.put("homeId", String.valueOf(homeId));
+            e.put("userId", userId);
+
+            btId = String.valueOf(e.get("btId"));
+            myIotGbCd = mapperMidToGcCode.get(btId);
+            logger.debug(">>>>>> btId/myIotGbCd:" + btId + "/" + myIotGbCd);
+            if( myIotGbCd == null ) {
+                // 잘못된 입력 값
+                throw new IotInfoUpdateFailedException("순서 변경이 실패하였습니다. 입력 값을 다시 확인하세요.");
+            }
+            e.put("myIotGbCd", myIotGbCd);
+            e.put("seqNo", btId);
+        }
+
+        final GsonBuilder builder = new GsonBuilder();
+        final Gson gson = builder.create();
+        String gsonout = gson.toJson(myIotIdOrderList);
+        logger.debug( ">>>>>> " + gsonout);
+
+        // 2. 업데이트 수행
+        requester = new HttpPostRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MYIOT_UPDATE_ORDER_PATH );
+        requester.setBody(gsonout);
+        result = requester.execute();
+        logger.debug(">>> msg: " + result.get("msg"));
+        logger.debug(">>> resFlag: " + result.get("resFlag"));  // BUGBUG: 항상 false로 반환 됨
+
+        buttonList.setData(myIotIdOrderList);
+        buttonList.setMsg("MyIOT 버튼의 순서를 변경하였습니다.");
+
+        return buttonList;
     }
 
 
@@ -1543,7 +1612,6 @@ public class IotInfoServiceImpl implements IotInfoService {
                 this.removeMapKeyIfExisted(e, "MIN_LINK_YN");
                 this.removeMapKeyIfExisted(e, "MIN_VLU");
                 this.removeMapKeyIfExisted(e, "PROTC_KEY");
-                this.removeMapKeyIfExisted(e, "SORT_ORDER");
                 this.removeMapKeyIfExisted(e, "STS_CNT");
                 this.removeMapKeyIfExisted(e, "STS_ID");
                 this.removeMapKeyIfExisted(e, "STS_NM");
@@ -1575,7 +1643,6 @@ public class IotInfoServiceImpl implements IotInfoService {
                 this.removeMapKeyIfExisted(e, "minLinkYn");
                 this.removeMapKeyIfExisted(e, "minVlu");
                 this.removeMapKeyIfExisted(e, "protcKey");
-                this.removeMapKeyIfExisted(e, "sortOrder");
                 this.removeMapKeyIfExisted(e, "stsCnt");
                 this.removeMapKeyIfExisted(e, "stsId");
                 this.removeMapKeyIfExisted(e, "stsNm");

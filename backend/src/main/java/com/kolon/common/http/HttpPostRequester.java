@@ -25,21 +25,21 @@ public class HttpPostRequester {
     final static private String CONTENT_TYPE = "Content-Type";
     final static private String ACCEPT = "Accept";
 
-    private CloseableHttpClient httpClient;
-    private URIBuilder          uriBuilder;
-    private TimerTask           timedOutTask;
-    private String              jsonBody;
+        private CloseableHttpClient httpClient;
+        private URIBuilder          uriBuilder;
+        private TimerTask           timedOutTask;
+        private String              jsonBody;
 
     public HttpPostRequester(CloseableHttpClient httpClient, String host, String path)
                 throws URISyntaxException {
-        this.httpClient = httpClient;
-        this.uriBuilder = new URIBuilder(host);
-        this.uriBuilder.setPath(path);
-    }
+            this.httpClient = httpClient;
+            this.uriBuilder = new URIBuilder(host);
+            this.uriBuilder.setPath(path);
+        }
 
-    public HttpPostRequester setParameter(String param , String value ) {
-        this.uriBuilder.setParameter(param, value);
-        return this;
+        public HttpPostRequester setParameter(String param , String value ) {
+            this.uriBuilder.setParameter(param, value);
+            return this;
     }
 
     public HttpPostRequester setParameter(Map<String,String> paramMap) {
