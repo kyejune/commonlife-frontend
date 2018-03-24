@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Iot from "../../../scripts/iot";
 
 import SampleSrc from 'images/io-t-icon-1@3x.png';
+import IconLoader from "../../ui/IconLoader";
 
 class IotDeviceTabList extends Component {
 
@@ -34,7 +35,7 @@ class IotDeviceTabList extends Component {
 		const List = this.state.tabData[ this.state.tabIndex ].map( ( data, index )=> {
 			return <li key={index}>
 				<Link className="cl-flex" to={( this.state.tabIndex === 0 ? { pathname: `${this.props.location.pathname}/${data.roomId}` } : { pathname: `${this.props.location.pathname}/${data.cateCd}` } )}>
-					<img className="cl__thumb" src={SampleSrc}/>
+					<IconLoader className="cl__thumb" src={data.imgSrc}/>
 					<h4 className="cl__title">{data.cateNm || data.roomNm}</h4>
 					<div className="cl-next__button ml-auto"/>
 				</Link>

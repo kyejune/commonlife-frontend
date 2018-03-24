@@ -7,7 +7,7 @@ class LiOfCtrl extends Component {
         return (
             <li>
                 <Link to={this.props.to || ''} className="w-100 cl-flex" >
-                    <IconLoader className="cl__thumb--rounded" src={undefined}/>
+                    <IconLoader className="cl__thumb--rounded" src={this.props.icon}/>
                     <div>
                         <h4 className="cl__title">{this.props.name}</h4>
                         {this.props.desc &&

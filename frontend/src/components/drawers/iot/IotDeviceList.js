@@ -31,9 +31,13 @@ class IotDeviceCategory extends Component {
 	loadData(){
         // 목록 가져오기
         Iot.getDevicesByCategory( this.state.isRoom, this.state.cateId, data=> {
+
+        	console.log( '목록 가져오기:', data );
+
             this.setState( {
 				deviceData: data
             } );
+
         } );
 	}
 
@@ -54,7 +58,7 @@ class IotDeviceCategory extends Component {
 
 	render () {
 
-		console.log( 'DEVICE DATA 새로 그릑');
+		console.log( '디바이스 목록 그리기:', this.state.deviceData );
 
 		const DeviceList = this.state.deviceData.map( ( data, index )=> {
 
@@ -62,18 +66,21 @@ class IotDeviceCategory extends Component {
 				case 'ctrl':
 					if( data.deviceType === 'button' )
 						return <LiOfToggle key={index} name={data.thingsNm} desc={data.cateNm}
+										   checked={data.currSts === data.maxVlu}
 										   onSwitch={ this.toggleDevice }
+										   icon={data.imgSrc}
 										   data={data}
 						/>;
 					else
 						return <LiOfCtrl key={index} name={data.thingsNm} desc={data.cateNm}
+                                         icon={data.imgSrc}
 										 to={{ pathname: `${this.props.location.pathname}/device/${data.deviceId}`}}
 
 						/>;
 					break;
 
 				case 'add':
-                    return <LiOfCheck key={index} name={data.thingsNm} desc={data.cateNm}/>;
+                    return <LiOfCheck key={index} name={data.thingsNm} icon={data.imgSrc} desc={data.cateNm}/>;
 					break;
 			}
 

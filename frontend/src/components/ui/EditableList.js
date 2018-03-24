@@ -3,6 +3,7 @@ import {arrayMove, SortableContainer, SortableElement, SortableHandle} from "rea
 import Checkbox from "./Checkbox";
 import SampleSrc from 'images/io-t-icon-1@3x.png';
 import Link from "react-router-dom/es/Link";
+import IconLoader from "./IconLoader";
 
 class EditableList extends Component {
 
@@ -59,7 +60,7 @@ class EditableList extends Component {
             <li>
                 <Checkbox className="mr-1em" index={value.idx} value={ this.state.checkeds[value.idx] } onChange={ this.onCheckboxChange }/>
                 {/*<Link to={value.to} className="cl-flex">*/}
-                    <img className="cl__thumb--rounded" src={SampleSrc}/>
+                    <IconLoader className="cl__thumb--rounded" src={value.imgSrc}/>
                     <div>
                         <h4 className="cl__title">{value.name}</h4>
                         {value.desc && <span className="cl__desc">{value.desc}</span>}

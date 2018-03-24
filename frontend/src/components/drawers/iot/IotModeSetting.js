@@ -62,9 +62,12 @@ class IotModeSetting extends Component {
 
         let sensorMore, deviceMore;
 
+        let icon;
+
         // 모드 편집 모드
         if ( isMode ) {
             scna = modeData.scna[0];
+            icon = scna.icon;
 
             sensorMore = <span className="ml-auto">설정불가</span>;
             deviceMore = <span className="ml-auto">설정가능</span>;
@@ -73,9 +76,9 @@ class IotModeSetting extends Component {
             // 일반 센서추가
             Sensors = modeData.scnaIfThings.map( (item, index)=>{
                 if( item.deviceType && item.deviceType === 'button')
-                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.stsNm} to={`${pathname}/sensor/0`}/>
+                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.stsNm}/>
                 else
-                    return <LiOfCtrl key={index} icon={item.imgSrc} name={item.stsNm} to={`${pathname}/sensor/0`}/>
+                    return <LiOfCtrl key={index} icon={item.imgSrc} name={item.stsNm} to={`${pathname}/sensor/${item.deviceId}`}/>
             });
 
             // 임시로 시간데이터 더미 추가
@@ -92,21 +95,21 @@ class IotModeSetting extends Component {
 
             // 특정 시간 있으면 추가
             Sensors = Sensors.concat( modeData.scnaIfSpc.map( item => {
-                return <LiOfCtrl key="time" icon={undefined} name="특정 시간(더미)" desc={ item.spcTime }/>
+                return <LiOfCtrl key="time" icon={undefined} name="특정 시간(더미)" desc={ item.spcTime } to={`${pathname}/time/0`}/>
             }));
 
             // 시간 구간 조건 추가
             Sensors = Sensors.concat( modeData.scnaIfAply.map( item =>{
-                return <LiOfCtrl key="time-range" icon={undefined} name="구간 시간" desc={ `${item.aplyStartTime} ~ ${item.aplyEndTime}` }/>
+                return <LiOfCtrl key="time-range" icon={undefined} name="구간 시간" desc={ `${item.aplyStartTime} ~ ${item.aplyEndTime}`} to={`${pathname}/duration/0`}/>
             }));
 
 
-            //// 디바이스 추가
+            // 디바이스 추가
             Devices = modeData.scnaThings.map( (item, index)=>{
                 if( item.deviceType && item.deviceType === 'button')
-                    return <LiOfToggle key={index} src={undefined} name={item.deviceNm} />
+                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.deviceNm} />
                 else
-                    return <LiOfCtrl key={index} src={undefined} name={item.deviceNm} />
+                    return <LiOfCtrl key={index} icon={item.imgSrc} name={item.deviceNm} to={`${pathname}/device/${item.deviceId}`}/>
             })
 
 
@@ -114,8 +117,6 @@ class IotModeSetting extends Component {
         } else {
             sensorMore = <Link className="ml-auto" to={`${pathname}/edit-sensor`}>센서편집</Link>;
             deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
-
-            // Sensors = <div></div>
         }
 
         return (
@@ -123,7 +124,7 @@ class IotModeSetting extends Component {
 
                 <header className="cl-mode-setting__header">
                     <div className={classNames("cl-iot-mode__button", {"cl-iot-mode__button--expand": !isMode } )}>
-                        <IconLoader src={undefined}/>
+                        <IconLoader src={icon}/>
                         { isMode ?
                             <span className="cl-name">{scna.scnaNm}</span> :
                             <input className="cl-name pr-04em" type="text" placeholder="시나리오" value={name}

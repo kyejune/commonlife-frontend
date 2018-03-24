@@ -23,7 +23,7 @@ class IotBtnMode extends Component {
 			<button type="button"
 					onClick={ ()=> this.viewProgress( ModeChanges.outMode ) }
 					className={( this.props.modeData.execYn === "Y" ? 'cl-iot-mode__button--active' : 'cl-iot-mode__button' )}>
-                <IconLoader src={`icons/${this.props.modeData.imgSrc}.png`} />
+                <IconLoader src={this.props.modeData.imgSrc} />
 
 				<span>{this.props.modeData.modeNm}</span>
 			</button>

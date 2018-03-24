@@ -6,7 +6,7 @@ class IconLoader extends Component {
         super( props );
 
         this.state = {
-            defaultSrc:'icons/alert-icon-red@3x.png',
+            defaultSrc:'cl_iot_default',
             src: this.props.src,
         }
     }
@@ -18,7 +18,7 @@ class IconLoader extends Component {
 
     render() {
         return (
-            <img src={ this.state.src || this.state.defaultSrc } width={this.props.width} height={this.props.height}
+            <img src={ `icons/${this.state.src || this.state.defaultSrc}.svg` } width={this.props.width} height={this.props.height}
                  alt={`아이콘이미지:${this.props.src}`}
                  onError={ this.loadFail } className={ this.props.className }/>
         );
