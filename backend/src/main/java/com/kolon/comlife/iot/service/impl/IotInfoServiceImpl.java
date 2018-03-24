@@ -52,6 +52,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     private static final String IOK_MODE_DETAIL_SAVE_PATH           = "/iokinterface/scenario/saveScnaDetail";
     private static final String IOK_MODE_DETAIL_CONDITONS_PATH      = "/iokinterface/scenario/scnaIfDetail";
     private static final String IOK_MODE_DETAIL_ACTORS_PATH         = "/iokinterface/scenario/scnaThingsDetail";
+    private static final String IOK_MODE_DETAIL_ACTOR_DETAIL_PATH   = "/iokinterface/scenario/scnaThingsSetDetail";
     private static final String IOK_MODE_DETAIL_CONDITONS_AVAILABLE_PATH = "/iokinterface/scenario/scnaIfAddList";
     private static final String IOK_MODE_DETAIL_ACTORS_AVAILABLE_PATH    = "/iokinterface/scenario/scnaThingsAddList";
     private static final String IOK_AUTOMATION_LIST_PATH            = "/iokinterface/scenario/scnaList";
@@ -1099,6 +1100,43 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
 
         return actorsInfo;
+    }
+
+    // 33-2. 특정 시나리오의 '작동기기' 상세조회
+    public IotDeviceListInfo getModeOrAutomationActorDetail(
+            int complexId, int homeId, int modeOrAutomationId, int deviceId, boolean modeFlag) throws Exception {
+        IotDeviceListInfo actorDetailInfo = new IotDeviceListInfo();
+        HttpGetRequester requester;
+        Map<String, Map> result;
+
+        requester = new HttpGetRequester(
+                httpClient,
+                serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                IOK_MODE_DETAIL_ACTOR_DETAIL_PATH );
+        requester.setParameter("cmplxId", String.valueOf(complexId) );
+        requester.setParameter("homeId", String.valueOf(homeId) );
+        requester.setParameter("scnaId", String.valueOf(modeOrAutomationId) );
+        requester.setParameter("moThingsId", String.valueOf(deviceId) );  // !! deviceId --> moThingsId
+        result = requester.execute();
+
+        // 1. result data 리맵핑
+        try {
+            this.remapResultDeviceDetailList( (List)result.get("DATA") );
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+        }
+
+        // 2. camelCase로 변환
+        actorDetailInfo.setData( convertListMapDataToCamelCase((List)result.get("DATA")) );
+
+        if( modeFlag ) {
+            actorDetailInfo.setMsg("'모드'의 작동기기(ACTOR) 상세 정보");
+        } else {
+            actorDetailInfo.setMsg("'자동화'의 작동기기(ACTOR) 상세 정보");
+        }
+
+        return actorDetailInfo;
     }
 
     // 39. 특정 시나리오에서 추가조건(IF) 목록(리스트)를 가져오기 at MyIOT 추가

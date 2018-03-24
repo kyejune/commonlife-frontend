@@ -62,6 +62,9 @@ public interface IotInfoService {
     IotModeAutomationInfo getModeOrAutomationActors(
             int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception;
 
+    IotDeviceListInfo getModeOrAutomationActorDetail(
+            int complexId, int homeId, int modeOrAutomationId, int deviceId, boolean modeFlag) throws Exception;
+
     IotModeAutomationInfo getModeOrAutomationConditions(
             int complexId, int homeId, int modeOrAutomationId, boolean modeFlag) throws Exception;
 

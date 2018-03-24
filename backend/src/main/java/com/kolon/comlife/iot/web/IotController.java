@@ -1145,6 +1145,37 @@ public class IotController {
     }
 
     /**
+     * 33-2. 특정 시나리오의 '작동기기' 상세조회 at MyIOT 추가
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/actors/{deviceId}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getModeOrAutomationActorDetail(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("automationId") int automationId,
+            @PathVariable("deviceId") int deviceId)
+    {
+        IotDeviceListInfo actorDetailInfo;
+
+        try {
+            actorDetailInfo = iotInfoService.getModeOrAutomationActorDetail(complexId, homeId, automationId, deviceId, false);
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( actorDetailInfo );
+    }
+
+
+    /**
      * 34. 특정 시나리오의 '기기' 목록 및 속성 변경하기 at MyIOT 추가
      */
     @PutMapping(
