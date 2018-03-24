@@ -112,11 +112,14 @@ public class IotIconMapperServiceImpl implements IotIconMapperService {
         iconMap.put("sub_icon_6_1", "cl_device_3");    // 옷방 가스벨브
         iconMap.put("sub_icon_8_1", "cl_status_4");    // 옷방 통합형대기전력차단기
         iconMap.put("sub_icon_5_1", "cl_device_6");    // 현관 스위치_1
+        iconMap.put("sub_icon_5_2", "cl_device_1");    // 현관 스위치_1
         iconMap.put("sub_icon_38_1", "cl_house-4");   // 서재 통합실내공기질센서
 //        iconMap.put("sub_icon_30_1", "");   // 마그네틱 센서
         iconMap.put("sub_icon_88_1", "cl_life-7");   // 벽걸이 에어컨
+        iconMap.put("sub_icon_88_2", "cl_life-7");   // 벽걸이 에어컨
         iconMap.put("sub_icon_84_1", "cl_life-7");   // 공기청정기
-        iconMap.put("sub_icon_4_1", "cl_life-5");    // 온도조절기
+        iconMap.put("sub_icon_4_1", "cl_status_4");    // 온도조절기
+        iconMap.put("sub_icon_4_2", "cl_status_4");    // 온도조절기
 //        iconMap.put("sub_icon_91_1", "");    // 로봇청소기
         iconMap.put("sub_icon_36_1", "cl_status_1");    // 에너지 사용량
 //        iconMap.put("sub_icon_29_1", "");    // 동체감시센서

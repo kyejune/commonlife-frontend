@@ -1560,6 +1560,8 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
 
         for(Map<String, Object>e : resultData) {
+            e.put("IMG_SRC", iconService.getIok2ClIcon((String)e.get("IMG_SRC")));
+
             // 사용하지 않은 값 삭제
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
@@ -1600,6 +1602,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultDeviceDetailList(List<Map<String, Object>> resultData) {
+        String imgSrc;
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
         }
@@ -1616,6 +1619,11 @@ public class IotInfoServiceImpl implements IotInfoService {
             this.removeMapKeyIfExisted(e, "HOME_ID");
             this.removeMapKeyIfExisted(e, "KIND_CD");
             this.removeMapKeyIfExisted(e, "THINGS_ID");
+
+            imgSrc = (String)e.get("IMG_SRC");
+            if( imgSrc != null && !"".equals(imgSrc)) {
+                e.put("IMG_SRC", iconService.getIok2ClIcon(imgSrc));
+            }
         }
     }
 
@@ -1631,11 +1639,17 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultScenarioDetail(List<Map<String, Object>> resultData) {
+        String imgSrc;
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
         }
 
         for(Map<String, Object>e : resultData) {
+            imgSrc = (String)e.get("IMG_SRC");
+            if(imgSrc != null) {
+                e.put("IMG_SRC", iconService.getIok2ClIcon(imgSrc));
+            }
+
             // MO_THINGS_NM --> DEVICE_NM로 변환
             this.replaceMapKeyIfExisted(e, "MO_THINGS_NM", "DEVICE_NM" );
             // MO_THINGS_ID --> DEVICE_ID로 변환
@@ -1681,11 +1695,15 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultDeviceUsageHistory(List<Map<String, Object>> resultData) {
+        String imgSrc;
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
         }
 
         for(Map<String, Object>e : resultData) {
+            imgSrc = (String)e.get("IMG_SRC");
+            e.put("IMG_SRC", iconService.getIok2ClIcon(imgSrc));
+
             // 사용하지 않은 값 삭제
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
