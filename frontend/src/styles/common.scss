@@ -100,6 +100,11 @@ h1, h2, h3, h4, h5, p{
   color: #f4ca5c;
 }
 
+.cl-wrap{
+  word-wrap: break-word;
+  white-space: normal;
+}
+
 .uppercase{
  text-transform: uppercase;
 }
@@ -197,7 +202,7 @@ h1, h2, h3, h4, h5, p{
   .pl-0#{$i}em { padding-left: #{$f}em; }
 }
 
-@for $i from 0 to 10 {
+@for $i from 0 to 11 {
   .m-#{$i}em { margin: #{$i}em; }
   .mt-#{$i}em { margin-top: #{$i}em; }
   .mr-#{$i}em { margin-right: #{$i}em; }
@@ -212,7 +217,8 @@ h1, h2, h3, h4, h5, p{
 
   .opacity-#{$i}0 { opacity: $i/10 }
 
-  .w-#{$i}00 { width: percentage($i); }
+  .w-#{$i}0 { width: percentage($i/10); }
+  .w-#{$i*10 + 5} { width: percentage($i/10 + 0.05); }
 }
 
 
@@ -229,9 +235,4 @@ h1, h2, h3, h4, h5, p{
 
 .ml-auto{ margin-left: auto; }
 .mr-auto{ margin-right: auto; }
-
-
-
-//.shadow--bottom{
-//  box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.14);
-//}
+.mt-auto{ margin-top: auto; }
