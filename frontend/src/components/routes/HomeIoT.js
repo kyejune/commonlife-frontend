@@ -54,7 +54,9 @@ class HomeIoT extends Component {
 			mode:{
                 mode:'iot-mode',
                 sensor:'iot-sensor',
-                device:'iot-device'
+                device:'iot-device',
+				time:'iot-time',
+				duration:'iot-duration',
 			},
 
 			// MyIot중 상세 제어 페이지가 있는 녀석 클릭
@@ -190,7 +192,17 @@ class HomeIoT extends Component {
 
 			{/* 센서 상세 */}
             <DrawerWrapper drawer="iot-sensor-detail" title="센서" back >
-                <IotSensor/>
+                <IotDevice/>
+            </DrawerWrapper>
+
+            {/* 특정시간 상세 */}
+            <DrawerWrapper drawer="iot-time-detail" title="특정시간" back >
+                <div>특정시간</div>
+            </DrawerWrapper>
+
+            {/* 구간시간 상세 */}
+            <DrawerWrapper drawer="iot-duration-detail" title="구간시간" back >
+                <div>구간시간</div>
             </DrawerWrapper>
 
             {/* Iot 추가 */}

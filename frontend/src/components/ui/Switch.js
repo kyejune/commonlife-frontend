@@ -9,14 +9,12 @@ class Switch extends Component {
             checked: this.props.defaultValue || false,
             offOnly: this.props.offOnly || false,
         };
-
-        console.log('S:', props );
     }
 
     componentWillReceiveProps(nextProps){
         this.setState({
-            checked: this.props.defaultValue || false,
-            offOnly: this.props.offOnly || false,
+            checked: nextProps.defaultValue,
+            offOnly: nextProps.offOnly,
         });
     }
 
@@ -35,7 +33,7 @@ class Switch extends Component {
 
     render() {
         return (
-            <label className="cl-iot-switch">
+            <label className={"cl-iot-switch " + this.props.className }>
                 <input type="checkbox" checked={this.state.checked} onChange={ this.onChange }/>
                 <span className="cl-iot-switch-slider"/>
             </label>

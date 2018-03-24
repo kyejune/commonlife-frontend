@@ -1,19 +1,41 @@
 import React, { Component } from 'react';
 import IconLoader from "../../ui/IconLoader";
+import Switch from "../../ui/Switch";
    
 class LiOfToggle extends Component {
 
+    constructor(props){
+        super( props );
 
-    onSwitch=( event )=>{
+        let defaultCheck;
+        if( props.data && props.data.currSts && props.data.maxVlu )
+            defaultCheck = (props.data.currSts === props.data.maxVlu);
+
+        if( this.props.checked )
+            defaultCheck = props.checked;
+
+        this.state = {
+            checked: defaultCheck,
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            checked: nextProps.checked,
+        });
+    }
+
+
+    onSwitch=( bool )=>{
+        this.setState({
+            checked: bool,
+        });
+
         if( this.props.onSwitch )
-            this.props.onSwitch( event.target.checked, this.props.data );
+            this.props.onSwitch( bool, this.props.data );
     }
 
     render() {
-
-        let defaultChecked = false;
-        if( this.props.data )
-            defaultChecked = (this.props.data.currSts === this.props.data.maxVlu);
 
         return (
             <li>
@@ -25,13 +47,7 @@ class LiOfToggle extends Component {
                     }
                 </div>
 
-                <div className="ml-auto">
-                    {/* IoT 스위치 토글버튼 */}
-                    <label className="cl-iot-switch">
-                        <input type="checkbox" onChange={ this.onSwitch } checked={defaultChecked}/>
-                        <span className="cl-iot-switch-slider"/>
-                    </label>
-                </div>
+                <Switch className="ml-auto" defaultValue={ this.state.checked } onChange={ this.onSwitch }/>
             </li>
         );
     }
