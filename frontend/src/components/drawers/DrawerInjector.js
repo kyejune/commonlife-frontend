@@ -38,7 +38,7 @@ class DrawerInjector extends Component{
 
     render(){
 
-        console.log('--------------------------- DrawerInjector ReDrawer' );
+        console.log('--------------------------- DrawerInjector ReDrawer', Store.modeModal, Store.myModal );
 
         return <div className="drawerInjector">
 
@@ -49,16 +49,16 @@ class DrawerInjector extends Component{
 
 
             {/* 모달 - IotProgressOverlay */}
-            {Store.ipo&&
+            {Store.modeModal&&
             <Modal>
-                <IotProgressOverlay { ...Store.ipo }  />
+                <IotModeChange { ...Store.modeModal }  />
             </Modal>
             }
 
 			{/* 모달 - IotModeChange */}
-            {Store.imc&&
+            {Store.myModal&&
             <Modal>
-                <IotModeChange { ...Store.imc }  />
+                <IotProgressOverlay { ...Store.myModal }  />
             </Modal>
             }
 

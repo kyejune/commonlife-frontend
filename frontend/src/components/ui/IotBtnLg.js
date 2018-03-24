@@ -9,6 +9,7 @@ import Store from "../../scripts/store";
 import classNames from "classnames";
 import IconLoader from "./IconLoader";
 import {Link, withRouter} from "react-router-dom";
+import Iot from "../../scripts/iot";
 
 class IotBtnLg extends Component {
 
@@ -16,24 +17,24 @@ class IotBtnLg extends Component {
         super(props);
     }
 
-    viewProgress(deviceInfo) {
-        Store.ipo = {targetValue: true, ...deviceInfo};
-    }
-
     // device && button
-    onClickSwitch=( bool, data )=>{
-        console.log( 'switch:', bool, data );
+    onClickSwitch( bool, btId, btTitle ){
+        Iot.setMyIot( 'switch', btId, btTitle, bool, success=>{
+           console.log( success );
+        });
     }
 
     // automation
-    onClickAutomaion=( data )=>{
-        console.log( 'direct:', data );
+    onClickAutomaion=( btId, btTitle )=>{
+        Iot.setMyIot( 'automation', btId, btTitle, 'automation', success=>{
+            console.log( success );
+        });
     }
 
 
     render() {
 
-        const {
+        const { btId,
             btImgSrc, btLeft, deviceId,
             btRightIcon, btRightIconType, btRightText, btSubTitle,
             btTitle, btTitleUnit, btType,
@@ -48,7 +49,7 @@ class IotBtnLg extends Component {
             case "information":
                 BottomLeft = <div className="cl-bold">{btLeft}</div>;
                 BottomRight = <div>{btRightText}</div>;
-                link = `${this.props.location.pathname}/info/0`;
+                // link = `${this.props.location.pathname}/info/0`; 지금은 연결할 페이지 없음
                 break;
 
             case "device":
@@ -58,7 +59,7 @@ class IotBtnLg extends Component {
                     link = `${this.props.location.pathname}/ctrl/device/${deviceId}`;
                 }else {
                     Src = off ? IotIcOff : IotIcOn;
-                    clickFunc = this.onClickSwitch;
+                    clickFunc = () => this.onClickSwitch( off, btId, btTitle );
                 }
 
 
@@ -71,6 +72,7 @@ class IotBtnLg extends Component {
 
             case "automation":
                 BottomLeft = <div className="cl-bold">{Store.auth.name}</div>;
+                clickFunc = () => this.onClickAutomaion( btId, btTitle );
                 break;
         }
 
@@ -84,6 +86,7 @@ class IotBtnLg extends Component {
                 {"cl-my-iot__button--automation": btType === "automation"},
                 {"cl-my-iot__button--off": off }
             )}
+                    onClick={ clickFunc }
             >
                 <i className="cl-my-iot__ic-alert"><img src={IotIcAlert} alt=""/></i>
 

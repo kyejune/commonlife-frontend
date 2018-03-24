@@ -4,10 +4,10 @@ import {ModeChanges} from "../../scripts/iot";
 import ImageLoader from 'react-imageloader';
 import IconLoader from "./IconLoader";
 
-class IotBtnLg extends Component {
+class IotBtnMode extends Component {
 
 	viewProgress( modeInfo ){
-		Store.imc = {
+		Store.modeModal = {
 			targetValue:( this.props.modeData.execYn !== "Y" ),
 			targetName: (this.props.modeData.modeNm),
 			targetIcon: (this.props.modeData.imgSrc),
@@ -32,4 +32,4 @@ class IotBtnLg extends Component {
 	}
 }
 
-export default IotBtnLg;
+export default IotBtnMode;

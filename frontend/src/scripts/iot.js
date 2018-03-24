@@ -16,12 +16,20 @@ axios.interceptors.response.use(null, function(err) {
     console.log( err.response );
     if( err.response.status !== 200) {
 
-        if( Store.ipo !== null ){
-            let obj = Store.ipo;
+        if( Store.modeModal !== null ){
+            let obj = Store.modeModal;
                 obj.status = 2;
                 obj.error = err.response.data.msg;
-            Store.ipo = Object.assign( {}, obj );
-            Store.hideIpo();
+            Store.modeModal = Object.assign( {}, obj );
+            Store.hideModeModal();
+        }
+
+        if( Store.myModal !== null ){
+            let obj = Store.myModal;
+            obj.status = 2;
+            obj.error = err.response.data.msg;
+            Store.myModal = Object.assign( {}, obj );
+            Store.hideMyModal();
         }
     }
 
@@ -54,350 +62,7 @@ const sortBySortOrder = (a, b) => {
 
 
 export let Modes = observable([]);
-export let MyIots = observable([
-    {
-        "btId": 1,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-15 23:57:06"
-    },
-    {
-        "btId": 18,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-22 15:46:24"
-    },
-    {
-        "btId": 2,
-        "btImgSrc": "CM02201",
-        "btRightIcon": "",
-        "btRightText": "",
-        "btSubTitle": "",
-        "btTitle": "단지시나테스-3a",
-        "btTitleUnit": "",
-        "btType": "automation",
-        "mNm": "단지시나테스-3a",
-        "myIotGbCd": "MB01702",
-        "myIotId": "99",
-        "regDt": "2018-03-15 23:57:06"
-    },
-    {
-        "btId": 8,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-17 20:51:47"
-    },
-    {
-        "btId": 19,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-22 15:46:24"
-    },
-    {
-        "btId": 23,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-22 16:08:19"
-    },
-    {
-        "btId": 10,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-17 20:52:01"
-    },
-    {
-        "btId": 11,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-19 20:17:20"
-    },
-    {
-        "btId": 13,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-19 20:18:41"
-    },
-    {
-        "btId": 15,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-19 20:18:53"
-    },
-    {
-        "btId": 4,
-        "btImgSrc": "sub_icon_91_1",
-        "btLeft": "청소기제어",
-        "btRightIcon": "",
-        "btRightIconType": "detail",
-        "btRightText": "Auto",
-        "btSubTitle": "",
-        "btTitle": "Test_로봇청소기",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-15 23:57:06"
-    },
-    {
-        "btId": 7,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-15 23:57:06"
-    },
-    {
-        "btId": 9,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-17 20:51:47"
-    },
-    {
-        "btId": 12,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-19 20:17:20"
-    },
-    {
-        "btId": 14,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-19 20:18:41"
-    },
-    {
-        "btId": 16,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-19 20:18:53"
-    },
-    {
-        "btId": 5,
-        "btImgSrc": "sub_icon_36_1",
-        "btLeft": "전기",
-        "btRightIcon": "",
-        "btRightText": "",
-        "btSubTitle": "에너지 사용량",
-        "btTitle": "12",
-        "btTitleUnit": "Kw",
-        "btType": "information",
-        "mNm": null,
-        "myIotGbCd": "MB01703",
-        "myIotId": "CM023009",
-        "regDt": "2018-03-15 23:57:06"
-    },
-    {
-        "btId": 20,
-        "btImgSrc": "sub_icon_29_1",
-        "btLeft": "동작감지",
-        "btRightIcon": "",
-        "btRightIconType": "detail",
-        "btRightText": "undetected",
-        "btSubTitle": "",
-        "btTitle": "동체감시센서",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-22 16:06:59"
-    },
-    {
-        "btId": 24,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-22 16:10:23"
-    },
-    {
-        "btId": 21,
-        "btImgSrc": "sub_icon_29_1",
-        "btLeft": "동작감지",
-        "btRightIcon": "",
-        "btRightIconType": "detail",
-        "btRightText": "undetected",
-        "btSubTitle": "",
-        "btTitle": "동체감시센서",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-22 16:07:07"
-    },
-    {
-        "btId": 22,
-        "btImgSrc": "sub_icon_5_1",
-        "btLeft": "전원",
-        "btRightIcon": "",
-        "btRightIconType": "button",
-        "btRightText": "off",
-        "btSubTitle": "",
-        "btTitle": "멀티스위치4단",
-        "btTitleUnit": "",
-        "btType": "device",
-        "myIotGbCd": "MB01701",
-        "myIotId": "null",
-        "regDt": "2018-03-22 16:08:19"
-    },
-    {
-        "btId": 25,
-        "btImgSrc": "main_life_weather_icon_3",
-        "btLeft": "구름많음",
-        "btRightIcon": "",
-        "btRightText": "현재습도 70%",
-        "btSubTitle": "경기도 안양시동안구 부림동",
-        "btTitle": "4.9",
-        "btTitleUnit": "℃",
-        "btType": "information",
-        "mNm": null,
-        "myIotGbCd": "MB01703",
-        "myIotId": "CM023005",
-        "regDt": "2018-03-23 18:14:07"
-    },
-    {
-        "btId": 26,
-        "btRightIcon": "",
-        "btRightText": "",
-        "btSubTitle": "",
-        "btTitle": "hoooray-2",
-        "btTitleUnit": "",
-        "btType": "automation",
-        "mNm": "hoooray-2",
-        "myIotGbCd": "MB01702",
-        "myIotId": "131",
-        "regDt": "2018-03-23 18:14:07"
-    }
-]);
+export let MyIots = observable([]);
 
 export default {
 
@@ -423,6 +88,14 @@ export default {
             .then(response => {
                 response.data.data.sort(sortBySortOrder);
                 Modes.replace(response.data.data);
+            });
+    },
+
+    getMy() {
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`)
+            .then(response => {
+                response.data.data.sort(sortBySortOrder);
+                MyIots.replace(response.data.data);
             });
     },
 
@@ -483,14 +156,14 @@ export default {
         const {deviceId, protcKey, maxVlu, minVlu} = data;
 
         const value = bool ? maxVlu : minVlu;
-        Store.ipo = { status:0, name:data.thingsNm, value: value.toUpperCase() };
+        Store.myModal = { status:0, name:data.thingsNm, value: value.toUpperCase() };
 
-        console.log( data, `의 값을 ${value}로 변경`, Store.ipo );
+        console.log( data, `의 값을 ${value}로 변경`, Store.modeModal );
         axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}/action?protcKey=${encodeURIComponent(protcKey)}&value=${value}`)
             .then(response => {
                 callback( true );
-                Store.ipo = { status:1, name:data.thingsNm, value: value.toUpperCase() };
-                Store.hideIpo();
+                Store.myModal = { status:1, name:data.thingsNm, value: value.toUpperCase() };
+                Store.hideMyModal();
             })
             .catch(error=>{
                callback( false );
@@ -505,11 +178,29 @@ export default {
             });
     },
 
-    // /* Iot모드의 값을 변경 */
-    // setIotMode(modeName, value) {
-    //     console.log(`${modeName}의 값을 ${value}로 변경`);
-    // }
-    // ,
 
+    /* 대시보드 myIot 스위치 버튼이나 시나리오 클릭시 */
+    setMyIot( type, id, name, value, callback ){
+
+        if( type === 'switch' ) value = value?'ON':'OFF';
+
+        Store.myModal = { status:0, name:name, value: value };
+
+        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot/buttons/${id}/action`)
+            .then(response => {
+                callback( true );
+                Store.myModal = { status:1, name:name, value: value };
+                Store.hideMyModal();
+
+                // 화면 반영을 위해 딜레이 콜
+                setTimeout( ()=>{
+                    this.getMy();
+                }, 1000 );
+
+            })
+            .catch( error=>{
+               callback( false );
+            });
+    },
 
 };

@@ -10,10 +10,9 @@ import IotConnectionProgress from "../ui/IotConnectionProgress";
 class IotProgressOverlay extends Component {
 
 	render () {
+		const { name, value, status, error } = Store.myModal;
 
-		console.log('IotProgressOverlay:', Store.ipo.status, Store.ipo );
-
-		const { name, value, status, error } = Store.ipo;
+		console.log('^^^^^^^', value );
 
 		const Status = [
             <h3 className="cl-iot-progress-overlay__text">변경사항을<br/>즉시 적용합니다.</h3>,
@@ -27,7 +26,7 @@ class IotProgressOverlay extends Component {
 					<div className="cl-iot-progress-overlay__icon">
 						<IconLoader src={undefined}/>
 					</div>
-					<p className="cl-iot-progress-overlay__info-text">{ name } <span>{ value }</span></p>
+					<p className="cl-iot-progress-overlay__info-text">{ name } <span className="uppercase">{ value }</span></p>
 				</div>
 				{ Status[ status ] }
 				<IotConnectionProgress className={ status===1?'cl--done':'' }/>
