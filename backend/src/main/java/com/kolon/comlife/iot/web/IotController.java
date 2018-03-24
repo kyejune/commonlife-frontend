@@ -545,6 +545,39 @@ public class IotController {
     }
 
     /**
+     * 17-2. '모드' 상태 종료 at IOT 모드 실행
+     */
+    @PutMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/modes/turnOff",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity turnOffMode(
+            @PathVariable("complexId") int    complexId,
+            @PathVariable("homeId")    int    homeId)
+    {
+        IotModeOrAutomationListInfo offMode;
+
+        try {
+            offMode = iotControlService.turnOffMode( complexId, homeId);
+        } catch( Exception e ) {
+            e.printStackTrace();
+            try {
+                e.printStackTrace();
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                unhandledEx.printStackTrace();
+                logger.error("Unhandled Exception: " + e.getMessage());
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        offMode.setMsg("'모드' 종료");
+
+        return ResponseEntity.status(HttpStatus.OK).body( offMode );
+    }
+
+    /**
      * 21. '모드' 편집에서, 모드 목록 및 순서를 가져오기 at Mode 내용 편집
      *  ===> 1. 번과 동일
      */

@@ -7,6 +7,7 @@ import com.kolon.comlife.iot.exception.IotInfoNoDataException;
 import com.kolon.comlife.iot.model.*;
 import com.kolon.comlife.iot.service.IotControlService;
 import com.kolon.comlife.iot.service.IotInfoService;
+import com.kolon.common.http.HttpGetRequester;
 import com.kolon.common.http.HttpPutRequester;
 import com.kolon.common.prop.ServicePropertiesMap;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -34,7 +35,12 @@ public class IotControlServiceImpl implements IotControlService {
     private static final String IOK_CONTROL_HOST_PROP_GROUP           = "IOK";
     private static final String IOK_CONTROL_HOST_PROP_KEY             = "IOT_CONTROL_HOST";
 
+    private static final String IOK_MOBILE_HOST_PROP_GROUP           = "IOK";
+    private static final String IOK_MOBILE_HOST_PROP_KEY             = "MOBILE_HOST";
+
+
     private static final String IOK_CONTROL_MODE_SWITCH_FMT_PATH      = "/iok/mode/%s/cmplx/%d/home/%d";
+    private static final String IOK_MOBILE_MODE_OFF_PATH             = "/iokinterface/scenario/setNoneMode";
     private static final String IOK_CONTROL_SCENARIO_EXECUTE_FMT_PATH = "/iok/scenario/%d/cmplx/%d/home/%d";
     private static final String IOK_CONTROL_DEVICE_EXECUTE_FMT_PATH   = "/iok/device/%s"; // CLNT_ID
 
@@ -300,8 +306,9 @@ public class IotControlServiceImpl implements IotControlService {
         HttpPutRequester requester;
         Map<String, Map> result;
         IotModeOrAutomationListInfo activeModeList;
-        String           changedModeId;
+        String           changedModeId = null;
         int retryCount = 0;
+        int retModeSize = -1;
 
         // 1. '모드 변경' 수행
         try {
@@ -329,9 +336,13 @@ public class IotControlServiceImpl implements IotControlService {
             // 2. 변경한 모드 값이 확인되면 수행
             try {
                 activeModeList = iotInfoService.getActiveMode(complexId, homeId);
-                changedModeId = (String)activeModeList.getData().get(0).get("mode");
+                retModeSize = activeModeList.getData().size();
 
-                if( mode.equals(changedModeId) ) {
+                if( retModeSize > 0 ) {
+                    changedModeId = (String)activeModeList.getData().get(0).get("mode");
+                }
+
+                if( retModeSize > 0 && mode.equals(changedModeId) ) {
                     // 변경 성공 --> do nothing
                     break;
                 } else {
@@ -353,6 +364,73 @@ public class IotControlServiceImpl implements IotControlService {
             }
         }
 
+        return activeModeList;
+    }
+
+    public IotModeOrAutomationListInfo turnOffMode(int complexId, int homeId) throws Exception {
+        HttpGetRequester requester;
+        Map<String, Map> result;
+        IotModeOrAutomationListInfo activeModeList = new IotModeOrAutomationListInfo();
+        int retryCount = 0;
+        int retModeSize = -1;
+
+        // 1. '모드 변경' 수행
+        try {
+            requester = new HttpGetRequester(
+                    httpClient,
+                    serviceProperties.getByKey(IOK_MOBILE_HOST_PROP_GROUP, IOK_MOBILE_HOST_PROP_KEY),
+                    IOK_MOBILE_MODE_OFF_PATH);
+            requester.setParameter("cmplxId", String.valueOf(complexId));
+            requester.setParameter("homeId", String.valueOf(homeId));
+            result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
+            logger.debug(" >>>> RESULT >>> " + result.toString());
+        } catch( SocketException se ) {
+            // socket is closed
+            if( "Socket closed".equals(se.getMessage())) {
+                throw new IotControlTimeoutException("'모드'종료 시간이 초과하였습니다.");
+            } else {
+                logger.error(se.getMessage());
+                throw se;
+            }
+        } catch( Exception e) {
+            logger.error(e.getMessage());
+            throw e;
+        }
+
+        retryCount = 0;
+        while(true) {
+            // 2. 변경한 모드 값이 확인되면 수행
+            try {
+                activeModeList = iotInfoService.getActiveMode(complexId, homeId);
+
+                retModeSize = activeModeList.getData().size();
+                logger.debug(">>>>> regModeSize:" + retModeSize);
+                // Mode size == 0
+                if( retModeSize == 0 ) {
+                    // SUCCESS: 모드 종료가 성공하였습니다.
+                    break;
+                } else {
+                    // 변경 값이 아직 바뀌지 않은 경우
+                    if( retryCount < IOK_CONTROL_RETRY_COUNT ) {
+                        // Retry
+                        retryCount++;
+                        Thread.sleep(IOK_CONTROL_RETRY_INTERVAL_MSEC * retryCount);
+                        continue;
+                    } else {
+                        logger.error(">>>>> 모드 종료 실패");
+                        throw new IotControlOperationFailedException("모드를 종료하는데 실패하였습니다. 잠시 후에 다시 시도하세요.");
+                    }
+                }
+            } catch( IotInfoNoDataException e ) {
+                // SUCCESS: 모드 종료가 성공하였습니다.
+                break;
+            } catch( Exception e ) {
+                logger.error(e.getMessage());
+                throw e;
+            }
+        }
+
+        activeModeList.setMsg("모드가 종료되었습니다.");
         return activeModeList;
     }
 

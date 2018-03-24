@@ -26,7 +26,8 @@
     </tx:advice>
 
     <aop:config>
-        <aop:pointcut id="comlife_tx"  expression="execution(* com.kolon..service..*Service*.*(..))"/>
+        <aop:pointcut id="comlife_tx"  expression="execution(* com.kolon..service..*Service*.*(..)) and
+                                                   !execution(* com.kolon.comlife.iot.service..*Service*.*(..))"/>
         <aop:pointcut id="iot_tx"  expression="execution(* com.kolonbenit..service..*Service*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="comlife_tx" />
         <aop:advisor advice-ref="txAdvice" pointcut-ref="iot_tx" />

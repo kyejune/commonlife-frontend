@@ -90,7 +90,4 @@ public interface IotInfoService {
 
     IotModeAutomationInfo getModeOrAutomationAllActors(
             int complexId, int homeId, boolean modeFlag) throws Exception;
-
-
-
 }
