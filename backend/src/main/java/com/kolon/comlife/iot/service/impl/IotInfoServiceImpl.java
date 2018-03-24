@@ -1420,6 +1420,17 @@ public class IotInfoServiceImpl implements IotInfoService {
                         if(e.get("BT_IMG_SRC") == null) {
                             e.put("BT_IMG_SRC", iconService.getIotDefaultIcon());
                         }
+                        e.put("DEVICE_ID", e.get("MO_THINGS_ID"));
+                        // BT_RIGHT_ICON_TYPE(btRightIconType) 결정
+                        if( (e.get("BINARY_YN") != null) && (e.get("BINARY_YN").equals("Y")) ) {
+                            if( e.get("STS_CNT").equals(new Integer(1)) ) {
+                                e.put("BT_RIGHT_ICON_TYPE", "button");
+                            } else {
+                                e.put("BT_RIGHT_ICON_TYPE", "detail");
+                            }
+                        } else {
+                            e.put("BT_RIGHT_ICON_TYPE", "detail");
+                        }
                         break;
                     case "MB01702":
                         e.put("BT_TYPE", "automation");
@@ -1455,19 +1466,6 @@ public class IotInfoServiceImpl implements IotInfoService {
                     default:
                         e.put("BT_TYPE", "unknown");
                         break;
-                }
-            }
-
-            // BT_RIGHT_ICON_TYPE(btRightIconType) 결정
-            if( e.get("BT_TYPE") != null && e.get("BT_TYPE").equals("device") ) {
-                if( (e.get("BINARY_YN") != null) && (e.get("BINARY_YN").equals("Y")) ) {
-                    if( e.get("STS_CNT").equals(new Integer(1)) ) {
-                        e.put("BT_RIGHT_ICON_TYPE", "button");
-                    } else {
-                        e.put("BT_RIGHT_ICON_TYPE", "detail");
-                    }
-                } else {
-                    e.put("BT_RIGHT_ICON_TYPE", "detail");
                 }
             }
         }
