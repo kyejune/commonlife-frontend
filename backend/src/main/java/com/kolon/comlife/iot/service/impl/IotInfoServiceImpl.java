@@ -677,7 +677,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     // 24-3. MyIOT내, 추가 가능한 기기(공간+카테고리 정보 포함) 목록 가져오기
-    public IotButtonListInfo getMyIotDevicesListAvailable
+    private IotButtonListInfo getMyIotDevicesListAvailableInternal
             (int complexId, int homeId, String userId) throws Exception {
         IotButtonListInfo   buttonListInfo = new IotButtonListInfo();
         HttpGetRequester    requester;
@@ -702,10 +702,155 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         buttonListInfo.setData( convertListMapDataToCamelCase((List)result.get("DATA")) );
 
-        buttonListInfo.setMsg("MyIOT에 추가가능한 기기 목록 가져오기");
+//        buttonListInfo.setMsg("MyIOT에 추가가능한 기기 목록 가져오기");
 
         return buttonListInfo;
     }
+
+
+    // 24-3-1. MyIOT내, 추가 가능한 기기의 "공간 목록" 가져오기
+    public IotRoomListInfo getMyIotRoomsListAvailable(int complexId, int homeId, String userId) throws Exception {
+        IotButtonListInfo           buttonList;
+        List<Map<String, Object>>   buttonListData;
+        Map<String, Map>            roomsMap = new TreeMap<>();
+        List                        roomList = new ArrayList();
+        IotRoomListInfo             roomListInfo = new IotRoomListInfo();
+
+        buttonList = this.getMyIotDevicesListAvailableInternal(complexId, homeId, userId);
+
+        buttonListData = buttonList.getData();
+        if( buttonListData.size() < 1 ){
+            throw new IotInfoNoDataException("공간 목록이 없습니다.");
+        }
+
+        for( Map<String, Object> e : buttonListData ) {
+            Map v = roomsMap.get( String.valueOf(e.get("roomId")) );
+            logger.debug(">>>> roomId:" + e.get("roomId"));
+            if( v == null ) {
+                Map newValue = new TreeMap();
+                newValue.put("roomId", e.get("roomId"));
+                newValue.put("roomNm", e.get("roomNm"));
+                newValue.put("typeCd", e.get("typeCd"));
+                newValue.put("imgSrc", iconService.getIconFromRoomType((String)e.get("typeCd")));
+
+                roomsMap.put( String.valueOf(e.get("roomId")), newValue );
+            }
+        }
+
+        for( String k : roomsMap.keySet() ) {
+            logger.debug(">>>> " + roomsMap.get(k));
+            roomList.add( roomsMap.get(k) );
+        }
+
+        roomListInfo.setData(roomList);
+        roomListInfo.setMsg("추가 가능한 기기의 '공간 목록' 가져오기");
+
+        return roomListInfo;
+    }
+
+    // 24-3-2. MyIOT내, 추가 가능한 기기 목록 가져오기 / 공간별
+    public IotButtonListInfo getMyIotDevicesListByRoomAvailable (int complexId, int homeId, String userId, int roomId) throws Exception {
+        IotButtonListInfo           buttonList;
+        List<Map<String, Object>>   buttonListData;
+
+        buttonList = this.getMyIotDevicesListAvailableInternal(complexId, homeId, userId);
+
+        buttonListData = buttonList.getData();
+        if( buttonListData.size() < 1 ){
+            throw new IotInfoNoDataException("기기 정보가 없습니다.");
+        }
+
+        // Filtering
+        Iterator iter = buttonListData.iterator();
+        while( iter.hasNext() ) {
+            Map v = (Map)iter.next();
+            if(String.valueOf(v.get("roomId")).equals(String.valueOf(roomId))) {
+                // keep
+            } else {
+                iter.remove();
+            }
+        }
+
+        if( buttonListData.size() < 1 ) {
+            throw new IotInfoNoDataException("기기 정보가 없습니다.");
+        }
+
+        buttonList.setMsg("추가 가능한 기기 목록 가져오기 / 공간별");
+
+        return buttonList;
+    }
+
+    // 24-3-3. MyIOT내, 추가 가능한 기기의 "기기카테고리 목록" 가져오기
+    public IotDeviceGroupListInfo getMyIotDeviceCategoryListAvailable (int complexId, int homeId, String userId) throws Exception {
+        IotButtonListInfo           buttonList;
+        List<Map<String, Object>>   buttonListData;
+        Map<String, Map>            categoryMap = new TreeMap<>();
+        List                        categoryList = new ArrayList();
+        IotDeviceGroupListInfo      categoryListInfo = new IotDeviceGroupListInfo();
+
+        buttonList = this.getMyIotDevicesListAvailableInternal(complexId, homeId, userId);
+
+        buttonListData = buttonList.getData();
+        if( buttonListData.size() < 1 ){
+            throw new IotInfoNoDataException("기기 카테고리 목록이 없습니다.");
+        }
+
+        for( Map<String, Object> e : buttonListData ) {
+            Map v = categoryMap.get( String.valueOf(e.get("cateCd")) );
+            logger.debug(">>>> cateCd:" + e.get("cateCd"));
+            if( v == null ) {
+                Map newValue = new TreeMap();
+                newValue.put("cateNm", e.get("cateNm"));
+                newValue.put("cateCd", e.get("cateCd"));
+                newValue.put("imgSrc", iconService.getIconFromDeviceCategory((String)e.get("cateCd")));
+
+                categoryMap.put( String.valueOf(e.get("cateCd")), newValue );
+            }
+        }
+
+        for( String k : categoryMap.keySet() ) {
+            logger.debug(">>>> " + categoryMap.get(k));
+            categoryList.add( categoryMap.get(k) );
+        }
+
+        categoryListInfo.setData(categoryList);
+        categoryListInfo.setMsg("추가 가능한 기기의 '기기 카테고리 목록' 가져오기");
+
+        return categoryListInfo;
+    }
+
+    // 24-3-4. MyIOT내, 추가 가능한 기기 목록 가져오기 / 기기카테고리별
+    public IotButtonListInfo getMyIotDevicesListByCategoryAvailable (int complexId, int homeId, String userId, String categoryCode) throws Exception {
+        IotButtonListInfo           buttonList;
+        List<Map<String, Object>>   buttonListData;
+
+        buttonList = this.getMyIotDevicesListAvailableInternal(complexId, homeId, userId);
+
+        buttonListData = buttonList.getData();
+        if( buttonListData.size() < 1 ){
+            throw new IotInfoNoDataException("기기 정보가 없습니다.");
+        }
+
+        // Filtering
+        Iterator iter = buttonListData.iterator();
+        while( iter.hasNext() ) {
+            Map v = (Map)iter.next();
+            if(String.valueOf(v.get("cateCd")).equals(categoryCode)) {
+                // keep
+            } else {
+                iter.remove();
+            }
+        }
+
+        if( buttonListData.size() < 1 ) {
+            throw new IotInfoNoDataException("기기 정보가 없습니다.");
+        }
+
+        buttonList.setMsg("추가 가능한 기기 목록 가져오기 / 기기카테고리별");
+
+        return buttonList;
+    }
+
 
     // 24-4. MyIOT내, 추가 가능한 가치정보 목록 가져오기
     public IotButtonListInfo getMyIotValueInfoListAvailable
@@ -1770,6 +1915,13 @@ public class IotInfoServiceImpl implements IotInfoService {
             imgSrc = (String)e.get("IMG_SRC");
             if(imgSrc != null) {
                 e.put("IMG_SRC", iconService.getIok2ClIcon(imgSrc));
+            } else {
+                // 시간 조건인 경우, 이미지를 추가
+                if(e.get("SPC_TIME_YN") != null) {
+                    e.put("IMG_SRC", "cl_status_4" );
+                } else if (e.get("APLY_TIME_YN") != null ) {
+                    e.put("IMG_SRC", "cl_status_4" );
+                }
             }
 
             // MO_THINGS_NM --> DEVICE_NM로 변환

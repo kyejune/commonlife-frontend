@@ -793,14 +793,47 @@ public class IotController {
     }
 
     /**
-     * 24-3. MyIOT내, 추가 가능한 기기(공간+카테고리 정보 포함) 목록 가져오기
+     * 24-3-1. MyIOT내, 추가 가능한 기기(공간+카테고리 정보 포함) 목록 가져오기
      */
     @GetMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/myiot/devices/available",
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/rooms/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getMyIotDevicesListAvailable(
+    public ResponseEntity getMyIotRoomsListAvailable(
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
+    {
+        IotRoomListInfo roomsList;
+        String            userId;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+            roomsList = iotInfoService.getMyIotRoomsListAvailable(complexId, homeId, userId );
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( roomsList );
+    }
+
+    /**
+     * 24-3-2. MyIOT내, 추가 가능한 기기(공간+카테고리 정보 포함) 목록 가져오기
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/rooms/{roomId}/devices/available",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getMyIotDevicesListByRoomAvailable(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("roomId")    int roomId)
     {
         IotButtonListInfo buttonsList;
         String            userId;
@@ -809,7 +842,72 @@ public class IotController {
         userId = "baek";
 
         try {
-            buttonsList = iotInfoService.getMyIotDevicesListAvailable(complexId, homeId, userId );
+            buttonsList = iotInfoService.getMyIotDevicesListByRoomAvailable(complexId, homeId, userId, roomId );
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( buttonsList );
+    }
+
+    /**
+     * 24-3-3. MyIOT내, 추가 가능한 기기(공간+카테고리 정보 포함) 목록 가져오기
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/deviceCategory/available",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getMyIotDeviceCategoryListAvailable(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId )
+    {
+        IotDeviceGroupListInfo deviceGroupList;
+        String            userId;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+            deviceGroupList = iotInfoService.getMyIotDeviceCategoryListAvailable(complexId, homeId, userId );
+        } catch( Exception e ) {
+            try {
+                return this.commonExceptionHandler( e );
+            } catch( Exception unhandledEx ) {
+                logger.error("Unhandled Exception: " + e.getMessage());
+                return ResponseEntity
+                        .status(HttpStatus.SERVICE_UNAVAILABLE)
+                        .body(new SimpleErrorInfo("예상하지 못한 예외가 발생하였습니다."));
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( deviceGroupList );
+    }
+
+    /**
+     * 24-3-4. MyIOT내, 추가 가능한 기기(공간+카테고리 정보 포함) 목록 가져오기
+     */
+    @GetMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/myiot/deviceCategory/{categoryCode}/devices/available",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getMyIotDevicesListByCategoryAvailable(
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("categoryCode") String categoryCode)
+    {
+        IotButtonListInfo buttonsList;
+        String            userId;
+
+        // todo: userId is retrieved from the user's token.
+        userId = "baek";
+
+        try {
+            buttonsList = iotInfoService.getMyIotDevicesListByCategoryAvailable(complexId, homeId, userId, categoryCode );
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -824,6 +922,7 @@ public class IotController {
 
         return ResponseEntity.status(HttpStatus.OK).body( buttonsList );
     }
+
 
     /**
      * 24-4. MyIOT내, 추가 가능한 가치정보 목록 가져오기

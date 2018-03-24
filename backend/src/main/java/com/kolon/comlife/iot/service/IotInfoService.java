@@ -27,8 +27,15 @@ public interface IotInfoService {
     IotButtonListInfo getMyIotAutomationListAvailable
             (int complexId, int homeId, String userId) throws Exception;
 
-    IotButtonListInfo getMyIotDevicesListAvailable
-            (int complexId, int homeId, String userId) throws Exception;
+
+    IotRoomListInfo getMyIotRoomsListAvailable(int complexId, int homeId, String userId) throws Exception;
+
+    IotButtonListInfo getMyIotDevicesListByRoomAvailable (int complexId, int homeId, String userId, int roomId) throws Exception;
+
+    IotDeviceGroupListInfo getMyIotDeviceCategoryListAvailable (int complexId, int homeId, String userId) throws Exception;
+
+    IotButtonListInfo getMyIotDevicesListByCategoryAvailable (int complexId, int homeId, String userId, String categoryCode) throws Exception;
+
 
     IotButtonListInfo getMyIotValueInfoListAvailable
             (int complexId, int homeId, String userId) throws Exception;
