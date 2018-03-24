@@ -37,13 +37,27 @@
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>Index</th>
+                                    <th class="text-center">Index</th>
+                                    <th class="text-center">시작일</th>
+                                    <th class="text-center">시작시각</th>
+                                    <th class="text-center">종료일</th>
+                                    <th class="text-center">종료시작</th>
+                                    <th class="text-center">포인트</th>
+                                    <th class="text-center">금액</th>
+                                    <th class="text-center">수량</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="reservation" items="${reservations}">
                                     <tr>
                                         <td class="text-center">${reservation.idx}</td>
+                                        <td class="text-center">${reservation.startDt}</td>
+                                        <td class="text-center">${reservation.startTime}</td>
+                                        <td class="text-center">${reservation.endDt}</td>
+                                        <td class="text-center">${reservation.endTime}</td>
+                                        <td class="text-center">${reservation.point}</td>
+                                        <td class="text-center">${reservation.amount}</td>
+                                        <td class="text-center">${reservation.qty}</td>
                                         <%--<td>--%>
                                             <%--<a href="/admin/reservation-schemes/edit.do?idx=${scheme.idx}" class="btn btn-xs btn-success">수정</a>--%>
                                         <%--</td>--%>

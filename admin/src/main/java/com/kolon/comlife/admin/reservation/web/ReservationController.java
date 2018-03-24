@@ -64,11 +64,31 @@ public class ReservationController {
             , HttpSession session
             , @RequestParam( value = "parentIdx", required = false ) int parentIdx
             , @RequestParam( value = "status", required = false ) String status
+            , @RequestParam( value = "startDt", required = false ) String startDt
+            , @RequestParam( value = "startTime", required = false ) String startTime
+            , @RequestParam( value = "endDt", required = false ) String endDt
+            , @RequestParam( value = "endTime", required = false ) String endTime
+            , @RequestParam( value = "qty", required = false ) int qty
             ) {
 
+        // 예약 틀
+        ReservationSchemeInfo scheme = schemeService.show( parentIdx );
+
         ReservationInfo info = new ReservationInfo();
-        info.setParentIdx( parentIdx );
+        info.setUsrID( 14 ); // TODO: 사용자 아이디 입력
         info.setStatus( status );
+        info.setStartDt( startDt );
+        info.setStartTime( startTime );
+        info.setEndDt( endDt );
+        info.setEndTime( endTime );
+        info.setQty( qty );
+
+        // 틀에서 내려받을 자료들
+        info.setParentIdx( scheme.getIdx() );
+        info.setPoint( scheme.getPoint() );
+        info.setAmount( scheme.getAmount() );
+
+        logger.debug( "---------- qty: " + qty );
 
         service.create( info );
 

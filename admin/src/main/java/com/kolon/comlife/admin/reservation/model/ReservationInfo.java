@@ -12,9 +12,9 @@ public class ReservationInfo {
     private String startTime;
     private String endDt;
     private String endTime;
-    private String point;
-    private String amount;
-    private String qty;
+    private int point;
+    private int amount;
+    private int qty;
     private String regDttm;
     private String updDttm;
 
@@ -82,27 +82,27 @@ public class ReservationInfo {
         this.endTime = endTime;
     }
 
-    public String getPoint() {
+    public int getPoint() {
         return point;
     }
 
-    public void setPoint(String point) {
+    public void setPoint(int point) {
         this.point = point;
     }
 
-    public String getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 
-    public String getQty() {
+    public int getQty() {
         return qty;
     }
 
-    public void setQty(String qty) {
+    public void setQty(int qty) {
         this.qty = qty;
     }
 

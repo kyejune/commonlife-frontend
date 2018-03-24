@@ -13,6 +13,7 @@
 
     <!-- FooTable -->
     <link href="/resources/css/plugins/footable/footable.core.css" rel="stylesheet">
+    <link href="/resources/css/plugins/datapicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <link href="/resources/css/animate.css" rel="stylesheet">
     <link href="/resources/css/style.css" rel="stylesheet">
@@ -35,6 +36,7 @@
     <!-- Mainly scripts -->
     <script src="/resources/js/jquery-3.1.1.min.js"></script>
     <script src="/resources/js/bootstrap.min.js"></script>
+    <script src="/resources/js/plugins/moment/moment.js"></script>
     <script src="/resources/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="/resources/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 
@@ -44,6 +46,7 @@
     <!-- Custom and plugin javascript -->
     <script src="/resources/js/inspinia.js"></script>
     <script src="/resources/js/plugins/pace/pace.min.js"></script>
+    <script src="/resources/js/plugins/datapicker/bootstrap-datetimepicker.min.js"></script>
 
     <tiles:insertAttribute name="js" />
 </body>
