@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller("reservationController")
@@ -38,6 +40,18 @@ public class ReservationController {
             , HttpSession session
     ) {
         List<ReservationInfo> reservations = service.index();
+        List<Integer> ids = new ArrayList<Integer>();
+        ids.add( 6 );
+        ids.add( 7 );
+
+        HashMap params = new HashMap<String, Object>();
+        params.put( "ids", ids );
+
+        List<ReservationSchemeInfo> schemes = schemeService.index( params );
+
+        logger.debug( ">>>>>>>>>>>>>>>> schemes: " + schemes );
+        logger.debug( ">>>>>>>>>>>>>>>> schemes size: " + schemes.size() );
+
         mav.addObject( "reservations", reservations );
 
         return mav;
@@ -50,7 +64,7 @@ public class ReservationController {
             , ModelAndView mav
             , HttpSession session
     ) {
-        List<ReservationSchemeInfo> schemes = schemeService.index();
+        List<ReservationSchemeInfo> schemes = schemeService.index( new HashMap() );
         mav.addObject( "schemes", schemes );
         return mav;
     }

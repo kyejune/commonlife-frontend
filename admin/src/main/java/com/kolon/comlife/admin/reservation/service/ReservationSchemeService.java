@@ -3,9 +3,10 @@ package com.kolon.comlife.admin.reservation.service;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ReservationSchemeService {
-    public List<ReservationSchemeInfo> index();
+    public List<ReservationSchemeInfo> index( Map params );
     public ReservationSchemeInfo show( int idx );
     public int create( ReservationSchemeInfo info );
     public int update( ReservationSchemeInfo info );
