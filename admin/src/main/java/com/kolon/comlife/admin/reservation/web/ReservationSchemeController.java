@@ -20,9 +20,6 @@ import java.util.List;
 public class ReservationSchemeController {
     private static final Logger logger = LoggerFactory.getLogger(ReservationSchemeController.class);
 
-    @Resource
-    private SqlSession db;
-
     @Resource(name = "reservationSchemeService")
     private ReservationSchemeService service;
 
@@ -33,7 +30,7 @@ public class ReservationSchemeController {
             , ModelAndView mav
             , HttpSession session
     ) {
-        List<ReservationSchemeInfo> schemes = db.selectList( "ReservationScheme.list" );
+        List<ReservationSchemeInfo> schemes = service.index();
         mav.addObject( "schemes", schemes );
 
         return mav;
@@ -99,7 +96,7 @@ public class ReservationSchemeController {
         info.setMaintenanceEndAt( maintenanceEndAt );
         info.setDelYn( delYn );
 
-        db.insert( "ReservationScheme.create", info );
+        service.create( info );
 
         return "redirect:" + "/admin/reservation-schemes/list.do";
     }

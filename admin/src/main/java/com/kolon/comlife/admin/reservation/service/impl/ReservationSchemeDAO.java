@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 @Repository("reservationSchemeDAO")
@@ -12,23 +13,25 @@ public class ReservationSchemeDAO {
     @Resource
     private SqlSession sqlSession;
 
-    public List<ReservationSchemeInfo> getReservationSchemeList() {
-        return null;
+    public List<ReservationSchemeInfo> index() {
+        return sqlSession.selectList("ReservationScheme.index");
     }
 
-    public ReservationSchemeInfo getReservationScheme() {
-        return null;
+    public ReservationSchemeInfo show(int idx) {
+        HashMap params = new HashMap<String, Object>();
+        params.put("idx", idx);
+        return sqlSession.selectOne("ReservationScheme.show", params);
     }
 
-    public int createReserverationScheme( ReservationSchemeInfo info ) {
-        return sqlSession.insert( "ReservationScheme.create", info );
+    public int create(ReservationSchemeInfo info) {
+        return sqlSession.insert("ReservationScheme.create", info);
     }
 
-    public ReservationSchemeInfo updateReservationScheme() {
-        return null;
+    public int update(ReservationSchemeInfo info) {
+        return sqlSession.update("ReservationScheme.update", info);
     }
 
-    public ReservationSchemeInfo deleteReservationScheme() {
-        return null;
+    public int delete(ReservationSchemeInfo info) {
+        return sqlSession.delete("ReservationScheme.delete", info);
     }
 }
