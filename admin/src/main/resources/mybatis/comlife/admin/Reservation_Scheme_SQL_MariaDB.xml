@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="ReservationScheme">
-    <select id="list" resultType="reservationSchemeInfo">
+    <select id="index" resultType="reservationSchemeInfo">
         <![CDATA[
             SELECT
                     *
@@ -17,7 +17,7 @@
             FROM
                     `RESERVATION_SCHEMES`
             WHERE
-                    `idx` = #{idx}
+                    `IDX` = #{idx}
         ]]>
     </select>
     <insert id="create" parameterType="reservationSchemeInfo">
@@ -35,7 +35,6 @@
                          `END_DT`,
                          `END_TIME`,
                          `AVAILABLE_IN_WEEKEND`,
-                         `AVAILABLE_IN_HOLIDAY`,
                          `POINT`,
                          `AMOUNT`,
                          `IN_STOCK`,
@@ -58,7 +57,6 @@
                          #{endDt},
                          #{endTime},
                          #{availableInWeekend},
-                         #{availableInHoliday},
                          #{point},
                          #{amount},
                          #{inStock},

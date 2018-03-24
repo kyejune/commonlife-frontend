@@ -50,7 +50,6 @@
                                         <small title="오늘부터 예약이 가능한 일수입니다" style="cursor: pointer;">[?]</small>
                                     </th>
                                     <th class="text-center">주말 예약</th>
-                                    <th class="text-center">휴일 예약</th>
                                     <th class="text-center">수량 제한</th>
                                     <th class="text-center">화면 표시</th>
                                     <%--<th>보기</th>--%>
@@ -73,7 +72,6 @@
                                         <td class="text-center">${scheme.endTime}</td>
                                         <td class="text-center">${scheme.activateDuration}일</td>
                                         <td class="text-center">${scheme.availableInWeekend}</td>
-                                        <td class="text-center">${scheme.availableInHoliday}</td>
                                         <td class="text-center">${scheme.maxQty}</td>
                                         <td class="text-center">${scheme.delYn}</td>
                                         <%--<td>--%>

@@ -1420,6 +1420,17 @@ public class IotInfoServiceImpl implements IotInfoService {
                         if(e.get("BT_IMG_SRC") == null) {
                             e.put("BT_IMG_SRC", iconService.getIotDefaultIcon());
                         }
+                        e.put("DEVICE_ID", e.get("MO_THINGS_ID"));
+                        // BT_RIGHT_ICON_TYPE(btRightIconType) 결정
+                        if( (e.get("BINARY_YN") != null) && (e.get("BINARY_YN").equals("Y")) ) {
+                            if( e.get("STS_CNT").equals(new Integer(1)) ) {
+                                e.put("BT_RIGHT_ICON_TYPE", "button");
+                            } else {
+                                e.put("BT_RIGHT_ICON_TYPE", "detail");
+                            }
+                        } else {
+                            e.put("BT_RIGHT_ICON_TYPE", "detail");
+                        }
                         break;
                     case "MB01702":
                         e.put("BT_TYPE", "automation");
@@ -1434,6 +1445,9 @@ public class IotInfoServiceImpl implements IotInfoService {
                         if(e.get("BT_IMG_SRC") == null) {
                             e.put("BT_IMG_SRC", iconService.getIconAutomationDefault());
                         }
+                        // 자동화는 모두 버튼 모양
+                        e.put("BT_RIGHT_ICON_TYPE", "button");
+                        e.put("BT_RIGHT_TEXT", "실행");
                         break;
                     case "MB01703":
                         e.put("BT_TYPE", "information");
@@ -1452,19 +1466,6 @@ public class IotInfoServiceImpl implements IotInfoService {
                     default:
                         e.put("BT_TYPE", "unknown");
                         break;
-                }
-            }
-
-            // BT_RIGHT_ICON_TYPE(btRightIconType) 결정
-            if( e.get("BT_TYPE") != null && e.get("BT_TYPE").equals("device") ) {
-                if( (e.get("BINARY_YN") != null) && (e.get("BINARY_YN").equals("Y")) ) {
-                    if( e.get("STS_CNT").equals(new Integer(1)) ) {
-                        e.put("BT_RIGHT_ICON_TYPE", "button");
-                    } else {
-                        e.put("BT_RIGHT_ICON_TYPE", "detail");
-                    }
-                } else {
-                    e.put("BT_RIGHT_ICON_TYPE", "detail");
                 }
             }
         }
@@ -1557,6 +1558,8 @@ public class IotInfoServiceImpl implements IotInfoService {
         }
 
         for(Map<String, Object>e : resultData) {
+            e.put("IMG_SRC", iconService.getIok2ClIcon((String)e.get("IMG_SRC")));
+
             // 사용하지 않은 값 삭제
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
@@ -1564,11 +1567,15 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultDeviceList(List<Map<String, Object>> resultData) {
+        String imgSrc;
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
         }
 
         for (Map<String, Object> e : resultData) {
+            imgSrc = (String)e.get("IMG_SRC");
+            e.put("IMG_SRC", iconService.getIok2ClIcon(imgSrc));
+
             // MO_THINGS_NM --> DEVICE_NM로 변환
             this.replaceMapKeyIfExisted(e, "MO_THINGS_NM", "DEVICE_NM" );
             // MO_THINGS_ID --> DEVICE_ID로 변환
@@ -1597,6 +1604,7 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultDeviceDetailList(List<Map<String, Object>> resultData) {
+        String imgSrc;
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
         }
@@ -1613,26 +1621,52 @@ public class IotInfoServiceImpl implements IotInfoService {
             this.removeMapKeyIfExisted(e, "HOME_ID");
             this.removeMapKeyIfExisted(e, "KIND_CD");
             this.removeMapKeyIfExisted(e, "THINGS_ID");
+
+            imgSrc = (String)e.get("IMG_SRC");
+            if( imgSrc != null && !"".equals(imgSrc)) {
+                e.put("IMG_SRC", iconService.getIok2ClIcon(imgSrc));
+            }
         }
     }
 
     private void remapResultRoomOrDeviceCategoryList(List<Map<String, Object>> resultData) {
+        String imgSrc;
+        String cateCd; // DEVICE CATEGORY
+        String typeCd; // ROOM TYPE
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
         }
 
         for (Map<String, Object> e : resultData) {
+            imgSrc = (String)e.get("IMG_SRC");
+            typeCd = (String)e.get("TYPE_CD");
+            cateCd = (String)e.get("CATE_CD");
+
+            if( imgSrc == null && typeCd != null ) {
+                e.put("IMG_SRC", iconService.getIconFromRoomType( typeCd ));
+            } else if( imgSrc == null && cateCd != null ) {
+                e.put("IMG_SRC", iconService.getIconFromDeviceCategory( cateCd ));
+            } else {
+                e.put("IMG_SRC", iconService.getIok2ClIcon( imgSrc ));
+            }
+
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
         }
     }
 
     private void remapResultScenarioDetail(List<Map<String, Object>> resultData) {
+        String imgSrc;
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
         }
 
         for(Map<String, Object>e : resultData) {
+            imgSrc = (String)e.get("IMG_SRC");
+            if(imgSrc != null) {
+                e.put("IMG_SRC", iconService.getIok2ClIcon(imgSrc));
+            }
+
             // MO_THINGS_NM --> DEVICE_NM로 변환
             this.replaceMapKeyIfExisted(e, "MO_THINGS_NM", "DEVICE_NM" );
             // MO_THINGS_ID --> DEVICE_ID로 변환
@@ -1678,11 +1712,15 @@ public class IotInfoServiceImpl implements IotInfoService {
     }
 
     private void remapResultDeviceUsageHistory(List<Map<String, Object>> resultData) {
+        String imgSrc;
         if( (resultData == null) || !(resultData instanceof List) ) {
             return;
         }
 
         for(Map<String, Object>e : resultData) {
+            imgSrc = (String)e.get("IMG_SRC");
+            e.put("IMG_SRC", iconService.getIok2ClIcon(imgSrc));
+
             // 사용하지 않은 값 삭제
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
