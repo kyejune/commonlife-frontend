@@ -38,6 +38,7 @@
                                 <thead>
                                 <tr>
                                     <th class="text-center">Index</th>
+                                    <th class="text-center">예약명</th>
                                     <th class="text-center">시작일</th>
                                     <th class="text-center">시작시각</th>
                                     <th class="text-center">종료일</th>
@@ -51,6 +52,7 @@
                                 <c:forEach var="reservation" items="${reservations}">
                                     <tr>
                                         <td class="text-center">${reservation.idx}</td>
+                                        <td class="text-center">${reservation.scheme.title}</td>
                                         <td class="text-center">${reservation.startDt}</td>
                                         <td class="text-center">${reservation.startTime}</td>
                                         <td class="text-center">${reservation.endDt}</td>

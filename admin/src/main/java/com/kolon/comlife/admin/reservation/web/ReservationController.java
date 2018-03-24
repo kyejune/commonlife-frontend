@@ -40,17 +40,25 @@ public class ReservationController {
             , HttpSession session
     ) {
         List<ReservationInfo> reservations = service.index();
+
         List<Integer> ids = new ArrayList<Integer>();
-        ids.add( 6 );
-        ids.add( 7 );
+        for (ReservationInfo item :
+                reservations) {
+            ids.add( item.getParentIdx() );
+        }
 
         HashMap params = new HashMap<String, Object>();
         params.put( "ids", ids );
 
         List<ReservationSchemeInfo> schemes = schemeService.index( params );
 
-        logger.debug( ">>>>>>>>>>>>>>>> schemes: " + schemes );
-        logger.debug( ">>>>>>>>>>>>>>>> schemes size: " + schemes.size() );
+        for (ReservationInfo item : reservations) {
+            for (ReservationSchemeInfo scheme : schemes) {
+                if (scheme.getIdx() == item.getParentIdx()) {
+                    item.setScheme(scheme);
+                }
+            }
+        }
 
         mav.addObject( "reservations", reservations );
 

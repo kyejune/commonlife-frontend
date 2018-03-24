@@ -18,6 +18,9 @@ public class ReservationInfo {
     private String regDttm;
     private String updDttm;
 
+    // Relations
+    private ReservationSchemeInfo scheme;
+
     public int getIdx() {
         return idx;
     }
@@ -120,5 +123,15 @@ public class ReservationInfo {
 
     public void setUpdDttm(String updDttm) {
         this.updDttm = updDttm;
+    }
+
+    // Relations
+
+    public ReservationSchemeInfo getScheme() {
+        return scheme;
+    }
+
+    public void setScheme(ReservationSchemeInfo scheme) {
+        this.scheme = scheme;
     }
 }
