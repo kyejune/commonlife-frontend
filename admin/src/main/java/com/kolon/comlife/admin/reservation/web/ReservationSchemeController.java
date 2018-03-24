@@ -1,14 +1,10 @@
 package com.kolon.comlife.admin.reservation.web;
 
-import com.kolon.comlife.admin.board.service.BoardService;
-import com.kolon.comlife.admin.board.web.BoardController;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.admin.reservation.service.ReservationSchemeService;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,17 +13,12 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller("reservationSchemeController")
 @RequestMapping("admin/reservation-schemes/*")
 public class ReservationSchemeController {
     private static final Logger logger = LoggerFactory.getLogger(ReservationSchemeController.class);
-
-    @Resource
-    private SqlSession db;
 
     @Resource(name = "reservationSchemeService")
     private ReservationSchemeService service;
@@ -39,7 +30,7 @@ public class ReservationSchemeController {
             , ModelAndView mav
             , HttpSession session
     ) {
-        List<ReservationSchemeInfo> schemes = db.selectList( "ReservationScheme.list" );
+        List<ReservationSchemeInfo> schemes = service.index();
         mav.addObject( "schemes", schemes );
 
         return mav;
@@ -73,7 +64,6 @@ public class ReservationSchemeController {
             , @RequestParam( value = "endDt", required = false ) String endDt
             , @RequestParam( value = "endTime", required = false ) String endTime
             , @RequestParam( value = "availableInWeekend", required = false ) String availableInWeekend
-            , @RequestParam( value = "availableInHoliday", required = false ) String availableInHoliday
             , @RequestParam( value = "point", required = false ) int point
             , @RequestParam( value = "amount", required = false ) int amount
             , @RequestParam( value = "inStock", required = false ) int inStock
@@ -97,7 +87,6 @@ public class ReservationSchemeController {
         info.setEndDt( endDt );
         info.setEndTime( endTime );
         info.setAvailableInWeekend( availableInWeekend );
-        info.setAvailableInHoliday( availableInHoliday );
         info.setPoint( point );
         info.setAmount( amount );
         info.setInStock( inStock );
@@ -107,7 +96,7 @@ public class ReservationSchemeController {
         info.setMaintenanceEndAt( maintenanceEndAt );
         info.setDelYn( delYn );
 
-        db.insert( "ReservationScheme.create", info );
+        service.create( info );
 
         return "redirect:" + "/admin/reservation-schemes/list.do";
     }

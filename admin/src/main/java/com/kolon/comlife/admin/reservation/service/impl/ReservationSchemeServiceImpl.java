@@ -5,13 +5,35 @@ import com.kolon.comlife.admin.reservation.service.ReservationSchemeService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 @Service("reservationSchemeService")
 public class ReservationSchemeServiceImpl implements ReservationSchemeService {
     @Resource(name = "reservationSchemeDAO")
-    ReservationSchemeDAO reservationSchemeDAO;
+    ReservationSchemeDAO dao;
 
-    public int createReserverationScheme(ReservationSchemeInfo info) {
-        return reservationSchemeDAO.createReserverationScheme( info );
+    @Override
+    public List<ReservationSchemeInfo> index() {
+        return dao.index();
+    }
+
+    @Override
+    public ReservationSchemeInfo show( int idx ) {
+        return dao.show( idx );
+    }
+
+    @Override
+    public int create(ReservationSchemeInfo info) {
+        return dao.create( info );
+    }
+
+    @Override
+    public int update(ReservationSchemeInfo info) {
+        return dao.update( info );
+    }
+
+    @Override
+    public int delete(ReservationSchemeInfo info) {
+        return dao.delete( info );
     }
 }
