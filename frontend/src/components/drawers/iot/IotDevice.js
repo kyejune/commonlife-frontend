@@ -205,7 +205,7 @@ class IotDevice extends Component {
         return <div className="cl-bg--lightgray">
 
             <div className="cl-iot__li--expand">
-                <IconLoader src={undefined} className="mr-1em"/>
+                <IconLoader src={this.state.icon} className="mr-1em"/>
                 <h4 className="cl__title">{ this.state.name }</h4>
                 <p className="cl__desc ml-auto uppercase">{ this.state.desc }</p>
             </div>

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="45" height="45" viewBox="0 0 45 45">
+    <defs>
+        <path id="a" d="M0 25h25V0H0z"/>
+    </defs>
+    <g fill="none" fill-rule="evenodd" transform="translate(10 10)">
+        <path fill="#006CB0" d="M2.273 25H0v-7.89c0-.663.538-1.2 1.202-1.2h1.07V25zM25 25h-2.273v-9.09h1.113c.64 0 1.16.519 1.16 1.16V25z"/>
+        <mask id="b" fill="#fff">
+            <use xlink:href="#a"/>
+        </mask>
+        <path fill="#006CB0" d="M17.273 11.364h1.818V4.545h-1.818z" mask="url(#b)"/>
+        <path fill="#006CB0" d="M22.727 7.792h-9.09L16.233 0h3.896zM2.273 20.455h20.454v-2.273H2.273zM2.273 22.727h20.454v-2.272H2.273z" mask="url(#b)"/>
+        <path fill="#F2C85B" d="M6.818 18.182h2.273v-2.273H6.818z" mask="url(#b)"/>
+        <path fill="#F2C85B" d="M9.09 15.91h2.274v-2.274H9.09zM11.364 18.182h2.272v-2.273h-2.272z" mask="url(#b)"/>
+        <path fill="#F2C85B" d="M13.636 15.91h2.273v-2.274h-2.273zM15.91 18.182h2.272v-2.273h-2.273z" mask="url(#b)"/>
+        <path fill="#F2C85B" d="M11.364 18.182h2.272v-2.273h-2.272zM6.818 18.182h2.273v-2.273H6.818z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M4.545 18.182h2.273v-2.273H4.545z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M4.545 18.182h2.273v-2.273H4.545zM6.818 15.91h2.273v-2.274H6.818z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M6.818 15.91h2.273v-2.274H6.818z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M9.09 18.182h2.274v-2.273H9.09z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M9.09 18.182h2.274v-2.273H9.09zM11.364 15.91h2.272v-2.274h-2.272z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M11.364 15.91h2.272v-2.274h-2.272z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M13.636 18.182h2.273v-2.273h-2.273z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M13.636 18.182h2.273v-2.273h-2.273zM15.91 15.91h2.272v-2.274h-2.273z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M15.91 15.91h2.272v-2.274h-2.273zM18.182 18.182h2.273v-2.273h-2.273z" mask="url(#b)"/>
+        <path fill="#FEFEFE" d="M18.182 18.182h2.273v-2.273h-2.273z" mask="url(#b)"/>
+        <path fill="#F2C85B" d="M4.545 15.91h2.273v-2.274H4.545zM18.182 15.91h2.273v-2.274h-2.273z" mask="url(#b)"/>
+        <path fill="#006CB0" d="M19.318 11.364H5.682a3.409 3.409 0 0 0-3.41 3.409v7.954h2.273v-7.954c0-.628.51-1.137 1.137-1.137h13.636c.628 0 1.137.509 1.137 1.137v7.954h2.272v-7.954a3.409 3.409 0 0 0-3.409-3.41" mask="url(#b)"/>
+    </g>
+</svg>

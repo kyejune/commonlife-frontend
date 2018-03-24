@@ -17,7 +17,7 @@ class LiOfToggle extends Component {
 
         return (
             <li>
-                <IconLoader className="cl__thumb--rounded" src={undefined}/>
+                <IconLoader className="cl__thumb--rounded" src={this.props.icon}/>
                 <div>
                     <h4 className="cl__title">{this.props.name}</h4>
                     {this.props.desc&&

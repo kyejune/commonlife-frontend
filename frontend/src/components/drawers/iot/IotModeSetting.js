@@ -62,9 +62,12 @@ class IotModeSetting extends Component {
 
         let sensorMore, deviceMore;
 
+        let icon;
+
         // 모드 편집 모드
         if ( isMode ) {
             scna = modeData.scna[0];
+            icon = scna.icon;
 
             sensorMore = <span className="ml-auto">설정불가</span>;
             deviceMore = <span className="ml-auto">설정가능</span>;
@@ -72,6 +75,7 @@ class IotModeSetting extends Component {
 
             // 일반 센서추가
             Sensors = modeData.scnaIfThings.map( (item, index)=>{
+                console.log( '일반 센서추가:', item );
                 if( item.deviceType && item.deviceType === 'button')
                     return <LiOfToggle key={index} icon={item.imgSrc} name={item.stsNm} to={`${pathname}/sensor/0`}/>
                 else
@@ -104,9 +108,9 @@ class IotModeSetting extends Component {
             //// 디바이스 추가
             Devices = modeData.scnaThings.map( (item, index)=>{
                 if( item.deviceType && item.deviceType === 'button')
-                    return <LiOfToggle key={index} src={undefined} name={item.deviceNm} />
+                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.deviceNm} />
                 else
-                    return <LiOfCtrl key={index} src={undefined} name={item.deviceNm} />
+                    return <LiOfCtrl key={index} icon={item.imgSrc} name={item.deviceNm} />
             })
 
 
@@ -123,7 +127,7 @@ class IotModeSetting extends Component {
 
                 <header className="cl-mode-setting__header">
                     <div className={classNames("cl-iot-mode__button", {"cl-iot-mode__button--expand": !isMode } )}>
-                        <IconLoader src={undefined}/>
+                        <IconLoader src={icon}/>
                         { isMode ?
                             <span className="cl-name">{scna.scnaNm}</span> :
                             <input className="cl-name pr-04em" type="text" placeholder="시나리오" value={name}

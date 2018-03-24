@@ -54,8 +54,6 @@ class IotDeviceCategory extends Component {
 
 	render () {
 
-		console.log( 'DEVICE DATA 새로 그릑');
-
 		const DeviceList = this.state.deviceData.map( ( data, index )=> {
 
 			switch( this.action ){
@@ -63,17 +61,19 @@ class IotDeviceCategory extends Component {
 					if( data.deviceType === 'button' )
 						return <LiOfToggle key={index} name={data.thingsNm} desc={data.cateNm}
 										   onSwitch={ this.toggleDevice }
+										   icon={data.imgSrc}
 										   data={data}
 						/>;
 					else
 						return <LiOfCtrl key={index} name={data.thingsNm} desc={data.cateNm}
+                                         icon={data.imgSrc}
 										 to={{ pathname: `${this.props.location.pathname}/device/${data.deviceId}`}}
 
 						/>;
 					break;
 
 				case 'add':
-                    return <LiOfCheck key={index} name={data.thingsNm} desc={data.cateNm}/>;
+                    return <LiOfCheck key={index} name={data.thingsNm} icon={data.imgSrc} desc={data.cateNm}/>;
 					break;
 			}
 
