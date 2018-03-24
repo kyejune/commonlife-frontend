@@ -62,6 +62,11 @@ class HomeIoT extends Component {
 				run:'iot-device-detail',
 			},
 
+			// 인포메이션
+			info:{
+				info:'iot-information-detail',
+			},
+
 			// MyIot추가 버튼 클릭
 			add:{
 				add:'iot-add',
@@ -152,6 +157,10 @@ class HomeIoT extends Component {
             <DrawerWrapper drawer="iot-mode" title="Mode 편집" back >
                 <IotModeEditor/>
 			</DrawerWrapper>
+
+            <DrawerWrapper drawer="iot-information-detail" title="인포메이션" back >
+                <div>상세정보</div>
+            </DrawerWrapper>
 
             {/* IoT 모드 설정 변경 || 모드 추가 > 시나리오 */}
             <DrawerWrapper drawer="iot-mode-detail" title="생성/설정 변경" back >

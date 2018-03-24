@@ -8,6 +8,7 @@ import IotIcOff from 'images/io-t-i-con-b-off@3x.png';
 import Store from "../../scripts/store";
 import classNames from "classnames";
 import IconLoader from "./IconLoader";
+import {Link, withRouter} from "react-router-dom";
 
 class IotBtnLg extends Component {
 
@@ -19,29 +20,46 @@ class IotBtnLg extends Component {
         Store.ipo = {targetValue: true, ...deviceInfo};
     }
 
+    // device && button
+    onClickSwitch=( bool, data )=>{
+        console.log( 'switch:', bool, data );
+    }
+
+    // automation
+    onClickAutomaion=( data )=>{
+        console.log( 'direct:', data );
+    }
+
+
     render() {
 
         const {
-            btImgSrc, btLeft,
+            btImgSrc, btLeft, deviceId,
             btRightIcon, btRightIconType, btRightText, btSubTitle,
             btTitle, btTitleUnit, btType,
         } = this.props;
 
         const off = (btType === 'device' && btRightText === 'off');
 
+        let link;
+        let clickFunc;
         let BottomLeft, BottomRight;
         switch (btType) {
             case "information":
                 BottomLeft = <div className="cl-bold">{btLeft}</div>;
-                BottomRight = <div>{btRightText}</div>
+                BottomRight = <div>{btRightText}</div>;
+                link = `${this.props.location.pathname}/info/0`;
                 break;
 
             case "device":
                 let Src;
-                if( btRightIconType !== "button" )
+                if( btRightIconType !== "button" ) {
                     Src = IotIcSet;
-                else
-                    Src = off?IotIcOff:IotIcOn;
+                    link = `${this.props.location.pathname}/ctrl/device/${deviceId}`;
+                }else {
+                    Src = off ? IotIcOff : IotIcOn;
+                    clickFunc = this.onClickSwitch;
+                }
 
 
                 BottomLeft = <div className="cl-bold">{btLeft}</div>;
@@ -56,9 +74,11 @@ class IotBtnLg extends Component {
                 break;
         }
 
+
+
         return (
 
-            <button type="button" className={classNames("cl-my-iot__button",
+            <button className={classNames("cl-my-iot__button",
                 {"cl-my-iot__button--default": btType === "information"},
                 {"cl-my-iot__button--set": btRightIconType === "detail"},
                 {"cl-my-iot__button--automation": btType === "automation"},
@@ -84,10 +104,14 @@ class IotBtnLg extends Component {
                     {BottomLeft}
                     {BottomRight}
                 </div>
+
+                {link&&
+                <Link to={link} className="cl--full--abs"/>
+                }
             </button>
 
         )
     }
 }
 
-export default IotBtnLg;
+export default withRouter( IotBtnLg );

@@ -22,10 +22,10 @@ class IotDevice extends Component {
     constructor(props){
         super( props );
 
-        const { action, option3 } = this.props.match.params;
+        const { action, option2, option3 } = this.props.match.params;
 
         this.state = {
-            deviceId: option3,
+            deviceId: option3||option2,
             name:'기기명',
             desc:'기기설명',
             options:[],

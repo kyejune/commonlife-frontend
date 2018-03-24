@@ -18,7 +18,9 @@ class IconLoader extends Component {
 
     render() {
         return (
-            <img src={ this.state.src || this.state.defaultSrc } width={this.props.width} height={this.props.height} alt="아이콘이미지" onError={ this.loadFail } className={ this.props.className }/>
+            <img src={ this.state.src || this.state.defaultSrc } width={this.props.width} height={this.props.height}
+                 alt={`아이콘이미지:${this.props.src}`}
+                 onError={ this.loadFail } className={ this.props.className }/>
         );
     }
 }
