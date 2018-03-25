@@ -48,7 +48,12 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 			throws Exception {
 
 		String url = request.getRequestURI();
-
+		
+		// 1. 모든 OPTIONS 요청에 대해 api_key 체크하지 않음
+		if ( request.getMethod().equals("OPTIONS") ) {
+			response.setStatus(HttpServletResponse.SC_OK);
+			return true;
+		}
 
 		String[] arrPermitUri = {"MobileUserController", "MobileUserCertNoController"};
 		String[] arrLimitUri = {"mobileUserLogin", "mobileUserLogout", "mobileUserLoginConfirm"};
@@ -73,15 +78,13 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 
 
 
-
-
 		Map<String, String> mHeader = getHeadersInfo(request);
 		ObjectMapper mapper = new ObjectMapper();
 
 		ResultSetMap resMap = new ResultSetMap();
 		resMap.putNoLowerCase("LOGIN_YN", "N");
 		// ykim added
-		resMap.put("msg", "토큰이 더이상 유효하지 않습니다. 다시 로그인 하세요.");  // todo: message 옮길 것
+		resMap.put("msg", "로그인이 해제되었습니다. 다시 로그인 하세요.");  // todo: message 옮길 것
 		response.setStatus( HttpStatus.UNAUTHORIZED.value() );
 		//
 		String strResJson = new ObjectMapper().writeValueAsString(resMap);
