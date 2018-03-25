@@ -29,10 +29,12 @@
                 `POST`
         WHERE
                 `DEL_YN` = 'N'
+        ORDER BY POST_IDX DESC -- 생성기준, 역순으로 표시
         LIMIT
                 #{limit}
         OFFSET
                 #{offset}
+
     ]]>
     </select>
 

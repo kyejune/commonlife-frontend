@@ -119,6 +119,7 @@ public class PostController {
         postFilesList = (List)args.get( "postFiles" );
         logger.debug(">>> Post Files: " +  postFilesList);
         if( (postFilesList != null) && (postFilesList.size() > 0) ) {
+            logger.debug(">>> Post Files Count: " +  postFilesList.size());
             List<PostFileInfo> postFiles = postFileService.bindPostToPostFiles( result.getPostIdx(), (List<Integer>) args.get( "postFiles" ) );
             result.setPostFiles( postFiles );
         }
