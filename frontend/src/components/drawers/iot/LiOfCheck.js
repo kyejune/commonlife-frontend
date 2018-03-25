@@ -28,7 +28,7 @@ class LiOfCheck extends Component {
 
     render() {
 
-        console.log( 'LiOfCheck render:', this.props.name, this.state.checked );
+        // console.log( 'LiOfCheck render:', this.props.name, this.state.checked );
 
         return (
             <li className={ classNames( "cl-iot-device__li--checkbox", { "cl--checked":this.state.checked } ) }>

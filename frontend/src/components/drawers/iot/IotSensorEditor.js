@@ -12,7 +12,7 @@ class IotSensorEditor extends Component {
         super(props);
 
         this.state = {
-            items: [{name:'특정시간'}, {name:'특정온도'}, {name:'특정일자'}],
+            items: [],//[{name:'특정시간'}, {name:'특정온도'}, {name:'특정일자'}],
             isMultipleCheck:false,
         }
     }
@@ -29,6 +29,7 @@ class IotSensorEditor extends Component {
         return (
             <div className="cl-bg--dark">
 
+                {/* 생성하려고 모아둔 아이템 출력 */}
                 <CheckRowList
                     onChange={ this.onChangeCheckList }
                     items={this.state.items}

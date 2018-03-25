@@ -57,11 +57,8 @@ class IotDeviceCategory extends Component {
 
 	// 추가된 기기 전송
     addDevices=()=>{
-		Iot.addDevices( this.state.addingList, success=>{
-			if( success )
-				this.loadData();
-			else
-				alert( '기기 추가에 실패하였습니다. 잠시 후 다시 시도해주시기 바랍니다.' );
+		Iot.setExposeItemOfDashboard( this.state.addingList, ()=>{
+			this.loadData();
 		});
 	}
 

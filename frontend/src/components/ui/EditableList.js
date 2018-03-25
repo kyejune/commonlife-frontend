@@ -63,7 +63,6 @@ class EditableList extends Component {
             <span className="ml-auto cl__handle"/>
         );
 
-        console.log('this.state.checkeds: ', this.state.checkeds );
 
         const SortableItem = SortableElement(({ value }) =>
             <li>

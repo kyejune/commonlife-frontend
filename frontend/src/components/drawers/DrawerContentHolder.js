@@ -3,10 +3,9 @@ import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import {Button, Toolbar} from 'react-md';
 import {withRouter} from 'react-router';
-import {observer} from 'mobx-react';
-import {HashRouter} from 'react-router-dom';
 import Store from "scripts/store";
 import closeSrc from 'images/back@3x.jpg';
+import classNames from 'classnames';
 
 class DrawerContentHolder extends Component {
 
@@ -94,7 +93,11 @@ class DrawerContentHolder extends Component {
                     children={ CustomHeader }
                 />
 
-                <section className="dialogs__content">
+                <section className={ classNames("dialogs__content",
+                    {"cl-bg--light":this.props.light },
+                    {"cl-bg--lightgray":this.props.lightgray },
+                    {"cl-bg--darkgray":this.props.darkgray }
+                    )}>
 
                     {childrenWithProps}
 
