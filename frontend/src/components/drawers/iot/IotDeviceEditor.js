@@ -11,7 +11,7 @@ class IotDeviceEditor extends Component {
         super(props);
 
         this.state = {
-            items: [{name:'공부방 조명'}, {name:'주방조명'}, {name:'보일러'}],
+            items: [],// [{name:'공부방 조명'}, {name:'주방조명'}, {name:'보일러'}],
             isMultipleCheck:false,
         }
     }

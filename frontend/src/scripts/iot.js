@@ -124,20 +124,20 @@ export default {
 
 
     /* 기기 추가!! */
-    addDevices( addingIds, callback ){
-        const data = addingIds.map( id=>{
-           return { myIotId: id };
-        });
-
-        axios.post( `${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, { data: data } )
-            .then( response => {
-                this.getMy(); // 추가되면 대시보드 my목록 재로딩
-                callback( true );
-            })
-            .catch( response => {
-               callback( false );
-            });
-    },
+    // addDevices( addingIds, callback ){
+    //     const data = addingIds.map( id=>{
+    //        return { myIotId: id };
+    //     });
+    //
+    //     axios.post( `${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, { data: data } )
+    //         .then( response => {
+    //             this.getMy(); // 추가되면 대시보드 my목록 재로딩
+    //             callback( true );
+    //         })
+    //         .catch( response => {
+    //            callback( false );
+    //         });
+    // },
 
     getSensors() {
 
@@ -185,6 +185,40 @@ export default {
             });
     },
 
+
+    /* 시나리오, 가치정보의 노출 가능한 놈들 가져오기 : 홈 화면에 빼는 용도 */
+    getExposableListOfDashboard( type, callback ){
+        //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/myiot/automation/available
+        //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/myiot/valueInfo/available
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot/${type}/available`)
+            .then(response => {
+                callback( response.data.data );
+            });
+    },
+
+    /* 26. MyIOT 편집 화면에서 '기기/시나리오/정보'의 신규등록: 홈화면에 노출 추가 */
+    setExposeItemOfDashboard( ids, callback ){
+        const map = ids.map( id => {
+            return { myIotId:id }
+        });
+
+        axios.post(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, { data: map })
+            .then( response=>{
+               callback();
+            });
+    },
+
+
+    //{{API_HOST}}/iot/complexes/125/homes/1/automation/conditions
+    //{{API_HOST}}/iot/complexes/125/homes/1/automation/actors
+
+    /* 시나리오 생성시 사용할 추가할수 있는 기기, 센서*/
+    getAddibleItemOfScenario( type, callback ){
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${type}`)
+            .then(response => {
+                callback(response.data);
+            });
+    },
 
 
     /* 모드 상세 가져오기 */

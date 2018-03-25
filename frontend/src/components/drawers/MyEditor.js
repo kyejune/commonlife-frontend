@@ -26,7 +26,6 @@ class MyEditor extends Component {
     }
 
     onCheck = ( values )=>{
-        console.log( values );
 
         let list = values.map( item=>{
            return  item.btId;
@@ -77,10 +76,23 @@ class MyEditor extends Component {
                 <EditableList items={ items } onCheck={ this.onCheck } clear={ selectedLen === 0 } onAlign={ this.onAlign } />
 
 
-                <Link to={`${this.props.location.pathname}/add`} className="cl-iot-add__button--light">
-                    <img src={addSrc} alt="센서추가" width="40" height="40"/>
-                    <p>My IoT 추가</p>
-                </Link>
+                <div className="cl-flex">
+                    <Link to={`${this.props.location.pathname}/add-device`} className="cl-iot-add__button--light">
+                        <img src={addSrc} alt="노출될 기기 추가" width="40" height="40"/>
+                        <p>기기 추가</p>
+                    </Link>
+
+                    <Link to={`${this.props.location.pathname}/add-auto`} className="cl-iot-add__button--light">
+                        <img src={addSrc} alt="센서추가" width="40" height="40"/>
+                        <p>자동화 추가</p>
+                    </Link>
+
+                    <Link to={`${this.props.location.pathname}/add-info`} className="cl-iot-add__button--light">
+                        <img src={addSrc} alt="센서추가" width="40" height="40"/>
+                        <p>가치정보 추가</p>
+                    </Link>
+                </div>
+
 
 
                 <footer className={ classNames( "cl-opts__footer", {"cl-opts__footer--hide":selectedLen === 0 })  }>

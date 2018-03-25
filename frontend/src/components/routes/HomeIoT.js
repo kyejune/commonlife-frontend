@@ -16,14 +16,13 @@ import {observer} from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
 import IotDevice from "../drawers/iot/IotDevice";
 import IotModeSetting from "../drawers/iot/IotModeSetting";
-import IotSensor from "../drawers/iot/IotSensor";
-import ChooseAddingIot from "../drawers/iot/ChooseAddingIot";
+import IotAddingSensorList from "../drawers/iot/IotAddingSensorList";
 import IotDeviceCategory from "../drawers/iot/IotDeviceCategory";
 import IotDeviceList from "../drawers/iot/IotDeviceList";
 import IotSensorEditor from "../drawers/iot/IotSensorEditor";
 import IotDeviceEditor from "../drawers/iot/IotDeviceEditor";
-import IotSensorList from "../drawers/iot/IotSensorList";
 import MyEditor from "../drawers/MyEditor";
+import ExposableEditor from "../drawers/iot/ExposableEditor";
 
 class HomeIoT extends Component {
 
@@ -70,17 +69,15 @@ class HomeIoT extends Component {
 				info:'iot-information-detail',
 			},
 
-			// MyIot추가 버튼 클릭
+			// MyIot추가 버튼 클릭, 이미 있는 목록 중 노출될 녀석들 관리
 			my:{
 				my:'iot-my-editor',
-				add:'iot-device-category',
+				'add-device':'iot-device-category',
+				'add-auto':'iot-adding-automation',
+				'add-info':'iot-adding-information',
                 sensor:'iot-sensor',
                 device:'iot-device',
-				category:'iot-device-category',
-				'edit-sensor':'iot-sensor-editor',
-				'edit-device':'iot-device-editor',
-				'add-device':'iot-device-category',
-				'add-sensor':'iot-sensor-list',
+				category:'iot-device-category'
 			},
 
 			// Footer에 붙어있는 파란 ctrl버튼 클릭
@@ -92,6 +89,10 @@ class HomeIoT extends Component {
 			// 시나리오 +
             scenario:{
                 scenario:'iot-mode-detail',
+                'edit-sensor':'iot-sensor-editor',
+                'edit-device':'iot-device-editor',
+                'add-device':'iot-device-category',
+                'add-sensor':'iot-sensor-list',
 			}
 		};
 
@@ -184,7 +185,7 @@ class HomeIoT extends Component {
                 <IotModeSetting/>
             </DrawerWrapper>
 
-            {/* 기기 카테고리 목록 */}
+            {/* 기기 카테고리 목록, 경로에 따라 풀 리스트나 추가 가능한 리스트로 나눠서 보여줌 */}
             <DrawerWrapper drawer="iot-device-category" title="기기 카테고리" back className="cl-bg--light">
                 <IotDeviceCategory/>
             </DrawerWrapper>
@@ -196,9 +197,19 @@ class HomeIoT extends Component {
 
             {/* Iot 센서 목록 */}
             <DrawerWrapper drawer="iot-sensor-list" title="IoT 센서 추가" back >
-                <IotSensorList/>
+                <IotAddingSensorList/>
             </DrawerWrapper>
 
+
+            {/* 밖에 끄집어낼 시나리오 목록 */}
+            <DrawerWrapper drawer="iot-adding-automation" title="시나리오 관리" back darkgray >
+                <ExposableEditor/>
+            </DrawerWrapper>
+
+            {/* 밖에 끄집어낼 가치정보 목록 */}
+            <DrawerWrapper drawer="iot-adding-information" title="가치정보 관리" back darkgray >
+                <ExposableEditor/>
+            </DrawerWrapper>
 
 			{/* 기기 상세 */}
             <DrawerWrapper drawer="iot-device-detail" title="기기 상세" back >
@@ -221,7 +232,7 @@ class HomeIoT extends Component {
             </DrawerWrapper>
 
             {/* Iot 편집 */}
-            <DrawerWrapper drawer="iot-my-editor" title="My IoT 편집" back >
+            <DrawerWrapper drawer="iot-my-editor" title="My IoT 관리" back >
                 <MyEditor/>
             </DrawerWrapper>
 
