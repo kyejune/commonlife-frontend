@@ -6,6 +6,7 @@ import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.post.service.PostService;
 import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.postFile.service.PostFileService;
+import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.model.UserInfo;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
@@ -64,7 +65,6 @@ public class PostController {
         postParams.put( "cmplxId", complexId );
 
         // 포스트 목록 추출
-//        List<PostInfo> postInfoList = postService.getPostList( paginationParams );
         List<PostInfo> postInfoList = postService.getPostListByComplexId( postParams );
 
         // USR_ID 추출
@@ -75,15 +75,19 @@ public class PostController {
 
         if( userIds.size() > 0 ) {
             // 추출한 ID로 유저 정보 SELECT
-            List<UserInfo> userList = userService.getUserListById( userIds );
+            List<PostUserInfo> userList = userService.getUserListForPostById( userIds );
+            Map<Integer, PostUserInfo> userListMap = new HashMap();
+
+            // 사용자 정보 Map 생성
+            for( PostUserInfo user : userList ) {
+                userListMap.put(Integer.valueOf(user.getUsrId()), user);
+            }
 
             // 유저 정보 바인딩
             for( PostInfo post : postInfoList ) {
-                for( UserInfo user : userList ) {
-                    if( post.getUsrId() == user.getUsrId() ) {
-                        post.setUser( user );
-                    }
-                }
+                PostUserInfo userInfo;
+                userInfo = userListMap.get( post.getUsrId() );
+                post.setUser(userInfo);
             }
         }
 

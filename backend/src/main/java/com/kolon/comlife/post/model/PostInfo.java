@@ -1,6 +1,7 @@
 package com.kolon.comlife.post.model;
 
 import com.kolon.comlife.postFile.model.PostFileInfo;
+import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.model.UserInfo;
 import org.apache.ibatis.type.Alias;
 
@@ -91,7 +92,7 @@ public class PostInfo {
     /*
         Relations
      */
-    private UserInfo user;
+    private PostUserInfo user;
     private List<PostFileInfo> postFiles = new ArrayList<PostFileInfo>();
 
     /*
@@ -106,11 +107,11 @@ public class PostInfo {
         this.postFiles = postFiles;
     }
 
-    public UserInfo getUser() {
+    public PostUserInfo getUser() {
         return user;
     }
 
-    public void setUser(UserInfo user) {
+    public void setUser(PostUserInfo user) {
         this.user = user;
     }
 }

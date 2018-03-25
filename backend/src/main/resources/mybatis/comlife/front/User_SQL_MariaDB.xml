@@ -3,20 +3,32 @@
 
 <mapper namespace="User">
 
-    <select id="selectUserList" parameterType="String" resultType="userInfo">
-        /* 공통게시판 리스트 조회 */
+    <select id="selectUserListForPostById" parameterType="java.util.List" resultType="postUserInfo">
+        /* Post에서 이용하는 사용자 목록 조회 */
         SELECT
-                *
+            USR_INFO.USR_ID,
+            USER_NM,
+            IFNULL(AVATAR_IMG_SRC, "cl_profile_default") AS IMG_SRC,
+            IFNULL(USER_ALIAS, USER_NM) AS USER_ALIAS,
+            CMPLX_NM
         FROM
-                USR_INFO
-        LIMIT
-                20
-        OFFSET
-                0
+          USR_INFO
+            LEFT JOIN
+          USR_INFO_EXT
+              ON USR_INFO.USR_ID = USR_INFO_EXT.USR_ID
+            JOIN
+          COMPLEX_M
+              ON USR_INFO.CMPLX_ID = COMPLEX_M.CMPLX_ID
+        WHERE
+            USR_INFO.USR_ID
+        IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
     </select>
 
     <select id="selectUserListById" parameterType="java.util.List" resultType="userInfo">
-        /* 공통게시판 리스트 조회 */
+        /* ID리스트로 사용자 조회 */
         SELECT
                 *
         FROM
