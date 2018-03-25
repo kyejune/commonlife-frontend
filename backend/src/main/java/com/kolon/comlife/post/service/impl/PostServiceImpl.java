@@ -30,6 +30,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<PostInfo> getPostListByComplexId(Map params) {
+        return postDAO.selectPostListByComplexId( params );
+    }
+
+    @Override
     public PostInfo setPost(PostInfo post) {
         return postDAO.insertPost(post);
     }

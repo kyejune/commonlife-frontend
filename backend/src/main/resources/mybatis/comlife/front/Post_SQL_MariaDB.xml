@@ -13,7 +13,6 @@
     </select>
 
     <select id="selectPostList" parameterType="java.util.Map" resultType="postInfo">
-    <![CDATA[
         /* 공통게시판 리스트 조회 */
         SELECT
                 *,
@@ -29,13 +28,15 @@
                 `POST`
         WHERE
                 `DEL_YN` = 'N'
+                <if test="cmplxId != null">
+                  AND CMPLX_ID=#{cmplxId}
+                </if>
         ORDER BY POST_IDX DESC -- 생성기준, 역순으로 표시
         LIMIT
                 #{limit}
         OFFSET
                 #{offset}
 
-    ]]>
     </select>
 
     <select id="selectPost" parameterType="java.util.Map" resultType="postInfo">
@@ -72,6 +73,7 @@
             `POST_TYPE`,
             `CONTENT`,
             `USR_ID`,
+            `CMPLX_ID`,
             `REG_DTTM`,
             `UPD_DTTM`
         )
@@ -80,6 +82,7 @@
             #{postType},
             #{content},
             #{usrId},
+            #{cmplxId},
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP
         )

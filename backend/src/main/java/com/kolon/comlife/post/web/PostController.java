@@ -1,12 +1,15 @@
 package com.kolon.comlife.post.web;
 
 import com.kolon.comlife.common.model.PaginateInfo;
+import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.post.service.PostService;
 import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.postFile.service.PostFileService;
 import com.kolon.comlife.users.model.UserInfo;
 import com.kolon.comlife.users.service.UserService;
+import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -38,6 +41,15 @@ public class PostController {
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PaginateInfo> getPostsInJson(HttpServletRequest request) {
+
+        AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+
+        logger.debug(">>> CmplxId: " + currUser.getCmplxId());
+        logger.debug(">>> UserId: " + currUser.getUserId());
+        logger.debug(">>> UsrId: " + currUser.getUsrId());
+
+        int complexId = currUser.getCmplxId();
+
         String page = request.getParameter( "page" );
         if( page == null ) {
             page = "1";
@@ -46,12 +58,14 @@ public class PostController {
         int limit = 20;
         int offset = limit * ( pageNum - 1 );
 
-        Map<String, Integer> paginationParams = new HashMap<String, Integer>();
-        paginationParams.put( "limit", limit );
-        paginationParams.put( "offset", offset );
+        Map<String, Integer> postParams = new HashMap<String, Integer>();
+        postParams.put( "limit", limit );
+        postParams.put( "offset", offset );
+        postParams.put( "cmplxId", complexId );
 
         // 포스트 목록 추출
-        List<PostInfo> postInfoList = postService.getPostList( paginationParams );
+//        List<PostInfo> postInfoList = postService.getPostList( paginationParams );
+        List<PostInfo> postInfoList = postService.getPostListByComplexId( postParams );
 
         // USR_ID 추출
         List<Integer> userIds = new ArrayList<Integer>();
@@ -107,20 +121,34 @@ public class PostController {
     @PostMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PostInfo> setPost(@RequestBody Map args) {
-        PostInfo newPost = new PostInfo();
-        List postFilesList;
+    public ResponseEntity<PostInfo> setPost( HttpServletRequest request,
+                                             @RequestBody Map args ) {
+        PostInfo           newPost = new PostInfo();
 
-        newPost.setUsrId( 14 );
+        List<PostFileInfo> postFiles;
+        List               postFilesIdList;
+        AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+        int          usrId = -1;
+        int          cmplxId = -1;
+
+        logger.debug(">>> CmplxId: " + currUser.getCmplxId());
+        logger.debug(">>> UserId: " + currUser.getUserId());
+        logger.debug(">>> UsrId: " + currUser.getUsrId());
+
+        usrId = currUser.getUsrId();
+        cmplxId = currUser.getCmplxId();
+
+        newPost.setUsrId( usrId );
+        newPost.setCmplxId( cmplxId );
         newPost.setPostType( (String) args.get( "postType" ) );
         newPost.setContent( (String) args.get( "content" ) );
         PostInfo result = postService.setPost( newPost );
 
-        postFilesList = (List)args.get( "postFiles" );
-        logger.debug(">>> Post Files: " +  postFilesList);
-        if( (postFilesList != null) && (postFilesList.size() > 0) ) {
-            logger.debug(">>> Post Files Count: " +  postFilesList.size());
-            List<PostFileInfo> postFiles = postFileService.bindPostToPostFiles( result.getPostIdx(), (List<Integer>) args.get( "postFiles" ) );
+        postFilesIdList = (List)args.get( "postFiles" );
+        logger.debug(">>> Post Files: " +  postFilesIdList);
+        if( (postFilesIdList != null) && (postFilesIdList.size() > 0) ) {
+            logger.debug(">>> Post Files Count: " +  postFilesIdList.size());
+            postFiles = postFileService.bindPostToPostFiles( result.getPostIdx(), (List<Integer>) args.get( "postFiles" ) );
             result.setPostFiles( postFiles );
         }
         return ResponseEntity.status( HttpStatus.OK ).body( result );
@@ -129,8 +157,23 @@ public class PostController {
     @GetMapping(
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<PostInfo> getPostInJson( @PathVariable("id") int id ) {
+    public ResponseEntity getPostInJson( HttpServletRequest request,
+                                                   @PathVariable("id") int id ) {
+        AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
         PostInfo result = postService.getPost( id );
+
+        if( result == null ) {
+            return ResponseEntity
+                    .status( HttpStatus.NOT_FOUND )
+                    .body( new SimpleErrorInfo("해당 게시물을 열람할 수 없습니다. ") );
+        }
+
+        if( currUser.getCmplxId() != result.getCmplxId() ) {
+            return ResponseEntity
+                    .status( HttpStatus.UNAUTHORIZED )
+                    .body( new SimpleErrorInfo("해당 게시물을 열람할 수 없습니다. ") );
+        }
+
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 

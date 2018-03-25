@@ -26,6 +26,13 @@
             <mvc:mapping path="/users/debug/authUserInfo" />
             <bean id="mobileSessionCheckInterceptor" class="com.kolon.common.interceptor.MobileSessionCheckInterceptor" />
         </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/posts/**" />
+            <bean id="sessionCheckPostsInterceptor" class="com.kolon.common.interceptor.MobileSessionCheckInterceptor" >
+                <property name="forceAuthTokenYN" value="#{prop_dev['forceAuthTokenYN']}" />
+                <property name="forceAuthToken" value="#{prop_dev['forceAuthToken']}" />
+            </bean>
+        </mvc:interceptor>
     </mvc:interceptors>
 
 </beans>

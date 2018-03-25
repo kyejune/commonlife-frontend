@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.kolon.common.helper.JedisHelper;
 import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.prop.SystemPropertiesMap;
 import com.kolon.common.servlet.AuthUserInfoUtil;
 //import com.kolon.common.servlet.UserInfoHttpServletRequest;
 import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
@@ -38,10 +39,22 @@ import redis.clients.jedis.Jedis;
 
 public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 
+	/* for DEVELOPMENT */
+	private final static String FORCE_AUTH_TOKEN_YN = "forceAuthTokenYN";
+	private final static String FORCE_AUTH_TOKEN = "forceAuthToken";
+	private String forceAuthTokenYN = null;
+	private String forceAuthToken = null;
 
 	private final Logger logger = LoggerFactory.getLogger(MobileSessionCheckInterceptor.class);
 	private static final JedisHelper helper = JedisHelper.getInstance();
 
+	public void setForceAuthTokenYN(String forceAuthTokenYN) {
+		this.forceAuthTokenYN = forceAuthTokenYN;
+	}
+
+	public void setForceAuthToken(String forceAuthToken) {
+		this.forceAuthToken = forceAuthToken;
+	}
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
@@ -98,6 +111,17 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		/*********************************************************************/
 		String sToken = mHeader.get("token");
 		String secretKey  ="";
+
+		// TODO: 개발 디버깅 용도입니다. 개발 완료되면 삭제 할 것
+		logger.debug("forceAuthTokenYN>>>> " + this.forceAuthTokenYN);
+		logger.debug("forceAuthToken>>>> " + this.forceAuthToken);
+		if( "Y".equals(this.forceAuthTokenYN) ) {
+			logger.debug("===== ====== ====== ====== ======");
+			logger.debug("===== DEVELOPEMENT MODE : Y =====");
+			logger.debug("===== ====== ====== ====== ======");
+			sToken = this.forceAuthToken;
+		}
+
 
 		/*********************************************************************/
 		/* Redis Token 게릿                                                                             */

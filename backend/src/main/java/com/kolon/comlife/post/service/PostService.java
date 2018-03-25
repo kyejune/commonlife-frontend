@@ -14,6 +14,8 @@ public interface PostService {
 
     public List<PostInfo> getPostList(Map params);
 
+    public List<PostInfo> getPostListByComplexId(Map params);
+
     public PostInfo setPost(PostInfo example);
 
     public PostInfo updatePost(PostInfo example);

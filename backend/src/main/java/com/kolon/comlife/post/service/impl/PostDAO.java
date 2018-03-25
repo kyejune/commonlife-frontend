@@ -34,6 +34,10 @@ public class PostDAO {
         return sqlSession.selectList( "Post.selectPostList", params );
     }
 
+    public List<PostInfo> selectPostListByComplexId(Map params) {
+        return sqlSession.selectList( "Post.selectPostList", params );
+    }
+
     public PostInfo insertPost(PostInfo post) {
         sqlSession.insert( "Post.insertPost", post );
         return sqlSession.selectOne( "Post.selectLatestPost" );
