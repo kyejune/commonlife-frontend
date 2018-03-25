@@ -182,6 +182,7 @@ public class PostController {
     )
     public ResponseEntity<PostInfo> updatePost( @PathVariable("id") int id, @RequestBody PostInfo post ) {
         post.setPostIdx( id );
+        // todo: 사용자 인증 체크 필요
         PostInfo result = postService.updatePost( post );
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
@@ -190,6 +191,7 @@ public class PostController {
             value = "/{id}"
     )
     public ResponseEntity<PostInfo> deletePost( @PathVariable("id") int id ) {
+        // todo: 사용자 인증 체크 필요
         postService.deletePost( id );
         return ResponseEntity.status( HttpStatus.OK ).body( null );
     }
