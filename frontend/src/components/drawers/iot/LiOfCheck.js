@@ -1,12 +1,34 @@
 import React, { Component } from 'react';
 import IconLoader from "../../ui/IconLoader";
-import Link from "react-router-dom/es/Link";
 import Checkbox from "../../ui/Checkbox";
+import classNames from 'classnames';
    
-class LiOfCtrl extends Component {
+class LiOfCheck extends Component {
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            checked: this.props.checked || false,
+        }
+    }
+
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            checked: nextProps.checked || false,
+        });
+    }
+
+    onChangeCheck=(bool)=>{
+        this.setState({ checked:bool });
+
+        if( this.props.onChange )
+            this.props.onChange( bool, this.props );
+    }
+
     render() {
         return (
-            <li className="cl-iot-device__li--checkbox">
+            <li className={ classNames( "cl-iot-device__li--checkbox", { "cl--checked":this.state.checked } ) }>
                 <IconLoader className="cl__thumb--rounded" src={this.props.icon}/>
                 <div>
                     <h4 className="cl__title">{ this.props.name }</h4>
@@ -15,11 +37,11 @@ class LiOfCtrl extends Component {
                     }
                 </div>
 
-                <Checkbox className="ml-auto" dark/>
+                <Checkbox className="ml-auto" onChange={this.onChangeCheck}/>
             </li>
         );
     }
 }
 
     
-export default LiOfCtrl;
+export default LiOfCheck;

@@ -100,24 +100,42 @@ export default {
     },
 
 
-    /* 공간별, 기기별 카테고리 출력 */
-    getDeviceCategories(callback) {
+    /* 공간별, 기기별 카테고리 출력
+    *  @param additional: 전체 목록 or 추가 가능한 목록
+    * */
+    getDeviceCategories( additional, callback) {
         axios.all([
-            axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/rooms/`),
-            axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/deviceCategory/`)
+            axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${ Store.homeId + (additional?'/myiot':'')}/rooms/${ additional?'available':''}`),
+            axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${ Store.homeId + (additional?'/myiot':'')}/deviceCategory/${ additional?'available':''}`)
         ]).then(axios.spread((place, device) => {
             callback(place.data.data, device.data.data);
         }));
     },
 
     /* 공간별( true, roomId), 기기별( false, cateCd )에 카테고리에 따른 기기 목록 */
-    getDevicesByCategory(isRoom, cateId, callback) {
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${isRoom ? 'rooms' : 'deviceCategory'}/${cateId}/devices`)
+    getDevicesByCategory( additional, isRoom, cateId, callback) {
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${ (additional?'myiot/':'') + (isRoom ? 'rooms' : 'deviceCategory')}/${cateId}/devices${ additional?'/available':'' }`)
             .then(response => {
                 callback(response.data.data);
             });
     },
 
+
+    /* 기기 추가!! */
+    addDevices( addingIds, callback ){
+        const data = addingIds.map( id=>{
+           return { myIotId: id };
+        });
+
+        axios.post( `${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, { data: data } )
+            .then( response => {
+                this.getMy(); // 추가되면 대시보드 my목록 재로딩
+                callback( true );
+            })
+            .catch( response => {
+               callback( false );
+            });
+    },
 
     getSensors() {
 

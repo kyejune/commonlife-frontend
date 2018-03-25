@@ -28,7 +28,7 @@ class IotModeSetting extends Component {
 
             // add 시나리오 상태
             name:'',
-
+            checkedMap:{},// 체크박스 선택된건 기억용
         }
 
     }
@@ -47,6 +47,14 @@ class IotModeSetting extends Component {
     onChangeName = (event) => {
         console.log(event.target.value);
         this.setState({name: event.target.value});
+    }
+
+    updateCheck( bool, id ){
+        let nMap = Object.assign({}, this.state.checkedMap );
+        nMap[id] = bool;
+        this.setState({
+           checkedMap: nMap,
+        });
     }
 
     render() {
@@ -69,14 +77,17 @@ class IotModeSetting extends Component {
             scna = modeData.scna[0];
             icon = scna.icon;
 
-            sensorMore = <span className="ml-auto">설정불가</span>;
-            deviceMore = <span className="ml-auto">설정가능</span>;
+            sensorMore = <span className="ml-auto"/>;
+            deviceMore = <span className="ml-auto"/>;
 
 
             // 일반 센서추가
             Sensors = modeData.scnaIfThings.map( (item, index)=>{
                 if( item.deviceType && item.deviceType === 'button')
-                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.stsNm}/>
+                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.stsNm}
+                                       checked={ this.state.checkedMap[item.deviceId] || (item.currSts === item.maxVlu) }
+                                       onSwitch={ bool => this.updateCheck( bool, item.deviceId ) }
+                                       />
                 else
                     return <LiOfCtrl key={index} icon={item.imgSrc} name={item.stsNm} to={`${pathname}/sensor/${item.deviceId}`}/>
             });
@@ -107,7 +118,10 @@ class IotModeSetting extends Component {
             // 디바이스 추가
             Devices = modeData.scnaThings.map( (item, index)=>{
                 if( item.deviceType && item.deviceType === 'button')
-                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.deviceNm} />
+                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.deviceNm}
+                                       checked={ this.state.checkedMap[item.deviceId] || (item.currSts === item.maxVlu) }
+                                       onSwitch={ bool => this.updateCheck( bool, item.deviceId ) }
+                    />
                 else
                     return <LiOfCtrl key={index} icon={item.imgSrc} name={item.deviceNm} to={`${pathname}/device/${item.deviceId}`}/>
             })

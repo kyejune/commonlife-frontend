@@ -33,7 +33,7 @@ class Switch extends Component {
 
     render() {
         return (
-            <label className={"cl-iot-switch " + this.props.className }>
+            <label className={"cl-iot-switch " + this.props.className||'' }>
                 <input type="checkbox" checked={this.state.checked} onChange={ this.onChange }/>
                 <span className="cl-iot-switch-slider"/>
             </label>

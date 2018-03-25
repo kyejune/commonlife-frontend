@@ -25,7 +25,6 @@ class LiOfToggle extends Component {
         });
     }
 
-
     onSwitch=( bool )=>{
         this.setState({
             checked: bool,

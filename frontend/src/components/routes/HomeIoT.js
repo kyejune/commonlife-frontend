@@ -72,7 +72,7 @@ class HomeIoT extends Component {
 			// MyIot추가 버튼 클릭
 			add:{
 				add:'iot-add',
-				scenario:'iot-mode-detail',
+				// scenario:'iot-mode-detail',
                 sensor:'iot-sensor',
                 device:'iot-device',
 				category:'iot-device-category',
@@ -86,6 +86,11 @@ class HomeIoT extends Component {
 			ctrl:{
 				ctrl:'iot-device-category',
 				device:'iot-device'
+			},
+
+			// 시나리오 +
+            scenario:{
+                scenario:'iot-mode-detail',
 			}
 		};
 
@@ -141,6 +146,8 @@ class HomeIoT extends Component {
                                 })
 							}
 
+
+							{/* 기기편집 및 추가 용 + */}
 							<li className="col cl-my-iot__list-item">
                                 <Link to={ { pathname:'/iot/add' } } >
 									<div className="cl-my-iot__button cl-my-iot__button--add">
@@ -148,6 +155,17 @@ class HomeIoT extends Component {
 									</div>
 								</Link>
 							</li>
+
+                            {/* 시나리오 추가 용 + */}
+                            <li className="col cl-my-iot__list-item">
+                                <Link to={ { pathname:'/iot/scenario' } } >
+                                    <div className="cl-my-iot__button cl-my-iot__button--add text-center">
+                                        <img src={IotIcAdd} alt=""/>
+                                        시나리오 추가
+                                    </div>
+                                </Link>
+                            </li>
+
 						</ul>
 					</div>
 

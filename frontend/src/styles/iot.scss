@@ -391,6 +391,10 @@
     &.cl-iot-device__li--checkbox{
         padding-top: 22px;
         padding-bottom: 22px;
+
+        &.cl--checked{
+            background-color: #E7E7E7;
+        }
     }
 }
 
