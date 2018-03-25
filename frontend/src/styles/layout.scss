@@ -163,6 +163,10 @@ body.cl-dom--added{
     left: 0;
     top: 0vh;
     border-top: 0 solid #1052a5;
+
+    &>*{
+        transform: translateZ(0);
+    }
 }
 
 .cl-fitted-box {

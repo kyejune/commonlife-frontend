@@ -15,8 +15,15 @@ class EditableList extends Component {
             items: props.items.slice(),
             checkeds:[],
         }
+    }
 
-        console.log( props.items );
+    componentWillReceiveProps(nextProps){
+        let p = { ...nextProps };
+
+        if( nextProps.clear )
+            p['checkeds'] = [];
+
+        this.setState( p );
     }
 
     onSortEnd = ({oldIndex, newIndex}) => {
@@ -35,7 +42,7 @@ class EditableList extends Component {
         if( this.props.radio ) a = [];
         else                   a = this.state.checkeds.slice();
 
-        a[index] = bool;
+        a[index] = bool?this.state.items[index]:undefined;
         this.setState( { checkeds: a } );
 
 
@@ -55,6 +62,8 @@ class EditableList extends Component {
         const Handle = SortableHandle(() =>
             <span className="ml-auto cl__handle"/>
         );
+
+        console.log('this.state.checkeds: ', this.state.checkeds );
 
         const SortableItem = SortableElement(({ value }) =>
             <li>

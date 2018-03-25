@@ -373,7 +373,7 @@
 
     .cl__handle{
         height: 45px;
-        width: 100px;
+        width: 50px;
         background-image: url("images/ic-bar-light@3x.png");
         background-size: 29px;
         background-position: right center;
@@ -781,6 +781,7 @@ footer.cl-opts__footer{
     padding: 10px 10px 8px 20px;
     transition: bottom 0.3s ease-out;
     box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.24), 0 0 4px 0 rgba(0, 0, 0, 0.12);
+    height: inherit;
 
     &.cl-opts__footer--hide{
         bottom: -50px;

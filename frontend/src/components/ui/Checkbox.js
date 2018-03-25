@@ -13,6 +13,10 @@ class Checkbox extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps){
+        this.setState( nextProps );
+    }
+
     toggle = ()=>{
         let isChecked = !this.state.checked;
         this.setState( { checked: isChecked });
@@ -22,7 +26,6 @@ class Checkbox extends Component {
     }
 
     render() {
-
         return (
             <button className={ classNames( this.props.className, 'cl__checkbox', { 'cl--checked':this.state.checked, 'cl__checkbox--light':this.props.dark } ) }
                     onClick={ this.toggle }

@@ -23,6 +23,7 @@ import IotDeviceList from "../drawers/iot/IotDeviceList";
 import IotSensorEditor from "../drawers/iot/IotSensorEditor";
 import IotDeviceEditor from "../drawers/iot/IotDeviceEditor";
 import IotSensorList from "../drawers/iot/IotSensorList";
+import MyEditor from "../drawers/MyEditor";
 
 class HomeIoT extends Component {
 
@@ -70,9 +71,9 @@ class HomeIoT extends Component {
 			},
 
 			// MyIot추가 버튼 클릭
-			add:{
-				add:'iot-add',
-				// scenario:'iot-mode-detail',
+			my:{
+				my:'iot-my-editor',
+				add:'iot-device-category',
                 sensor:'iot-sensor',
                 device:'iot-device',
 				category:'iot-device-category',
@@ -146,10 +147,9 @@ class HomeIoT extends Component {
                                 })
 							}
 
-
 							{/* 기기편집 및 추가 용 + */}
 							<li className="col cl-my-iot__list-item">
-                                <Link to={ { pathname:'/iot/add' } } >
+                                <Link to={ { pathname:'/iot/my' } } >
 									<div className="cl-my-iot__button cl-my-iot__button--add">
 										<img src={IotIcAdd} alt=""/>
 									</div>
@@ -159,10 +159,7 @@ class HomeIoT extends Component {
                             {/* 시나리오 추가 용 + */}
                             <li className="col cl-my-iot__list-item">
                                 <Link to={ { pathname:'/iot/scenario' } } >
-                                    <div className="cl-my-iot__button cl-my-iot__button--add text-center">
-                                        <img src={IotIcAdd} alt=""/>
-                                        시나리오 추가
-                                    </div>
+                                    시나리오 추가
                                 </Link>
                             </li>
 
@@ -223,9 +220,9 @@ class HomeIoT extends Component {
                 <div>구간시간</div>
             </DrawerWrapper>
 
-            {/* Iot 추가 */}
-            <DrawerWrapper drawer="iot-add" title="추가" back >
-                <ChooseAddingIot/>
+            {/* Iot 편집 */}
+            <DrawerWrapper drawer="iot-my-editor" title="My IoT 편집" back >
+                <MyEditor/>
             </DrawerWrapper>
 
 			{/* 센서 편집 */}

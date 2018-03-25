@@ -29,6 +29,7 @@ class IotDevice extends Component {
             name:'기기명',
             desc:'기기설명',
             options:[],
+            action: action,
 
             // 전송용 데이터
             updateData:{},
@@ -36,6 +37,7 @@ class IotDevice extends Component {
         }
 
         if( action === 'ctrl' ) this.props.updateTitle('상세 제어');
+        else if( action === 'my' ) this.props.updateTitle('My IoT 기기 편집');
     }
 
 
@@ -71,9 +73,17 @@ class IotDevice extends Component {
     // 즉시실행 토글버튼
     onUpdateSwitch=( bool, data )=>{
         console.log( data.data.moAttr, ": ", bool, data.data );
-        Iot.setIotToggleDevice( data.data, bool, success=>{
-            if( !success ) this.loadDeviceInformation();
-        });
+
+        // 기기제어
+        if( this.state.action === 'ctrl ') {
+            Iot.setIotToggleDevice(data.data, bool, success => {
+                if (!success) this.loadDeviceInformation();
+            });
+
+        // My Iot 편집
+        }else{
+            console.log( '편집용으로 저장' );
+        }
     }
 
 
@@ -81,12 +91,21 @@ class IotDevice extends Component {
     onChangeOthers=( value, data )=>{
         console.log( data.data.moAttr, ": ", value, data.data );
 
-        let updateData = Object.assign({}, this.state.updateData);
-        updateData['key'] = data.data;
+        // 기기제어
+        if( this.state.action === 'ctrl ') {
+            let updateData = Object.assign({}, this.state.updateData);
+            updateData['key'] = data.data;
 
-        this.setState({
-            updateData: updateData,
-        });
+            this.setState({
+                updateData: updateData,
+            });
+
+        // My Iot 편집
+        }else{
+            console.log( '편집용으로 저장' );
+        }
+
+
     }
 
 

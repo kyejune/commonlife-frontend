@@ -14,7 +14,7 @@ class LiOfCheck extends Component {
     }
 
     componentWillReceiveProps(nextProps){
-        this.setState({
+        this.setState( {
             checked: nextProps.checked || false,
         });
     }
@@ -27,6 +27,9 @@ class LiOfCheck extends Component {
     }
 
     render() {
+
+        console.log( 'LiOfCheck render:', this.props.name, this.state.checked );
+
         return (
             <li className={ classNames( "cl-iot-device__li--checkbox", { "cl--checked":this.state.checked } ) }>
                 <IconLoader className="cl__thumb--rounded" src={this.props.icon}/>
@@ -37,7 +40,7 @@ class LiOfCheck extends Component {
                     }
                 </div>
 
-                <Checkbox className="ml-auto" onChange={this.onChangeCheck}/>
+                <Checkbox className="ml-auto" checked={this.state.checked} onChange={this.onChangeCheck}/>
             </li>
         );
     }

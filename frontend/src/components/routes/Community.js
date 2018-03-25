@@ -68,7 +68,7 @@ class Community extends Component {
                                onTabChange={index => this.onTabChange(index)}>
                     <Tabs tabId="simple-tab"
                           mobile={true}
-                          className="cl-second-header"
+                          // className="cl-second-header"
                     >
                         <Tab label="feed">
                             <CommunityFeed/>
