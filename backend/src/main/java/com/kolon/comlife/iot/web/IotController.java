@@ -998,7 +998,7 @@ public class IotController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(addedButtonList);
+        return ResponseEntity.status(HttpStatus.OK).body(addedButtonList);
     }
 
     /**
@@ -1041,7 +1041,7 @@ public class IotController {
             }
         }
 
-        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(currentButtonList);
+        return ResponseEntity.status(HttpStatus.OK).body(currentButtonList);
     }
 
 
