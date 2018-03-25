@@ -17,7 +17,7 @@ class IotDeviceTabList extends Component {
 
 		const { action } = props.match.params;
 
-		Iot.getDeviceCategories( action === 'add', ( byPlace, byType )=> {
+		Iot.getDeviceCategories( action === 'my', ( byPlace, byType )=> {
 
 			this.setState( {
 				tabIndex: 0,

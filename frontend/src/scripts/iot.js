@@ -91,11 +91,13 @@ export default {
             });
     },
 
-    getMy() {
+    getMy( callback ) {
         axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`)
             .then(response => {
                 response.data.data.sort(sortBySortOrder);
                 MyIots.replace(response.data.data);
+
+                if( callback ) callback();
             });
     },
 
@@ -158,6 +160,32 @@ export default {
                 callback();
             });
     },
+
+
+    /* My Iot 정렬 변경 */
+    reAlignMyIot(map, callback) {
+        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, {data: map } )
+            .then(response => {
+                callback();
+                this.getMy();
+            });
+    },
+
+    /* My Iot 삭제 */
+    removeMyIot( ids, callback ){
+        //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/myiot/buttons/12
+
+        const deletes = ids.map( id => {
+           return axios.delete(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot/buttons/${id}`)
+        });
+
+        axios.all(deletes)
+            .then( response => {
+               this.getMy( callback );
+            });
+    },
+
+
 
     /* 모드 상세 가져오기 */
     getModeDetail(mode, callback) {

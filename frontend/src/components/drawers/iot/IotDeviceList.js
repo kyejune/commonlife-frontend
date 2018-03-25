@@ -12,7 +12,7 @@ class IotDeviceCategory extends Component {
 	constructor ( props ) {
 		super( props );
 
-		this.action = props.match.params.action;
+		const action = props.match.params.action;
 		const dId = props.match.params.option2 || props.match.params.option1;
 
 		const isRoom = !isNaN( dId ); // 숫자형이면 룸별 목록, 문자 조합이면 공간별 목록으로 구분
@@ -21,7 +21,7 @@ class IotDeviceCategory extends Component {
 			isRoom: isRoom,
 			cateId: dId,
 			deviceData: [],
-            modeAdd:this.props.match.params.action === 'add',
+            modeAdd: action === 'my',
 			addingList:[],
 		};
 
@@ -78,7 +78,7 @@ class IotDeviceCategory extends Component {
 	render () {
 		const DeviceList = this.state.deviceData.map( ( data, index )=> {
 
-			switch( this.action ){
+			switch( this.props.match.params.action ){
 				case 'ctrl':
 					if( data.deviceType === 'button' )
 						return <LiOfToggle key={index} name={data.thingsNm} desc={data.cateNm}
@@ -95,8 +95,11 @@ class IotDeviceCategory extends Component {
 						/>;
 					break;
 
-				case 'add':
-                    return <LiOfCheck key={index} name={data.mNm} icon={data.btImgSrc} desc={data.cateNm} data={data} onChange={this.onChangeAddCheck }/>;
+				case 'my':
+                    return <LiOfCheck key={index} name={data.mNm} icon={data.btImgSrc} desc={data.cateNm}
+									  data={data}
+									  checked={this.state.addingList.indexOf( data.myIotId ) >= 0 }
+									  onChange={this.onChangeAddCheck }/>;
 					break;
 			}
 
