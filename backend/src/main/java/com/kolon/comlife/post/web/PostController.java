@@ -109,11 +109,16 @@ public class PostController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<PostInfo> setPost(@RequestBody Map args) {
         PostInfo newPost = new PostInfo();
+        List postFilesList;
+
         newPost.setUsrId( 14 );
         newPost.setPostType( (String) args.get( "postType" ) );
         newPost.setContent( (String) args.get( "content" ) );
         PostInfo result = postService.setPost( newPost );
-        if( args.get( "postFiles" ) != null ) {
+
+        postFilesList = (List)args.get( "postFiles" );
+        logger.debug(">>> Post Files: " +  postFilesList);
+        if( (postFilesList != null) && (postFilesList.size() > 0) ) {
             List<PostFileInfo> postFiles = postFileService.bindPostToPostFiles( result.getPostIdx(), (List<Integer>) args.get( "postFiles" ) );
             result.setPostFiles( postFiles );
         }
