@@ -16,7 +16,7 @@
         SELECT *  FROM (
             SELECT
                 `POST`.*,
-                COUNT(POST_IDX) AS LIKES_COUNT,
+                SUM(CASE WHEN ISNULL(`LIKE`.`LIKE_IDX`) THEN 0 ELSE 1 END) AS LIKES_COUNT,
                 IF( 1 = SUM(CASE WHEN `LIKE`.`USR_ID` = #{usrId} THEN 1 ELSE 0 END), TRUE, FALSE) AS MY_LIKE_FLAG
             FROM
               `POST`
