@@ -59,10 +59,11 @@ public class PostController {
         postParams.put( "limit", LIMIT_COUNT);
         postParams.put( "pageNum", Integer.valueOf(pageNum) );
         postParams.put( "cmplxId", Integer.valueOf(complexId) );
+        postParams.put( "usrId", currUser.getUsrId() );
 
         // 포스트 목록 추출
         try {
-            paginateInfo = postService.getPostALLLLLInfoList( postParams );
+            paginateInfo = postService.getPostWithLikeInfoList( postParams );
         } catch( Exception e ) {
             logger.error(e.getMessage());
             return ResponseEntity

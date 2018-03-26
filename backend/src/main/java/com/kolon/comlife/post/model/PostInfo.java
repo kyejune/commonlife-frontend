@@ -90,9 +90,21 @@ public class PostInfo {
         return likesCount;
     }
 
+    public void setLikesCount(int likesCount) {
+        this.likesCount = likesCount;
+    }
+
+    public boolean isMyLikeFlag() {
+        return myLikeFlag;
+    }
+
+    public void setMyLikeFlag(boolean myLikeFlag) {
+        this.myLikeFlag = myLikeFlag;
+    }
+
     /*
-        Relations
-     */
+            Relations
+         */
     private PostUserInfo user;
     private List<PostFileInfo> postFiles = new ArrayList<PostFileInfo>();
 

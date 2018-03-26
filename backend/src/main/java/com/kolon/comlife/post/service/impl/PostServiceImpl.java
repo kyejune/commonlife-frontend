@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PaginateInfo getPostALLLLLInfoList(Map params) throws Exception {
+    public PaginateInfo getPostWithLikeInfoList(Map params) throws Exception {
         List<PostInfo>             postInfoList;
         List<Integer>              userIds;
         List<PostUserInfo>         userList;

@@ -5,6 +5,7 @@ import com.kolon.comlife.like.model.LikeInfo;
 import com.kolon.comlife.like.model.LikeStatusInfo;
 import com.kolon.comlife.like.service.LikeService;
 import com.kolon.comlife.post.web.PostController;
+import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.model.UserInfo;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
@@ -47,11 +48,11 @@ public class LikeController {
 
         if( userIds.size() > 0 ) {
             // 추출한 ID로 유저 정보 SELECT
-            List<UserInfo> userList = userService.getUserListById( userIds );
+            List<PostUserInfo> userList = userService.getUserListForPostById( userIds );
 
             // 유저 정보 바인딩
             for( LikeInfo like : likes ) {
-                for( UserInfo user : userList ) {
+                for( PostUserInfo user : userList ) {
                     if( like.getUsrId() == user.getUsrId() ) {
                         like.setUser( user );
                     }

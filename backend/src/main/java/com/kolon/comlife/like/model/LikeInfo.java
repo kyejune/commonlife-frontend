@@ -1,5 +1,6 @@
 package com.kolon.comlife.like.model;
 
+import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.model.UserInfo;
 import org.apache.ibatis.type.Alias;
 
@@ -13,7 +14,7 @@ public class LikeInfo {
     private String regDttm;
     private String updDttm;
 
-    private UserInfo user;
+    private PostUserInfo user;
 
     public int getLikeIdx() {
         return likeIdx;
@@ -71,11 +72,11 @@ public class LikeInfo {
         this.updDttm = updDttm;
     }
 
-    public UserInfo getUser() {
+    public PostUserInfo getUser() {
         return user;
     }
 
-    public void setUser(UserInfo user) {
+    public void setUser(PostUserInfo user) {
         this.user = user;
     }
 

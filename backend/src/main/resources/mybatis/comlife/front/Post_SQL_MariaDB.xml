@@ -13,30 +13,28 @@
     </select>
 
     <select id="selectPostList" parameterType="java.util.Map" resultType="postInfo">
-        /* 공통게시판 리스트 조회 */
-        SELECT
-                *,
-                (
-                    SELECT
-                            COUNT( * )
-                    FROM
-                            `LIKE`
-                    WHERE
-                            `PARENT_IDX` = `POST_IDX`
-                ) as LIKES_COUNT
-        FROM
-                `POST`
-        WHERE
-                `DEL_YN` = 'N'
+        SELECT *  FROM (
+            SELECT
+                `POST`.*,
+                COUNT(POST_IDX) AS LIKES_COUNT,
+                IF( 1 = SUM(CASE WHEN `LIKE`.`USR_ID` = #{usrId} THEN 1 ELSE 0 END), TRUE, FALSE) AS MY_LIKE_FLAG
+            FROM
+              `POST`
+                LEFT JOIN
+              `LIKE`
+                ON  `POST`.`POST_IDX` = `LIKE`.`PARENT_IDX`  AND `LIKE`.`DEL_YN` = "N"
+            WHERE
+                `POST`.`DEL_YN` = 'N'
                 <if test="cmplxId != null">
                   AND CMPLX_ID=#{cmplxId}
                 </if>
-        ORDER BY POST_IDX DESC -- 생성기준, 역순으로 표시
+            GROUP BY POST_IDX ) AS POST_LIST
+        ORDER BY
+            POST_IDX DESC -- 생성기준, 역순으로 표시
         LIMIT
-                #{limit}
+            #{limit}
         OFFSET
-                #{offset}
-
+            #{offset}
     </select>
 
     <select id="selectPost" parameterType="java.util.Map" resultType="postInfo">

@@ -11,5 +11,6 @@ public interface LikeService {
     public boolean hasLike( int parentIdx, int usrIdx );
 
     public LikeStatusInfo addLike(int parentIdx, int usrId );
+
     public LikeStatusInfo cancelLike( int parentIdx, int usrId );
 }

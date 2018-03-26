@@ -12,7 +12,7 @@ public interface PostService {
 
     PostInfo getPostById(int id );
 
-    PaginateInfo getPostALLLLLInfoList(Map params)  throws Exception ;
+    PaginateInfo getPostWithLikeInfoList(Map params)  throws Exception ;
 
     List<PostInfo> getPostList(Map params);
 
