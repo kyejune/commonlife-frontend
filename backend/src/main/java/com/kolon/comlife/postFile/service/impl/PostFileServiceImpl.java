@@ -37,8 +37,8 @@ public class PostFileServiceImpl implements PostFileService {
     }
 
     @Override
-    public List<PostFileInfo> bindPostToPostFiles( int postIdx, List<Integer> postFileIdxs ) {
-        return postFileDAO.bindPostToPostFiles( postIdx, postFileIdxs );
+    public List<PostFileInfo> bindPostToPostFiles( int postIdx, List<Integer> postFileIdxs, int usrId ) {
+        return postFileDAO.bindPostToPostFiles( postIdx, postFileIdxs, usrId);
     }
 
     @Override

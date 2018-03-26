@@ -23,7 +23,7 @@
                 </foreach>
             </when>
             <otherwise>
-                1 != 1 -- 조건에 해당하지 않으면 실패
+                1 != 1 -- 상기 조건 중에 해당하지 않으면 반드시 실패
             </otherwise>
         </choose>
     </select>
@@ -63,16 +63,24 @@
     <update id="bindPostToPostFiles" parameterType="java.util.Map">
         UPDATE  `POST_FILE`
         SET     `POST_IDX` =  #{postIdx}
-        <if test="postFileIdx != null">
-            WHERE   `POST_FILE_IDX` =   #{postFileIdx}
-        </if>
-        <if test="postFileIdxs != null">
-            WHERE   `POST_FILE_IDX`
-                    IN
-                    <foreach collection="postFileIdxs" item="item" index="index" separator="," open="(" close=")">
-                        #{item}
-                    </foreach>
-        </if>
+        WHERE
+            ISNULL(`POST_IDX`) AND
+            `USR_ID` = #{usrId} AND   -- 본인이 업로드한 이미지만 연결할 수 있음
+        <choose>
+            <when test="postFileIdx != null">
+                `POST_FILE_IDX` =   #{postFileIdx}
+            </when>
+            <when test="postFileIdxs != null">
+                `POST_FILE_IDX`
+                IN
+                <foreach collection="postFileIdxs" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                1 != 1 -- 상기 조건 중에 해당하지 않으면 반드시 실패
+            </otherwise>
+        </choose>
     </update>
 
     <delete id="deletePostFile" parameterType="java.util.Map">

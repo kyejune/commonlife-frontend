@@ -92,19 +92,25 @@
     <update id="updatePost" parameterType="postInfo">
     <![CDATA[
         UPDATE  `POST`
-        SET     `POST_TYPE` =  #{postType},
-                `CONTENT` =     #{content},
-                `UPD_DTTM` =    CURRENT_TIMESTAMP
-        WHERE   `POST_IDX` =   #{postIdx}
+        SET     `POST_TYPE` = #{postType},
+                `CONTENT`   = #{content},
+                `UPD_DTTM`  = CURRENT_TIMESTAMP
+        WHERE
+                `DEL_YN`   = 'N'  AND
+                `POST_IDX` = #{postIdx} AND
+                `USR_ID`   = #{usrId}
     ]]>
     </update>
 
     <update id="deletePost" parameterType="postInfo">
     <![CDATA[
         UPDATE  `POST`
-        SET     `DEL_YN` =  'Y',
-                `UPD_DTTM` =    CURRENT_TIMESTAMP
-        WHERE   `POST_IDX` =   #{postIdx}
+        SET     `DEL_YN`   = 'Y',
+                `UPD_DTTM` = CURRENT_TIMESTAMP
+        WHERE
+                `DEL_YN`   = 'N'  AND
+                `POST_IDX` = #{postIdx} AND
+                `USR_ID`   = #{usrId}
     ]]>
     </update>
 

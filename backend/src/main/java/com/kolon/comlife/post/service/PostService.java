@@ -1,6 +1,8 @@
 package com.kolon.comlife.post.service;
 
+import com.kolon.comlife.common.model.PaginateInfo;
 import com.kolon.comlife.post.model.PostInfo;
+import com.kolon.comlife.postFile.model.PostFileInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -8,18 +10,20 @@ import java.util.Map;
 
 public interface PostService {
 
-    public PostInfo getPost( int id );
+    PostInfo getPostById(int id );
 
-    public int countPostList();
+    PaginateInfo getPostALLLLLInfoList(Map params)  throws Exception ;
 
-    public List<PostInfo> getPostList(Map params);
+    List<PostInfo> getPostList(Map params);
 
-    public List<PostInfo> getPostListByComplexId(Map params);
+    List<PostInfo> getPostListByComplexId(Map params);
 
-    public PostInfo setPost(PostInfo example);
+    PostInfo setPost(PostInfo example);
 
-    public PostInfo updatePost(PostInfo example);
+    PostInfo setPostWithImage(PostInfo newPost, List<Integer> fileInfo, int usrId);
 
-    public void deletePost(int id);
+    PostInfo updatePost(PostInfo example);
+
+    PostInfo deletePost(int id, int usrId);
 
 }

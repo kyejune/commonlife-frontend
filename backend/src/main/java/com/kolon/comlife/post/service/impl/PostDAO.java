@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +21,7 @@ public class PostDAO {
 
     public PostInfo selectPost(int id) {
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "boardIdx", id );
+        selectParams.put( "postIdx", Integer.valueOf(id) );
         return sqlSession.selectOne( "Post.selectPost", selectParams );
     }
 
@@ -44,16 +43,23 @@ public class PostDAO {
     }
 
     public PostInfo updatePost(PostInfo post) {
-        sqlSession.update( "Post.updatePost", post );
+        int updateCount = -1;
+        updateCount = sqlSession.update( "Post.updatePost", post );
+
+        if( updateCount < 1 ) {
+            return null;
+        }
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "boardIdx", post.getPostIdx() );
+        selectParams.put( "postIdx", post.getPostIdx() );
         return sqlSession.selectOne( "Post.selectPost", selectParams );
     }
 
-    public void deletePost(int id) {
+    public int deletePost(int id, int usrId) {
+        int updateCount = -1;
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "boardIdx", id );
-        sqlSession.update( "Post.deletePost", id );
-        return;
+        selectParams.put( "postIdx", id );
+        selectParams.put( "usrId", usrId );
+        updateCount = sqlSession.update( "Post.deletePost", selectParams );
+        return updateCount;
     }
 }

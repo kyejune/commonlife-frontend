@@ -2,7 +2,7 @@ package com.kolon.comlife.common.model;
 
 import java.util.List;
 
-public class PaginateInfo {
+public class PaginateInfo extends SimpleMsgInfo {
     private int currentPage;
     private double totalPages;
     private int perPage;

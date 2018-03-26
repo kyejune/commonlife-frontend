@@ -50,7 +50,6 @@ public class ApiKeyCheckerInterceptor extends HandlerInterceptorAdapter {
 
             String apiKey = request.getHeader(API_KEY_NAME);
 
-
             if( expectedApiKey.equals(apiKey) == true ) {
                 return true;
             }

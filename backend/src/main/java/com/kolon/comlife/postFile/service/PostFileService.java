@@ -11,7 +11,7 @@ public interface PostFileService {
     public List<PostFileInfo> getPostFilesByPostIds( List<Integer> ids );
     public PostFileInfo setPostFile( PostFileInfo postFileInfo );
     public PostFileInfo updatePostFile( int id, PostFileInfo postFileInfo );
-    public List<PostFileInfo> bindPostToPostFiles( int postIdx, List<Integer> ids );
+    public List<PostFileInfo> bindPostToPostFiles( int postIdx, List<Integer> ids, int usrId );
     public void deletePostFile( int id );
 
 }
