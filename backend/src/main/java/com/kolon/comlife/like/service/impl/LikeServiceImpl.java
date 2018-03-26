@@ -1,6 +1,7 @@
 package com.kolon.comlife.like.service.impl;
 
 import com.kolon.comlife.like.model.LikeInfo;
+import com.kolon.comlife.like.model.LikeStatusInfo;
 import com.kolon.comlife.like.service.LikeService;
 import org.springframework.stereotype.Service;
 
@@ -16,17 +17,29 @@ public class LikeServiceImpl implements LikeService {
     public List<LikeInfo> getLikeList(int parentIdx ) {
         return likeDAO.selectLikeList( parentIdx );
     };
+
     @Override
     public boolean hasLike( int parentIdx, int usrIdx ) {
         return likeDAO.hasLike( parentIdx, usrIdx );
-    };
+    }
+
     @Override
-    public LikeInfo addLike( int parentIdx, int usrIdx ) {
-        return likeDAO.addLike( parentIdx, usrIdx );
-    };
+    public LikeStatusInfo addLike(int parentIdx, int usrId ) {
+        LikeStatusInfo likeStatus;
+
+        likeDAO.addLike( parentIdx, usrId );
+        likeStatus = likeDAO.selectLikeCountByPostId(parentIdx, usrId);
+
+        return likeStatus;
+    }
+
     @Override
-    public void cancelLike( int parentIdx, int usrIdx ) {
-        likeDAO.cancelLike( parentIdx, usrIdx );
-        return;
-    };
+    public LikeStatusInfo cancelLike( int parentIdx, int usrId ) {
+        LikeStatusInfo likeStatus;
+
+        likeDAO.cancelLike( parentIdx, usrId );
+        likeStatus = likeDAO.selectLikeCountByPostId(parentIdx, usrId);
+
+        return likeStatus;
+    }
 }

@@ -1,6 +1,7 @@
 package com.kolon.comlife.like.service.impl;
 
 import com.kolon.comlife.like.model.LikeInfo;
+import com.kolon.comlife.like.model.LikeStatusInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -20,26 +21,34 @@ public class LikeDAO {
         return sqlSession.selectList( "Like.selectLikeList", params );
     }
 
-    public boolean hasLike( int parentIdx, int usrIdx ) {
+    public boolean hasLike( int parentIdx, int usrId ) {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put( "parentIdx", parentIdx );
-        params.put( "usrIdx", usrIdx );
+        params.put( "usrId", usrId );
         sqlSession.insert( "Like.addLike", params );
         return sqlSession.selectOne( "Like.hasLike", params ) != null;
     }
 
-    public LikeInfo addLike( int parentIdx, int usrIdx ) {
-        Map<String, Integer> params = new HashMap<String, Integer>();
-        params.put( "parentIdx", parentIdx );
-        params.put( "usrIdx", usrIdx );
-        sqlSession.insert( "Like.addLike", params );
-        return sqlSession.selectOne( "Like.selectLatestLike", params );
+    public LikeStatusInfo selectLikeCountByPostId(int parentIdx, int usrId ) {
+        Map<String, Integer> params = new HashMap<>();
+
+        params.put("parentIdx", Integer.valueOf(parentIdx));
+        params.put("usrId", Integer.valueOf(usrId));
+
+        return sqlSession.selectOne( "Like.selectLikeCountByPostId", params );
     }
 
-    public void cancelLike( int parentIdx, int usrIdx ) {
+    public int addLike( int parentIdx, int usrId ) {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put( "parentIdx", parentIdx );
-        params.put( "usrIdx", usrIdx );
+        params.put( "usrId", usrId );
+        return sqlSession.insert( "Like.addLike", params );
+    }
+
+    public void cancelLike( int parentIdx, int usrId ) {
+        Map<String, Integer> params = new HashMap<String, Integer>();
+        params.put( "parentIdx", parentIdx );
+        params.put( "usrId", usrId );
         sqlSession.update( "Like.cancelLike", params );
         return;
     }

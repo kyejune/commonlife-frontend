@@ -8,7 +8,7 @@
             `LIKE_IDX`,
             `PARENT_TYPE`,
             `PARENT_IDX`,
-            `USR_IDX`,
+            `USR_ID`,
             `DEL_YN`,
             `REG_DTTM`,
             `UPD_DTTM`
@@ -23,13 +23,40 @@
         ]]>
     </select>
 
+    <select id="selectLikeCountByPostId" parameterType="java.util.Map" resultType="LikeStatusInfo">
+        <![CDATA[
+        SELECT
+          COUNT(*) AS LIKE_COUNT,
+          IF( 1 = SUM(CASE WHEN `USR_ID` = #{usrId} THEN 1 ELSE 0 END), TRUE, FALSE) AS MY_LIKE_FLAG
+        FROM
+        (
+            SELECT
+                `LIKE_IDX`,
+                `PARENT_TYPE`,
+                `PARENT_IDX`,
+                `USR_ID`,
+                `DEL_YN`,
+                `REG_DTTM`,
+                `UPD_DTTM`
+            FROM
+                `LIKE`
+            WHERE
+                `DEL_YN` = 'N'
+                AND
+                `PARENT_TYPE` = 'POST'
+                AND
+                `PARENT_IDX` =  #{parentIdx}
+        ) AS POST_LIKE;
+        ]]>
+    </select>
+
     <select id="selectLatestLike" resultType="LikeInfo">
         <![CDATA[
         SELECT
             `LIKE_IDX`,
             `PARENT_TYPE`,
             `PARENT_IDX`,
-            `USR_IDX`,
+            `USR_ID`,
             `DEL_YN`,
             `REG_DTTM`,
             `UPD_DTTM`
@@ -52,7 +79,7 @@
             `LIKE_IDX`,
             `PARENT_TYPE`,
             `PARENT_IDX`,
-            `USR_IDX`,
+            `USR_ID`,
             `DEL_YN`,
             `REG_DTTM`,
             `UPD_DTTM`
@@ -69,14 +96,14 @@
         ]]>
     </select>
 
-    <insert id="addLike" parameterType="likeInfo">
+    <insert id="addLike" parameterType="java.util.Map">
         <![CDATA[
         INSERT
         INTO    `LIKE`
         (
             `PARENT_TYPE`,
             `PARENT_IDX`,
-            `USR_IDX`,
+            `USR_ID`,
             `REG_DTTM`,
             `UPD_DTTM`
         )
@@ -84,10 +111,14 @@
         (
             'POST',
             #{parentIdx},
-            #{usrIdx},
+            #{usrId},
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP
         )
+        ON DUPLICATE KEY
+	    UPDATE
+	      DEL_YN="N",
+	      UPD_DTTM=CURRENT_TIMESTAMP;
         ]]>
     </insert>
 
@@ -102,7 +133,7 @@
                 AND
                 `PARENT_IDX` = #{parentIdx}
                 AND
-                `USR_IDX` = #{usrIdx}
+                `USR_ID` = #{usrId}
         ]]>
     </update>
 </mapper>

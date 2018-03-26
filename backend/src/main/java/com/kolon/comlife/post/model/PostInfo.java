@@ -18,6 +18,7 @@ public class PostInfo {
     private String content;
     private String delYn;
     private int likesCount;
+    private boolean myLikeFlag;
     private String regDttm;
     private String updDttm;
 

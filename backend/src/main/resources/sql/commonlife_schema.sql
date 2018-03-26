@@ -80,7 +80,7 @@ CREATE TABLE `LIKE` (
   `LIKE_IDX` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `PARENT_TYPE` varchar(31) NOT NULL DEFAULT '',
   `PARENT_IDX` int(11) unsigned NOT NULL,
-  `USR_IDX` int(11) unsigned NOT NULL,
+  `USR_ID` int(11) unsigned NOT NULL,
   `DEL_YN` char(1) NOT NULL DEFAULT 'N',
   `REG_DTTM` datetime NOT NULL DEFAULT current_timestamp(),
   `UPD_DTTM` datetime NOT NULL DEFAULT current_timestamp(),

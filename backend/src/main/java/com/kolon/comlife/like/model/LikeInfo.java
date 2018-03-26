@@ -8,7 +8,7 @@ public class LikeInfo {
     private int likeIdx;
     private String parentType;
     private int parentIdx;
-    private int usrIdx;
+    private int usrId;
     private String delYn;
     private String regDttm;
     private String updDttm;
@@ -39,12 +39,12 @@ public class LikeInfo {
         this.parentIdx = parentIdx;
     }
 
-    public int getUsrIdx() {
-        return usrIdx;
+    public int getUsrId() {
+        return usrId;
     }
 
-    public void setUsrIdx(int usrIdx) {
-        this.usrIdx = usrIdx;
+    public void setUsrId(int usrId) {
+        this.usrId = usrId;
     }
 
     public String getDelYn() {

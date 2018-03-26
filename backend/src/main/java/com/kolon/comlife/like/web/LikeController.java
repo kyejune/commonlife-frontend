@@ -1,10 +1,14 @@
 package com.kolon.comlife.like.web;
 
+import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.like.model.LikeInfo;
+import com.kolon.comlife.like.model.LikeStatusInfo;
 import com.kolon.comlife.like.service.LikeService;
 import com.kolon.comlife.post.web.PostController;
 import com.kolon.comlife.users.model.UserInfo;
 import com.kolon.comlife.users.service.UserService;
+import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -38,7 +42,7 @@ public class LikeController {
         // USR_ID 추출
         List<Integer> userIds = new ArrayList<Integer>();
         for (LikeInfo e : likes) {
-            userIds.add( e.getUsrIdx() );
+            userIds.add( e.getUsrId() );
         }
 
         if( userIds.size() > 0 ) {
@@ -48,7 +52,7 @@ public class LikeController {
             // 유저 정보 바인딩
             for( LikeInfo like : likes ) {
                 for( UserInfo user : userList ) {
-                    if( like.getUsrIdx() == user.getUsrId() ) {
+                    if( like.getUsrId() == user.getUsrId() ) {
                         like.setUser( user );
                     }
                 }
@@ -71,9 +75,21 @@ public class LikeController {
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<LikeInfo> addLike( @PathVariable( "postId" ) int postId, @RequestBody LikeInfo likeInfo ) {
-        int usrIdx = likeInfo.getUsrIdx();
-        LikeInfo result = likeService.addLike( postId, usrIdx );
+    public ResponseEntity addLike(
+                    HttpServletRequest            request,
+                    @PathVariable( "postId" ) int postId ) {
+        AuthUserInfo currUser;
+        LikeStatusInfo result;
+        try {
+            currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+            result = likeService.addLike(postId, currUser.getUsrId());
+        } catch(Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body( new SimpleErrorInfo("LIKE 추가 명령이 실패했습니다.") );
+        }
+
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
@@ -81,9 +97,21 @@ public class LikeController {
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<LikeInfo> cancelLike( @PathVariable( "postId" ) int postId, @RequestBody LikeInfo likeInfo) {
-        int usrIdx = likeInfo.getUsrIdx();
-        likeService.cancelLike( postId, usrIdx );
-        return ResponseEntity.status( HttpStatus.OK ).body( null );
+    public ResponseEntity cancelLike(
+                    HttpServletRequest            request,
+                    @PathVariable( "postId" ) int postId) {
+        AuthUserInfo currUser;
+        LikeStatusInfo result;
+        try {
+            currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+            result = likeService.cancelLike( postId, currUser.getUsrId() );
+        } catch(Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body( new SimpleErrorInfo("LIKE 추가 명령이 실패했습니다.") );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 }
