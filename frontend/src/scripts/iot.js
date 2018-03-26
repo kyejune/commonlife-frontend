@@ -9,32 +9,15 @@ import Store from "./store";
 
 
 // axios.defaults.baseURL = 'http://localhost:8080'// host;
-axios.defaults.headers.common['api_key'] = 'acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70';
-axios.defaults.headers.common['Content-Type'] = 'application/json; charset=UTF-8';
+// axios.defaults.headers.common['api_key'] = 'acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70';
+// axios.defaults.headers.common['Content-Type'] = 'application/json; charset=UTF-8';
 
-axios.interceptors.response.use(null, function(err) {
-    console.log( err.response );
-    if( err.response.status !== 200) {
-
-        if( Store.modeModal !== null ){
-            let obj = Store.modeModal;
-                obj.status = 2;
-                obj.error = err.response.data.msg;
-            Store.modeModal = Object.assign( {}, obj );
-            Store.hideModeModal();
-        }
-
-        if( Store.myModal !== null ){
-            let obj = Store.myModal;
-            obj.status = 2;
-            obj.error = err.response.data.msg;
-            Store.myModal = Object.assign( {}, obj );
-            Store.hideMyModal();
-        }
-    }
-
-    return Promise.reject(err);
-});
+// axios.interceptors.response.use(null, function(err) {
+//     console.log( err.response );
+//
+//
+//     return Promise.reject(err);
+// });
 
 
 /*

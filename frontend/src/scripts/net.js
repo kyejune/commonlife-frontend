@@ -10,7 +10,52 @@ let sjf = new SimpleJsonFilter();
 axios.defaults.headers.common['api_key'] = 'acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70';
 axios.defaults.headers.common['Content-Type'] = 'application/json; charset=UTF-8';
 
+// Add a request interceptor
+axios.interceptors.request.use(function (config) {
+    // Do something before request is sent
+    document.querySelector('#spinner').classList.add('cl-status--ajax');
+
+    return config;
+}, function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+});
+
+// Add a response interceptor
+axios.interceptors.response.use(function (response) {
+    // Do something with response data
+    document.querySelector('#spinner').classList.remove('cl-status--ajax');
+    return response;
+}, function (error) {
+
+    document.querySelector('#spinner').classList.remove('cl-status--ajax');
+    // 에러 상황일 경우 iot모달이 있으면 처리
+    if( error.response.status !== 200) {
+
+        if( Store.modeModal !== null ){
+            let obj = Store.modeModal;
+            obj.status = 2;
+            obj.error = error.response.data.msg;
+            Store.modeModal = Object.assign( {}, obj );
+            Store.hideModeModal();
+        }
+
+        if( Store.myModal !== null ){
+            let obj = Store.myModal;
+            obj.status = 2;
+            obj.error = error.response.data.msg;
+            Store.myModal = Object.assign( {}, obj );
+            Store.hideMyModal();
+        }
+    }
+
+    // Do something with response error
+    return Promise.reject(error);
+});
+
+
 let communityData = null;
+
 
 
 export default {

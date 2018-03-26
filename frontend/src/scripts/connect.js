@@ -1,7 +1,9 @@
 
 document.addEventListener('deviceready', function(){
 
-    document.querySelector('body').classList.add('device--ready');
+    document.querySelector('body').classList.add('device--ready' );
+    document.querySelector('body').classList.add('platform--' + window.device.platform.toLowerCase());
+
 
     if( window.Keyboard ) {
         window.Keyboard.shrinkView(true);
@@ -13,12 +15,7 @@ document.addEventListener('deviceready', function(){
     window.addEventListener('keyboardHeightWillChange', function (event) {
 
         if(event.keyboardHeight > 0 ){
-
             document.querySelector('body').classList.add('cl-keyboard--open');
-            // document.querySelectorAll('.cl-shrink').forEach( function( el, index ){
-            //    el.style.height = 'calc( 96.1vh - ' + ( 56 + parseInt(event.keyboardHeight )) + 'px )';
-            // });
-
         }else{
             document.querySelector('body').classList.remove('cl-keyboard--open');
         }

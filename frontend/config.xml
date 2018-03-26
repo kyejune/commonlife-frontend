@@ -54,8 +54,11 @@
         <param name="android-package" value="nl.xservices.plugins.Calendar" />
     </feature>
     <preference name="android-build-tool" value="gradle" />
-    <plugin name="cordova-plugin-device" spec="^2.0.1" />
+    <preference name="StatusBarBackgroundColor" value="#1052a5" />
+    <preference name="DisallowOverscroll" value="true" />
     <plugin name="cordova-plugin-keyboard" spec="^1.2.0" />
+    <plugin name="cordova-plugin-device" spec="^2.0.1" />
+    <plugin name="cordova-plugin-splashscreen" spec="~5.0.2" />
     <engine name="android" spec="^7.0.0" />
     <engine name="ios" spec="^4.5.4" />
 </widget>

@@ -1,7 +1,16 @@
 $dur: 0.4s;
 $delay: 0.2s;
 
-body.cl-is-device{
+html, body{
+    position: fixed;
+    overflow: hidden;
+}
+
+body{
+    width: 100vw;
+}
+
+body.platform--ios{
     #status-bar{
         position: fixed;
         background-color: #1052a5;
@@ -12,7 +21,7 @@ body.cl-is-device{
     }
 
     .cl-second-header {
-        top: 3.90625vh;
+        //top: 3.90625vh;
     }
 
     .App{
@@ -42,7 +51,7 @@ body.cl-is-device{
     }
 }
 
-body:not(.cl-is-device){
+body:not(.platform--ios){
     overflow-y: scroll;
 }
 
@@ -88,6 +97,7 @@ body.cl-dom--added{
 
     height: 100vh;
     -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
 
     & > header {
         transition: margin-top $dur ease-out;
