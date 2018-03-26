@@ -1,5 +1,5 @@
 /* Drawer */
-body:not(.cl-is-device){
+body:not(.platform--ios){
 
   .md-drawer{
     overflow-y: auto;

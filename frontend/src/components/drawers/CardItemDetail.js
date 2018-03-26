@@ -37,7 +37,7 @@ class CardItemDetailDrawer extends Component {
 
         let Img;
         if (this.state.postFiles[0])
-            Img = <img src={Store.api + '/' + this.state.postFiles[0].largePath} alt="관련 이미지" width="100%"/>
+            Img = <img src={Store.api + this.state.postFiles[0].largePath} alt="관련 이미지" width="100%"/>
 
 
         return <div className="cl-card-detail">

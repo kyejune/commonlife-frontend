@@ -23,7 +23,7 @@ class App extends Component {
 
         this.state = {
             scrolled: false,
-            isDevice: window.location.protocol === 'file:',
+            // isDevice: window.location.protocol === 'file:',
         }
     }
 
@@ -40,8 +40,8 @@ class App extends Component {
 
         }, true);
 
-        if( this.state.isDevice )
-            document.querySelector('body').classList.add('cl-is-device');
+        // if( this.state.isDevice )
+        //     document.querySelector('body').classList.add('cl-is-device');
 
     }
 
