@@ -4,21 +4,28 @@
 <mapper namespace="PostFile">
 
     <select id="selectPostFile" parameterType="java.util.Map" resultType="postFileInfo">
-        SELECT  *
-        FROM    `POST_FILE`
-        <if test="postFileIdx != null">
-        WHERE   `POST_FILE_IDX` = #{postFileIdx}
-        </if>
-        <if test="postIdx != null">
-        WHERE   `POST_IDX` = #{postIdx}
-        </if>
-        <if test="postIdxs != null">
-        WHERE   `POST_IDX`
+        SELECT
+          *
+        FROM
+          `POST_FILE`
+        <choose>
+            <when test="postFileIdx != null">
+                WHERE   `POST_FILE_IDX` = #{postFileIdx}
+            </when>
+            <when test="postIdx != null">
+                WHERE   `POST_IDX` = #{postIdx}
+            </when>
+            <when test="postIdxs != null">
+                WHERE   `POST_IDX`
                 IN
                 <foreach collection="postIdxs" item="item" index="index" separator="," open="(" close=")">
                     #{item}
                 </foreach>
-        </if>
+            </when>
+            <otherwise>
+                1 != 1 -- 조건에 해당하지 않으면 실패
+            </otherwise>
+        </choose>
     </select>
 
     <insert id="insertPostFile" parameterType="postFileInfo">
@@ -34,7 +41,7 @@
             )
             VALUES
             (
-                0,
+                #{usrId},
                 #{mimeType},
                 #{filePath},
                 CURRENT_TIMESTAMP,

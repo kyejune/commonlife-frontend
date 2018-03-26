@@ -8,12 +8,15 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
+import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.example.web.ExampleController;
 import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.postFile.service.PostFileService;
+import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.prop.KeyValueMap;
 import com.kolon.common.prop.ServicePropertiesMap;
+import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +26,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -35,12 +39,16 @@ import java.util.HashMap;
 public class PostFileController {
     private static final Logger logger = LoggerFactory.getLogger(ExampleController.class);
 
-    private String s3key;
-    private String s3secret;
-    private String writeBucket;
-    private String readBucket;
+    private static final String POST_IMG_BASE_PATH = "origin/article/";
 
-    private KeyValueMap kvm;
+    private static final String PROP_GROUP         = "POST";
+    private static final String S3_ACCESS_KEY      = "S3_ACCESS_KEY";
+    private static final String S3_ACCESS_SECRET   = "S3_ACCESS_SECRET";
+
+    // 업로드 버킷에 올라간 이미지는 리사이징 되어 다운로드 버킷에 저장됩니다.
+    private static final String S3_UPLOAD_BUCKET   = "UP_S3_NAME";
+    private static final String S3_DOWNLOAD_BUCKET = "DN_S3_NAME";
+
 
     @Resource(name = "postFileService")
     private PostFileService postFileService;
@@ -48,29 +56,14 @@ public class PostFileController {
     ServicePropertiesMap serviceProp;
 
     /**
-     * Properties 로드
-     *
-     * @return KeyValueMap
-     */
-    private KeyValueMap getKvm() {
-        if( kvm == null ) {
-            kvm = serviceProp.getByGroup( "POST" );
-            s3key = kvm.getValue( "S3_ACCESS_KEY" );
-            s3secret = kvm.getValue( "S3_ACCESS_SECRET" );
-            writeBucket = kvm.getValue( "UP_S3_NAME" );
-            readBucket = kvm.getValue( "DN_S3_NAME" );
-        }
-        return kvm;
-    }
-
-    /**
      * AWS S3 Client 객체 생성
      *
      * @return AmazonS3
      */
     private AmazonS3 getS3Client() {
-        getKvm();
-        AWSCredentials credentials = new BasicAWSCredentials( s3key, s3secret );
+        AWSCredentials credentials = new BasicAWSCredentials(
+                                                serviceProp.getByKey(PROP_GROUP, S3_ACCESS_KEY),
+                                                serviceProp.getByKey(PROP_GROUP, S3_ACCESS_SECRET) );
         return AmazonS3ClientBuilder
                 .standard()
                 .withRegion(Regions.AP_NORTHEAST_2)
@@ -112,7 +105,9 @@ public class PostFileController {
      */
     private ResponseEntity getOriginFile( AmazonS3 s3Client, PostFileInfo postFileInfo ) {
         String key = postFileInfo.getFilePath();
-        S3Object object = s3Client.getObject( new GetObjectRequest( writeBucket, key ) );
+        S3Object object = s3Client.getObject(
+                                new GetObjectRequest(
+                                        serviceProp.getByKey(PROP_GROUP, S3_UPLOAD_BUCKET), key ) );
         InputStream objectData = object.getObjectContent();
         try {
             byte[] byteArray = IOUtils.toByteArray( objectData );
@@ -138,7 +133,9 @@ public class PostFileController {
     private ResponseEntity getResizeFile( AmazonS3 s3Client, PostFileInfo postFileInfo, String size ) {
         String key = postFileInfo.getFilePath();
         key = key.replace( "origin/", "resize/" + size + "/" );
-        S3Object object = s3Client.getObject( new GetObjectRequest( readBucket, key ) );
+        S3Object object = s3Client.getObject(
+                                new GetObjectRequest(
+                                        serviceProp.getByKey(PROP_GROUP, S3_DOWNLOAD_BUCKET), key ) );
         InputStream objectData = object.getObjectContent();
         try {
             byte[] byteArray = IOUtils.toByteArray( objectData );
@@ -157,7 +154,16 @@ public class PostFileController {
     @PostMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity setPostFile( @RequestBody HashMap<String, String> params ) {
+    public ResponseEntity setPostFile( HttpServletRequest request,
+                                       @RequestBody HashMap<String, String> params ) {
+        AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+
+        logger.debug(">>> CmplxId: " + currUser.getCmplxId());
+        logger.debug(">>> UserId: " + currUser.getUserId());
+        logger.debug(">>> UsrId: " + currUser.getUsrId());
+
+        int usrId = currUser.getUsrId();
+
         String base64 = params.get( "file" );
 
         if( base64 == null ) {
@@ -182,14 +188,16 @@ public class PostFileController {
 
         AmazonS3 s3Client = getS3Client();
 
-        // TODO: 파일 저장 경로에 대한 고민 필요
+        // TODO: 파일 저장 경로 변경 및 파일 이름 변경 - IOT-62
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String key = "origin/article/" + timestamp.getTime() + "." + fileType;
+        String key = POST_IMG_BASE_PATH + timestamp.getTime() + "." + fileType;
 
-        s3Client.putObject( new PutObjectRequest( writeBucket, key, stream, metadata ) );
+        s3Client.putObject(
+                new PutObjectRequest(
+                        serviceProp.getByKey(PROP_GROUP, S3_UPLOAD_BUCKET), key, stream, metadata ) );
 
         PostFileInfo postFile = new PostFileInfo();
-        postFile.setPostIdx( 0 );
+        postFile.setUsrId( usrId );
         postFile.setFilePath( key );
         postFile.setMimeType( metadata.getContentType() );
 
@@ -203,6 +211,16 @@ public class PostFileController {
     )
     public ResponseEntity getPostFile( @PathVariable( "id" ) int id ) {
         PostFileInfo postFileInfo = postFileService.getPostFile( id );
+
+        if( postFileInfo == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new SimpleErrorInfo("해당하는 이미지가 없습니다."));
+        }
+
+        logger.debug(">>>> postFileInfo" + postFileInfo);
+        logger.debug(">>>> postIdx:" + postFileInfo.getPostIdx());
+        logger.debug(">>>> filePath:" + postFileInfo.getFilePath());
+        logger.debug(">>>> postFileIdx:" + postFileInfo.getPostFileIdx());
+
         return getOriginFile( getS3Client(), postFileInfo );
     }
 
@@ -211,6 +229,16 @@ public class PostFileController {
     )
     public ResponseEntity getPostSmallFile( @PathVariable( "id" ) int id, @PathVariable( "size" ) String size ) {
         PostFileInfo postFileInfo = postFileService.getPostFile( id );
+
+        if( postFileInfo == null ) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new SimpleErrorInfo("해당하는 이미지가 없습니다."));
+        }
+
+        logger.debug(">>>> postFileInfo" + postFileInfo);
+        logger.debug(">>>> postIdx:" + postFileInfo.getPostIdx());
+        logger.debug(">>>> filePath:" + postFileInfo.getFilePath());
+        logger.debug(">>>> postFileIdx:" + postFileInfo.getPostFileIdx());
+
         return getResizeFile( getS3Client(), postFileInfo, size );
     }
 
@@ -224,7 +252,9 @@ public class PostFileController {
 
         String key = postFileInfo.getFilePath();
 
-        s3Client.deleteObject( new DeleteObjectRequest( writeBucket, key ) );
+        s3Client.deleteObject(
+                new DeleteObjectRequest(
+                        serviceProp.getByKey(PROP_GROUP, S3_UPLOAD_BUCKET), key ) );
         return null;
     }
 }
