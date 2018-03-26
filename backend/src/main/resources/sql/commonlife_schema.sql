@@ -84,8 +84,11 @@ CREATE TABLE `LIKE` (
   `DEL_YN` char(1) NOT NULL DEFAULT 'N',
   `REG_DTTM` datetime NOT NULL DEFAULT current_timestamp(),
   `UPD_DTTM` datetime NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`LIKE_IDX`)
+  PRIMARY KEY (`LIKE_IDX`),
+  UNIQUE KEY `idxunique` (`PARENT_IDX`,`USR_ID`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+
 
 ---- POST -----
 CREATE TABLE `POST` (
