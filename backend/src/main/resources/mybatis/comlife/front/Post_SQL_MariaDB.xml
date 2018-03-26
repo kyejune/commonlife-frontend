@@ -89,8 +89,9 @@
 
     <update id="updatePost" parameterType="postInfo">
     <![CDATA[
-        UPDATE  `POST`
-        SET     `POST_TYPE` = #{postType},
+        UPDATE
+                `POST`
+        SET
                 `CONTENT`   = #{content},
                 `UPD_DTTM`  = CURRENT_TIMESTAMP
         WHERE
