@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import IconLoader from 'components/ui/IconLoader';
-import LiOfToggle from "./LiOfToggle";
 import IotSlider from "../../ui/IotSlider";
-import CheckBoxes from "../../ui/CheckBoxes";
 import Iot from "../../../scripts/iot";
 import {withRouter} from "react-router-dom";
 import checkSrc from 'images/ic-check@3x.png';
@@ -121,7 +119,6 @@ class IotDevice extends Component {
 
             switch( item.moAttr ){
                 case 'image': return null;
-                break;
 
                 case 'text':
                     return <li key={index}>
@@ -129,7 +126,6 @@ class IotDevice extends Component {
                             {item.stsNm} <span className="color-primary">{item.currStsKor}</span>
                         </h4>
                     </li>;
-                break;
 
                 case 'binary':
                     // 밸브는 끄기만 가능
@@ -146,7 +142,6 @@ class IotDevice extends Component {
                             />
                         </div>
                     </li>;
-                break;
 
                 case 'level':
                     return <li key={index}>
@@ -159,7 +154,6 @@ class IotDevice extends Component {
                                    onChange={ this.onChangeOthers } data={item}
                         />
                     </li>;
-                break;
 
 
                 case 'option':
@@ -178,7 +172,6 @@ class IotDevice extends Component {
                             {Opts}
                         </select>
                     </li>
-                break;
 
                 case 'optiontext':
 
@@ -189,19 +182,16 @@ class IotDevice extends Component {
                             {item.stsNm} <span className="color-primary">{ otText }</span>
                         </h4>
                     </li>
-                break;
 
                 case 'button':
                     return <li key={index}>
                         <button onClick={ ()=>this.onRunButton( item ) }>{item.stsNm}</button>
                     </li>
-                break;
 
                 case 'noti':
                     return <li key={index}>
                         <h4>{item.attr1Rmk}</h4>
                     </li>
-                break;
 
 
                 case 'inputtext':
@@ -215,7 +205,6 @@ class IotDevice extends Component {
                                onChange={ event => this.onChangeOthers( event.target.value, {data: item} )}
                         />
                     </li>
-                break;
 
                 default: return <li key={index}>{item.moAttr}</li>;
             }

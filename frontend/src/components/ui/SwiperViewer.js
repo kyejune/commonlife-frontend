@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { observer } from 'mobx-react';
 import Swiper from 'react-id-swiper';
 import ImageSlide from 'components/ui/ImageSlide';
 

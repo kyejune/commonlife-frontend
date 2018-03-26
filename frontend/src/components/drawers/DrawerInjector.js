@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import Store from "../../scripts/store";
-import {Drawer} from 'react-md';
-import DrawerContentHolder from 'components/drawers/DrawerContentHolder';
 import Profile from "components/drawers/Profile";
 import Modal from "../overlay/Modal";
 import IotProgressOverlay from "../overlay/IotProgressOverlay";

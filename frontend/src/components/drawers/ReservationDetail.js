@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
-import {observer} from 'mobx-react';
 import TimeScheduler from 'components/ui/TimeScheduler';
 import SwiperViewer from 'components/ui/SwiperViewer';
 import Counter from 'components/ui/Counter';
@@ -32,6 +31,7 @@ class ReservationDetail extends Component {
                     data.dates = [ new Date( opt.value ), new Date( opt.value ) ];
                 else if( opt.type === 'dateRange')
                     data.dates = [ new Date( opt.value[0] ), new Date( opt.value[1] ) ];
+                return null;
             });
 
             this.setState(data);
@@ -57,7 +57,7 @@ class ReservationDetail extends Component {
 
     // 타임스케쥴러 업데이트
     onUpdateTimeSchedule( data ){
-        let { start, end, correct } = data;
+        let { start, end } = data;
         let starts = start.split(':');
         let ends = end.split(':');
 

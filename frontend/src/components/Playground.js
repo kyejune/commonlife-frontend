@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import TimeScheduler from 'components/ui/TimeScheduler';
 import SampleSrc from 'images/io-t-icon-1@3x.png';
 import Checkbox from "./ui/Checkbox";
-import {SortableContainer, SortableElement, arrayMove, SortableHandle} from 'react-sortable-hoc';
 import EditableList from "./ui/EditableList";
 import IotSlider from "./ui/IotSlider";
 
@@ -20,14 +19,14 @@ export default class Playground extends Component{
             <ul className="cl-iot-vertical-list cl-bg--light">
                 {/* Iot_기기제어 목록, 기기별 보기 */}
                 <li>
-                    <img className="cl__thumb" src={SampleSrc}/>
+                    <img className="cl__thumb" src={SampleSrc} alt=''/>
                     <h4 className="cl__title">거실</h4>
                     <div className="cl-next__button ml-auto"/>
                 </li>
 
                 {/* Iot_기기제어 상세 */}
                 <li>
-                    <img className="cl__thumb--rounded" src={SampleSrc}/>
+                    <img className="cl__thumb--rounded" src={SampleSrc} alt=''/>
                     <div>
                         <h4 className="cl__title">거실</h4>
                         <p className="cl__desc mt-05em">스위치 | OFF</p>
@@ -44,7 +43,7 @@ export default class Playground extends Component{
 
                 {/* 센서 추가 */}
                 <li className="cl__list--middle">
-                    <img className="cl__thumb--rounded" src={SampleSrc}/>
+                    <img className="cl__thumb--rounded" src={SampleSrc} alt=''/>
                     <div>
                         <h4 className="cl__title">보안센서</h4>
                         <p className="cl__desc mt-05em">일반센서</p>
@@ -57,7 +56,7 @@ export default class Playground extends Component{
             <ul className="cl-iot-vertical-list cl--full">
                 {/* 기기제어 상세1 */}
                 <li>
-                    <img className="cl__thumb--rounded" src={SampleSrc}/>
+                    <img className="cl__thumb--rounded" src={SampleSrc} alt=''/>
                     <h4 className="cl__title">중앙 보일러</h4>
                     <p className="cl__desc ml-auto">실내온도 38°C</p>
                 </li>
@@ -90,7 +89,7 @@ export default class Playground extends Component{
 
             <ul className="cl-iot-vertical-list">
                 <li>
-                    <img className="cl__thumb--rounded" src={SampleSrc}/>
+                    <img className="cl__thumb--rounded" src={SampleSrc} alt=''/>
                     <div>
                         <h4 className="cl__title">거실</h4>
                         <p className="cl__desc mt-05em">스위치 | OFF</p>
@@ -106,7 +105,7 @@ export default class Playground extends Component{
                 </li>
 
                 <li>
-                    <img className="cl__thumb--rounded" src={SampleSrc}/>
+                    <img className="cl__thumb--rounded" src={SampleSrc} alt=''/>
                     <div>
                         <h4 className="cl__title">거실</h4>
                         <p className="cl__desc mt-05em">스위치 | OFF</p>
@@ -120,7 +119,7 @@ export default class Playground extends Component{
 
                 {/* IoT_history 켜짐상태 */}
                 <li>
-                    <img className="cl__thumb--rounded" src={SampleSrc}/>
+                    <img className="cl__thumb--rounded" src={SampleSrc} alt=''/>
                     <div>
                         <h4 className="cl__title">거실조명</h4>
                         <p className="cl__desc mt-05em">조성우 | ON</p>
@@ -134,7 +133,7 @@ export default class Playground extends Component{
 
                 {/* IoT_history 꺼짐상태 */}
                 <li>
-                    <img className="cl__thumb--rounded--off" src={SampleSrc}/>
+                    <img className="cl__thumb--rounded--off" src={SampleSrc} alt=''/>
                     <div>
                         <h4 className="cl__title">거실조명</h4>
                         <p className="cl__desc mt-05em">조성우 | OFF</p>

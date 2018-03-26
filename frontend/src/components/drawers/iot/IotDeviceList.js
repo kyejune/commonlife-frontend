@@ -90,14 +90,14 @@ class IotDeviceCategory extends Component {
 										 to={{ pathname: `${this.props.location.pathname}/device/${data.deviceId}`}}
 
 						/>;
-					break;
 
 				case 'my':
                     return <LiOfCheck key={index} name={data.mNm} icon={data.btImgSrc} desc={data.cateNm}
 									  data={data}
 									  checked={this.state.addingList.indexOf( data.myIotId ) >= 0 }
 									  onChange={this.onChangeAddCheck }/>;
-					break;
+				default:
+					return '';
 			}
 
 		} );

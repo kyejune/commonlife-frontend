@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
-import {observer} from 'mobx-react';
 import clRightCaretSrc from 'images/ic-favorite-24-px@3x.png';
 import ReserveServiceLaundry from 'images/rs-icon-1@3x.png';
 import ReserveServiceCleaning from 'images/rs-icon-2@3x.png';

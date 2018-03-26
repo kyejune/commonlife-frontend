@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {HashRouter, Route, Switch} from 'react-router-dom';
-import {Drawer} from 'react-md';
 import './App.css';
 import 'font-awesome/fonts/fontawesome-webfont.eot';
 import 'react-md/dist/react-md.min.js';

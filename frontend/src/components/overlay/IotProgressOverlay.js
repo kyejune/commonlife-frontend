@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Iot from 'scripts/iot';
-import SampleSrc from 'images/io-t-icon-1@3x.png';
 import Store from "../../scripts/store";
 import IconLoader from 'components/ui/IconLoader';
 
@@ -10,7 +8,7 @@ import IotConnectionProgress from "../ui/IotConnectionProgress";
 class IotProgressOverlay extends Component {
 
 	render () {
-		const { name, value, status, error } = Store.myModal;
+		const { name, value, status } = Store.myModal;
 
 		console.log('^^^^^^^', value );
 

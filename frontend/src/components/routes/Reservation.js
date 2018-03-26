@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import Store from "../../scripts/store";
 import ReservationDetail from "components/drawers/ReservationDetail";
 import ReservationHistory from "components/drawers/ReservationHistory";
-import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 import DrawerSwiperViewer from "components/drawers/DrawerSwiperViewer";
-import {Drawer} from 'react-md';
 import { Link } from 'react-router-dom';
 import HeaderOfReservation from 'components/ui/HeaderOfReservation';
 // import NoCreditPopup from "components/ui/NoCreditPopup";
@@ -26,14 +24,6 @@ import DrawerWrapper from "../drawers/DrawerWrapper";
 // import ReserveIcNotice from 'images/alert-icon-red@3x.png';
 
 class Reservation extends Component {
-
-    constructor( props ){
-        super( props );
-
-        // this.state = {
-        //     drawer: Store.drawer,
-        // }
-    }
 
     componentDidMount(){
         this.updateRoute();

@@ -1,6 +1,5 @@
 /* WriteDrawer.jsx */
 import React from 'react';
-import {observer} from 'mobx-react';
 import Net from 'scripts/net';
 
 import BottomDrawer from 'components/drawers/BottomDrawer';

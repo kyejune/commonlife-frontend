@@ -17,7 +17,7 @@ class IotModeChange extends Component {
 
 	setProgress () {
 		this.setState( { step: 'progress' } );
-		let { cmd, name, type, targetValue } = this.props;
+		let { targetValue } = this.props;
 
 		Iot.changeIotMode( Store.modeModal.mode, targetValue, ()=> {
 			this.setState( { step: 'done' } );

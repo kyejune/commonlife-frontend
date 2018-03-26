@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
-import {observer} from 'mobx-react';
 import {CardTitle, Avatar} from "react-md";
 import Net from "scripts/net";
 import Store from "scripts/store";

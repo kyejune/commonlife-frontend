@@ -3,7 +3,6 @@ import { withRouter } from 'react-router';
 import { Link } from "react-router-dom";
 import Iot from "../../../scripts/iot";
 
-import SampleSrc from 'images/io-t-icon-1@3x.png';
 import IconLoader from "../../ui/IconLoader";
 
 class IotDeviceTabList extends Component {

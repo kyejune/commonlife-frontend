@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Devices} from "../../scripts/iot";
 
 import IotIcAlert from 'images/alert-icon-black@3x.png';
 import IotIcSet from 'images/io-t-i-con-b-copy@3x.png';
@@ -12,10 +11,6 @@ import {Link, withRouter} from "react-router-dom";
 import Iot from "../../scripts/iot";
 
 class IotBtnLg extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     // device && button
     onClickSwitch( bool, btId, btTitle ){
@@ -36,7 +31,7 @@ class IotBtnLg extends Component {
 
         const { btId,
             btImgSrc, btLeft, deviceId,
-            btRightIcon, btRightIconType, btRightText, btSubTitle,
+            btRightIconType, btRightText, btSubTitle,
             btTitle, btTitleUnit, btType,
         } = this.props;
 
@@ -74,6 +69,7 @@ class IotBtnLg extends Component {
                 BottomLeft = <div className="cl-bold">{Store.auth.name}</div>;
                 clickFunc = () => this.onClickAutomaion( btId, btTitle );
                 break;
+            default :
         }
 
 

@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
 import {observer} from 'mobx-react';
-import {TabsContainer, Tabs, Tab, Drawer} from 'react-md';
+import {TabsContainer, Tabs, Tab} from 'react-md';
 import {withRouter} from 'react-router';
 
 import CommunityFeed from './CommunityFeed';
 import CommunityNews from './CommunityNews';
 import CommunityEvent from './CommunityEvent';
-import DrawerContentHolder from 'components/drawers/DrawerContentHolder';
 import CardItemDetail from "../drawers/CardItemDetail";
 import People from "../drawers/People";
 import Store from "scripts/store";

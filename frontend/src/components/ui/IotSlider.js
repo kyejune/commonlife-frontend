@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 // import Tooltip from 'rc-tooltip';
-import Tooltip from 'rc-tooltip';
-import Slider, {Handle, createSliderWithTooltip} from 'rc-slider';
+import Slider from 'rc-slider';
 import classNames from 'classnames';
 
 

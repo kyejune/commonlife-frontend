@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import Store from "../../scripts/store";
 import {ModeChanges} from "../../scripts/iot";
-import ImageLoader from 'react-imageloader';
 import IconLoader from "./IconLoader";
 
 class IotBtnMode extends Component {

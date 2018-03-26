@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import Net from "scripts/net";
 import LikeList from 'components/drawers/LikeList';
-import {observer} from 'mobx-react';
-
 
 class People extends Component{
 

@@ -6,6 +6,7 @@ class CheckBoxes extends Component {
 
         let { max, items } = this.props;
         max = max || items.length;
+        console.log( max ); // resolve unused var
 
         items = items || [];
 

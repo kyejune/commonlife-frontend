@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import Store from 'scripts/store';
 import Iot, { Modes, MyIots } from 'scripts/iot';
-import { Drawer } from 'react-md';
 import { Link } from 'react-router-dom';
 import IotModeEditor from "components/drawers/iot/IotModeEditor";
 import WithTitle from 'components/ui/WithTitle';
@@ -25,15 +24,6 @@ import MyEditor from "../drawers/MyEditor";
 import ExposableEditor from "../drawers/iot/ExposableEditor";
 
 class HomeIoT extends Component {
-
-	constructor ( props ) {
-		super( props );
-
-		// this.state = {
-		// 	// drawer: Store.drawer,
-		// 	// mode: [],
-		// }
-	}
 
 	componentDidMount () {
 		Iot.getIotAll();
@@ -104,7 +94,8 @@ class HomeIoT extends Component {
 		if( action === undefined ) return;
 
 
-		let prevSeg = params[p];
+		// let prevSeg = params[p];
+		let prevSeg = null;
 		for( var p in params ){
 			let d = map[params[p]];
 			if( RegExp(/\d+/).test(params[p])  ) d = map[prevSeg] + '-detail';

@@ -1,8 +1,6 @@
 import React, {Component} from 'react';
 import {arrayMove, SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
 import Checkbox from "./Checkbox";
-import SampleSrc from 'images/io-t-icon-1@3x.png';
-import Link from "react-router-dom/es/Link";
 import IconLoader from "./IconLoader";
 
 class EditableList extends Component {

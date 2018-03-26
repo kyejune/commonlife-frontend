@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import checkSrc from 'images/ic-check@3x.png';
 import addSrc from 'images/add-light@3x.png';
-import RightArrowSrc from "images/ic-arrow-right@3x.png";
 import CheckRowList from "../../ui/CheckRowList";
 import {withRouter} from 'react-router';
 import Link from "react-router-dom/es/Link";
