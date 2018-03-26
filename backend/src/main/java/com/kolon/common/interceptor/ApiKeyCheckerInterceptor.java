@@ -39,6 +39,8 @@ public class ApiKeyCheckerInterceptor extends HandlerInterceptorAdapter {
         logger.debug(">>>> request path: " + request.getRequestURL());
         if ( request.getRequestURL().indexOf("/status/") > 0 ) {
             return true;
+        } else if ( request.getRequestURL().indexOf("/postFiles/") > 0 ) {
+            return true;
         }
 
         // 3. Header의 Api_key 체크
