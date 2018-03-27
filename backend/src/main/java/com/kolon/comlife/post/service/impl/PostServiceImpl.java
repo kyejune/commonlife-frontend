@@ -34,8 +34,28 @@ public class PostServiceImpl implements PostService {
     private PostFileDAO postFileDAO;
 
     @Override
-    public PostInfo getPostById(int id) {
-        return postDAO.selectPost(id);
+    public PostInfo getPostById(int id) throws Exception {
+        List<Integer>  userIds;
+        List<PostUserInfo>         userList;
+        PostInfo  postInfo;
+
+        userIds = new ArrayList<>();
+
+        postInfo = postDAO.selectPost(id);
+        if( postInfo == null ) {
+            throw new Exception("해당 게시물이 없습니다.");
+        }
+
+        userIds.add(postInfo.getUsrId());
+        userList = userDAO.getUserListForPostById( userIds );
+        if( userList == null || userList.size() < 1 ) {
+            // todo: exception...
+            throw new Exception("해당 게시물을 가져올 수 없습니다.");
+        }
+
+        postInfo.setUser( userList.get(0) );
+
+        return postInfo;
     }
 
     @Override

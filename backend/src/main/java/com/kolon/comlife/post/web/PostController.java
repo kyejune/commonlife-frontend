@@ -137,7 +137,16 @@ public class PostController {
     public ResponseEntity getPostInJson( HttpServletRequest request,
                                          @PathVariable("id") int id ) {
         AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
-        PostInfo result = postService.getPostById( id );
+        PostInfo result;
+
+        try {
+            result = postService.getPostById( id );
+        } catch( Exception e ) {
+            logger.error(e.getMessage());
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST)
+                    .body( new SimpleErrorInfo(e.getMessage()) );
+        }
 
         if( result == null ) {
             return ResponseEntity
