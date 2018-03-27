@@ -188,7 +188,7 @@ class ReservationDetail extends Component {
         }
 
 
-        return <div className="cl-reservation-detail">
+        return <div className="cl-reservation-detail pb-3em">
 
             {!this.state.reserved &&
             <Link to={ '/reservation/0/thumbnails' }>

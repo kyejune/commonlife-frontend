@@ -6,6 +6,7 @@ import BottomDrawer from 'components/drawers/BottomDrawer';
 import thumbSrc from 'images/ic-thumb@3x.png';
 import checkSrc from 'images/ic-check@3x.png';
 import previewSrc from 'images/img-preview-holder@3x.png';
+import classNames from 'classnames';
 
 class WriteDrawer extends BottomDrawer {
 
@@ -14,6 +15,9 @@ class WriteDrawer extends BottomDrawer {
 
         this.state = {
             base64Img: null,
+            imageId: null,
+            content:'',
+            isUploading: false,
         }
     }
 
@@ -23,9 +27,19 @@ class WriteDrawer extends BottomDrawer {
 
 
     selectPicture() {
+
+        if( this.state.isUploading ){
+            alert("기존 이미지를 업로드 중입니다.");
+            return;
+        }
+
+
+
         if( navigator.camera ) {
-            // let gettedPicture = (base64) => this.gettedPicture(base64);
-            // let failedPicture = (msg) => this.failedPicture(msg);
+
+            this.setState({
+                isUploading: true,
+            });
 
             navigator.camera.getPicture(
                 (base64) => this.gettedPicture(base64),
@@ -43,14 +57,15 @@ class WriteDrawer extends BottomDrawer {
 
     gettedPicture(base64) {
 
-        this.setState({
-            base64Img: 'data:image/jpeg;base64,' + base64
-        }, ()=>{
+        const b64 = 'data:image/jpeg;base64,' + base64;
 
-            Net.uploadImg(this.state.base64Img, data => {
-                this.imgId = data.postFileIdx;
+        Net.uploadImg( b64, data => {
+
+            this.setState({
+                base64Img: b64,
+                imageId: data.postFileIdx,
+                isUploading: false,
             });
-
         });
 
         // {
@@ -79,18 +94,27 @@ class WriteDrawer extends BottomDrawer {
     clearPicture() {
         this.setState({
             base64Img: null,
+            imageId: null,
         });
     }
 
     complete() {
+
+        if( this.state.content.replace(/\s/g, '') === '' ){
+            alert( '내용을 작성해주세요.' );
+            return;
+        }
+
+
+
         let data = {
             postType: "feed",
             content: this.state.content,
             postFiles: []
         };
 
-        if( this.imgId )
-            data.postFiles.push( this.imgId );
+        if( this.state.imageId )
+            data.postFiles.push( this.imageId );
 
         console.log( 'complete:', data );
 
@@ -100,6 +124,10 @@ class WriteDrawer extends BottomDrawer {
     }
 
     render() {
+
+        let msg = '이미지 추가';
+        if( this.state.base64Img ) msg = '이미지 변경';
+        if( this.state.isUploading ) msg = '이미지 올리는 중...';
 
         return <div>
 
@@ -111,6 +139,8 @@ class WriteDrawer extends BottomDrawer {
 
                 <footer className="cl-flex-between">
 
+
+
                     {this.state.base64Img&&
                         <div className="cl-preview-holder">
                             <img src={this.state.base64Img || previewSrc} alt="이미지 미리보기" width="52" height="52"/>
@@ -120,7 +150,7 @@ class WriteDrawer extends BottomDrawer {
 
                     <button className="cl-flex" onClick={()=> this.selectPicture()} >
                         <img src={thumbSrc} width="26" height="26" className="mr-03em opacity-50" alt="이미지 추가"/>
-                        <span>{ this.state.base64Img?"이미지 변경":"이미지 추가"}</span>
+                        <span>{ msg }</span>
                     </button>
 
                     <button className="cl-flex" onClick={()=> this.complete()} >

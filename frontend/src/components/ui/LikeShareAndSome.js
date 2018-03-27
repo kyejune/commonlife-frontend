@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import qaSrc from 'images/contact-bt-gray@3x.png';
 import calSrc from 'images/calender-bt-gray@3x.png';
 import Net from 'scripts/net.js';
-
+import classNames from 'classnames';
 
 export default class LikeShareAndSome extends Component{
 
@@ -12,8 +12,17 @@ export default class LikeShareAndSome extends Component{
         super( props );
 
         this.state = {
-            count: props.like.count || 0
+            count: props.like.count || 0,
+            liked: props.like.liked,
         }
+    }
+
+    componentWillReceiveProps( nextProps ){
+
+        this.setState({
+            count: nextProps.like.count || 0,
+            liked: nextProps.like.liked,
+        });
     }
 
 	shareItem() {
@@ -28,10 +37,11 @@ export default class LikeShareAndSome extends Component{
 	}
 
 	likeItem( id ){
-        Net.setLikey( id, response =>{
-            this.setState({
-                count: response.likeIdx
-            })
+        Net.setLikey( id, !this.state.liked, response =>{
+
+            if( this.props.onChangeLike )
+                this.props.onChangeLike( response.likeCount, response.myLikeFlag );
+
         });
     }
 
@@ -60,7 +70,8 @@ export default class LikeShareAndSome extends Component{
 
             <div className="cl-flex">
 
-                <button className="cl-card-item__button cl-like__button" onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }>LIKE</button>
+                <button className={ classNames("cl-card-item__button", "cl-like__button", { "cl-like--liked":this.state.liked } )}
+                        onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }>LIKE</button>
                 <Link className="cl-counter__button" to={this.props.like.to}>
                     {this.state.count}
                 </Link>

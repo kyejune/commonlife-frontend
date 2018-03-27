@@ -10,15 +10,25 @@ class CardItem extends Component {
 	constructor( props ){
 		super( props );
 
-		this.user = props.cardData.user;
-		this.user = props.cardData.user;
-		this.data = props.cardData;
+		this.state = props.cardData;
 	}
 
+    componentWillReceiveProps(nextProps){
+		if( this.state.postIdx !== nextProps.cardData.postIdx )
+        	this.setState( nextProps.cardData );
+    }
+
+    onChangeLike=( likeCount, hasLiked )=>{
+		let obj = Object.assign({}, this.state );
+		obj.likesCount = likeCount;
+		obj.myLikeFlag = hasLiked;
+
+		this.setState( obj );
+	}
 
 	// 카드 종류
 	cardName = ()=> {
-		if( this.data.postType === 'brand') {
+		if( this.state.postType === 'brand') {
 			return 'cl-card-item cl-card-item--brand';
 		}
 		else {
@@ -28,15 +38,15 @@ class CardItem extends Component {
 
 	// 피드, 뉴스 작성자 정보
 	cardAuthorInfo = ()=> {
-		if( this.data.postType !== 'event' ) {
+		if( this.state.postType !== 'event' ) {
 			return (
 				<CardTitle
 					// 작성자 이름
-					title={this.user.userNm}
+					title={this.state.user.userNm}
 					// 작성자 프로필 이미지
-					avatar={<Avatar src={this.user.avatar} role="presentation"/>}
+					avatar={<Avatar src={this.state.user.avatar} role="presentation"/>}
 					// 작성 시간
-					subtitle={ this.data.regDttm }
+					subtitle={ this.state.regDttm }
 				/>
 			);
 		}
@@ -47,30 +57,30 @@ class CardItem extends Component {
 
 	// 이벤트 썸네일, 제목
 	cardEventTitle = ()=> {
-		if( this.data.postType === "event" ) {
+		if( this.state.postType === "event" ) {
 			return (
 				<div>
 					<Media>
-						<img src={this.data.thumbnail} alt="이벤트 썸네일"/>
+						<img src={this.state.thumbnail} alt="이벤트 썸네일"/>
 						<MediaOverlay>
 							<CardTitle
 								// 이벤트 제목
-								title={this.data.title}
+								title={this.state.title}
 							/>
 						</MediaOverlay>
 					</Media>
 				</div>
 			);
 		}
-		if( this.data.postType === "brand" ) {
+		if( this.state.postType === "brand" ) {
 			return (
 				<div>
 					<Media>
-						<img src={ Store.api + this.data.postFiles[0].filePath } alt="이벤트 썸네일"/>
+						<img src={ Store.api + this.state.postFiles[0].filePath } alt="이벤트 썸네일"/>
 						<MediaOverlay>
 							<CardTitle
 								// 이벤트 제목
-								title={this.data.title}
+								title={this.state.title}
 							/>
 						</MediaOverlay>
 					</Media>
@@ -84,13 +94,13 @@ class CardItem extends Component {
 
 	// 이벤트 장소, 일정
 	cardEventContent = ()=> {
-		if( this.data.postType === "event" ) {
+		if( this.state.postType === "event" ) {
 			return (
 				<div className="cl-card-item__event-content">
 					{/*이벤트 장소*/}
-					<h3>{this.data.event_schedule}</h3>
+					<h3>{this.state.event_schedule}</h3>
 					{/*이벤트 일정*/}
-					<p>{this.data.event_location}</p>
+					<p>{this.state.event_location}</p>
 				</div>
 			);
 		}
@@ -101,10 +111,10 @@ class CardItem extends Component {
 
 	// 피드, 뉴스 컨텐츠
 	cardTextContent = ()=> {
-		if( this.data.postType !== "event" ) {
+		if( this.state.postType !== "event" ) {
 			return (
 				<p>
-					{this.data.content}
+					{this.state.content}
 				</p>
 			);
 		}
@@ -116,14 +126,14 @@ class CardItem extends Component {
 
 	render () {
 
-		if( this.data ) {
+		if( this.state ) {
 			return (
 				<div className={this.cardName()}>
 					<Card style={{ maxWidth: "600px" }} className="md-block-centered">
 						{/* 작성자 정보 - 피드, 뉴스 */}
 						{this.cardAuthorInfo()}
 
-						<Link to={this.props.list + '/' + this.data.postIdx }>
+						<Link to={this.props.list + '/' + this.state.postIdx }>
 							{/* 이벤트 썸네일, 제목 */}
 							{this.cardEventTitle()}
 
@@ -141,8 +151,10 @@ class CardItem extends Component {
 						<CardActions>
 							{/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
 							<LikeShareAndSome
-								like={ { to:this.props.list + '/' + this.data.postIdx + '/like', count:this.data.likesCount } }
-								share={this.data.postType !== 'feed' } />
+								like={ { to:this.props.list + '/' + this.state.postIdx + '/like', count:this.state.likesCount, liked:this.state.myLikeFlag } }
+								share={ this.state.postType !== 'feed' }
+								onChangeLike={ this.onChangeLike }
+							/>
 						</CardActions>
 					</Card>
 				</div>

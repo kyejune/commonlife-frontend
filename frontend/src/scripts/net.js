@@ -73,7 +73,7 @@ export default {
                 Store.event = sjf.filter({ 'postType':'event' }).data( response.data.data ).wantArray().exec();
                 Store.news = sjf.filter({ 'postType':'news' }).data( response.data.data ).wantArray().exec();
 
-                console.log('Store update:', response );
+                console.log('Store update getFeedAll:', response );
                 if( callback ) callback();
 
             });
@@ -95,11 +95,20 @@ export default {
     //         } );
     // },
 
-    setLikey( id, callback ){
-        axios.post( Store.api + '/posts/' + id + '/likes/', { usrIdx:1 })
-            .then( response => {
-               callback( response.data );
-            });
+    setLikey( id, bool, callback ){
+
+        if( bool ) {
+            axios.post(Store.api + '/posts/' + id + '/likes/', {usrIdx: id})
+                .then(response => {
+                    callback(response.data);
+                });
+
+        }else{
+            axios.delete( Store.api + '/posts/' + id + '/likes/', { usrIdx:id })
+                .then( response => {
+                    callback( response.data );
+                });
+        }
     },
 
     getLikesOfPost( postId, callback ){

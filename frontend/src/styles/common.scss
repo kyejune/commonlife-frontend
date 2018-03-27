@@ -80,7 +80,9 @@ h1, h2, h3, h4, h5, p{
 //  box-shadow: none;
 //  -webkit-appearance: none;
 //}
-
+input:focus, textarea:focus {
+  outline: none;
+}
 
 
 /* Text */
@@ -146,16 +148,6 @@ h1, h2, h3, h4, h5, p{
   @extend .cl-flex;
   justify-content: space-between;
 }
-
-
-
-/* 이미지에 마진이 포함되어 있어서 임시 수정용 */
-.cl-mrn--32{
-  margin-right: -32px;
-}
-
-
-
 
 
 /* Helper */

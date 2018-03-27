@@ -3,9 +3,11 @@ import Store from "../../scripts/store";
 import ReservationDetail from "components/drawers/ReservationDetail";
 import ReservationHistory from "components/drawers/ReservationHistory";
 import DrawerSwiperViewer from "components/drawers/DrawerSwiperViewer";
+
 import { Link } from 'react-router-dom';
+import {Drawer} from 'react-md';
+import {Link} from 'react-router-dom';
 import HeaderOfReservation from 'components/ui/HeaderOfReservation';
-// import NoCreditPopup from "components/ui/NoCreditPopup";
 import SelectWithTitle from 'components/ui/SelectWithTitle';
 import ReserveGroupArrow from 'images/ic-favorite-24-px-blue@3x.png';
 import ReserveGroupHome from 'images/r-icon-1@3x.png';
@@ -19,13 +21,14 @@ import ReserveServiceCarwash from 'images/rs-icon-4@3x.png';
 import ReserveIcPlus from 'images/page-1@3x.png';
 import {observer} from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
-// import ReserveIcTimeNext from 'images/shape-time-next@3x.png';
-// import ReserveIcTimePlus from 'images/shape-time-plus@3x.png';
-// import ReserveIcNotice from 'images/alert-icon-red@3x.png';
 
 class Reservation extends Component {
 
-    componentDidMount(){
+    constructor(props) {
+        super(props);
+    }
+
+    componentDidMount() {
         this.updateRoute();
     }
 
@@ -34,27 +37,27 @@ class Reservation extends Component {
             this.updateRoute();
     }
 
-    updateRoute(){
+    updateRoute() {
 
         console.log('updateRoute', Store.drawer);
 
         // id위치에 특정 단어가 들어올때 처리
-        if( this.props.match.params.id  === 'history' )
-            Store.pushDrawer( 'reservation-history' );
+        if (this.props.match.params.id === 'history')
+            Store.pushDrawer('reservation-history');
 
         // id위치에 일반적으로 숫자가 들어오면 상세보기
-        else if( this.props.match.params.id  )
-            Store.pushDrawer( 'reservation-detail' );
-        else{
+        else if (this.props.match.params.id)
+            Store.pushDrawer('reservation-detail');
+        else {
             Store.clearDrawer();
         }
 
         // 썸네일 뷰 추가
-        if( this.props.match.params.add === 'thumbnails' )
-            Store.pushDrawer( 'reservation-thumbnails');
+        if (this.props.match.params.add === 'thumbnails')
+            Store.pushDrawer('reservation-thumbnails');
 
 
-        setTimeout( ()=> this.render(), 1000 );
+        setTimeout(() => this.render(), 1000);
         // this.render();
     }
 
@@ -73,16 +76,14 @@ class Reservation extends Component {
 
                 <ul className="cl-reservation__list--group">
                     <li className="cl-reservation__list-item">
-                        <Link to={ '/reservation/0' }>
-                            <div className="cl-flex-between">
-                                <img src={ReserveGroupHome} alt="" className="cl-reservation__list-item-type-img"/>
-                                <div className="cl-reservation__list-item-text">
-                                    <h5>생활 서비스</h5>
-                                    <p className="cl-ellipsis">세탁배달, 청소서비스, 음식배달외 3</p>
-                                </div>
-                                <img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
+                        <div className="cl-flex-between">
+                            <img src={ReserveGroupHome} alt="" className="cl-reservation__list-item-type-img"/>
+                            <div className="cl-reservation__list-item-text">
+                                <h5>생활 서비스</h5>
+                                <p className="cl-ellipsis">세탁배달, 청소서비스, 음식배달외 3</p>
                             </div>
-                        </Link>
+                            <img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
+                        </div>
                     </li>
                     <li className="cl-reservation__list-item">
                         <div>
@@ -135,7 +136,7 @@ class Reservation extends Component {
                                 </div>
                                 <button type="button" className="cl-reservation__list-item-bullet">
                                     <img src={ReserveIcPlus} alt=""/>
-                                    <span>예약하기</span>
+                                    <Link to={ '/reservation/0' }>예약하기</Link>
                                 </button>
                             </div>
                         </div>
@@ -143,7 +144,8 @@ class Reservation extends Component {
                     <li className="cl-reservation__list-item cl-reservation__notice">
                         <div>
                             <div className="cl-flex-between">
-                                <img src={ReserveServiceCleaning} alt="" className="cl-reservation__list-item-type-img"/>
+                                <img src={ReserveServiceCleaning} alt=""
+                                     className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
                                     <h5>청소 서비스</h5>
                                     <p className="cl-ellipsis">외부 서비스업체 사정에 따라 변경 또는 취소의 여지가 있을 수도 있습니다.</p>
@@ -158,7 +160,8 @@ class Reservation extends Component {
                     <li className="cl-reservation__list-item">
                         <div>
                             <div className="cl-flex-between">
-                                <img src={ReserveServiceCleaning} alt="" className="cl-reservation__list-item-type-img"/>
+                                <img src={ReserveServiceCleaning} alt=""
+                                     className="cl-reservation__list-item-type-img"/>
                                 <div className="cl-reservation__list-item-text">
                                     <h5>청소 서비스</h5>
                                     <p className="cl-ellipsis">외부 서비스업체 사정에 따라 변경 또는 취소의 여지가 있을 수도 있습니다.</p>
@@ -214,7 +217,7 @@ class Reservation extends Component {
                 <ReservationHistory/>
             </DrawerWrapper>
 
-			{/* 이미지상세보기 */}
+            {/* 이미지상세보기 */}
             <DrawerWrapper drawer="reservation-thumbnails">
                 <DrawerSwiperViewer/>
             </DrawerWrapper>

@@ -148,7 +148,7 @@
             height: 18px;
         }
 
-        span {
+        &>span, &>a {
             padding-left: 4px;
         }
     }
