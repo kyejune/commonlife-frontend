@@ -8,7 +8,7 @@
         SELECT
             USR_INFO.USR_ID,
             USER_NM,
-            IFNULL(AVATAR_IMG_SRC, "cl_profile_default") AS IMG_SRC,
+            IFNULL(AVATAR_IMG_SRC, NULL) AS IMG_SRC,
             IFNULL(USER_ALIAS, USER_NM) AS USER_ALIAS,
             CMPLX_NM
         FROM
