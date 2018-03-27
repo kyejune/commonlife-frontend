@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PostRsv">
+    <select id="selectRsvList" parameterType="java.util.Map" resultType="likeInfo">
+        <![CDATA[
+        SELECT
+            `RSV_IDX`,
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_ID`,
+            `DEL_YN`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `POST_RSV`
+        WHERE
+            `DEL_YN` = 'N'
+            AND
+            `PARENT_TYPE` = 'POST'
+            AND
+            `PARENT_IDX` = #{parentIdx}
+        ]]>
+    </select>
+
+    <select id="selectLikeCountByPostId" parameterType="java.util.Map" resultType="LikeStatusInfo">
+        <![CDATA[
+        SELECT
+          COUNT(*) AS LIKE_COUNT,
+          IF( 1 = SUM(CASE WHEN `USR_ID` = #{usrId} THEN 1 ELSE 0 END), TRUE, FALSE) AS MY_LIKE_FLAG
+        FROM
+        (
+            SELECT
+                `RSV_IDX`,
+                `PARENT_TYPE`,
+                `PARENT_IDX`,
+                `USR_ID`,
+                `DEL_YN`,
+                `REG_DTTM`,
+                `UPD_DTTM`
+            FROM
+                `POST_RSV`
+            WHERE
+                `DEL_YN` = 'N'
+                AND
+                `PARENT_TYPE` = 'POST'
+                AND
+                `PARENT_IDX` =  #{parentIdx}
+        ) AS V;
+        ]]>
+    </select>
+
+    <select id="selectLatestLike" resultType="LikeInfo">
+        <![CDATA[
+        SELECT
+            `RSV_IDX`,
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_ID`,
+            `DEL_YN`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `POST_RSV`
+        WHERE
+            `DEL_YN` = 'N'
+            AND
+            `PARENT_TYPE` = 'POST'
+            AND
+            `PARENT_IDX` = #{parentIdx}
+            AND
+            `RSV_IDX` = LAST_INSERT_ID()
+        ]]>
+    </select>
+
+    <select id="hasLike" resultType="LikeInfo">
+        <![CDATA[
+        SELECT
+            `RSV_IDX`,
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_ID`,
+            `DEL_YN`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `POST_RSV`
+        WHERE
+            `DEL_YN` = 'N'
+            AND
+            `PARENT_TYPE` = 'POST'
+            AND
+            `PARENT_IDX` = #{parentIdx}
+            AND
+            `USR_ID` = #{usrId}
+        ]]>
+    </select>
+
+    <insert id="addLike" parameterType="java.util.Map">
+        <![CDATA[
+        INSERT
+        INTO    `POST_RSV`
+        (
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_ID`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        )
+        VALUES
+        (
+            'POST',
+            #{parentIdx},
+            #{usrId},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+        ON DUPLICATE KEY
+	    UPDATE
+	      DEL_YN="N",
+	      UPD_DTTM=CURRENT_TIMESTAMP;
+        ]]>
+    </insert>
+
+    <update id="cancelLike" parameterType="java.util.Map">
+        <![CDATA[
+        UPDATE  `POST_RSV`
+        SET     `DEL_YN` = 'Y',
+                `UPD_DTTM` = CURRENT_TIMESTAMP
+        WHERE   `DEL_YN` = 'N'
+                AND
+                `PARENT_TYPE` = 'POST'
+                AND
+                `PARENT_IDX` = #{parentIdx}
+                AND
+                `USR_ID` = #{usrId}
+        ]]>
+    </update>
+</mapper>

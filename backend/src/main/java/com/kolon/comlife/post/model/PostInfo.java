@@ -21,6 +21,17 @@ public class PostInfo {
     private boolean myLikeFlag;
     private String regDttm;
     private String updDttm;
+    private String rsvYn;
+    private int    rsvMaxCnt;
+    private int    rsvCurrCnt;
+    private String shareYn;
+    private String eventBeginDttm;
+    private String eventEndDttm;
+    private String eventCmplxNm;
+    private String eventPlaceNm;
+    private String inquiryYn;
+    private String inquiryType;
+    private String inquiryInfo;
 
     public int getPostIdx() {
         return postIdx;
@@ -102,9 +113,97 @@ public class PostInfo {
         this.myLikeFlag = myLikeFlag;
     }
 
+    public String getRsvYn() {
+        return rsvYn;
+    }
+
+    public void setRsvYn(String rsvYn) {
+        this.rsvYn = rsvYn;
+    }
+
+    public int getRsvMaxCnt() {
+        return rsvMaxCnt;
+    }
+
+    public void setRsvMaxCnt(int rsvMaxCnt) {
+        this.rsvMaxCnt = rsvMaxCnt;
+    }
+
+    public String getShareYn() {
+        return shareYn;
+    }
+
+    public void setShareYn(String shareYn) {
+        this.shareYn = shareYn;
+    }
+
+    public String getEventBeginDttm() {
+        return eventBeginDttm;
+    }
+
+    public void setEventBeginDttm(String eventBeginDttm) {
+        this.eventBeginDttm = eventBeginDttm;
+    }
+
+    public String getEventEndDttm() {
+        return eventEndDttm;
+    }
+
+    public void setEventEndDttm(String eventEndDttm) {
+        this.eventEndDttm = eventEndDttm;
+    }
+
+    public String getEventCmplxNm() {
+        return eventCmplxNm;
+    }
+
+    public void setEventCmplxNm(String eventCmplxNm) {
+        this.eventCmplxNm = eventCmplxNm;
+    }
+
+    public String getEventPlaceNm() {
+        return eventPlaceNm;
+    }
+
+    public void setEventPlaceNm(String eventPlaceNm) {
+        this.eventPlaceNm = eventPlaceNm;
+    }
+
+    public String getInquiryYn() {
+        return inquiryYn;
+    }
+
+    public void setInquiryYn(String inquiryYn) {
+        this.inquiryYn = inquiryYn;
+    }
+
+    public String getInquiryType() {
+        return inquiryType;
+    }
+
+    public void setInquiryType(String inquiryType) {
+        this.inquiryType = inquiryType;
+    }
+
+    public String getInquiryInfo() {
+        return inquiryInfo;
+    }
+
+    public void setInquiryInfo(String inquiryInfo) {
+        this.inquiryInfo = inquiryInfo;
+    }
+
+    public int getRsvCurrCnt() {
+        return rsvCurrCnt;
+    }
+
+    public void setRsvCurrCnt(int rsvCurrCnt) {
+        this.rsvCurrCnt = rsvCurrCnt;
+    }
+
     /*
-            Relations
-         */
+                    Relations
+                 */
     private PostUserInfo user;
     private List<PostFileInfo> postFiles = new ArrayList<PostFileInfo>();
 

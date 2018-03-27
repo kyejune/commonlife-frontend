@@ -1,4 +1,4 @@
-package com.kolon.comlife.like.service.impl;
+package com.kolon.comlife.post.service.impl;
 
 import com.kolon.comlife.like.model.LikeInfo;
 import com.kolon.comlife.like.model.LikeStatusInfo;
@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Repository("likeDAO")
-public class LikeDAO {
+@Repository("postRsvDAO")
+public class PostRsvDAO {
     @Resource
     private SqlSession sqlSession;
 

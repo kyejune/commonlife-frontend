@@ -28,6 +28,9 @@
                 <if test="cmplxId != null">
                   AND CMPLX_ID=#{cmplxId}
                 </if>
+                <if test="postType != null">
+                  AND POST_TYPE=#{postType}
+                </if>
             GROUP BY POST_IDX ) AS POST_LIST
         ORDER BY
             POST_IDX DESC -- 생성기준, 역순으로 표시

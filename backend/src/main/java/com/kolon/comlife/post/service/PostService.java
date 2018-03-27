@@ -2,9 +2,7 @@ package com.kolon.comlife.post.service;
 
 import com.kolon.comlife.common.model.PaginateInfo;
 import com.kolon.comlife.post.model.PostInfo;
-import com.kolon.comlife.postFile.model.PostFileInfo;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 

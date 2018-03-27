@@ -1,34 +1,33 @@
-package com.kolon.comlife.like.web;
+package com.kolon.comlife.post.web;
 
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.like.model.LikeInfo;
 import com.kolon.comlife.like.model.LikeStatusInfo;
-import com.kolon.comlife.like.service.LikeService;
-import com.kolon.comlife.post.web.PostController;
+import com.kolon.comlife.post.service.PostRsvService;
 import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/posts/{postId}/likes/*")
-public class LikeController {
+@RequestMapping("/posts/{postId}/rsv/*")
+public class PostRsvController {
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
-    @Resource(name = "likeService")
-    private LikeService likeService;
-    @Resource(name = "userService")
+    @Autowired
+    private PostRsvService postRsvService;
+    @Autowired
     private UserService userService;
 
     @CrossOrigin
@@ -37,7 +36,7 @@ public class LikeController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<List<LikeInfo>> getLikeList(@PathVariable( "postId" ) int postId ) {
-        List<LikeInfo> likes = likeService.getLikeList( postId );
+        List<LikeInfo> likes = postRsvService.getLikeList( postId );
 
         // USR_ID 추출
         List<Integer> userIds = new ArrayList<Integer>();
@@ -68,26 +67,26 @@ public class LikeController {
     )
     public boolean hasLike( @PathVariable( "postId" ) int postId, HttpServletRequest request ) {
         int usrIdx = Integer.parseInt( request.getParameter( "usrIdx" ) );
-        return likeService.hasLike( postId, usrIdx );
+        return postRsvService.hasLike( postId, usrIdx );
     }
 
     @PostMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity addLike(
+    public ResponseEntity requestRsv(
                     HttpServletRequest            request,
                     @PathVariable( "postId" ) int postId ) {
         AuthUserInfo currUser;
         LikeStatusInfo result;
         try {
             currUser = AuthUserInfoUtil.getAuthUserInfo( request );
-            result = likeService.addLike(postId, currUser.getUsrId());
+            result = postRsvService.requestRsv( postId, currUser.getUsrId());
         } catch(Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity
                     .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body( new SimpleErrorInfo("LIKE 추가 명령이 실패했습니다.") );
+                    .body( new SimpleErrorInfo("현재 참여 신청이 가능하지 않습니다.") );
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
@@ -97,19 +96,19 @@ public class LikeController {
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity cancelLike(
+    public ResponseEntity cancelRsv(
                     HttpServletRequest            request,
                     @PathVariable( "postId" ) int postId) {
         AuthUserInfo currUser;
         LikeStatusInfo result;
         try {
             currUser = AuthUserInfoUtil.getAuthUserInfo( request );
-            result = likeService.cancelLike( postId, currUser.getUsrId() );
+            result = postRsvService.cancelRsv( postId, currUser.getUsrId() );
         } catch(Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity
                     .status( HttpStatus.SERVICE_UNAVAILABLE )
-                    .body( new SimpleErrorInfo("LIKE 취소 명령이 실패했습니다.") );
+                    .body( new SimpleErrorInfo("참여 취소 신청이 가능하지 않습니다.") );
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );

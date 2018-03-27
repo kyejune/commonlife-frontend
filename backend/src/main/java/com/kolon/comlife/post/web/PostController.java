@@ -31,6 +31,10 @@ public class PostController {
 
     private static final int LIMIT_COUNT = 20;  // 한 번에 로딩할 게시글 갯수
 
+    private static final String POST_TYPE_FEED  = "feed";
+    private static final String POST_TYPE_EVENT = "event";
+    private static final String POST_TYPE_NEWS  = "news";
+
     @Resource(name = "postService")
     private PostService postService;
     @Resource(name = "userService")
@@ -44,18 +48,31 @@ public class PostController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getPostListInJson(HttpServletRequest request) {
 
-        PaginateInfo paginateInfo;
-        AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+        AuthUserInfo         currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+        PaginateInfo         paginateInfo;
+        Map<String, Object>  postParams = new HashMap<>();
 
         logger.debug(">>> CmplxId: " + currUser.getCmplxId());
         logger.debug(">>> UserId: " + currUser.getUserId());
         logger.debug(">>> UsrId: " + currUser.getUsrId());
 
-        int complexId = currUser.getCmplxId();
+        int    complexId = currUser.getCmplxId();
         String page = request.getParameter( "page" );
-        int pageNum = StringUtil.parseInt(page, 1);
+        int    pageNum = StringUtil.parseInt(page, 1);
 
-        Map<String, Integer> postParams = new HashMap<String, Integer>();
+        String postType = request.getParameter("postType");
+        if( postType != null ) {
+            if( POST_TYPE_FEED.equals(postType) ||
+                POST_TYPE_EVENT.equals(postType) ||
+                POST_TYPE_NEWS.equals(postType)) {
+                postParams.put( "postType", postType );
+            } else {
+                return ResponseEntity
+                        .status( HttpStatus.BAD_REQUEST )
+                        .body(new SimpleErrorInfo("잘못된 postType 값이 입력되었습니다. "));
+            }
+        }
+
         postParams.put( "limit", LIMIT_COUNT);
         postParams.put( "pageNum", Integer.valueOf(pageNum) );
         postParams.put( "cmplxId", Integer.valueOf(complexId) );
