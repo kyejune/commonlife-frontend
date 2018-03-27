@@ -42,14 +42,14 @@ public class LikeDAO {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put( "parentIdx", parentIdx );
         params.put( "usrId", usrId );
-        return sqlSession.insert( "Like.requestRsv", params );
+        return sqlSession.insert( "Like.addLike", params );
     }
 
     public void cancelLike( int parentIdx, int usrId ) {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put( "parentIdx", parentIdx );
         params.put( "usrId", usrId );
-        sqlSession.update( "Like.cancelRsv", params );
+        sqlSession.update( "Like.cancelLike", params );
         return;
     }
 }
