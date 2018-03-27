@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReservationGroup">
+
+    <select id="index" parameterType="java.util.Map" resultType="reservationGroupInfo">
+        SELECT *
+        FROM   `RESERVATION_GROUPS`
+        WHERE  1=1
+        <choose>
+            <when test='ids != null'>
+                AND
+                IDX IN
+                <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </when>
+        </choose>
+    </select>
+
+    <select id="show" parameterType="java.util.Map" resultType="reservationGroupInfo">
+
+    </select>
+
+    <insert id="create" parameterType="reservationGroupInfo">
+
+    </insert>
+
+    <update id="update" parameterType="reservationGroupInfo">
+
+    </update>
+
+    <update id="delete" parameterType="reservationGroupInfo">
+
+    </update>
+
+</mapper>
