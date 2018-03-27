@@ -35,11 +35,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostInfo getPostById(int id) throws Exception {
-        List<Integer>  userIds;
-        List<PostUserInfo>         userList;
+        List<Integer>        userIds;
+        List<Integer>        postIdxs;
+        List<PostUserInfo>   userList;
+        PostFileInfo         postFile;
+        List<PostFileInfo>   postFileList;
+
         PostInfo  postInfo;
 
         userIds = new ArrayList<>();
+        postIdxs = new ArrayList<>();
 
         postInfo = postDAO.selectPost(id);
         if( postInfo == null ) {
@@ -49,11 +54,19 @@ public class PostServiceImpl implements PostService {
         userIds.add(postInfo.getUsrId());
         userList = userDAO.getUserListForPostById( userIds );
         if( userList == null || userList.size() < 1 ) {
-            // todo: exception...
             throw new Exception("해당 게시물을 가져올 수 없습니다.");
         }
-
+        // 게시물의 사용자 정보 연결
         postInfo.setUser( userList.get(0) );
+
+        postIdxs.add(id);
+        postFileList = postFileDAO.getPostFilesByPostIds( postIdxs );
+        if( postFileList != null && postFileList.size() > 0 ) {
+            postFile = postFileList.get(0);
+
+            // PostInfo에 이미지 파일 연결
+            postInfo.getPostFiles().add( postFile );
+        }
 
         return postInfo;
     }
