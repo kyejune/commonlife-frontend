@@ -135,6 +135,16 @@
                                         </label>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label>시설 옵션</label>
+                                    <div>
+                                        <c:forEach var="amenity" items="${amenities}">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="amenities[]" value="${amenity.idx}"> ${amenity.name}
+                                            </label>
+                                        </c:forEach>
+                                    </div>
+                                </div>
                                 <div>
                                     <button class="btn btn-primary">전송</button>
                                 </div>

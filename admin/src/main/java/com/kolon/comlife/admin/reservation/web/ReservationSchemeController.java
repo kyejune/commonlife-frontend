@@ -1,12 +1,15 @@
 package com.kolon.comlife.admin.reservation.web;
 
+import com.kolon.comlife.admin.reservation.model.ReservationAmenityInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
+import com.kolon.comlife.admin.reservation.service.ReservationAmenityService;
 import com.kolon.comlife.admin.reservation.service.ReservationSchemeService;
-import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -23,6 +26,9 @@ public class ReservationSchemeController {
 
     @Resource(name = "reservationSchemeService")
     private ReservationSchemeService service;
+
+    @Resource(name = "reservationAmenityService")
+    private ReservationAmenityService amenityService;
 
     @RequestMapping(value = "list.do")
     public ModelAndView listReservationScheme (
@@ -44,6 +50,9 @@ public class ReservationSchemeController {
             , ModelAndView mav
             , HttpSession session
     ) {
+        List<ReservationAmenityInfo> amenities = amenityService.index();
+        mav.addObject( "amenities", amenities );
+
         return mav;
     }
 
