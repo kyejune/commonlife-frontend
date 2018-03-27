@@ -16,6 +16,7 @@ public class PostInfo {
     private int cmplxId;
     private String postType;
     private String content;
+    private String title;
     private String delYn;
     private int likesCount;
     private boolean myLikeFlag;
@@ -201,9 +202,17 @@ public class PostInfo {
         this.rsvCurrCnt = rsvCurrCnt;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     /*
-                    Relations
-                 */
+                        Relations
+                     */
     private PostUserInfo user;
     private List<PostFileInfo> postFiles = new ArrayList<PostFileInfo>();
 
