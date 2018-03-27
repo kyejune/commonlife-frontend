@@ -13,7 +13,7 @@ class CardItemDetailDrawer extends Component {
 
         let match = this.props.match.params;
         this.state = {
-            likeLink: '/community/' + match.tab + '/' + match.id + '/like'
+            likeLink: '/community/' + match.tab + '/' + match.id + '/like',
         }
     }
 
@@ -27,6 +27,14 @@ class CardItemDetailDrawer extends Component {
             this.props.updateTitle('글보기');//data.content || 'untitled' ); // ContentHolder에 전달
 
         });
+    }
+
+    onChangeLike=( likeCount, hasLiked )=>{
+        let obj = Object.assign({}, this.state );
+            obj.likesCount = likeCount;
+            obj.myLikeFlag = hasLiked;
+
+        this.setState( obj );
     }
 
 
@@ -69,9 +77,11 @@ class CardItemDetailDrawer extends Component {
 
                     {/*this.props.list + '/like/' + this.props.cardData.index*/}
                     {/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
-                    <LikeShareAndSome like={{to: this.state.likeLink, count: this.state.likesCount || 0 }} share
-                                      schedule={this.state.type === 'event'} qa={this.state.type !== 'event'}/>
-
+                    <LikeShareAndSome
+                        like={ { to:this.props.list + '/' + this.state.postIdx + '/like', count:this.state.likesCount, liked:this.state.myLikeFlag } }
+                        share
+                        onChangeLike={ this.onChangeLike }
+                    />
                 </div>
             </div>
 
