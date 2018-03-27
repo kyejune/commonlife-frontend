@@ -210,7 +210,7 @@ body.cl-dom--added{
     color: white;
 
     & + .cl-fitted-box {
-        @extend .cl-bg--light;
+        //@extend .cl-bg--light;
         //background-image: url("images/bg-3@2x.png");
     }
 }
@@ -271,8 +271,6 @@ body.cl-dom--added{
 
 .cl-home-iot {
     .cl-fitted-box {
-        @extend .cl-bg--light;
         min-height: calc(100vh - 56px);
-        //background-image: url("images/bg-3@2x.png");
     }
 }

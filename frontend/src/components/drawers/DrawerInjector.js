@@ -36,7 +36,6 @@ class DrawerInjector extends Component{
 
     render(){
 
-        console.log('--------------------------- DrawerInjector ReDrawer', Store.modeModal, Store.myModal );
 
         return <div className="drawerInjector">
 
