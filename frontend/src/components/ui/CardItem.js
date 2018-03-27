@@ -4,6 +4,7 @@ import { Avatar, Card, CardActions, CardText, CardTitle, Media, MediaOverlay } f
 import { Link } from 'react-router-dom';
 import LikeShareAndSome from "components/ui/LikeShareAndSome";
 import Store from 'scripts/store.js';
+import reactStringReplace from 'react-string-replace';
 
 class CardItem extends Component {
 
@@ -64,8 +65,7 @@ class CardItem extends Component {
 						<img src={this.state.thumbnail} alt="이벤트 썸네일"/>
 						<MediaOverlay>
 							<CardTitle
-								// 이벤트 제목
-								title={this.state.title}
+								title={this.state.title || '이벤트 제목' }
 							/>
 						</MediaOverlay>
 					</Media>
@@ -112,9 +112,12 @@ class CardItem extends Component {
 	// 피드, 뉴스 컨텐츠
 	cardTextContent = ()=> {
 		if( this.state.postType !== "event" ) {
+
 			return (
 				<p>
-					{this.state.content}
+					{reactStringReplace( this.state.content, /(\n)/g, ( match, index, offset )=>{
+						return <br key={index} />;
+					})}
 				</p>
 			);
 		}

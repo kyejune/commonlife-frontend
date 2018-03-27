@@ -109,7 +109,7 @@ class WriteDrawer extends BottomDrawer {
 
         let data = {
             postType: "feed",
-            content: this.state.content,
+            content: this.state.content.replace(/\n{2,}/g, '\n\n' ), // 2줄 이상만 묶어버리기
             postFiles: []
         };
 

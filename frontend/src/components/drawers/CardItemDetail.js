@@ -4,6 +4,8 @@ import {CardTitle, Avatar} from "react-md";
 import Net from "scripts/net";
 import Store from "scripts/store";
 import LikeShareAndSome from "components/ui/LikeShareAndSome";
+import reactStringReplace from 'react-string-replace';
+import {Link} from "react-router-dom";
 
 
 class CardItemDetailDrawer extends Component {
@@ -44,8 +46,28 @@ class CardItemDetailDrawer extends Component {
 
         let Img;
         if (this.state.postFiles[0])
-            Img = <img src={Store.api + this.state.postFiles[0].largePath} alt="관련 이미지" width="100%"/>
+            Img = <img src={Store.api + this.state.postFiles[0].largePath} alt="관련 이미지" width="100%"/>;
 
+
+            // 줄넘김 태그 변환, url -> a링크 생성
+        let content = this.state.content;
+        content = reactStringReplace( content, /(\n)/g, ( match, index  )=>{
+            return <br key={ 'br-' + index} />;
+        });
+
+        content = reactStringReplace( content, /(https:\/\/\S+)/g, ( match, index, offset  )=>{
+            return <a key={match + offset } href={match} target="_blank">{match}</a>;
+        });
+
+        content = reactStringReplace( content, /(http:\/\/\S+)/g, ( match, index, offset  )=>{
+            return <a key={match + offset } href={match} target="_blank">{match}</a>;
+        });
+
+        content = reactStringReplace( content, /(www\.\S+)/g, ( match, index, offset  )=>{
+            return <a key={match + offset } href={match} target="_blank">{match}</a>;
+        });
+
+        console.log( '링크생성후 결과:', content );
 
         return <div className="cl-card-detail">
 
@@ -86,9 +108,9 @@ class CardItemDetailDrawer extends Component {
             </div>
 
 
-            <div className="cl-content--card">
-                {this.state.content}
-            </div>
+            <p className="cl-content--card">
+                {content}
+            </p>
 
 
             {this.state.postType === 'event' &&
