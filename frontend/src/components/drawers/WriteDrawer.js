@@ -6,7 +6,6 @@ import BottomDrawer from 'components/drawers/BottomDrawer';
 import thumbSrc from 'images/ic-thumb@3x.png';
 import checkSrc from 'images/ic-check@3x.png';
 import previewSrc from 'images/img-preview-holder@3x.png';
-import classNames from 'classnames';
 
 class WriteDrawer extends BottomDrawer {
 

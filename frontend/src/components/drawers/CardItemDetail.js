@@ -1,12 +1,9 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
-import {CardTitle, Avatar} from "react-md";
 import Net from "scripts/net";
 import Store from "scripts/store";
 import LikeShareAndSome from "components/ui/LikeShareAndSome";
 import reactStringReplace from 'react-string-replace';
-import {Link} from "react-router-dom";
-import CardItem from "../ui/CardItem";
 import moment from "moment/moment";
 import joinSrc from 'images/rsvp-normal@3x.png';
 import joinedSrc from 'images/rsvp-activity@3x.png';
@@ -106,7 +103,7 @@ class CardItemDetailDrawer extends Component {
 
 
         const PostType = this.state.postType;
-        const PostLink = this.props.list + '/' + this.state.postIdx;
+        // const PostLink = this.props.list + '/' + this.state.postIdx;
         const Content = this.makeContentComponent( this.state.content );
 
         let userThumb = {};
@@ -193,7 +190,7 @@ class CardItemDetailDrawer extends Component {
                         onChangeLike={this.onChangeLike}
 
                         share={this.state.shareYn === 'Y'}
-                        qa={this.state.inquiryYn === 'E' || this.state.inquiryYn == 'P' }
+                        qa={this.state.inquiryYn === 'E' || this.state.inquiryYn === 'P' }
                         calendar={this.state.postType === 'event'?[this.state.eventBeginDttm, this.state.eventEndDttm]:false }
 
                         data={ { ...this.state } }

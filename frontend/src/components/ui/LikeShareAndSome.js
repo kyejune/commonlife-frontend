@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import { Button } from 'react-md';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import qaSrc from 'images/contact-bt-gray@3x.png';
 import calSrc from 'images/calender-bt-gray@3x.png';
 import joinSrc from 'images/rsvp-normal@3x.png';
@@ -30,7 +29,7 @@ export default class LikeShareAndSome extends Component{
 
 	shareItem() {
 
-        const { title, eventPlaceNm, eventCmplxNm, content } = this.props.data;
+        const { title, content } = this.props.data;
 
 		let options = {
 			message: content, // not supported on Facebook, Instagram

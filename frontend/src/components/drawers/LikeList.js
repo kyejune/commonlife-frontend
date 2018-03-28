@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
-import clRightCaretSrc from 'images/ic-favorite-24-px@3x.png';
-import {Link} from 'react-router-dom';
+import React, {Component} from 'react';
+import {withRouter} from 'react-router';
 import Store from "../../scripts/store";
 
 class LikeList extends Component{
