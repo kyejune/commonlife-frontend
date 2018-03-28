@@ -132,7 +132,7 @@ export default {
         axios.post( Store.api + '/posts/', data)
             .then( response => {
 
-                this.getFeedAll();
+                this.getFeed('feed', 0 );
                 callback( response );
 
             });

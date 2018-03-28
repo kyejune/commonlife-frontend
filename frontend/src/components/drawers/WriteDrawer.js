@@ -20,6 +20,10 @@ class WriteDrawer extends BottomDrawer {
         }
     }
 
+    componentDidMount(){
+        this.input.focus();
+    }
+
     handleChange(event) {
         this.setState({content: event.target.value});
     }
@@ -133,7 +137,7 @@ class WriteDrawer extends BottomDrawer {
             <section className="cl-write-section dialogs__content cl-shrink">
 
                 <textarea name="" id="" cols="30" rows="5" placeholder="새로운 글을 작성해 보세요." value={this.state.content}
-                          onChange={event => this.handleChange(event)}/>
+                          onChange={event => this.handleChange(event)} ref={ textarea =>{ this.input = textarea; }  }/>
 
 
                 <footer className="cl-flex-between">
