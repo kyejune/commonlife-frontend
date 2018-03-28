@@ -335,6 +335,18 @@
     color: rgba(0, 0, 0, 0.5);
 }
 
+.cl__thumb{
+    width: 45px;
+    margin-right: 10px;
+}
+
+.cl__thumb--rounded{
+    @extend .cl__thumb;
+    border-radius: 50%;
+    background-color: #f3f3f3;
+    border: 1px solid #DBDBDB;
+}
+
 /* Iot Vertical List */
 .abs__list--common{
     display: flex;
@@ -348,17 +360,18 @@
     margin-bottom: 5px;
     border-radius: 2px;
 
-    .cl__thumb{
-        width: 45px;
-        margin-right: 10px;
-    }
-
-    .cl__thumb--rounded{
-        @extend .cl__thumb;
-        border-radius: 50%;
-        background-color: #f3f3f3;
-        border: 1px solid #DBDBDB;
-    }
+    //.cl__thumb{
+    //    width: 45px;
+    //    margin-right: 10px;
+    //}
+    //
+    //.
+    // cl__thumb--rounded{
+    //    @extend .cl__thumb;
+    //    border-radius: 50%;
+    //    background-color: #f3f3f3;
+    //    border: 1px solid #DBDBDB;
+    //}
 
     .cl__title{
         font-size: 17px;

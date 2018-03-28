@@ -5,12 +5,13 @@ let host = 'https://clback.cyville.net';
 if( window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' )
     host = 'http://localhost:8080';
     
-// 디바이스 테스트용 주소
+// 아이폰 디바이스 테스트용 주소
 if( window.location.protocol === 'file:' && window.location.pathname.includes('CoreSimulator') )
     host = 'http://192.168.0.100:8080';
 
-
-host = 'https://clback.cyville.net';
+// 덮어쓰기
+// host = 'https://cl-stage.cyville.net'; // 클라 전달용
+host = 'https://clback.cyville.net'; // 테스트용
 
 
 const Store = observable({

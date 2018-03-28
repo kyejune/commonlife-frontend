@@ -86,9 +86,6 @@ class CardItem extends Component {
 
         const PostLink = this.props.list + '/' + this.state.postIdx;
 
-        console.log( 'render:', this.state.rsvYn, this.state.rsvFlag );
-
-
         if (this.state) {
             return <div className="cl-card-item-wrapper">
 
