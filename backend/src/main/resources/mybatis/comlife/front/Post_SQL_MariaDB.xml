@@ -17,12 +17,25 @@
             SELECT
                 `POST`.*,
                 SUM(CASE WHEN ISNULL(`LIKE`.`LIKE_IDX`) THEN 0 ELSE 1 END) AS LIKES_COUNT,
-                IF( 1 = SUM(CASE WHEN `LIKE`.`USR_ID` = #{usrId} THEN 1 ELSE 0 END), TRUE, FALSE) AS MY_LIKE_FLAG
+                IF( 1 = SUM(CASE WHEN (`LIKE`.`USR_ID` = #{usrId} AND `LIKE`.`DEL_YN` = "N") THEN 1 ELSE 0 END),
+                  TRUE,
+                  FALSE) AS MY_LIKE_FLAG,
+                `POST_RSV`.`RSV_MAX_CNT` AS RSV_MAX_CNT,
+                `POST_RSV`.`RSV_CURR_CNT` AS RSV_COUNT,
+                IF( 1 = SUM(CASE WHEN (`POST_RSV_ITEMS`.`USR_ID` = #{usrId} AND `POST_RSV_ITEMS`.`DEL_YN` = "N") THEN 1 ELSE 0 END),
+                  TRUE,
+                  FALSE) AS RSV_FLAG
             FROM
               `POST`
                 LEFT JOIN
               `LIKE`
-                ON  `POST`.`POST_IDX` = `LIKE`.`PARENT_IDX`  AND `LIKE`.`DEL_YN` = "N"
+                  ON  `POST`.`POST_IDX` = `LIKE`.`PARENT_IDX`  AND `LIKE`.`DEL_YN` = "N"
+                LEFT JOIN
+              `POST_RSV`
+                  ON  `POST`.`POST_IDX` = `POST_RSV`.`PARENT_IDX` AND `POST`.`RSV_YN` = "Y"
+                LEFT JOIN
+              `POST_RSV_ITEMS`
+                  ON  `POST`.`POST_IDX` = `POST_RSV_ITEMS`.`PARENT_IDX` AND `POST`.`DEL_YN` = "N"
             WHERE
                 `POST`.`DEL_YN` = 'N'
                 <if test="cmplxId != null">

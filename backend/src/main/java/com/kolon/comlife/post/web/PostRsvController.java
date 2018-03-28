@@ -1,10 +1,11 @@
 package com.kolon.comlife.post.web;
 
 import com.kolon.comlife.common.model.SimpleErrorInfo;
-import com.kolon.comlife.like.model.LikeInfo;
-import com.kolon.comlife.like.model.LikeStatusInfo;
+import com.kolon.comlife.post.exception.PostRsvGeneralException;
+import com.kolon.comlife.post.exception.ReservedAlreadyException;
+import com.kolon.comlife.post.model.PostRsvInfo;
+import com.kolon.comlife.post.model.PostRsvStatusInfo;
 import com.kolon.comlife.post.service.PostRsvService;
-import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
@@ -17,8 +18,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("/posts/{postId}/rsv/*")
@@ -30,44 +29,30 @@ public class PostRsvController {
     @Autowired
     private UserService userService;
 
+    /**
+     * 해당 포스팅에 참여 신청한 사용자 목록 가져오기
+     * @param postId
+     * @return
+     */
     @CrossOrigin
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<List<LikeInfo>> getLikeList(@PathVariable( "postId" ) int postId ) {
-        List<LikeInfo> likes = postRsvService.getLikeList( postId );
+    public ResponseEntity getRsvUserList(@PathVariable( "postId" ) int postId ) {
+        PostRsvInfo rsvInfoList;
+        PostRsvInfo rsvInfo;
 
-        // USR_ID 추출
-        List<Integer> userIds = new ArrayList<Integer>();
-        for (LikeInfo e : likes) {
-            userIds.add( e.getUsrId() );
+        try {
+            rsvInfoList = postRsvService.getRsvInfoWithUserListByPostId(postId);
+        } catch( Exception e ) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body( new SimpleErrorInfo("참여 신청자 내역을 가져올 수 없습니다.") );
         }
 
-        if( userIds.size() > 0 ) {
-            // 추출한 ID로 유저 정보 SELECT
-            List<PostUserInfo> userList = userService.getUserListForPostById( userIds );
-
-            // 유저 정보 바인딩
-            for( LikeInfo like : likes ) {
-                for( PostUserInfo user : userList ) {
-                    if( like.getUsrId() == user.getUsrId() ) {
-                        like.setUser( user );
-                    }
-                }
-            }
-        }
-
-        return ResponseEntity.status( HttpStatus.OK ).body( likes );
-    }
-
-    @GetMapping(
-            value = "/has",
-            produces = MediaType.APPLICATION_JSON_VALUE
-    )
-    public boolean hasLike( @PathVariable( "postId" ) int postId, HttpServletRequest request ) {
-        int usrIdx = Integer.parseInt( request.getParameter( "usrIdx" ) );
-        return postRsvService.hasLike( postId, usrIdx );
+        return ResponseEntity.status( HttpStatus.OK ).body( rsvInfoList );
     }
 
     @PostMapping(
@@ -77,13 +62,26 @@ public class PostRsvController {
     public ResponseEntity requestRsv(
                     HttpServletRequest            request,
                     @PathVariable( "postId" ) int postId ) {
-        AuthUserInfo currUser;
-        LikeStatusInfo result;
+        AuthUserInfo      currUser;
+        PostRsvStatusInfo result;
+
         try {
-            currUser = AuthUserInfoUtil.getAuthUserInfo( request );
-            result = postRsvService.requestRsv( postId, currUser.getUsrId());
+            currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+            result = postRsvService.requestRsv(postId, currUser.getUsrId());
+            logger.debug(">>>> request rsv Success!!");
+
+        } catch( ReservedAlreadyException e) {
+            return ResponseEntity
+                    .status( HttpStatus.CONFLICT)
+                    .body( new SimpleErrorInfo( e.getMessage() ) );
+
+        } catch( PostRsvGeneralException e) {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST)
+                    .body( new SimpleErrorInfo( e.getMessage() ) );
+
         } catch(Exception e) {
-            logger.error(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity
                     .status( HttpStatus.SERVICE_UNAVAILABLE )
                     .body( new SimpleErrorInfo("현재 참여 신청이 가능하지 않습니다.") );
@@ -98,12 +96,24 @@ public class PostRsvController {
     )
     public ResponseEntity cancelRsv(
                     HttpServletRequest            request,
-                    @PathVariable( "postId" ) int postId) {
-        AuthUserInfo currUser;
-        LikeStatusInfo result;
+                    @PathVariable( "postId" ) int postId){
+        AuthUserInfo      currUser;
+        PostRsvStatusInfo result;
+
         try {
             currUser = AuthUserInfoUtil.getAuthUserInfo( request );
             result = postRsvService.cancelRsv( postId, currUser.getUsrId() );
+
+        } catch( ReservedAlreadyException e) {
+            return ResponseEntity
+                    .status( HttpStatus.CONFLICT)
+                    .body( new SimpleErrorInfo( e.getMessage() ) );
+
+        } catch( PostRsvGeneralException e) {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST)
+                    .body( new SimpleErrorInfo( e.getMessage() ) );
+
         } catch(Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity

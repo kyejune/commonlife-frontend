@@ -24,7 +24,8 @@ public class PostInfo {
     private String updDttm;
     private String rsvYn;
     private int    rsvMaxCnt;
-    private int    rsvCurrCnt;
+    private int    rsvCount;
+    private boolean  rsvFlag;
     private String shareYn;
     private String eventBeginDttm;
     private String eventEndDttm;
@@ -194,12 +195,20 @@ public class PostInfo {
         this.inquiryInfo = inquiryInfo;
     }
 
-    public int getRsvCurrCnt() {
-        return rsvCurrCnt;
+    public int getRsvCount() {
+        return rsvCount;
     }
 
-    public void setRsvCurrCnt(int rsvCurrCnt) {
-        this.rsvCurrCnt = rsvCurrCnt;
+    public void setRsvCount(int rsvCount) {
+        this.rsvCount = rsvCount;
+    }
+
+    public boolean isRsvFlag() {
+        return rsvFlag;
+    }
+
+    public void setRsvFlag(boolean rsvFlag) {
+        this.rsvFlag = rsvFlag;
     }
 
     public String getTitle() {
