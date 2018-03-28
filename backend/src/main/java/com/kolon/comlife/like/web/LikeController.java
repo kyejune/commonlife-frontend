@@ -37,7 +37,11 @@ public class LikeController {
             produces = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<List<LikeInfo>> getLikeList(@PathVariable( "postId" ) int postId ) {
-        List<LikeInfo> likes = likeService.getLikeList( postId );
+        List<LikeInfo> likes;
+
+
+        // Post에 대한 Like 정보 가져오기 
+        likes = likeService.getLikeList( postId );
 
         // USR_ID 추출
         List<Integer> userIds = new ArrayList<Integer>();
@@ -84,7 +88,7 @@ public class LikeController {
             currUser = AuthUserInfoUtil.getAuthUserInfo( request );
             result = likeService.addLike(postId, currUser.getUsrId());
         } catch(Exception e) {
-            logger.error(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity
                     .status( HttpStatus.SERVICE_UNAVAILABLE )
                     .body( new SimpleErrorInfo("LIKE 추가 명령이 실패했습니다.") );
@@ -106,7 +110,7 @@ public class LikeController {
             currUser = AuthUserInfoUtil.getAuthUserInfo( request );
             result = likeService.cancelLike( postId, currUser.getUsrId() );
         } catch(Exception e) {
-            logger.error(e.getMessage());
+            e.printStackTrace();
             return ResponseEntity
                     .status( HttpStatus.SERVICE_UNAVAILABLE )
                     .body( new SimpleErrorInfo("LIKE 취소 명령이 실패했습니다.") );

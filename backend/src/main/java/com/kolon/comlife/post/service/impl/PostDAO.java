@@ -20,9 +20,15 @@ public class PostDAO {
     private SqlSession sqlSession;
 
     public PostInfo selectPost(int id) {
-        Map<String, Integer> selectParams = new HashMap<String, Integer>();
+        Map<String, Integer> selectParams = new HashMap<>();
+
         selectParams.put( "postIdx", Integer.valueOf(id) );
-        return sqlSession.selectOne( "Post.selectPost", selectParams );
+        selectParams.put( "cmplxId", null );
+        selectParams.put( "postType", null );
+        selectParams.put( "limit", null );
+        selectParams.put( "offset", null );
+
+        return sqlSession.selectOne( "Post.selectPostList", selectParams );
     }
 
     public int countPostList() {
@@ -34,6 +40,7 @@ public class PostDAO {
     }
 
     public List<PostInfo> selectPostListByComplexId(Map params) {
+        params.put( "postIdx", null );
         return sqlSession.selectList( "Post.selectPostList", params );
     }
 
@@ -43,15 +50,22 @@ public class PostDAO {
     }
 
     public PostInfo updatePost(PostInfo post) {
-        int updateCount = -1;
-        updateCount = sqlSession.update( "Post.updatePost", post );
+        int                  updateCount  = -1;
+        Map<String, Integer> selectParams = new HashMap<>();
 
+        updateCount = sqlSession.update( "Post.updatePost", post );
         if( updateCount < 1 ) {
+            // 업데이트 되지 않은 경우, NULL 반환
             return null;
         }
-        Map<String, Integer> selectParams = new HashMap<String, Integer>();
+
         selectParams.put( "postIdx", post.getPostIdx() );
-        return sqlSession.selectOne( "Post.selectPost", selectParams );
+        selectParams.put( "cmplxId", null );
+        selectParams.put( "postType", null );
+        selectParams.put( "limit", null );
+        selectParams.put( "offset", null );
+
+        return sqlSession.selectOne( "Post.selectPostList", selectParams );
     }
 
     public int deletePost(int id, int usrId) {

@@ -31,6 +31,7 @@ public class PostFileServiceImpl implements PostFileService {
     public PostFileInfo setPostFile( PostFileInfo postFileInfo ) {
         return postFileDAO.setPostFile( postFileInfo );
     }
+
     @Override
     public PostFileInfo updatePostFile( int id, PostFileInfo postFileInfo ) {
         return postFileDAO.updatePostFile( id, postFileInfo );

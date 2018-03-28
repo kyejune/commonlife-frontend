@@ -31,26 +31,20 @@
                 <if test="postType != null">
                   AND POST_TYPE=#{postType}
                 </if>
+                <if test="postIdx != null">
+                  AND POST_IDX=#{postIdx}
+                </if>
             GROUP BY POST_IDX ) AS POST_LIST
         ORDER BY
             POST_IDX DESC -- 생성기준, 역순으로 표시
+        <if test="limit != null">
         LIMIT
             #{limit}
+        </if>
+        <if test="offset != null">
         OFFSET
             #{offset}
-    </select>
-
-    <select id="selectPost" parameterType="java.util.Map" resultType="postInfo">
-    <![CDATA[
-        SELECT
-                *
-        FROM
-                `POST`
-        WHERE
-                `DEL_YN` = 'N'
-                AND
-                `POST_IDX` = #{postIdx}
-    ]]>
+        </if>
     </select>
 
     <select id="selectLatestPost" resultType="postInfo">
