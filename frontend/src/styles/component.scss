@@ -223,7 +223,7 @@
 }
 
 .cl-card-item-detail-content{
-    padding: 15px;
+    padding: 15px 15px 80px 15px;
     color: #C9CACC;
 }
 
@@ -237,7 +237,16 @@
     color: #8C8C8C;
     transition: all 0.3s ease-in-out;
     padding: 0 3px 0;
-    //border-bottom: 2px solid #ffffff;
+
+
+    &:last-child{
+        padding-right: 0;
+    }
+
+    &>img{
+        vertical-align: middle;
+        max-height: 100%;
+    }
 }
 
 .cl-counter__button {
@@ -253,43 +262,6 @@
     margin-right: 1em;
 }
 
-//.cl-card-item--brand {
-//    position: relative;
-//
-//    .md-card-text {
-//        display: none;
-//    }
-//
-//    .md-dialog-footer--card.md-dialog-footer--inline {
-//        position: absolute;
-//        bottom: 0;
-//        z-index: 9;
-//        width: 100%;
-//    }
-//
-//    hr {
-//        position: absolute;
-//        bottom: 55px;
-//        z-index: 9;
-//        width: calc(100% - 30px);
-//        opacity: 0.7;
-//    }
-//
-//    .md-media-overlay {
-//        h2 {
-//            bottom: 77px;
-//        }
-//    }
-//
-//    .cl-card-item__button {
-//        color: #8b9da7;
-//
-//        span {
-//            border-color: transparent;
-//        }
-//    }
-//}
-
 /* Content Holder */
 .cl-back__button {
     padding: 0;
@@ -300,12 +272,17 @@
 .cl-card-detail {
 
     height: calc(100vh - 106px);
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 
     .cl-card-item-wrapper{
         position: sticky;
         top: 0;
         margin-top: 0;
+    }
+
+    .cl-opts__footer{
+        height: 50px;
     }
 
     .cl-info {
@@ -326,11 +303,36 @@
         border-bottom: 1px solid #cfcfcf;
     }
 
+    .cl-card-item--event{
+
+        .cl-title{
+            font-weight: bold;
+            font-size: 24px;
+            padding-bottom: 24px;
+            line-height: 1.2em;
+            border-bottom: 1px solid #cfcfcf;
+        }
+    }
+
     .cl-content--card {
         padding: 16px;
         min-height: 100px;
         font-size: 16px;
         color: white;
+    }
+
+
+    .cl-join-status{
+        span{
+            &:first-child{
+                font-weight: bold;
+                color: rgba( 0, 0, 0, 0.5 );
+            }
+
+            &:last-child{
+                color: #4a4a4a;
+            }
+        }
     }
 
 }

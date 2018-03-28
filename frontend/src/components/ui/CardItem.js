@@ -21,14 +21,17 @@ class CardItem extends Component {
             this.setState(nextProps.cardData);
     }
 
-    // componentDidMount(){
-    //     console.log( 'did mount:', this.props.detail, this.props, this.state );
-    // }
-
     onChangeLike = (likeCount, hasLiked) => {
         let obj = Object.assign({}, this.state);
         obj.likesCount = likeCount;
         obj.myLikeFlag = hasLiked;
+
+        this.setState(obj);
+    }
+
+    onChangeJoin=(bool)=>{
+        let obj = Object.assign({}, this.state);
+        obj.rsvFlag = bool;// 실서버 반영되면 반전 시켜줘야됨
 
         this.setState(obj);
     }
@@ -82,6 +85,8 @@ class CardItem extends Component {
         }
 
         const PostLink = this.props.list + '/' + this.state.postIdx;
+
+        console.log( 'render:', this.state.rsvYn, this.state.rsvFlag );
 
 
         if (this.state) {
@@ -153,8 +158,15 @@ class CardItem extends Component {
                             count: this.state.likesCount,
                             liked: this.state.myLikeFlag
                         }}
-                        share={this.state.postType !== 'feed'}
                         onChangeLike={this.onChangeLike}
+                        onChangeJoin={this.onChangeJoin}
+
+                        share={this.state.shareYn === 'Y'}
+                        join={this.state.rsvYn === 'Y' && !this.state.rsvFlag}
+                        joined={this.state.rsvYn === 'Y' && this.state.rsvFlag }
+                        qa={ (this.state.inquiryYn === 'Y' )?(this.state.inquiryType === 'P'?'tel:':'mailto:') + this.state.inquiryInfo:false }
+
+                        data={{...this.props.cardData}}
                     />
 
                 </div>

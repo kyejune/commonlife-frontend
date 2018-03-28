@@ -8,6 +8,8 @@ import reactStringReplace from 'react-string-replace';
 import {Link} from "react-router-dom";
 import CardItem from "../ui/CardItem";
 import moment from "moment/moment";
+import joinSrc from 'images/rsvp-normal@3x.png';
+import joinedSrc from 'images/rsvp-activity@3x.png';
 
 
 class CardItemDetailDrawer extends Component {
@@ -36,6 +38,14 @@ class CardItemDetailDrawer extends Component {
 
         this.setState(obj);
     }
+
+    onChangeJoin=(bool)=>{
+        let obj = Object.assign({}, this.state);
+        obj.rsvFlag = bool;// 실서버 반영되면 반전 시켜줘야됨
+
+        this.setState(obj);
+    }
+
 
     /* 이벤트 날짜 구성 컴퍼넌트 생성 */
     makeDateComponent( fromDate, toDate ){
@@ -113,6 +123,15 @@ class CardItemDetailDrawer extends Component {
             duration = this.makeDateComponent( this.state.eventBeginDttm, this.state.eventEndDttm );
         }
 
+        // 참여버튼
+        let join;
+        if( this.state.rsvYn ){
+            join = <button  className="cl-card-item__button" onClick={ ()=> this.onChangeJoin( !this.state.rsvFlag ) }>
+                <img src={ this.state.rsvFlag?joinedSrc:joinSrc } alt="참석여부 결정" height="30"/>
+            </button>;
+        }
+
+
 
         return <div className="cl-card-detail">
             {/* event 타입 아니면 이미지 노출 */}
@@ -122,9 +141,7 @@ class CardItemDetailDrawer extends Component {
 
             {/* event 타입이면 타이틀과 bg를 노출 */}
             {PostType === 'event' && imgAddr &&
-            <div key={this.state.postIdx + '-bg'} className="cl-card-item__bg--event" style={{ backgroundImage:`url(${ imgAddr })`}}>
-                <h5 className="cl-title">{ this.state.title }</h5>
-            </div>
+            <div key={this.state.postIdx + '-bg'} className="cl-card-item__bg--event" style={{ backgroundImage:`url(${ imgAddr })`}}/>
             }
 
             <div className="cl-card-item-wrapper">
@@ -132,6 +149,11 @@ class CardItemDetailDrawer extends Component {
 
 
                 <div className={`cl-card-item cl-card-item--${PostType}`} key="item-info">
+
+                    {/* event 타입이면 타이틀과 bg를 노출 */}
+                    {PostType === 'event' && imgAddr &&
+                    <h5 className="cl-title">{ this.state.title }</h5>
+                    }
 
                     {/* 작성자 정보 - 피드, 뉴스 */}
                     {PostType !== 'event' &&
@@ -160,8 +182,6 @@ class CardItemDetailDrawer extends Component {
                     </div>
                     }
 
-                    <hr/>
-
                     {/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
                     <LikeShareAndSome
                         like={{
@@ -169,8 +189,14 @@ class CardItemDetailDrawer extends Component {
                             count: this.state.likesCount,
                             liked: this.state.myLikeFlag
                         }}
-                        share={this.state.postType !== 'feed'}
+
                         onChangeLike={this.onChangeLike}
+
+                        share={this.state.shareYn === 'Y'}
+                        qa={this.state.inquiryYn === 'E' || this.state.inquiryYn == 'P' }
+                        calendar={this.state.postType === 'event'?[this.state.eventBeginDttm, this.state.eventEndDttm]:false }
+
+                        data={ { ...this.state } }
                     />
 
                 </div>
@@ -179,6 +205,18 @@ class CardItemDetailDrawer extends Component {
             <div className="cl-card-item-detail-content">
                 {Content}
             </div>
+
+
+            {PostType === 'event' &&
+            <footer className="cl-opts__footer cl-flex">
+                <div className="cl-join-status mr-auto">
+                    <span>{this.state.rsvCurrCnt}</span>
+                    <span>/{this.state.rsvMaxCnt} 참여</span>
+                </div>
+
+                {join}
+            </footer>
+            }
         </div>
     }
 }

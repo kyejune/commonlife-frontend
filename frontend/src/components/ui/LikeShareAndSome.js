@@ -3,6 +3,8 @@ import { Button } from 'react-md';
 import { Link } from 'react-router-dom';
 import qaSrc from 'images/contact-bt-gray@3x.png';
 import calSrc from 'images/calender-bt-gray@3x.png';
+import joinSrc from 'images/rsvp-normal@3x.png';
+import joinedSrc from 'images/rsvp-activity@3x.png';
 import Net from 'scripts/net.js';
 import classNames from 'classnames';
 
@@ -22,10 +24,14 @@ export default class LikeShareAndSome extends Component{
         this.setState({
             count: nextProps.like.count || 0,
             liked: nextProps.like.liked,
+
         });
     }
 
 	shareItem() {
+
+        const { title, eventPlaceNm, eventCmplxNm, content } = this.props.data;
+
 		let options = {
 			message: 'share this', // not supported on Facebook, Instagram
 			subject: 'the subject', // fi. for email
@@ -33,7 +39,12 @@ export default class LikeShareAndSome extends Component{
 			chooserTitle: 'Pick an app' // Android only
 		};
 
-		window.plugins.socialsharing.shareWithOptions(options);
+		console.log( 'share item:', this.props.data );
+
+		if( window.plugins )
+		    window.plugins.socialsharing.shareWithOptions(options);
+		else
+		    alert('모바일 전용 기능');
 	}
 
 	likeItem( id ){
@@ -45,24 +56,64 @@ export default class LikeShareAndSome extends Component{
         });
     }
 
+    toggleJoin=( bool )=>{
+        // join은 부모 컨덴츠에서 조절
+        if( this.props.onChangeJoin )
+            this.props.onChangeJoin( bool, this.props.data );
+    }
+
+    onQa=()=>{
+        console.log( 'qa', this.props.data );
+    }
+
+    addCalendar=()=>{
+        console.log( 'addCalendar', this.props.calendar );
+        const { title, eventPlaceNm, eventCmplxNm, content } = this.props.data;
+
+        if( window.plugins ) {
+            window.plugins.calendar.createEventInteractively(
+                title, (eventCmplxNm||'') + (eventPlaceNm||''), content,
+                new Date(this.props.qa[0]), new Date(this.props.qa[1]),
+
+                ()=>{
+                    alert('달력에 추가되었습니다.');
+                },
+
+                ()=>{
+                    alert('달력에 추가되지 않았습니다.');
+                }
+            );
+        }
+    }
+
     render(){
 
-        let Share, Some;
-        if( this.props.share )
-            Share = <button onClick={() => this.shareItem()}>SHARE</button>;
+        console.log( 'LikeShare....', this.props.join, this.props.joined );
 
+        let Share, Cal, Join, Joined, Qa;
+        if( this.props.share )
+            Share = <button className="cl-card-item__button" onClick={() => this.shareItem()}>SHARE</button>;
 
         if( this.props.join )
-            Some = <Button flat inkDisabled className="cl-icon cl-card-item__rsvp"/>;
-
-        else if( this.props.qa )
-            Some = <button>
-                <img className="ml-1em" src={qaSrc} alt="문의하기" width="118" height="36"/>
+            Join = <button  className="cl-card-item__button" onClick={ ()=> this.toggleJoin( true ) }>
+                <img src={joinSrc} alt="참석" height="30"/>
             </button>;
 
-        else if( this.props.schedule )
-            Some = <button>
-                <img src={calSrc} alt="달력에추가" height="36"/>
+        if( this.props.joined )
+            Joined = <button className="cl-card-item__button">
+                <img src={joinedSrc} alt="참석취소" height="30" onClick={ ()=> this.toggleJoin( false )}/>
+            </button>;
+
+        if( this.props.qa ) {
+
+            Qa = <a className="cl-card-item__button cl-flex" href={this.props.qa} target="_blank">
+                <img className="ml-1em" src={qaSrc} alt="문의하기" height="18" onClick={this.onQa}/>
+            </a>;
+        }
+
+        if( this.props.calendar )
+            Cal = <button className="cl-card-item__button">
+                <img src={calSrc} alt="달력에추가" height="19" onClick={ this.addCalendar }/>
             </button>;
 
 
@@ -70,6 +121,7 @@ export default class LikeShareAndSome extends Component{
 
             <div className="cl-flex">
 
+                {/* Like 노출 */}
                 <button className={ classNames("cl-card-item__button", "cl-like__button", { "cl-like--liked":this.state.liked } )}
                         onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }>LIKE</button>
 
@@ -81,11 +133,18 @@ export default class LikeShareAndSome extends Component{
                 </Link>
                 }
 
+
+                {/* 공유기능 */}
                 {Share}
 
             </div>
 
-            {Some}
+            {/* 문의하기, 달력에추가, 참석 */}
+            <div className="cl-flex">
+                {Cal}
+                {Join || Joined}
+                {Qa}
+            </div>
 
         </div>
 

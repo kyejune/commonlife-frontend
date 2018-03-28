@@ -60,9 +60,9 @@ axios.interceptors.response.use(function (response) {
 
 
 export default {
-
+///posts/?postType=feed&page=2
     getFeed( type, page ){
-        axios.get( Store.api + '/posts/', { postType:type, page:page||1 } )
+        axios.get( `${Store.api}/posts/?postType=${type}&page=${(page+1)||1}`)
             .then( response =>{
                 Store[type] = Store[type].concat( response.data.data );
                 console.log( 'get data ', type, page, response.data.data );
