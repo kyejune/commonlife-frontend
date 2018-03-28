@@ -10,11 +10,13 @@ import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 class CommunityFeed extends Component {
 
     componentDidMount(){
-		Net.getFeedAll();
+		Net.getFeed( 'feed', 0 );
 	}
 
 
 	render () {
+
+    	console.log('Community feed render' );
 
 		return (
 			<div className="cl-fitted-box">

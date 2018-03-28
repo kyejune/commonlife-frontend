@@ -17,6 +17,8 @@ class People extends Component{
 
 		Net.getLikesOfPost( this.props.match.params.id, data => {
 
+            console.log('People list:', data );
+
             // ContentHolder에 전달
             this.props.updateTitle(
                 <h2 className="md-title md-title--toolbar cl-ellipsis">
@@ -37,10 +39,9 @@ class People extends Component{
 
         return (
         	<div>
-				<div className="cl-like__header"/>
 				{ this.state.users.map( ( user, index ) => {
 					return (
-						<LikeList key={index} likeData={user}/>
+						<LikeList key={index} {...user}/>
 					)
 				} ) }
 

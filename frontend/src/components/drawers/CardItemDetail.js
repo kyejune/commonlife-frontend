@@ -6,6 +6,8 @@ import Store from "scripts/store";
 import LikeShareAndSome from "components/ui/LikeShareAndSome";
 import reactStringReplace from 'react-string-replace';
 import {Link} from "react-router-dom";
+import CardItem from "../ui/CardItem";
+import moment from "moment/moment";
 
 
 class CardItemDetailDrawer extends Component {
@@ -20,23 +22,71 @@ class CardItemDetailDrawer extends Component {
     }
 
     componentWillMount() {
+        this.props.updateTitle('글보기');
 
-        Net.getCardContent(this.props.match.params.tab, this.props.match.params.id, data => {
-
+        Net.getCardContent( this.props.match.params.tab, this.props.match.params.id, data => {
             this.setState(data);
-
-            console.log('ddd:', data);
-            this.props.updateTitle('글보기');//data.content || 'untitled' ); // ContentHolder에 전달
-
         });
     }
 
-    onChangeLike=( likeCount, hasLiked )=>{
-        let obj = Object.assign({}, this.state );
-            obj.likesCount = likeCount;
-            obj.myLikeFlag = hasLiked;
+    onChangeLike = (likeCount, hasLiked) => {
+        let obj = Object.assign({}, this.state);
+        obj.likesCount = likeCount;
+        obj.myLikeFlag = hasLiked;
 
-        this.setState( obj );
+        this.setState(obj);
+    }
+
+    /* 이벤트 날짜 구성 컴퍼넌트 생성 */
+    makeDateComponent( fromDate, toDate ){
+        let result = [];
+        let fm = moment(fromDate);
+        let tm = moment(toDate);
+
+        // 날짜같고
+        if( fm.format('YYYY/MM/DD') === tm.format('YYYY/MM/DD') ) {
+
+            // 시간도 같을경우
+            if( fm.format('hh:mm') === tm.format('hh:mm') ){
+                result = [<div key='date' className="cl__date">{ fm.format('MM월 DD일(ddd)')}</div>,
+                    <div key='time' className="cl__time">{ fm.format('a hh:mm')}</div>];
+                // 시간은 다를경우
+            }else{
+                result = [<div key='date' className="cl__date">{ fm.format('MM월 DD일(ddd)')}</div>,
+                    <div key='time' className="cl__time">{ fm.format('a hh:mm') } ~ { tm.format('a hh:mm') }</div>];
+            }
+
+        }
+        // 날짜가 아예 다르면
+        else{
+            result = [<div key='datefrom' className="cl__date">{ fm.format('MM월 DD일(ddd)')}</div>,
+                <div key='timefrom' className="cl__time">{ fm.format('a hh:mm') }</div>,
+                <span key="~">~</span>,
+                <div key='dateto' className="cl__date">{ tm.format('MM월 DD일(ddd)')}</div>,
+                <div key='timeto' className="cl__time">{ tm.format('a hh:mm') }</div>];
+        }
+        return result;
+    }
+
+    /* 링크 태그 생성 및 줄넘김 처리 */
+    makeContentComponent( content ){
+        content = reactStringReplace(content, /(\n)/g, (match, index) => {
+            return <br key={'br-' + index}/>;
+        });
+
+        content = reactStringReplace(content, /(https:\/\/\S+)/g, (match, index, offset) => {
+            return <a key={match + offset} href={match} target="_blank">{match}</a>;
+        });
+
+        content = reactStringReplace(content, /(http:\/\/\S+)/g, (match, index, offset) => {
+            return <a key={match + offset} href={match} target="_blank">{match}</a>;
+        });
+
+        content = reactStringReplace(content, /(www\.\S+)/g, (match, index, offset) => {
+            return <a key={match + offset} href={match} target="_blank">{match}</a>;
+        });
+
+        return content;
     }
 
 
@@ -44,84 +94,91 @@ class CardItemDetailDrawer extends Component {
 
         if (!this.state.postIdx) return null;
 
-        let Img;
-        if (this.state.postFiles[0])
-            Img = <img src={Store.api + this.state.postFiles[0].largePath} alt="관련 이미지" width="100%"/>;
 
+        const PostType = this.state.postType;
+        const PostLink = this.props.list + '/' + this.state.postIdx;
+        const Content = this.makeContentComponent( this.state.content );
 
-            // 줄넘김 태그 변환, url -> a링크 생성
-        let content = this.state.content;
-        content = reactStringReplace( content, /(\n)/g, ( match, index  )=>{
-            return <br key={ 'br-' + index} />;
-        });
+        let userThumb = {};
+        if (this.state.user.imgSrc )
+            userThumb['background-image'] = `url(${ Store.api + this.state.user.imgSrc})`;
 
-        content = reactStringReplace( content, /(https:\/\/\S+)/g, ( match, index, offset  )=>{
-            return <a key={match + offset } href={match} target="_blank">{match}</a>;
-        });
+        let imgAddr;
+        if (this.state.postFiles.length > 0 ) {
+            imgAddr = Store.api + this.state.postFiles[0].largePath;
+        }
 
-        content = reactStringReplace( content, /(http:\/\/\S+)/g, ( match, index, offset  )=>{
-            return <a key={match + offset } href={match} target="_blank">{match}</a>;
-        });
+        let duration;
+        if( PostType === 'event' ){
+            duration = this.makeDateComponent( this.state.eventBeginDttm, this.state.eventEndDttm );
+        }
 
-        content = reactStringReplace( content, /(www\.\S+)/g, ( match, index, offset  )=>{
-            return <a key={match + offset } href={match} target="_blank">{match}</a>;
-        });
-
-        console.log( '링크생성후 결과:', content );
 
         return <div className="cl-card-detail">
+            {/* event 타입 아니면 이미지 노출 */}
+            { imgAddr && PostType !== 'event' &&
+            <img className="cl-card-item__img" src={imgAddr} width="100%" alt="첨부 이미지"/>
+            }
 
-            <div>
-                {Img}
-                <div className="cl-info">
+            {/* event 타입이면 타이틀과 bg를 노출 */}
+            {PostType === 'event' && imgAddr &&
+            <div key={this.state.postIdx + '-bg'} className="cl-card-item__bg--event" style={{ backgroundImage:`url(${ imgAddr })`}}>
+                <h5 className="cl-title">{ this.state.title }</h5>
+            </div>
+            }
+
+            <div className="cl-card-item-wrapper">
 
 
-                    {/* Event용 */}
-                    {/*<h3 className="cl-dynamic-lines">{this.state.content || this.state.event_title}</h3>*/}
 
-                    {/*<div className="cl-black">*/}
-                    {/*<span className="cl-bold mr-1em">12월 28일(수)</span>*/}
-                    {/*<span>오후 2:00 ~ 6:00</span>*/}
-                    {/*</div>*/}
-                    {/*<p>역삼하우스 5F, 커뮤니티룸</p>*/}
+                <div className={`cl-card-item cl-card-item--${PostType}`} key="item-info">
+
+                    {/* 작성자 정보 - 피드, 뉴스 */}
+                    {PostType !== 'event' &&
+                    <div className="cl-flex">
+                        <div className="cl-avatar" style={userThumb}/>
+                        <div>
+                            <h6 className="cl-name">{this.state.user.userNm }</h6>
+                            <p className="cl-desc">
+                                {this.state.user.cmplxNm},
+                                {moment(this.state.regDttm).fromNow()}
+                            </p>
+                        </div>
+                    </div>
+                    }
 
 
-                    <CardTitle
-                        // 작성자 이름
-                        title={this.state.user.userNm}
-                        // 작성자 프로필 이미지
-                        avatar={<Avatar src={this.state.thumbnail} role="presentation"/>}
-                        // 작성 시간
-                        subtitle={"역삼하우스"}
+                    {/* event라면 장소등 노출.. */}
+                    {PostType === 'event' &&
+                    <div className="mt-06em mb-1em">
+                        <h6 className="cl-flex cl-dates">
+                            {duration}
+                        </h6>
+                        <p className="cl-desc pb-05em">
+                            {this.state.eventCmplxNm} {this.state.eventPlaceNm}
+                        </p>
+                    </div>
+                    }
 
-                        className="p-0em cl-card-item"
-                    />
+                    <hr/>
 
-                    {/*this.props.list + '/like/' + this.props.cardData.index*/}
                     {/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
                     <LikeShareAndSome
-                        like={ { to:this.props.list + '/' + this.state.postIdx + '/like', count:this.state.likesCount, liked:this.state.myLikeFlag } }
-                        share
-                        onChangeLike={ this.onChangeLike }
+                        like={{
+                            to: this.state.likeLink,
+                            count: this.state.likesCount,
+                            liked: this.state.myLikeFlag
+                        }}
+                        share={this.state.postType !== 'feed'}
+                        onChangeLike={this.onChangeLike}
                     />
+
                 </div>
             </div>
 
-
-            <p className="cl-content--card">
-                {content}
-            </p>
-
-
-            {this.state.postType === 'event' &&
-            <footer className="cl-flex-between">
-                <div>
-                    <span className="cl-strong">25</span><span>/50참여</span>
-                </div>
-
-                <button className="cl-plus-label__button">참여</button>
-            </footer>
-            }
+            <div className="cl-card-item-detail-content">
+                {Content}
+            </div>
         </div>
     }
 }

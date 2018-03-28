@@ -29,6 +29,7 @@ axios.interceptors.response.use(function (response) {
 }, function (error) {
 
     document.querySelector('#spinner').classList.remove('cl-status--ajax');
+
     // 에러 상황일 경우 iot모달이 있으면 처리
     if( error.response.status !== 200) {
 
@@ -54,47 +55,42 @@ axios.interceptors.response.use(function (response) {
 });
 
 
-let communityData = null;
+// let communityData = null;
 
 
 
 export default {
 
-    /* Community, Event, News */
-    getFeedAll( callback ){
-
-
-        axios.get( Store.api + '/posts/' )
-            .then( response => {
-
-                communityData = response.data.data;
-
-                Store.feed = sjf.filter({ 'postType':'feed' }).data( response.data.data ).wantArray().exec();
-                Store.event = sjf.filter({ 'postType':'event' }).data( response.data.data ).wantArray().exec();
-                Store.news = sjf.filter({ 'postType':'news' }).data( response.data.data ).wantArray().exec();
-
-                console.log('Store update getFeedAll:', response );
-                if( callback ) callback();
-
+    getFeed( type, page ){
+        axios.get( Store.api + '/posts/', { postType:type, page:page||1 } )
+            .then( response =>{
+                Store[type] = Store[type].concat( response.data.data );
+                console.log( 'get data ', type, page, response.data.data );
             });
     },
 
     /* Community 글보기 */
-    getCardContent( type, idx, callback ){
+    getCardContent( type, postIdx, callback ){
 
-        if( communityData ) callback( sjf.filter({ postType:'feed', postIdx:idx }).data( communityData ).wantArray().exec()[0]);
-        else this.getFeedAll( ()=> this.getCardContent( type, idx, callback ));
+        let data = null;
+        let a = Store[type];
+        a.some( item=>{
+            let bool = (item.postIdx === postIdx);
+            if( bool ) data = item;
+            return bool;
+        });
+
+        if( data ) callback( data );
+        else{
+            axios.get( `${Store.api}/posts/${postIdx}` )
+                .then( response => {
+                   callback( response.data );
+                });
+        }
 
     },
 
     /* Likey */
-    // getLikey( id, callback ) {
-    //     axios.get( Store.api + './dummy/likey.json' )
-    //         .then( response => {
-    //         	callback( response.data );
-    //         } );
-    // },
-
     setLikey( id, bool, callback ){
 
         if( bool ) {

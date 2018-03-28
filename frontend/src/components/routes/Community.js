@@ -40,7 +40,7 @@ class Community extends Component {
 
     updateRoute(){
 
-        console.log('community:', this.props.match.params );
+        // console.log('community:', this.props.match.params );
 
         let paths = this.props.location.pathname.match(/\w+/g)||['community','feed'];
 
@@ -61,7 +61,7 @@ class Community extends Component {
     render() {
 
         return (
-            <div className="cl-bg--light">
+            <div>
                 <TabsContainer panelClassName="md-grid" colored
                                activeTabIndex={this.state.tabIndex}
                                onTabChange={index => this.onTabChange(index)}>
