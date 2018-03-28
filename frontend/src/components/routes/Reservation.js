@@ -4,8 +4,7 @@ import ReservationDetail from "components/drawers/ReservationDetail";
 import ReservationHistory from "components/drawers/ReservationHistory";
 import DrawerSwiperViewer from "components/drawers/DrawerSwiperViewer";
 
-import { Link } from 'react-router-dom';
-import {Drawer} from 'react-md';
+import {Link} from 'react-router-dom';
 import HeaderOfReservation from 'components/ui/HeaderOfReservation';
 import SelectWithTitle from 'components/ui/SelectWithTitle';
 import ReserveGroupArrow from 'images/ic-favorite-24-px-blue@3x.png';
@@ -22,10 +21,6 @@ import {observer} from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
 
 class Reservation extends Component {
-
-    constructor(props) {
-        super(props);
-    }
 
     componentDidMount() {
         this.updateRoute();

@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import { Button } from 'react-md';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import qaSrc from 'images/contact-bt-gray@3x.png';
 import calSrc from 'images/calender-bt-gray@3x.png';
 import joinSrc from 'images/rsvp-normal@3x.png';
@@ -30,16 +29,14 @@ export default class LikeShareAndSome extends Component{
 
 	shareItem() {
 
-        const { title, eventPlaceNm, eventCmplxNm, content } = this.props.data;
+        const { title, content } = this.props.data;
 
 		let options = {
-			message: 'share this', // not supported on Facebook, Instagram
-			subject: 'the subject', // fi. for email
-			url: 'https://www.website.com/foo/#bar?a=b',
-			chooserTitle: 'Pick an app' // Android only
+			message: content, // not supported on Facebook, Instagram
+			subject: title, // fi. for email
+			url: null,//'https://www.website.com/foo/#bar?a=b',
+			chooserTitle: 'CommonLife' // Android only
 		};
-
-		console.log( 'share item:', this.props.data );
 
 		if( window.plugins )
 		    window.plugins.socialsharing.shareWithOptions(options);
@@ -60,10 +57,6 @@ export default class LikeShareAndSome extends Component{
         // join은 부모 컨덴츠에서 조절
         if( this.props.onChangeJoin )
             this.props.onChangeJoin( bool, this.props.data );
-    }
-
-    onQa=()=>{
-        console.log( 'qa', this.props.data );
     }
 
     addCalendar=()=>{
@@ -88,8 +81,6 @@ export default class LikeShareAndSome extends Component{
 
     render(){
 
-        console.log( 'LikeShare....', this.props.join, this.props.joined );
-
         let Share, Cal, Join, Joined, Qa;
         if( this.props.share )
             Share = <button className="cl-card-item__button" onClick={() => this.shareItem()}>SHARE</button>;
@@ -104,12 +95,10 @@ export default class LikeShareAndSome extends Component{
                 <img src={joinedSrc} alt="참석취소" height="30" onClick={ ()=> this.toggleJoin( false )}/>
             </button>;
 
-        if( this.props.qa ) {
-
-            Qa = <a className="cl-card-item__button cl-flex" href={this.props.qa} target="_blank">
-                <img className="ml-1em" src={qaSrc} alt="문의하기" height="18" onClick={this.onQa}/>
+        if( this.props.qa )
+            Qa = <a className="cl-card-item__button cl-flex" href={this.props.qa}>
+                <img className="ml-1em" src={qaSrc} alt="문의하기" height="18"/>
             </a>;
-        }
 
         if( this.props.calendar )
             Cal = <button className="cl-card-item__button">

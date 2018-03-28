@@ -6,7 +6,6 @@ import BottomDrawer from 'components/drawers/BottomDrawer';
 import thumbSrc from 'images/ic-thumb@3x.png';
 import checkSrc from 'images/ic-check@3x.png';
 import previewSrc from 'images/img-preview-holder@3x.png';
-import classNames from 'classnames';
 
 class WriteDrawer extends BottomDrawer {
 
@@ -19,6 +18,10 @@ class WriteDrawer extends BottomDrawer {
             content:'',
             isUploading: false,
         }
+    }
+
+    componentDidMount(){
+        this.input.focus();
     }
 
     handleChange(event) {
@@ -134,7 +137,7 @@ class WriteDrawer extends BottomDrawer {
             <section className="cl-write-section dialogs__content cl-shrink">
 
                 <textarea name="" id="" cols="30" rows="5" placeholder="새로운 글을 작성해 보세요." value={this.state.content}
-                          onChange={event => this.handleChange(event)}/>
+                          onChange={event => this.handleChange(event)} ref={ textarea =>{ this.input = textarea; }  }/>
 
 
                 <footer className="cl-flex-between">
