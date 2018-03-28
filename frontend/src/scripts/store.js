@@ -11,6 +11,9 @@ if( window.location.protocol === 'file:' && window.location.pathname.includes('C
 
 
 host = 'https://clback.cyville.net';
+// host = 'https://cl-stage.cyville.net';
+// host = 'http://localhost:8080';
+
 
 
 const Store = observable({
