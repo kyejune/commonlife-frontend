@@ -10,7 +10,7 @@ if( window.location.protocol === 'file:' && window.location.pathname.includes('C
     host = 'http://192.168.0.100:8080';
 
 // 덮어쓰기
-//host = 'https://cl-stage.cyville.net'; // 클라 전달용
+// host = 'https://cl-stage.cyville.net'; // 클라 전달용
 host = 'https://clback.cyville.net'; // 테스트용
 
 

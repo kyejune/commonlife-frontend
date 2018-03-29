@@ -64,6 +64,8 @@ class WriteDrawer extends BottomDrawer {
 
         Net.uploadImg( b64, data => {
 
+            console.log( 'uploadedImage:', data );
+
             this.setState({
                 base64Img: b64,
                 imageId: data.postFileIdx,
@@ -108,8 +110,6 @@ class WriteDrawer extends BottomDrawer {
             return;
         }
 
-
-
         let data = {
             postType: "feed",
             content: this.state.content.replace(/\n{2,}/g, '\n\n' ), // 2줄 이상만 묶어버리기
@@ -117,11 +117,10 @@ class WriteDrawer extends BottomDrawer {
         };
 
         if( this.state.imageId )
-            data.postFiles.push( this.imageId );
-
-        console.log( 'complete:', data );
+            data.postFiles.push( this.state.imageId );
 
         Net.makePost(data, () => {
+            Net.getFeed('feed', 0 );
             this.props.close();
         });
     }

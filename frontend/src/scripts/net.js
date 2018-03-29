@@ -59,7 +59,7 @@ export default {
     getFeed( type, page ){
         axios.get( `${Store.api}/posts/?postType=${type}&page=${(page+1)||1}`)
             .then( response =>{
-                Store[type] = Store[type].concat( response.data.data );
+                Store[type] = Store[type] = ( response.data.data ); //  추후 페이지별로 삽입 시켜주기
                 console.log( 'get data ', type, page, response.data.data );
             });
     },
@@ -131,10 +131,7 @@ export default {
     makePost( data, callback ){
         axios.post( Store.api + '/posts/', data)
             .then( response => {
-
-                this.getFeed('feed', 0 );
                 callback( response );
-
             });
     }
 
