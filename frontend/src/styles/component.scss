@@ -222,6 +222,26 @@
     }
 }
 
+.cl-card-item--dark{
+    @extend .cl-card-item;
+
+    background-color: transparent;
+
+    color: white;
+
+    .cl-name{
+        color: white;
+    }
+
+    .cl-desc{
+        color: #9B9B9B;
+    }
+
+    box-shadow: none;
+}
+
+
+
 .cl-card-item-detail-content{
     padding: 15px 15px 80px 15px;
     color: #C9CACC;

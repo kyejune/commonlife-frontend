@@ -7,6 +7,7 @@ import reactStringReplace from 'react-string-replace';
 import moment from 'moment';
 import 'moment/locale/ko';
 import Store from "../../scripts/store";
+import TagComponent from "./TagComponent";
 
 class CardItem extends Component {
 
@@ -138,9 +139,7 @@ class CardItem extends Component {
                     <div className="cl-card-item-content mb-1em mt-1em">
                         <Link to={PostLink}>
                             <p>
-                                {reactStringReplace(this.state.content, /(\n)/g, (match, index, offset) => {
-                                    return <br key={index}/>;
-                                })}
+                                <TagComponent content={this.state.content}/>
                             </p>
                         </Link>
                     </div>

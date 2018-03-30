@@ -172,14 +172,42 @@ input:focus, textarea:focus {
   overflow:hidden;
 }
 
+/* mixin for multiline */
+@mixin multiLineEllipsis($lineHeight: 1.2em, $lineCount: 1, $bgColor: white){
+  overflow: hidden;
+  position: relative;
+  line-height: $lineHeight;
+  max-height: $lineHeight * $lineCount;
+  text-align: justify;
+  margin-right: -1em;
+  padding-right: 1em;
+  &:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+  &:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: $bgColor;
+  }
+}
 
 /* 여러줄 말줄임 표시 */
 @for $i from 2 to 5 {
-
   .cl-ellipsis--#{$i}{
-
+      display: -webkit-box;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      word-wrap:break-word;
+      -webkit-line-clamp: $i;
+      -webkit-box-orient:vertical; // 이 속성이 컴파일 과정에 자꾸 없어져서 일단 직접 style로 추가해줘야함
   }
-
 }
 
 

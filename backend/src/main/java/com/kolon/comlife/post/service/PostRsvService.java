@@ -1,16 +1,17 @@
 package com.kolon.comlife.post.service;
 
-import com.kolon.comlife.like.model.LikeInfo;
-import com.kolon.comlife.like.model.LikeStatusInfo;
+import com.kolon.comlife.post.exception.ReservedAlreadyException;
+import com.kolon.comlife.post.exception.PostRsvGeneralException;
+import com.kolon.comlife.post.model.PostRsvInfo;
+import com.kolon.comlife.post.model.PostRsvStatusInfo;
 
 import java.util.List;
 
 public interface PostRsvService {
 
-    public List<LikeInfo> getLikeList(int parentIdx);
-    public boolean hasLike(int parentIdx, int usrIdx);
+    PostRsvInfo getRsvInfoWithUserListByPostId(int postId );
 
-    public LikeStatusInfo requestRsv(int parentIdx, int usrId);
+    PostRsvStatusInfo requestRsv(int parentIdx, int usrId ) throws PostRsvGeneralException, ReservedAlreadyException;
 
-    public LikeStatusInfo cancelRsv(int parentIdx, int usrId);
+    PostRsvStatusInfo cancelRsv(int parentIdx, int usrId) throws PostRsvGeneralException, ReservedAlreadyException;
 }

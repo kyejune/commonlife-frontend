@@ -39,8 +39,7 @@ public class LikeController {
     public ResponseEntity<List<LikeInfo>> getLikeList(@PathVariable( "postId" ) int postId ) {
         List<LikeInfo> likes;
 
-
-        // Post에 대한 Like 정보 가져오기 
+        // Post에 대한 Like 정보 가져오기
         likes = likeService.getLikeList( postId );
 
         // USR_ID 추출

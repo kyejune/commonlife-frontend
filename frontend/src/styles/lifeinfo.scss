@@ -7,14 +7,18 @@
 
 }
 
+$card-trans-time: 0.3s;
 .cl-profile-card{
-  background-color: white;
-  padding: 20px 18px 14px 18px;
+  //background-color: white;
+  //padding: 20px 18px 14px 18px;
   font-size: 13px;
+  //padding-bottom: 68px;
+  transition: $card-trans-time padding-top ease-out;
 
   .cl-avatar{
     width: 65px;
     height: 65px;
+    transition: $card-trans-time all ease-out;
   }
 
   h4{
@@ -31,7 +35,17 @@
     color: rgba( 0, 0, 0, 0.5 );
   }
 
+  .cl-summary{
+    transition: $card-trans-time all ease-out;
+    padding: 20px 18px 16px 18px;
+    background-color: white;
+  }
+
   .cl-profile-card__footer{
+    padding: 18px;
+    background-color: white;
+    bottom: 0;
+    width: 100%;
     border-top: 1px solid #cfcfcf;
   }
 
@@ -45,10 +59,82 @@
 }
 
 
+.cl-app--expand{
+
+  .cl-profile-card{
+    pointer-events: none;
+
+    & + .cl-info-dashboard__list{
+      padding-bottom: 20px;
+    }
+
+    .cl-avatar{
+      margin-left: -78px;
+      opacity: 0;
+    }
+  }
+
+
+
+  .cl-edit{
+    display: none;
+  }
+
+  .cl-summary{
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .cl-profile-card__footer{
+    border-top: none;
+    background-color: transparent;
+
+    p:first-child{
+      opacity: 0;
+    }
+
+    p:last-child{
+      margin-top: -110px;
+    }
+  }
+
+
+}
+
+
+.cl-info-notice{
+
+  padding: 20px 18px 30px 18px;
+
+  &>h4{
+    color: #42a5f5;
+    font-size: 14px;
+    margin-bottom: 1em;
+  }
+
+  a{
+    color: white;
+    font-size: 24px;
+    line-height: 1.4em;
+    -webkit-box-orient:vertical;
+  }
+}
+
+.cl-notice-detail__content{
+  color: white;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 1.4em;
+  padding: 0.8em 0.6em 2em 0.6em;
+}
+
+
 .cl-info-dashboard__list{
 
   display: grid;
   grid-template-columns: repeat( 2, 50vw );
+  border-bottom: 1px solid #313336;
+  transition: $card-trans-time margin-top ease-out;
 
   .cl__thumb--rounded {
     width: 60px;
@@ -60,6 +146,12 @@
     align-items: center;
     height: 50vw;
     border: 1px solid #313336;
+    background-color: #1F2125;
+    border-bottom: none;
+
+    &:nth-child(odd){
+      border-right: none;
+    }
 
     a{
       margin: auto;

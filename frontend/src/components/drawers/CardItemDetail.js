@@ -7,6 +7,7 @@ import reactStringReplace from 'react-string-replace';
 import moment from "moment/moment";
 import joinSrc from 'images/rsvp-normal@3x.png';
 import joinedSrc from 'images/rsvp-activity@3x.png';
+import TagComponent from "../ui/TagComponent";
 
 
 class CardItemDetailDrawer extends Component {
@@ -75,36 +76,12 @@ class CardItemDetailDrawer extends Component {
         return result;
     }
 
-    /* 링크 태그 생성 및 줄넘김 처리 */
-    makeContentComponent( content ){
-        content = reactStringReplace(content, /(\n)/g, (match, index) => {
-            return <br key={'br-' + index}/>;
-        });
-
-        content = reactStringReplace(content, /(https:\/\/\S+)/g, (match, index, offset) => {
-            return <a key={match + offset} href={match} target="_blank">{match}</a>;
-        });
-
-        content = reactStringReplace(content, /(http:\/\/\S+)/g, (match, index, offset) => {
-            return <a key={match + offset} href={match} target="_blank">{match}</a>;
-        });
-
-        content = reactStringReplace(content, /(www\.\S+)/g, (match, index, offset) => {
-            return <a key={match + offset} href={match} target="_blank">{match}</a>;
-        });
-
-        return content;
-    }
-
-
     render() {
 
         if (!this.state.postIdx) return null;
 
 
         const PostType = this.state.postType;
-        // const PostLink = this.props.list + '/' + this.state.postIdx;
-        const Content = this.makeContentComponent( this.state.content );
 
         let userThumb = {};
         if (this.state.user.imgSrc )
@@ -200,7 +177,7 @@ class CardItemDetailDrawer extends Component {
             </div>
 
             <div className="cl-card-item-detail-content">
-                {Content}
+                <TagComponent content={this.state.content}/>
             </div>
 
 

@@ -1,10 +1,16 @@
 /* LifeInfo.jsx */
 import React, {Component} from 'react';
 import Store from 'scripts/store';
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {observer} from "mobx-react";
+import DrawerWrapper from "../drawers/DrawerWrapper";
+import NoticeDetail from "../drawers/lifeInfo/NoticeDetail";
 
 class LifeInfo extends Component {
+
+    componentDidMount () {
+        this.updateRoute();
+    }
 
     componentDidUpdate ( prevProps ) {
         if( this.props.location !== prevProps.location )
@@ -17,22 +23,20 @@ class LifeInfo extends Component {
         const compMap = {
 
             // Mode 추가 버튼 클릭
-            mode:{
-                mode:'iot-mode',
-                sensor:'iot-sensor',
-                device:'iot-device',
-                time:'iot-time',
-                duration:'iot-duration',
+            notice:{
+                notice:'info-notice',
             },
 
         };
 
 
-        const action = this.props.match.params.action;
-        const map = compMap[action];
+        const cate = this.props.match.params.cate;
+        const map = compMap[cate];
+
+        console.log( 'update router info:', map );
 
         Store.clearDrawer();
-        if( action === undefined ) return;
+        if( cate === undefined ) return;
 
         let prevSeg = null;
         for( var p in params ){
@@ -49,7 +53,7 @@ class LifeInfo extends Component {
             <div className="cl-fitted-box cl-bg--black">
 
                 <div className="cl-second-header cl-profile-card">
-                    <div className="cl-flex">
+                    <div className="cl-flex cl-summary">
                         <div className="cl-avatar"/>
                         <div>
                             <h4>김정신</h4>
@@ -59,10 +63,20 @@ class LifeInfo extends Component {
 
                     <Link className="cl-edit color-primary" to="#">ProfileEdit</Link>
 
-                    <footer className="cl-profile-card__footer cl-flex pt-1em mt-1em">
+                    <footer className="cl-profile-card__footer cl-flex">
                         <p>입주일: 2017년 4월 1일</p>
                         <p className="ml-auto">포인트: 25</p>
                     </footer>
+                </div>
+
+
+                <div className="cl-info-notice">
+                    <h4>Notice</h4>
+                    <Link to="/info/notice/0" className="cl-ellipsis--3" style={{'WebkitBoxOrient':'vertical'}}>
+                        역삼동 하우징 엘레베이터 정기검진 안내말씀 드립니다.<br/>
+                        8월 30일 오후1시 부터 약 1시간동안 역삼동 하우징 101동<br/>
+                        엘레베이터 정기검진으로 인하여...
+                    </Link>
                 </div>
 
 
@@ -113,8 +127,16 @@ class LifeInfo extends Component {
                 </ul>
 
             </div>
+
+
+
+
+            {/* 공지 상세보기 */}
+            <DrawerWrapper drawer="info-notice-detail" title="" deepdark back >
+                <NoticeDetail/>
+            </DrawerWrapper>
         </div>
     }
 }
 
-export default observer( LifeInfo );
+export default withRouter(observer( LifeInfo ));

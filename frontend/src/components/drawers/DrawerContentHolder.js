@@ -86,6 +86,7 @@ class DrawerContentHolder extends Component {
 
                 <Toolbar
                     colored
+                    className={ classNames({"cl-bg--deepdark":this.props.deepdark })}
                     fixed
                     nav={CloseButton}
                     title={ this.state.title }
@@ -96,7 +97,8 @@ class DrawerContentHolder extends Component {
                 <section className={ classNames("dialogs__content",
                     {"cl-bg--light":this.props.light },
                     {"cl-bg--lightgray":this.props.lightgray },
-                    {"cl-bg--darkgray":this.props.darkgray }
+                    {"cl-bg--darkgray":this.props.darkgray },
+                    {"cl-bg--deepdark":this.props.deepdark }
                     )}>
 
                     {childrenWithProps}

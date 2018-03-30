@@ -2,6 +2,8 @@ package com.kolon.comlife.post.service.impl;
 
 import com.kolon.comlife.like.model.LikeInfo;
 import com.kolon.comlife.like.model.LikeStatusInfo;
+import com.kolon.comlife.post.model.PostRsvInfo;
+import com.kolon.comlife.post.model.PostRsvItemInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -15,41 +17,79 @@ public class PostRsvDAO {
     @Resource
     private SqlSession sqlSession;
 
-    public List<LikeInfo> selectLikeList( int parentIdx ) {
+    public  PostRsvInfo selectRsvInfo(int parentIdx ) {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put( "parentIdx", parentIdx );
-        return sqlSession.selectList( "Like.selectLikeList", params );
+        return sqlSession.selectOne( "PostRsv.selectRsvList", params );
     }
 
-    public boolean hasLike( int parentIdx, int usrId ) {
+    public List<PostRsvItemInfo> selectRsvItemList(int parentIdx ) {
         Map<String, Integer> params = new HashMap<String, Integer>();
+        params.put( "parentIdx", parentIdx );
+        return sqlSession.selectList( "PostRsv.selectRsvItemList", params );
+    }
+
+    public boolean isReserved( int parentIdx, int usrId ) {
+        PostRsvItemInfo      rsvItem;
+        Map<String, Integer> params = new HashMap<String, Integer>();
+
         params.put( "parentIdx", parentIdx );
         params.put( "usrId", usrId );
-        sqlSession.insert( "Like.requestRsv", params );
-        return sqlSession.selectOne( "Like.hasLike", params ) != null;
+
+        rsvItem = sqlSession.selectOne( "PostRsv.selectRsvItemByParentIdxAndUsrId", params );
+
+        return (rsvItem != null) ? true : false;
     }
 
-    public LikeStatusInfo selectLikeCountByPostId(int parentIdx, int usrId ) {
+    public LikeStatusInfo selectRsvCountByPostId(int parentIdx, int usrId ) {
         Map<String, Integer> params = new HashMap<>();
 
         params.put("parentIdx", Integer.valueOf(parentIdx));
         params.put("usrId", Integer.valueOf(usrId));
 
-        return sqlSession.selectOne( "Like.selectLikeCountByPostId", params );
+        return sqlSession.selectOne( "PostRsv.selectRsvCountByPostId", params );
     }
 
-    public int addLike( int parentIdx, int usrId ) {
+    public int selectRsvAvailableWithLock( int parentIdx ) {
         Map<String, Integer> params = new HashMap<String, Integer>();
-        params.put( "parentIdx", parentIdx );
-        params.put( "usrId", usrId );
-        return sqlSession.insert( "Like.requestRsv", params );
+
+        params.put( "postIdx", parentIdx );
+
+        return sqlSession.selectOne( "PostRsv.selectRsvAvailableWithLock", params );
     }
 
-    public void cancelLike( int parentIdx, int usrId ) {
+    public int incRsvCntIfAvailable( int parentIdx ) {
         Map<String, Integer> params = new HashMap<String, Integer>();
+
+        params.put( "parentIdx", parentIdx );
+
+        return sqlSession.insert( "PostRsv.incRsvCntIfAvailable", params );
+    }
+
+    public int decRsvCntIfAvailable( int parentIdx ) {
+        Map<String, Integer> params = new HashMap<String, Integer>();
+
+        params.put( "parentIdx", parentIdx );
+
+        return sqlSession.insert( "PostRsv.decRsvCntIfAvailable", params );
+    }
+
+    public int addRsvItem( int parentIdx, int usrId ) {
+        Map<String, Integer> params = new HashMap<String, Integer>();
+
         params.put( "parentIdx", parentIdx );
         params.put( "usrId", usrId );
-        sqlSession.update( "Like.cancelRsv", params );
-        return;
+
+        return sqlSession.insert( "PostRsv.addRsvItem", params );
+    }
+
+
+    public int removeRsvItem( int parentIdx, int usrId ) {
+        Map<String, Integer> params = new HashMap<String, Integer>();
+
+        params.put( "parentIdx", parentIdx );
+        params.put( "usrId", usrId );
+
+        return sqlSession.update( "PostRsv.removeRsvItem", params );
     }
 }

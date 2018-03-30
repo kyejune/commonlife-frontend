@@ -29,6 +29,10 @@ body:not(.platform--ios){
       margin-top: 2px;
     }
 
+    &.cl-bg--deepdark{
+      box-shadow: none;
+    }
+
   }
 
   .dialogs__content{
