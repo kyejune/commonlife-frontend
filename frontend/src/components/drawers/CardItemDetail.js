@@ -3,7 +3,6 @@ import {withRouter} from 'react-router';
 import Net from "scripts/net";
 import Store from "scripts/store";
 import LikeShareAndSome from "components/ui/LikeShareAndSome";
-import reactStringReplace from 'react-string-replace';
 import moment from "moment/moment";
 import joinSrc from 'images/rsvp-normal@3x.png';
 import joinedSrc from 'images/rsvp-activity@3x.png';

@@ -7,6 +7,9 @@ import IotProgressOverlay from "../overlay/IotProgressOverlay";
 import IotModeChange from "../overlay/IotModeChange";
 import {observer} from "mobx-react";
 import DrawerWrapper from "./DrawerWrapper";
+import BottomDrawer from "./BottomDrawer";
+import DrawerContentHolder from "./DrawerContentHolder";
+import WriteDrawer from "./WriteDrawer";
 
 
 
@@ -43,6 +46,14 @@ class DrawerInjector extends Component{
                 <Profile/>
             </DrawerWrapper>
 
+
+            <BottomDrawer visible={Store.hasDrawer('write')} renderNode={document.querySelector('.App')}
+                          onVisibilityChange={()=>{}}
+                          portal={true}>
+                <DrawerContentHolder title="새글쓰기" drawer="write" close >
+                    <WriteDrawer/>
+                </DrawerContentHolder>
+            </BottomDrawer>
 
 
             {/* 모달 - IotProgressOverlay */}

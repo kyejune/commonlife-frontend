@@ -6,18 +6,27 @@ import BottomDrawer from 'components/drawers/BottomDrawer';
 import thumbSrc from 'images/ic-thumb@3x.png';
 import checkSrc from 'images/ic-check@3x.png';
 import previewSrc from 'images/img-preview-holder@3x.png';
+import Store from "../../scripts/store";
+import IconLoader from "../ui/IconLoader";
+import AlertSrc from "images/alert-icon-red@3x.png"
 
 class WriteDrawer extends BottomDrawer {
 
     constructor(props) {
         super(props);
 
+        const { type, index } = Store.getDrawerData('write');
+
         this.state = {
             base64Img: null,
             imageId: null,
             content:'',
             isUploading: false,
+            postType: type,
+            postResult: null,
         }
+
+        if( type === 'support' ) this.props.updateTitle('문의하기');
     }
 
     componentDidMount(){
@@ -111,7 +120,7 @@ class WriteDrawer extends BottomDrawer {
         }
 
         let data = {
-            postType: "feed",
+            postType: this.state.postType,
             content: this.state.content.replace(/\n{2,}/g, '\n\n' ), // 2줄 이상만 묶어버리기
             postFiles: []
         };
@@ -119,28 +128,55 @@ class WriteDrawer extends BottomDrawer {
         if( this.state.imageId )
             data.postFiles.push( this.state.imageId );
 
-        Net.makePost(data, () => {
-            Net.getFeed('feed', 0 );
-            this.props.close();
+        // 임시로 블락
+        if( this.state.postType !== 'feed' ){
+            alert( '문의 하기는 api뭐 호출하지' );
+            return;
+        }
+
+
+        Net.makePost(data, ( success, response ) => {
+
+            // 목록 갱신
+            if( success && this.state.postType === 'feed' )
+                Net.getFeed('feed', 0 );
+
+            if( success )
+                this.setState({ postResult: "성공적으로 완료되었습니다." } );
+            else
+                this.setState({ postResult: "잠시 뒤에 다시 시도해주십시요." });
         });
     }
 
+    onClose=()=>{
+        this.setState({ postResult:null });
+        this.props.close();
+    }
+
     render() {
+
 
         let msg = '이미지 추가';
         if( this.state.base64Img ) msg = '이미지 변경';
         if( this.state.isUploading ) msg = '이미지 올리는 중...';
 
+        const PLACE_HOLDERS = {feed:'새로운 글을 작성해 보세요.', support:'문의사항에 대해 상세한 설명을 부탁드립니다.'};
+
         return <div>
 
             <section className="cl-write-section dialogs__content cl-shrink">
 
-                <textarea name="" id="" cols="30" rows="5" placeholder="새로운 글을 작성해 보세요." value={this.state.content}
+                <textarea name="" id="" cols="30" rows="5"
+                          placeholder={PLACE_HOLDERS[this.state.postType]}
+                          value={this.state.content}
                           onChange={event => this.handleChange(event)} ref={ textarea =>{ this.input = textarea; }  }/>
 
 
                 <footer className="cl-flex-between">
 
+                    {(this.state.postType==='support' && this.state.content.length === 0 )&&
+                    <p className="cl-write-noti">가능한 빠른 시일내에 이메일을 통해 연락드립니다.</p>
+                    }
 
 
                     {this.state.base64Img&&
@@ -161,6 +197,15 @@ class WriteDrawer extends BottomDrawer {
                     </button>
 
                 </footer>
+
+
+                {this.state.postResult &&
+                <div className="cl-dim--complete">
+                    <img src={AlertSrc} alt="알림"/>
+                    <p>{this.state.postResult}</p>
+                    <button onClick={this.onClose}>확인</button>
+                </div>
+                }
 
             </section>
         </div>

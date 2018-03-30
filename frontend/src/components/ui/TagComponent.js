@@ -8,12 +8,14 @@ class TagComponent extends Component {
 
         // 이미지 복원
         let imgs = this.props.content.match(/<img[^>]+>/g);
-        imgs.forEach( (img, index)=>{
-            content = reactStringReplace(content, img, (match, index, offset) => {
-                let src = match.match(/src=\S+/)[0].replace(/(src=)|(")|(')|(<img)|(\/>)|\s/g, '');
-                return <img key={'img' + index } src={src} width="100%" alt="첨부 이미지"/>;
+        if( imgs ) {
+            imgs.forEach((img, index) => {
+                content = reactStringReplace(content, img, (match, index, offset) => {
+                    let src = match.match(/src=\S+/)[0].replace(/(src=)|(")|(')|(<img)|(\/>)|\s/g, '');
+                    return <img key={'img' + index} src={src} width="100%" alt="첨부 이미지"/>;
+                });
             });
-        });
+        }
 
         // 줄넘김 복원
         content = reactStringReplace(content, /(\n)/g, (match, index) => {

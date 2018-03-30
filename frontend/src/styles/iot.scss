@@ -463,6 +463,11 @@
         }
     }
 
+    &.cl-bg--transparent{
+        background: transparent none;
+    }
+
+
     p, h4{
         margin-bottom: 0;
         line-height: 1em;

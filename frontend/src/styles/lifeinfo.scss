@@ -166,3 +166,30 @@ $card-trans-time: 0.3s;
   }
 
 }
+
+
+
+
+/* Living Support */
+.cl-support{
+
+  &>header{
+
+    padding: 20px 18px;
+    background-color: #ECECEC;
+    height: inherit;
+    box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+    margin-bottom: 0.2em;
+
+    h4{
+      font-size: 17px;
+      font-weight: bold;
+      color: #000000;
+    }
+
+    p{
+      font-size: 12px;
+      color: rgba( 0, 0, 0, 0.87 );
+    }
+  }
+}

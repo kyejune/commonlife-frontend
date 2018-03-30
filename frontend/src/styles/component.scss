@@ -59,7 +59,61 @@
         color: white;
         background-color: transparent;
     }
+
+    footer{
+        height: initial;
+        padding: 0.6em 1em;
+    }
+    
+    .cl-write-noti{
+        position: absolute;
+        background-color: rgba(143, 143, 143, 0.5);
+        color: rgba( 255, 255, 255, 0.5 );
+        width: 100%;
+        top: -40px;
+        height: 40px;
+        line-height: 40px;
+        left: 0;
+        padding-left: 1.4em;
+    }
 }
+
+
+.cl-dim--complete{
+    @extend .cl-flex;
+    position: fixed;
+    top: 0;
+    z-index: 999;
+    background-color: rgba( 0, 0, 0, 0.85 );
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    padding: 15px;
+
+    img{
+        margin-top: 60%;
+        width: 30px;
+        height: 30px;
+    }
+
+    p{
+        color: white;
+        font-size: 19px;
+        margin-top: 1em;
+        font-weight: 600;
+    }
+
+    button{
+        margin-top: auto;
+        color: white;
+        font-size: 14px;
+        background-color: #4a4a4a;
+        padding: 0.8em 0;
+        text-align: center;
+        width: 100%;
+    }
+}
+
 
 .cl-preview-holder {
 

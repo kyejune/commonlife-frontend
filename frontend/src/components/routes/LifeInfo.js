@@ -5,6 +5,7 @@ import {Link, withRouter} from 'react-router-dom';
 import {observer} from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
 import NoticeDetail from "../drawers/lifeInfo/NoticeDetail";
+import LivingSupportCategory from "../drawers/lifeInfo/LivingSupportCategory";
 
 class LifeInfo extends Component {
 
@@ -26,6 +27,10 @@ class LifeInfo extends Component {
             notice:{
                 notice:'info-notice',
             },
+
+            support:{
+                support:'info-support'
+            }
 
         };
 
@@ -134,6 +139,11 @@ class LifeInfo extends Component {
             {/* 공지 상세보기 */}
             <DrawerWrapper drawer="info-notice-detail" title="" deepdark back >
                 <NoticeDetail/>
+            </DrawerWrapper>
+
+            {/* 리빙서포트 카테고리 */}
+            <DrawerWrapper drawer="info-support" title="Living Support" back >
+                <LivingSupportCategory/>
             </DrawerWrapper>
         </div>
     }

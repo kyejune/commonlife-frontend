@@ -131,7 +131,10 @@ export default {
     makePost( data, callback ){
         axios.post( Store.api + '/posts/', data)
             .then( response => {
-                callback( response );
+                callback( true, response );
+            })
+            .catch( error => {
+                callback( false, error );
             });
     }
 

@@ -16,7 +16,7 @@ const WriteButton = () => {
     return <Button floating primary
                    iconClassName="fa fa-pencil fa-2x"
                    className="cl-write__button"
-                   onClick={() => Store.pushDrawer('write')}
+                   onClick={() => Store.pushDrawer('write', { type:'feed' } )}
     />
 }
 

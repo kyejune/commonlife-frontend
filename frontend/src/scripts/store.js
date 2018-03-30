@@ -51,6 +51,16 @@ const Store = observable({
         return has;
     },
 
+    getDrawerData: key => {
+        let data = null;
+        let has = Store.drawer.some( drawerInfo => {
+            if( drawerInfo.key === key ) data = drawerInfo.data;
+            return drawerInfo.key === key;
+        });
+
+        return data;
+    },
+
     getDrawerIndex: key => {
         let idx = -1;
         Store.drawer.some( ( drawerInfo, index ) => {
