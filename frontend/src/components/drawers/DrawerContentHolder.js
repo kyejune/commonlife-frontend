@@ -20,6 +20,7 @@ class DrawerContentHolder extends Component {
     componentDidMount(){
         ReactDOM.findDOMNode(this).parentNode.style.zIndex = ( Store.getDrawerIndex( this.props.drawer ) + 100 ).toString();
         document.querySelector('body').classList.add('cl-dom--added');
+        document.querySelector('.App').scrollTo(0,0);
     }
 
     componentWillUnmount(){

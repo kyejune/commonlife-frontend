@@ -24,6 +24,7 @@ $card-trans-time: 0.3s;
   h4{
     font-weight: bold;
     font-size: 20px;
+    text-align: left;
 
     &+p{
       font-size: 16px;
@@ -72,6 +73,11 @@ $card-trans-time: 0.3s;
       margin-left: -78px;
       opacity: 0;
     }
+
+    h4{
+      margin-top: 0;
+    }
+
   }
 
 
@@ -271,9 +277,8 @@ $card-trans-time: 0.3s;
 
 /* Profile */
 .cl-profile-card{
-  position: relative;
-  background-color: white;
-  padding: 30px 0 25px 0;
+  //background-color: white;
+  padding: 0;// 0 0 25px 0;
   text-align: center;
 
 
@@ -313,6 +318,21 @@ $card-trans-time: 0.3s;
   }
 }
 
+.cl-profile{
+
+  .cl-profile-card{
+    background-color: white;
+    position: relative;
+    text-align: center;
+    padding: 30px 0;
+
+    h4{
+      text-align: center;
+    }
+  }
+
+}
+
 .cl-profile-family{
   padding: 0 23px;
   background-color: rgba( 0, 0, 0, 0.3 );
@@ -323,6 +343,8 @@ $card-trans-time: 0.3s;
     background: transparent;
   }
 }
+
+
 
 .cl-form{
   padding: 20px 23px;
