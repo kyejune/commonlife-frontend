@@ -6,6 +6,10 @@ import {observer} from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
 import NoticeDetail from "../drawers/lifeInfo/NoticeDetail";
 import LivingSupportCategory from "../drawers/lifeInfo/LivingSupportCategory";
+import SubjectList from "../drawers/lifeInfo/SubjectList";
+import Status from "../drawers/lifeInfo/Status";
+import Profile from "../drawers/lifeInfo/Profile";
+import ContentPage from "../drawers/lifeInfo/ContentPage";
 
 class LifeInfo extends Component {
 
@@ -22,23 +26,36 @@ class LifeInfo extends Component {
 
         const params = this.props.match.params;
         const compMap = {
-
-            // Mode 추가 버튼 클릭
             notice:{
                 notice:'info-notice',
             },
 
             support:{
                 support:'info-support'
+            },
+
+            guide:{
+                guide:'info-subject',
+            },
+
+            benefit:{
+                benefit:'info-subject',
+            },
+
+            profile:{
+                profile:'info-profile',
+            },
+
+            status:{
+                status:'info-status',
             }
+
 
         };
 
 
         const cate = this.props.match.params.cate;
         const map = compMap[cate];
-
-        console.log( 'update router info:', map );
 
         Store.clearDrawer();
         if( cate === undefined ) return;
@@ -109,7 +126,7 @@ class LifeInfo extends Component {
                     </li>
 
                     <li>
-                        <Link to="/info/benefits">
+                        <Link to="/info/benefit">
                             <img className="cl__thumb--rounded" src={"icons/cl_life-9.svg"} alt="svg"/>
                             <p>Benefits</p>
                         </Link>
@@ -145,6 +162,33 @@ class LifeInfo extends Component {
             <DrawerWrapper drawer="info-support" title="Living Support" back >
                 <LivingSupportCategory/>
             </DrawerWrapper>
+
+            {/* Benefit 목록, 리빙가이드 목록 */}
+            <DrawerWrapper drawer="info-subject" back >
+                <SubjectList/>
+            </DrawerWrapper>
+
+            {/* Benefit 목록, 리빙가이드 상세 */}
+            <DrawerWrapper drawer="info-subject-detail" back >
+                <ContentPage/>
+            </DrawerWrapper>
+
+
+            {/* 리방가이드 목록 */}
+            {/*<DrawerWrapper drawer="info-guide" title="Living Guide" back >*/}
+                {/*<SubjectList type="guide"/>*/}
+            {/*</DrawerWrapper>*/}
+
+            {/* My Status */}
+            <DrawerWrapper drawer="info-status" title="My Status" back >
+                <Status/>
+            </DrawerWrapper>
+
+            {/* Profile */}
+            <DrawerWrapper drawer="info-profile" title="사용자 정보 관리" back >
+                <Profile/>
+            </DrawerWrapper>
+
         </div>
     }
 }

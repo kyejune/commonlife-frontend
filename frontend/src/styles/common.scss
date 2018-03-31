@@ -149,6 +149,12 @@ input:focus, textarea:focus {
   align-items: center;
 }
 
+.cl-flex--bottom{
+  @extend .cl-flex;
+  align-items: flex-end;
+}
+
+
 .cl-flex-between{
   @extend .cl-flex;
   justify-content: space-between;

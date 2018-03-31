@@ -800,6 +800,7 @@ footer.cl-opts__footer{
     transition: bottom 0.3s ease-out;
     box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.24), 0 0 4px 0 rgba(0, 0, 0, 0.12);
     height: inherit;
+    min-height: 50px;
 
     &.cl-opts__footer--hide{
         bottom: -50px;

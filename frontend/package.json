@@ -59,7 +59,8 @@
         "react-sortable": "^2.0.0",
         "react-sortable-hoc": "^0.6.8",
         "react-string-replace": "^0.4.1",
-        "simple-json-filter": "^0.3.0"
+        "simple-json-filter": "^0.3.0",
+        "simple-react-validator": "^0.0.6"
     },
     "cordova": {
         "plugins": {

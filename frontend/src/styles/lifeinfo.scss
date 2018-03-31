@@ -193,3 +193,158 @@ $card-trans-time: 0.3s;
     }
   }
 }
+
+
+.cl-subject-list{
+  li{
+    min-height: 69px;
+  }
+
+
+  .cl-version{
+    background-color: #E3E3E3;
+    p{
+      font-size: 12px;
+    }
+  }
+}
+
+
+/* My Status */
+.cl-status-vertical-list{
+  background-color: rgba(0, 0, 0, 0.3);
+
+  .cl-name{
+    font-size: 16px;
+
+    .cl-desc{
+      font-size: 14px;
+      font-weight: 300;
+      margin-left: 0.5em;
+    }
+  }
+
+  .cl-desc{
+    font-size: 16px;
+    span{
+      color: #80d6ff;
+    }
+  }
+
+  .cl-card-item{
+    @extend .cl-flex;
+    padding: 26px 23px;
+  }
+
+}
+
+.cl-status-vertical-list--nano{
+  @extend .cl-status-vertical-list;
+  font-size: 12px;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+
+  .cl-card-item--dark{
+    padding: 4px 0;
+    margin-bottom: 9px;
+  }
+
+  .cl-name{
+    font-size: 14px;
+    line-height: 1em;
+  }
+
+  .cl-desc, button{
+    font-size: 12px;
+    color: #9b9b9b;
+  }
+
+  button{
+
+    &.cl--active{
+      color: #80d6ff;
+    }
+  }
+
+}
+
+
+/* Profile */
+.cl-profile-card{
+  position: relative;
+  background-color: white;
+  padding: 30px 0 25px 0;
+  text-align: center;
+
+
+  .cl-avatar-border{
+    @extend .cl-avatar;
+    border-radius: 0;
+    border: 0;
+    width: 108px;
+    height: 108px;
+    background-size: contain;
+    background: #E6E6E6 none;
+    clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
+    margin: 0 auto;
+    padding: 4px;
+
+
+    .cl-avatar{
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  h4{
+    margin-top: 12px;
+    margin-bottom: 4px;
+  }
+
+  .cl-edit__button{
+    position: absolute;
+    top: 30px - 12px;
+    left: calc( 50% + 54px - 12px );
+    width: 24px;
+    height: 24px;
+    background-color: #f4ca5c;
+    box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+  }
+}
+
+.cl-profile-family{
+  padding: 0 23px;
+  background-color: rgba( 0, 0, 0, 0.3 );
+
+  .cl-status-vertical-list{
+    padding: 26px 0;
+    border-bottom: 1px solid #303236;
+    background: transparent;
+  }
+}
+
+.cl-form{
+  padding: 20px 23px;
+  background-color: rgba( 0, 0, 0, 0.1 );
+
+  .cl__input{
+    font-size: 16px;
+    color: #96979A;
+    border-bottom: 1px solid #47494F;
+    margin-top: 22px;
+    padding-bottom: 0.4em;
+  }
+
+  .cl__button{
+    width: 84px;
+    height: 34px;
+    opacity: 0.5;
+    border-radius: 1px;
+    background-color: rgba(155, 155, 155, 0.8);
+    color: #fafafa;
+
+  }
+
+  margin-bottom: 4em;
+}

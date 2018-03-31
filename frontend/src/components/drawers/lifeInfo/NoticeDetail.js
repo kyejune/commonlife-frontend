@@ -18,7 +18,7 @@ class NoticeDetail extends Component {
                     <TagComponent content={content}/>
                 </p>
 
-                <div className="cl-card-item--dark cl-flex">
+                <div className="cl-card-item--dark cl-flex mb-3em">
                     <div className="cl-avatar"/>
                     <div>
                         <h6 className="cl-name">최수영 CM</h6>

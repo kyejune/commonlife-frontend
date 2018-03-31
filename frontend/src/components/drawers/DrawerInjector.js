@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import Store from "../../scripts/store";
-import Profile from "components/drawers/Profile";
 import Modal from "../overlay/Modal";
 import IotProgressOverlay from "../overlay/IotProgressOverlay";
 import IotModeChange from "../overlay/IotModeChange";
@@ -42,9 +41,9 @@ class DrawerInjector extends Component{
 
         return <div className="drawerInjector">
 
-            <DrawerWrapper drawer="profile" title="프로필">
-                <Profile/>
-            </DrawerWrapper>
+            {/*<DrawerWrapper drawer="profile" title="프로필">*/}
+                {/*<Profile/>*/}
+            {/*</DrawerWrapper>*/}
 
 
             <BottomDrawer visible={Store.hasDrawer('write')} renderNode={document.querySelector('.App')}
