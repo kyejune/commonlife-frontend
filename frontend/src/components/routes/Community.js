@@ -61,7 +61,7 @@ class Community extends Component {
     render() {
 
         return (
-            <div>
+            <div className="cl-tab--community">
                 <TabsContainer panelClassName="md-grid" colored
                                activeTabIndex={this.state.tabIndex}
                                onTabChange={index => this.onTabChange(index)}>

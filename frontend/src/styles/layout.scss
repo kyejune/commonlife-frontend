@@ -8,6 +8,7 @@ html, body{
 
 body{
     width: 100vw;
+    height: 100vh;
 }
 
 body.platform--ios{
@@ -25,7 +26,7 @@ body.platform--ios{
     }
 
     .App{
-        height: calc( 100vh - 3.90625vh);
+        height: calc( 100vh - 3.90625vh + 56px );
     }
 
     #root{
@@ -33,7 +34,7 @@ body.platform--ios{
     }
 
     .dialogs__content{
-        margin-top: 3.90625vh;
+        //margin-top: 3.90625vh;
         height: calc( 100vh - 3.90625vh - 56px );
     }
 
@@ -49,10 +50,17 @@ body.platform--ios{
             min-height: calc( 100vh - 3.90625vh - 97px - 50px );
         }
     }
+
+
+    .cl-drawer-content-holder{
+        &>header {
+          margin-top: 3.90625vh;
+        }
+    }
 }
 
 body:not(.platform--ios){
-    overflow-y: scroll;
+    //overflow-y: scroll;
 }
 
 body.cl-keyboard--open{
@@ -77,6 +85,40 @@ body.cl-dom--added{
 }
 
 
+.abs-scroll{
+    -webkit-overflow-scrolling: touch;
+    overflow-y: scroll;
+    height: calc( 100vh - 56px*2 - 48px );
+}
+
+
+/* 스크롤 영역 따로 지정 */
+.cl-tab--community{
+    .cl-fitted-box{
+        @extend .abs-scroll;
+    }
+}
+
+.cl-tab--reservation{
+    .cl-fitted-box{
+        @extend .abs-scroll;
+    }
+}
+
+.cl-tab--iot{
+    .cl-fitted-box{
+        @extend .abs-scroll;
+        height: 100vh;
+    }
+}
+
+.cl-tab--info{
+    .cl-fitted-box{
+        @extend .abs-scroll;
+        height: calc( 100vh - 56px*2 - 158px );
+    }
+}
+
 
 #modal{
     position: fixed;
@@ -96,8 +138,9 @@ body.cl-dom--added{
 .App {
 
     height: 100vh;
-    -webkit-overflow-scrolling: touch;
-    overflow-y: scroll;
+    width: 100vw;
+    //-webkit-overflow-scrolling: touch;
+    //overflow-y: scroll;
 
     & > header {
         transition: margin-top $dur ease-out;
@@ -158,9 +201,43 @@ body.cl-dom--added{
     // 스크롤해서 위아래 메뉴 치울때,
     &.cl-app--expand {
 
+        height: calc( 100vh + 56px );
+
+        &>header{
+            margin-top: -56px;
+        }
+
+
         #cl-footer {
             bottom: -56px;
         }
+
+        .cl-write__button, .cl-iot-run__button{
+            bottom: 1em;
+        }
+
+
+        // 스크롤 영역 조절
+        .cl-tab--community{
+            .cl-fitted-box{
+                height: calc( 100vh - 48px - 16px ); //상단 및 패딩 제외
+            }
+        }
+
+        .cl-tab--reservation{
+            .cl-fitted-box{
+                height: calc( 100vh - 145px ); // 상단 대시보드 제외
+            }
+        }
+
+        .cl-tab--info{
+            .cl-fitted-box{
+                position: absolute;
+                bottom: 0;
+                height: calc( 100vh - 85px );
+            }
+        }
+
     }
 
 }

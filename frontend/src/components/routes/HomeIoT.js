@@ -106,9 +106,9 @@ class HomeIoT extends Component {
 
 	render () {
 
-		return <div>
+		return <div className="cl-tab--iot">
 			<div className="cl-home-iot">
-				<div className="cl-fitted-box">
+				<div className="cl-fitted-box pb-3em">
 					<WithTitle titleName="MODE"/>
 
 					<div className="cl-iot-mode">

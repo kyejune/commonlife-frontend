@@ -54,8 +54,10 @@
         "react-day-picker": "^7.0.7",
         "react-draggable": "^3.0.5",
         "react-id-swiper": "^1.6.1",
+        "react-iscroll": "^2.0.3",
         "react-md": "^1.2.10",
         "react-router-dom": "^4.2.2",
+        "react-scroll-box": "^0.3.5",
         "react-sortable": "^2.0.0",
         "react-sortable-hoc": "^0.6.8",
         "react-string-replace": "^0.4.1",
@@ -73,7 +75,6 @@
             },
             "cordova-plugin-device-name": {},
             "cordova-plugin-device": {},
-            "cordova-plugin-splashscreen": {},
             "cordova-plugin-keyboard": {},
             "cordova-plugin-statusbar": {}
         },

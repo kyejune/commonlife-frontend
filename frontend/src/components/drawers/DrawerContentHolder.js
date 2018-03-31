@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import {Button, Toolbar} from 'react-md';
 import {withRouter} from 'react-router';
 import Store from "scripts/store";
-import closeSrc from 'images/back@3x.jpg';
+import closeSrc from 'images/back@3x.png';
 import classNames from 'classnames';
 
 class DrawerContentHolder extends Component {
@@ -61,9 +61,9 @@ class DrawerContentHolder extends Component {
 
         if( this.props.back ){
 
-            CloseButton = <Button onClick={ ()=> this.onClose() } flat className="cl-back__button">
-                <img src={ closeSrc } alt="이전" width="40" height="40"/>
-            </Button>
+            CloseButton = <button onClick={ ()=> this.onClose() } className="cl-back__button ml-1em">
+                <img src={ closeSrc } alt="이전" width="20" height="20"/>
+            </button>
 
         }else{
 

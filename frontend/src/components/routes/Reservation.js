@@ -58,7 +58,7 @@ class Reservation extends Component {
     render() {
 
 
-        return <div>
+        return <div className="cl-tab--reservation">
             {/*크레딧 에러 팝업 */}
             {/*<NoCreditPopup/>*/}
 

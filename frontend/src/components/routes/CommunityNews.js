@@ -15,7 +15,7 @@ class CommunityNews extends Component {
 		return (
             <div className="cl-fitted-box">
 
-                <div>
+                <div className="cl-card-items">
 
 					{ Store.news.map( ( card, index ) => {
 						return (

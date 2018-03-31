@@ -14,6 +14,8 @@ import LifeInfo from 'components/routes/LifeInfo';
 import Reservation from 'components/routes/Reservation';
 import Playground from 'components/Playground';
 import DrawerInjector from "./components/drawers/DrawerInjector";
+import {ScrollBox, ScrollAxes, FastTrack} from 'react-scroll-box';
+
 
 class App extends Component {
 
@@ -27,20 +29,19 @@ class App extends Component {
     }
 
 
-    componentWillMount() {
+    componentDidMount() {
 
         document.addEventListener('scroll', () => {
-
-            let bodyTop = document.querySelector('body').scrollTop || document.querySelector('html').scrollTop;
+            let bodyTop = 0;
+            document.querySelectorAll('.cl-fitted-box').forEach( item => {
+                bodyTop = Math.max( bodyTop, item.scrollTop );
+            });
 
             this.setState({
-                scrolled: ( bodyTop > 56 || document.querySelector('.App').scrollTop > 56)
+                scrolled: ( bodyTop > 56 )
             });
 
         }, true);
-
-        // if( this.state.isDevice )
-        //     document.querySelector('body').classList.add('cl-is-device');
 
     }
 

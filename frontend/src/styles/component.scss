@@ -49,6 +49,7 @@
 .cl-write-section {
 
     height: calc(100vh - 56px * 2 );
+    overflow: hidden !important;
 
     textarea{
         padding: 1em;
@@ -203,6 +204,10 @@
         font-size: 22px;
         font-weight: bold;
     }
+}
+
+.cl-card-items{
+    padding-bottom: 3em;
 }
 
 .cl-card-item {
@@ -1010,5 +1015,16 @@
         color: rgba( 0, 0, 0, .87 );
         margin-top: 26px;
         font-weight: lighter;
+    }
+}
+
+
+
+
+
+/* Map Link */
+.cl-map__link{
+    .cl-map-pin__icon{
+        background: transparent url('images/ic-plus-24-px-copy-2@3x.png') no-repeat;
     }
 }

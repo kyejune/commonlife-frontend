@@ -14,7 +14,7 @@ class CommunityEvent extends Component {
 		return (
 			<div className="cl-fitted-box">
 
-				<div>
+				<div className="cl-card-items">
 					{ Store.event.map( ( card, index ) => {
 						return (
 							<CardItem key={index} list="/community/event" cardData={card}/>
