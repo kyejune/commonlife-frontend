@@ -2,6 +2,7 @@ package com.kolon.comlife.admin.complexes.service.impl;
 
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
+import com.kolon.comlife.admin.complexes.model.ComplexRegion;
 import com.kolon.comlife.admin.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
 import org.slf4j.Logger;
@@ -44,5 +45,10 @@ public class ComplexServiceImpl implements ComplexService {
     @Override
     public List<HashMap> selectComplexGroupType() {
         return complexDAO.selectComplexGroupType();
+    }
+
+    @Override
+    public List<ComplexRegion> getComplexRegion() {
+        return complexDAO.selectComplexRegion();
     }
 }

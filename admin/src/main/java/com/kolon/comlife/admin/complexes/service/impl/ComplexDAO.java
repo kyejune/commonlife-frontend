@@ -2,6 +2,7 @@ package com.kolon.comlife.admin.complexes.service.impl;
 
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
+import com.kolon.comlife.admin.complexes.model.ComplexRegion;
 import com.kolon.comlife.admin.complexes.model.ComplexSimpleInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -49,5 +50,9 @@ public class ComplexDAO {
 
     public List<HashMap> selectComplexGroupType() {
         return sqlSession.selectList("Complex.selectComplexGroupType");
+    }
+
+    public List<ComplexRegion> selectComplexRegion() {
+        return sqlSession.selectList("Complex.selectComplexRegion");
     }
 }

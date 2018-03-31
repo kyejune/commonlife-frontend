@@ -175,9 +175,9 @@
                     data: $("#complexReqForm").serialize(),
                     success: function (rs) {
                         if (rs.result) {
-                            alert(modeMsg+" 되었습니다.");
+                            alert( rs.msg +" 되었습니다.");
                         }else{
-                            alert(rs.msg);
+                            alert( rs.msg );
                         }
                         refreshList();
                     },

@@ -28,59 +28,6 @@
     </div>
 
     <div class="wrapper wrapper-content animated fadeInRight">
-        <%--<c:choose>--%>
-            <%--<c:when test="${grpId == -1}"></c:when>--%>
-            <%--<c:otherwise>--%>
-        <%--<div class="row">--%>
-            <%--<div class="col-lg-12">--%>
-                <%--<div class="ibox float-e-margins">--%>
-                    <%--<div class="ibox-title">--%>
-                        <%--<h5>관리자 생성</h5>--%>
-                        <%--<div class="ibox-tools">--%>
-                            <%--<a class="collapse-link">--%>
-                                <%--<i class="fa fa-chevron-up"></i>--%>
-                            <%--</a>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                    <%--<div class="ibox-content" style="">--%>
-                        <%--<form class="form-horizontal">--%>
-                            <%--<c:choose>--%>
-                                <%--<c:when test="${adminConst.adminGrpSuper == grpId}">--%>
-                                    <%--<div class="form-group">--%>
-                                        <%--<label class="col-sm-2 control-label">--%>
-                                            <%--<button type="button"--%>
-                                                    <%--class="btn btn-primary b-r-lg"--%>
-                                                    <%--onclick="managerAdd(${adminConst.adminGrpSuper})">--%>
-                                                <%--슈퍼 관리자 생성</button>--%>
-                                        <%--</label>--%>
-                                        <%--<div class="col-sm-10"> 설명 작성 ... </div>--%>
-                                    <%--</div>--%>
-                                <%--</c:when>--%>
-                                <%--<c:when test="${adminConst.adminGrpComplex == grpId}">--%>
-                                    <%--<div class="form-group">--%>
-                                        <%--<label class="col-sm-2 control-label">--%>
-                                            <%--<button type="button"--%>
-                                                    <%--class="btn btn-success b-r-lg"--%>
-                                                    <%--onclick="managerAdd(${adminConst.adminGrpComplex})">--%>
-                                                <%--현장 관리자 생성</button>--%>
-                                        <%--</label>--%>
-                                        <%--<div class="col-sm-10"> 설명 작성 ... </div>--%>
-                                    <%--</div>--%>
-                                <%--</c:when>--%>
-                                <%--<c:otherwise>--%>
-                                    <%--<span class="badge-plain">--%>
-                                        <%-----%>
-                                    <%--</span>--%>
-                                <%--</c:otherwise>--%>
-                            <%--</c:choose>--%>
-                        <%--</form>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-            <%--</c:otherwise>--%>
-        <%--</c:choose>--%>
-
         <form:form name="complexReqForm" id="complexReqForm" method="post" commandName="complexInfo">
             <!--//paging-->
             <%--<form:hidden path="pageIndex"/>--%>
@@ -120,7 +67,7 @@
                                         <c:forEach var="vo" items="${complexList}" varStatus="status">
                                             <tr>
                                                 <td> ${vo.rnum} </td>
-                                                <td> ${vo.cmplxNm}</td>
+                                                <td><a href="complexDetail.do?cmplxId=${vo.cmplxId}">${vo.cmplxNm}</a></td>
                                                 <td> ${vo.cmplxGrp}</td>
                                                 <td> ${vo.addr}</td>
                                             </tr>

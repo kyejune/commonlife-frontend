@@ -2,22 +2,24 @@ package com.kolon.comlife.admin.complexes.service;
 
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
+import com.kolon.comlife.admin.complexes.model.ComplexRegion;
 import com.kolon.comlife.admin.complexes.model.ComplexSimpleInfo;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public interface ComplexService {
 
-    public ComplexInfoDetail getComplexById(int id);
+    ComplexInfoDetail getComplexById(int id);
 
-    public List<ComplexInfo> getComplexList();
+    List<ComplexInfo> getComplexList();
 
-    public List<ComplexSimpleInfo> getComplexSimpleList();
+    List<ComplexSimpleInfo> getComplexSimpleList();
 
-    public int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId);
+    int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId);
 
-    public List<HashMap> selectComplexGroupType();
+    List<HashMap> selectComplexGroupType();
+
+    List<ComplexRegion> getComplexRegion();
 }
 

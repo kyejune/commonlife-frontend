@@ -225,4 +225,13 @@
             CMPLX.CMPLX_ID = #{cmplxId}
         ;
     </select>
+
+    <select id="selectComplexRegion" resultType="ComplexRegion">
+        SELECT
+          CL_CMPLX_RGN_ID,
+          RGN_NM,
+          DISP_ORDER
+        FROM
+          `CL_COMPLEX_REGION`;
+    </select>
 </mapper>
