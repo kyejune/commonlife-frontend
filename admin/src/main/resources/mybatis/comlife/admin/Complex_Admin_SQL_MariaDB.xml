@@ -125,14 +125,14 @@
             CMPLX_EXT.UPD_ADMIN_IDX AS UPD_ADMIN_IDX
         FROM
             COMPLEX_M AS CMPLX
-              LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
+              LEFT JOIN
             COMPLEX_M_EXT AS CMPLX_EXT
         ON
             CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
         WHERE
             CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
     ) AS A
-      JOIN
+      LEFT JOIN
     (
         SELECT
             CMPLX_ID,
@@ -150,11 +150,37 @@
     ;
     </select>
 
-    <select id="selectComplexDetail" resultType="ComplexInfo">
-    BEGIN
-        CALL ADD_IF_NOT_EXIST_COMPLEX_M_EXT(${cmplxId});
+    <select id="selectComplexGroupType" resultType="hashmap">
+      SELECT
+        CMPLX_GRP_TYPE_ID,
+        CMPLX_GRP_TYPE,
+        CMPLX_GRP_TYPE_DESC
+      FROM
+        COMPLEX_GRP_TYPE_M;
+    </select>
 
+
+    <update id="updateComplexGroupTypeById" parameterType="ComplexInfo">
+      INSERT INTO
+        `COMPLEX_GRP_M`
+        (
+          CMPLX_GRP_TYPE_ID,
+          CMPLX_ID
+      )
+      VALUES
+      (
+        ${cmplxGrpId},
+        ${cmplxId}
+      )
+      ON DUPLICATE KEY
+      UPDATE
+        CMPLX_GRP_TYPE_ID = ${cmplxGrpId},
+        UPD_DTTM=CURRENT_TIMESTAMP;
+    </update>
+
+    <select id="selectComplexById" parameterType="ComplexInfoDetail" resultType="ComplexInfoDetail">
         SELECT
+            GRP_TYPE.CMPLX_GRP_TYPE AS CMPLX_GRP_TYPE,
             CMPLX.CMPLX_ID AS CMPLX_ID,
             CMPLX.CMPLX_CD AS CMPLX_CD,
             CMPLX.CMPLX_NM AS CMPLX_NM, -- COMPLEX NAME
@@ -181,38 +207,22 @@
             CMPLX_EXT.CL_LOGO_IMG_SRC AS CL_LOGO_IMG_SRC,
             CMPLX_EXT.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
             CMPLX_EXT.REG_DT AS REG_DT,
-            CMPLX_EXT.REG_ADMIN_IDX AS REG_ADMIN_IDX,
+            (SELECT ADMIN_ID FROM CL_ADMIN_INFO WHERE ADMIN_IDX = CMPLX_EXT.REG_ADMIN_IDX) AS REG_ADMIN_ID,
             CMPLX_EXT.UPD_DT AS UPD_DT,
-            CMPLX_EXT.UPD_ADMIN_IDX AS UPD_ADMIN_IDX
+            (SELECT ADMIN_ID FROM CL_ADMIN_INFO WHERE ADMIN_IDX = CMPLX_EXT.UPD_ADMIN_IDX ) AS UPD_ADMIN_ID
         FROM
-            COMPLEX_M AS CMPLX
-              JOIN
-            COMPLEX_M_EXT AS CMPLX_EXT
-        ON
-            CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
+            (COMPLEX_M AS CMPLX  LEFT JOIN
+             COMPLEX_M_EXT AS CMPLX_EXT
+                ON CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID)
+            JOIN
+            (COMPLEX_GRP_TYPE_M AS GRP_TYPE LEFT JOIN
+             COMPLEX_GRP_M AS GRP
+                ON GRP_TYPE.CMPLX_GRP_TYPE_ID = GRP.CMPLX_GRP_TYPE_ID)
+            ON CMPLX.CMPLX_ID = GRP.CMPLX_ID
         WHERE
             CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
-            AND
-            CMPLX.CMPLX_ID = cmplxId
+                AND
+            CMPLX.CMPLX_ID = #{cmplxId}
         ;
-    END
     </select>
-
-    <select id="selectComplexGroupType" resultType="hashmap">
-      SELECT
-        CMPLX_GRP_TYPE_ID,
-        CMPLX_GRP_TYPE,
-        CMPLX_GRP_TYPE_DESC
-      FROM
-        COMPLEX_GRP_TYPE_M;
-    </select>
-
-
-    <update id="updateComplexGroupTypeById" parameterType="ComplexInfo">
-      UPDATE COMPLEX_GRP_M
-      SET
-        CMPLX_GRP_TYPE_ID = ${cmplxGrpId}
-      WHERE
-        CMPLX_ID = ${cmplxId};
-    </update>
 </mapper>

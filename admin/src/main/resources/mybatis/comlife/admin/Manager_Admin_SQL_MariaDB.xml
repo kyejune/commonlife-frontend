@@ -61,6 +61,9 @@
               ON A_I.GRP_ID = A_G.GRP_ID
             WHERE 1=1
             <choose>
+                <when test='searchType1 != null and searchType1.equals("CMPLX_ID")'>
+                    AND A_I.CMPLX_ID = #{searchKeyword1}
+                </when>
                 <when test='searchType1 != null and searchType1.equals("GRP_ID")'>
                     AND A_I.GRP_ID LIKE #{searchKeyword1}
                 </when>

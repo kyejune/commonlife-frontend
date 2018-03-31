@@ -1,6 +1,7 @@
 package com.kolon.comlife.admin.complexes.service.impl;
 
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
+import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public class ComplexServiceImpl implements ComplexService {
     private ComplexDAO complexDAO;
 
     @Override
-    public ComplexInfo getComplexById(int id ) {
+    public ComplexInfoDetail getComplexById(int id ) {
         return complexDAO.selectComplexById( id );
     }
 

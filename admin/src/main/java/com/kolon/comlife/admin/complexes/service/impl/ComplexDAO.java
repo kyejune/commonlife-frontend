@@ -1,6 +1,7 @@
 package com.kolon.comlife.admin.complexes.service.impl;
 
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
+import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.model.ComplexSimpleInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -21,8 +22,8 @@ public class ComplexDAO {
     @Resource
     private SqlSession sqlSession;
 
-    public ComplexInfo selectComplexById(int id) {
-        ComplexInfo complex = new ComplexInfo();
+    public ComplexInfoDetail selectComplexById(int id) {
+        ComplexInfoDetail complex = new ComplexInfoDetail();
         complex.setCmplxId(id);
         return sqlSession.selectOne("Complex.selectComplexById", complex );
     }

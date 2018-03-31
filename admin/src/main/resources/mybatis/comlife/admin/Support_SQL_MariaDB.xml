@@ -1,0 +1,897 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Support">
+    <!--<select id="selectBoardList" parameterType="supportInfo" resultType="supportInfo">-->
+    <!--</select>-->
+
+    <select id="selectCategoryListByComplexId" parameterType="supportCategoryInfo"  resultType="supportCategoryInfo">
+        SELECT
+            CATE.LVNG_SUPT_CATE_IDX AS LVNG_SUPT_CATE_IDX,
+            #{cmplxId} AS CMPLX_ID,
+            CATE_NM,
+            CATE_ID,
+            IMG_SRC,
+            `DESC`,
+            IFNULL(DISP_ORDER, 9999) AS DISP_ORDER,
+            IF (DEL_YN = "N", "Y", "N") AS SET_YN,
+            IFNULL(CONF.DEL_YN, "Y") AS DEL_YN,
+            CONF.REG_DTTM AS REG_DTTM,
+            CONF.UPD_DTTM AS UPD_DTTM
+        FROM
+            CL_LIVING_SUPPORT_CATE AS CATE LEFT JOIN
+             CL_LIVING_SUPPORT_CONF AS CONF
+                ON CATE.LVNG_SUPT_CATE_IDX = CONF.LVNG_SUPT_CONF_IDX AND CMPLX_ID=#{cmplxId}
+        ORDER BY
+            DISP_ORDER
+        ;
+    </select>
+
+
+    <select id="selectBoardList" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 리스트 조회 */
+        <include refid="Common.prefixPagination"/>
+        SELECT
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            (CASE WHEN BOARD_TYPE = 'EVENT'
+                    OR BOARD_TYPE = 'NEWS_PRESS'
+                    OR BOARD_TYPE = 'NEWS'
+                    OR BOARD_TYPE = 'PRESS'
+                  THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = A.REG_USERID LIMIT 1)
+                  ELSE A.REG_USERID
+             END) AS MNG_NM,
+            ROW_NUMBER() OVER(ORDER BY BOARD_IDX DESC) ROWNUM,
+            COUNT(1) OVER() AS TOT,
+            FILE_NM,
+            FILE_PATH,
+            FILE_TYPE,
+            EVENT_ON_YN
+        FROM(
+            SELECT
+                B.BOARD_IDX, B.BOARD_TYPE, B.TITLE, B.CONTENT, B.CONTENT_TYPE,
+                B.READ_CNT, B.OPEN_DT, B.CLOSE_DT, B.HTML_YN, B.USE_YN,
+                B.DEL_YN, B.WRITE_NM, B.WRITE_HP, B.WRITE_EMAIL, B.ORDERER_DATE_TIME,
+                B.REG_DTTM, B.REG_USERID, B.UPD_DTTM, B.UPD_USERID,
+                F.FILE_NM, F.FILE_PATH, F.FILE_TYPE,
+                CASE WHEN ( NOW() > CAST(close_dt as date))
+                    THEN 'N' ELSE 'Y' END AS EVENT_ON_YN
+            FROM BOARD B LEFT JOIN (
+                SELECT
+                    BOARD_IDX, FILE_NM, FILE_PATH, FILE_TYPE
+                FROM BOARD_FILE BF
+                WHERE 1=1
+                    AND BF.FILE_TYPE = 'THUMB'
+                    AND BF.DEL_YN = 'N'
+                ) F
+            ON B.BOARD_IDX = F.BOARD_IDX
+            WHERE 1=1
+            <choose>
+                <when test='eventOnYn == "Y"'>
+                    AND
+                        NOW() <![CDATA[<=]]> CAST(close_dt as date)
+                </when>
+                <when test='eventOnYn == "N"'>
+                    AND
+                        NOW() <![CDATA[>]]> CAST(close_dt as date)
+                </when>
+                <otherwise>
+                    AND 1=1
+                </otherwise>
+            </choose>
+            <choose>
+                <when test='boardType != null and boardType.equals("NEWS_PRESS")'>
+                    AND B.BOARD_TYPE IN('NEWS','PRESS')
+                </when>
+                <otherwise>
+                    AND B.BOARD_TYPE = #{boardType}
+                </otherwise>
+            </choose>
+              AND B.USE_YN = 'Y'
+              AND IFNULL(B.DEL_YN,'N') = 'N'
+            <choose>
+                <when test='contentType != null'>
+                    AND B.CONTENT_TYPE LIKE CONCAT('%', #{contentType}, '%')
+                </when>
+                <when test='searchType1 != null and searchType1.equals("TITLE")'>
+                    AND B.TITLE LIKE CONCAT('%', #{searchKeyword1}, '%')
+                </when>
+                <when test='searchType1 != null and searchType1.equals("CONTENT")'>
+                    AND B.CONTENT LIKE CONCAT('%', #{searchKeyword1}, '%')
+                </when>
+                <otherwise>
+                    AND (B.TITLE LIKE CONCAT('%', #{searchKeyword1}, '%') OR B.CONTENT LIKE CONCAT('%', #{searchKeyword1}, '%'))
+                </otherwise>
+            </choose>
+        )A
+        <include refid="Common.suffixPagination"/>
+    </select>
+
+
+    <select id="selectBoardAndFbList" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 및 페이스북 리스트 조회 */
+
+        <include refid="Common.prefixPagination"/>
+        SELECT
+            CAST_IDX,
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            REPLACE(SUBSTRING(CREATED_DATE, 1, 10), '-', '. ') AS CREATED_TIME,
+            UPDATED_TIME, LINK,
+            ORDER_NO,
+            IMAGE_LINK,
+            (CASE WHEN BOARD_TYPE = 'EVENT'
+                    OR BOARD_TYPE = 'NEWS_PRESS'
+                    OR BOARD_TYPE = 'NEWS'
+                    OR BOARD_TYPE = 'PRESS'
+                  THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = A.REG_USERID LIMIT 1)
+                  ELSE A.REG_USERID END) AS MNG_NM,
+--             ROW_NUMBER() OVER(ORDER BY CASE WHEN ORDER_NO IS NULL THEN -9999999 ELSE -ORDER_NO END DESC, CREATED_TIME DESC) ROWNUM,
+            COUNT(1) OVER() AS TOT,
+            FILE_NM, FILE_PATH, FILE_TYPE
+        FROM(
+            SELECT
+                CONCAT(BOARD_TYPE, '_', B.BOARD_IDX) AS CAST_IDX,
+                B.BOARD_IDX as BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+                READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+                DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+                REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+                CONVERT(REG_DTTM, CHAR(19)) AS CREATED_DATE,
+                CONVERT(REG_DTTM, CHAR(19)) AS CREATED_TIME,
+                CONVERT(UPD_DTTM, CHAR(19)) AS UPDATED_TIME,
+                '' AS LINK,
+                ORDER_NO,
+                '' AS IMAGE_LINK,
+                FILE_NM, FILE_PATH, FILE_TYPE
+            FROM BOARD B LEFT JOIN (
+                    SELECT
+                        BOARD_IDX, FILE_NM, FILE_PATH, FILE_TYPE
+                    FROM BOARD_FILE BF
+                    WHERE 1=1
+                        AND BF.FILE_TYPE = 'THUMB'
+                        AND BF.DEL_YN = 'N'
+                    ) F
+                    ON B.BOARD_IDX = F.BOARD_IDX
+                WHERE 1=1
+                <choose>
+                    <when test='boardType != null and boardType.equals("NEWS_PRESS")'>
+                        AND BOARD_TYPE IN('NEWS','PRESS')
+                    </when>
+                    <otherwise>
+                        AND BOARD_TYPE = #{boardType}
+                    </otherwise>
+                </choose>
+                AND USE_YN = 'Y'
+                AND IFNULL(DEL_YN,'N') = 'N'
+                <choose>
+                    <when test='contentType != null'>
+                        AND CONTENT_TYPE LIKE CONCAT('%', #{contentType}, '%')
+                    </when>
+                    <when test='searchType1 != null and searchType1.equals("TITLE")'>
+                        AND TITLE LIKE CONCAT('%', #{searchKeyword1}, '%')
+                    </when>
+                    <when test='searchType1 != null and searchType1.equals("CONTENT")'>
+                        AND CONTENT LIKE CONCAT('%', #{searchKeyword1}, '%')
+                    </when>
+                    <otherwise>
+                        AND (TITLE LIKE CONCAT('%', #{searchKeyword1}, '%') OR CONTENT LIKE CONCAT('%', #{searchKeyword1}, '%'))
+                    </otherwise>
+                </choose>
+            UNION ALL
+            SELECT
+                CONCAT('FACEBOOK_', IDX) AS CAST_IDX,
+                IDX AS BOARD_IDX,
+                'FACEBOOK' AS BOARD_TYPE,
+                (CASE WHEN CHAR_LENGTH(TITLE) = 0
+                THEN MESSAGE ELSE TITLE END
+                ) AS TITLE,
+                MESSAGE AS CONTENT,
+                '' AS CONTENT_TYPE,
+                0 AS READ_CNT,
+                '' AS OPEN_DT,
+                '' AS CLOSE_DT,
+                'N' AS HTML_YN,
+                IS_OPEN AS USE_YN,
+                'N' AS DEL_YN,
+                '' AS WRITE_NM,
+                '' AS WRITE_HP,
+                '' AS WRITE_EMAIL,
+                '' AS ORDERER_DATE_TIME,
+                SYS_REG_DTTM AS REG_DTTM,
+                'FaceBook' AS REG_USERID,
+                SYS_UPD_DTTM AS UPD_DTTM,
+                'FaceBook' AS UPD_USERID,
+                CONVERT(CREATED_TIME, CHAR(19)) AS CREATED_DATE,
+                CONVERT(CREATED_TIME, CHAR(19)) AS CREATED_TIME,
+                CONVERT(UPDATED_TIME, CHAR(19)) AS UPDATED_TIME,
+                LINK,
+                ORDER_NO,
+                FULL_PICTURE AS IMAGE_LINK,
+                '' as FILE_NM,
+                '' as FILE_PATH,
+                '' as FILE_TYPE
+            FROM INF_FACEBOOK
+            WHERE IS_OPEN = 'Y'
+        )A
+        <include refid="Common.orderby"/>
+        <include refid="Common.suffixPagination"/>
+        <!--ORDER BY CREATED_TIME DESC-->
+    </select>
+
+
+    <select id="selectBoardDetail" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 상세 조회 */
+        SET @BOARD_IDX = #{boardIdx};
+
+        SELECT
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            (CASE WHEN BOARD_TYPE = 'NOTICE'
+                    OR BOARD_TYPE = 'EVENT'
+                    OR BOARD_TYPE = 'EVENT_WIN'
+                    OR BOARD_TYPE = 'FNA'
+                    OR BOARD_TYPE = 'SPECIAL_SHOP'
+                  THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = BOARD.REG_USERID LIMIT 1)
+                  ELSE BOARD.REG_USERID
+             END) AS MNG_NM
+        FROM BOARD
+        WHERE 1=1
+            AND BOARD_IDX = @BOARD_IDX
+    </select>
+
+
+    <select id="selectBoardDetailNext" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 다음 상세 조회 */
+        SET @BOARD_IDX = #{boardIdx};
+        SET @BOARD_TYPE = #{boardType};
+
+        SELECT
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            (CASE WHEN BOARD_TYPE = 'NOTICE'
+                    OR BOARD_TYPE = 'EVENT'
+                    OR BOARD_TYPE = 'EVENT_WIN'
+                    OR BOARD_TYPE = 'FNA'
+                    OR BOARD_TYPE = 'SPECIAL_SHOP'
+                  THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = BOARD.REG_USERID LIMIT 1)
+                  ELSE BOARD.REG_USERID
+             END) AS MNG_NM,
+            CONVERT(VARCHAR(19), REG_DTTM, 121) AS CREATED_TIME,
+            CONVERT(VARCHAR(19), UPD_DTTM, 121) AS UPDATED_TIME
+        FROM BOARD
+        WHERE 1=1
+            <choose>
+            <when test='boardType != null and boardType.equals("NEWS_PRESS")'>
+                AND BOARD_TYPE IN('NEWS','PRESS')
+            </when>
+            <otherwise>
+                AND BOARD_TYPE = @BOARD_TYPE
+            </otherwise>
+            </choose>
+            AND USE_YN = 'Y'
+            AND IFNULL(DEL_YN,'N') = 'N'
+            AND BOARD_IDX IN(SELECT MIN(BOARD_IDX)
+                           FROM BOARD
+                           WHERE 1=1
+                                <choose>
+                                    <when test='boardType != null and boardType.equals("NEWS_PRESS")'>
+                                        AND BOARD_TYPE IN('NEWS','PRESS')
+                                    </when>
+                                    <otherwise>
+                                        AND BOARD_TYPE = @BOARD_TYPE
+                                    </otherwise>
+                                </choose>
+                                AND USE_YN = 'Y'
+                                AND IFNULL(DEL_YN,'N') = 'N'
+                                AND BOARD_IDX <![CDATA[>]]> @BOARD_IDX
+            )
+    </select>
+
+    <select id="selectBoardDetailPrev" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 이전 상세 조회 */
+        SET @BOARD_IDX = #{boardIdx};
+        SET @BOARD_TYPE = #{boardType};
+
+        SELECT
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            (CASE WHEN BOARD_TYPE = 'NOTICE'
+                    OR BOARD_TYPE = 'EVENT'
+                    OR BOARD_TYPE = 'EVENT_WIN'
+                    OR BOARD_TYPE = 'FNA'
+                    OR BOARD_TYPE = 'SPECIAL_SHOP'
+                  THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = BOARD.REG_USERID LIMIT 1)
+                  ELSE BOARD.REG_USERID
+             END) AS MNG_NM,
+            CONVERT(VARCHAR(19), REG_DTTM, 121) AS CREATED_TIME,
+            CONVERT(VARCHAR(19), UPD_DTTM, 121) AS UPDATED_TIME
+        FROM BOARD
+        WHERE 1=1
+            <choose>
+                <when test='boardType != null and boardType.equals("NEWS_PRESS")'>
+                    AND BOARD_TYPE IN('NEWS','PRESS')
+                </when>
+                <otherwise>
+                    AND BOARD_TYPE = @BOARD_TYPE
+                </otherwise>
+            </choose>
+            AND USE_YN = 'Y'
+            AND IFNULL(DEL_YN,'N') = 'N'
+            AND BOARD_IDX IN(SELECT MAX(BOARD_IDX)
+                             FROM BOARD
+                             WHERE 1=1
+                                <choose>
+                                    <when test='boardType != null and boardType.equals("NEWS_PRESS")'>
+                                        AND BOARD_TYPE IN('NEWS','PRESS')
+                                    </when>
+                                    <otherwise>
+                                        AND BOARD_TYPE = @BOARD_TYPE
+                                    </otherwise>
+                                </choose>
+                                AND USE_YN = 'Y'
+                                AND IFNULL(DEL_YN,'N') = 'N'
+                                AND BOARD_IDX <![CDATA[<]]> @BOARD_IDX
+        )
+    </select>
+
+    <select id="selectBoardAndFbDetailNext" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 및 페이스북 다음 상세 조회 */
+        SELECT
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            CREATED_TIME, UPDATED_TIME, LINK, MNG_NM, ROWNUM AS rnum,
+            TOT
+        FROM(
+            SELECT
+                BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+                READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+                DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+                REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+                CREATED_TIME, UPDATED_TIME, LINK,
+                (CASE WHEN BOARD_TYPE = 'NOTICE'
+                        OR BOARD_TYPE = 'EVENT'
+                        OR BOARD_TYPE = 'EVENT_WIN'
+                        OR BOARD_TYPE = 'FNA'
+                        OR BOARD_TYPE = 'SPECIAL_SHOP'
+                        THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = A.REG_USERID LIMIT 1)
+                        ELSE A.REG_USERID END) AS MNG_NM,
+                ROW_NUMBER() OVER(ORDER BY CREATED_TIME DESC) ROWNUM,
+                COUNT(1) OVER() AS TOT
+            FROM(
+                SELECT
+                    BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+                    READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+                    DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+                    REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+                    CONVERT(VARCHAR(10), REG_DTTM, 121) AS CREATED_TIME,
+                    CONVERT(VARCHAR(10), UPD_DTTM, 121) AS UPDATED_TIME,
+                    '' AS LINK
+                FROM BOARD
+                WHERE 1=1
+                    AND BOARD_TYPE = 'NOTICE'
+                    AND USE_YN = 'Y'
+                    AND IFNULL(DEL_YN,'N') = 'N'
+                UNION ALL
+                SELECT
+                    IDX AS BOARD_IDX,
+                    'FACEBOOK' AS BOARD_TYPE,
+                    TITLE AS TITLE,
+                    MESSAGE AS CONTENT,
+                    '' AS CONTENT_TYPE,
+                    0 AS READ_CNT,
+                    '' AS OPEN_DT,
+                    '' AS CLOSE_DT,
+                    'N' AS HTML_YN,
+                    IS_OPEN AS USE_YN,
+                    'N' AS DEL_YN,
+                    '' AS WRITE_NM,
+                    '' AS WRITE_HP,
+                    '' AS WRITE_EMAIL,
+                    '' AS ORDERER_DATE_TIME,
+                    SYS_REG_DTTM AS REG_DTTM,
+                    'FaceBook' AS REG_USERID,
+                    SYS_UPD_DTTM AS UPD_DTTM,
+                    'FaceBook' AS UPD_USERID,
+                    CONVERT(VARCHAR(10), CREATED_TIME) AS CREATED_TIME,
+                    CONVERT(VARCHAR(10), UPDATED_TIME) AS UPDATED_TIME,
+                    LINK
+                FROM INF_FACEBOOK
+                WHERE IS_OPEN = 'Y'
+            )A
+        )L
+        WHERE ROWNUM IN(SELECT MAX(ROWNUM)
+                        FROM(
+                            SELECT
+                                BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+                                READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+                                DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+                                REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+                                CREATED_TIME, UPDATED_TIME, LINK,
+                                (CASE WHEN BOARD_TYPE = 'NOTICE'
+                                        OR BOARD_TYPE = 'EVENT'
+                                        OR BOARD_TYPE = 'EVENT_WIN'
+                                        OR BOARD_TYPE = 'FNA'
+                                        OR BOARD_TYPE = 'SPECIAL_SHOP'
+                                        THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = AA.REG_USERID LIMIT 1)
+                                        ELSE AA.REG_USERID END) AS MNG_NM,
+                                ROW_NUMBER() OVER(ORDER BY CREATED_TIME DESC) ROWNUM,
+                                COUNT(1) OVER() AS TOT
+                            FROM(
+                                SELECT
+                                    BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+                                    READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+                                    DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+                                    REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+                                    CONVERT(VARCHAR(10), REG_DTTM, 121) AS CREATED_TIME,
+                                    CONVERT(VARCHAR(10), UPD_DTTM, 121) AS UPDATED_TIME,
+                                    '' AS LINK
+                                FROM BOARD
+                                WHERE 1=1
+                                    AND BOARD_TYPE = 'NOTICE'
+                                    AND USE_YN = 'Y'
+                                    AND IFNULL(DEL_YN,'N') = 'N'
+                                UNION ALL
+                                SELECT
+                                    IDX AS BOARD_IDX,
+                                    'FACEBOOK' AS BOARD_TYPE,
+                                    TITLE AS TITLE,
+                                    MESSAGE AS CONTENT,
+                                    '' AS CONTENT_TYPE,
+                                    0 AS READ_CNT,
+                                    '' AS OPEN_DT,
+                                    '' AS CLOSE_DT,
+                                    'N' AS HTML_YN,
+                                    IS_OPEN AS USE_YN,
+                                    'N' AS DEL_YN,
+                                    '' AS WRITE_NM,
+                                    '' AS WRITE_HP,
+                                    '' AS WRITE_EMAIL,
+                                    '' AS ORDERER_DATE_TIME,
+                                    SYS_REG_DTTM AS REG_DTTM,
+                                    'FaceBook' AS REG_USERID,
+                                    SYS_UPD_DTTM AS UPD_DTTM,
+                                    'FaceBook' AS UPD_USERID,
+                                    CONVERT(VARCHAR(10), CREATED_TIME) AS CREATED_TIME,
+                                    CONVERT(VARCHAR(10), UPDATED_TIME) AS UPDATED_TIME,
+                                    LINK
+                                FROM INF_FACEBOOK
+                                WHERE IS_OPEN = 'Y'
+                            )AA
+                        )LL WHERE 1=1
+                            AND ROWNUM <![CDATA[<]]> #{rnum}
+                      )
+    </select>
+
+    <select id="selectBoardAndFbDetailPrev" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 및 페이스북 이전 상세 조회 */
+        SET @BOARD_IDX = #{boardIdx};
+        SET @BOARD_TYPE = #{boardType};
+
+        SELECT
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            CREATED_TIME, UPDATED_TIME, LINK, MNG_NM, ROWNUM AS rnum,
+            TOT
+        FROM(
+            SELECT
+                BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+                READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+                DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+                REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+                CREATED_TIME, UPDATED_TIME, LINK,
+                (CASE WHEN BOARD_TYPE = 'NOTICE'
+                        OR BOARD_TYPE = 'EVENT'
+                        OR BOARD_TYPE = 'EVENT_WIN'
+                        OR BOARD_TYPE = 'FNA'
+                        OR BOARD_TYPE = 'SPECIAL_SHOP'
+                        THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = A.REG_USERID LIMIT 1)
+                        ELSE A.REG_USERID END) AS MNG_NM,
+                ROW_NUMBER() OVER(ORDER BY CREATED_TIME DESC) ROWNUM,
+                COUNT(1) OVER() AS TOT
+            FROM(
+                SELECT
+                    BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+                    READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+                    DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+                    REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+                    CONVERT(VARCHAR(10), REG_DTTM, 121) AS CREATED_TIME,
+                    CONVERT(VARCHAR(10), UPD_DTTM, 121) AS UPDATED_TIME,
+                    '' AS LINK
+                FROM BOARD
+                WHERE 1=1
+                    AND BOARD_TYPE = 'NOTICE'
+                    AND USE_YN = 'Y'
+                    AND IFNULL(DEL_YN,'N') = 'N'
+                UNION ALL
+                SELECT
+                    IDX AS BOARD_IDX,
+                    'FACEBOOK' AS BOARD_TYPE,
+                    TITLE AS TITLE,
+                    MESSAGE AS CONTENT,
+                    '' AS CONTENT_TYPE,
+                    0 AS READ_CNT,
+                    '' AS OPEN_DT,
+                    '' AS CLOSE_DT,
+                    'N' AS HTML_YN,
+                    IS_OPEN AS USE_YN,
+                    'N' AS DEL_YN,
+                    '' AS WRITE_NM,
+                    '' AS WRITE_HP,
+                    '' AS WRITE_EMAIL,
+                    '' AS ORDERER_DATE_TIME,
+                    SYS_REG_DTTM AS REG_DTTM,
+                    'FaceBook' AS REG_USERID,
+                    SYS_UPD_DTTM AS UPD_DTTM,
+                    'FaceBook' AS UPD_USERID,
+                    CONVERT(VARCHAR(10), CREATED_TIME) AS CREATED_TIME,
+                    CONVERT(VARCHAR(10), UPDATED_TIME) AS UPDATED_TIME,
+                    LINK
+                FROM INF_FACEBOOK
+                WHERE IS_OPEN = 'Y'
+            )A
+        )L
+        WHERE ROWNUM IN(SELECT MIN(ROWNUM)
+                        FROM(
+                            SELECT
+                                BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+                                READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+                                DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+                                REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+                                CREATED_TIME, UPDATED_TIME, LINK,
+                                (CASE WHEN BOARD_TYPE = 'NOTICE'
+                                        OR BOARD_TYPE = 'EVENT'
+                                        OR BOARD_TYPE = 'EVENT_WIN'
+                                        OR BOARD_TYPE = 'FNA'
+                                        OR BOARD_TYPE = 'SPECIAL_SHOP'
+                                        THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = AA.REG_USERID LIMIT 1)
+                                        ELSE AA.REG_USERID END) AS MNG_NM,
+                                ROW_NUMBER() OVER(ORDER BY CREATED_TIME DESC) ROWNUM,
+                                COUNT(1) OVER() AS TOT
+                            FROM(
+                                SELECT
+                                    BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+                                    READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+                                    DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+                                    REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+                                    CONVERT(VARCHAR(10), REG_DTTM, 121) AS CREATED_TIME,
+                                    CONVERT(VARCHAR(10), UPD_DTTM, 121) AS UPDATED_TIME,
+                                    '' AS LINK
+                                FROM BOARD
+                                WHERE 1=1
+                                    AND BOARD_TYPE = 'NOTICE'
+                                    AND USE_YN = 'Y'
+                                    AND IFNULL(DEL_YN,'N') = 'N'
+                                UNION ALL
+                                SELECT
+                                    IDX AS BOARD_IDX,
+                                    'FACEBOOK' AS BOARD_TYPE,
+                                    TITLE AS TITLE,
+                                    MESSAGE AS CONTENT,
+                                    '' AS CONTENT_TYPE,
+                                    0 AS READ_CNT,
+                                    '' AS OPEN_DT,
+                                    '' AS CLOSE_DT,
+                                    'N' AS HTML_YN,
+                                    IS_OPEN AS USE_YN,
+                                    'N' AS DEL_YN,
+                                    '' AS WRITE_NM,
+                                    '' AS WRITE_HP,
+                                    '' AS WRITE_EMAIL,
+                                    '' AS ORDERER_DATE_TIME,
+                                    SYS_REG_DTTM AS REG_DTTM,
+                                    'FaceBook' AS REG_USERID,
+                                    SYS_UPD_DTTM AS UPD_DTTM,
+                                    'FaceBook' AS UPD_USERID,
+                                    CONVERT(VARCHAR(10), CREATED_TIME) AS CREATED_TIME,
+                                    CONVERT(VARCHAR(10), UPDATED_TIME) AS UPDATED_TIME,
+                                    LINK
+                                FROM INF_FACEBOOK
+                                WHERE IS_OPEN = 'Y'
+                            )AA
+                        )LL WHERE 1=1
+                            AND ROWNUM <![CDATA[>]]> #{rnum}
+
+                      )
+
+    </select>
+
+    <select id="selectBoardDetailTop1" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 TOP 1 상세 조회 */
+
+        SELECT
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            (CASE WHEN BOARD_TYPE = 'NOTICE'
+                    OR BOARD_TYPE = 'EVENT'
+                    OR BOARD_TYPE = 'EVENT_WIN'
+                    OR BOARD_TYPE = 'FNA'
+                    OR BOARD_TYPE = 'SPECIAL_SHOP'
+                  THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = BOARD.REG_USERID LIMIT 1)
+                  ELSE BOARD.REG_USERID
+             END) AS MNG_NM
+        FROM BOARD
+        WHERE 1=1
+            AND BOARD_TYPE = #{boardType}
+            AND USE_YN = 'Y'
+            AND IFNULL(DEL_YN,'N') = 'N'
+            AND BOARD_IDX IN(SELECT MAX(BOARD_IDX)
+                             FROM BOARD
+                             WHERE 1=1
+                                AND BOARD_TYPE = #{boardType}
+                                AND USE_YN = 'Y'
+                                AND IFNULL(DEL_YN,'N') = 'N'
+            )
+        LIMIT 1;
+    </select>
+
+    <select id="selectBoardOpenCloseDtDetail" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 오픈 종료 기간 조회 */
+
+        SELECT
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            (CASE WHEN BOARD_TYPE = 'NOTICE'
+                    OR BOARD_TYPE = 'EVENT'
+                    OR BOARD_TYPE = 'EVENT_WIN'
+                    OR BOARD_TYPE = 'FNA'
+                    OR BOARD_TYPE = 'SPECIAL_SHOP'
+                  THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = BOARD.REG_USERID LIMIT 1)
+                  ELSE BOARD.REG_USERID
+             END) AS MNG_NM
+        FROM BOARD
+        WHERE 1=1
+          AND USE_YN = 'Y'
+          AND IFNULL(DEL_YN,'N') = 'N'
+          AND BOARD_TYPE = #{boardType}
+          AND #{openDt} BETWEEN LEFT(OPEN_DT,7) AND LEFT(CLOSE_DT,7)
+        ORDER BY OPEN_DT ASC
+    </select>
+
+    <select id="selectBoardTodayOpenCloseDtDetail" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 금일기준 오픈 종료 기간 조회 */
+
+        SELECT
+            BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID,
+            (CASE WHEN BOARD_TYPE = 'NOTICE'
+                OR BOARD_TYPE = 'EVENT'
+                OR BOARD_TYPE = 'EVENT_WIN'
+                OR BOARD_TYPE = 'FNA'
+                OR BOARD_TYPE = 'SPECIAL_SHOP'
+                THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = BOARD.REG_USERID LIMIT 1)
+                ELSE BOARD.REG_USERID
+            END) AS MNG_NM
+        FROM BOARD
+            WHERE 1=1
+            AND USE_YN = 'Y'
+            AND IFNULL(DEL_YN,'N') = 'N'
+            AND BOARD_TYPE = #{boardType}
+        AND CONVERT(VARCHAR(10), GETDATE(), 121) <![CDATA[<=]]> CLOSE_DT
+        ORDER BY OPEN_DT ASC
+    </select>
+
+    <select id="selectBoardEventDetailTop3" parameterType="boardInfo" resultType="boardInfo">
+        /* 메인화면 이벤트  TOP 3 상세 조회 */
+
+        SELECT
+            A.BOARD_IDX, BOARD_TYPE, TITLE, CONTENT, CONTENT_TYPE,
+            READ_CNT, OPEN_DT, CLOSE_DT, HTML_YN, USE_YN,
+            A.DEL_YN, WRITE_NM, WRITE_HP, WRITE_EMAIL, ORDERER_DATE_TIME,
+            A.REG_DTTM, A.REG_USERID, A.UPD_DTTM, A.UPD_USERID,
+			B.FILE_IDX, B.FILE_NM, B.FILE_ORG_NM, B.FILE_PATH,
+			(CASE WHEN BOARD_TYPE = 'NOTICE'
+                    OR BOARD_TYPE = 'EVENT'
+                    OR BOARD_TYPE = 'EVENT_WIN'
+                    OR BOARD_TYPE = 'FNA'
+                    OR BOARD_TYPE = 'SPECIAL_SHOP'
+                  THEN (SELECT MNG_NM FROM MANAGER_INFO WHERE MNG_ID = A.REG_USERID LIMIT 1)
+                  ELSE A.REG_USERID
+             END) AS MNG_NM
+        FROM BOARD A JOIN BOARD_FILE B
+		ON A.BOARD_IDX = B.BOARD_IDX
+        WHERE 1=1
+            AND BOARD_TYPE = #{boardType}
+            AND B.FILE_TYPE = 'BANNER'
+            AND USE_YN = 'Y'
+            AND IFNULL(A.DEL_YN,'N') = 'N'
+            AND IFNULL(B.DEL_YN,'N') = 'N'
+        LIMIT 3
+        ORDER BY CLOSE_DT DESC
+    </select>
+
+
+    <select id="selectBoardContentTypeGroupBy" parameterType="boardInfo" resultType="boardInfo">
+        SET @BOARD_TYPE = #{boardType};
+
+        SELECT
+            CONTENT_TYPE
+        FROM(
+            SELECT
+                CONTENT_TYPE,
+                (CASE WHEN CONTENT_TYPE = '정보' THEN 1
+                      WHEN CONTENT_TYPE = '위치' THEN 2
+                      WHEN CONTENT_TYPE = '단체주문' THEN 3
+                      WHEN CONTENT_TYPE = '기타' THEN 999
+                 ELSE 9 END) AS ORDER_NO
+            FROM BOARD
+            WHERE 1=1
+                AND BOARD_TYPE = @BOARD_TYPE
+                AND USE_YN = 'Y'
+                AND DEL_YN = 'N'
+                AND CONTENT_TYPE IS NOT NULL
+            GROUP BY CONTENT_TYPE
+        )A ORDER BY ORDER_NO ASC
+    </select>
+
+    <insert id="insertBoard" parameterType="boardInfo" useGeneratedKeys="true" keyProperty="boardIdx">
+        /* 공통게시판 등록 */
+        INSERT INTO BOARD(BOARD_TYPE,
+                          TITLE,
+                          CONTENT,
+                          CONTENT_TYPE,
+                          READ_CNT,
+                          OPEN_DT,
+                          CLOSE_DT,
+                          HTML_YN,
+                          USE_YN,
+                          DEL_YN,
+                          WRITE_NM,
+                          WRITE_HP,
+                          WRITE_EMAIL,
+                          ORDERER_DATE_TIME,
+                          REG_DTTM,
+                          REG_USERID,
+                          UPD_DTTM,
+                          UPD_USERID)
+        VALUES(#{boardType},
+               #{title},
+               #{content},
+               #{contentType},
+               0,
+               #{openDt},
+               #{closeDt},
+               #{htmlYn},
+               #{useYn},
+               #{delYn},
+               #{writeNm},
+               #{writeHp},
+               #{writeEmail},
+               #{ordererDateTime},
+               CONVERT(DATETIME, GETDATE(), 121),
+               #{regUserId},
+               CONVERT(DATETIME, GETDATE(), 121),
+               #{updUserId})
+    </insert>
+
+    <update id="updateBoard" parameterType="boardInfo">
+        /* 공통게시판 수정 */
+        <![CDATA[
+        UPDATE BOARD SET
+        ]]>
+
+        <if test='title != null and !title.equals("")'>
+            TITLE = #{title},
+        </if>
+
+        <if test='content != null and !content.equals("")'>
+            CONTENT = #{content},
+        </if>
+
+        <if test='contentType != null and !contentType.equals("")'>
+            CONTENT_TYPE = #{contentType},
+        </if>
+
+        <if test='openDt != null and !openDt.equals("")'>
+            OPEN_DT = #{openDt},
+        </if>
+
+        <if test='closeDt != null and !closeDt.equals("")'>
+            CLOSE_DT = #{closeDt},
+        </if>
+
+        <if test='htmlYn != null and !htmlYn.equals("")'>
+            HTML_YN = #{htmlYn},
+        </if>
+
+        <if test='useYn != null and !useYn.equals("")'>
+            USE_YN = #{useYn},
+        </if>
+
+        <if test='writeNm != null and !writeNm.equals("")'>
+            WRITE_NM = #{writeNm},
+        </if>
+
+        <if test='writeHp != null and !writeHp.equals("")'>
+            WRITE_HP = #{writeHp},
+        </if>
+
+        <if test='writeEmail != null and !writeEmail.equals("")'>
+            WRITE_EMAIL = #{writeEmail},
+        </if>
+
+        <if test='ordererDateTime != null and !ordererDateTime.equals("")'>
+            ORDERER_DATE_TIME = #{ordererDateTime},
+        </if>
+
+
+
+        <![CDATA[
+            UPD_DTTM = CONVERT(DATETIME, GETDATE(), 121),
+            UPD_USERID = #{updUserId}
+        WHERE BOARD_IDX = #{boardIdx}
+        ]]>
+    </update>
+
+    <update id="updateReadCntBoard" parameterType="boardInfo">
+        /* 공통게시판 게시글 READ */
+        <![CDATA[
+        UPDATE BOARD SET
+            READ_CNT = READ_CNT + 1
+        WHERE BOARD_IDX = #{boardIdx}
+        ]]>
+    </update>
+
+    <insert id="insertBoardFile" parameterType="boardInfo">
+        /* 공통게시판 첨부파일 등록 */
+        INSERT INTO BOARD_FILE(
+            BOARD_IDX, FILE_TYPE, FILE_NM, FILE_ORG_NM,
+            FILE_PATH, FILE_SIZE, DEL_YN, DISP_ORDER,
+            REG_DTTM, REG_USERID, UPD_DTTM, UPD_USERID)
+        VALUES(#{boardIdx}, #{fileType}, #{fileNm}, #{fileOrgNm},
+               #{filePath}, #{fileSize}, #{delYn}, #{dispOrder},
+               CONVERT(DATETIME, GETDATE(), 121), #{regUserId}, CONVERT(DATETIME, GETDATE(), 121), #{updUserId})
+    </insert>
+
+    <select id="selectBoardFile" parameterType="boardInfo" resultType="boardInfo">
+        /* 공통게시판 첨부파일 조회 */
+
+        SELECT
+            FILE_IDX,
+            BOARD_IDX,
+            FILE_TYPE,
+            FILE_NM,
+            FILE_ORG_NM,
+            FILE_PATH,
+            FILE_SIZE,
+            DEL_YN,
+            DISP_ORDER,
+            REG_DTTM,
+            REG_USERID,
+            UPD_DTTM,
+            UPD_USERID
+        FROM BOARD_FILE
+        WHERE 1=1
+          AND IFNULL(DEL_YN,'N') <![CDATA[<>]]> 'Y'
+          AND BOARD_IDX = #{boardIdx}
+        ORDER BY DISP_ORDER ASC
+    </select>
+
+    <update id="deleteBoardFile" parameterType="boardInfo">
+        /* 공통게시판 첨부파일 삭제처리 */
+        <![CDATA[
+        UPDATE BOARD_FILE SET
+            DEL_YN = 'Y'
+        WHERE FILE_IDX = #{fileIdx}
+        ]]>
+    </update>
+</mapper>

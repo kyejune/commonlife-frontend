@@ -1,6 +1,7 @@
 package com.kolon.comlife.admin.complexes.service;
 
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
+import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.model.ComplexSimpleInfo;
 
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.Map;
 
 public interface ComplexService {
 
-    public ComplexInfo getComplexById(int id);
+    public ComplexInfoDetail getComplexById(int id);
 
     public List<ComplexInfo> getComplexList();
 

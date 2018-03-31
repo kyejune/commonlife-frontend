@@ -1,9 +1,17 @@
+
 package com.kolon.comlife.admin.complexes.web;
 
 
 import com.kolon.comlife.admin.complexes.model.ComplexConst;
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
+import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
+import com.kolon.comlife.admin.manager.model.AdminConst;
+import com.kolon.comlife.admin.manager.model.AdminInfo;
+import com.kolon.comlife.admin.manager.service.ManagerService;
+import com.kolon.comlife.admin.users.exception.UserGeneralException;
+import com.kolon.comlife.admin.users.service.UserService;
+import com.kolon.comlife.admin.users.service.impl.UserSerivceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,6 +46,16 @@ public class ComplexController {
 
     @Autowired
     private ComplexConst complexConst;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ManagerService managerService;
+
+    @Autowired
+    private AdminConst adminConst;
+
 
 
     @RequestMapping(value = "list.do", method = {RequestMethod.GET, RequestMethod.POST})
@@ -79,7 +98,7 @@ public class ComplexController {
         logger.debug("====================> complexInfo.getCmplxNm : {} ", complexInfo.getCmplxNm());
         logger.debug("====================> complexInfo.getCmplxGrp : {} ", complexInfo.getCmplxGrp());
 
-        ComplexInfo complexDetail = complexService.getComplexById( complexInfo.getCmplxId() );
+        ComplexInfoDetail complexDetail = complexService.getComplexById( complexInfo.getCmplxId() );
 
 //        mav.addObject("grpId",      grpId);
 //        mav.addObject("adminConst", adminConst);
@@ -147,4 +166,52 @@ public class ComplexController {
                 .body(ret);
     }
 
+
+    /**
+     * 현장 관리 - 상세보기 페이지
+     */
+    @RequestMapping(value = "complexDetail.do", method = {RequestMethod.GET, RequestMethod.POST})
+    public ModelAndView complexDetail (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+            , @ModelAttribute ComplexInfoDetail complexInfo
+    ) {
+        ComplexInfoDetail resultComplexInfo;
+        int               totalUserCount;
+        List<AdminInfo> managerList;
+
+        logger.debug("====================> 현장 상세 정보 페이지 !!!!!!!!!!!!!!!!!!!!!!!!! ");
+        logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
+        logger.debug("====================> complexInfo.getCmplxNm : {} ", complexInfo.getCmplxNm());
+        logger.debug("====================> complexInfo.getCmplxGrp : {} ", complexInfo.getCmplxGrp());
+
+        try {
+            resultComplexInfo = complexService.getComplexById( complexInfo.getCmplxId() );
+            if( resultComplexInfo == null ) {
+                mav.addObject("error", "현장에 대한 정보가 없습니다.");
+            }
+
+            totalUserCount = userService.getTotalUserCountByComplexId( complexInfo.getCmplxId() );
+        } catch( UserGeneralException e ) {
+            return mav.addObject("error", e.getMessage() );
+        } catch( Exception e ) {
+            e.printStackTrace();;
+            return mav.addObject("error", "내부 오류가 발생하였습니다." );
+        }
+
+        AdminInfo adminInfo = new AdminInfo();
+        adminInfo.setSearchType1("CMPLX_ID");
+        adminInfo.setSearchKeyword1(String.valueOf( complexInfo.getCmplxId() ));
+        managerList = managerService.selectManagerList(adminInfo);
+
+        mav.addObject("complexDetail",  resultComplexInfo);
+        mav.addObject("totalUserCount", totalUserCount);
+        mav.addObject("managerList",    managerList);
+        mav.addObject("adminConst",     adminConst);
+        mav.addObject("adminInfo",     new AdminInfo());  // Manager 화면전환시 이용
+
+        return mav;
+    }
 }
