@@ -1121,3 +1121,48 @@ a.cl-map__link--branch{
 
 
 
+
+/* 알림 센터 */
+.cl-next__button--gray{
+    background-image: url("images/ic-next-gray@3x.png");
+    width: 40px;
+    height: 46px;
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: right top;
+    opacity: 0.5;
+}
+
+.cl-notification-center{
+    .cl-iot-control-tab__item{
+        width: 25%;
+    }
+
+    li{
+
+        &.cl--new{
+
+            .cl__title{
+
+                display: flex;
+
+                &:after{
+                    content:'';
+                    background-image: url("images/a-1@3x.png");
+                    background-size: contain;
+                    width: 18px;
+                    height: 16px;
+                    margin-left: 0.4em;
+                }
+            }
+        }
+
+        p{
+            line-height: 1.2em;
+        }
+
+        .cl-next__button--gray{
+            margin-top: -0.7em;
+        }
+    }
+}

@@ -10,6 +10,7 @@ import BottomDrawer from "./BottomDrawer";
 import DrawerContentHolder from "./DrawerContentHolder";
 import WriteDrawer from "./WriteDrawer";
 import BranchSeletor from "./BranchSeletor";
+import NotificationCenter from "./NotificationCenter";
 
 
 
@@ -60,6 +61,13 @@ class DrawerInjector extends Component{
                     <BranchSeletor/>
                 </DrawerContentHolder>
             </BottomDrawer>
+
+
+
+            {/* 신규 알림... */}
+            <DrawerWrapper drawer="notifications">
+                <NotificationCenter/>
+            </DrawerWrapper>
 
 
             {/* 모달 - IotProgressOverlay */}

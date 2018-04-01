@@ -6,7 +6,13 @@ import IconSrc from 'images/ic-plus-24-px-copy-2@3x.png';
 class MapLink extends Component {
 
 
+    // Android 공용
+    // geo:LATITUDE,LONGITUDE?q=PLACE_NAME
+
+    // iOS
     // navermaps://?menu=location&pinType=place&lat=LATITUDE&lng=LONGITUDE&title=PLACE_NAME
+    // lng=a24c4613a8320e2ddc4d7ba8ea37c467
+    // lat=4c8280d31d80d8eb13ac4743c97789ea
     render() {
         return (
             <a to="#" className="cl-map__link--branch">

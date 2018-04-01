@@ -24,7 +24,6 @@ class App extends Component {
 
         this.state = {
             scrolled: false,
-            // isDevice: window.location.protocol === 'file:',
         }
     }
 
@@ -43,12 +42,18 @@ class App extends Component {
 
         }, true);
 
+
+        this.router.history.listen = this.listenRoute;
+    }
+
+    listenRoute(){
+        console.log('sakljfl;aksdfjlksdjfl;kdsjaf;kljskf;dlsfk');
     }
 
     render() {
 
         return (
-            <HashRouter onChange={()=> console.log('change') }>
+            <HashRouter ref={ r => this.router = r }>
 
                 <div className={classNames({
                     'App': true,

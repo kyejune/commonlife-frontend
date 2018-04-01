@@ -11,6 +11,10 @@ class Header extends Component {
         Store.pushDrawer( 'branch' );
     }
 
+    openNotificationCenter(){
+        Store.pushDrawer( 'notifications' );
+    }
+
 
     render() {
 
@@ -31,6 +35,7 @@ class Header extends Component {
                 <div className="md-cell--right md-toolbar--action-right">
                     <div className="md-layover md-layover--simplified md-inline-block md-menu-container">
                         <button id="toolbar-colored-kebab-menu-toggle"
+                                onClick={ this.openNotificationCenter }
                                 type="button"
                                 className="md-btn md-btn--icon md-pointer--hover md-inline-block md-btn--toolbar">
                             <img src={alert} alt="알림 이미지"/>
