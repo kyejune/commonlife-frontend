@@ -523,6 +523,8 @@
     }
 }
 
+
+/* 지도 버튼 */
 .cl-map__link {
     width: 24px;
     height: 24px;
@@ -530,6 +532,25 @@
     background-size: contain;
     opacity: 0.3;
 }
+
+a.cl-map__link--branch{
+
+    display: flex;
+    flex-flow: row wrap;
+    color: white;
+    font-size: 12px;
+
+    .cl-map-pin__icon{
+        width: 15px;
+        height: 15px;
+        background-image: url('images/ic-plus-24-px-copy-2@3x.png');
+        background-size: contain;
+    }
+}
+
+
+
+
 
 .DayPicker-Day--disabled {
     pointer-events: none;
@@ -1028,3 +1049,75 @@
         background: transparent url('images/ic-plus-24-px-copy-2@3x.png') no-repeat;
     }
 }
+
+
+
+
+
+/* 지점 정보 */
+.cl-branch-list{
+    display: grid;
+    max-width: calc( 100vw - 60px );
+    width: 100%;
+    grid-template-columns: repeat( 2, 1fr );
+    grid-template-rows: 58vw;
+    grid-gap: 40px;
+    margin: 0 auto;
+    padding-bottom: 3em;
+}
+
+.cl-branch-item{
+
+    &.cl--selected{
+        .cl-avatar-border{
+            background-color: $md-secondary-color;
+        }
+
+        .cl-check{
+            position: absolute;
+            width: 29px;
+            height: 29px;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        h5{
+            color: white;
+        }
+    }
+
+    .cl-avatar-border{
+        width: 100%;
+        height: calc( 50vw - 50px );
+    }
+
+    .cl-avatar{
+        background-image: url("images/branch-default@3x.png");
+        background-size: 40%;
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-color: #48494F;
+    }
+
+    h5, p{
+        color: #96979A;
+    }
+
+    h5{
+        font-size: 16px;
+        font-weight: bold;
+        margin-bottom: 0;
+        margin-top: 0.6em;
+        line-height: 1.3em;
+    }
+
+    p{
+        margin-bottom: 1em;
+        font-size: 12px;
+    }
+}
+
+
+

@@ -44,7 +44,7 @@ class Profile extends Component {
         };
 
 
-        return <div className="cl-profile">
+        return <div className="cl-profile drawer-fitted-box--b">
             <div className="cl-profile-card">
 
                 <div className="cl-avatar-border">

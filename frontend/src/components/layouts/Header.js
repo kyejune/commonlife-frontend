@@ -2,8 +2,16 @@ import React, {Component} from 'react';
 
 import logo from 'images/logo@2x.png';
 import alert from 'images/alert-icon-top-28@2x.png';
+import Store from "../../scripts/store";
 
 class Header extends Component {
+
+
+    openBranchList=()=>{
+        Store.pushDrawer( 'branch' );
+    }
+
+
     render() {
 
         return (
@@ -16,9 +24,9 @@ class Header extends Component {
                     <img src={logo} alt="로고 이미지"/>
                 </button>
 
-                <select className="md-title md-title--toolbar">
-                    <option value="">역삼하우징</option>
-                </select>
+                <button className="md-title md-title--toolbar" onClick={ this.openBranchList }>
+                    역삼하우징
+                </button>
 
                 <div className="md-cell--right md-toolbar--action-right">
                     <div className="md-layover md-layover--simplified md-inline-block md-menu-container">

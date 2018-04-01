@@ -6,10 +6,10 @@ import IconSrc from 'images/ic-plus-24-px-copy-2@3x.png';
 class MapLink extends Component {
 
 
-
+    // navermaps://?menu=location&pinType=place&lat=LATITUDE&lng=LONGITUDE&title=PLACE_NAME
     render() {
         return (
-            <a to="#" className="cl-icon-map__link">
+            <a to="#" className="cl-map__link--branch">
                <i className="cl-map-pin__icon"/>
                <span>MAP</span>
             </a>

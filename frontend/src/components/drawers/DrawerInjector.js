@@ -9,6 +9,7 @@ import DrawerWrapper from "./DrawerWrapper";
 import BottomDrawer from "./BottomDrawer";
 import DrawerContentHolder from "./DrawerContentHolder";
 import WriteDrawer from "./WriteDrawer";
+import BranchSeletor from "./BranchSeletor";
 
 
 
@@ -41,16 +42,22 @@ class DrawerInjector extends Component{
 
         return <div className="drawerInjector">
 
-            {/*<DrawerWrapper drawer="profile" title="프로필">*/}
-                {/*<Profile/>*/}
-            {/*</DrawerWrapper>*/}
-
-
+            {/*  글쓰기 */}
             <BottomDrawer visible={Store.hasDrawer('write')} renderNode={document.querySelector('.App')}
                           onVisibilityChange={()=>{}}
                           portal={true}>
                 <DrawerContentHolder title="새글쓰기" drawer="write" close >
                     <WriteDrawer/>
+                </DrawerContentHolder>
+            </BottomDrawer>
+
+
+            {/* 지점 셀랙터 */}
+            <BottomDrawer visible={Store.hasDrawer('branch')} renderNode={document.querySelector('.App')}
+                          onVisibilityChange={()=>{}}
+                          portal={true}>
+                <DrawerContentHolder title="지점 선택" drawer="write" close >
+                    <BranchSeletor/>
                 </DrawerContentHolder>
             </BottomDrawer>
 

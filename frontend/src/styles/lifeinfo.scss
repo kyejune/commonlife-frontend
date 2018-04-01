@@ -116,6 +116,7 @@ $card-trans-time: 0.3s;
 
   padding: 20px 18px 30px 18px;
   transform: translateZ(0);
+  background-color: #000000;
 
   &>h4{
     color: #42a5f5;
@@ -279,32 +280,35 @@ $card-trans-time: 0.3s;
 
 }
 
+.cl-avatar-border{
+  @extend .cl-avatar;
+  border-radius: 0;
+  border: 0;
+  background-size: contain;
+  background: #E6E6E6 none;
+  clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
+  padding: 4px;
+
+  .cl-avatar{
+    width: 100%;
+    height: 100%;
+  }
+
+}
+
 
 /* Profile */
 .cl-profile-card{
-  //background-color: white;
-  padding: 0;// 0 0 25px 0;
+  padding: 0;
   text-align: center;
 
 
   .cl-avatar-border{
-    @extend .cl-avatar;
-    border-radius: 0;
-    border: 0;
     width: 108px;
     height: 108px;
-    background-size: contain;
-    background: #E6E6E6 none;
-    clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
     margin: 0 auto;
-    padding: 4px;
-
-
-    .cl-avatar{
-      width: 100%;
-      height: 100%;
-    }
   }
+
 
   h4{
     margin-top: 12px;
