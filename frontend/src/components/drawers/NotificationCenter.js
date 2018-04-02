@@ -6,17 +6,26 @@ class NotificationCenter extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            tabIndex: 0
+        }
         this.props.updateTitle('12개의 신규 알림');
+    }
+
+    onClickTab( index ){
+        this.setState({tabIndex: index});
     }
 
 
     render() {
         return <div className="cl-notification-center">
             <div className="cl-iot-control-tab">
-                <button className="cl-iot-control-tab__item--active">일반</button>
-                <button className="cl-iot-control-tab__item">예약</button>
-                <button className="cl-iot-control-tab__item">IoT</button>
-                <button className="cl-iot-control-tab__item">주차</button>
+                {['일반', '예약', 'IoT', '주차' ].map( (item, index)=>{
+                    return <button key={index} className={`cl-iot-control-tab__item${index===this.state.tabIndex?'--active':''}`}
+                            onClick={ ()=>this.onClickTab( index ) }>
+                        {item}
+                    </button>
+                })}
             </div>
 
 

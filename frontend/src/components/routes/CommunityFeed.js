@@ -1,11 +1,8 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {observer} from 'mobx-react';
-import WriteDrawer from "components/drawers/WriteDrawer";
 import CardItem from 'components/ui/CardItem';
 import Store from 'scripts/store';
 import Net from 'scripts/net';
-import BottomDrawer from "components/drawers/BottomDrawer";
-import DrawerContentHolder from "components/drawers/DrawerContentHolder";
 
 class CommunityFeed extends Component {
 

@@ -14,7 +14,6 @@ import LifeInfo from 'components/routes/LifeInfo';
 import Reservation from 'components/routes/Reservation';
 import Playground from 'components/Playground';
 import DrawerInjector from "./components/drawers/DrawerInjector";
-import {ScrollBox, ScrollAxes, FastTrack} from 'react-scroll-box';
 
 
 class App extends Component {
@@ -32,9 +31,17 @@ class App extends Component {
 
         document.addEventListener('scroll', () => {
             let bodyTop = 0;
-            document.querySelectorAll('.cl-fitted-box').forEach( item => {
-                bodyTop = Math.max( bodyTop, item.scrollTop );
-            });
+            let boxes = document.querySelectorAll('.cl-fitted-box');
+
+            // 일반적인 상황에서..
+            if( boxes.length === 1 ) bodyTop = boxes[0].scrollTop;
+            else{
+                // 탭구조라서 복수개가 존재할때 보이는 영역에만 제한
+                document.querySelectorAll('.cl-fitted-box').forEach( item => {
+                    if( item.parentElement.getAttribute('aria-hidden') === 'false' )
+                        bodyTop = item.scrollTop;
+                });
+            }
 
             this.setState({
                 scrolled: ( bodyTop > 56 )
@@ -42,18 +49,12 @@ class App extends Component {
 
         }, true);
 
-
-        this.router.history.listen = this.listenRoute;
-    }
-
-    listenRoute(){
-        console.log('sakljfl;aksdfjlksdjfl;kdsjaf;kljskf;dlsfk');
     }
 
     render() {
 
         return (
-            <HashRouter ref={ r => this.router = r }>
+            <HashRouter>
 
                 <div className={classNames({
                     'App': true,

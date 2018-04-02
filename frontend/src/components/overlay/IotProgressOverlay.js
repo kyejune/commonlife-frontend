@@ -9,9 +9,6 @@ class IotProgressOverlay extends Component {
 
 	render () {
 		const { name, value, status } = Store.myModal;
-
-		console.log('^^^^^^^', value );
-
 		const Status = [
             <h3 className="cl-iot-progress-overlay__text">변경사항을<br/>즉시 적용합니다.</h3>,
             <h3 className="cl-iot-progress-overlay__text">변경사항이<br/>적용되었습니다.</h3>,

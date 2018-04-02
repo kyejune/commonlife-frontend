@@ -139,8 +139,31 @@ class HomeIoT extends Component {
                                 })
 							}
 
+
+                            {/* 시나리오 추가 용 + */}
+                            <li className="cl-my-iot__list-item">
+                                <Link to={ { pathname:'/iot/scenario' } } >
+                                    <div className="cl-my-iot__button cl-my-iot__button--set" style={{backgroundColor:'#E8EDF6'}}>
+                                        <div className="cl-my-iot__content">
+                                            <div>
+                                                <h3 className="cl-bold mt-01em uppercase w-85 cl-wrap">
+                                                    <span className="cl-bold">자동화 관리</span>
+                                                </h3>
+                                                <p className="cl-my-iot__paragraph">Automation</p>
+                                            </div>
+                                            <img src="icons/cl_device-12.svg" width="45" height="45" alt="아이콘이미지:cl_device-12" className="cl-my-iot__icons"/>
+                                        </div>
+                                        <div className="cl-my-iot__bottom cl-flex pt-04em">
+                                            <div className="cl-bold">목록보기</div>
+                                            <div className="cl-flex"> > </div>
+                                        </div>
+                                    </div>
+                                </Link>
+                            </li>
+
+
 							{/* 기기편집 및 추가 용 + */}
-							<li className="col cl-my-iot__list-item">
+							<li className="cl-my-iot__list-item">
                                 <Link to={ { pathname:'/iot/my' } } >
 									<div className="cl-my-iot__button cl-my-iot__button--add">
 										<img src={IotIcAdd} alt=""/>
@@ -149,11 +172,11 @@ class HomeIoT extends Component {
 							</li>
 
                             {/* 시나리오 추가 용 + */}
-                            <li className="col cl-my-iot__list-item">
-                                <Link to={ { pathname:'/iot/scenario' } } >
-                                    시나리오 추가
-                                </Link>
-                            </li>
+                            {/*<li className="col cl-my-iot__list-item">*/}
+                                {/*<Link to={ { pathname:'/iot/scenario' } } >*/}
+                                    {/*시나리오 추가*/}
+                                {/*</Link>*/}
+                            {/*</li>*/}
 
 						</ul>
 					</div>

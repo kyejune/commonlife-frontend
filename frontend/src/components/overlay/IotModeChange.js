@@ -121,7 +121,7 @@ class IotModeChange extends Component {
 						</p>
 
 						<div className="cl-iot-mode-progress__on-bullet">
-							<IotConnectionProgress/>
+							<IotConnectionProgress className="cl--done"/>
 						</div>
 					</div>
 					<div className="cl-iot-mode-progress__bottom">

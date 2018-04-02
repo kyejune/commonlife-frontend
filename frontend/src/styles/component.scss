@@ -1,3 +1,8 @@
+
+::-webkit-scrollbar {
+    display: none;
+}
+
 /* Drawer */
 .md-drawer {
 
@@ -161,6 +166,7 @@
     background-size: contain;
     clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
 }
+
 
 .cl-like-item{
     &>div{
@@ -731,15 +737,6 @@ a.cl-map__link--branch{
     transform: rotate(-90deg);
 }
 
-@keyframes move-connect-ic {
-    0% {
-        background-image: url("images/iot-ic-connect-bullet@3x.png");
-    }
-    100% {
-        background-image: url("images/iot-ic-connect-bullet-grey@3x.png");
-    }
-}
-
 .cl-iot-connect-progress__icon-done {
     position: absolute;
     top: 3px;
@@ -753,14 +750,6 @@ a.cl-map__link--branch{
     transition: 300ms ease-in-out;
 }
 
-@keyframes connect-done-ic {
-    0% {
-        background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
-    }
-    100% {
-        background-image: url("images/iot-ic-connect-check-bullet@3x.png");
-    }
-}
 
 .cl-iot-mode-progress__on-bullet {
     .cl-iot-connect-progress {
@@ -785,24 +774,6 @@ a.cl-map__link--branch{
         left: 218px;
         background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
     }
-
-    //@keyframes move-connect-ic {
-    //    0% {
-    //        background-image: url("images/iot-ic-connect-bullet-blue@3x.png") !important;
-    //    }
-    //    100% {
-    //        background-image: url("images/iot-ic-connect-bullet-grey@3x.png");
-    //    }
-    //}
-    //
-    //@keyframes connect-done-ic {
-    //    0% {
-    //        background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
-    //    }
-    //    100% {
-    //        background-image: url("images/iot-ic-connect-check-bullet-orange@3x.png") !important;
-    //    }
-    //}
 
     .cl-iot-connect-progress__box {
         width: 180px;
@@ -833,24 +804,6 @@ a.cl-map__link--branch{
         background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
     }
 
-    @keyframes move-connect-ic {
-        0% {
-            background-image: url("images/iot-ic-connect-bullet-dark@3x.png") !important;
-        }
-        100% {
-            background-image: url("images/iot-ic-connect-bullet-grey@3x.png");
-        }
-    }
-
-    @keyframes connect-done-ic {
-        0% {
-            background-image: url("images/iot-ic-connect-check-bullet-grey@3x.png");
-        }
-        100% {
-            background-image: url("images/iot-ic-connect-check-bullet-dark@3x.png");
-        }
-    }
-
     .cl-iot-connect-progress__box {
         width: 180px;
     }
@@ -878,6 +831,14 @@ a.cl-map__link--branch{
 
     .cl-iot-connect-progress__text-done{
         opacity: 1;
+    }
+
+    .cl-iot-connect-progress__icon-start {
+        background-image: url("images/iot-ic-connect-bullet-grey@3x.png") !important;
+    }
+
+    .cl-iot-connect-progress__icon-done {
+        background-image: url("images/iot-ic-connect-check-bullet-orange@3x.png") !important;
     }
 }
 
@@ -1091,7 +1052,20 @@ a.cl-map__link--branch{
     .cl-avatar-border{
         width: 100%;
         height: calc( 50vw - 50px );
+
+        &:after{
+            content:'';
+            @extend .cl-avatar;
+            position: absolute;
+            width: calc(100% - 8px);
+            height: calc(100% - 8px);
+            background-color: red;
+            top: 4px;
+            left: 4px;
+            z-index: -1;
+        }
     }
+
 
     .cl-avatar{
         background-image: url("images/branch-default@3x.png");
@@ -1100,6 +1074,7 @@ a.cl-map__link--branch{
         background-repeat: no-repeat;
         background-color: #48494F;
     }
+
 
     h5, p{
         color: #96979A;

@@ -37,13 +37,6 @@ class Profile extends Component {
 
     render() {
 
-        const validations = {
-            name:['required'],
-            email:['required', 'email'],
-            password:['required', 'min:6', 'max:12']
-        };
-
-
         return <div className="cl-profile drawer-fitted-box--b">
             <div className="cl-profile-card">
 

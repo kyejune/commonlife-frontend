@@ -7,7 +7,6 @@ import thumbSrc from 'images/ic-thumb@3x.png';
 import checkSrc from 'images/ic-check@3x.png';
 import previewSrc from 'images/img-preview-holder@3x.png';
 import Store from "../../scripts/store";
-import IconLoader from "../ui/IconLoader";
 import AlertSrc from "images/alert-icon-red@3x.png"
 
 class WriteDrawer extends BottomDrawer {
