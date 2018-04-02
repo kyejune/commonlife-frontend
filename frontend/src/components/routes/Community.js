@@ -75,7 +75,7 @@ class Community extends Component {
                         <Tab label="event">
                             <CommunityEvent/>
                         </Tab>
-                        <Tab label="news">
+                        <Tab label="notice">
                             <CommunityNews/>
                         </Tab>
                     </Tabs>

@@ -3,6 +3,26 @@
     display: none;
 }
 
+/* 빗금 */
+.cl-deviant-crease{
+    background: linear-gradient(45deg,
+            transparent 49%,
+            black 0,
+            black 50%,
+            transparent 0,
+            transparent 99%,
+            black 0);
+    background-size: 8px 8px;
+
+    &:after{
+        content:'';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        border: 1px solid rgba(151, 151, 151, 0.4);
+    }
+}
+
 /* Drawer */
 .md-drawer {
 
@@ -1140,4 +1160,79 @@ a.cl-map__link--branch{
             margin-top: -0.7em;
         }
     }
+}
+
+
+
+
+/* 시간 선택기  */
+.cl-time-selector{
+    @extend .cl-flex;
+    margin: 4px 23px 2px 23px;
+    border-bottom: 1px solid #CCCCCC;
+    background-color: #E9E9E9;
+    //margin-top: 4px;
+
+    &>*{
+        background-image: url("images/cl-select-with-title-select-bullet@2x.png");
+        background-repeat: no-repeat;
+        background-position: 80% 50%;
+        background-size: 12px;
+        border-right: 1px solid #CCCCCC;
+        color: rgba( 0, 0, 0, 0.87 );
+        font-size: 15px;
+        width: 33.3%;
+        line-height: 3em;
+        padding-right: 15px;
+        margin-bottom: 2px;
+        padding-left: 22px;
+
+        &:first-child{
+            padding-left: 0;
+        }
+
+        &:last-child{
+            border-right: none;
+            padding-right: 0;
+        }
+    }
+
+    label{
+        background: none;
+    }
+}
+
+
+/* 날짜 선택기 */
+.cl-date-selector{
+    margin: 0 10px;
+    background-color: #E9E9E9;
+    white-space: nowrap;
+
+    .cl-date-selector__button{
+
+        font-size: 14px;
+        width: calc( 100% / 7 );
+        height: 50px;// calc( 100% / 7 );
+        border-right: solid 1px rgba(0,0,0,0.4);
+
+        &.cl--selected{
+            background-color: #4a90e2;
+            color: white;
+            font-weight: bold;
+            border-radius: 3px;
+            border: 2px solid #195fb1;
+            margin-left: -1px;
+            box-sizing: content-box;
+        }
+
+        &.cl--disabled{
+            @extend .cl-deviant-crease;
+            pointer-events: none;
+            &:after{
+                content:none;
+            }
+        }
+    }
+
 }

@@ -80,18 +80,7 @@
 
   .cl-area--disabled{
     @extend .cl-time-area;
-    background: linear-gradient(45deg,
-            transparent 49%, black 0, black 50%,
-            transparent 0, transparent 99%, black 0);
-    background-size: 8px 8px;
-
-    &:after{
-      content:'';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      border: 1px solid rgba(151, 151, 151, 0.4);
-    }
+    @extend .cl-deviant-crease;
   }
 
   .cl-area--selected{

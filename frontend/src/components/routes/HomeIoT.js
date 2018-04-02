@@ -22,6 +22,8 @@ import IotSensorEditor from "../drawers/iot/IotSensorEditor";
 import IotDeviceEditor from "../drawers/iot/IotDeviceEditor";
 import MyEditor from "../drawers/MyEditor";
 import ExposableEditor from "../drawers/iot/ExposableEditor";
+import TimesSelector from "../ui/TimesSelector";
+import TimeSelector from "../ui/TimeSelector";
 
 class HomeIoT extends Component {
 
@@ -237,12 +239,12 @@ class HomeIoT extends Component {
 
             {/* 특정시간 상세 */}
             <DrawerWrapper drawer="iot-time-detail" title="특정시간" back >
-                <div>특정시간</div>
+                <TimeSelector/>
             </DrawerWrapper>
 
             {/* 구간시간 상세 */}
             <DrawerWrapper drawer="iot-duration-detail" title="구간시간" back >
-                <div>구간시간</div>
+                <TimesSelector/>
             </DrawerWrapper>
 
             {/* Iot 편집 */}

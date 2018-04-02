@@ -83,7 +83,7 @@ class LifeInfo extends Component {
                         </div>
                     </div>
 
-                    <Link className="cl-edit color-primary" to="#">ProfileEdit</Link>
+                    <Link className="cl-edit color-primary" to="/info/profile">ProfileEdit</Link>
 
                     <footer className="cl-profile-card__footer cl-flex">
                         <p>입주일: 2017년 4월 1일</p>
