@@ -1,7 +1,5 @@
 package com.kolon.comlife.support.model;
 
-import com.kolon.comlife.postFile.model.PostFileInfo;
-import com.kolon.comlife.users.model.PostUserInfo;
 import org.apache.ibatis.type.Alias;
 
 import java.util.ArrayList;
@@ -83,18 +81,16 @@ public class TicketInfo {
         this.updDttm = updDttm;
     }
 
+    private List<TicketFileInfo> ticketFiles = new ArrayList<>();
 
-    //    private List<PostFileInfo> postFiles = new ArrayList<PostFileInfo>();
-//
-//    /*
-//        Relations Getter and Setter
-//     */
-//
-//    public List<PostFileInfo> getPostFiles() {
-//        return postFiles;
-//    }
-//
-//    public void setPostFiles(List<PostFileInfo> postFiles) {
-//        this.postFiles = postFiles;
-//    }
+    /*
+        Relations Getter and Setter
+     */
+    public List<TicketFileInfo> getTicketFiles() {
+        return ticketFiles;
+    }
+
+    public void setTicketFiles(List<TicketFileInfo> ticketFiles) {
+        this.ticketFiles = ticketFiles;
+    }
 }

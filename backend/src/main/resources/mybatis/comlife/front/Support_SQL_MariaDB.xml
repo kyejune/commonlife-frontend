@@ -61,6 +61,7 @@
             `USR_ID`,
             `CMPLX_ID`,
             `LVNG_SUPT_CATE_IDX`,
+            `DEL_YN`,
             `REG_DTTM`,
             `UPD_DTTM`
         FROM
@@ -71,6 +72,89 @@
             `LVNG_SUPT_TKT_IDX` = LAST_INSERT_ID()
     ]]>
     </select>
+
+
+    <insert id="insertTicketFile" parameterType="ticketFileInfo">
+        <![CDATA[
+            INSERT
+            INTO    `CL_LIVING_SUPPORT_TICKETS_FILE`
+            (
+                `USR_ID`,
+                `MIME_TYPE`,
+                `FILE_PATH`,
+                `REG_DTTM`,
+                `UPD_DTTM`
+            )
+            VALUES
+            (
+                #{usrId},
+                #{mimeType},
+                #{filePath},
+                CURRENT_TIMESTAMP,
+                CURRENT_TIMESTAMP
+            )
+        ]]>
+    </insert>
+
+    <select id="selectLatestTicketFile" resultType="ticketFileInfo">
+        <![CDATA[
+            SELECT  *
+            FROM    `CL_LIVING_SUPPORT_TICKETS_FILE`
+            WHERE   `DEL_YN` = 'N'
+            AND
+                    `TKT_FILE_IDX` = LAST_INSERT_ID()
+        ]]>
+    </select>
+
+
+    <update id="bindTicketToTicketFiles" parameterType="java.util.Map">
+        UPDATE  `CL_LIVING_SUPPORT_TICKETS_FILE`
+        SET     `TKT_IDX` =  #{ticketIdx}
+        WHERE
+        ISNULL(`TKT_IDX`) AND
+        `USR_ID` = #{usrId} AND   -- 본인이 업로드한 이미지만 연결할 수 있음
+        <choose>
+            <when test="ticketFileIdx != null">
+                `TKT_FILE_IDX` =   #{tktFileIdx}
+            </when>
+            <when test="ticketFileIdxs != null">
+                `TKT_FILE_IDX`
+                IN
+                <foreach collection="ticketFileIdxs" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                1 != 1 -- 상기 조건 중에 해당하지 않으면 반드시 실패
+            </otherwise>
+        </choose>
+    </update>
+
+    <select id="selectTicketFile" parameterType="java.util.Map" resultType="ticketFileInfo">
+        SELECT
+        *
+        FROM
+        `CL_LIVING_SUPPORT_TICKETS_FILE`
+        <choose>
+            <when test="ticketFileIdx != null">
+                WHERE   `TKT_FILE_IDX` = #{ticketFileIdx}
+            </when>
+            <when test="ticketIdx != null">
+                WHERE   `TKT_IDX` = #{ticketIdx}
+            </when>
+            <when test="ticketIdxs != null">
+                WHERE   `TKT_IDX`
+                IN
+                <foreach collection="ticketIdxs" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                1 != 1 -- 상기 조건 중에 해당하지 않으면 반드시 실패
+            </otherwise>
+        </choose>
+    </select>
+
 
 
 </mapper>

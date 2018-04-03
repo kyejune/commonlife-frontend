@@ -4,10 +4,14 @@ import com.kolon.comlife.common.model.DataListInfo;
 import com.kolon.comlife.common.model.PaginateInfo;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
+import com.kolon.comlife.postFile.model.PostFileInfo;
+import com.kolon.comlife.support.exception.OperationFailedException;
 import com.kolon.comlife.support.exception.SupportGeneralException;
 import com.kolon.comlife.support.model.SupportCategoryInfo;
+import com.kolon.comlife.support.model.TicketFileInfo;
 import com.kolon.comlife.support.model.TicketInfo;
 import com.kolon.comlife.support.service.SupportService;
+import com.kolon.comlife.support.service.TicketFileStoreService;
 import com.kolon.comlife.support.service.TicketService;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
@@ -20,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.ws.Response;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +41,9 @@ public class SupportController {
 
     @Autowired
     private TicketService ticketService;
+
+    @Autowired
+    private TicketFileStoreService ticketFileStoreService;
 
 
     /**
@@ -78,18 +86,17 @@ public class SupportController {
         return ResponseEntity.status(HttpStatus.OK).body(retCateInfoList);
     }
 
-
-
     @PostMapping(
-            value = "/",
+            value = "/ticket",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity submitTicket( HttpServletRequest request,
                                         @RequestBody Map args ) throws Exception {
         TicketInfo newTicket = new TicketInfo();
         TicketInfo retTicket;
 
-//        List<PostFileInfo> postFiles;
-//        List<Integer>      postFilesIdList;
+        List<TicketFileInfo> ticketFiles;
+        List<Integer>        ticketFilesIdList;
+
         AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
         int          usrId = -1;
         int          cmplxId = -1;
@@ -106,11 +113,11 @@ public class SupportController {
         newTicket.setLvngSuptCateIdx( ((Integer) args.get( "lvngSuptCateIdx" )).intValue() );
         newTicket.setContent( (String) args.get( "content" ) );
 
-//        postFilesIdList = (List)args.get( "postFiles" );
+        ticketFilesIdList = (List)args.get( "ticketFiles" );
 
         try {
-//            retPost = postService.setPostWithImage( newPost, postFilesIdList, currUser.getUsrId() );
-            retTicket = ticketService.submitTicket( newTicket );
+            retTicket = ticketService.submitTicketWithImage( newTicket, ticketFilesIdList, currUser.getUsrId() );
+//            retTicket = ticketService.submitTicket( newTicket );
         } catch( Exception e ){
             logger.error(e.getMessage());
             return ResponseEntity
@@ -119,5 +126,57 @@ public class SupportController {
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( retTicket );
+    }
+
+
+    @CrossOrigin
+    @PostMapping(
+            value = "/ticketFiles",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity createTicketFile( HttpServletRequest request,
+                                          @RequestBody HashMap<String, String> params ) {
+        AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+        int          usrId;
+        TicketInfo  ticketInfo;
+        TicketFileInfo  ticketFileInfo;
+        byte[]       imageBytes;
+
+        logger.debug(">>> CmplxId: " + currUser.getCmplxId());
+        logger.debug(">>> UserId: " + currUser.getUserId());
+        logger.debug(">>> UsrId: " + currUser.getUsrId());
+
+        usrId = currUser.getUsrId();
+
+        String base64 = params.get( "file" );
+
+        if( base64 == null ) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleMsgInfo( "file은 필수 입력 항목입니다." ));
+        }
+
+        String[] base64Components = base64.split(",");
+
+        if (base64Components.length != 2) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleMsgInfo( "잘못된 데이터입니다." ));
+        }
+
+        String base64Data = base64Components[0];
+        String fileType = base64Data.substring(base64Data.indexOf('/') + 1, base64Data.indexOf(';'));
+        String base64Image = base64Components[1];
+        imageBytes = DatatypeConverter.parseBase64Binary(base64Image);
+
+        try {
+            // Upload to S3
+            ticketFileInfo = ticketFileStoreService.createTicketFile( imageBytes, fileType );
+            ticketFileInfo.setUsrId( usrId );
+
+            // 테이블 업데이트
+            ticketFileInfo = ticketService.setTicketFile( ticketFileInfo );
+        } catch(OperationFailedException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( new SimpleMsgInfo( "이미지 업로드가 실패하였습니다." ));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( ticketFileInfo );
     }
 }

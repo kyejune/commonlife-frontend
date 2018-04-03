@@ -11,7 +11,19 @@
     <typeAliases>
         <typeAlias alias="requestParam" type="com.kolonbenit.benitware.framework.http.parameter.RequestParameter" />
         <typeAlias alias="resultSetMap" type="com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap" />
-        <package name="com.kolon.comlife" />
+        <package name="com.kolon.comlife.board.model" />
+        <package name="com.kolon.comlife.complexes.model" />
+        <package name="com.kolon.comlife.example.model" />
+        <package name="com.kolon.comlife.iot.model" />
+        <package name="com.kolon.comlife.like.model" />
+        <package name="com.kolon.comlife.post.model" />
+        <package name="com.kolon.comlife.postFile.model" />
+        <package name="com.kolon.comlife.properties.model" />
+        <package name="com.kolon.comlife.reservation.model" />
+        <package name="com.kolon.comlife.status.model" />
+        <package name="com.kolon.comlife.support.model" />
+        <package name="com.kolon.comlife.users.model" />
+
         <!-- 패키지 com.kolon.common은 추가하지 마시오 -->
         <package name="com.kolonbenit.iot" />
         <!-- 패키지 com.konlonbenit.benitware는 추가하지 마시오 -->
