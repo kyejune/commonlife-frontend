@@ -10,12 +10,14 @@ let targetBucketName = process.env.TARGET_S3_BUCKET;
 const supportImageTypes = ["jpg", "jpeg", "png", "gif"];
 const ThumbnailSizes = {
     PROFILE: [
+        {size: 40, alias: 'vs', type: 'crop'},
         {size: 80, alias: 's', type: 'crop'},
         {size: 256, alias: 'm', type: 'crop'},
         {size: 640, alias: 'l', type: 'crop'}
     ],
     ARTICLE: [
         {size: 192, alias: 's'},
+        {size: 640, alias: 'm'},
         {size: 1280, alias: 'l'}
     ],
     MESSAGE: [
@@ -23,6 +25,15 @@ const ThumbnailSizes = {
     ],
     BUSINESS_ARTICLE_THUMB: [
         {size: 192, alias: 's', type: 'crop'}
+    ],
+    TICKET: [
+        {size: 640, alias: 'm'},
+        {size: 1280, alias: 'l'}
+    ],
+    COMPLEX: [
+        {size: 128, alias: 's', type: 'crop'},
+        {size: 256, alias: 'm', type: 'crop'},
+        {size: 512, alias: 'l', type: 'crop'}
     ],
     sizeFromKey: function(key) {
         const type = key.split('/')[1];
@@ -34,7 +45,12 @@ const ThumbnailSizes = {
             return ThumbnailSizes.MESSAGE;
         } else if (type === 'business_article_thumb') {
             return ThumbnailSizes.BUSINESS_ARTICLE_THUMB;
+        } else if (type === 'ticket') {
+            return ThumbnailSizes.TICKET;
+        } else if (type === 'complex') {
+            return ThumbnailSizes.COMPLEX;
         }
+
         return null;
     }
 }
