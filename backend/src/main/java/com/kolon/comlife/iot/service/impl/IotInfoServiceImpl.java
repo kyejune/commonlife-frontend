@@ -14,6 +14,7 @@ import com.kolon.common.http.HttpDeleteRequester;
 import com.kolon.common.http.HttpGetRequester;
 import com.kolon.common.http.HttpPostRequester;
 import com.kolon.common.prop.ServicePropertiesMap;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
@@ -1938,7 +1939,18 @@ public class IotInfoServiceImpl implements IotInfoService {
                 {
                     e.put("DEVICE_TYPE", "button");
                 } else {
-                    e.put("DEVICE_TYPE", "detail");
+                    // 센서의 예외 처리 - BINARY_YN=N인데, BINARY처리가 필요한 센서가 있음(인산화탄소, 문열림센서 등등)
+                    if( StringUtils.isNumeric((String)e.get("minVal")) &&
+                        StringUtils.isNumeric((String)e.get("maxVal")) ) {
+                        e.put("DEVICE_TYPE", "detail");
+                    } else {
+                        if( e.get("STS_CNT").equals(new Integer(1)) ) {
+                            e.put("DEVICE_TYPE", "button");
+                        }
+                        else {
+                            e.put("DEVICE_TYPE", "detail");
+                        }
+                    }
                 }
             }
 
