@@ -37,10 +37,11 @@ class CardItemDetailDrawer extends Component {
     }
 
     onChangeJoin=(bool)=>{
-        let obj = Object.assign({}, this.state);
-        obj.rsvFlag = bool;// 실서버 반영되면 반전 시켜줘야됨
-
-        this.setState(obj);
+        Net.setJoin( this.state.postIdx, bool, res => {
+            let obj = Object.assign({}, this.state);
+                obj.rsvFlag = bool;// 실서버 반영되면 반전 시켜줘야됨
+            this.setState(obj);
+        });
     }
 
 
@@ -183,7 +184,7 @@ class CardItemDetailDrawer extends Component {
             {PostType === 'event' &&
             <footer className="cl-opts__footer cl-flex">
                 <div className="cl-join-status mr-auto">
-                    <span>{this.state.rsvCurrCnt}</span>
+                    <span>{this.state.rsvCount}</span>
                     <span>/{this.state.rsvMaxCnt} 참여</span>
                 </div>
 

@@ -45,6 +45,8 @@ axios.interceptors.response.use(function (response) {
         }
     }
 
+    alert( error.response.data.msg || '잠시 후 다시 이용해 주시기 바랍니다.');
+
     // Do something with response error
     return Promise.reject(error);
 });
@@ -89,18 +91,37 @@ export default {
     setLikey( id, bool, callback ){
 
         if( bool ) {
-            axios.post(Store.api + '/posts/' + id + '/likes/', {usrIdx: id})
+            axios.post(Store.api + '/posts/' + id + '/likes/')
                 .then(response => {
                     callback(response.data);
                 });
 
         }else{
-            axios.delete( Store.api + '/posts/' + id + '/likes/', { usrIdx:id })
+            axios.delete( Store.api + '/posts/' + id + '/likes/')
                 .then( response => {
                     callback( response.data );
                 });
         }
     },
+
+
+    /* event 참여 */
+    setJoin( id, bool, callback ){
+
+        if( bool ){
+            axios.post( `${Store.api}/posts/${id}/rsv/` )
+                .then( response => {
+                   callback( response.data );
+                });
+        }else{
+            axios.delete( `${Store.api}/posts/${id}/rsv/` )
+                .then( response => {
+                    callback( response.data );
+                });
+        }
+
+    },
+
 
     getLikesOfPost( postId, callback ){
         axios.get( Store.api + '/posts/'+ postId +'/likes/' )

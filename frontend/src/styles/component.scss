@@ -1049,19 +1049,28 @@ a.cl-map__link--branch{
 
 .cl-branch-item{
 
+    position: relative;
+
     &.cl--selected{
         .cl-avatar-border{
             background-color: $md-secondary-color;
-        }
 
-        .cl-check{
-            position: absolute;
-            width: 29px;
-            height: 29px;
-            border-radius: 50%;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+            &:before{
+                z-index: 0;
+            }
+
+            &:after{
+                content:'';
+                position: absolute;
+                width: 29px;
+                height: 29px;
+                border-radius: 50%;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-image: url('images/check-yellow@3x.png');
+                background-size: contain;
+            }
         }
 
         h5{
@@ -1073,7 +1082,7 @@ a.cl-map__link--branch{
         width: 100%;
         height: calc( 50vw - 50px );
 
-        &:after{
+        &:before{
             content:'';
             @extend .cl-avatar;
             position: absolute;

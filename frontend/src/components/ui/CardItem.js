@@ -7,6 +7,7 @@ import moment from 'moment';
 import 'moment/locale/ko';
 import Store from "../../scripts/store";
 import TagComponent from "./TagComponent";
+import Net from "../../scripts/net";
 
 class CardItem extends Component {
 
@@ -30,10 +31,13 @@ class CardItem extends Component {
     }
 
     onChangeJoin=(bool)=>{
-        let obj = Object.assign({}, this.state);
-        obj.rsvFlag = bool;// 실서버 반영되면 반전 시켜줘야됨
 
-        this.setState(obj);
+        Net.setJoin( this.state.postIdx, bool, res => {
+           let obj = Object.assign({}, this.state);
+           obj.rsvFlag = bool;// 실서버 반영되면 반전 시켜줘야됨
+           this.setState(obj);
+        });
+
     }
 
     makeDateComponent( fromDate, toDate ){
@@ -158,7 +162,8 @@ class CardItem extends Component {
 
                         share={this.state.shareYn === 'Y'}
                         join={this.state.rsvYn === 'Y' && !this.state.rsvFlag}
-                        joined={this.state.rsvYn === 'Y' && this.state.rsvFlag }
+                        joined={this.state.rsvYn === 'Y' && this.state.rsvFlag}
+                        joinFulled={this.state.rsvCount >= this.state.rsvMaxCnt}
                         qa={ (this.state.inquiryYn === 'Y' )?(this.state.inquiryType === 'P'?'tel:':'mailto:') + this.state.inquiryInfo:false }
 
                         data={{...this.props.cardData}}
