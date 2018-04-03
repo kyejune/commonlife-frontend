@@ -140,7 +140,7 @@ public class PostController {
         PostInfo result;
 
         try {
-            result = postService.getPostById( id );
+            result = postService.getPostById( id, currUser.getUsrId() );
         } catch( Exception e ) {
             logger.error(e.getMessage());
             return ResponseEntity

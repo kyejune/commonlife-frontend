@@ -34,7 +34,7 @@ public class PostServiceImpl implements PostService {
     private PostFileDAO postFileDAO;
 
     @Override
-    public PostInfo getPostById(int id) throws Exception {
+    public PostInfo getPostById(int id, int currUsrId ) throws Exception {
         List<Integer>        userIds;
         List<Integer>        postIdxs;
         List<PostUserInfo>   userList;
@@ -46,7 +46,7 @@ public class PostServiceImpl implements PostService {
         userIds = new ArrayList<>();
         postIdxs = new ArrayList<>();
 
-        postInfo = postDAO.selectPost(id);
+        postInfo = postDAO.selectPost(id, currUsrId);
         if( postInfo == null ) {
             throw new Exception("해당 게시물이 없습니다.");
         }

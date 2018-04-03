@@ -19,9 +19,10 @@ public class PostDAO {
     @Resource
     private SqlSession sqlSession;
 
-    public PostInfo selectPost(int id) {
+    public PostInfo selectPost(int id, int usrId) {
         Map<String, Integer> selectParams = new HashMap<>();
 
+        selectParams.put( "usrId", Integer.valueOf(usrId) );
         selectParams.put( "postIdx", Integer.valueOf(id) );
         selectParams.put( "cmplxId", null );
         selectParams.put( "postType", null );

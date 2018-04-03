@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface PostService {
 
-    PostInfo getPostById(int id ) throws Exception;
+    PostInfo getPostById(int id, int currUsrId ) throws Exception;
 
     PaginateInfo getPostWithLikeInfoList(Map params)  throws Exception ;
 
