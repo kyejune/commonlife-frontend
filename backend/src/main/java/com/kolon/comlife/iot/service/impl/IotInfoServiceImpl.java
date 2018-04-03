@@ -1868,6 +1868,20 @@ public class IotInfoServiceImpl implements IotInfoService {
             // MOD_ID --> DEVICE_ID로 변환
             this.replaceMapKeyIfExisted(e, "MOD_ID", "DEVICE_ID" );
 
+            // '자동화 - 동작기기'의 동작 속성 값의 설정 가능 여부를 표시하기 위해 사용
+            if( (e.get("CHK") != null) &&
+                ( "0".equals(e.get("PRIME_YN")) ||
+                  "1".equals(e.get("PRIME_YN"))) ) {
+                if( "binary".equals(e.get("MO_ATTR")) ||
+                    "level".equals(e.get("MO_ATTR")) ||
+                    "option".equals(e.get("MO_ATTR"))  ||
+                    "button".equals(e.get("MO_ATTR")) ) {
+                    e.put("ADD_BTN_YN", "Y");
+                } else {
+                    e.put("ADD_BTN_YN", "N");
+                }
+            }
+
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
             this.removeMapKeyIfExisted(e, "KIND_CD");
