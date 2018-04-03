@@ -86,7 +86,10 @@ export default class LikeShareAndSome extends Component{
             Share = <button className="cl-card-item__button" onClick={() => this.shareItem()}>SHARE</button>;
 
         if( this.props.join )
-            Join = <button  className="cl-card-item__button" onClick={ ()=> this.toggleJoin( true ) }>
+            Join = <button  className={classNames(
+                "cl-card-item__button",
+                {"cl--fulled": this.props.joinFulled })}
+                            onClick={ ()=> this.toggleJoin( true ) }>
                 <img src={joinSrc} alt="참석" height="30"/>
             </button>;
 
