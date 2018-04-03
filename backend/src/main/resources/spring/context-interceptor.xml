@@ -29,6 +29,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/posts/**" />
             <mvc:mapping path="/postFiles/**" />
+            <mvc:mapping path="/info/livingSupport/**" />
             <bean id="sessionCheckPostsInterceptor" class="com.kolon.common.interceptor.MobileSessionCheckInterceptor" >
                 <property name="forceAuthTokenYN" value="#{prop_dev['forceAuthTokenYN']}" />
                 <property name="forceAuthToken" value="#{prop_dev['forceAuthToken']}" />

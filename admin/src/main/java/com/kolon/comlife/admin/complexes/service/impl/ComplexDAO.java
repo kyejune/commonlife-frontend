@@ -48,6 +48,12 @@ public class ComplexDAO {
         return sqlSession.update("Complex.updateComplexGroupTypeById", complex );
     }
 
+    public int createComplexExtById(int cmplxId) {
+        ComplexInfo complex = new ComplexInfo();
+        complex.setCmplxId(cmplxId);
+        return sqlSession.update("Complex.createComplexExtById", complex );
+    }
+
     public List<HashMap> selectComplexGroupType() {
         return sqlSession.selectList("Complex.selectComplexGroupType");
     }

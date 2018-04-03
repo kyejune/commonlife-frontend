@@ -16,7 +16,7 @@ public interface ComplexService {
 
     List<ComplexSimpleInfo> getComplexSimpleList();
 
-    int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId);
+    int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId) throws Exception ;
 
     List<HashMap> selectComplexGroupType();
 

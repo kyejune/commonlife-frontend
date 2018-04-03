@@ -178,6 +178,21 @@
         UPD_DTTM=CURRENT_TIMESTAMP;
     </update>
 
+    <update id="createComplexExtById" parameterType="ComplexInfo">
+        INSERT IGNORE INTO
+        `COMPLEX_M_EXT`
+        (
+            CMPLX_ID,
+            REG_ADMIN_IDX
+        )
+        VALUES
+        (
+            ${cmplxId},
+            ${adminIdx}
+        );
+    </update>
+
+
     <select id="selectComplexById" parameterType="ComplexInfoDetail" resultType="ComplexInfoDetail">
         SELECT
             GRP_TYPE.CMPLX_GRP_TYPE AS CMPLX_GRP_TYPE,

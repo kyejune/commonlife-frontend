@@ -2,7 +2,7 @@ package com.kolon.comlife.common.model;
 
 import java.util.List;
 
-public class DataListInfo {
+public class DataListInfo extends SimpleMsgInfo {
     private List data;
 
 

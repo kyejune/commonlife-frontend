@@ -59,7 +59,7 @@ public class SupportServiceImpl implements SupportService {
         for(SupportCategoryInfo e : dispOrderList ) {
             resultCnt = supportDAO.updateCategoryDisplayOrder( e );
             if( resultCnt < 1 ) {
-                logger.error("resultCnt는 1보다 커야 합니다. CL_LIVING_SUPPORT_CONF 테이블의 데이터 무결성이 깨졌는지 확인하시기 바랍니다.");
+                logger.error("resultCnt는 1보다 커야 합니다. CL_LIVING_SUPPORT_CONF 테이블의 데이터를 확인하세요.");
                 throw new SupportGeneralException("업데이트 과정에 문제가 발생했습니다. 문제가 지속되면 담당자에게 문의하세요.");
             }
         }

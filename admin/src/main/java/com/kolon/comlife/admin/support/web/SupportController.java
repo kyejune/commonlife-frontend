@@ -1,6 +1,8 @@
 package com.kolon.comlife.admin.support.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
+import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.support.exception.SupportGeneralException;
 import com.kolon.comlife.admin.support.model.SupportCategoryInfo;
 import com.kolon.comlife.admin.support.service.SupportService;
@@ -8,6 +10,7 @@ import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +34,10 @@ public class SupportController {
 
     private static final Logger logger = LoggerFactory.getLogger(SupportController.class);
 
-    @Resource(name = "supportService")
+    @Autowired
+    private ComplexService complexService;
+
+    @Autowired
     private SupportService supportService;
 
     @GetMapping( value = "categoryList.do" )
@@ -42,11 +48,13 @@ public class SupportController {
             , HttpSession session
             , @ModelAttribute("categoryInfo") SupportCategoryInfo categoryInfo
     ) {
-        ObjectMapper mapper = new ObjectMapper();
-        String categoryListJson;
+        ComplexInfoDetail         complexInfo;
         List<SupportCategoryInfo> categoryList;
+        String                    categoryListJson;
+        ObjectMapper              mapper = new ObjectMapper();
 
         try {
+            complexInfo = complexService.getComplexById(categoryInfo.getCmplxId());
             categoryList = supportService.getCategoryInfoByComplexId(categoryInfo);
         } catch( SupportGeneralException e ) {
             return mav.addObject(
@@ -62,6 +70,7 @@ public class SupportController {
                     "작업 처리과정에 에러가 발생했습니다. 문제가 지속되면 담당자에게 문의하세요.");
         }
 
+        mav.addObject("complexInfo", complexInfo );
         mav.addObject("categoryInfo", categoryInfo); // Parameters
         // JSON value
         mav.addObject("categoryList", categoryListJson);

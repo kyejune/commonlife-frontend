@@ -13,6 +13,7 @@ import com.kolon.comlife.admin.manager.service.ManagerService;
 import com.kolon.comlife.admin.users.exception.UserGeneralException;
 import com.kolon.comlife.admin.users.service.UserService;
 import com.kolon.comlife.admin.users.service.impl.UserSerivceImpl;
+import com.kolon.comlife.common.model.SimpleErrorInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +70,7 @@ public class ComplexController {
     ) {
         // 전체현장 목록 가져오기
 
-        logger.debug("====================> 현장 목록 리스트!!!!!!!!!!!!!!!!!!!!!!!!! ");
+        logger.debug("====================> 현장 목록 리스트");
         logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
         logger.debug("====================> complexInfo.getCmplxNm : {} ", complexInfo.getCmplxNm());
         logger.debug("====================> complexInfo.getCmplxGrp : {} ", complexInfo.getCmplxGrp());
@@ -94,7 +95,7 @@ public class ComplexController {
     ) {
         // 현장 상세 정보 가져오기
 
-        logger.debug("====================> 현장 상세 정보 가져오기!!!!!!!!!!!!!!!!!!!!!!!!! ");
+        logger.debug("====================> 현장 상세 정보 가져오기");
         logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
         logger.debug("====================> complexInfo.getCmplxNm : {} ", complexInfo.getCmplxNm());
         logger.debug("====================> complexInfo.getCmplxGrp : {} ", complexInfo.getCmplxGrp());
@@ -116,44 +117,55 @@ public class ComplexController {
             , HttpSession session
             , @ModelAttribute ComplexInfo complexInfo
     ) {
+        List<ComplexInfo> complexList;
 
         if( complexInfo == null ) {
             complexInfo = new ComplexInfo();
         }
 
         // 현장 분류 하기
-        logger.debug("====================> 현장 분류하기 가져오기!!!!!!!!!!!!!!!!!!!!!!!!! ");
+        logger.debug("====================> 현장 분류하기 가져오기 ");
         logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
         logger.debug("====================> complexInfo.getCmplxNm : {} ", complexInfo.getCmplxNm());
         logger.debug("====================> complexInfo.getCmplxGrp : {} ", complexInfo.getCmplxGrp());
 
-        List<ComplexInfo> complexList = complexService.getComplexList();
+        complexList = complexService.getComplexList();
 
-//        mav.addObject("grpId",      grpId);
         mav.addObject("complexList", complexList);
         mav.addObject("complexConst", complexConst);
 
         return mav;
     }
 
-    @RequestMapping(value = "updateCategory.do", method= {RequestMethod.POST})
+    @RequestMapping(
+            value = "updateCategory.do",
+            method= {RequestMethod.POST} )
     public ResponseEntity complexUpdateCategory(HttpServletRequest request
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
             , @ModelAttribute ComplexInfo complexInfo
     ) {
-        logger.debug("====================> 현장 그룹 변경하기!!!!!!!!!!!!!!!!!!!!!!!!! ");
+        int      updatedCount = -1;
+        ModelMap ret = new ModelMap();
+
+        logger.debug("====================> 현장 그룹 변경하기");
         logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
         logger.debug("====================> complexInfo.getCmplxGrpId : {} ", complexInfo.getCmplxGrpId());
 
-        ModelMap ret = new ModelMap();
+        try {
+            updatedCount = complexService.updateComplexGroupTypeById(
+                    complexInfo.getCmplxId(),
+                    complexInfo.getCmplxGrpId());
+        } catch( Exception e ) {
+            logger.error( e.getMessage() );
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .body(new SimpleErrorInfo( e.getMessage() ));
+        }
 
-        int count = complexService.updateComplexGroupTypeById(
-                                        complexInfo.getCmplxId(),
-                                        complexInfo.getCmplxGrpId() );
-
-        if( count > 0 ) {
+        if( updatedCount > 0 ) {
             ret.put("result", true);
             ret.put("msg", "성공");
         } else {
@@ -185,7 +197,7 @@ public class ComplexController {
         AdminInfo         adminInfo;
         List<ComplexRegion> regionList;
 
-        logger.debug("====================> 현장 상세 정보 페이지 !!!!!!!!!!!!!!!!!!!!!!!!! ");
+        logger.debug("====================> 현장 상세 정보 페이지 ");
         logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
         logger.debug("====================> complexInfo.getCmplxNm : {} ", complexInfo.getCmplxNm());
         logger.debug("====================> complexInfo.getCmplxGrp : {} ", complexInfo.getCmplxGrp());
@@ -225,8 +237,8 @@ public class ComplexController {
         mav.addObject("totalUserCount", totalUserCount);
         mav.addObject("managerList",    managerList);
         mav.addObject("adminConst",     adminConst);
-        mav.addObject("adminInfo",     new AdminInfo());  // Manager 화면전환시 이용
-        mav.addObject("regionList", regionList);
+        mav.addObject("adminInfo",      new AdminInfo());  // Manager 화면전환시 이용
+        mav.addObject("regionList",     regionList);
 
         return mav;
     }

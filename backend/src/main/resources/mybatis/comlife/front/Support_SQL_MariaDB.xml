@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Support">
+
+
+    <select id="selectCategoryListByComplexId" parameterType="supportCategoryInfo"  resultType="supportCategoryInfo">
+        SELECT
+            CATE.LVNG_SUPT_CATE_IDX AS LVNG_SUPT_CATE_IDX,
+            #{cmplxId} AS CMPLX_ID,
+            CATE_NM,
+            CATE_ID,
+            IMG_SRC,
+            `DESC`,
+            IFNULL(DISP_ORDER, 9999) AS DISP_ORDER,
+            IF (DEL_YN = "N", "Y", "N") AS SET_YN,
+            IFNULL(CONF.DEL_YN, "Y") AS DEL_YN,
+            CONF.REG_DTTM AS REG_DTTM,
+            CONF.UPD_DTTM AS UPD_DTTM
+        FROM
+            CL_LIVING_SUPPORT_CATE AS CATE LEFT JOIN
+            CL_LIVING_SUPPORT_CONF AS CONF
+                ON CATE.LVNG_SUPT_CATE_IDX = CONF.LVNG_SUPT_CATE_IDX AND CMPLX_ID=#{cmplxId}
+        WHERE
+            DEL_YN != "Y"
+        ORDER BY
+            DISP_ORDER
+        ;
+    </select>
+
+
+    <insert id="insertSupportTicket" parameterType="ticketInfo">
+        <![CDATA[
+        INSERT INTO
+        `CL_LIVING_SUPPORT_TICKETS`
+        (
+            `LVNG_SUPT_CATE_IDX`,
+            `CONTENT`,
+            `USR_ID`,
+            `CMPLX_ID`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        )
+        VALUES
+        (
+            #{lvngSuptCateIdx},
+            #{content},
+            #{usrId},
+            #{cmplxId},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+    ]]>
+    </insert>
+
+    <select id="selectLatestTicket" resultType="ticketInfo">
+        <![CDATA[
+        SELECT
+            `LVNG_SUPT_TKT_IDX`,
+            `CONTENT`,
+            `USR_ID`,
+            `CMPLX_ID`,
+            `LVNG_SUPT_CATE_IDX`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `CL_LIVING_SUPPORT_TICKETS`
+        WHERE
+            `DEL_YN` = 'N'
+          AND
+            `LVNG_SUPT_TKT_IDX` = LAST_INSERT_ID()
+    ]]>
+    </select>
+
+
+</mapper>

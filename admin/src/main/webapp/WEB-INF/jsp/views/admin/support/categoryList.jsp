@@ -14,16 +14,22 @@
     <!-- Section Title -->
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>INFO - Living Support</h2>
+            <h2>Living Support 항목 설정 - ${complexInfo.cmplxNm}</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="/">Home</a>
                 </li>
                 <li>
-                    INFO - Living Support 관리
+                    현장 관리
+                </li>
+                <li>
+                    개별 현장 관리
+                </li>
+                <li>
+                    현장 상세 정보
                 </li>
                 <li class="active">
-                    <a>Support 카테고리</a>
+                    <a>Living Support 항목 설정</a>
                 </li>
             </ol>
         </div>
@@ -111,7 +117,9 @@
         $(function () {
             $('.footable').footable();
 
-            // Exception check
+            $("#left_complex").addClass("active");
+            $("#left_complex > .nav-second-level").addClass("in");
+            $("#left_complex_list").addClass("active");
 
             <c:if test="${error != null}">
                 alert("${error}");
@@ -123,7 +131,6 @@
             <c:if test="${categoryList != null}">
                 categoryList = JSON.parse('${categoryList}');
             </c:if>
-
 
             $.each(categoryList, function(i, obj) {
                 console.log(">>>>> " + obj.cateNm);

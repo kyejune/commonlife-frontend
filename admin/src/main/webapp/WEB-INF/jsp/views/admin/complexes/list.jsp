@@ -10,16 +10,16 @@
     <!-- Section Title -->
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>현장 목록</h2>
+            <h2>개별 현장 관리</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="/">Home</a>
                 </li>
                 <li>
-                    현장/현장그룹 관리
+                    현장 관리
                 </li>
                 <li class="active">
-                    <a>현장 목록</a>
+                    <a>개별 현장 관리</a>
                 </li>
             </ol>
         </div>

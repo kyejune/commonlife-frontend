@@ -31,10 +31,10 @@
             <li id="left_complex">
                 <a href="#">
                     <i class="fa fa-table"></i>
-                    <span class="nav-label">현장 그룹 관리</span><span class="fa arrow"></span>
+                    <span class="nav-label">현장 관리</span><span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
-                    <li id="left_complex_category"><a href="/admin/complexes/category.do">현장 분류</a></li>
+                    <li id="left_complex_category"><a href="/admin/complexes/category.do">현장 그룹 관리</a></li>
                     <li id="left_complex_list"><a href="/admin/complexes/list.do">개별 현장 관리</a></li>
                 </ul>
             </li>

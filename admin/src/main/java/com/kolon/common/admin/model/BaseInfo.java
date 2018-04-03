@@ -21,6 +21,12 @@ public class BaseInfo implements Serializable {
         this.condAlign = condAlign;
     }
 
+    // admin info
+    private int    adminIdx;
+    private String regDttm;
+    private String updDttm;
+
+    // Paging and search
     private int pageIndex = 1;
     private int pageUnit = 10;
     private int pageSize = 10;
@@ -49,6 +55,31 @@ public class BaseInfo implements Serializable {
     private String searchKeyword1;
     private String searchKeyword2;
     private String searchKeyword3;
+
+
+    public int getAdminIdx() {
+        return adminIdx;
+    }
+
+    public void setAdminIdx(int adminIdx) {
+        this.adminIdx = adminIdx;
+    }
+
+    public String getRegDttm() {
+        return regDttm;
+    }
+
+    public void setRegDttm(String regDttm) {
+        this.regDttm = regDttm;
+    }
+
+    public String getUpdDttm() {
+        return updDttm;
+    }
+
+    public void setUpdDttm(String updDttm) {
+        this.updDttm = updDttm;
+    }
 
     public int getPageIndex() {
         return pageIndex;

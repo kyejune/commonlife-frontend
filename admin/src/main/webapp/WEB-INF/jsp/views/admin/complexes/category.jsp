@@ -14,16 +14,16 @@
     <!-- Section Title -->
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>현장 분류</h2>
+            <h2>현장 그룹 관리</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="/">Home</a>
                 </li>
                 <li>
-                    현장/현장그룹 관리
+                    현장 관리
                 </li>
                 <li class="active">
-                    <a>현장 목록</a>
+                    <a>현장 그룹 관리</a>
                 </li>
             </ol>
         </div>
@@ -36,6 +36,43 @@
             <form:hidden path="cmplxId" />
             <form:hidden path="cmplxGrpId" />
         </form:form>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>현장 그룹 관리 설명서</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content" style="">
+                        <form class="form-horizontal">
+                            <h3>주의 사항</h3>
+                            <p>
+                                todo: 1. 현재 현장에 대한 정보를 표시
+                            </p>
+                            <p>
+                                - App내 [INFO] - [Living Support]의 항목을 표시하고 순서를 변경할 수 있습니다.
+                                - 항목간 순서를 변경한 이후, '업데이트'클릭하면 반영됩니다.
+                            </p>
+                                <%-- todo: 1. COMPLEX_ID 현재 현장에 대한 정보를 표시 --%>
+
+                            <h3 >변경 사항 적용</h3>
+                            <p>
+                                <button type="button"
+                                        class="btn btn-block btn-outline btn-primary"
+                                        onclick="javascript:procIns();" >변경 사항 적용</button>
+                            </p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <div class="row">
             <!-- Uncategorized -->
             <div class="col-lg-4">
