@@ -28,6 +28,7 @@ public class SupportServiceImpl implements SupportService {
     private ComplexDAO complexDAO;
 
 
+    @Override
     public List<SupportCategoryInfo> getCategoryInfoByComplexId(SupportCategoryInfo categoryInfo)
                                         throws SupportGeneralException
     {
@@ -47,6 +48,23 @@ public class SupportServiceImpl implements SupportService {
         categoryInfoList = supportDAO.selectCategoryListByComplexId( categoryInfo );
 
         return categoryInfoList;
+    }
+
+    @Override
+    public void updateCategoryInfoDisplayByComplexId(List<SupportCategoryInfo> dispOrderList)
+            throws SupportGeneralException
+    {
+        int resultCnt;
+
+        for(SupportCategoryInfo e : dispOrderList ) {
+            resultCnt = supportDAO.updateCategoryDisplayOrder( e );
+            if( resultCnt < 1 ) {
+                logger.error("resultCnt는 1보다 커야 합니다. CL_LIVING_SUPPORT_CONF 테이블의 데이터 무결성이 깨졌는지 확인하시기 바랍니다.");
+                throw new SupportGeneralException("업데이트 과정에 문제가 발생했습니다. 문제가 지속되면 담당자에게 문의하세요.");
+            }
+        }
+
+        return;
     }
 
 //    @Override

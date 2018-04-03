@@ -8,7 +8,7 @@ import org.apache.ibatis.type.Alias;
  */
 @Alias("supportCategoryInfo")
 public class SupportCategoryInfo {
-    private String lvngSuptCateIdx;
+    private int  lvngSuptCateIdx;
     private int    cmplxId;
     private String cateNm;
 
@@ -22,11 +22,11 @@ public class SupportCategoryInfo {
     private String regDttm;
     private String updDttm;
 
-    public String getLvngSuptCateIdx() {
+    public int getLvngSuptCateIdx() {
         return lvngSuptCateIdx;
     }
 
-    public void setLvngSuptCateIdx(String lvngSuptCateIdx) {
+    public void setLvngSuptCateIdx(int lvngSuptCateIdx) {
         this.lvngSuptCateIdx = lvngSuptCateIdx;
     }
 

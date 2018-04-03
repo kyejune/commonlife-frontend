@@ -4,18 +4,25 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kolon.comlife.admin.support.exception.SupportGeneralException;
 import com.kolon.comlife.admin.support.model.SupportCategoryInfo;
 import com.kolon.comlife.admin.support.service.SupportService;
+import com.kolon.comlife.common.model.SimpleErrorInfo;
+import com.kolon.comlife.common.model.SimpleMsgInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Controller("supportController")
@@ -27,7 +34,7 @@ public class SupportController {
     @Resource(name = "supportService")
     private SupportService supportService;
 
-    @RequestMapping(value = "categoryList.do")
+    @GetMapping( value = "categoryList.do" )
     public ModelAndView categoryList (
             HttpServletRequest request
             , HttpServletResponse response
@@ -56,11 +63,68 @@ public class SupportController {
         }
 
         mav.addObject("categoryInfo", categoryInfo); // Parameters
+        // JSON value
         mav.addObject("categoryList", categoryListJson);
         mav.addObject("cmplxId", categoryInfo.getCmplxId());
 
         return mav;
     }
+
+
+    @PostMapping(
+            value = "procIns.do",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity procIns (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+            , @RequestBody List<Map<String, Object>> dispOrderParam
+            , @RequestParam("cmplxId") int cmplxId
+    ) {
+        List<SupportCategoryInfo> dispOrderList;
+
+        if( cmplxId < 1 ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("잘못된 현장아이디(cmplxId)를 입력했습니다. 다시 확인하세요."));
+        }
+
+        if( dispOrderParam == null ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("업데이트 할 내용이 없습니다. 전송 내용을 다시 확인하세요. "));
+        }
+
+
+        dispOrderList = new ArrayList<>();
+        for( Map e: dispOrderParam ) {
+            SupportCategoryInfo cateInfo = new SupportCategoryInfo();
+
+            cateInfo.setLvngSuptCateIdx( Integer.parseInt( (String) e.get("lvngSuptCateIdx") ) );
+            cateInfo.setCmplxId( cmplxId );
+            cateInfo.setDispOrder( ((Integer)e.get("dispOrder")).intValue() );
+            cateInfo.setDelYn( (String) e.get("delYn") );
+
+            dispOrderList.add(cateInfo);
+
+
+            logger.debug(">>> " + cateInfo.getLvngSuptCateIdx() );
+            logger.debug(">>> " + cateInfo.getDispOrder() );
+            logger.debug(">>> " + cateInfo.getDelYn() );
+            logger.debug("----");
+        }
+
+        try {
+            supportService.updateCategoryInfoDisplayByComplexId( dispOrderList );
+        } catch( SupportGeneralException e ) {
+            logger.error( e.getMessage() );
+            e.printStackTrace();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(new SimpleMsgInfo("업데이트를 완료했습니다."));
+    }
+
 
 
 //    /**

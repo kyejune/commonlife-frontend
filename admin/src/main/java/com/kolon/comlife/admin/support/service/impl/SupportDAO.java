@@ -22,6 +22,11 @@ public class SupportDAO {
         return sqlSession.selectList("Support.selectCategoryListByComplexId", categoryInfo);
     }
 
+    public int updateCategoryDisplayOrder( SupportCategoryInfo categoryInfo ) {
+        return sqlSession.update("Support.updateCategoryDisplayOrder", categoryInfo);
+    }
+
+
     /**
      * 공통게시판 AND 페이스북 리스트 조회
      * @param boardInfo

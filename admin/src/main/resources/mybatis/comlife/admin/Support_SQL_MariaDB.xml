@@ -21,11 +21,33 @@
         FROM
             CL_LIVING_SUPPORT_CATE AS CATE LEFT JOIN
              CL_LIVING_SUPPORT_CONF AS CONF
-                ON CATE.LVNG_SUPT_CATE_IDX = CONF.LVNG_SUPT_CONF_IDX AND CMPLX_ID=#{cmplxId}
+                ON CATE.LVNG_SUPT_CATE_IDX = CONF.LVNG_SUPT_CATE_IDX AND CMPLX_ID=#{cmplxId}
         ORDER BY
             DISP_ORDER
         ;
     </select>
+
+
+    <update  id="updateCategoryDisplayOrder" parameterType="supportCategoryInfo" >
+        INSERT INTO
+          CL_LIVING_SUPPORT_CONF
+          (
+            CMPLX_ID,
+            LVNG_SUPT_CATE_IDX,
+            DISP_ORDER,
+            DEL_YN
+          )
+        VALUES
+        (
+          #{cmplxId}, #{lvngSuptCateIdx}, #{dispOrder}, #{delYn}
+        )
+        ON DUPLICATE KEY
+        UPDATE
+            UPD_DTTM=CURRENT_TIMESTAMP,
+            DEL_YN=#{delYn},
+            DISP_ORDER=#{dispOrder};
+    </update>
+
 
 
     <select id="selectBoardList" parameterType="boardInfo" resultType="boardInfo">

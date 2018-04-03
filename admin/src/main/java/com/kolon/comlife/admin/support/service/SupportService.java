@@ -14,6 +14,9 @@ public interface SupportService {
     // 카테고리 가져오기
     List<SupportCategoryInfo> getCategoryInfoByComplexId(SupportCategoryInfo categoryInfo ) throws SupportGeneralException;
 
+    // 카테고리 표시 여부 설정 및 순서 업데이트
+    void updateCategoryInfoDisplayByComplexId(List<SupportCategoryInfo> dispOrderList) throws SupportGeneralException;
+
 //    /**
 //     * 공통게시판 리스트 조회
 //     * @param boardInfo
