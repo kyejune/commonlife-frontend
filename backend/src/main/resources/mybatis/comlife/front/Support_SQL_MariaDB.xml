@@ -6,7 +6,7 @@
 
     <select id="selectCategoryListByComplexId" parameterType="supportCategoryInfo"  resultType="supportCategoryInfo">
         SELECT
-            CATE.LVNG_SUPT_CATE_IDX AS LVNG_SUPT_CATE_IDX,
+            CATE.CATE_IDX AS CATE_IDX,
             #{cmplxId} AS CMPLX_ID,
             CATE_NM,
             CATE_ID,
@@ -18,9 +18,9 @@
             CONF.REG_DTTM AS REG_DTTM,
             CONF.UPD_DTTM AS UPD_DTTM
         FROM
-            CL_LIVING_SUPPORT_CATE AS CATE LEFT JOIN
-            CL_LIVING_SUPPORT_CONF AS CONF
-                ON CATE.LVNG_SUPT_CATE_IDX = CONF.LVNG_SUPT_CATE_IDX AND CMPLX_ID=#{cmplxId}
+            CL_SUPPORT_CATE AS CATE LEFT JOIN
+            CL_SUPPORT_CONF AS CONF
+                ON CATE.CATE_IDX = CONF.CATE_IDX AND CMPLX_ID=#{cmplxId}
         WHERE
             DEL_YN != "Y"
         ORDER BY
@@ -32,9 +32,9 @@
     <insert id="insertSupportTicket" parameterType="ticketInfo">
         <![CDATA[
         INSERT INTO
-        `CL_LIVING_SUPPORT_TICKETS`
+        `CL_SUPPORT_TICKETS`
         (
-            `LVNG_SUPT_CATE_IDX`,
+            `CATE_IDX`,
             `CONTENT`,
             `USR_ID`,
             `CMPLX_ID`,
@@ -43,7 +43,7 @@
         )
         VALUES
         (
-            #{lvngSuptCateIdx},
+            #{cateIdx},
             #{content},
             #{usrId},
             #{cmplxId},
@@ -56,20 +56,20 @@
     <select id="selectLatestTicket" resultType="ticketInfo">
         <![CDATA[
         SELECT
-            `LVNG_SUPT_TKT_IDX`,
+            `TKT_IDX`,
             `CONTENT`,
             `USR_ID`,
             `CMPLX_ID`,
-            `LVNG_SUPT_CATE_IDX`,
+            `CATE_IDX`,
             `DEL_YN`,
             `REG_DTTM`,
             `UPD_DTTM`
         FROM
-            `CL_LIVING_SUPPORT_TICKETS`
+            `CL_SUPPORT_TICKETS`
         WHERE
             `DEL_YN` = 'N'
           AND
-            `LVNG_SUPT_TKT_IDX` = LAST_INSERT_ID()
+            `TKT_IDX` = LAST_INSERT_ID()
     ]]>
     </select>
 
@@ -77,7 +77,7 @@
     <insert id="insertTicketFile" parameterType="ticketFileInfo">
         <![CDATA[
             INSERT
-            INTO    `CL_LIVING_SUPPORT_TICKETS_FILE`
+            INTO    `CL_SUPPORT_TICKETS_FILE`
             (
                 `USR_ID`,
                 `MIME_TYPE`,
@@ -99,7 +99,7 @@
     <select id="selectLatestTicketFile" resultType="ticketFileInfo">
         <![CDATA[
             SELECT  *
-            FROM    `CL_LIVING_SUPPORT_TICKETS_FILE`
+            FROM    `CL_SUPPORT_TICKETS_FILE`
             WHERE   `DEL_YN` = 'N'
             AND
                     `TKT_FILE_IDX` = LAST_INSERT_ID()
@@ -108,7 +108,7 @@
 
 
     <update id="bindTicketToTicketFiles" parameterType="java.util.Map">
-        UPDATE  `CL_LIVING_SUPPORT_TICKETS_FILE`
+        UPDATE  `CL_SUPPORT_TICKETS_FILE`
         SET     `TKT_IDX` =  #{ticketIdx}
         WHERE
         ISNULL(`TKT_IDX`) AND
@@ -134,7 +134,7 @@
         SELECT
         *
         FROM
-        `CL_LIVING_SUPPORT_TICKETS_FILE`
+        `CL_SUPPORT_TICKETS_FILE`
         <choose>
             <when test="ticketFileIdx != null">
                 WHERE   `TKT_FILE_IDX` = #{ticketFileIdx}

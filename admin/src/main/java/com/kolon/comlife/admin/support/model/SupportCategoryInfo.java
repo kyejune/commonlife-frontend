@@ -1,14 +1,10 @@
 package com.kolon.comlife.admin.support.model;
 
-import com.kolon.common.admin.model.FileInfo;
 import org.apache.ibatis.type.Alias;
 
-/**
- * 공통게시판 Value Object
- */
 @Alias("supportCategoryInfo")
 public class SupportCategoryInfo {
-    private int  lvngSuptCateIdx;
+    private int    cateIdx;
     private int    cmplxId;
     private String cateNm;
 
@@ -22,12 +18,12 @@ public class SupportCategoryInfo {
     private String regDttm;
     private String updDttm;
 
-    public int getLvngSuptCateIdx() {
-        return lvngSuptCateIdx;
+    public int getCateIdx() {
+        return cateIdx;
     }
 
-    public void setLvngSuptCateIdx(int lvngSuptCateIdx) {
-        this.lvngSuptCateIdx = lvngSuptCateIdx;
+    public void setCateIdx(int cateIdx) {
+        this.cateIdx = cateIdx;
     }
 
     public int getCmplxId() {

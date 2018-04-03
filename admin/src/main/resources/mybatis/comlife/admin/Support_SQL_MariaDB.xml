@@ -7,7 +7,7 @@
 
     <select id="selectCategoryListByComplexId" parameterType="supportCategoryInfo"  resultType="supportCategoryInfo">
         SELECT
-            CATE.LVNG_SUPT_CATE_IDX AS LVNG_SUPT_CATE_IDX,
+            CATE.CATE_IDX AS CATE_IDX,
             #{cmplxId} AS CMPLX_ID,
             CATE_NM,
             CATE_ID,
@@ -19,27 +19,26 @@
             CONF.REG_DTTM AS REG_DTTM,
             CONF.UPD_DTTM AS UPD_DTTM
         FROM
-            CL_LIVING_SUPPORT_CATE AS CATE LEFT JOIN
-             CL_LIVING_SUPPORT_CONF AS CONF
-                ON CATE.LVNG_SUPT_CATE_IDX = CONF.LVNG_SUPT_CATE_IDX AND CMPLX_ID=#{cmplxId}
+            CL_SUPPORT_CATE AS CATE LEFT JOIN
+             CL_SUPPORT_CONF AS CONF
+                ON CATE.CATE_IDX = CONF.CATE_IDX AND CMPLX_ID=#{cmplxId}
         ORDER BY
             DISP_ORDER
         ;
     </select>
 
-
     <update  id="updateCategoryDisplayOrder" parameterType="supportCategoryInfo" >
         INSERT INTO
-          CL_LIVING_SUPPORT_CONF
+          CL_SUPPORT_CONF
           (
             CMPLX_ID,
-            LVNG_SUPT_CATE_IDX,
+            CATE_IDX,
             DISP_ORDER,
             DEL_YN
           )
         VALUES
         (
-          #{cmplxId}, #{lvngSuptCateIdx}, #{dispOrder}, #{delYn}
+          #{cmplxId}, #{cateIdx}, #{dispOrder}, #{delYn}
         )
         ON DUPLICATE KEY
         UPDATE

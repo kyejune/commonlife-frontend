@@ -5,7 +5,7 @@ import org.apache.ibatis.type.Alias;
 
 @Alias("supportCategoryInfo")
 public class SupportCategoryInfo extends SimpleMsgInfo {
-    private int    lvngSuptCateIdx;
+    private int    cateIdx;
     private int    cmplxId;
     private String cateNm;
 
@@ -19,12 +19,12 @@ public class SupportCategoryInfo extends SimpleMsgInfo {
     private String regDttm;
     private String updDttm;
 
-    public int getLvngSuptCateIdx() {
-        return lvngSuptCateIdx;
+    public int getCateIdx() {
+        return cateIdx;
     }
 
-    public void setLvngSuptCateIdx(int lvngSuptCateIdx) {
-        this.lvngSuptCateIdx = lvngSuptCateIdx;
+    public void setCateIdx(int cateIdx) {
+        this.cateIdx = cateIdx;
     }
 
     public int getCmplxId() {

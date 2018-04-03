@@ -2,7 +2,6 @@ package com.kolon.comlife.admin.support.service.impl;
 
 import com.kolon.comlife.admin.board.model.BoardInfo;
 import com.kolon.comlife.admin.support.model.SupportCategoryInfo;
-import com.kolon.comlife.admin.support.model.SupportInfo;
 import com.kolon.common.admin.model.FileInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;

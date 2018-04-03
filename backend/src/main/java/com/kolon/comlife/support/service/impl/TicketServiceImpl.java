@@ -38,7 +38,7 @@ public class TicketServiceImpl implements TicketService {
 
         if( (filesIdList != null) && (filesIdList.size() > 0) ) {
             logger.debug(">>> Ticket Files Count: " +  filesIdList.size());
-            fileInfoList = ticketDAO.bindTicketToTicketFiles( retTicketInfo.getLvngSuptTktIdx(), filesIdList, usrId );
+            fileInfoList = ticketDAO.bindTicketToTicketFiles( retTicketInfo.getTktIdx(), filesIdList, usrId );
             retTicketInfo.setTicketFiles( fileInfoList );
         }
 

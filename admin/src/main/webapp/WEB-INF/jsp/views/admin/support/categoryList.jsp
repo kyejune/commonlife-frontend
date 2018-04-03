@@ -136,14 +136,14 @@
                 console.log(">>>>> " + obj.cateNm);
 
                 //use obj.id and obj.name here, for example:
-                categoryCard = '<li class="success-element" id="' + obj.lvngSuptCateIdx + '">' +
+                categoryCard = '<li class="success-element" id="' + obj.cateIdx + '">' +
                                     "항목 이름 : " + "<label class='font-bold'>" + obj.cateNm + "</label>" +
                                     '<div class="agile-detail">' +
                                     '<i class="fa fa-clock-o"></i> ' + obj.desc +
                                     '</div>' +
                                 '</li>';
                 $( "#card_set_" +  obj.setYn ).append(categoryCard);
-                console.log("added! " + i + " // " +  + " // " + obj.setYn );
+                console.log("added! " + i + " // " +  + " // " + obj.delYn );
             });
 
             $("#card_set_N, #card_set_Y").sortable({
@@ -169,7 +169,7 @@
                 var e = new Object();
                 e['dispOrder'] = 9999;  // 해당 항목 순서는 제일 뒤로
                 e['delYn'] = 'Y';     // 해당 항목 삭제
-                e['lvngSuptCateIdx'] = obj;
+                e['cateIdx'] = obj;
                 updateList.push(e);
             });
 
@@ -177,7 +177,7 @@
                 var e = new Object();
                 e['dispOrder'] = i + 1;     // dispOrder는 1부터 시작
                 e['delYn'] = 'N';           // 해당 항목 삭제
-                e['lvngSuptCateIdx'] = obj;
+                e['cateIdx'] = obj;
                 updateList.push(e);
             });
 

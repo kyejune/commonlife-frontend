@@ -1,10 +1,8 @@
 package com.kolon.comlife.support.web;
 
 import com.kolon.comlife.common.model.DataListInfo;
-import com.kolon.comlife.common.model.PaginateInfo;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
-import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.support.exception.OperationFailedException;
 import com.kolon.comlife.support.exception.SupportGeneralException;
 import com.kolon.comlife.support.model.SupportCategoryInfo;
@@ -25,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
-import javax.xml.ws.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,7 +107,7 @@ public class SupportController {
 
         newTicket.setUsrId( usrId );
         newTicket.setCmplxId( cmplxId );
-        newTicket.setLvngSuptCateIdx( ((Integer) args.get( "lvngSuptCateIdx" )).intValue() );
+        newTicket.setCateIdx( ((Integer) args.get( "cateIdx" )).intValue() );
         newTicket.setContent( (String) args.get( "content" ) );
 
         ticketFilesIdList = (List)args.get( "ticketFiles" );

@@ -8,21 +8,21 @@ import java.util.List;
 @Alias("ticketInfo")
 public class TicketInfo {
 
-    private int lvngSuptTktIdx;
+    private int tktIdx;
     private int usrId;
     private int cmplxId;
-    private int lvngSuptCateIdx; // 지원티켓 분류(Category) IDX
+    private int cateIdx; // 지원티켓 분류(Category) IDX
     private String content;
     private String delYn;
     private String regDttm;
     private String updDttm;
 
-    public int getLvngSuptTktIdx() {
-        return lvngSuptTktIdx;
+    public int getTktIdx() {
+        return tktIdx;
     }
 
-    public void setLvngSuptTktIdx(int lvngSuptTktIdx) {
-        this.lvngSuptTktIdx = lvngSuptTktIdx;
+    public void setTktIdx(int tktIdx) {
+        this.tktIdx = tktIdx;
     }
 
     public int getUsrId() {
@@ -41,12 +41,12 @@ public class TicketInfo {
         this.cmplxId = cmplxId;
     }
 
-    public int getLvngSuptCateIdx() {
-        return lvngSuptCateIdx;
+    public int getCateIdx() {
+        return cateIdx;
     }
 
-    public void setLvngSuptCateIdx(int lvngSuptCateIdx) {
-        this.lvngSuptCateIdx = lvngSuptCateIdx;
+    public void setCateIdx(int cateIdx) {
+        this.cateIdx = cateIdx;
     }
 
     public String getContent() {
