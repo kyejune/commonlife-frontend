@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Service("ticketFileStoreService")
 public class TicketFileStoreServiceImpl implements TicketFileStoreService {
@@ -65,10 +66,10 @@ public class TicketFileStoreServiceImpl implements TicketFileStoreService {
         InputStream     stream   = new ByteArrayInputStream( inputData );
         ObjectMetadata  metadata = new ObjectMetadata();
         AmazonS3        s3Client = this.getS3Client();
+        UUID uuid;
 
-        // TODO: 파일 저장 경로 변경 및 파일 이름 변경 - IOT-62
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String objectPath = TICKET_IMG_BASE_PATH + timestamp.getTime() + "." + fileType;
+        uuid = UUID.randomUUID();
+        String objectPath = TICKET_IMG_BASE_PATH + uuid.toString() + "." + fileType;
 
         try {
             s3Client.putObject(

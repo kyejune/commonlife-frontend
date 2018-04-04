@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Service("postFileStoreService")
 public class PostFileStoreServiceImpl implements PostFileStoreService {
@@ -95,10 +96,10 @@ public class PostFileStoreServiceImpl implements PostFileStoreService {
         InputStream stream = new ByteArrayInputStream( inputData );
         ObjectMetadata metadata = new ObjectMetadata();
         AmazonS3 s3Client = getS3Client();
-
-        // TODO: 파일 저장 경로 변경 및 파일 이름 변경 - IOT-62
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        String objectPath = POST_IMG_BASE_PATH + timestamp.getTime() + "." + fileType;
+        UUID uuid;
+        
+        uuid = UUID.randomUUID();
+        String objectPath = POST_IMG_BASE_PATH + uuid.toString() + "." + fileType;
 
         try {
             s3Client.putObject(
