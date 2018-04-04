@@ -2,6 +2,8 @@ package com.kolon.comlife.reservation.model;
 
 import org.apache.ibatis.type.Alias;
 
+import java.util.List;
+
 @Alias("reservationGroupInfo")
 public class ReservationGroupInfo {
     private int idx;
@@ -12,6 +14,11 @@ public class ReservationGroupInfo {
     private String delYn;
     private String regDttm;
     private String updDttm;
+
+    /*
+        Relations
+     */
+    private List<ReservationSchemeInfo> schemes;
 
     public int getIdx() {
         return idx;
@@ -75,5 +82,17 @@ public class ReservationGroupInfo {
 
     public void setUpdDttm(String updDttm) {
         this.updDttm = updDttm;
+    }
+
+    /*
+        Relations
+     */
+
+    public List<ReservationSchemeInfo> getSchemes() {
+        return schemes;
+    }
+
+    public void setSchemes(List<ReservationSchemeInfo> schemes) {
+        this.schemes = schemes;
     }
 }

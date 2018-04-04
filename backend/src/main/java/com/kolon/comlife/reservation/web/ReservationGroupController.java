@@ -1,19 +1,19 @@
 package com.kolon.comlife.reservation.web;
 
 import com.kolon.comlife.reservation.model.ReservationGroupInfo;
+import com.kolon.comlife.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.reservation.service.ReservationGroupService;
+import com.kolon.comlife.reservation.service.ReservationSchemeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,12 +25,44 @@ public class ReservationGroupController {
     @Resource(name = "reservationGroupService")
     ReservationGroupService service;
 
+    @Resource(name = "reservationSchemeService")
+    ReservationSchemeService schemeService;
+
     @CrossOrigin
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity index(HttpServletRequest request) {
         List<ReservationGroupInfo> groups = service.index( new HashMap() );
+
+        // 현재 그룹에 속해있는 스키마들을 가져온다
+        List<Integer> ids = new ArrayList<Integer>();
+        for ( ReservationGroupInfo group: groups ) {
+            ids.add( group.getIdx() );
+        }
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put( "ids", ids );
+        List<ReservationSchemeInfo> schems = schemeService.index( params );
+
         return ResponseEntity.status( HttpStatus.OK ).body( groups );
+    }
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity show( HttpServletRequest request, @PathVariable("id") int id ) {
+        ReservationGroupInfo info = service.show( id );
+
+        // 현재 그룹에 속해있는 스키마들을 가져온다
+        List<Integer> ids = new ArrayList<Integer>();
+        ids.add( info.getIdx() );
+        HashMap<String, Object> params = new HashMap<String, Object>();
+        params.put( "ids", ids );
+        List<ReservationSchemeInfo> schems = schemeService.index( params );
+        info.setSchemes( schems );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( info );
     }
 }
