@@ -99,16 +99,7 @@ class IotDeviceOfScan extends Component {
 
         let obj= { ...d };
 
-        // 구현해야됭
-        switch( d.moAttr ){
-            case 'option':
-                d.stsValue = value;
-                break;
-
-            case 'level':
-                d.stsValue = value;
-                break;
-        }
+        d.stsValue = value;
 
         this.updateSendingData( d );
     }
