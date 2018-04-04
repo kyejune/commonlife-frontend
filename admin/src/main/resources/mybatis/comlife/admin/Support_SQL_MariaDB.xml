@@ -47,6 +47,83 @@
             DISP_ORDER=#{dispOrder};
     </update>
 
+
+
+    <!-- /////////  Ticket  ///////// -->
+    <select id="countTicketList" resultType="java.lang.Integer">
+        SELECT
+            COUNT(*) as COUNT
+        FROM
+            `CL_SUPPORT_TICKETS`
+    </select>
+
+
+    <select id="selectTicketList" parameterType="java.util.Map" resultType="ticketInfo">
+        SELECT
+          TKT_IDX,
+          TKT.USR_ID,
+          USR.USER_NM,
+          TKT.CMPLX_ID,
+          TKT.CATE_IDX,
+          CATE.CATE_NM,
+          TKT.CONTENT,
+          TKT.DEL_YN,
+          TKT.REG_DTTM,
+          TKT.UPD_DTTM,
+          TKT.ADMIN_DESC,
+          TKT.RESP_YN,
+          TKT.RESP_ADMIN_IDX,
+          ADMIN.ADMIN_NM AS RESP_ADMIN_NM,
+          TKT.RESP_DTTM
+        FROM
+            CL_SUPPORT_TICKETS AS TKT
+            LEFT JOIN CL_SUPPORT_CATE AS CATE
+                ON TKT.CATE_IDX = CATE.CATE_IDX
+            JOIN USR_INFO AS USR
+                ON USR.USR_ID = TKT.USR_ID
+            LEFT JOIN CL_ADMIN_INFO AS ADMIN
+                ON ADMIN.ADMIN_IDX = TKT.RESP_ADMIN_IDX
+        WHERE TKT.CMPLX_ID=#{cmplxId}
+        ORDER BY  TKT_IDX  DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+            <if test="offset != null">
+                OFFSET #{offset}
+            </if>
+        </if>
+        ;
+    </select>
+
+
+    <!-- /////////  Ticket File  ///////// -->
+    <select id="selectTicketFile" parameterType="java.util.Map" resultType="ticketFileInfo">
+        SELECT
+          *
+        FROM
+          `CL_SUPPORT_TICKETS_FILE`
+        <choose>
+            <when test="ticketFileIdx != null">
+                WHERE   `TKT_FILE_IDX` = #{ticketFileIdx}
+            </when>
+            <when test="ticketIdx != null">
+                WHERE   `TKT_IDX` = #{ticketIdx}
+            </when>
+            <when test="ticketIdxs != null">
+                WHERE   `TKT_IDX`
+                IN
+                <foreach collection="ticketIdxs" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                1 != 1 -- 상기 조건 중에 해당하지 않으면 반드시 실패
+            </otherwise>
+        </choose>
+    </select>
+
+
+
+
     <!-- todo: 아래의 사용하지 않는 query 삭제할 것 -->
     <select id="selectBoardList" parameterType="boardInfo" resultType="boardInfo">
         /* 공통게시판 리스트 조회 */
