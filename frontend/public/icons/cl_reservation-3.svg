@@ -1,7 +1,4 @@
-cl_device-9.svg
-        cl_device-10.svg
-        cl_device-11.svg
-        cl_device-12.svg<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45">
+<svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 45 45">
     <g fill="none" fill-rule="evenodd">
         <circle cx="22.5" cy="22.5" r="18.5" fill="#D3D3D3"/>
         <path fill="#006CB0" d="M13 23.2L20.6 34h3.8L32 23.2z"/>
