@@ -70,10 +70,10 @@ class IotDevice extends Component {
 
     // 즉시실행 토글버튼
     onUpdateSwitch=( bool, data )=>{
-        console.log( data.data.moAttr, ": ", bool, data.data );
+        console.log( this.state.action, data.data.moAttr, ": ", bool, data.data );
 
         // 기기제어
-        if( this.state.action === 'ctrl ') {
+        if( this.state.action === 'ctrl') {
             Iot.setIotToggleDevice(data.data, bool, success => {
                 if (!success) this.loadDeviceInformation();
             });
@@ -90,7 +90,7 @@ class IotDevice extends Component {
         console.log( data.data.moAttr, ": ", value, data.data );
 
         // 기기제어
-        if( this.state.action === 'ctrl ') {
+        if( this.state.action === 'ctrl') {
             let updateData = Object.assign({}, this.state.updateData);
             updateData['key'] = data.data;
 
@@ -136,7 +136,7 @@ class IotDevice extends Component {
 
                         <div className="ml-auto">
                             <Switch offOnly={ item.protcKey === 'valve' }
-                                    defaultValue={ item.maxVlu === item.currSts }
+                                    checked={ item.maxVlu === item.currSts }
                                     onChange={ this.onUpdateSwitch }
                                     data={item}
                             />
