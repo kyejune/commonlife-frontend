@@ -1885,7 +1885,6 @@ public class IotInfoServiceImpl implements IotInfoService {
             this.removeMapKeyIfExisted(e, "CMPLX_ID");
             this.removeMapKeyIfExisted(e, "HOME_ID");
             this.removeMapKeyIfExisted(e, "KIND_CD");
-            this.removeMapKeyIfExisted(e, "THINGS_ID");
 
             imgSrc = (String)e.get("IMG_SRC");
             if( imgSrc != null && !"".equals(imgSrc)) {
