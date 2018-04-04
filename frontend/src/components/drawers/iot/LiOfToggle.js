@@ -46,7 +46,7 @@ class LiOfToggle extends Component {
                     }
                 </div>
 
-                <Switch className="ml-auto" defaultValue={ this.state.checked } onChange={ this.onSwitch }/>
+                <Switch className="ml-auto" checked={ this.state.checked } onChange={ this.onSwitch }/>
             </li>
         );
     }

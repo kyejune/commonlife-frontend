@@ -6,22 +6,19 @@ class Switch extends Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            checked: this.props.defaultValue || false,
+            checked: this.props.defaultChecked || this.props.checked || false,
             offOnly: this.props.offOnly || false,
         };
     }
 
     componentWillReceiveProps(nextProps){
-        this.setState({
-            checked: nextProps.defaultValue,
-            offOnly: nextProps.offOnly,
-        });
+        this.setState( nextProps );
     }
 
-    onChange=()=>{
+    onChange=( event )=>{
         if( this.state.offOnly && this.state.checked === false ) return;
 
-        const newChecked = !this.state.checked;
+        const newChecked = this.state.checked?false:true;
         this.setState({
             checked: newChecked,
         });

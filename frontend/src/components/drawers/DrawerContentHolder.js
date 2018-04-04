@@ -79,6 +79,7 @@ class DrawerContentHolder extends Component {
             React.cloneElement( child, {
                 updateTitle: title=> this.updateTitle(title),
                 close: ()=>this.onClose(),
+                ...Store.getDrawerData( this.props.drawer ),
             })
         );
 

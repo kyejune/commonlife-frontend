@@ -11,6 +11,10 @@ import DrawerContentHolder from "./DrawerContentHolder";
 import WriteDrawer from "./WriteDrawer";
 import BranchSeletor from "./BranchSeletor";
 import NotificationCenter from "./NotificationCenter";
+import ConditionalExpression from "./ConditionalExpression";
+import TimeSelector from "../ui/TimeSelector";
+import TimesSelector from "../ui/TimesSelector";
+import IotDeviceOfScan from "./iot/IotDeviceOfScan";
 
 
 
@@ -61,6 +65,28 @@ class DrawerInjector extends Component{
                     <BranchSeletor/>
                 </DrawerContentHolder>
             </BottomDrawer>
+
+
+            {/* 센서 편집 - 조건식 */}
+            <DrawerWrapper drawer="edit-sensor-if" className="cl-bg--lightgray" close >
+                <ConditionalExpression/>
+            </DrawerWrapper>
+
+            {/* 센서 편집 - 특정시간 */}
+            <DrawerWrapper drawer="edit-sensor-time" className="cl-bg--lightgray"  close >
+                <TimeSelector/>
+            </DrawerWrapper>
+
+            {/* 센서 편집 - 구간시간 */}
+            <DrawerWrapper drawer="edit-sensor-duration" className="cl-bg--lightgray"  close >
+                <TimesSelector/>
+            </DrawerWrapper>
+
+            {/* 모드-> 기기편집 */}
+            <DrawerWrapper drawer="edit-scan-device"  className="cl-bg--lightgray"  close >
+                <IotDeviceOfScan/>
+            </DrawerWrapper>
+
 
 
 

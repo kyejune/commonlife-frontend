@@ -32,6 +32,11 @@
         background-image: url("images/bg-3@2x.png");
     }
 
+    &.cl-bg--lightgray{
+        background-image: none;
+        background-color: #E9E9E9;
+    }
+
     color: white;
 
     a {
@@ -1233,6 +1238,8 @@ a.cl-map__link--branch{
             border: 2px solid #195fb1;
             margin-left: -1px;
             box-sizing: content-box;
+            width: calc( 100% / 7 - 3px );
+            height: 50px - 3px;
         }
 
         &.cl--disabled{
@@ -1244,4 +1251,44 @@ a.cl-map__link--branch{
         }
     }
 
+}
+
+
+/* 조건문 입력기 */
+.cl-condition-expression{
+//ic-arrow-down@3x
+
+    font-size: 14px;
+    color: rgba( 0, 0, 0, 0.9 );
+
+    .cl-value{
+        min-width: 60px;
+        font-size: 16px;
+        line-height: 1.4em;
+        border-bottom: 2px solid $md-primary-color;
+        padding-bottom: 4px;
+    }
+
+    select{
+        width: 110px;
+        background-image: url('images/ic-arrow-down@3x.png');
+        background-repeat: no-repeat;
+        background-position: right center;
+        background-size: 24px;
+        border-radius: 0;
+    }
+}
+
+
+/* 시나리오내 기기 속성 토글 버튼 */
+.cl-device-of-scna-toggle__button{
+    width: 30px;
+    height: 20px;
+    background-image: url('images/a-off@3x.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+
+    &.cl--selected{
+        background-image: url('images/a-on@3x.png');
+    }
 }

@@ -886,3 +886,21 @@ header.cl-mode-setting__header{
         background-position: right -4px;
     }
 }
+
+
+
+
+
+/* 시나리오/모드에 붙어있는 기기리스트 */
+.cl-device-props-of-scna__list{
+
+    li{
+        pointer-events: none;
+
+        &.cl--editable{
+            pointer-events: auto;
+        }
+
+    }
+
+}
