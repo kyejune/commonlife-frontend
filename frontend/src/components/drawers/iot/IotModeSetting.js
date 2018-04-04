@@ -10,6 +10,15 @@ import classNames from 'classnames';
 import moment from 'moment';
 import Store from 'scripts/store';
 
+
+
+
+/*
+*
+*  센서는 thingsAttrIfCond 값으로,
+*  기기는 stsValue로 읽기/쓰기
+*
+* */
 class IotModeSetting extends Component {
 
     constructor(props) {
@@ -29,7 +38,7 @@ class IotModeSetting extends Component {
             // add 시나리오 상태
             name:'',
             checkedMap:{},// 체크박스 선택된건 기억용
-            updatedScnaThings:{}
+            updatedScnaThings:{} // 디바이스는 변경된 부분만 저장
         }
 
     }
@@ -38,19 +47,30 @@ class IotModeSetting extends Component {
     // Mode 편집 상태일경우 데이터 불러오기
     componentDidMount(){
         if( !this.state.isMode ) return;
+        this.getModeData();
+    }
 
+    // 모드 값 로드
+    getModeData=()=>{
         Iot.getModeDetail( this.state.modeName, data=>{
             console.log( '모드 상세정보:', data );
 
-
             let checkedMap = [];
             data.scnaIfThings.forEach( item => {
-                checkedMap[item.deviceId] = (item.currSts === item.maxVlu);
+                checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] = (item.thingsAttrIfCond === item.maxVlu);
+            });
+
+            data.scnaThings.forEach( item => {
+                checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] = (item.stsValue === item.maxVlu);
             });
 
             this.setState( { checkedMap:checkedMap, modeData:data, sendingData:Object.assign({}, data ) });
+
         });
     }
+
+
+
 
     /* Create Scenario */
     // 시나리오 생성 상태에서 이름 변경
@@ -65,17 +85,19 @@ class IotModeSetting extends Component {
     /*사용된 센서 ----------------------------------------------------------*/
     // 센서 토글
     updateSensorCheck( bool, index ){
-        this.updateCheck( bool, this.state.modeData.scnaIfThings[index].deviceId );
+        const item = this.state.modeData.scnaIfThings[index]
+        console.log( item );
+        this.updateCheck( bool, `${item.deviceId}-${item.stsId}-${item.thingsId}` );
 
         let d = this.state.sendingData.scnaIfThings[index];
-            d.currSts = bool?d.maxVlu:d.minVlu;
+            d.thingsAttrIfCond = bool?d.maxVlu:d.minVlu;
         this.state.sendingData.scnaIfThings[index] = d;
     }
 
     // 조건문 콜백
     updateCondition( value, index ){
         let d = this.state.sendingData.scnaIfThings[index];
-            d.currSts = value;
+            d.thingsAttrIfCond = value;
         this.state.sendingData.scnaIfThings[index] = d;
     }
 
@@ -95,11 +117,13 @@ class IotModeSetting extends Component {
     /* 사용된 기기 ----------------------------------------- */
     // 디바이스 토글
     updateDeviceCheck( bool, index ){
-        this.updateCheck( bool, this.state.modeData.scnaThings[index].deviceId ); // 토글 변경 적용 용
+        const item = this.state.modeData.scnaThings[index];
+        this.updateCheck( bool, `${item.deviceId}-${item.stsId}-${item.thingsId}` ); // 토글 변경 적용 용
 
         let d = this.state.sendingData.scnaThings[index];
         let updateObj = Object.assign({}, this.state.updatedScnaThings );
-        updateObj[`${d.deviceId}-${d.stsId}-${d.thingsId}`] = { thingsId:d.thingsId, deviceId: d.deviceId, stsId:d.stsId, stsValue: bool?d.maxVlu:d.minVlu };
+        updateObj[`${d.deviceId}-${d.stsId}-${d.thingsId}`] =
+            { thingsId:d.thingsId, deviceId: d.deviceId, stsId:d.stsId, stsValue: bool?d.maxVlu:d.minVlu, chk:"Y" };
 
         this.setState({ updatedScnaThings: updateObj });
     }
@@ -112,13 +136,14 @@ class IotModeSetting extends Component {
 
     // 변경값 적용
     onApply=()=>{
-        const data = { ...this.state.sendingData, scnaThings:Object.values(this.state.updatedScnaThings) };
+        const prevData = this.state.sendingData;
+        const scna = prevData.scna[0];
+        const data = { ...prevData, scna:[{msg:scna.msg, scnaNm:scna.scnaNm}], scnaThings:Object.values(this.state.updatedScnaThings) };
 
-        console.log( '적용:', data );
-        Iot.updateAutomationOrScenario( this.state.sendingData.scna[0].scnaId, data, res=>{
-           console.log( '적용결과:', res );
+        // console.log( '적용:', data );
+        Iot.updateMode( scna.mode, data, res=>{
+           alert( res.msg );
         });
-        // console.log( 'scnaThigns:', Object.values(this.state.updatedScnaThings) );
     }
 
 
@@ -161,9 +186,10 @@ class IotModeSetting extends Component {
 
             // 일반 센서추가
             Sensors = modeData.scnaIfThings.map( (item, index)=>{
+
                 if( item.deviceType && item.deviceType === 'button')
                     return <LiOfToggle key={index} icon={item.imgSrc} name={item.stsNm}
-                                       checked={ this.state.checkedMap[item.deviceId] }
+                                       checked={ this.state.checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] }
                                        onSwitch={ bool => this.updateSensorCheck( bool, index ) }
                                        />
                 else
@@ -198,7 +224,7 @@ class IotModeSetting extends Component {
             Devices = modeData.scnaThings.map( (item, index)=>{
                 if( item.deviceType && item.deviceType === 'button')
                     return <LiOfToggle key={index} icon={item.imgSrc} name={item.deviceNm}
-                                       checked={ this.state.checkedMap[item.deviceId] || (item.currSts === item.maxVlu) }
+                                       checked={ this.state.checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] }
                                        onSwitch={ bool => this.updateDeviceCheck( bool, index ) }
                     />
                 else
@@ -263,7 +289,7 @@ class IotModeSetting extends Component {
 
 
                 <footer className={ classNames("cl-flex", "cl-opts__footer", { "cl-opts__footer--hide": ( Sensors.length + Devices.length === 0 ) } ) }>
-                    <button>취소</button>
+                    <button onClick={ this.getModeData }>취소</button>
                     <button className="ml-auto cl-flex mr-1em" onClick={ this.onApply }>
                         <img src={checkSrc} alt="확인" width="28" height="28"/>
                         <span className="color-primary ml-03em">확인</span>

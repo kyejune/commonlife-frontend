@@ -22,7 +22,9 @@ class ConditionalExpression extends Component {
 
     render() {
 
-        const { stsNm, condi, unit, thingsAttrIfCond, options = [] } = this.props;
+        const { stsNm, currSts, unit, thingsAttrIfCond, options = [] } = this.props;
+
+        console.log('조건문:', this.props );
 
         return (
             <div>
@@ -32,10 +34,10 @@ class ConditionalExpression extends Component {
 
                     <div className="cl-flex mt-2em">
                         <span className="cl-bold mr-1em">{stsNm}</span>
-                        <span className="cl-value cl-bold mr-04em">{thingsAttrIfCond}</span>
+                        <span className="cl-value cl-bold mr-04em">{currSts}</span>
                         <span>{unit}</span>
 
-                        <select ref={ r => this.selector = r } className="cl-value ml-1em" defaultValue={condi}>
+                        <select ref={ r => this.selector = r } className="cl-value ml-1em" defaultValue={thingsAttrIfCond}>
                             {options.map( item =>{
                               return <option key={item.condi} value={item.condi}>{item.comnCdnm}</option>
                             })}

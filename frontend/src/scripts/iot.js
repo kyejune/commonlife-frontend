@@ -251,12 +251,13 @@ export default {
     },
 
 
-    /* Iot 30:시나리오/오토메이션 업데이트 */
-    updateAutomationOrScenario( scnaId, data, callback ){
+    /* Iot 23: 모드 업데이트 */
+    updateMode( modeId, data, callback ){
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/automation/128
-        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${scnaId}`, data )
+        //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/modes/CM01103
+        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${modeId}`, data )
             .then(response => {
-                callback(response.data.data);
+                callback(response.data);
             });
     },
 

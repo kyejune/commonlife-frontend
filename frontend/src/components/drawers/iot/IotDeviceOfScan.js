@@ -102,7 +102,7 @@ class IotDeviceOfScan extends Component {
         // 구현해야됭
         switch( d.moAttr ){
             case 'option':
-                d.stsValue = d.option[value].VAL;
+                d.stsValue = value;
                 break;
 
             case 'level':
@@ -118,7 +118,8 @@ class IotDeviceOfScan extends Component {
     updateSendingData( data ){
         let obj = Object.assign({}, this.state.updateData );
         // 고유키 : deviceId-stsId-thingsId
-        obj[`${data.deviceId}-${data.stsId}-${data.thingsId}`] = { thingsId:data.thingsId, deviceId: data.deviceId, stsId:data.stsId, stsValue: data.stsValue };
+        obj[`${data.deviceId}-${data.stsId}-${data.thingsId}`] =
+            { thingsId:data.thingsId, deviceId: data.deviceId, stsId:data.stsId, stsValue: data.stsValue, chk:"Y" };
         this.setState({ updateData: obj});
 
         console.log( 'updateSendingData:', Object.values(obj) );
@@ -194,7 +195,7 @@ class IotDeviceOfScan extends Component {
 
                     const oText = sjf.filter({'VAL': item.stsValue}).data(item.option).wantArray().exec()[0].NM;
                     const Opts = item.option.map((optionItem, optionIndex) => {
-                        return <option value={optionIndex} key={optionIndex}>{optionItem.NM}</option>
+                        return <option value={optionItem.VAL} key={optionIndex}>{optionItem.NM}</option>
                     });
 
                     return <li key={index} className={classNames({ 'cl--editable':btnOn })}>
@@ -205,7 +206,7 @@ class IotDeviceOfScan extends Component {
                             </h4>
                         </div>
 
-                        <select name="cl-options" onChange={evt => this.onChangeOthers(evt.target.value, {data: item})}>
+                        <select name="cl-options" defaultValue={item.stsValue} onChange={evt => this.onChangeOthers(evt.target.value, {data: item})}>
                             {Opts}
                         </select>
                     </li>

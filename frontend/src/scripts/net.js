@@ -52,9 +52,6 @@ axios.interceptors.response.use(function (response) {
 });
 
 
-// let communityData = null;
-
-
 
 export default {
 ///posts/?postType=feed&page=2
