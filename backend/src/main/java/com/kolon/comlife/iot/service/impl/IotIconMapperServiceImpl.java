@@ -123,16 +123,16 @@ public class IotIconMapperServiceImpl implements IotIconMapperService {
 //        iconMap.put("sub_icon_91_1", "");    // 로봇청소기
         iconMap.put("sub_icon_36_1", "cl_status_1");    // 에너지 사용량
 //        iconMap.put("sub_icon_29_1", "");    // 동체감시센서
-        iconMap.put("main_life_weather_icon_1", "cl_life-5");    // 날씨 - 가치정보 - 해
-        iconMap.put("main_life_weather_icon_2", "cl_life-5");    // 날씨 - 가치정보 - 해+구름
-        iconMap.put("main_life_weather_icon_3", "cl_life-5");    // 날씨 - 가치정보 - 구름
-        iconMap.put("main_life_weather_icon_4", "cl_life-5");    // 날씨 - 가치정보 - 구름+구름
-        iconMap.put("main_life_weather_icon_5", "cl_life-5");    // 날씨 - 가치정보 - 구름+비
-        iconMap.put("main_life_weather_icon_6", "cl_life-5");    // 날씨 - 가치정보 - 구름+눈
-        iconMap.put("main_life_weather_icon_7", "cl_life-5");    // 날씨 - 가치정보 - 구름+눈+비
-        iconMap.put("main_life_weather_icon_8", "cl_life-5");    // 날씨 - 가치정보 - 먹구름
-        iconMap.put("main_life_weather_icon_9", "cl_life-5");    // 날씨 - 가치정보 - 먹구름 + 번개
-        iconMap.put("main_life_weather_icon_10", "cl_life-5");    // 날씨 - 가치정보 - 먹구름 + 번개 + 비
+        iconMap.put("main_life_weather_icon_1", "cl_weather-3");    // 날씨 - 가치정보 - 해
+        iconMap.put("main_life_weather_icon_2", "cl_weather-5");    // 날씨 - 가치정보 - 해+구름
+        iconMap.put("main_life_weather_icon_3", "cl_weather-4");    // 날씨 - 가치정보 - 구름
+        iconMap.put("main_life_weather_icon_4", "cl_weather-4");    // 날씨 - 가치정보 - 구름+구름
+        iconMap.put("main_life_weather_icon_5", "cl_weather-8");    // 날씨 - 가치정보 - 구름+비
+        iconMap.put("main_life_weather_icon_6", "cl_weather-9");    // 날씨 - 가치정보 - 구름+눈
+        iconMap.put("main_life_weather_icon_7", "cl_weather-9");    // 날씨 - 가치정보 - 구름+눈+비
+        iconMap.put("main_life_weather_icon_8", "cl_weather-4");    // 날씨 - 가치정보 - 먹구름
+        iconMap.put("main_life_weather_icon_9", "cl_weather-11");    // 날씨 - 가치정보 - 먹구름 + 번개
+        iconMap.put("main_life_weather_icon_10", "cl_weather-11");    // 날씨 - 가치정보 - 먹구름 + 번개 + 비
         iconMap.put("main_life_weather_icon_11", "cl_life-5");    // 날씨 - 가치정보 - 회오리
         iconMap.put("main_life_weather_icon_12", "cl_life-5");    // 날씨 - 가치정보 - 황사
         iconMap.put("main_life_weather_icon_13", "cl_life-5");    // 날씨 - 가치정보 - 안개
