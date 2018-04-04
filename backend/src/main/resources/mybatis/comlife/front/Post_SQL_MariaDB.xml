@@ -53,10 +53,10 @@
         <if test="limit != null">
         LIMIT
             #{limit}
-        </if>
-        <if test="offset != null">
-        OFFSET
-            #{offset}
+            <if test="offset != null">
+                OFFSET
+                #{offset}
+            </if>
         </if>
     </select>
 
