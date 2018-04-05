@@ -95,9 +95,10 @@ class IotModeSetting extends Component {
     }
 
     // 조건문 콜백
-    updateCondition( value, index ){
+    updateCondition( {basic, condition}, index ){
         let d = this.state.sendingData.scnaIfThings[index];
-            d.thingsAttrIfCond = value;
+            d.thingsAttrIfCond = basic;
+            d.condi = condition;
         this.state.sendingData.scnaIfThings[index] = d;
     }
 

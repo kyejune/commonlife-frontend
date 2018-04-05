@@ -9,7 +9,7 @@ class Checkbox extends Component {
         super(props);
 
         this.state = {
-            checked: this.props.value || false,
+            checked: this.props.checked || false,
         }
     }
 

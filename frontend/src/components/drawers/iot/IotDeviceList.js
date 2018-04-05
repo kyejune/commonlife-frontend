@@ -13,7 +13,7 @@ class IotDeviceCategory extends Component {
 		super( props );
 
 		const action = props.match.params.action;
-		const dId = props.match.params.option2 || props.match.params.option1;
+		const dId = props.match.params.option4 || props.match.params.option1;
 
 		const isRoom = !isNaN( dId ); // 숫자형이면 룸별 목록, 문자 조합이면 공간별 목록으로 구분
 
@@ -21,7 +21,7 @@ class IotDeviceCategory extends Component {
 			isRoom: isRoom,
 			cateId: dId,
 			deviceData: [],
-            modeAdd: action === 'my',
+            modeAdd: action === 'scenario',
 			addingList:[],
 		};
 
@@ -87,11 +87,11 @@ class IotDeviceCategory extends Component {
 					else
 						return <LiOfCtrl key={index} name={data.thingsNm} desc={data.cateNm}
                                          icon={data.imgSrc}
-										 to={{ pathname: `${this.props.location.pathname}/device/${data.deviceId}`}}
+										 to={`${this.props.location.pathname}/device/${data.deviceId}`}
 
 						/>;
 
-				case 'my':
+				case 'scenario':
                     return <LiOfCheck key={index} name={data.mNm} icon={data.btImgSrc} desc={data.cateNm}
 									  data={data}
 									  checked={this.state.addingList.indexOf( data.myIotId ) >= 0 }

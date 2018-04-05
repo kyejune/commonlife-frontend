@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {arrayMove, SortableContainer, SortableElement, SortableHandle} from "react-sortable-hoc";
 import Checkbox from "./Checkbox";
 import IconLoader from "./IconLoader";
+import classNames from "classnames";
 
 class EditableList extends Component {
 
@@ -64,7 +65,7 @@ class EditableList extends Component {
 
         const SortableItem = SortableElement(({ value }) =>
             <li>
-                <Checkbox className="mr-1em" index={value.idx} value={ this.state.checkeds[value.idx] } onChange={ this.onCheckboxChange }/>
+                <Checkbox className="mr-1em" index={value.idx} checked={ this.state.checkeds[value.idx] } onChange={ this.onCheckboxChange }/>
                 {/*<Link to={value.to} className="cl-flex">*/}
                     <IconLoader className="cl__thumb--rounded" src={value.imgSrc}/>
                     <div>

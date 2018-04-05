@@ -3,18 +3,39 @@ import Store from "../../scripts/store";
 
 class ConditionalExpression extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: props.thingsAttrIfCond,
+        }
 
-    onChangeCondition = (event) => {
-        let val = event.target.value;
+    }
 
-        console.log(val);
+
+    // onChangeCondition = (event) => {
+    //     let val = event.target.value;
+    //
+    //     console.log(val);
+    // }
+
+    onChangeValue = ( event ) => {
+
+        // let val = Math.min( Math.max( event.target.value, this.props.minVlu ), this.props.maxVlu );
+        // if( isNaN(val) ) val = parseInt((this.props.maxVlu - this.props.minVlu)/2);
+
+        this.setState({
+            value: event.target.value,
+        });
+
+
     }
 
     onApply=()=>{
-        const val = this.selector.options[this.selector.selectedIndex].value;
+        const optionValue = this.selector.options[this.selector.selectedIndex].value;
+        const basicValue = Math.min( Math.max( this.state.value, this.props.minVlu ), this.props.maxVlu );
 
         if( this.props.callback )
-            this.props.callback( val, this.props.deviceId );
+            this.props.callback( { basic:basicValue, condition:optionValue }, this.props.deviceId );
 
         Store.popDrawer();
     }
@@ -22,7 +43,7 @@ class ConditionalExpression extends Component {
 
     render() {
 
-        const { stsNm, currSts, unit, thingsAttrIfCond, options = [] } = this.props;
+        const { stsNm, unit, condi, options = [] } = this.props;
 
         console.log('조건문:', this.props );
 
@@ -34,10 +55,11 @@ class ConditionalExpression extends Component {
 
                     <div className="cl-flex mt-2em">
                         <span className="cl-bold mr-1em">{stsNm}</span>
-                        <span className="cl-value cl-bold mr-04em">{currSts}</span>
+                        <input type="number" value={this.state.value} onChange={ this.onChangeValue }
+                               className="cl-value cl-bold mr-04em w-20"/>
                         <span>{unit}</span>
 
-                        <select ref={ r => this.selector = r } className="cl-value ml-1em" defaultValue={thingsAttrIfCond}>
+                        <select ref={ r => this.selector = r } className="cl-value ml-1em" defaultValue={condi}>
                             {options.map( item =>{
                               return <option key={item.condi} value={item.condi}>{item.comnCdnm}</option>
                             })}

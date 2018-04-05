@@ -34,6 +34,7 @@ class IotDeviceTabList extends Component {
 		if( this.state.tabIndex === undefined ) return <div/>;
 
 		const List = this.state.tabData[ this.state.tabIndex ].map( ( data, index )=> {
+
 			return <li key={index}>
 				<Link className="cl-flex" to={( this.state.tabIndex === 0 ? { pathname: `${this.props.location.pathname}/${data.roomId}` } : { pathname: `${this.props.location.pathname}/${data.cateCd}` } )}>
 					<IconLoader className="cl__thumb" src={data.imgSrc}/>

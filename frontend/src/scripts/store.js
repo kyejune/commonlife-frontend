@@ -17,6 +17,13 @@ if( window.location.protocol === 'file:' && window.location.pathname.includes('C
 host = 'https://clback.cyville.net'; // 테스트용
 
 
+// 생성용 시나리오/자동화 객체
+export const Scenario = observable({
+    sensors:[],
+    devices:[],
+});
+
+
 const Store = observable({
 
     api:host,

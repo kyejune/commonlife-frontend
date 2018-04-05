@@ -24,6 +24,7 @@ import MyEditor from "../drawers/MyEditor";
 import ExposableEditor from "../drawers/iot/ExposableEditor";
 import TimesSelector from "../ui/TimesSelector";
 import TimeSelector from "../ui/TimeSelector";
+import Automations from "../drawers/iot/Automations";
 
 class HomeIoT extends Component {
 
@@ -80,7 +81,10 @@ class HomeIoT extends Component {
 
 			// 시나리오 +
             scenario:{
-                scenario:'iot-mode-detail',
+                scenario:'iot-scenario',
+				add:'iot-mode-detail',
+
+
                 'edit-sensor':'iot-sensor-editor',
                 'edit-device':'iot-device-editor',
                 'add-device':'iot-device-category',
@@ -91,6 +95,7 @@ class HomeIoT extends Component {
 
 		const action = this.props.match.params.action;
 		const map = compMap[action];
+
 
 		Store.clearDrawer();
 		if( action === undefined ) return;
@@ -200,6 +205,13 @@ class HomeIoT extends Component {
             <DrawerWrapper drawer="iot-mode-detail" title="생성/설정 변경" back >
                 <IotModeSetting/>
             </DrawerWrapper>
+
+
+			{/* 자동화 리스트 목록 */}
+            <DrawerWrapper drawer="iot-scenario" title="자동화 리스트" back >
+                <Automations/>
+            </DrawerWrapper>
+
 
             {/* 기기 카테고리 목록, 경로에 따라 풀 리스트나 추가 가능한 리스트로 나눠서 보여줌 */}
             <DrawerWrapper drawer="iot-device-category" title="기기 카테고리" back className="cl-bg--light">

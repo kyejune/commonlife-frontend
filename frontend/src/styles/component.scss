@@ -3,6 +3,25 @@
     display: none;
 }
 
+
+
+.cl-content--empty{
+    &:before{
+        content:'콘덴츠가 없습니다.';
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: transparent url('images/ic-empty-page.png') no-repeat;
+        background-position: center calc( 40vh - 104px );
+        background-size: 104px;
+        width: 100%;
+        height: 100%;
+        padding-top: calc(40vh + 1em);
+        color: rgba( 0, 0, 0, 0.2 );
+        text-align: center;
+    }
+}
+
 /* 빗금 */
 .cl-deviant-crease{
     background: linear-gradient(45deg,
