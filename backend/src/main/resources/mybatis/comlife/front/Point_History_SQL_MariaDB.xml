@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PointHistory">
+
+    <insert id="create" parameterType="pointHistoryInfo">
+        INSERT INTO
+        `POINT_HIST`
+        (
+            `HOME_HEAD_ID`,
+            `USR_ID`,
+            `POINT`,
+            `DESCRIPTION`,
+            `COMMANDER_ID`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        )
+        VALUES
+        (
+            #{homeHeadID},
+            #{usrID},
+            #{point},
+            #{description},
+            #{commanderID},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        );
+
+    </insert>
+
+</mapper>

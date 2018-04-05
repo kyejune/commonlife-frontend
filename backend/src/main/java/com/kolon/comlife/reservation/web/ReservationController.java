@@ -73,6 +73,14 @@ public class ReservationController {
                     .body( new SimpleErrorInfo( "종료 일시가 유효하지 않습니다." ) );
         }
 
+        Date now = new Date();
+
+        if( startDttm.getTime() - now.getTime() < 0 ) {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( new SimpleErrorInfo( "시작 일시를 과거로 설정할 수 없습니다." ) );
+        }
+
         if( endDttm.getTime() - startDttm.getTime() < 0 ) {
             return ResponseEntity
                     .status( HttpStatus.BAD_REQUEST )
@@ -131,6 +139,14 @@ public class ReservationController {
                     .body( new SimpleErrorInfo( "종료 일시가 유효하지 않습니다." ) );
         }
 
+        Date now = new Date();
+
+        if( startDttm.getTime() - now.getTime() < 0 ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("시작 일시를 과거로 설정할 수 없습니다."));
+        }
+
         if( endDttm.getTime() - startDttm.getTime() < 0 ) {
             return ResponseEntity
                     .status( HttpStatus.BAD_REQUEST )
@@ -163,6 +179,14 @@ public class ReservationController {
             return ResponseEntity
                     .status( HttpStatus.BAD_REQUEST )
                     .body( new SimpleErrorInfo( "시작 일시가 유효하지 않습니다." ) );
+        }
+
+        Date now = new Date();
+
+        if( startDttm.getTime() - now.getTime() < 0 ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("시작 일시를 과거로 설정할 수 없습니다."));
         }
 
         // TODO: 예약 상태 체크 필요
