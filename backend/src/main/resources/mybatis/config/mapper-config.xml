@@ -23,6 +23,7 @@
         <package name="com.kolon.comlife.status.model" />
         <package name="com.kolon.comlife.support.model" />
         <package name="com.kolon.comlife.users.model" />
+        <package name="com.kolon.comlife.point.model" />
 
         <!-- 패키지 com.kolon.common은 추가하지 마시오 -->
         <package name="com.kolonbenit.iot" />
