@@ -1540,7 +1540,7 @@ public class IotInfoServiceImpl implements IotInfoService {
             int complexId, int homeId, boolean modeFlag) throws Exception {
         IotModeAutomationInfo conditionsInfo = new IotModeAutomationInfo();
         HttpGetRequester      requester;
-        Map<String, Map>      result;
+        Map<String, List>     result;
         String                anyId = "-1"; // 모든 값을 가져오기 위해 없는 값입력
 
         requester = new HttpGetRequester(
@@ -1554,20 +1554,40 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         // 1. result data 리맵핑
         try {
-            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_THINGS") );
-            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_SPC") );
-            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_APLY") );
-            this.remapResultScenarioDetail( (List)result.get("SCNA_IF_OPTION") );
+            this.remapResultScenarioDetail( result.get("SCNA_IF_THINGS") );
+            this.remapResultScenarioDetail( result.get("SCNA_IF_SPC") );
+            this.remapResultScenarioDetail( result.get("SCNA_IF_APLY") );
+
+            if( result.get("SCNA_IF_OPTION") == null ) {
+                // BUGBUG: Front에서 조건을 표시하고, 값을 가져오는데 SCNA_IF_OPTION이 필요하여 HARDCODE 함
+                //  만약, 조건 코드를 변경할 경우, 본 값도 변경해야 함
+                List scnaIfOption = new ArrayList();
+                Map condi = new HashMap();
+                condi.put("CONDI", "CM00801");
+                condi.put("COMN_CDNM", "같다");
+                scnaIfOption.add(condi);
+                condi = new HashMap();
+                condi.put("CONDI", "CM00806");
+                condi.put("COMN_CDNM", "이상");
+                scnaIfOption.add(condi);
+                condi = new HashMap();
+                condi.put("CONDI", "CM00807");
+                condi.put("COMN_CDNM", "이하");
+                scnaIfOption.add(condi);
+                result.put("SCNA_IF_OPTION", scnaIfOption);
+            } else {
+                this.remapResultScenarioDetail( result.get("SCNA_IF_OPTION") );
+            }
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.getMessage());
         }
 
         // 2. camelCase로 변환
-        conditionsInfo.setScnaIfThings( convertListMapDataToCamelCase((List)result.get("SCNA_IF_THINGS")) );
-        conditionsInfo.setScnaIfSpc( convertListMapDataToCamelCase((List)result.get("SCNA_IF_SPC")) );
-        conditionsInfo.setScnaIfAply( convertListMapDataToCamelCase((List)result.get("SCNA_IF_APLY")) );
-        conditionsInfo.setScnaIfOption( convertListMapDataToCamelCase((List)result.get("SCNA_IF_OPTION")) );
+        conditionsInfo.setScnaIfThings( convertListMapDataToCamelCase(result.get("SCNA_IF_THINGS")) );
+        conditionsInfo.setScnaIfSpc( convertListMapDataToCamelCase(result.get("SCNA_IF_SPC")) );
+        conditionsInfo.setScnaIfAply( convertListMapDataToCamelCase(result.get("SCNA_IF_APLY")) );
+        conditionsInfo.setScnaIfOption( convertListMapDataToCamelCase(result.get("SCNA_IF_OPTION")) );
 
         if( modeFlag ) {
             conditionsInfo.setMsg("'모드'의 추가조건(IF) 정보");
@@ -1667,7 +1687,7 @@ public class IotInfoServiceImpl implements IotInfoService {
             v = (String) e.get("MY_IOT_GB_CD");
             if( v != null ) {
                 switch(v) {
-                    case "MB01701":
+                    case "MB01701":     // device
                         e.put("BT_TYPE", "device");
                         e.put("MY_IOT_ID", String.valueOf(e.get("M_ID")));
                         if(e.get("BT_IMG_SRC") == null) {
@@ -1685,7 +1705,7 @@ public class IotInfoServiceImpl implements IotInfoService {
                             e.put("BT_RIGHT_ICON_TYPE", "detail");
                         }
                         break;
-                    case "MB01702":
+                    case "MB01702":     // automation
                         e.put("BT_TYPE", "automation");
                         if( e.get("M_ID") == null ) {
                             e.put("MY_IOT_ID", String.valueOf(e.get("SCNA_ID")));
@@ -1702,7 +1722,7 @@ public class IotInfoServiceImpl implements IotInfoService {
                         e.put("BT_RIGHT_ICON_TYPE", "button");
                         e.put("BT_RIGHT_TEXT", "실행");
                         break;
-                    case "MB01703":
+                    case "MB01703":     // information
                         e.put("BT_TYPE", "information");
                         if( e.get("M_ID") == null ) {
                             e.put("MY_IOT_ID", e.get("VALUE_CD"));
