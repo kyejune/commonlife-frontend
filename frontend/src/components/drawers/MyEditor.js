@@ -98,12 +98,12 @@ class MyEditor extends Component {
                 <footer className={ classNames( "cl-opts__footer", {"cl-opts__footer--hide":selectedLen === 0 })  }>
 
                     <div>
-                        {selectedLen===1&&
-                        <Link to={`/iot/my/device/${this.state.deviceIds[0]}`} className="cl-flex mb-03em">
-                            <span className="name--strong">상세설정 변경</span>
-                            <img className="ml-auto opacity-70" src={RightArrowSrc} alt="다음" width="30"/>
-                        </Link>
-                        }
+                        {/*{selectedLen===1&&*/}
+                        {/*<Link to={`/iot/my/device/${this.state.deviceIds[0]}`} className="cl-flex mb-03em">*/}
+                            {/*<span className="name--strong">상세설정 변경</span>*/}
+                            {/*<img className="ml-auto opacity-70" src={RightArrowSrc} alt="다음" width="30"/>*/}
+                        {/*</Link>*/}
+                        {/*}*/}
 
                         {selectedLen >= 1 &&
                         <button className="cl-flex w-100" onClick={ this.removeItem }>

@@ -22,8 +22,11 @@ class IotDeviceCategory extends Component {
 	constructor ( props ) {
 		super( props );
 
-		const action = props.match.params.action;
-		const dId = props.match.params.option4 || props.match.params.option3 || props.match.params.option2 || props.match.params.option1;
+		const params = props.match.params;
+		const action = params.action;
+		let dId = params.option4 || params.option3 || params.option2 || params.option1;
+
+		if( action === 'ctrl' ) dId = params.option1;
 
 		const isRoom = !isNaN( dId ); // 숫자형이면 룸별 목록, 문자 조합이면 공간별 목록으로 구분
 

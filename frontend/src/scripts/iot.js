@@ -228,8 +228,12 @@ export default {
 
     setIotDeviceValue( data, value, callback) {
 
-        const {deviceId, protcKey} = data;
+        let {deviceId, protcKey, maxLinkYn, minLinkYn} = data;
         let valueName = value.toString();
+
+        // 로봇청소기는 protcKey값이 달라진다.
+        if( maxLinkYn === 'Y' && minLinkYn === 'Y' )
+            protcKey = data.option.filter( opt=>{ return opt.VAL == value } )[0].LINK_PROTC_KEY;
 
         let params = `action?protcKey=${encodeURIComponent(protcKey)}&value=${value}`;
 
