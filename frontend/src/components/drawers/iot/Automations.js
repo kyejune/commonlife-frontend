@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import {Link} from "react-router-dom";
 
 class Automations extends Component {
+
+    constructor(props) {
+        super(props);
+
+
+        this.props.setBackPath('/iot');
+    }
+
+
     render() {
         return (
             <div>

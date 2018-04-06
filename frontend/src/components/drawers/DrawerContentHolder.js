@@ -33,14 +33,24 @@ class DrawerContentHolder extends Component {
 
         Store.popDrawer();
 
-        if( !this.props.close )
-            this.props.history.goBack();
+        if( !this.props.close ){
+            if( this.state.backPath )
+                this.props.history.replace( this.state.backPath );
+            else
+                this.props.history.goBack();
+        }
     }
 
     updateTitle( title ){
         this.setState({
             title: title,
         })
+    }
+
+    setBackPath( path ){
+        this.setState({
+            backPath: path,
+        });
     }
 
 
@@ -78,6 +88,7 @@ class DrawerContentHolder extends Component {
         let childrenWithProps = React.Children.map( children, child =>
             React.cloneElement( child, {
                 updateTitle: title=> this.updateTitle(title),
+                setBackPath: path=> this.setBackPath(path),
                 close: ()=>this.onClose(),
                 ...Store.getDrawerData( this.props.drawer ),
             })

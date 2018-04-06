@@ -13,7 +13,7 @@ import Store from "../../../scripts/store";
 let sjf = new SimpleJsonFilter();
 
 /*
-* 모드에서 기기편집용 화면
+* 모드 or 시나리오 생성/편집 에서 기기편집용 화면
 * */
 class IotDeviceOfScan extends Component {
 
@@ -37,9 +37,8 @@ class IotDeviceOfScan extends Component {
     }
 
     loadDeviceInformation() {
-
-        console.log(this.props);
-        Iot.getDeviceOfScan(this.props.scnaId, this.props.deviceId, data => {
+        // 시나리오 생성할땐 아직 scnaId가 없으므로 -1을 전달
+        Iot.getDeviceOfScan( this.props.scnaId || -1, this.props.deviceId, data => {
 
             this.setState({
                 icon: data[0].imgSrc,
@@ -93,15 +92,32 @@ class IotDeviceOfScan extends Component {
 
 
     // 완료 누르면 후 전송할 데이터 차곡차곡 모아두기...
-    onChangeOthers = (value, data) => {
+    onChangeOthers = (value, data, index ) => {
         let d = data.data;
         console.log(data.data.moAttr, ": ", value, data.data);
 
         let obj= { ...d };
-
         d.stsValue = value;
 
+        // UI에 반영되게
+        if( index != undefined ){
+            let opts  = this.state.options.concat();
+            opts[index].stsValue = value;
+            console.log( '값 갱신:', opts[index], value );
+            this.setState({ options: opts });
+        }
+
         this.updateSendingData( d );
+    }
+
+    // ADD버튼 토글 ( 시나리오 용 )
+    onChangeEnable( item, index ){
+        let opts  = this.state.options.concat();
+        const PREV = (opts[index].chk === 'Y');
+        opts[index].chk = PREV?'N':'Y';
+
+        this.setState({ options: opts });
+        this.updateSendingData( opts[index]);
     }
 
 
@@ -132,7 +148,14 @@ class IotDeviceOfScan extends Component {
             const btnOn = (item.chk === 'Y');
 
             if( hasBtn ){
-                BeforeBtn = <span className={ classNames("cl-device-of-scna-toggle__button", {"cl--selected":btnOn}) } />;
+                BeforeBtn = <button onClick={ ()=> this.onChangeEnable( item, index ) }
+                    className={ classNames("cl-device-of-scna-toggle__button", {"cl--selected":btnOn, "cl--editable":this.props.isScenario}) } />;
+            }
+
+            // 시나리오 생성의 경우 기본값이 없으므로 무조건 min값으로
+            if( this.props.isScenario ){
+                item.stsValue = item.stsValue || item.minVlu;
+                console.log('시나리오 생성중인가? 기본값 없어서 min값 세팅');
             }
 
 
@@ -176,8 +199,8 @@ class IotDeviceOfScan extends Component {
                         </div>
 
                         <IotSlider className="w-100 mt-3em ml-03em mr-03em"
-                                   min={item.minVlu} max={item.maxVlu} value={item.stsValue} unit={item.unit}
-                                   onChange={this.onChangeOthers} data={item}
+                                   min={item.minVlu} max={item.maxVlu} value={item.stsValue } unit={item.unit}
+                                   onChange={ (value)=> this.onChangeOthers( value, {data:item}, index ) } data={item}
                         />
                     </li>;
 

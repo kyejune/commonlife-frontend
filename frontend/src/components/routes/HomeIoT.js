@@ -83,11 +83,12 @@ class HomeIoT extends Component {
             scenario:{
                 scenario:'iot-scenario',
 				add:'iot-mode-detail',
+				'adding-devices':'iot-device-category-detail',
 
 
                 'edit-sensor':'iot-sensor-editor',
                 'edit-device':'iot-device-editor',
-                'add-device':'iot-device-category',
+                // 'add-device':'iot-device-category',
                 'add-sensor':'iot-sensor-list',
 			}
 		};
@@ -218,7 +219,7 @@ class HomeIoT extends Component {
                 <IotDeviceCategory/>
             </DrawerWrapper>
 
-            {/* 기기 카테고리 리스트 */}
+            {/* 기기 카테고리 리스트, 시나리오 생성시 추가 가능한 기기목록을 바로 접근 */}
             <DrawerWrapper drawer="iot-device-category-detail" title="기기 리스트" back className="cl-bg--light">
                 <IotDeviceList/>
             </DrawerWrapper>

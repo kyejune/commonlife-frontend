@@ -8,8 +8,8 @@ import Iot from "../../../scripts/iot";
 import checkSrc from 'images/ic-check@3x.png';
 import classNames from 'classnames';
 import moment from 'moment';
-import Store from 'scripts/store';
-
+import Store, {Scenario} from 'scripts/store';
+import {observer} from 'mobx-react';
 
 
 
@@ -36,47 +36,69 @@ class IotModeSetting extends Component {
             sendingData:null,
 
             // add 시나리오 상태
-            name:'',
+            // name:'',
+
+
             checkedMap:{},// 체크박스 선택된건 기억용
             updatedScnaThings:{} // 디바이스는 변경된 부분만 저장
         }
 
+        if( action === 'scenario' )
+            this.props.setBackPath('/iot/scenario');
+
     }
 
-
-    // Mode 편집 상태일경우 데이터 불러오기
     componentDidMount(){
-        if( !this.state.isMode ) return;
-        this.getModeData();
+        this.updateRoute();
+    }
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location)
+            this.settingInitData(Scenario);
+    }
+
+    componentDidMount(){
+        if( this.state.isMode ){
+            // Mode 편집 상태일경우 데이터 불러오기
+            this.getModeData();
+        }else{
+            if( this.nameInput )
+                this.nameInput.focus();
+            // Scenario or Store의 값을 가져와서 modeData와 유사하게 object만들어주기
+            this.settingInitData(Scenario);
+        }
     }
 
     // 모드 값 로드
     getModeData=()=>{
         Iot.getModeDetail( this.state.modeName, data=>{
             console.log( '모드 상세정보:', data );
-
-            let checkedMap = [];
-            data.scnaIfThings.forEach( item => {
-                checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] = (item.thingsAttrIfCond === item.maxVlu);
-            });
-
-            data.scnaThings.forEach( item => {
-                checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] = (item.stsValue === item.maxVlu);
-            });
-
-            this.setState( { checkedMap:checkedMap, modeData:data, sendingData:Object.assign({}, data ) });
-
+            this.settingInitData( data );
         });
     }
 
+    // 들어온값 초기 세팅
+    settingInitData=( data )=>{
+        let checkedMap = [];
+        data.scnaIfThings.forEach( item => {
+            checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] = (item.thingsAttrIfCond === item.maxVlu);
+        });
+
+        data.scnaThings.forEach( item => {
+            checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] = (item.stsValue === item.maxVlu);
+        });
+
+        this.setState( { checkedMap:checkedMap, modeData:data, sendingData:Object.assign({}, data ) });
+    }
 
 
 
     /* Create Scenario */
     // 시나리오 생성 상태에서 이름 변경
     onChangeName = (event) => {
+        Scenario.scna[0].name = event.target.value;
         console.log(event.target.value);
-        this.setState({name: event.target.value});
+        //this.setState({name: event.target.value});
     }
 
 
@@ -123,7 +145,8 @@ class IotModeSetting extends Component {
 
         let d = this.state.sendingData.scnaThings[index];
         let updateObj = Object.assign({}, this.state.updatedScnaThings );
-        updateObj[`${d.deviceId}-${d.stsId}-${d.thingsId}`] =
+        // updateObj[`${d.deviceId}-${d.stsId}-${d.thingsId}`] =
+        updateObj[d.deviceId] =
             { thingsId:d.thingsId, deviceId: d.deviceId, stsId:d.stsId, stsValue: bool?d.maxVlu:d.minVlu, chk:"Y" };
 
         this.setState({ updatedScnaThings: updateObj });
@@ -131,20 +154,53 @@ class IotModeSetting extends Component {
 
     // 디바이스 내부 속성들 변경되면 [stsId:값들... 형태로 넘어옴
     updateDeviceInfo( changedMap, index ){
-        console.log( changedMap );
+        console.log( '기기 내부 속성 변경됨:', changedMap );
         this.setState({ updatedScnaThings:{ ...changedMap, ...this.state.updatedScnaThings }}); // 변경된 데이터와 취합
     }
 
     // 변경값 적용
     onApply=()=>{
-        const prevData = this.state.sendingData;
-        const scna = prevData.scna[0];
-        const data = { ...prevData, scna:[{msg:scna.msg, scnaNm:scna.scnaNm}], scnaThings:Object.values(this.state.updatedScnaThings) };
 
-        // console.log( '적용:', data );
-        Iot.updateMode( scna.mode, data, res=>{
-           alert( res.msg );
-        });
+        if( this.state.isMode ) {
+            const prevData = this.state.sendingData;
+            const scna = prevData.scna[0];
+            const data = { ...prevData, scna:[{msg:scna.msg, scnaNm:scna.scnaNm}], scnaThings:Object.values(this.state.updatedScnaThings) };
+
+
+            Iot.updateMode(scna.mode, data, res => {
+                alert(res.msg);
+            });
+        }else{
+            let data = Object.assign({}, Scenario );
+
+            const NAME = Scenario.scna[0].name;
+            if( NAME === undefined || NAME.trim().length === 0 ){
+                alert('이름을 지어주세요.');
+                this.nameInput.focus();
+                return;
+            }
+
+            // scnaThings에는 추가된 목록이..
+            // updatedScnaThings에는 추가후 변경된 놈들만 들어있음...
+            // console.log( '이전데이터:', data.scnaThings );
+            // deviceType=='button'은 기본으로 넣어주자..
+            const Buttons = data.scnaThings.filter( item=>{
+                // console.log( item.deviceId, '수정된이력:', this.state.updatedScnaThings[item.deviceId] );
+                return ((item.deviceType === 'button') && this.state.updatedScnaThings[item.deviceId] === undefined );
+            });
+
+            data.scnaThings = Object.values(this.state.updatedScnaThings).concat( Buttons );
+
+            if( data.scnaIfAply.length === 0 ) delete data.scnaIfAply;
+            if( data.scnaIfSpc.length === 0 ) delete data.scnaIfSpc;
+
+            console.log('취합된 데이터', data );
+
+            Iot.createAutomation( data, res =>{
+               console.log( '시나리오 생성:', res );
+                alert(res.msg);
+            });
+        }
     }
 
 
@@ -163,9 +219,9 @@ class IotModeSetting extends Component {
 
     render() {
 
-        const { isMode, modeData, name } = this.state;
+        const { isMode, modeData } = this.state;
 
-        if( isMode && modeData === null ) return <div/>
+        if( !modeData ) return <div/>
 
         const {pathname} = this.props.location;
         let scna;
@@ -173,17 +229,19 @@ class IotModeSetting extends Component {
         let Devices = [];
 
         let sensorMore, deviceMore;
+        if( !isMode ){ // Automation 생성 및 편집에서만 편집 가능하게 노출
+            sensorMore = <Link className="ml-auto" to={`${pathname}/edit-sensor`}>센서편집</Link>;
+            deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
+        }
 
         let icon;
 
+        // console.log( '페이지에서 쓸 데이터:', isMode, modeData );
+
         // 모드 편집 모드
-        if ( isMode ) {
+        // if ( isMode ) {
             scna = modeData.scna[0];
             icon = scna.icon;
-
-            sensorMore = <span className="ml-auto"/>;
-            deviceMore = <span className="ml-auto"/>;
-
 
             // 일반 센서추가
             Sensors = modeData.scnaIfThings.map( (item, index)=>{
@@ -231,15 +289,15 @@ class IotModeSetting extends Component {
                 else
                     return <LiOfCtrl key={index} icon={item.imgSrc}
                                      name={item.deviceNm}
-                                     onClick={ ()=> Store.pushDrawer('edit-scan-device', { ...item, callback: val => this.updateDeviceInfo( val, index ) } )}/>
+                                     onClick={ ()=> Store.pushDrawer('edit-scan-device', { ...item, isScenario:!this.state.isMode, callback: val => this.updateDeviceInfo( val, index ) } )}/>
             })
 
 
         // 시나리오 생성모드
-        } else {
-            sensorMore = <Link className="ml-auto" to={`${pathname}/edit-sensor`}>센서편집</Link>;
-            deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
-        }
+        // } else {
+        //     sensorMore = <Link className="ml-auto" to={`${pathname}/edit-sensor`}>센서편집</Link>;
+        //     deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
+        // }
 
         return (
             <div className="cl-bg--darkgray">
@@ -249,7 +307,7 @@ class IotModeSetting extends Component {
                         <IconLoader src={icon}/>
                         { isMode ?
                             <span className="cl-name">{scna.scnaNm}</span> :
-                            <input className="cl-name pr-04em" type="text" placeholder="시나리오" value={name}
+                            <input ref={ r => this.nameInput = r } className="cl-name pr-04em" type="text" placeholder="시나리오" value={Scenario.scnaNm}
                                        onChange={this.onChangeName}/>
                         }
                     </div>
@@ -259,7 +317,7 @@ class IotModeSetting extends Component {
 
                         <div>
                             <h5>사용자 Automation</h5>
-                            <span className="desc">{ moment().format('YYYY년 MM월 DD일 | ') + Store.auth.name }</span>
+                            <span className="desc">{ moment().format('YYYY년 MM월 DD일') }</span>
                         </div>
                     }
                 </header>
@@ -302,4 +360,4 @@ class IotModeSetting extends Component {
 }
 
 
-export default withRouter(IotModeSetting);
+export default withRouter(observer(IotModeSetting));

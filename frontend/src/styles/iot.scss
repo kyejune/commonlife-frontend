@@ -895,12 +895,28 @@ header.cl-mode-setting__header{
 .cl-device-props-of-scna__list{
 
     li{
+        //pointer-events: none;
+
+        &>*:last-child{
+            pointer-events: none;
+        }
+
+        &.cl--editable{
+
+            &>*:last-child {
+                pointer-events: auto;
+            }
+        }
+
+    }
+
+    .cl-device-of-scna-toggle__button{
         pointer-events: none;
 
         &.cl--editable{
             pointer-events: auto;
         }
-
     }
+
 
 }

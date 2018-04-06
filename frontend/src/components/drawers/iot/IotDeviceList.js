@@ -6,6 +6,8 @@ import LiOfToggle from "./LiOfToggle";
 import LiOfCtrl from "./LiOfCtrl";
 import checkSrc from 'images/ic-check@3x.png';
 import classNames from 'classnames';
+import {Scenario} from "../../../scripts/store";
+import Store from "../../../scripts/store";
 
 
 /*
@@ -38,24 +40,39 @@ class IotDeviceCategory extends Component {
 			addingList:[],
 		};
 
-		props.updateTitle( isRoom ? '공간별 기기목록' : '기기별 기기목록' );
+		if( action === 'scenario' ) props.updateTitle( '추가할 기기목록' );
+		else                        props.updateTitle( isRoom ? '공간별 기기목록' : '기기별 기기목록' );
 
 		this.loadData();
-
 	}
 
 	loadData(){
+		
         // 목록 가져오기
-        Iot.getDevicesByCategory( this.state.action === 'my', this.state.isRoom, this.state.cateId, ( success, data )=> {
-        	if( success ) {
+		if( this.state.action === 'scenario' )
+		{
+			Iot.getAddibleItemOfScenario( 'actors', data =>{
                 this.setState({
-                    deviceData: data,
+                    deviceData: data.scnaThings,
                     addingList: [],
                 });
-            }else{
-        		console.log( data );
-			}
-        } );
+			});
+		}
+		else
+		{
+
+            Iot.getDevicesByCategory( this.state.action === 'my', this.state.isRoom, this.state.cateId, ( success, data )=> {
+                if( success ) {
+                    this.setState({
+                        deviceData: data,
+                        addingList: [],
+                    });
+                }else{
+                    console.log( data );
+                }
+            } );
+
+		}
 	}
 
     // Scenario or My IoT ---------------------------------------------------------------------------------------
@@ -89,7 +106,16 @@ class IotDeviceCategory extends Component {
             });
 
         }else if( this.state.action === 'scenario' ){
-			console.log('시나리오에 기기추가');
+
+            Scenario.scnaThings =  Scenario.scnaThings.concat( this.state.addingList.map(itemIndex=>{
+                return { ...this.state.deviceData[itemIndex], chk:'Y' };
+            }));
+
+            // 시나리오 편집화면으로 이동
+            this.props.history.replace('/iot/scenario/add');
+            Store.popDrawer();
+            Store.popDrawer();
+
 		}else{
 
 			alert('예외상황');

@@ -83,7 +83,7 @@ class DrawerInjector extends Component{
             </DrawerWrapper>
 
             {/* 모드-> 기기편집 */}
-            <DrawerWrapper drawer="edit-scan-device"  className="cl-bg--lightgray"  close >
+            <DrawerWrapper drawer="edit-scan-device" title="기기정보" className="cl-bg--lightgray"  close >
                 <IotDeviceOfScan/>
             </DrawerWrapper>
 

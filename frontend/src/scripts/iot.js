@@ -199,7 +199,6 @@ export default {
 
     //{{API_HOST}}/iot/complexes/125/homes/1/automation/conditions
     //{{API_HOST}}/iot/complexes/125/homes/1/automation/actors
-
     /* 시나리오 생성시 사용할 추가할수 있는 기기, 센서*/
     getAddibleItemOfScenario( type, callback ){
         axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${type}`)
@@ -290,6 +289,14 @@ export default {
             });
     },
 
+    // 29: 시나리오/오토메이션 생성
+    createAutomation( data, callback ){
+        //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/automation
+        axios.post(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation`, data )
+            .then(response => {
+                callback(response.data);
+            });
+    },
 
     /* 대시보드 myIot 스위치 버튼이나 시나리오 클릭시 */
     setMyIot( type, id, name, value, callback ){

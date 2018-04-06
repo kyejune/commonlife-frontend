@@ -18,10 +18,41 @@ host = 'https://clback.cyville.net'; // 테스트용
 
 
 // 생성용 시나리오/자동화 객체
+/*
+scna:{
+    "scna": [{
+        "msg": "시나리오 생성 테스트-nobody",
+        "scnaNm": "시나리오 생성 테스트-nobody"
+    }],
+
+    "scnaIfSpc": [{
+    "spcTime": "19:00",
+    "monYn": "Y",
+    "tueYn": "N",
+    "wedYn": "Y",
+    "thuYn": "N",
+    "friYn": "Y",
+    "satYn": "N",
+    "sunYn": "Y"
+  }]
+}
+*/
+
+
+
 export const Scenario = observable({
-    sensors:[],
-    devices:[],
+
+    scna:[{
+        msg:'사용자 Automation',
+        name: undefined,
+    }],
+
+    scnaIfSpc:[],
+    scnaIfAply:[],
+    scnaIfThings:[],
+    scnaThings:[],
 });
+
 
 
 const Store = observable({

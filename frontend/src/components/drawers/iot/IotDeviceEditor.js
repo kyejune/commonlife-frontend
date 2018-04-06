@@ -35,7 +35,7 @@ class IotDeviceEditor extends Component {
 
 
 
-                <Link to={`${pathname}/add-device`} className="cl-iot-add__button--light">
+                <Link to={`${pathname}/adding-devices`} className="cl-iot-add__button--light">
                     <img src={addSrc} alt="센서추가" width="40" height="40"/>
                     <p>IoT 기기 추가</p>
                 </Link>
