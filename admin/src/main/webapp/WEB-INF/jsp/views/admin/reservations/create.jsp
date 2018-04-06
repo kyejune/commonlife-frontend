@@ -36,17 +36,6 @@
                         <div class="ibox-content" style="">
                             <form action="" method="post">
                                 <div class="form-group">
-                                    <label>현장</label>
-                                    <div>
-                                        <label class="radio-inline">
-                                            <input type="radio"> 역삼
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio"> 선릉
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group">
                                     <label>예약명</label>
                                     <select name="parentIdx" class="form-control">
                                         <c:forEach var="scheme" items="${schemes}">

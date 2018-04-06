@@ -35,6 +35,28 @@
                         </div>
                         <div class="ibox-content" style="">
                             <form action="" method="post">
+                                <input type="hidden" name="redirectTo" value="${redirectTo}">
+                                <div class="form-group">
+                                    <label>현장</label>
+                                    <div>
+                                        <c:forEach var="complex" items="${complexes}">
+                                            <label class="radio-inline">
+                                                <input type="radio" name="cmplxIdx" value="${complex.cmplxId}"
+                                                       required <c:if test="${cmplxIdx == complex.cmplxId}"> checked </c:if> >
+                                                    ${complex.cmplxNm}
+                                            </label>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+                                <c:if test="${parentIdx != 0}">
+                                <div class="form-group">
+                                    <label>예약 그룹</label>
+                                    <div>
+                                        <input type="hidden" name="parentIdx" value="${parentIdx}">
+                                        <input type="text" class="form-control" readonly value="${group.title}">
+                                    </div>
+                                </div>
+                                </c:if>
                                 <div class="form-group">
                                     <label>예약 유형</label>
                                     <select name="reservationType" class="form-control">
@@ -79,19 +101,19 @@
                                 </div>
                                 <div class="form-group">
                                     <label>예약 개시일</label>
-                                    <input type="date" name="startDt" class="form-control">
+                                    <input type="text" name="startDt" class="form-control datepicker" data-format="YYYY-MM-DD">
                                 </div>
                                 <div class="form-group">
                                     <label>예약 개시 시각</label>
-                                    <input type="time" name="startTime" class="form-control">
+                                    <input type="text" name="startTime" class="form-control datepicker" data-format="HH:mm">
                                 </div>
                                 <div class="form-group">
                                     <label>예약 마감일</label>
-                                    <input type="date" name="endDt" class="form-control">
+                                    <input type="text" name="endDt" class="form-control datepicker" data-format="YYYY-MM-DD">
                                 </div>
                                 <div class="form-group">
                                     <label>예약 마감 시각</label>
-                                    <input type="time" name="endTime" class="form-control">
+                                    <input type="text" name="endTime" class="form-control datepicker" data-format="HH:mm">
                                 </div>
                                 <div class="form-group">
                                     <label>주말 예약 가능</label>
@@ -167,6 +189,18 @@
 
                     $( '.type-group' ).hide();
                     $( '.type-group-' + type ).show();
+                } );
+            } );
+        </script>
+        <script>
+            $( function() {
+                $( '.datepicker' ).each( function( index, element ) {
+                    var $element = $( element );
+                    var params = {};
+                    if( $element.data( 'format' ) ) {
+                        params.format = $element.data( 'format' );
+                    }
+                    $element.datetimepicker( params );
                 } );
             } );
         </script>

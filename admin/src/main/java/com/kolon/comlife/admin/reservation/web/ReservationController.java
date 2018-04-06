@@ -1,7 +1,10 @@
 package com.kolon.comlife.admin.reservation.web;
 
+import com.kolon.comlife.admin.complexes.model.ComplexInfo;
+import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.reservation.model.ReservationInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
+import com.kolon.comlife.admin.reservation.service.ReservationGroupService;
 import com.kolon.comlife.admin.reservation.service.ReservationSchemeService;
 import com.kolon.comlife.admin.reservation.service.ReservationService;
 import org.apache.ibatis.session.SqlSession;
@@ -28,6 +31,12 @@ public class ReservationController {
 
     @Resource(name = "reservationSchemeService")
     private ReservationSchemeService schemeService;
+
+    @Resource(name = "reservationGroupService")
+    private ReservationGroupService groupService;
+
+    @Resource(name = "complexService" )
+    private ComplexService complexService;
 
     @Resource(name = "reservationService")
     private ReservationService service;
@@ -74,8 +83,15 @@ public class ReservationController {
             , ModelAndView mav
             , HttpSession session
     ) {
+        String redirectTo = request.getHeader( "referer" );
+        mav.addObject( "redirectTo", redirectTo );
+
+        List<ComplexInfo> complexes = complexService.getComplexList();
+        mav.addObject( "complexes", complexes );
+
         List<ReservationSchemeInfo> schemes = schemeService.index( new HashMap() );
         mav.addObject( "schemes", schemes );
+
         return mav;
     }
 
@@ -86,6 +102,7 @@ public class ReservationController {
             HttpServletRequest request
             , HttpServletResponse response
             , HttpSession session
+            , @RequestParam( value = "redirectTo", defaultValue = "/admin/reservation-groups/list.do" ) String redirectTo
             , @RequestParam( value = "parentIdx", required = false ) int parentIdx
             , @RequestParam( value = "status", required = false ) String status
             , @RequestParam( value = "startDt", required = false ) String startDt
@@ -114,9 +131,9 @@ public class ReservationController {
 
         logger.debug( "---------- qty: " + qty );
 
-        service.create( info );
+//        service.create( info );
 
-        return "redirect:" + "/admin/reservations/list.do";
+        return "redirect:" + redirectTo;
     }
 
     @RequestMapping(value = "edit.do")

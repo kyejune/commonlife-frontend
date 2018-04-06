@@ -40,6 +40,29 @@
                             <div>${group.summary}</div>
                         </div>
                     </div>
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>이 그룹의 예약 틀 목록</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>예약명</th>
+                                    <th>보기</th>
+                                    <th>수정</th>
+                                    <th>삭제</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <div class="text-right">
+                                <a href="/admin/reservation-schemes/create.do?cmplxIdx=${group.cmplxIdx}&parentIdx=${group.idx}" class="btn btn-primary">예약 추가</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

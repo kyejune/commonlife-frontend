@@ -1,8 +1,12 @@
 package com.kolon.comlife.admin.reservation.web;
 
+import com.kolon.comlife.admin.complexes.model.ComplexInfo;
+import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.reservation.model.ReservationAmenityInfo;
+import com.kolon.comlife.admin.reservation.model.ReservationGroupInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.admin.reservation.service.ReservationAmenityService;
+import com.kolon.comlife.admin.reservation.service.ReservationGroupService;
 import com.kolon.comlife.admin.reservation.service.ReservationSchemeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +34,12 @@ public class ReservationSchemeController {
     @Resource(name = "reservationAmenityService")
     private ReservationAmenityService amenityService;
 
+    @Resource(name = "complexService" )
+    private ComplexService complexService;
+
+    @Resource(name = "reservationGroupService")
+    private ReservationGroupService groupService;
+
     @RequestMapping(value = "list.do")
     public ModelAndView listReservationScheme (
             HttpServletRequest request
@@ -49,9 +59,25 @@ public class ReservationSchemeController {
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
+            , @RequestParam( value = "cmplxIdx", defaultValue = "0") int cmplxIdx
+            , @RequestParam( value = "parentIdx", defaultValue = "0") int parentIdx
     ) {
+        String redirectTo = request.getHeader( "referer" );
+        mav.addObject( "redirectTo", redirectTo );
+
+        List<ComplexInfo> complexes = complexService.getComplexList();
+        mav.addObject( "complexes", complexes );
+
         List<ReservationAmenityInfo> amenities = amenityService.index();
         mav.addObject( "amenities", amenities );
+
+        mav.addObject( "cmplxIdx", cmplxIdx );
+        mav.addObject( "parentIdx", parentIdx );
+
+        if( parentIdx != 0 ) {
+            ReservationGroupInfo group = groupService.show( parentIdx );
+            mav.addObject( "group", group );
+        }
 
         return mav;
     }
