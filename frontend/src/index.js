@@ -4,13 +4,9 @@ import App from './App';
 import 'scripts/connect.js';
 import registerServiceWorker from './registerServiceWorker';
 
-try {
+if( window.location.protocol === 'file:' ) {
     document.write('<script src="cordova.js"></script>');
 }
-catch (error) {
-    console.warn('cannot load cordova.js');
-}
-
 
 ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();
