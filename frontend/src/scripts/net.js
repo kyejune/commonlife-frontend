@@ -127,6 +127,12 @@ export default {
             });
     },
 
+    getComplexes( callback ) {
+        axios.get( Store.api + '/complexes/' )
+            .then( response => {
+                callback( response.data );
+            } );
+    },
 
     getReservation( id, callback ){
         axios.get( './dummy/reservation.json' )

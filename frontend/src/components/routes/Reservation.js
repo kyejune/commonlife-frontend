@@ -19,11 +19,17 @@ import ReserveServiceCarwash from 'images/rs-icon-4@3x.png';
 import ReserveIcPlus from 'images/page-1@3x.png';
 import {observer} from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
+import net from '../../scripts/net';
 
 class Reservation extends Component {
 
     componentDidMount() {
         this.updateRoute();
+
+        // TODO: 어차피 Store 에서 관리할거면 로드하는 위치가 여기가 아니어도 될 것 같은데..
+        net.getComplexes( data => {
+            Store.complexes = data;
+        } );
     }
 
     componentDidUpdate(prevProps) {
@@ -56,7 +62,6 @@ class Reservation extends Component {
     }
 
     render() {
-
 
         return <div className="cl-tab--reservation">
             {/*크레딧 에러 팝업 */}
