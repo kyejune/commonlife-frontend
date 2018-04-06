@@ -10,22 +10,16 @@
         <!-- Section Title -->
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>Living Support 티켓 관리 - ${complexInfo.cmplxNm}</h2>
+                <h2>티켓 관리 - <label class="font-bold">${complexInfo.cmplxNm}</label></h2>
                 <ol class="breadcrumb">
                     <li>
                         <a href="/">Home</a>
                     </li>
                     <li>
-                        현장 관리
-                    </li>
-                    <li>
-                        개별 현장 관리
-                    </li>
-                    <li>
-                        현장 상세 정보
+                        Living Support
                     </li>
                     <li class="active">
-                        <a>Living Support 항목 설정</a>
+                        <a>티켓 관리</a>
                     </li>
                 </ol>
             </div>
@@ -37,15 +31,8 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="box">
-                        <div class="box-header" align="right">
-                            <!--
-                            <h3 class="box-title">공지사항</h3>
-                            -->
-                            <button class="btn btn-primary" onclick="boardWrite()">글작성</button>
-                        </div>
-                        <!-- /.box-header -->
                         <div class="box-body">
-                            <table id="ticketList" class="table table-bordered table-striped">
+                            <table id="ticketList" class="table table-bordered table-striped table-hover dataTable">
                                 <thead>
                                 <tr>
                                     <th>No</th>
@@ -58,13 +45,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <c:forEach var="vo" items="${paginateInfo.data}" varStatus="status">
+                                <c:forEach var="vo" items="${ticketList}" varStatus="status">
                                 <tr>
                                     <td> ${vo.tktIdx}</td>
                                     <td> ${vo.respYn}</td>
                                     <td> ${vo.cateNm}</td>
                                     <td> ${vo.userNm}</td>
-                                    <td> ${vo.content}</td>
+                                    <td>
+                                        <a href="ticketView.do?tktIdx=${vo.tktIdx}&pageNum=${paginateInfo.currentPageNo}">
+                                                ${vo.content}
+                                        </a>
+                                    </td>
                                     <td>
                                         <fmt:parseDate value="${vo.regDttm}" pattern="yyyy-MM-dd HH:mm" var="regDttm"/>
                                         <fmt:formatDate value="${regDttm}" pattern="yyyy.MM.dd HH:mm"/>
@@ -76,22 +67,21 @@
                                 </tr>
                                 </c:forEach>
 
-                                <%--<c:if test="${fn:length(boardList) == 0}">--%>
-                                <%--<tfoot>--%>
-                                    <%--<tr>--%>
-                                        <%--<td colspan="5"><p><dfn>조회된 결과가 없습니다.</dfn></p></td>--%>
-                                    <%--</tr>--%>
-                                <%--</tfoot>--%>
-                                <%--</c:if>--%>
+                                <c:if test="${fn:length(ticketList) == 0}">
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="7"><p><dfn>조회된 결과가 없습니다.</dfn></p></td>
+                                    </tr>
+                                </tfoot>
+                                </c:if>
                                 </tbody>
                             </table>
                         </div>
                         <!-- /.box-body -->
 
                         <!--paging-->
-
                         <div class="dataTables_paginate paging_simple_numbers" align="center">
-                            <%--<ui:pagination paginationInfo="${pagination}" jsFunction="fn_link_page"/>--%>
+                            <ui:pagination paginationInfo="${paginateInfo}" jsFunction="fn_link_page"/>
                         </div>
 
                     </div>
@@ -123,7 +113,9 @@
             })
 
 
-            function fn_link_page(pageIndex){
+            function fn_link_page( pageIndex) {
+                window.location.replace("ticketList.do?pageNum=" + pageIndex);
+
 //                 $("#boardReqForm > #pageIndex").val(pageIndex);
 // //                $("#pageIndex").val(pageIndex);
 //
@@ -131,8 +123,7 @@
             }
 
             function refreshList(){
-                // $("#boardReqForm").attr("action", "/manage/board/event_list.do");
-                // $("#boardReqForm").submit();
+                location.reload();
             }
 
             function boardDetail(boardIdx){

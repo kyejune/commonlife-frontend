@@ -29,12 +29,24 @@ public class TicketDAO {
         return sqlSession.selectList("Support.selectTicketList", params );
     }
 
+    public TicketInfo selectTicketByIdx( Map params ) {
+        return sqlSession.selectOne("Support.selectTicketList", params );
+    }
+
+
     /////////  Ticket File  /////////
-    public TicketFileInfo getTicketFile(int id ) {
+    public TicketFileInfo getTicketFileByFileIdx( int ticketFileIdx ) {
         Map<String, Integer> selectParams = new HashMap<>();
-        selectParams.put( "ticketFileIdx", id );
+        selectParams.put( "ticketFileIdx", ticketFileIdx );
         return sqlSession.selectOne( "Support.selectTicketFile", selectParams );
     }
+
+    public TicketFileInfo getTicketFileByTiketId( int ticketIdx ) {
+        Map<String, Integer> selectParams = new HashMap<>();
+        selectParams.put( "ticketIdx", ticketIdx );
+        return sqlSession.selectOne( "Support.selectTicketFile", selectParams );
+    }
+
 
 }
 

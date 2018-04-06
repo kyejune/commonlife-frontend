@@ -68,9 +68,9 @@
         <property name="supportedMediaTypes" value="application/json" />
     </bean>
 
-    <bean id="defaultRenderer" class="com.kolon.common.admin.pagination.DefaultPaginationRenderer" />
+    <bean id="defaultRenderer" class="com.kolon.comlife.common.paginate.DefaultPaginationRenderer" />
 
-    <bean id="paginationManager" class="com.kolon.common.admin.pagination.DefaultPaginationManager">
+    <bean id="paginationManager" class="com.kolon.comlife.common.paginate.DefaultPaginationManager">
         <property name="rendererType">
             <map>
                 <entry key="default" value-ref="defaultRenderer" />

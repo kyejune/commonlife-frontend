@@ -58,4 +58,37 @@
         ;
     </select>
 
+
+    <select id="selectUserExtInfoByUsrId" parameterType="Map" resultType="UserExtInfo">
+        SELECT
+          U.USR_ID,
+          USER_ID,
+          USER_NM,
+          CELL,
+          EMAIL,
+          CELL_YN,
+          EMAIL_YN,
+          U.CMPLX_ID,
+          C.CMPLX_NM,
+          DONG,
+          HO,
+          HEAD_ID,
+          AVATAR_IMG_SRC,
+          USER_ALIAS,
+          U_E.UPD_DTTM,
+          U_E.REG_DTTM
+        FROM
+          USR_INFO AS U
+            LEFT JOIN
+          USR_INFO_EXT AS U_E
+              ON U.USR_ID = U_E.USR_ID
+            JOIN
+          COMPLEX_M AS C
+            ON U.CMPLX_ID = C.CMPLX_ID
+        WHERE
+          U.USR_ID = #{usrId}
+        ;
+    </select>
+
+
 </mapper>

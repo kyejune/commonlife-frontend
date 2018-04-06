@@ -1,5 +1,6 @@
 package com.kolon.comlife.admin.users.service.impl;
 
+import com.kolon.comlife.admin.users.model.UserExtInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -16,10 +17,21 @@ public class UserDAO {
     public int selectUserCountByComplexId(int cmplxId) {
         Map params = new HashMap();
         Map result;
+
         params.put("cmplxId", cmplxId);
+
         result = sqlSession.selectOne("User.selectUserCountByComplexId", params);
 
         return ((Long)result.get("USER_COUNT")).intValue();
+    }
+
+
+    public UserExtInfo selectUserExtInfoByUsrId( int usrId ) {
+        Map params = new HashMap();
+
+        params.put("usrId", usrId);
+
+        return sqlSession.selectOne( "User.selectUserExtInfoByUsrId", params);
     }
 
 }

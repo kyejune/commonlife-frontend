@@ -70,7 +70,7 @@
           TKT.DEL_YN,
           TKT.REG_DTTM,
           TKT.UPD_DTTM,
-          TKT.ADMIN_DESC,
+          TKT.ADMIN_COMMENT,
           TKT.RESP_YN,
           TKT.RESP_ADMIN_IDX,
           ADMIN.ADMIN_NM AS RESP_ADMIN_NM,
@@ -83,7 +83,11 @@
                 ON USR.USR_ID = TKT.USR_ID
             LEFT JOIN CL_ADMIN_INFO AS ADMIN
                 ON ADMIN.ADMIN_IDX = TKT.RESP_ADMIN_IDX
-        WHERE TKT.CMPLX_ID=#{cmplxId}
+        WHERE
+          TKT.CMPLX_ID=#{cmplxId}
+          <if test="tktIdx != null">
+            AND TKT.TKT_IDX = #{tktIdx}
+          </if>
         ORDER BY  TKT_IDX  DESC
         <if test="limit != null">
             LIMIT #{limit}

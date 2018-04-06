@@ -1,17 +1,18 @@
 package com.kolon.comlife.admin.support.web;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.support.exception.OperationFailedException;
-import com.kolon.comlife.admin.support.exception.SupportGeneralException;
-import com.kolon.comlife.admin.support.model.SupportCategoryInfo;
 import com.kolon.comlife.admin.support.model.TicketFileInfo;
+import com.kolon.comlife.admin.support.model.TicketInfo;
 import com.kolon.comlife.admin.support.service.SupportService;
 import com.kolon.comlife.admin.support.service.TicketFileStoreService;
 import com.kolon.comlife.admin.support.service.TicketService;
-import com.kolon.comlife.common.model.PaginateInfo;
+import com.kolon.comlife.admin.users.model.UserExtInfo;
+import com.kolon.comlife.admin.users.model.UserInfo;
+import com.kolon.comlife.admin.users.service.UserService;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
+import com.kolon.comlife.common.paginate.PaginateInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import sun.security.krb5.internal.Ticket;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.List;
 
 
 @Controller("ticketController")
@@ -44,10 +43,25 @@ public class TicketController {
     private SupportService supportService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private TicketService ticketService;
 
     @Autowired
     private TicketFileStoreService storeService;
+
+
+    private int getPageNumParam(HttpServletRequest request) throws NumberFormatException {
+        String pageNumStr;
+
+        pageNumStr = request.getParameter("pageNum");
+        if( pageNumStr == null ) {
+            return 1;
+        }
+
+        return Integer.parseInt( pageNumStr );
+    }
 
     @GetMapping( value = "ticketList.do" )
     public ModelAndView ticketList (
@@ -55,65 +69,83 @@ public class TicketController {
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
+            , @RequestParam(required=false, defaultValue = "1") int pageNum
            )
     {
-        // todo: 관리자 로그인 정보로 부터 cmplxId 가져오기
-        PaginateInfo paginateInfo;
-        String pageNumStr;
-        int pageNum = 1;
+        PaginateInfo        paginateInfo;
+        ComplexInfoDetail   complexInfo;
+
         int recCntPerPage = RECORD_COUNT_PER_PAGE;
+        int complexId = 125; // todo: 관리자 로그인 정보로 부터 cmplxId 가져오기
 
-        pageNumStr = request.getParameter("pageNum");
-        if( pageNumStr == null ) {
-            pageNum=1;
-        } else {
-            try {
-                pageNum = Integer.parseInt(pageNumStr);
-            } catch( NumberFormatException e ) {
-                //todo: 잘못된 파라메터 입력 됨
-                logger.error("잘못된 pageNum 입력");
-                mav.addObject("error", "잘못된 pageNum가 입력되었습니다.");
-                return mav;
-            }
-        }
+        complexInfo = complexService.getComplexById( complexId );
+        paginateInfo = ticketService.getTicketList( complexId, pageNum, recCntPerPage );
 
-        paginateInfo = ticketService.getTicketList( 125, pageNum, recCntPerPage );
-
-//        ComplexInfoDetail         complexInfo;
-//        List<SupportCategoryInfo> categoryList;
-//        String                    categoryListJson;
-//        ObjectMapper              mapper = new ObjectMapper();
-//
-//        try {
-//            complexInfo = complexService.getComplexById(categoryInfo.getCmplxId());
-//            categoryList = supportService.getCategoryInfoByComplexId(categoryInfo);
-//        } catch( SupportGeneralException e ) {
-//            return mav.addObject(
-//                    "error",
-//                    e.getMessage() );
-//        }
-//
-//        try {
-//            categoryListJson = mapper.writeValueAsString(categoryList);
-//        } catch( Exception e) {
-//            return mav.addObject(
-//                    "error",
-//                    "작업 처리과정에 에러가 발생했습니다. 문제가 지속되면 담당자에게 문의하세요.");
-//        }
-//
-//        mav.addObject("complexInfo", complexInfo );
-//        mav.addObject("categoryInfo", categoryInfo); // Parameters
-//        // JSON value
-//        mav.addObject("categoryList", categoryListJson);
-//        mav.addObject("cmplxId", categoryInfo.getCmplxId());
-
+        mav.addObject("complexInfo", complexInfo);
         mav.addObject("paginateInfo", paginateInfo);
+        mav.addObject("ticketList", paginateInfo.getData());
+
         return mav;
     }
 
+    // 편집화면
+    @GetMapping( value = "ticketView.do" )
+    public ModelAndView ticketView (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+            , @RequestParam                 int tktIdx
+            , @RequestParam(required=false, defaultValue = "1") int pageNum
+    )
+    {
+        TicketInfo        ticketInfo;
+        TicketFileInfo    ticketFileInfo = null;
+        ComplexInfoDetail complexInfo;
+        UserExtInfo       userExtInfo;
+        String            ticketFileImgUrl = null;
 
+        if(pageNum < 1) {
+            pageNum = 1;
+        }
 
+        int complexId = 125; // todo: 관리자 로그인 정보로 부터 cmplxId 가져오기
 
+        // todo: 현장 관리자가 확인 권한 있는지 체크
+
+        complexInfo = complexService.getComplexById( complexId );
+        if( complexInfo == null ) {
+            return mav.addObject("error", "해당하는 현장 정보가 없습니다.");
+        }
+
+        ticketInfo = ticketService.getTicket( complexId, tktIdx );
+        if( ticketInfo == null ) {
+            return mav.addObject("error", "해당하는 티켓 정보가 없습니다.");
+        }
+        if( ticketInfo.getTicketFiles() != null && ticketInfo.getTicketFiles().size() > 0 ) {
+            ticketFileInfo = ticketInfo.getTicketFiles().get(0);
+
+            logger.debug(">>> " + ticketFileInfo);
+            if( ticketFileInfo != null ) {
+                // image 가져오기 경로 ex: {{ADMIN_HOST}}/admin/support/ticket/ticketFiles/1
+                ticketFileImgUrl = "/admin/support/ticket/ticketFiles/" + ticketFileInfo.getTktFileIdx() + "/m";
+                logger.debug(">>> imgUrl: " + ticketFileImgUrl);
+            }
+        }
+
+        userExtInfo = userService.getUserExtInfoById( ticketInfo.getUsrId() );
+        if( userExtInfo == null ) {
+            return mav.addObject("error", "티켓의 사용자 정보가 없습니다.");
+        }
+
+        mav.addObject("userExtInfo", userExtInfo);
+        mav.addObject("complexInfo", complexInfo);
+        mav.addObject("ticketInfo", ticketInfo);
+        mav.addObject("ticketFileImgUrl", ticketFileImgUrl);
+        mav.addObject("pageNum", pageNum );
+
+        return mav;
+    }
 
 
     //////////////////////// TICKET FILE METHODS ////////////////////////////////

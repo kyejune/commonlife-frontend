@@ -1,10 +1,8 @@
-package com.kolon.comlife.common.paginate;
+package com.kolon.common.admin.pagination;
 
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 
-import java.util.List;
-
-public class PaginateInfo extends SimpleMsgInfo {
+public class PaginationInfo extends SimpleMsgInfo {
     private int currentPageNo;
     private int recordCountPerPage;
     private int pageSize;
@@ -15,10 +13,7 @@ public class PaginateInfo extends SimpleMsgInfo {
     private int firstRecordIndex;
     private int lastRecordIndex;
 
-    // Paginated Data List
-    private List data;
-
-    public PaginateInfo() {
+    public PaginationInfo() {
         super();
     };
 
@@ -111,13 +106,5 @@ public class PaginateInfo extends SimpleMsgInfo {
     {
         this.lastRecordIndex = (getCurrentPageNo() * getRecordCountPerPage());
         return this.lastRecordIndex;
-    }
-
-    public List getData() {
-        return data;
-    }
-
-    public void setData(List data) {
-        this.data = data;
     }
 }

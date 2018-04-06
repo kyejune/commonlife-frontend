@@ -19,7 +19,7 @@ public class TicketInfo {
     private String regDttm;
     private String updDttm;
 
-    private String adminDesc;
+    private String adminComment;
     private String respYn;
     private int respAdminIdx;
     private String respAdminNm;
@@ -106,12 +106,12 @@ public class TicketInfo {
         this.cateNm = cateNm;
     }
 
-    public String getAdminDesc() {
-        return adminDesc;
+    public String getAdminComment() {
+        return adminComment;
     }
 
-    public void setAdminDesc(String adminDesc) {
-        this.adminDesc = adminDesc;
+    public void setAdminComment(String adminComment) {
+        this.adminComment = adminComment;
     }
 
     public String getRespYn() {
