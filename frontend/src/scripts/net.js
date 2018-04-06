@@ -26,7 +26,7 @@ axios.interceptors.response.use(function (response) {
     document.querySelector('#spinner').classList.remove('cl-status--ajax');
 
     // 에러 상황일 경우 iot모달이 있으면 처리
-    if( error.response.status !== 200) {
+    if( error.response === undefined || error.response.status !== 200) {
 
         if( Store.modeModal !== null ){
             let obj = Store.modeModal;
@@ -45,7 +45,7 @@ axios.interceptors.response.use(function (response) {
         }
     }
 
-    alert( error.response.data.msg || '잠시 후 다시 이용해 주시기 바랍니다.');
+    alert( (error.response?error.response.data.msg:error) || '잠시 후 다시 이용해 주시기 바랍니다.');
 
     // Do something with response error
     return Promise.reject(error);

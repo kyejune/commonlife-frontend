@@ -14,7 +14,7 @@ if( window.location.protocol === 'file:' && window.location.pathname.includes('C
 // host = 'https://cl-stage.cyville.net'; // 클라 전달용
 // host = 'http://localhost:8080';      // ykim 로컬 테스트용
 // host = 'https://cl-stage.cyville.net'; // 클라 전달용
-// host = 'https://clback.cyville.net'; // 테스트용
+host = 'https://clback.cyville.net'; // 테스트용
 
 
 // 생성용 시나리오/자동화 객체
