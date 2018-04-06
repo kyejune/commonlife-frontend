@@ -1,7 +1,6 @@
 package com.kolon.comlife.admin.login.web;
 
-import com.kolon.comlife.admin.login.service.LoginService;
-import com.kolon.common.admin.security.CustomUserDetails;
+import com.kolon.comlife.admin.manager.model.AdminInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.UUID;
 
@@ -19,10 +17,7 @@ import java.util.UUID;
 public class LoginController {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
-
-    @Resource(name = "loginService")
-    private LoginService loginService;
-
+    private static final String USER_LOGIN_INFO = "userLoginInfo";
 
     @RequestMapping(
             value = {"","/", "/loginPage.*","login.*"},
@@ -35,19 +30,25 @@ public class LoginController {
 
     @RequestMapping(value = "logout", method = RequestMethod.GET)
     public void logout(HttpSession session) {
-        CustomUserDetails userDetails = (CustomUserDetails)session.getAttribute("userLoginInfo");
+        AdminInfo userLoginInfo = (AdminInfo) session.getAttribute( USER_LOGIN_INFO );
 
-        logger.info("Welcome logout! {}, {}", session.getId(), userDetails.getUsername());
+        logger.info( "Logged out! {}, {}@{}",
+                     session.getId(),
+                     userLoginInfo.getAdminId(),
+                     userLoginInfo.getGrpNm() );
 
         session.invalidate();
     }
 
     @RequestMapping(value = "login_success", method = RequestMethod.GET)
     public void login_success(HttpSession session) {
-        CustomUserDetails userDetails = (CustomUserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        AdminInfo userLoginInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
-        logger.info("Welcome login_success! {}, {}", session.getId(), userDetails.getUsername() + "/" + userDetails.getPassword());
-        session.setAttribute("userLoginInfo", userDetails);
+        logger.info( "Login success! {}, {}@{}",
+                     session.getId(),
+                     userLoginInfo.getAdminId(),
+                     userLoginInfo.getGrpNm() );
+        session.setAttribute("userLoginInfo", userLoginInfo);
 
         // RANDOM TOKEN 추가
         session.setAttribute("CSRF_TOKEN", UUID.randomUUID().toString());

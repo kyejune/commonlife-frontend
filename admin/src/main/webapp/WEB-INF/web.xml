@@ -56,6 +56,11 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
+    <!-- 스프링 세션  리스너 등록 -->
+    <listener>
+        <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+    </listener>
+
     <!--<filter>-->
         <!--<filter-name>SimpleCORSFilter</filter-name>-->
         <!--<filter-class>com.kolon.common.filter.SimpleCORSFilter</filter-class>-->
@@ -67,14 +72,25 @@
 
 
     <!--&lt;!&ndash; Spring Security Filter &ndash;&gt;-->
-    <!--<filter>-->
-        <!--<filter-name>springSecurityFilterChain</filter-name>-->
-        <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
-    <!--</filter>-->
-    <!--<filter-mapping>-->
-        <!--<filter-name>springSecurityFilterChain</filter-name>-->
-        <!--<url-pattern>/*</url-pattern>-->
-    <!--</filter-mapping>-->
+    <filter>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSecurityFilterChain</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <session-config>
+        <!-- set session Timeout -->
+        <session-timeout>600</session-timeout>
+        <!-- set distinguished JESSIONID name -->
+        <cookie-config>
+            <http-only>true</http-only>
+            <name>COMMONLIFE_JSESSIONID</name>
+        </cookie-config>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
 
 
 

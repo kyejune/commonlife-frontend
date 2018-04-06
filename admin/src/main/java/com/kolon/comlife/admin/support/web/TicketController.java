@@ -128,7 +128,7 @@ public class TicketController {
             logger.debug(">>> " + ticketFileInfo);
             if( ticketFileInfo != null ) {
                 // image 가져오기 경로 ex: {{ADMIN_HOST}}/admin/support/ticket/ticketFiles/1
-                ticketFileImgUrl = "/admin/support/ticket/ticketFiles/" + ticketFileInfo.getTktFileIdx() + "/m";
+                ticketFileImgUrl = "/admin/support/ticket/ticketFiles/" + ticketFileInfo.getTktFileIdx() + "/s";
                 logger.debug(">>> imgUrl: " + ticketFileImgUrl);
             }
         }
@@ -233,6 +233,21 @@ public class TicketController {
         return new ResponseEntity(outputFile, headers, HttpStatus.OK);
     }
 
+
+    @PostMapping(
+            value = "updateComment",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateComment (
+              HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+
+    ) {
+        
+
+        return null;
+    }
 
 //    @PostMapping(
 //            value = "procIns.do",

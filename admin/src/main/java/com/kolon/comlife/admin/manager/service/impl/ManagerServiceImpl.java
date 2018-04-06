@@ -1,7 +1,6 @@
 package com.kolon.comlife.admin.manager.service.impl;
 
 import com.kolon.comlife.admin.manager.model.AdminInfo;
-import com.kolon.comlife.admin.manager.model.ManagerInfo;
 import com.kolon.comlife.admin.manager.service.ManagerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,7 @@ public class ManagerServiceImpl implements ManagerService {
      * @param managerInfo
      * @return
      */
-    public ManagerInfo selectLoginManager(ManagerInfo managerInfo) {
+    public AdminInfo selectLoginManager(AdminInfo  managerInfo) {
         return managerDAO.selectLoginManager(managerInfo);
     }
 

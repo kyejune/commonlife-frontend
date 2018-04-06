@@ -21,7 +21,7 @@ public class ManagerDAO {
      * @param managerInfo
      * @return
      */
-    public ManagerInfo selectLoginManager(ManagerInfo managerInfo)  {
+    public AdminInfo selectLoginManager(AdminInfo managerInfo)  {
         return sqlSession.selectOne("Manager.selectLoginManager", managerInfo);
     }
 

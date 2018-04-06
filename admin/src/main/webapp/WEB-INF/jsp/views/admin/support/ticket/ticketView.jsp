@@ -113,14 +113,14 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-8">
-                                                        <h3><strong>${userExtInfo.userNm}</strong></h3>
+                                                        <h3>이름 : <strong>${userExtInfo.userNm}</strong></h3>
+                                                        <h5>주소 : ${complexInfo.cmplxNm} | ${userExtInfo.dong} - ${userExtInfo.ho}</h5>
                                                         <address>
                                                             <c:if test="${userExtInfo.cellYn != null}">
-                                                                <abbr title="Phone">P:</abbr> ${userExtInfo.cell}<br>
+                                                                연락처: ${userExtInfo.cell}<br>
                                                             </c:if>
                                                             <c:if test="${userExtInfo.emailYn != null}">
-                                                                <abbr title="Email">E:</abbr>
-                                                                <a href="mailto:${userExtInfo.email}">${userExtInfo.email}</a>
+                                                                이메일: <a href="mailto:${userExtInfo.email}">${userExtInfo.email}</a>
                                                             </c:if>
                                                         </address>
                                                     </div>
@@ -224,13 +224,6 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="row">
-                                        <div class="hr-line-dashed"></div>
-                                        이전 현장 관리자 코멘트
-                                        {{내용 업데이트 버튼}}
-                                        <div class="hr-line-dashed"></div>
-                                    </div>
                                 </div>
                                 <div class="col-sm-6">
                                     {{티켓처리 도움말 추가}}
@@ -238,90 +231,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-
-
-            <!--//paging-->
-            <!-- Main content -->
-            <div class="box-header with-border">
-                <h3 class="box-title"> </h3>
-            </div>
-
-            <div class="box-body">
-
-                <div class="form-group">
-                    <label>* 공지사항/보도자료 선택</label>
-                    <p/>
-                    <label> 라벨
-                    </label>&nbsp;&nbsp;&nbsp;            <%--<form:hidden path="boardIdx"/>--%>
-
-                    <label>
-                        <%--<form:radiobutton path="boardType" value="PRESS"/>보도자료--%>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label>* 제목</label>
-                    <input type="text" id="title" name="title" class="form-control" placeholder="제목 입력" value="${boardDetail.title}">
-                </div>
-                <div class="form-group">
-                    <label>* 내용  - (<span style="color:blue">'보도자료' 선택 시</span>, 하나의 URL 만 입력하세요. 입력된 값(URL)으로 링크가 설정됩니다.) </label>
-                    <!--
-                    <input type="text" class="form-control" placeholder="내용 입력">
-                    -->
-                    <textarea name="content" id="content" rows="10" cols="100" style="width:100%; height:412px;">${ticketInfo.content}</textarea>
-
-                    <script type="text/javascript">
-
-                        // todo: Editor 코드가 위치함
-                    </script>
-                </div>
-                <div class="form-group">
-                    <label>* 공개여부</label>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" name="useYn" id="useYnTrue" value="Y" checked>
-                            공개
-                        </label>&nbsp;&nbsp;&nbsp;
-                        <label>
-                            <input type="radio" name="useYn" id="useYnFalse" value="N" >
-                            비공개
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="atchFiles">* 파일첨부</label>
-                    <input type="file" name="atchFiles" id="atchFiles" multiple="multiple" onchange="boardAtchFile(this);"/>
-                    <span id="atchFilInput">
-                    </span>
-                    <span id="atchFilInputView">
-                        <%--<c:forEach var="vo" items="${fileList}" varStatus="status">--%>
-                            <%--<li id="viewAttFileList<c:out value="${status.count + 1}"/>">--%>
-                                <%--<strong>--%>
-                                    <%--<a href="javascript:void(0)" onclick="fileDown('${vo.fileNm}','${vo.fileOrgNm}','${vo.filePath}')">${vo.fileOrgNm}</a>--%>
-                                <%--</strong>--%>
-                                <%--&nbsp;&nbsp;--%>
-                                <%--<a href="javascript:void(0)" onclick="fileDel('${vo.fileIdx}','${vo.fileNm}','${vo.filePath}','viewAttFileList<c:out value="${status.count + 1}"/>');"><span>[삭제하기]</span></a>--%>
-                            <%--</li>--%>
-                        <%--</c:forEach>--%>
-                    </span>
-                    <!--
-                    <p class="help-block">Example block-level help text here.</p>
-                     -->
-                </div>
-
-                <div align="right">
-                    <input class="btn btn-primary" type="button" value="목록" onclick="refreshList()" />
-                    <%--<c:choose>--%>
-                        <%--<c:when test="${boardDetail.boardIdx > 0 }">--%>
-                            <%--<input class="btn btn-primary" type="button" value="수정" onclick="procIns()" />--%>
-                        <%--</c:when>--%>
-                        <%--<c:otherwise>--%>
-                            <%--<input class="btn btn-primary" type="button" value="등록" onclick="procIns()" />--%>
-                        <%--</c:otherwise>--%>
-                    <%--</c:choose>--%>
                 </div>
             </div>
             </form:form>

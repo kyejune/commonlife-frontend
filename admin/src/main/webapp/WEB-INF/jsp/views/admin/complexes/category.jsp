@@ -50,21 +50,11 @@
                     </div>
                     <div class="ibox-content" style="">
                         <form class="form-horizontal">
-                            <h3>주의 사항</h3>
+                            <h3>설명서</h3>
                             <p>
-                                todo: 1. 현재 현장에 대한 정보를 표시
-                            </p>
-                            <p>
-                                - App내 [INFO] - [Living Support]의 항목을 표시하고 순서를 변경할 수 있습니다.
-                                - 항목간 순서를 변경한 이후, '업데이트'클릭하면 반영됩니다.
-                            </p>
-                                <%-- todo: 1. COMPLEX_ID 현재 현장에 대한 정보를 표시 --%>
-
-                            <h3 >변경 사항 적용</h3>
-                            <p>
-                                <button type="button"
-                                        class="btn btn-block btn-outline btn-primary"
-                                        onclick="javascript:procIns();" >변경 사항 적용</button>
+                                그룹 간의 이동은 서비스 현장에 바로 적용됩니다. 설정에 유의하시기 바랍니다.
+                                설정이 바로 적용됩니다.
+                                새롭게 생성된 '현장'은 미분류에 배치됩니다.
                             </p>
                         </form>
                     </div>
@@ -75,34 +65,64 @@
 
         <div class="row">
             <!-- Uncategorized -->
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content" style="">
-                        <h3>미분류</h3>
-                        <p class="small"><i class="fa fa-hand-o-up"></i> 현장그룹 간에 현장을 드래그하여 이동하세요.</p>
-                        <ul class="sortable-list connectList agile-list" id="srt_list_${complexConst.grpUncategorizedId}" value="${complexConst.grpUncategorizedId}">
+                        <h3>0. 미분류</h3>
+                        <p class="small">
+                            <i class="fa fa-hand-o-up"></i>
+                            초기 설정된 현장은 여기에 나타나게 됩니다. <br>
+                            <i class="fa fa-hand-o-up"></i>
+                            준비중 항목으로 이동하고 현장의 세부 설정을 진행하시기 바랍니다.
+                        </p>
+                        <ul class="sortable-list connectList agile-list"
+                            id="srt_list_${complexConst.grpUncategorizedId}"
+                            value="${complexConst.grpUncategorizedId}">
                         </ul>
                     </div>
                 </div>
             </div>
-            <!-- COMMNONLife  -->
-            <div class="col-lg-4">
+            <!-- 준비 -->
+            <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content" style="">
-                        <h3>민간</h3>
-                        <p class="small"><i class="fa fa-hand-o-up"></i> 현장그룹 간에 현장을 드래그하여 이동하세요.</p>
-                        <ul class="sortable-list connectList agile-list" id="srt_list_${complexConst.grpMinganId}" value="${complexConst.grpMinganId}">
+                        <h3>1. 준비중</h3>
+                        <p class="small">
+                            <i class="fa fa-hand-o-up"></i>여기에 현장을 배치하고 현장의 세부 설정을 진행하세요. <br>
+                            <i class="fa fa-hand-o-up"></i>현장의 세부 설정을 마무리하였고 공개할 준비가 되었다면,
+                            "2.COMMON Life -민간" 또는 "3.따복하우스 -공공" 항목으로 이동하세요.
+                        </p>
+                        <ul class="sortable-list connectList agile-list" id="srt_list_READY" value="READY">
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- COMMNON Life  -->
+            <div class="col-lg-3">
+                <div class="ibox">
+                    <div class="ibox-content" style="">
+                        <h3>2. COMMON Life - 민간</h3>
+                        <p class="small">
+                            <i class="fa fa-hand-o-up"></i>
+                            현장그룹 간에 현장을 드래그하여 이동하세요.
+                        </p>
+                        <ul class="sortable-list connectList agile-list"
+                            id="srt_list_${complexConst.grpMinganId}" value="${complexConst.grpMinganId}">
                         </ul>
                     </div>
                 </div>
             </div>
             <!-- 민간 -->
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content" style="">
-                        <h3>공공</h3>
-                        <p class="small"><i class="fa fa-hand-o-up"></i> 현장그룹 간에 현장을 드래그하여 이동하세요.</p>
-                        <ul class="sortable-list connectList agile-list" id="srt_list_${complexConst.grpGonggongId}" value="${complexConst.grpGonggongId}">
+                        <h3>3. 따복하우스 - 공공</h3>
+                        <p class="small"><i class="fa fa-hand-o-up"></i>
+                            현장그룹 간에 현장을 드래그하여 이동하세요.
+                        </p>
+                        <ul class="sortable-list connectList agile-list"
+                            id="srt_list_${complexConst.grpGonggongId}"
+                            value="${complexConst.grpGonggongId}">
                         </ul>
                     </div>
                 </div>

@@ -1,9 +1,7 @@
 package com.kolon.comlife.admin.manager.service;
 
 import com.kolon.comlife.admin.manager.model.AdminInfo;
-import com.kolon.comlife.admin.manager.model.ManagerInfo;
 
-import java.sql.SQLException;
 import java.util.List;
 
 
@@ -15,7 +13,7 @@ public interface ManagerService {
      * @param managerInfo
      * @return
      */
-    ManagerInfo selectLoginManager(ManagerInfo managerInfo);
+    AdminInfo selectLoginManager( AdminInfo managerInfo);
 
     /**
      * 관리자 목록 조회

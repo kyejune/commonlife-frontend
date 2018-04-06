@@ -4,7 +4,7 @@ import com.kolon.comlife.properties.model.PropertiesInfo;
 import com.kolon.comlife.properties.service.PropertiesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-@Controller
+@Component
 public class ServicePropertiesMap {
     private static final Logger logger = LoggerFactory.getLogger(ServicePropertiesMap.class);
 
