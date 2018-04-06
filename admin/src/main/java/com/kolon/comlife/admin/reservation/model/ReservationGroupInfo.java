@@ -2,10 +2,11 @@ package com.kolon.comlife.admin.reservation.model;
 
 import org.apache.ibatis.type.Alias;
 
-@Alias("reservationGroupseqInfo")
+@Alias("reservationGroupInfo")
 public class ReservationGroupInfo {
     private int idx;
     private int cmplxIdx;
+    private String cmplxNm;
     private String icon;
     private String title;
     private String summary;
@@ -27,6 +28,14 @@ public class ReservationGroupInfo {
 
     public void setCmplxIdx(int cmplxIdx) {
         this.cmplxIdx = cmplxIdx;
+    }
+
+    public String getCmplxNm() {
+        return cmplxNm;
+    }
+
+    public void setCmplxNm(String cmplxNm) {
+        this.cmplxNm = cmplxNm;
     }
 
     public String getIcon() {

@@ -75,9 +75,7 @@
                     <span class="nav-label">예약 관리<span class="fa arrow"></span></span>
                 </a>
                 <ul class="nav nav-second-level callapse">
-                    <li><a href="/admin/reservation-schemes/list.do">예약 틀 관리</a></li>
-                    <li><a href="/admin/reservation-amenities/list.do">예약 시설 옵션 관리</a></li>
-                    <li><a href="/admin/reservations/list.do">예약 관리</a></li>
+                    <li><a href="/admin/reservation-groups/list.do">예약 그룹 관리</a></li>
                 </ul>
             </li>
         </ul>

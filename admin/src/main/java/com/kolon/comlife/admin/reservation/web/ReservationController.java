@@ -48,7 +48,9 @@ public class ReservationController {
         }
 
         HashMap params = new HashMap<String, Object>();
-        params.put( "ids", ids );
+        if( ids.size() > 0 ) {
+            params.put( "ids", ids );
+        }
 
         List<ReservationSchemeInfo> schemes = schemeService.index( params );
 

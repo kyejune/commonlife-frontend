@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReservationGroup">
+    <select id="index" parameterType="java.util.Map" resultType="reservationGroupInfo">
+        SELECT
+                `RESERVATION_GROUPS`.*,
+                `COMPLEX_M`.*
+        FROM
+                `RESERVATION_GROUPS`
+                LEFT JOIN (
+                    SELECT  `CMPLX_ID`, `CMPLX_NM`
+                    FROM    `COMPLEX_M`
+                ) AS `COMPLEX_M`
+                ON `RESERVATION_GROUPS`.`CMPLX_IDX` = `COMPLEX_M`.`CMPLX_ID`
+        WHERE
+                `RESERVATION_GROUPS`.`DEL_YN` = 'N'
+                <choose>
+                    <when test='ids != null'>
+                        AND
+                            IDX IN
+                            <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
+                                #{id}
+                            </foreach>
+                    </when>
+                    <when test='id != null'>
+                        AND
+                            CMPLX_IDX = #{id}
+                    </when>
+                </choose>
+    </select>
+    <select id="show" parameterType="java.util.Map" resultType="reservationGroupInfo">
+        <![CDATA[
+            SELECT
+                    *
+            FROM
+                    `RESERVATION_GROUPS`
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </select>
+    <insert id="create" parameterType="reservationGroupInfo">
+        <![CDATA[
+            INSERT INTO `RESERVATION_GROUPS`
+                        (
+                            `CMPLX_IDX`,
+                            `ICON`,
+                            `TITLE`,
+                            `SUMMARY`,
+                            `DEL_YN`,
+                            `REG_DTTM`,
+                            `UPD_DTTM`
+                        )
+                        VALUES
+                        (
+                            #{cmplxIdx},
+                            #{icon},
+                            #{title},
+                            #{summary},
+                            'N',
+                            CURRENT_TIMESTAMP,
+                            CURRENT_TIMESTAMP
+                        );
+        ]]>
+    </insert>
+    <update id="update" parameterType="reservationGroupInfo">
+        <![CDATA[
+            UPDATE
+                    `RESERVATION_GROUPS`
+            SET
+                    `CMPLX_IDX` = #{cmplxIdx},
+                    `ICON` = #{icon},
+                    `TITLE` = #{title},
+                    `SUMMARY` = #{summary},
+                    `UPD_DTTM` = #{updDttm}
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </update>
+    <update id="delete" parameterType="reservationGroupInfo">
+        <![CDATA[
+            UPDATE
+                    `RESERVATION_GROUPS`
+            SET
+                    `DEL_YN` = 'Y'
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </update>
+</mapper>
