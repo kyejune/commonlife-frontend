@@ -45,7 +45,7 @@ class ConditionalExpression extends Component {
 
         const { stsNm, unit, condi, options = [] } = this.props;
 
-        console.log('조건문:', this.props );
+        //console.log('조건문:', this.props );
 
         return (
             <div>

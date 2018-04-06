@@ -11,6 +11,10 @@ class IconLoader extends Component {
         }
     }
 
+    componentWillReceiveProps( nextProps ){
+        this.setState( nextProps );
+    }
+
     loadFail = ()=>{
         // 로드 실패하면 기본값 이미지로 교체
         this.setState( { src: this.state.defaultSrc });

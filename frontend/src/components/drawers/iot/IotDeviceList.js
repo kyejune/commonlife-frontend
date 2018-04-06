@@ -7,13 +7,23 @@ import LiOfCtrl from "./LiOfCtrl";
 import checkSrc from 'images/ic-check@3x.png';
 import classNames from 'classnames';
 
+
+/*
+*  my, senario, ctrl 세군데서 접근하는 페이지
+*  scenario, ctrl는 풀 리스트를 보여주고,
+*  my는 추가 가능한 리스트만 보여주기
+*
+*  ctrl은 제어
+*  scenario, my는 체크박스 형태
+*
+* */
 class IotDeviceCategory extends Component {
 
 	constructor ( props ) {
 		super( props );
 
 		const action = props.match.params.action;
-		const dId = props.match.params.option4 || props.match.params.option1;
+		const dId = props.match.params.option4 || props.match.params.option3 || props.match.params.option2 || props.match.params.option1;
 
 		const isRoom = !isNaN( dId ); // 숫자형이면 룸별 목록, 문자 조합이면 공간별 목록으로 구분
 
@@ -21,7 +31,7 @@ class IotDeviceCategory extends Component {
 			isRoom: isRoom,
 			cateId: dId,
 			deviceData: [],
-            modeAdd: action === 'scenario',
+            action: action,
 			addingList:[],
 		};
 
@@ -33,37 +43,59 @@ class IotDeviceCategory extends Component {
 
 	loadData(){
         // 목록 가져오기
-        Iot.getDevicesByCategory( this.state.modeAdd, this.state.isRoom, this.state.cateId, data=> {
-
-            this.setState( {
-				deviceData: data
-            } );
-
+        Iot.getDevicesByCategory( this.state.action === 'my', this.state.isRoom, this.state.cateId, ( success, data )=> {
+        	if( success ) {
+                this.setState({
+                    deviceData: data,
+                    addingList: [],
+                });
+            }else{
+        		console.log( data );
+			}
         } );
 	}
 
-
+    // Scenario or My IoT ---------------------------------------------------------------------------------------
 	// 기기 추가
-    onChangeAddCheck=( bool, data )=>{
+    onChangeAddCheck=( bool, data, index )=>{
 		data = data.data;
-        let list = this.state.addingList.concat();
-        const sIdx = list.indexOf( data.myIotId );
+		const ID = index;//this.state.action==='my'?data.myIotId:data.clntId;
 
-        if( bool ) list.push( data.myIotId );
+        let list = this.state.addingList.concat();
+        const sIdx = list.indexOf( ID );
+
+        if( bool ) list.push( ID );
         else if( sIdx >= 0 ) list.splice( sIdx, 1 );
 
         this.setState( { addingList:list });
 	}
 
-	// 추가된 기기 전송
+	// My IoT 추가된 기기 전송
     addDevices=()=>{
-		Iot.setExposeItemOfDashboard( this.state.addingList, ()=>{
-			this.loadData();
-		});
+
+		if( this.state.action === 'my' ) {
+			const Addings = this.state.addingList.map(itemIndex=>{
+				return this.state.deviceData[itemIndex].myIotId;
+			});
+
+            Iot.setExposeItemOfDashboard( Addings, () => {
+            	if( this.state.deviceData.length > Addings.length )
+            		this.loadData();
+            	else
+            		this.props.history.goBack();
+            });
+
+        }else if( this.state.action === 'scenario' ){
+			console.log('시나리오에 기기추가');
+		}else{
+
+			alert('예외상황');
+		}
 	}
 
 
-	// 기기 제어: 토글 바로 적용
+    // Ctrl  ---------------------------------------------------------------------------------------
+	// 기기 제어: 토글 바로 적용, detail은 페이지 이동해서 제어
     toggleDevice=( bool, data )=>{
         Iot.setIotToggleDevice( data, bool, ( success )=>{
         	console.log( '전환성공?', success );
@@ -73,29 +105,33 @@ class IotDeviceCategory extends Component {
     }
 
 	render () {
+
+		const action = this.props.match.params.action;
+
 		const DeviceList = this.state.deviceData.map( ( data, index )=> {
 
-			switch( this.props.match.params.action ){
+			switch( action ){
 				case 'ctrl':
 					if( data.deviceType === 'button' )
-						return <LiOfToggle key={index} name={data.thingsNm} desc={data.cateNm}
+						return <LiOfToggle key={index} name={data.deviceNm} desc={data.cateNm}
 										   checked={data.currSts === data.maxVlu}
 										   onSwitch={ this.toggleDevice }
 										   icon={data.imgSrc}
 										   data={data}
 						/>;
 					else
-						return <LiOfCtrl key={index} name={data.thingsNm} desc={data.cateNm}
+						return <LiOfCtrl key={index} name={data.deviceNm} desc={data.cateNm}
                                          icon={data.imgSrc}
 										 to={`${this.props.location.pathname}/device/${data.deviceId}`}
 
 						/>;
 
 				case 'scenario':
-                    return <LiOfCheck key={index} name={data.mNm} icon={data.btImgSrc} desc={data.cateNm}
+                case 'my':
+                    return <LiOfCheck key={index} name={action==='my'?data.mNm:data.deviceNm} icon={data.btImgSrc} desc={data.cateNm}
 									  data={data}
-									  checked={this.state.addingList.indexOf( data.myIotId ) >= 0 }
-									  onChange={this.onChangeAddCheck }/>;
+									  checked={this.state.addingList.indexOf( index ) >= 0 }
+									  onChange={ (bool, data)=>this.onChangeAddCheck( bool, data, index ) }/>;
 				default:
 					return '';
 			}
@@ -108,7 +144,7 @@ class IotDeviceCategory extends Component {
 					{DeviceList}
 				</ul>
 
-                {this.state.modeAdd&&
+                {this.state.mode !== 'ctrl' &&
                     <footer className={ classNames("cl-flex cl-opts__footer", { "cl-opts__footer--hide":this.state.addingList.length === 0 } )}>
                         <div>{this.state.addingList.length}개의 기기 선택</div>
                         <button className="ml-auto cl-flex mr-1em" onClick={ this.addDevices }>

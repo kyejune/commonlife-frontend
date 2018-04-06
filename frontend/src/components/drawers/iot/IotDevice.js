@@ -14,6 +14,7 @@ let sjf = new SimpleJsonFilter();
 /*
 * 상세제어,
 * 진입경로: MyIot, MyIot추가,
+* -- 진입경로가 대시보드 -> 기기제어, 파란버튼 -> 기기제어 의 기기 제어쪽만 남을것 같은데 확인 요망
 * */
 class IotDevice extends Component {
 
@@ -30,8 +31,7 @@ class IotDevice extends Component {
             action: action,
 
             // 전송용 데이터
-            updateData:{},
-            rnd:Math.random(), // 강제 업데이트용 키
+            // updateData:{},
         }
 
         if( action === 'ctrl' ) this.props.updateTitle('상세 제어');
@@ -56,16 +56,23 @@ class IotDevice extends Component {
         });
     }
 
-    componentWillUnmount(){
-        this.setState({
-            updateData:{},
-        });
-    }
+    // componentWillUnmount(){
+    //     this.setState({
+    //         updateData:{},
+    //     });
+    // }
 
 
     // 즉시실행 일반버튼
     onRunButton( data ){
 
+    }
+
+    // 인풋 텍스트 변경
+    onChangeInputText( value, optIndex ){
+        let opts = this.state.options.concat();
+            opts[optIndex].currStsKor = value;
+        this.setState( { options:opts });
     }
 
     // 즉시실행 토글버튼
@@ -80,36 +87,55 @@ class IotDevice extends Component {
 
         // My Iot 편집
         }else{
-            console.log( '편집용으로 저장' );
+            console.log( '편집용으로 저장???' );
         }
     }
 
 
-    // 완료 누르면 후 전송할 데이터 차곡차곡 모아두기...
+    // 토글버튼 제외한 녀석들 값 변할때 수신
     onChangeOthers=( value, data )=>{
         console.log( data.data.moAttr, ": ", value, data.data );
 
-        // 기기제어
-        if( this.state.action === 'ctrl') {
-            let updateData = Object.assign({}, this.state.updateData);
-            updateData['key'] = data.data;
+        if( this.state.action === 'ctrl' ){
 
-            this.setState({
-                updateData: updateData,
+            // value change적용 용
+            let idx = data.index;
+            if( idx !== undefined ){
+                let opts = this.state.options.concat();
+                opts[idx].currSts = value;
+                this.setState({ options: opts });
+            }
+
+            // 호출
+            Iot.setIotDeviceValue(data.data, value, success => {
+                if (!success) this.loadDeviceInformation();
             });
-
-        // My Iot 편집
         }else{
-            console.log( '편집용으로 저장' );
+
+            alert('어디서 접근한거냐? 아직 예외처리 안된 페이지인듯');
         }
 
+        // 기기제어
+        // if( this.state.action === 'ctrl') {
+        //     let updateData = Object.assign({}, this.state.updateData);
+        //     updateData['key'] = data.data;
+        //
+        //     this.setState({
+        //         updateData: updateData,
+        //     });
+        //
+        // // My Iot 편집
+        // }else{
+        //     console.log( '편집용으로 저장' );
+        // }
+
 
     }
 
 
-    onConfirm=()=>{
-        console.log('확인:', this.state.updateData );
-    }
+    // onConfirm=()=>{
+    //     console.log('확인:', this.state.updateData );
+    // }
 
 
     render() {
@@ -151,7 +177,7 @@ class IotDevice extends Component {
 
                         <IotSlider className="w-100 mt-3em ml-03em mr-03em"
                                    min={item.minVlu} max={item.maxVlu} value={item.currSts} unit={item.unit}
-                                   onChange={ this.onChangeOthers } data={item}
+                                   onChange={ value => this.onChangeOthers( value, { data:item, index:index }) } data={item}
                         />
                     </li>;
 
@@ -160,7 +186,7 @@ class IotDevice extends Component {
 
                     const oText = sjf.filter({ 'VAL':item.currSts }).data( item.option ).wantArray().exec()[0].NM;
                     const Opts = item.option.map( (optionItem, optionIndex )=>{
-                        return <option value={optionIndex} key={optionIndex}>{optionItem.NM}</option>
+                        return <option value={optionItem.VAL} key={optionIndex}>{optionItem.NM}</option>
                     });
 
                     return <li key={index}>
@@ -168,7 +194,7 @@ class IotDevice extends Component {
                             {item.stsNm} <span className="color-primary">{ oText }</span>
                         </h4>
 
-                        <select name="cl-options" onChange={ evt =>this.onChangeOthers( evt.target.value, { data:item } )}>
+                        <select name="cl-options" value={item.currSts} onChange={ evt =>this.onChangeOthers( evt.target.value, { data:item, index:index } )}>
                             {Opts}
                         </select>
                     </li>
@@ -195,15 +221,23 @@ class IotDevice extends Component {
 
 
                 case 'inputtext':
+
                     return <li key={index}>
                         <h4 className="cl__title ml-03em">
-                            인풋텍스트 <span className="color-primary">VALUE</span>
+                            {item.stsNm} <span className="color-primary">VALUE</span>
                         </h4>
 
-                        <input type="text"
-                               className="mt-2em ml-03em mr-03em" placeholder="TEXT를 입력해주세요."
-                               onChange={ event => this.onChangeOthers( event.target.value, {data: item} )}
-                        />
+                        <div className="cl-flex w-100 mt-2em ml-03em mr-03em">
+                            <div className="w-85">
+                                <input type="text"
+                                       placeholder="TEXT를 입력해주세요."
+                                       defaultValue={ item.currStsKor }
+                                       onChange={ event => this.onChangeInputText( event.target.value, index ) }
+                                />
+                            </div>
+                            <button className="ml-auto"
+                                    onClick={ ()=> this.onChangeOthers( item.currStsKor, { data:item, index:index } )}>확인</button>
+                        </div>
                     </li>
 
                 default: return <li key={index}>{item.moAttr}</li>;
@@ -225,12 +259,12 @@ class IotDevice extends Component {
             </ul>
 
 
-            <footer className={ classNames( "cl-opts__footer", "cl-flex", { "cl-opts__footer--hide": Object.keys(this.state.updateData).length === 0 } )}>
-                <div className="ml-auto">
-                    <img src={checkSrc} width="28" height="28" className="mr-03em" alt="완료"/>
-                    <button className="color-primary" onClick={this.onConfirm }>확인</button>
-                </div>
-            </footer>
+            {/*<footer className={ classNames( "cl-opts__footer", "cl-flex", { "cl-opts__footer--hide": Object.keys(this.state.updateData).length === 0 } )}>*/}
+                {/*<div className="ml-auto">*/}
+                    {/*<img src={checkSrc} width="28" height="28" className="mr-03em" alt="완료"/>*/}
+                    {/*<button className="color-primary" onClick={this.onConfirm }>확인</button>*/}
+                {/*</div>*/}
+            {/*</footer>*/}
 
         </div>
     }

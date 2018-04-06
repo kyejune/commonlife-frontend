@@ -97,11 +97,16 @@ export default {
         }));
     },
 
-    /* 공간별( true, roomId), 기기별( false, cateCd )에 카테고리에 따른 기기 목록 */
+    /* 공간별( true, roomId), 기기별( false, cateCd )에 카테고리에 따른 기기 목록
+    * @params additional 추가 가능한 목록만 가져올것인지 다 가져올것인지...
+    * */
     getDevicesByCategory( additional, isRoom, cateId, callback) {
         axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${ (additional?'myiot/':'') + (isRoom ? 'rooms' : 'deviceCategory')}/${cateId}/devices${ additional?'/available':'' }`)
             .then(response => {
-                callback(response.data.data);
+                callback( true, response.data.data);
+            })
+            .catch( error => {
+               callback( false, error);
             });
     },
 
@@ -215,21 +220,41 @@ export default {
 
     /* Iot장비의 값을 변경 */
     setIotToggleDevice(data, bool, callback) {
-
-        const {deviceId, protcKey, maxVlu, minVlu} = data;
-
+        const {maxVlu, minVlu} = data;
         const value = bool ? maxVlu : minVlu;
-        Store.myModal = { status:0, name:data.thingsNm, value: value.toUpperCase() };
 
+        this.setIotDeviceValue( data, value, callback );
+    },
+
+    setIotDeviceValue( data, value, callback) {
+
+        const {deviceId, protcKey} = data;
+        let valueName = value.toString();
+
+        let params = `action?protcKey=${encodeURIComponent(protcKey)}&value=${value}`;
+
+        // 기기명 옆에 표시될 바꾸기로 한 값 표시용
+        switch( data.moAttr ){
+            case 'option':
+                valueName = data.option.filter( opt=>{ return opt.VAL == value } )[0].NM;
+                break;
+
+            case 'inputtext':
+                // 관련장비 기기명 변경은 api주소가 다름
+                params = `desc?value=${encodeURIComponent(value)}`;
+                break;
+        }
+
+        Store.myModal = { status:0, name:data.thingsNm, value: valueName };
         console.log( data, `의 값을 ${value}로 변경`, Store.modeModal );
-        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}/action?protcKey=${encodeURIComponent(protcKey)}&value=${value}`)
+        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}/${params}`)
             .then(response => {
                 callback( true );
-                Store.myModal = { status:1, name:data.thingsNm, value: value.toUpperCase() };
+                Store.myModal = { status:1, name:data.thingsNm, value: valueName };
                 Store.hideMyModal();
             })
             .catch(error=>{
-               callback( false );
+                callback( false );
             });
     },
 

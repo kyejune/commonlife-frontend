@@ -14,6 +14,12 @@ class IotSlider extends Component {
         }
     }
 
+    componentWillReceiveProps( nextProps ){
+        this.setState({
+            value: Number(nextProps.value)
+        });
+    }
+
     onBeforeChange = () => {
         this.setState({ isDragging: true });
     }
@@ -41,7 +47,7 @@ class IotSlider extends Component {
         return <div className={"cl-iot-slider cl-flex " + this.props.className}>
             <div className="cl-iot-slider__min">{min + unit}</div>
 
-            <Slider dots step={1} min={min} max={max} defaultValue={value}
+            <Slider dots step={1} min={min} max={max} value={value}
                     className="cl-slider"
                     onBeforeChange={this.onBeforeChange}
                     onChange={this.onChange}
