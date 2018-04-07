@@ -213,6 +213,11 @@ class HomeIoT extends Component {
                 <Automations/>
             </DrawerWrapper>
 
+            {/* 자동화 리스트 개별 편집 */}
+            <DrawerWrapper drawer="iot-scenario-detail" title="자동화 리스트 편집" back >
+                <IotModeSetting/>
+            </DrawerWrapper>
+
 
             {/* 기기 카테고리 목록, 경로에 따라 풀 리스트나 추가 가능한 리스트로 나눠서 보여줌 */}
             <DrawerWrapper drawer="iot-device-category" title="기기 카테고리" back className="cl-bg--light">

@@ -209,8 +209,9 @@ export default {
 
 
     /* 모드 상세 가져오기 */
-    getModeDetail(mode, callback) {
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${mode}`)
+    //{{API_HOST}}/iot/complexes/125/homes/1/automation/140
+    getScenarioDetail( modeString, id, callback) {
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${modeString}/${id}`)
             .then(response => {
                 callback(response.data);
             });
@@ -280,10 +281,11 @@ export default {
 
 
     /* Iot 23: 모드 업데이트 */
-    updateMode( modeId, data, callback ){
+    /* Iot 30: 오토메이션 업데이트 */
+    updateAutomation( mode, modeId, data, callback ){
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/automation/128
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/modes/CM01103
-        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${modeId}`, data )
+        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${mode}/${modeId}`, data )
             .then(response => {
                 callback(response.data);
             });
@@ -297,6 +299,18 @@ export default {
                 callback(response.data);
             });
     },
+
+    // 44. 전체 시나리오 리스트 조회
+    getScenarioes( callback ){
+        //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/automation
+        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation` )
+            .then(response => {
+                callback(response.data);
+            });
+    },
+
+
+
 
     /* 대시보드 myIot 스위치 버튼이나 시나리오 클릭시 */
     setMyIot( type, id, name, value, callback ){

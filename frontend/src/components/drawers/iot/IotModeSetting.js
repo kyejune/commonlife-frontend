@@ -25,13 +25,15 @@ class IotModeSetting extends Component {
         super(props);
 
         const {action, option1} = props.match.params;
-        this.props.updateTitle(action === 'mode' ? 'Mode 설정 변경' : '시나리오 생성');
+
+        this.props.updateTitle(action === 'mode' ? 'Mode 설정 변경' : (option1==='add'?'시나리오 생성':'시나리오 편집'));
 
         this.state = {
-            isMode: action === 'mode',
+            action: action,
+            isCreateMode: option1 === 'add',
 
             // mode 상태
-            modeName: option1,
+            editTarget: option1,
             modeData: null,
             sendingData:null,
 
@@ -43,35 +45,37 @@ class IotModeSetting extends Component {
             updatedScnaThings:{} // 디바이스는 변경된 부분만 저장
         }
 
-        if( action === 'scenario' )
+        if( action === 'scenario' ) // 필요한 경우 백버튼 path를 강제 지정
             this.props.setBackPath('/iot/scenario');
 
-    }
+        console.log( `action:${ action }, editTarget:${ option1 }, isCreateMode: ${ option1 === 'add' }`);
 
-    componentDidMount(){
-        this.updateRoute();
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.location !== prevProps.location)
+        if( this.state.isCreateMode && (this.props.location !== prevProps.location))
             this.settingInitData(Scenario);
     }
 
     componentDidMount(){
-        if( this.state.isMode ){
-            // Mode 편집 상태일경우 데이터 불러오기
-            this.getModeData();
-        }else{
+
+        // 생성 및 편집 분기처리
+        if( this.state.isCreateMode ){
             if( this.nameInput )
                 this.nameInput.focus();
+
             // Scenario or Store의 값을 가져와서 modeData와 유사하게 object만들어주기
             this.settingInitData(Scenario);
+
+        }else{ // Mode 편집 상태일경우 데이터 불러오기
+            this.getSavedData();
         }
+
     }
 
     // 모드 값 로드
-    getModeData=()=>{
-        Iot.getModeDetail( this.state.modeName, data=>{
+    getSavedData=()=>{
+        Iot.getScenarioDetail( this.state.action === 'mode'?'modes':'automation', this.state.editTarget, data=>{
             console.log( '모드 상세정보:', data );
             this.settingInitData( data );
         });
@@ -97,8 +101,6 @@ class IotModeSetting extends Component {
     // 시나리오 생성 상태에서 이름 변경
     onChangeName = (event) => {
         Scenario.scna[0].name = event.target.value;
-        console.log(event.target.value);
-        //this.setState({name: event.target.value});
     }
 
 
@@ -145,7 +147,7 @@ class IotModeSetting extends Component {
 
         let d = this.state.sendingData.scnaThings[index];
         let updateObj = Object.assign({}, this.state.updatedScnaThings );
-        // updateObj[`${d.deviceId}-${d.stsId}-${d.thingsId}`] =
+
         updateObj[d.deviceId] =
             { thingsId:d.thingsId, deviceId: d.deviceId, stsId:d.stsId, stsValue: bool?d.maxVlu:d.minVlu, chk:"Y" };
 
@@ -161,16 +163,9 @@ class IotModeSetting extends Component {
     // 변경값 적용
     onApply=()=>{
 
-        if( this.state.isMode ) {
-            const prevData = this.state.sendingData;
-            const scna = prevData.scna[0];
-            const data = { ...prevData, scna:[{msg:scna.msg, scnaNm:scna.scnaNm}], scnaThings:Object.values(this.state.updatedScnaThings) };
+        // Automation 생성
+        if( this.state.isCreateMode ) {
 
-
-            Iot.updateMode(scna.mode, data, res => {
-                alert(res.msg);
-            });
-        }else{
             let data = Object.assign({}, Scenario );
 
             const NAME = Scenario.scna[0].name;
@@ -197,9 +192,23 @@ class IotModeSetting extends Component {
             console.log('취합된 데이터', data );
 
             Iot.createAutomation( data, res =>{
-               console.log( '시나리오 생성:', res );
+                console.log( '시나리오 생성:', res );
                 alert(res.msg);
             });
+
+        }else{
+        // Mode 및 Automation 업데이트
+
+            const prevData = this.state.sendingData;
+            const scna = prevData.scna[0];
+            const data = { ...prevData, scna:[{msg:scna.msg, scnaNm:scna.scnaNm}], scnaThings:Object.values(this.state.updatedScnaThings) };
+
+
+            Iot.updateAutomation( this.state.action === 'mode'?'modes':'automation', scna.mode, data, res => {
+                alert(res.msg);
+            });
+
+
         }
     }
 
@@ -219,9 +228,12 @@ class IotModeSetting extends Component {
 
     render() {
 
-        const { isMode, modeData } = this.state;
+        const { action, isCreateMode, modeData } = this.state;
 
         if( !modeData ) return <div/>
+
+
+        const ACTION_SCENARIO = (action === 'scenario');
 
         const {pathname} = this.props.location;
         let scna;
@@ -229,96 +241,88 @@ class IotModeSetting extends Component {
         let Devices = [];
 
         let sensorMore, deviceMore;
-        if( !isMode ){ // Automation 생성 및 편집에서만 편집 가능하게 노출
+        if( ACTION_SCENARIO ){ // Automation 생성 및 편집에서만 편집 가능하게 노출
             sensorMore = <Link className="ml-auto" to={`${pathname}/edit-sensor`}>센서편집</Link>;
             deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
         }
 
         let icon;
 
-        // console.log( '페이지에서 쓸 데이터:', isMode, modeData );
+        scna = modeData.scna[0];
+        icon = scna.icon;
 
-        // 모드 편집 모드
-        // if ( isMode ) {
-            scna = modeData.scna[0];
-            icon = scna.icon;
+        // 일반 센서추가
+        Sensors = modeData.scnaIfThings.map( (item, index)=>{
 
-            // 일반 센서추가
-            Sensors = modeData.scnaIfThings.map( (item, index)=>{
+            if( item.deviceType && item.deviceType === 'button')
+                return <LiOfToggle key={index} icon={item.imgSrc} name={item.stsNm}
+                                   checked={ this.state.checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] }
+                                   onSwitch={ bool => this.updateSensorCheck( bool, index ) }
+                                   />
+            else
+                return <LiOfCtrl key={index} icon={item.imgSrc} name={item.stsNm}
+                                 onClick={ ()=> Store.pushDrawer('edit-sensor-if',
+                                     { ...item,
+                                         options: modeData.scnaIfOption,
+                                         callback: value => this.updateCondition( value, index )
+                                     }) }
+                />
+        });
 
-                if( item.deviceType && item.deviceType === 'button')
-                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.stsNm}
-                                       checked={ this.state.checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] }
-                                       onSwitch={ bool => this.updateSensorCheck( bool, index ) }
-                                       />
-                else
-                    return <LiOfCtrl key={index} icon={item.imgSrc} name={item.stsNm}
-                                     onClick={ ()=> Store.pushDrawer('edit-sensor-if',
-                                         { ...item,
-                                             options: modeData.scnaIfOption,
-                                             callback: value => this.updateCondition( value, index )
-                                         }) }
-                    />
-            });
+        // 특정 시간 있으면 추가
+        Sensors = Sensors.concat( modeData.scnaIfSpc.map( item => {
+            return <LiOfCtrl key="time" icon={undefined}
+                             name="특정 시간"
+                             desc={ item.spcTime }
+                             onClick={ ()=> Store.pushDrawer('edit-sensor-time', { ...item, callback: this.updateTime } ) }
+                             />
+        }));
 
-            // 특정 시간 있으면 추가
-            Sensors = Sensors.concat( modeData.scnaIfSpc.map( item => {
-                return <LiOfCtrl key="time" icon={undefined}
-                                 name="특정 시간"
-                                 desc={ item.spcTime }
-                                 onClick={ ()=> Store.pushDrawer('edit-sensor-time', { ...item, callback: this.updateTime } ) }
-                                 />
-            }));
-
-            // 시간 구간 조건 추가
-            Sensors = Sensors.concat( modeData.scnaIfAply.map( item =>{
-                return <LiOfCtrl key="time-range" icon={undefined} name="구간 시간"
-                                 desc={ `${item.aplyStartTime} ~ ${item.aplyEndTime}`}
-                                 onClick={ ()=> Store.pushDrawer('edit-sensor-duration', { ...item, callback: this.updateDuration } ) }
-                                 />
-            }));
+        // 시간 구간 조건 추가
+        Sensors = Sensors.concat( modeData.scnaIfAply.map( item =>{
+            return <LiOfCtrl key="time-range" icon={undefined} name="구간 시간"
+                             desc={ `${item.aplyStartTime} ~ ${item.aplyEndTime}`}
+                             onClick={ ()=> Store.pushDrawer('edit-sensor-duration', { ...item, callback: this.updateDuration } ) }
+                             />
+        }));
 
 
-            // 디바이스 추가
-            Devices = modeData.scnaThings.map( (item, index)=>{
-                if( item.deviceType && item.deviceType === 'button')
-                    return <LiOfToggle key={index} icon={item.imgSrc} name={item.deviceNm}
-                                       checked={ this.state.checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] }
-                                       onSwitch={ bool => this.updateDeviceCheck( bool, index ) }
-                    />
-                else
-                    return <LiOfCtrl key={index} icon={item.imgSrc}
-                                     name={item.deviceNm}
-                                     onClick={ ()=> Store.pushDrawer('edit-scan-device', { ...item, isScenario:!this.state.isMode, callback: val => this.updateDeviceInfo( val, index ) } )}/>
-            })
+        // 디바이스 추가
+        Devices = modeData.scnaThings.map( (item, index)=>{
+            if( item.deviceType && item.deviceType === 'button')
+                return <LiOfToggle key={index} icon={item.imgSrc} name={item.deviceNm}
+                                   checked={ this.state.checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] }
+                                   onSwitch={ bool => this.updateDeviceCheck( bool, index ) }
+                />
+            else
+                return <LiOfCtrl key={index} icon={item.imgSrc}
+                                 name={item.deviceNm}
+                                 onClick={ ()=> Store.pushDrawer('edit-scan-device', { ...item, isScenario: ACTION_SCENARIO, callback: val => this.updateDeviceInfo( val, index ) } )}/>
+        });
 
-
-        // 시나리오 생성모드
-        // } else {
-        //     sensorMore = <Link className="ml-auto" to={`${pathname}/edit-sensor`}>센서편집</Link>;
-        //     deviceMore = <Link className="ml-auto" to={`${pathname}/edit-device`}>기기편집</Link>;
-        // }
 
         return (
             <div className="cl-bg--darkgray">
 
                 <header className="cl-mode-setting__header">
-                    <div className={classNames("cl-iot-mode__button", {"cl-iot-mode__button--expand": !isMode } )}>
+                    <div className={classNames("cl-iot-mode__button", {"cl-iot-mode__button--expand": ACTION_SCENARIO } )}>
                         <IconLoader src={icon}/>
-                        { isMode ?
-                            <span className="cl-name">{scna.scnaNm}</span> :
-                            <input ref={ r => this.nameInput = r } className="cl-name pr-04em" type="text" placeholder="시나리오" value={Scenario.scnaNm}
-                                       onChange={this.onChangeName}/>
+                        { ACTION_SCENARIO ?
+                            <input ref={ r => this.nameInput = r } className="cl-name pr-04em" type="text" placeholder="시나리오"
+                                   value={Scenario.scnaNm}
+                                   onChange={this.onChangeName}/>
+                            :
+                            <span className="cl-name">{scna.scnaNm}</span>
                         }
                     </div>
 
-                    { this.state.isMode ?
-                        <span className="desc">{ scna.msg }</span> :
-
+                    { ACTION_SCENARIO ?
                         <div>
                             <h5>사용자 Automation</h5>
                             <span className="desc">{ moment().format('YYYY년 MM월 DD일') }</span>
-                        </div>
+                        </div> :
+
+                        <span className="desc">{ scna.msg }</span>
                     }
                 </header>
 
@@ -348,7 +352,7 @@ class IotModeSetting extends Component {
 
 
                 <footer className={ classNames("cl-flex", "cl-opts__footer", { "cl-opts__footer--hide": ( Sensors.length + Devices.length === 0 ) } ) }>
-                    <button onClick={ this.getModeData }>취소</button>
+                    <button onClick={ this.getSavedData }>취소</button>
                     <button className="ml-auto cl-flex mr-1em" onClick={ this.onApply }>
                         <img src={checkSrc} alt="확인" width="28" height="28"/>
                         <span className="color-primary ml-03em">확인</span>
