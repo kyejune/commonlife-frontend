@@ -933,3 +933,36 @@ header.cl-mode-setting__header {
   }
 
 }
+
+
+
+.cl-iot-expose-link-group{
+
+  text-align: center;
+  padding-bottom: 3em;
+
+  a{
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    background-color: #626469;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    border: 1px solid rgba( 0, 0, 0, 0.5 );
+    margin: 0 27px;
+  }
+
+  img{
+    margin-top: 5px;
+  }
+
+  p{
+    position: absolute;
+    white-space: nowrap;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    font-weight: bold;
+  }
+}

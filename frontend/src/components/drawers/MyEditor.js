@@ -6,7 +6,9 @@ import RightArrowSrc from "images/ic-arrow-right@3x.png";
 import classNames from "classnames";
 import Iot from "scripts/iot";
 import EditableList from "../ui/EditableList";
-import addSrc from 'images/add-light@3x.png';
+import addIotSrc from 'images/add-iot@3x.png';
+import addInfoSrc from 'images/add-info@3x.png';
+import addAutoSrc from 'images/add-auto@3x.png';
 import {withRouter} from "react-router-dom";
 
 /* 모드 목록 (편집용) */
@@ -79,19 +81,19 @@ class MyEditor extends Component {
                               onAlign={ this.onAlign } />
 
 
-                <div className="cl-flex">
+                <div className="cl-iot-expose-link-group">
                     <Link to={`${this.props.location.pathname}/add-device`} className="cl-iot-add__button--light">
-                        <img src={addSrc} alt="노출될 기기 추가" width="40" height="40"/>
-                        <p>기기 추가</p>
+                        <img src={addIotSrc} alt="노출될 기기 추가" width="40" height="40"/>
+                        <p>IoT기기 추가</p>
                     </Link>
 
                     <Link to={`${this.props.location.pathname}/add-auto`} className="cl-iot-add__button--light">
-                        <img src={addSrc} alt="센서추가" width="40" height="40"/>
+                        <img src={addAutoSrc} alt="센서추가" width="40" height="40"/>
                         <p>자동화 추가</p>
                     </Link>
 
                     <Link to={`${this.props.location.pathname}/add-info`} className="cl-iot-add__button--light">
-                        <img src={addSrc} alt="센서추가" width="40" height="40"/>
+                        <img src={addInfoSrc} alt="센서추가" width="40" height="40"/>
                         <p>가치정보 추가</p>
                     </Link>
                 </div>
