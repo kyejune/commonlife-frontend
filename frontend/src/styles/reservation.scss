@@ -113,7 +113,7 @@
     }
 
     .cl-reservation__list-item-text {
-        width: calc( 100% - 45px - 94px );
+        width: calc( 100% - 45px - 75px );
         padding-left: 8px;
 
         h5 {
@@ -134,7 +134,8 @@
     }
 
     .cl-reservation__list-item-bullet {
-        width: 94px;
+        @extend .cl-flex;
+        width: 75px;
         opacity: 0.5;
         font-size: 14px;
         font-weight: 500;
@@ -142,10 +143,8 @@
         color: #000000;
 
         img {
-            position: relative;
-            top: 4px;
-            width: 18px;
-            height: 18px;
+            width: 17px;
+            height: 17px;
         }
 
         &>span, &>a {
@@ -332,3 +331,85 @@
 }
 
 //예약내역 끝
+
+//예약목록
+.cl-reservation-list {
+    padding-bottom: 56px;
+    background-image: url("images/bg-3@2x.png");
+}
+
+.cl-reservation-list__link {
+    padding-top: 10px;
+    padding-left: 53px;
+}
+
+.cl-reservation__list-item-alert {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.5);
+
+    img {
+        width: 14px;
+        height: 14px;
+        margin: 0 3px 0 7px;
+    }
+}
+
+.cl-reservation__alert {
+    .cl-reservation__list-item-text {
+        width: calc(100% - 45px);
+    }
+
+}
+
+.cl-reservation-list__info {
+    position: relative;
+    padding: 30px 15px 24px;
+    background-color: #ffffff;
+    box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+}
+
+.cl-reservation-list__info-paragraph {
+    margin: 0;
+    padding-top: 7px;
+    border-top: 1px solid #cfcfcf;
+    font-size: 13px;
+    color: $md-primary-color;
+}
+
+.cl-reservation-list__info-text {
+    width: calc(100% - 45px);
+    margin-bottom: 15px;
+    padding-left: 8px;
+
+    h4 {
+        margin: 0;
+        font-size: 19px;
+        font-weight: 500;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    p {
+        margin: 0;
+        font-size: 12px;
+        color: rgba(0,0,0,0.5);
+    }
+}
+
+.cl-reservation-list__info-type-img {
+    width: 45px;
+    margin-bottom: 15px;
+}
+
+.cl-reservation-list__info-credit {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 11px;
+    color: #4a4a4a;
+
+    span {
+        font-weight: bold;
+        color: $md-primary-color;
+    }
+}
+//예약목록 끝
