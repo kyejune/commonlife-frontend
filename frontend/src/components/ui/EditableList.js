@@ -79,7 +79,10 @@ class EditableList extends Component {
 
         const SortableList = SortableContainer(({items}) => {
             return (
-                <ul className="cl-iot-vertical-list cl-bg--dark">
+                <ul className={ classNames(
+                    "cl-iot-vertical-list",
+                    (this.props.strongdark?'cl-bg--strongdark':'cl-bg--dark')
+                ) }>
                     {items.map((value, index) => (
                         <SortableItem key={`item-${index}`} index={index} value={value}/>
                     ))}

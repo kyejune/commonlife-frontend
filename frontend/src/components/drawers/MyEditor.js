@@ -73,7 +73,10 @@ class MyEditor extends Component {
 
         return (
             <div className="pb-3em">
-                <EditableList items={ items } onCheck={ this.onCheck } clear={ selectedLen === 0 } onAlign={ this.onAlign } />
+                <EditableList items={ items }
+                              strongdark
+                              onCheck={ this.onCheck } clear={ selectedLen === 0 }
+                              onAlign={ this.onAlign } />
 
 
                 <div className="cl-flex">

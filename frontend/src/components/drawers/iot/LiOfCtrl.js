@@ -4,13 +4,14 @@ import Link from "react-router-dom/es/Link";
 
 class LiOfCtrl extends Component {
 
+
     render() {
 
         const WrapClass = this.props.to ? 'a':'div';
 
         return (
             <li onClick={ this.props.onClick }>
-                <WrapClass href={ '#' + this.props.to} className="w-100 cl-flex" >
+                <div className="w-100 cl-flex" >
                     <IconLoader className="cl__thumb--rounded" src={this.props.icon}/>
                     <div>
                         <h4 className="cl__title">{this.props.name}</h4>
@@ -19,8 +20,11 @@ class LiOfCtrl extends Component {
                         }
                     </div>
 
-                    <span className="ml-auto cl-ctrl__button"/>
-                </WrapClass>
+                    {this.props.removable ?
+                        <button className="cl-delete__button ml-auto" onClick={ this.props.onRemove }/> :
+                        <WrapClass  href={ '#' + this.props.to } className="ml-auto cl-ctrl__button"/>
+                    }
+                </div>
             </li>
         );
     }

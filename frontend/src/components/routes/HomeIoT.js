@@ -10,7 +10,8 @@ import IotBtnLg from 'components/ui/IotBtnLg';
 
 import IotIcAddMode from 'images/combined-shape@3x.png';
 
-import IotIcAdd from 'images/combined-shape-plus@3x.png';
+import IotIcAdd from 'images/service-manage@3x.png';
+import ModeManageSrc from 'images/mode-manage@3x.png';
 import {observer} from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
 import IotDevice from "../drawers/iot/IotDevice";
@@ -25,6 +26,7 @@ import ExposableEditor from "../drawers/iot/ExposableEditor";
 import TimesSelector from "../ui/TimesSelector";
 import TimeSelector from "../ui/TimeSelector";
 import Automations from "../drawers/iot/Automations";
+import RightArrowSrc from 'images/ic-favorite-24-px-blue@3x.png';
 
 class HomeIoT extends Component {
 
@@ -83,13 +85,12 @@ class HomeIoT extends Component {
             scenario:{
                 scenario:'iot-scenario',
 				add:'iot-mode-detail',
-				'adding-devices':'iot-device-category-detail',
 
 
                 'edit-sensor':'iot-sensor-editor',
                 'edit-device':'iot-device-editor',
                 // 'add-device':'iot-device-category',
-                'add-sensor':'iot-sensor-list',
+                // 'add-sensor':'iot-sensor-list',
 			}
 		};
 
@@ -128,9 +129,9 @@ class HomeIoT extends Component {
 									</li>
 								)
 							} ) }
-							<li className="cl-iot-mode__list-item">
-								<Link to={'/iot/mode'} className="cl-iot-mode__button cl-iot-mode__add-mode-button">
-									<img src={IotIcAddMode} alt=""/>
+							<li className="cl-iot-mode__list-item cl-iot-mode__add-mode-button">
+								<Link to={'/iot/mode'} className="cl-iot-mode__button">
+									<img src={ModeManageSrc} alt="모드 관리"/>
 								</Link>
 							</li>
 						</ul>
@@ -162,34 +163,22 @@ class HomeIoT extends Component {
                                             <img src="icons/cl_device-12.svg" width="45" height="45" alt="아이콘이미지:cl_device-12" className="cl-my-iot__icons"/>
                                         </div>
                                         <div className="cl-my-iot__bottom cl-flex pt-04em">
-                                            <div className="cl-bold">목록보기</div>
-                                            <div className="cl-flex"> > </div>
+                                            <div className="cl-bold color-black">목록보기</div>
+                                            <img className="cl-flex" src={RightArrowSrc} width="24" height="24"/>
                                         </div>
                                     </div>
                                 </Link>
                             </li>
-
-
-							{/* 기기편집 및 추가 용 + */}
-							<li className="cl-my-iot__list-item">
-                                <Link to={ { pathname:'/iot/my' } } >
-									<div className="cl-my-iot__button cl-my-iot__button--add">
-										<img src={IotIcAdd} alt=""/>
-									</div>
-								</Link>
-							</li>
-
-                            {/* 시나리오 추가 용 + */}
-                            {/*<li className="col cl-my-iot__list-item">*/}
-                                {/*<Link to={ { pathname:'/iot/scenario' } } >*/}
-                                    {/*시나리오 추가*/}
-                                {/*</Link>*/}
-                            {/*</li>*/}
-
 						</ul>
+
+                        {/* 서비스 관리 */}
+						<Link className="cl-my-iot-service-manage" to={ { pathname:'/iot/my' } } >
+							<img src={IotIcAdd} alt="서비스 관리" width="150" height="65"/>
+						</Link>
+
 					</div>
 
-					<button type="button" className="cl-iot__help-button">기기 제어에 어려움이 있으신가요?</button>
+					{/*<button type="button" className="cl-iot__help-button">기기 제어에 어려움이 있으신가요?</button>*/}
 				</div>
 			</div>
 
@@ -209,7 +198,7 @@ class HomeIoT extends Component {
 
 
 			{/* 자동화 리스트 목록 */}
-            <DrawerWrapper drawer="iot-scenario" title="자동화 리스트" back >
+            <DrawerWrapper drawer="iot-scenario" title="자동화(Automation)관리" back light >
                 <Automations/>
             </DrawerWrapper>
 
@@ -225,12 +214,12 @@ class HomeIoT extends Component {
             </DrawerWrapper>
 
             {/* 기기 카테고리 리스트, 시나리오 생성시 추가 가능한 기기목록을 바로 접근 */}
-            <DrawerWrapper drawer="iot-device-category-detail" title="기기 리스트" back className="cl-bg--light">
+            <DrawerWrapper drawer="iot-device-category-detail" title="기기 리스트" close className="cl-bg--light">
                 <IotDeviceList/>
             </DrawerWrapper>
 
             {/* Iot 센서 목록 */}
-            <DrawerWrapper drawer="iot-sensor-list" title="IoT 센서 추가" back >
+            <DrawerWrapper drawer="iot-sensor-list" title="IoT 센서 추가" close >
                 <IotAddingSensorList/>
             </DrawerWrapper>
 
@@ -266,7 +255,7 @@ class HomeIoT extends Component {
             </DrawerWrapper>
 
             {/* Iot 편집 */}
-            <DrawerWrapper drawer="iot-my-editor" title="My IoT 관리" back >
+            <DrawerWrapper drawer="iot-my-editor" title="My Service 편집" back strongdark >
                 <MyEditor/>
             </DrawerWrapper>
 

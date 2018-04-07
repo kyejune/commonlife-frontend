@@ -12,6 +12,8 @@ class DrawerContentHolder extends Component {
     constructor( props ){
         super( props );
 
+        console.log( 'DrawercontentHolder:', props );
+
         this.state = {
             title: props.title,
         }
@@ -111,7 +113,8 @@ class DrawerContentHolder extends Component {
                     {"cl-bg--light":this.props.light },
                     {"cl-bg--lightgray":this.props.lightgray },
                     {"cl-bg--darkgray":this.props.darkgray },
-                    {"cl-bg--deepdark":this.props.deepdark }
+                    {"cl-bg--deepdark":this.props.deepdark },
+                    {"cl-bg--strongdark":this.props.strongdark }
                     )}>
 
                     {childrenWithProps}

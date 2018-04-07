@@ -112,6 +112,10 @@ input:focus, textarea:focus {
  text-transform: uppercase;
 }
 
+.cl--underline{
+  text-decoration: underline;
+}
+
 /**/
 .cl-write__button, .cl-iot-run__button{
   position: fixed;

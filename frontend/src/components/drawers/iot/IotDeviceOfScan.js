@@ -94,13 +94,13 @@ class IotDeviceOfScan extends Component {
     // 완료 누르면 후 전송할 데이터 차곡차곡 모아두기...
     onChangeOthers = (value, data, index ) => {
         let d = data.data;
-        console.log(data.data.moAttr, ": ", value, data.data);
+        console.log('디바이스 아이템 상세 변경:', data.data.moAttr, ": ", value, data.data);
 
         let obj= { ...d };
         d.stsValue = value;
 
         // UI에 반영되게
-        if( index != undefined ){
+        if( index !== undefined ){
             let opts  = this.state.options.concat();
             opts[index].stsValue = value;
             console.log( '값 갱신:', opts[index], value );
@@ -209,6 +209,7 @@ class IotDeviceOfScan extends Component {
 
                     const oText = sjf.filter({'VAL': item.stsValue}).data(item.option).wantArray().exec()[0].NM;
                     const Opts = item.option.map((optionItem, optionIndex) => {
+                        console.log( 'opt추가!', optionItem );
                         return <option value={optionItem.VAL} key={optionIndex}>{optionItem.NM}</option>
                     });
 
@@ -220,7 +221,7 @@ class IotDeviceOfScan extends Component {
                             </h4>
                         </div>
 
-                        <select name="cl-options" defaultValue={item.stsValue} onChange={evt => this.onChangeOthers(evt.target.value, {data: item})}>
+                        <select name="cl-options" defaultValue={item.stsValue} onChange={evt => this.onChangeOthers(evt.target.value, {data: item} )}>
                             {Opts}
                         </select>
                     </li>

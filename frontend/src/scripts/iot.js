@@ -300,6 +300,15 @@ export default {
             });
     },
 
+    // 43: 오토메이션 삭제
+    removeAutomation( id, callback ){
+        // {{API_HOST}}/iot/complexes/125/homes/1/automation/190
+        axios.delete(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${id}` )
+            .then(response => {
+                callback(response.data);
+            });
+    },
+
     // 44. 전체 시나리오 리스트 조회
     getScenarioes( callback ){
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/automation

@@ -40,8 +40,13 @@ class IotDeviceCategory extends Component {
 			addingList:[],
 		};
 
-		if( action === 'scenario' ) props.updateTitle( '추가할 기기목록' );
-		else                        props.updateTitle( isRoom ? '공간별 기기목록' : '기기별 기기목록' );
+		if( action === 'scenario' ){
+            props.updateTitle( '추가할 기기목록' );
+            // props.setBackPath( undefined );
+		}
+		else{
+            props.updateTitle( isRoom ? '공간별 기기목록' : '기기별 기기목록' );
+		}
 
 		this.loadData();
 	}
@@ -107,13 +112,20 @@ class IotDeviceCategory extends Component {
 
         }else if( this.state.action === 'scenario' ){
 
-            Scenario.scnaThings =  Scenario.scnaThings.concat( this.state.addingList.map(itemIndex=>{
-                return { ...this.state.deviceData[itemIndex], chk:'Y' };
-            }));
+            const Adding = this.state.addingList.map(itemIndex => {
+                return {...this.state.deviceData[itemIndex], chk: 'Y'};
+            });
+
+			// 시나리오 생성 중이면 바로 저장
+			if( this.props.isCreate ) {
+                Scenario.scnaThings = Scenario.scnaThings.concat( Adding );
+
+			// 편집중이면 콜백
+            }else{
+				this.props.callback( Adding );
+			}
 
             // 시나리오 편집화면으로 이동
-            this.props.history.replace('/iot/scenario/add');
-            Store.popDrawer();
             Store.popDrawer();
 
 		}else{

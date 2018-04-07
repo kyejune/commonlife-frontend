@@ -16,12 +16,14 @@ class LiOfToggle extends Component {
 
         this.state = {
             checked: defaultCheck,
+            // removable: props.removable || false,
         }
     }
 
     componentWillReceiveProps(nextProps){
         this.setState({
             checked: nextProps.checked,
+            // removable: nextProps.removable || this.state.removable
         });
     }
 
@@ -46,7 +48,10 @@ class LiOfToggle extends Component {
                     }
                 </div>
 
-                <Switch className="ml-auto" checked={ this.state.checked } onChange={ this.onSwitch }/>
+                {this.props.removable ?
+                    <button className="cl-delete__button ml-auto" onClick={ this.props.onRemove }/> :
+                    <Switch className="ml-auto" checked={ this.state.checked } onChange={ this.onSwitch }/>
+                }
             </li>
         );
     }
