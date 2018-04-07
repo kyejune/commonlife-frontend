@@ -1071,7 +1071,9 @@ public class IotInfoServiceImpl implements IotInfoService {
             throw new IotInfoGeneralException("입력된 정보가 잘못되었습니다. 새로운 자동화를 생성할 때, ID를 포함하면 안됩니다.");
         }
 
-        if( automationInfo.getScnaIfSpc() != null && automationInfo.getScnaIfAply() != null ) {
+        //
+        if( (automationInfo.getScnaIfSpc() != null) && (automationInfo.getScnaIfSpc().size() > 0) &&
+            (automationInfo.getScnaIfAply() != null) && (automationInfo.getScnaIfAply().size() > 0) ){
             // IfSpc && IfAply는 같이 사용할 수 없음
             throw new IotInfoGeneralException("'특정시간'조건과 '구간시간' 조건은 같이 사용할 수 없습니다.");
         }
