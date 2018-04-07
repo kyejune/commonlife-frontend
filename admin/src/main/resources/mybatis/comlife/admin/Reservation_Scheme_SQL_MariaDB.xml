@@ -17,6 +17,10 @@
                                 #{id}
                             </foreach>
                     </when>
+                    <when test='groupIdx != null'>
+                        AND
+                            `PARENT_IDX` = #{groupIdx}
+                    </when>
                 </choose>
     </select>
     <select id="show" parameterType="java.util.Map" resultType="reservationSchemeInfo">
@@ -32,7 +36,8 @@
     <insert id="create" parameterType="reservationSchemeInfo">
         <![CDATA[
             INSERT INTO `RESERVATION_SCHEMES`
-                        (`PARENT_IDX`,
+                        (`CMPLX_IDX`,
+                         `PARENT_IDX`,
                          `CODE`,
                          `RESERVATION_TYPE`,
                          `TITLE`,
@@ -54,7 +59,8 @@
                          `DEL_YN`,
                          `REG_DTTM`,
                          `UPD_DTTM`)
-            VALUES      (#{parentIdx},
+            VALUES      (#{cmplxIdx},
+                         #{parentIdx},
                          #{code},
                          #{reservationType},
                          #{title},

@@ -168,6 +168,11 @@ public class ReservationGroupController {
         ReservationGroupInfo group = service.show( idx );
         mav.addObject( "group", group );
 
+        HashMap params = new HashMap();
+        params.put( "groupIdx", idx );
+        List<ReservationSchemeInfo> schemes = schemeService.index( params );
+        mav.addObject( "schemes", schemes );
+
         return mav;
     }
 

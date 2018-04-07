@@ -26,7 +26,7 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>예약 틀 생성</h5>
+                            <h5>예약 틀 수정</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>
@@ -41,11 +41,13 @@
                                     <label>현장</label>
                                     <div>
                                         <c:forEach var="complex" items="${complexes}">
+                                            <c:if test="${scheme.cmplxIdx == complex.cmplxId}">
                                             <label class="radio-inline">
                                                 <input type="radio" name="cmplxIdx" value="${complex.cmplxId}"
-                                                       required <c:if test="${cmplxIdx == complex.cmplxId}"> checked </c:if> >
+                                                       required  checked  >
                                                     ${complex.cmplxNm}
                                             </label>
+                                            </c:if>
                                         </c:forEach>
                                     </div>
                                 </div>
@@ -61,22 +63,22 @@
                                 <div class="form-group">
                                     <label>예약 유형</label>
                                     <select name="reservationType" class="form-control">
-                                        <option value="A">예약 A: 시간 단위 대여</option>
-                                        <option value="B">예약 B: 일자 단위 대여</option>
-                                        <option value="C">예약 C: 장기 대여</option>
+                                        <option value="A" <c:if test="${scheme.reservationType == 'A'}"></c:if> >예약 A: 시간 단위 대여</option>
+                                        <option value="B" <c:if test="${scheme.reservationType == 'B'}"></c:if> >예약 B: 일자 단위 대여</option>
+                                        <option value="C" <c:if test="${scheme.reservationType == 'C'}"></c:if> >예약 C: 장기 대여</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label>예약명</label>
-                                    <input name="title" type="text" class="form-control" placeholder="예약명을 입력해주세요.">
+                                    <input name="title" type="text" class="form-control" placeholder="예약명을 입력해주세요." value="${scheme.title}">
                                 </div>
                                 <div class="form-group">
                                     <label>예약 개요</label>
-                                    <textarea name="summary" rows="3" class="form-control"></textarea>
+                                    <textarea name="summary" rows="3" class="form-control">${scheme.summary}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>예약 상세</label>
-                                    <textarea name="description" rows="6" class="form-control"></textarea>
+                                    <textarea name="description" rows="6" class="form-control">${scheme.description}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <label>예약 가능일</label>
@@ -84,7 +86,7 @@
                                         <span class="input-group-addon">
                                             오늘로부터
                                         </span>
-                                        <input type="number" name="activateDuration" class="form-control" value="7">
+                                        <input type="number" name="activateDuration" class="form-control" value="${scheme.activateDuration}">
                                         <span class="input-group-addon">
                                             일 까지
                                         </span>
@@ -93,28 +95,28 @@
 
                                 <div class="form-group">
                                     <label>사용 포인트</label>
-                                    <input type="number" name="point" class="form-control" value="0">
+                                    <input type="number" name="point" class="form-control" value="${scheme.point}">
                                 </div>
                                 <div class="form-group">
                                     <label>금액</label>
-                                    <input type="number" name="amount" class="form-control" value="0">
+                                    <input type="number" name="amount" class="form-control" value="${scheme.amount}">
                                     <p class="text-info">* 0으로 설정하면 금액 청구 비활성</p>
                                 </div>
                                 <div class="form-group">
                                     <label>예약 개시일</label>
-                                    <input type="text" name="startDt" class="form-control datepicker" data-format="YYYY-MM-DD">
+                                    <input type="text" name="startDt" class="form-control datepicker" data-format="YYYY-MM-DD" value="${scheme.startDt}">
                                 </div>
                                 <div class="form-group">
                                     <label>예약 개시 시각</label>
-                                    <input type="text" name="startTime" class="form-control datepicker" data-format="HH:mm">
+                                    <input type="text" name="startTime" class="form-control datepicker" data-format="HH:mm" value="${scheme.startTime}">
                                 </div>
                                 <div class="form-group">
                                     <label>예약 마감일</label>
-                                    <input type="text" name="endDt" class="form-control datepicker" data-format="YYYY-MM-DD">
+                                    <input type="text" name="endDt" class="form-control datepicker" data-format="YYYY-MM-DD" value="${scheme.endDt}">
                                 </div>
                                 <div class="form-group">
                                     <label>예약 마감 시각</label>
-                                    <input type="text" name="endTime" class="form-control datepicker" data-format="HH:mm">
+                                    <input type="text" name="endTime" class="form-control datepicker" data-format="HH:mm" value="${scheme.endTime}">
                                 </div>
                                 <div class="form-group">
                                     <label>주말 예약 가능</label>

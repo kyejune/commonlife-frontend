@@ -5,6 +5,7 @@ import org.apache.ibatis.type.Alias;
 @Alias("reservationSchemeInfo")
 public class ReservationSchemeInfo {
     private int idx;
+    private int cmplxIdx;
     private int parentIdx;
     private String code;
     private String reservationType;
@@ -34,6 +35,14 @@ public class ReservationSchemeInfo {
 
     public void setIdx(int idx) {
         this.idx = idx;
+    }
+
+    public int getCmplxIdx() {
+        return cmplxIdx;
+    }
+
+    public void setCmplxIdx(int cmplxIdx) {
+        this.cmplxIdx = cmplxIdx;
     }
 
     public int getParentIdx() {

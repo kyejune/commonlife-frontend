@@ -89,6 +89,8 @@ public class ReservationSchemeController {
             HttpServletRequest request
             , HttpServletResponse response
             , HttpSession session
+            , @RequestParam( value = "cmplxIdx", defaultValue = "0") int cmplxIdx
+            , @RequestParam( value = "parentIdx", required = false, defaultValue = "0") int parentIdx
             , @RequestParam( value = "code", required = false ) String code
             , @RequestParam( value = "reservationType", required = false ) String reservationType
             , @RequestParam( value = "title", required = false ) String title
@@ -111,7 +113,8 @@ public class ReservationSchemeController {
             ) {
 
         ReservationSchemeInfo info = new ReservationSchemeInfo();
-        info.setParentIdx( 0 );
+        info.setCmplxIdx( cmplxIdx );
+        info.setParentIdx( parentIdx );
         info.setCode( code );
         info.setReservationType( reservationType );
         info.setTitle( title );
@@ -143,7 +146,19 @@ public class ReservationSchemeController {
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
+            , @RequestParam( value = "idx") int idx
+            , @RequestParam( value = "cmplxIdx", defaultValue = "0") int cmplxIdx
+            , @RequestParam( value = "parentIdx", required = false, defaultValue = "0") int parentIdx
     ) {
+        String redirectTo = request.getHeader( "referer" );
+        mav.addObject( "redirectTo", redirectTo );
+
+        List<ComplexInfo> complexes = complexService.getComplexList();
+        mav.addObject( "complexes", complexes );
+
+        ReservationSchemeInfo scheme = service.show( idx );
+        mav.addObject( "scheme", scheme );
+
         return mav;
     }
 
