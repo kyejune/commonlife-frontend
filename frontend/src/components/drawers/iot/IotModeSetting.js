@@ -100,7 +100,7 @@ class IotModeSetting extends Component {
     /* Create Scenario */
     // 시나리오 생성 상태에서 이름 변경
     onChangeName = (event) => {
-        Scenario.scna[0].name = event.target.value;
+        Scenario.scna[0].scnaNm = event.target.value;
     }
 
 
@@ -168,7 +168,7 @@ class IotModeSetting extends Component {
 
             let data = Object.assign({}, Scenario );
 
-            const NAME = Scenario.scna[0].name;
+            const NAME = Scenario.scna[0].scnaNm;
             if( NAME === undefined || NAME.trim().length === 0 ){
                 alert('이름을 지어주세요.');
                 this.nameInput.focus();
@@ -204,7 +204,7 @@ class IotModeSetting extends Component {
             const data = { ...prevData, scna:[{msg:scna.msg, scnaNm:scna.scnaNm}], scnaThings:Object.values(this.state.updatedScnaThings) };
 
 
-            Iot.updateAutomation( this.state.action === 'mode'?'modes':'automation', scna.mode, data, res => {
+            Iot.updateAutomation( this.state.action === 'mode'?'modes':'automation', this.state.editTarget, data, res => {
                 alert(res.msg);
             });
 
@@ -309,7 +309,7 @@ class IotModeSetting extends Component {
                         <IconLoader src={icon}/>
                         { ACTION_SCENARIO ?
                             <input ref={ r => this.nameInput = r } className="cl-name pr-04em" type="text" placeholder="시나리오"
-                                   value={Scenario.scnaNm}
+                                   value={ this.state.isCreateMode?Scenario.scnaNm:scna.scnaNm }
                                    onChange={this.onChangeName}/>
                             :
                             <span className="cl-name">{scna.scnaNm}</span>
@@ -318,8 +318,8 @@ class IotModeSetting extends Component {
 
                     { ACTION_SCENARIO ?
                         <div>
-                            <h5>사용자 Automation</h5>
-                            <span className="desc">{ moment().format('YYYY년 MM월 DD일') }</span>
+                            <h5>{scna.msg || '사용자 Automation' }</h5>
+                            <span className="desc">{ (this.state.isCreateMode?moment():moment(scna.regDt)).format('YYYY년 MM월 DD일') }</span>
                         </div> :
 
                         <span className="desc">{ scna.msg }</span>

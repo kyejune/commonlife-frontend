@@ -114,19 +114,19 @@ class IotDeviceOfScan extends Component {
     onChangeEnable( item, index ){
         let opts  = this.state.options.concat();
         const PREV = (opts[index].chk === 'Y');
-        opts[index].chk = PREV?'N':'Y';
+        const YN = opts[index].chk = PREV?'N':'Y';
 
         this.setState({ options: opts });
-        this.updateSendingData( opts[index]);
+        this.updateSendingData( opts[index], YN );
     }
 
 
     // 변경된 데이터 취합
-    updateSendingData( data ){
+    updateSendingData( data, YN = 'Y' ){
         let obj = Object.assign({}, this.state.updateData );
         // 고유키 : deviceId-stsId-thingsId
         obj[`${data.deviceId}-${data.stsId}-${data.thingsId}`] =
-            { thingsId:data.thingsId, deviceId: data.deviceId, stsId:data.stsId, stsValue: data.stsValue, chk:"Y" };
+            { thingsId:data.thingsId, deviceId: data.deviceId, stsId:data.stsId, stsValue: data.stsValue, chk:YN };
         this.setState({ updateData: obj});
 
         console.log( 'updateSendingData:', Object.values(obj) );

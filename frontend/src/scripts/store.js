@@ -44,7 +44,7 @@ export const Scenario = observable({
 
     scna:[{
         msg:'사용자 Automation',
-        name: undefined,
+        scnaNm: undefined,
     }],
 
     scnaIfSpc:[],
