@@ -35,6 +35,7 @@
                         </div>
                         <div class="ibox-content" style="">
                             <form action="" method="post">
+                                <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
                                 <div class="form-group">
                                     <label>현장 선택</label>
                                     <div>
