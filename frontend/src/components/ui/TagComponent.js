@@ -22,18 +22,21 @@ class TagComponent extends Component {
             return <br key={'br-' + index}/>;
         });
 
-        // 각종 링크들 복원
-        content = reactStringReplace(content, /(https:\/\/\S+)/g, (match, index, offset) => {
-            return <a key={match + offset} href={match} target="_blank">{match}</a>;
-        });
 
-        content = reactStringReplace(content, /(http:\/\/\S+)/g, (match, index, offset) => {
-            return <a key={match + offset} href={match} target="_blank">{match}</a>;
-        });
+        if( !this.props.nolink ) {
+            // 각종 링크들 복원
+            content = reactStringReplace(content, /(https:\/\/\S+)/g, (match, index, offset) => {
+                return <a key={match + offset} href={match} target="_blank">{match}</a>;
+            });
 
-        content = reactStringReplace(content, /(www\.\S+)/g, (match, index, offset) => {
-            return <a key={match + offset} href={match} target="_blank">{match}</a>;
-        });
+            content = reactStringReplace(content, /(http:\/\/\S+)/g, (match, index, offset) => {
+                return <a key={match + offset} href={match} target="_blank">{match}</a>;
+            });
+
+            content = reactStringReplace(content, /(www\.\S+)/g, (match, index, offset) => {
+                return <a key={match + offset} href={match} target="_blank">{match}</a>;
+            });
+        }
 
         return content;
     }

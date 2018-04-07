@@ -55,11 +55,14 @@ axios.interceptors.response.use(function (response) {
 
 export default {
 ///posts/?postType=feed&page=2
-    getFeed( type, page ){
+    getFeed( type, page, callback ){
         axios.get( `${Store.api}/posts/?postType=${type}&page=${(page+1)||1}`)
             .then( response =>{
-                Store[type] = Store[type] = ( response.data.data ); //  추후 페이지별로 삽입 시켜주기
+                Store[type] = Store[type].concat(( response.data.data )); //  추후 페이지별로 삽입 시켜주기
                 console.log( 'get data ', type, page, response.data.data );
+
+                if( callback ) callback( response.data );
+
             });
     },
 

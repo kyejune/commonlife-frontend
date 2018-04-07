@@ -14,7 +14,7 @@ class WriteDrawer extends BottomDrawer {
     constructor(props) {
         super(props);
 
-        const { type, index } = Store.getDrawerData('write');
+        const { type, index } = Store.getDrawerData('write')||{ type:'feed', index:-1 };
 
         this.state = {
             base64Img: null,

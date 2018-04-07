@@ -142,7 +142,7 @@ class CardItem extends Component {
                     <div className="cl-card-item-content mb-1em mt-1em">
                         <Link to={PostLink}>
                             <p>
-                                <TagComponent content={this.state.content}/>
+                                <TagComponent content={this.state.content} nolink />
                             </p>
                         </Link>
                     </div>

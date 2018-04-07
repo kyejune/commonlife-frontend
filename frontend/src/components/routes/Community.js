@@ -20,7 +20,6 @@ class Community extends Component {
             name: 'community',
             tabs: ['feed', 'event', 'news'],
             tabIndex: 0,
-            // drawer: Store.drawer,
         }
     }
 
