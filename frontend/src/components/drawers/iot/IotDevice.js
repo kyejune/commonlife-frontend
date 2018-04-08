@@ -108,7 +108,7 @@ class IotDevice extends Component {
 
             // 호출
             Iot.setIotDeviceValue(data.data, value, success => {
-                if (!success) this.loadDeviceInformation();
+                this.loadDeviceInformation();
             });
         }else{
 

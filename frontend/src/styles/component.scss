@@ -1065,7 +1065,7 @@ a.cl-map__link--branch{
     max-width: calc( 100vw - 60px );
     width: 100%;
     grid-template-columns: repeat( 2, 1fr );
-    grid-template-rows: 58vw;
+    grid-template-rows: auto;//58vw;
     grid-gap: 40px;
     margin: 0 auto;
     padding-bottom: 3em;
@@ -1100,6 +1100,10 @@ a.cl-map__link--branch{
         h5{
             color: white;
         }
+    }
+
+    button{
+        margin-bottom: auto;
     }
 
     .cl-avatar-border{

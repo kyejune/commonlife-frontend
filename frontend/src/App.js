@@ -14,6 +14,8 @@ import LifeInfo from 'components/routes/LifeInfo';
 import Reservation from 'components/routes/Reservation';
 import Playground from 'components/Playground';
 import DrawerInjector from "./components/drawers/DrawerInjector";
+import Join from "./components/auth/Join";
+import Login from "./components/auth/Login";
 
 
 class App extends Component {
@@ -83,13 +85,17 @@ class App extends Component {
 
                             <Route path="/playground" component={Playground}/>
 
-
                             <Route component={Community}/>
                         </Switch>
 
                     </div>
 
                     <Footer/>
+
+
+                    {/* 회원가입, 로그인 */}
+                    <Route path="/join/:step?" component={Join}/>
+                    <Route path="/login" component={Login}/>
 
                 </div>
 

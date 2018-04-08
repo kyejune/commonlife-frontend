@@ -68,7 +68,7 @@ class Footer extends Component {
                     <NavLink to="/iot" activeClassName="footer__button--selected"
                              className="md-fake-btn md-pointer--hover md-fake-btn--no-outline md-bottom-nav md-bottom-nav--active md-bottom-nav--fixed">
                         <img src={Src2} alt="HomeIoT"/>
-                        <div className="md-bottom-nav-label">Home IoT</div>
+                        <div className="md-bottom-nav-label">Smart HOME</div>
                     </NavLink>
 
                     <NavLink to="/info" activeClassName="footer__button--selected"

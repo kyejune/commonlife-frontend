@@ -37,6 +37,7 @@ class IotBtnLg extends Component {
 
         const off = (btType === 'device' && btRightText === 'off');
 
+        let rtIcon;
         let link;
         let clickFunc;
         let BottomLeft, BottomRight;
@@ -44,9 +45,10 @@ class IotBtnLg extends Component {
             case "information":
                 BottomLeft = <div className="cl-bold">{btLeft}</div>;
                 BottomRight = <div>{btRightText}</div>;
+                rtIcon = <i className="cl-my-iot__ic-alert"><img src={IotIcAlert} alt=""/></i>;
 
                 // 날씨는 연결안되게 막아야됨
-                link = `${this.props.location.pathname}/info/${myIotId}`;// 지금은 연결할 페이지 없음
+                // link = `${this.props.location.pathname}/info/${myIotId}`;// 지금은 연결할 페이지 없음
                 break;
 
             case "device":
@@ -86,7 +88,7 @@ class IotBtnLg extends Component {
             )}
                     onClick={ clickFunc }
             >
-                <i className="cl-my-iot__ic-alert"><img src={IotIcAlert} alt=""/></i>
+                {rtIcon}
 
                 <div className="cl-my-iot__content">
                     <div>

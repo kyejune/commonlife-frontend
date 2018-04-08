@@ -156,12 +156,78 @@ export default {
     },
 
     makePost( data, callback ){
-        axios.post( Store.api + '/posts/', data)
+        axios.post( Store.api + '/posts/', data )
             .then( response => {
                 callback( true, response );
             })
             .catch( error => {
                 callback( false, error );
+            });
+    },
+
+
+
+    /* Auth */
+
+    // 등록 지점 가져오기
+    getBranch( callback ){
+        // {{API_HOST}}/users/registration/complexes/
+        axios.get( Store.api + '/users/registration/complexes' )
+            .then( response => {
+                callback( response.data.data );
+            });
+    },
+
+    // 동 목록 가져오기
+    getDongsInBranch( branchId, callback ){
+        axios.get( `${Store.api}/users/registration/complexes/${branchId}` )
+            .then( response => {
+               callback( response.data.data );
+            });
+    },
+
+    // 호 목록 가져오기
+    getNumbersInBranch( branchId, dongId, callback ){
+        axios.get( `${Store.api}/users/registration/complexes/${branchId}/${dongId}` )
+            .then( response => {
+                callback( response.data.data );
+            });
+    },
+
+    // 세대주 휴대폰 인증번호 요청
+    requestHouseHolderPhoneAuthNumber( branchId, dongId, hoId, name, phone, callback ){
+        axios.get(`${Store.api}/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}&headCell=${phone}`)
+            .then( response => {
+                callback( response.data );
+            });
+    },
+
+    // 사용자 휴대폰 인증번호 요청
+    requestUserPhoneAuthNumber( branchId, dongId, hoId, hhname, hhphone, name, phone, certNo, callback ){
+        axios.get(`${Store.api}/users/registration/certHeadCellNo?
+                    cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(hhname)}&headCell=${hhphone}
+                    &userCertId=${certNo}&userNm=${name}&userCell=${phone}`)
+            .then( response => {
+                callback( response.data );
+            });
+    },
+
+    // 세대주 휴대폰 인증번호 확인
+    confirmHouseHolderPhoneAuthNumber( branchId, dongId, hoId, name, phone, certNo, hhCertNo, callback ){
+        // {{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=37&headCertNum=652038
+        axios.post(`${Store.api}/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}
+                                                                   &headCell=${phone}&userCetId=${certNo}&headCertNum=${hhCertNo}`)
+            .then( response => {
+                callback( response.data );
+            });
+    },
+
+    confirmUserPhoneAuthNumber( branchId, dongId, hoId, name, phone, certNo, hhCertNo, callback ){
+        // {{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=37&headCertNum=652038
+        axios.post(`${Store.api}/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}
+                                                                   &headCell=${phone}&userCetId=${certNo}&headCertNum=${hhCertNo}`)
+            .then( response => {
+                callback( response.data );
             });
     }
 
