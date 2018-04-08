@@ -5,8 +5,10 @@ import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
+import com.kolon.comlife.users.exception.NotAcceptedUserIdException;
 import com.kolon.comlife.users.model.AgreementInfo;
 import com.kolon.comlife.users.service.UserRegistrationService;
+import com.kolon.comlife.users.service.UserService;
 import com.kolon.comlife.users.util.IokUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.controller.MobileUserCertNoController;
@@ -236,6 +238,14 @@ public class UserRegistrationController {
         parameter = IokUtil.buildRequestParameter(request);
 
         try {
+            regService.isAcceptedUserId(userId);
+        } catch (NotAcceptedUserIdException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo( e.getMessage() ));
+        }
+
+        try {
             parameter.put("userId", userId);
             result = mobileUserController.checkUserId(parameter, null);
         } catch (Exception e) {
@@ -334,6 +344,15 @@ public class UserRegistrationController {
         boolean resFlag;
 
         parameter = IokUtil.buildRequestParameter(request);
+
+        // User id validation
+        try {
+            regService.isAcceptedUserId(parameter.getString("userId"));
+        } catch (NotAcceptedUserIdException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo( e.getMessage() ));
+        }
 
         try {
             result = mobileUserController.registerMember(parameter, null);
