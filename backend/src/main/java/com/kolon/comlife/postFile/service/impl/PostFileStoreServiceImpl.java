@@ -25,7 +25,6 @@ import javax.annotation.Resource;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.Timestamp;
 import java.util.UUID;
 
 @Service("postFileStoreService")

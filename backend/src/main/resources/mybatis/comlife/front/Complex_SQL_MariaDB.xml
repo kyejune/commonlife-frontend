@@ -62,19 +62,28 @@
 
   <select id="selectComplexSimpleInfoList" resultType="ComplexSimpleInfo">
     SELECT
-      COMPLEX_M.CMPLX_ID,
-      '' AS CMPLX_GRP,
-      COMPLEX_M.CMPLX_NM, -- COMPLEX NAME
-      COMPLEX_M.ADDR,     -- 일반 주소
-      COMPLEX_M.ADDR_DTL, -- 상세 주소
-      COMPLEX_M.ADDR1,
-      COMPLEX_M.ADDR2,
-      COMPLEX_M_EXT.CL_MAP_SRC,     -- CommonLife's Map Src/Url
-      COMPLEX_M_EXT.CL_LOGO_IMG_SRC -- CommonLife's LOGO Image Source
+      CMPLX.CMPLX_ID,
+      GRP_TYPE.CMPLX_GRP_TYPE AS CMPLX_GRP,
+      CMPLX.CMPLX_NM, -- COMPLEX NAME
+      CMPLX.ADDR,     -- 일반 주소
+      CMPLX.ADDR_DTL, -- 상세 주소
+      CMPLX.ADDR1,
+      CMPLX.ADDR2,
+      CMPLX.CL_MAP_SRC,     -- CommonLife's Map Src/Url
+      CMPLX.CL_LOGO_IMG_SRC -- CommonLife's LOGO Image Source
     FROM
-      COMPLEX_M LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
-      COMPLEX_M_EXT
-      ON COMPLEX_M.CMPLX_ID = COMPLEX_M_EXT.CMPLX_ID
+      COMPLEX_M AS CMPLX
+        LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
+      COMPLEX_M_EXT AS CMPLX_EXT
+          ON COMPLEX_M.CMPLX_ID = COMPLEX_M_EXT.CMPLX_ID
+        LEFT JOIN
+      COMPLEX_GRP_M AS GRP
+          ON GRP.CMPLX_ID = CMPLX.CMPLX_ID
+        LEFT JOIN
+      COMPLEX_GRP_TYPE_M AS GRP_TYPE
+          ON GRP.CMPLX_GRP_TYPE_ID = GRP_TYPE.CMPLX_GRP_TYPE_ID
+
+
     WHERE
       COMPLEX_M.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
     ORDER BY

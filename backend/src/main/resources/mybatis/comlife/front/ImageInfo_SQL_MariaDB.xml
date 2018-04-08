@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ImageInfo">
+
+    <select id="selectImageInfo" parameterType="java.util.Map" resultType="imageInfo">
+        SELECT
+          `IMG`.
+          `IMG_TYPE`.`TYPE_NM` AS PARENT_TYPE_NM
+        FROM
+          `CL_IMAGE_INFO` AS IMG
+            JOIN
+          `CL_IMAGE_TYPE` AS IMG_TYPE
+            ON IMG.PARENT_TYPE = IMG_TYPE.TYPE_IDX
+        <choose>
+            <!--<when test="parentIdx != null and parentType ">-->
+                <!--WHERE   `PARENT_IDX` = #{parentIdx}-->
+            <!--</when>-->
+            <when test="imageIdx != null">
+                WHERE   `IMAGE_IDX` = #{imageIdx}
+            </when>
+            <when test="imageIdxList != null">
+                WHERE   `POST_IDX`
+                IN
+                <foreach collection="postIdxs" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                1 != 1 -- 상기 조건 중에 해당하지 않으면 반드시 실패
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectImageTypeIdxByTypeNm" parameterType="java.util.Map" resultType="Integer">
+        SELECT
+          `TYPE_IDX`
+        FROM
+          `CL_IMAGE_TYPE`
+        WHERE
+          `TYPE_NM` = #{typeNm}
+        ;
+    </select>
+
+    <insert id="insertImageInfo" parameterType="imageInfo">
+        <![CDATA[
+            INSERT INTO  `CL_IMAGE_INFO`
+            (
+                `PARENT_TYPE`,
+                `USR_ID`,
+                `MIME_TYPE`,
+                `FILE_PATH`,
+                `FILE_NM`,
+                `REG_DTTM`,
+                `UPD_DTTM`
+            )
+            VALUES
+            (
+                #{parentType},
+                #{usrId},
+                #{mimeType},
+                #{filePath},
+                #{fileNm},
+                CURRENT_TIMESTAMP,
+                CURRENT_TIMESTAMP
+            )
+        ]]>
+    </insert>
+
+    <select id="selectLatestImageInfo" resultType="imageInfo">
+        <![CDATA[
+            SELECT  *
+            FROM    `CL_IMAGE_INFO`
+            WHERE   `DEL_YN` = 'N'
+            AND
+                    `IMAGE_IDX` = LAST_INSERT_ID()
+        ]]>
+    </select>
+
+    <update id="bindPostToImageInfos" parameterType="java.util.Map">
+        UPDATE  `POST_FILE`
+        SET     `POST_IDX` =  #{postIdx}
+        WHERE
+            ISNULL(`POST_IDX`) AND
+            `USR_ID` = #{usrId} AND   -- 본인이 업로드한 이미지만 연결할 수 있음
+        <choose>
+            <when test="postFileIdx != null">
+                `POST_FILE_IDX` =   #{postFileIdx}
+            </when>
+            <when test="postFileIdxs != null">
+                `POST_FILE_IDX`
+                IN
+                <foreach collection="postFileIdxs" item="item" index="index" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </when>
+            <otherwise>
+                1 != 1 -- 상기 조건 중에 해당하지 않으면 반드시 실패
+            </otherwise>
+        </choose>
+    </update>
+
+    <delete id="deleteImageInfo" parameterType="java.util.Map">
+        <![CDATA[
+            UPDATE  `POST_FILE`
+            SET     `DEL_YN` =  'Y',
+                    `UPD_DTTM` =    CURRENT_TIMESTAMP
+            WHERE   `POST_FILE_IDX` =   #{postFileIdx}
+        ]]>
+    </delete>
+
+</mapper>

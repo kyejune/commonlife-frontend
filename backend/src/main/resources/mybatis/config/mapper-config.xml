@@ -24,6 +24,7 @@
         <package name="com.kolon.comlife.support.model" />
         <package name="com.kolon.comlife.users.model" />
         <package name="com.kolon.comlife.point.model" />
+        <package name="com.kolon.comlife.imageStore.model" />
 
         <!-- 패키지 com.kolon.common은 추가하지 마시오 -->
         <package name="com.kolonbenit.iot" />
