@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReservationAmenityIcon">
+    <select id="index" parameterType="java.util.Map" resultType="reservationAmenityIconInfo">
+        SELECT
+                *
+        FROM
+                `RESERVATION_AMENITY_ICONS`
+        WHERE
+                1=1
+                <choose>
+                    <when test='ids != null'>
+                        AND
+                            IDX IN
+                            <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
+                                #{id}
+                            </foreach>
+                    </when>
+                </choose>
+    </select>
+    <select id="show" parameterType="java.util.Map" resultType="reservationAmenityIconInfo">
+        <![CDATA[
+            SELECT
+                    *
+            FROM
+                    `RESERVATION_AMENITY_ICONS`
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </select>
+    <insert id="create" parameterType="reservationAmenityIconInfo">
+        <![CDATA[
+            INSERT INTO `RESERVATION_AMENITY_ICONS`
+                        (`MIME_TYPE`,
+                         `FILE_NAME`,
+                         `FILE_PATH`,
+                         `DEL_YN`,
+                         `REG_DTTM`,
+                         `UPD_DTTM`)
+            VALUES      (#{mimeType},
+                         #{fileName},
+                         #{filePath},
+                         'N',
+                         CURRENT_TIMESTAMP,
+                         CURRENT_TIMESTAMP);
+        ]]>
+    </insert>
+
+    <select id="latest" resultType="reservationAmenityIconInfo">
+        <![CDATA[
+            SELECT  *
+            FROM    `RESERVATION_AMENITY_ICONS`
+            WHERE   `DEL_YN` = 'N'
+            AND
+                    `IDX` = LAST_INSERT_ID()
+        ]]>
+    </select>
+
+    <update id="update" parameterType="reservationAmenityIconInfo">
+        <![CDATA[
+            UPDATE  `RESERVATION_AMENITY_ICONS`
+            SET
+                    `MIME_TYPE` = #{mimeType},
+                    `FILE_NAME` = #{fileName},
+                    `FILE_PATH` = #{filePath},
+                    `DEL_YN` = #{delYn},
+                    `UPD_DTTM` = CURRENT_TIMESTAMP
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </update>
+
+    <update id="delete" parameterType="reservationAmenityIconInfo">
+        <![CDATA[
+            UPDATE  `RESERVATION_AMENITY_ICONS`
+            SET
+                    `DEL_YN` = 'N',
+                    `UPD_DTTM` = CURRENT_TIMESTAMP
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </update>
+</mapper>

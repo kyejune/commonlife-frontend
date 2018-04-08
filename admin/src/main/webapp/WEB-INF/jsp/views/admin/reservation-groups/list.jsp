@@ -81,6 +81,7 @@
                                         </td>
                                         <td class="text-center">
                                             <form action="/admin/reservation-groups/delete.do?idx=${group.idx}" method="post">
+                                                <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
                                                 <button class="btn btn-xs btn-danger">삭제</button>
                                             </form>
                                         </td>

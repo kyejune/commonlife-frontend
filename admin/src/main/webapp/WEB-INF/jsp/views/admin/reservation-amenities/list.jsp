@@ -37,28 +37,34 @@
                             <table class="table">
                                 <thead>
                                 <tr>
-                                    <th>이름</th>
-                                    <th class="text-center">표시 형식</th>
-                                    <th class="text-center">아이콘 클래스</th>
-                                    <th class="text-center">이미지</th>
+                                    <th class="text-center">아이콘</th>
+                                    <th class="text-center">이름</th>
+                                    <th class="text-center">등록일시</th>
+                                    <th class="text-center">최종수정</th>
+                                    <th class="text-center">수정</th>
+                                    <th class="text-center">삭제</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <c:forEach var="amenity" items="${amenities}">
                                     <tr>
-                                        <td>${amenity.name}</td>
                                         <td class="text-center">
-                                            <c:choose>
-                                                <c:when test="${amenity.useIcon == 'Y'}">
-                                                    아이콘
-                                                </c:when>
-                                                <c:otherwise>
-                                                    이미지
-                                                </c:otherwise>
-                                            </c:choose>
+                                            <span style="background: #666666; padding: 4px 4px 7px;">
+                                                <img src="/admin/reservation-amenities/icon.do?idx=${amenity.iconIdx}" style="width: 18px;" alt="">
+                                            </span>
                                         </td>
-                                        <td class="text-center">${amenity.iconClass}</td>
-                                        <td class="text-center">${amenity.imagePath}</td>
+                                        <td class="text-center">${amenity.name}</td>
+                                        <td class="text-center">${amenity.regDttm}</td>
+                                        <td class="text-center">${amenity.updDttm}</td>
+                                        <td class="text-center">
+                                            <a href="/admin/reservation-amenities/edit.do?idx=${amenity.idx}" class="btn btn-xs btn-white">수정</a>
+                                        </td>
+                                        <td class="text-center">
+                                            <form action="/admin/reservation-amenities/delete.do?idx=${amenity.idx}" method="post">
+                                                <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+                                                <button class="btn btn-xs btn-danger">삭제</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>

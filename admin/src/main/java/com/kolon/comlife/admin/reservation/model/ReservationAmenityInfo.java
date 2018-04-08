@@ -5,11 +5,11 @@ import org.apache.ibatis.type.Alias;
 @Alias("reservationAmenityInfo")
 public class ReservationAmenityInfo {
     private int idx;
-    private String useIcon;
-    private String iconClass;
-    private String imagePath;
+    private int iconIdx;
     private String name;
+    private String delYn;
     private String regDttm;
+    private String updDttm;
 
     public int getIdx() {
         return idx;
@@ -19,28 +19,12 @@ public class ReservationAmenityInfo {
         this.idx = idx;
     }
 
-    public String getUseIcon() {
-        return useIcon;
+    public int getIconIdx() {
+        return iconIdx;
     }
 
-    public void setUseIcon(String useIcon) {
-        this.useIcon = useIcon;
-    }
-
-    public String getIconClass() {
-        return iconClass;
-    }
-
-    public void setIconClass(String iconClass) {
-        this.iconClass = iconClass;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
+    public void setIconIdx(int iconIdx) {
+        this.iconIdx = iconIdx;
     }
 
     public String getName() {
@@ -51,11 +35,27 @@ public class ReservationAmenityInfo {
         this.name = name;
     }
 
+    public String getDelYn() {
+        return delYn;
+    }
+
+    public void setDelYn(String delYn) {
+        this.delYn = delYn;
+    }
+
     public String getRegDttm() {
         return regDttm;
     }
 
     public void setRegDttm(String regDttm) {
         this.regDttm = regDttm;
+    }
+
+    public String getUpdDttm() {
+        return updDttm;
+    }
+
+    public void setUpdDttm(String updDttm) {
+        this.updDttm = updDttm;
     }
 }

@@ -8,7 +8,7 @@
         FROM
                 `RESERVATION_AMENITIES`
         WHERE
-                1=1
+                `DEL_YN` = 'N'
                 <choose>
                     <when test='ids != null'>
                         AND
@@ -32,18 +32,36 @@
     <insert id="create" parameterType="reservationAmenityInfo">
         <![CDATA[
             INSERT INTO `RESERVATION_AMENITIES`
-                        (`USE_ICON`,
-                         `ICON_CLASS`,
-                         `IMAGE_PATH`,
+                        (`ICON_IDX`,
                          `NAME`,
                          `REG_DTTM`,
                          `UPD_DTTM`)
-            VALUES      (#{useIcon},
-                         #{iconClass},
-                         #{imagePath},
+            VALUES      (#{iconIdx},
                          #{name},
                          CURRENT_TIMESTAMP,
                          CURRENT_TIMESTAMP);
         ]]>
     </insert>
+    <update id="update">
+        <![CDATA[
+            UPDATE  `RESERVATION_AMENITIES`
+            SET
+                    `ICON_IDX` = #{iconIdx},
+                    `NAME` = #{name},
+                    `DEL_YN` = #{delYn},
+                    `UPD_DTTM` = CURRENT_TIMESTAMP
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </update>
+    <update id="delete">
+        <![CDATA[
+            UPDATE  `RESERVATION_AMENITIES`
+            SET
+                    `DEL_YN` = 'Y',
+                    `UPD_DTTM` = CURRENT_TIMESTAMP
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </update>
 </mapper>

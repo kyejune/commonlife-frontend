@@ -163,7 +163,11 @@
                                     <div>
                                         <c:forEach var="amenity" items="${amenities}">
                                             <label class="checkbox-inline">
-                                                <input type="checkbox" name="amenities[]" value="${amenity.idx}"> ${amenity.name}
+                                                <input type="checkbox" name="amenities[]" value="${amenity.idx}">
+                                                    <span style="background: #666; padding: 2px; display: inline-block; margin-right: 0.5em;">
+                                                        <img src="/admin/reservation-amenities/icon.do?idx=${amenity.iconIdx}" style="width: 18px;" alt="">
+                                                    </span>
+                                                    ${amenity.name}
                                             </label>
                                         </c:forEach>
                                     </div>

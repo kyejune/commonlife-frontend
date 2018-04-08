@@ -34,16 +34,21 @@
                             </div>
                         </div>
                         <div class="ibox-content" style="">
-                            <form action="?${ _csrf.parameterName }=${ _csrf.token }" method="post" enctype="multipart/form-data">
+                            <form action="/admin/reservation-amenities/edit.do?idx=${amenity.idx}&${ _csrf.parameterName }=${ _csrf.token }" method="post" enctype="multipart/form-data">
                                 <div class="form-group">
                                     <label>이미지</label>
-                                    <div>
+                                    <div style="margin-bottom: 1em;">
                                         <input type="file" name="image" accept="image/*">
+                                    </div>
+                                    <div>
+                                        <span style="background: #333; padding: 4px 4px 7px;">
+                                            <img src="/admin/reservation-amenities/icon.do?idx=${amenity.iconIdx}" style="width: 18px;" alt="">
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>시설 옵션명</label>
-                                    <input type="text" name="name" class="form-control" placeholder="예) 샤워 부스">
+                                    <input type="text" name="name" class="form-control" placeholder="예) 샤워 부스" value="${amenity.name}">
                                 </div>
                                 <div>
                                     <button class="btn btn-primary">전송</button>
