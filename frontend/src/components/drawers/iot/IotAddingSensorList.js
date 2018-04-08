@@ -36,7 +36,18 @@ class IotAddingSensorList extends Component {
         if( itemKey === 'time' || itemKey === 'duration' )
         {
             let state = {};
+
+            // time, duration은 중복 선택 안됨, 한쪽 선택시 다른쪽 끄기
+            if( bool && itemKey === 'time' && this.state.duration )
+                state.duration = false;
+
+            if( bool && itemKey === 'duration' && this.state.time )
+                state.time = false;
+
             state[itemKey]  = bool;
+
+
+            console.log( state );
             this.setState( state )
         }
         else
@@ -67,6 +78,8 @@ class IotAddingSensorList extends Component {
     addSensors=()=>{
 
         let { addedData } = this.state;
+
+
 
         addedData.scnaIfSpc = this.state.time?[{ spcTime:'12:00', monYn:'Y', tueYn:'Y', wedYn:'Y', thuYn:'Y', friYn:'Y', satYn:'Y', sunYn:'Y' }]:[];
         addedData.scnaIfAply = this.state.duration?[{ aplyStartTime:'01:00', aplyEndTime:'23:00', monYn:'Y', tueYn:'Y', wedYn:'Y', thuYn:'Y', friYn:'Y', satYn:'Y', sunYn:'Y' }]:[]
@@ -132,12 +145,16 @@ class IotAddingSensorList extends Component {
 
         // 특정 시간
         Sensors = Sensors.concat(data.scnaIfSpc.map(item => {
-            return <LiOfCheck key="time" icon={item.imgSrc} name="특정 시간" onChange={ bool => this.onChangeCheck( bool, 'time' ) }/>
+            return <LiOfCheck key="time" icon={item.imgSrc} name="특정 시간"
+                              checked={this.state.time}
+                              onChange={ bool => this.onChangeCheck( bool, 'time' ) }/>
         }));
 
         // 시간 구간
         Sensors = Sensors.concat(data.scnaIfAply.map(item => {
-            return <LiOfCheck key="time-range" icon={item.imgSrc} name="구간 시간" onChange={ bool => this.onChangeCheck( bool, 'duration' ) }/>
+            return <LiOfCheck key="time-range" icon={item.imgSrc} name="구간 시간"
+                              checked={this.state.duration}
+                              onChange={ bool => this.onChangeCheck( bool, 'duration' ) }/>
         }));
 
         let checkedLen = this.state.addingList.length;

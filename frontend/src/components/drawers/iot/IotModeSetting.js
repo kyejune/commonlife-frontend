@@ -26,7 +26,8 @@ class IotModeSetting extends Component {
 
         const {action, option1} = props.match.params;
 
-        this.props.updateTitle(action === 'mode' ? 'Mode 설정 변경' : (option1==='add'?'시나리오 생성':'시나리오 편집'));
+        this.props.updateTitle(action === 'mode' ? 'Mode 설정 변경' : (option1==='add'?'자동화(Automation) 생성':'자동화(Automation) 편집'));
+
 
         this.state = {
             action: action,
@@ -45,10 +46,19 @@ class IotModeSetting extends Component {
 
             checkedMap:{},// 체크박스 선택된건 기억용
             updatedScnaThings:{} // 디바이스는 변경된 부분만 저장
-        }
+        };
 
-        if( action === 'scenario' ) // 필요한 경우 백버튼 path를 강제 지정
+        if( action === 'scenario' ) { // 필요한 경우 백버튼 path를 강제 지정
             this.props.setBackPath('/iot/scenario');
+
+            // 생성모드 시작시엔 바로 편집모드로 바꿔두기
+            if( option1 === 'add' ) {
+                this.state.isEditingSensor = true;
+                this.state.isEditingDevice = true;
+            }
+        };
+
+
 
         console.log( `action:${ action }, editTarget:${ option1 }, isCreateMode: ${ option1 === 'add' }`);
 
@@ -67,6 +77,7 @@ class IotModeSetting extends Component {
                 this.nameInput.focus();
 
             // Scenario or Store의 값을 가져와서 editingData와 유사하게 object만들어주기
+            Scenario.scna[0].scnaNm = '';
             this.settingInitData(Scenario);
 
         }else{ // 편집 상태일경우 데이터 불러오기
@@ -86,6 +97,7 @@ class IotModeSetting extends Component {
     // 들어온값 초기 세팅
     settingInitData=( data )=>{
         let checkedMap = [];
+        //data.scna[0].scnaNm = data'';
         data.scnaIfThings.forEach( item => {
             checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] = (item.thingsAttrIfCond === item.maxVlu);
         });
@@ -114,7 +126,10 @@ class IotModeSetting extends Component {
     /* Create Scenario */
     // 시나리오 생성 상태에서 이름 변경
     onChangeName = (event) => {
-        Scenario.scna[0].scnaNm = event.target.value;
+        const newEditingData = Object.assign({}, this.state.editingData );
+              newEditingData.scna[0].scnaNm = event.target.value;
+
+        this.setState({ editingData: newEditingData });
     }
 
 
@@ -224,11 +239,11 @@ class IotModeSetting extends Component {
 
         switch( type ){
             case 'time':
-                if( newEditingData.scnaIfSpc.length > 0 ) newEditingData.scnaIfSpc.chk = 'N';
+                if( newEditingData.scnaIfSpc.length > 0 ) newEditingData.scnaIfSpc[0].chk = 'N';
                 break;
 
             case 'duration':
-                if( newEditingData.scnaIfAply.length > 0 ) newEditingData.scnaIfAply.chk = 'N';
+                if( newEditingData.scnaIfAply.length > 0 ) newEditingData.scnaIfAply[0].chk = 'N';
                 break;
 
             case 'sensor':
@@ -287,14 +302,11 @@ class IotModeSetting extends Component {
             Iot.createAutomation( data, res =>{
                 console.log( '시나리오 생성:', res );
                 alert(res.msg);
+                this.props.history.goBack();
             });
 
         }else{
         // Mode 및 Automation 업데이트
-
-            // const prevData = this.state.editingData;
-            // const scna = prevData.scna[0];
-            // const data = { ...prevData, scna:[{msg:scna.msg, scnaNm:scna.scnaNm}], scnaThings:Object.values(this.state.updatedScnaThings) };
             let { updatedScnaThings, editingData } = this.state;
 
             let data = Object.assign({}, editingData);
@@ -340,6 +352,7 @@ class IotModeSetting extends Component {
 
             Iot.updateAutomation( this.state.action === 'mode'?'modes':'automation', this.state.editTarget, data, res => {
                 alert(res.msg);
+                this.props.history.goBack();
             });
         }
     }
@@ -363,7 +376,7 @@ class IotModeSetting extends Component {
 
         const { action, isCreateMode, editingData, isEditingDevice, isEditingSensor } = this.state;
 
-        if( !editingData ) return <div/>
+        if( !editingData ) return <div/>;
 
 
         const ACTION_SCENARIO = (action === 'scenario');
@@ -415,25 +428,36 @@ class IotModeSetting extends Component {
 
         // 특정 시간 있으면 추가
         Sensors = Sensors.concat( editingData.scnaIfSpc.map( item => {
-            return <LiOfCtrl key="time" icon={undefined}
-                             name="특정 시간"
-                             desc={ item.spcTime }
-                             onClick={ this.state.isEditingSensor?undefined:
-                                 ()=> Store.pushDrawer('edit-sensor-time', { ...item, callback: this.updateTime } ) }
-                             removable={ this.state.isEditingSensor }
-                             onRemove={ ()=> this.onRemoveItem( item, 'time' ) }
-                             />
+            if( item.chk === 'N' ) {
+                return null;
+            }else {
+                return <LiOfCtrl key="time" icon={undefined}
+                                 name="특정 시간"
+                                 desc={item.spcTime}
+                                 onClick={this.state.isEditingSensor ? undefined :
+                                     () => Store.pushDrawer('edit-sensor-time', {...item, callback: this.updateTime})}
+                                 removable={this.state.isEditingSensor}
+                                 onRemove={() => this.onRemoveItem(item, 'time')}
+                />
+            }
         }));
 
         // 시간 구간 조건 추가
         Sensors = Sensors.concat( editingData.scnaIfAply.map( item =>{
-            return <LiOfCtrl key="time-range" icon={undefined} name="구간 시간"
-                             desc={ `${item.aplyStartTime} ~ ${item.aplyEndTime}`}
-                             onClick={ this.state.isEditingSensor?undefined:
-                                 ()=> Store.pushDrawer('edit-sensor-duration', { ...item, callback: this.updateDuration } ) }
-                             removable={ this.state.isEditingSensor }
-                             onRemove={ ()=> this.onRemoveItem( item, 'duration' ) }
-                             />
+            if( item.chk === 'N' ) {
+                return null;
+            }else {
+                return <LiOfCtrl key="time-range" icon={undefined} name="구간 시간"
+                                 desc={`${item.aplyStartTime} ~ ${item.aplyEndTime}`}
+                                 onClick={this.state.isEditingSensor ? undefined :
+                                     () => Store.pushDrawer('edit-sensor-duration', {
+                                         ...item,
+                                         callback: this.updateDuration
+                                     })}
+                                 removable={this.state.isEditingSensor}
+                                 onRemove={() => this.onRemoveItem(item, 'duration')}
+                />
+            }
         }));
 
 
@@ -467,8 +491,8 @@ class IotModeSetting extends Component {
                     <div className={classNames("cl-iot-mode__button", {"cl-iot-mode__button--expand": ACTION_SCENARIO } )}>
                         <IconLoader src={icon}/>
                         { ACTION_SCENARIO ?
-                            <input ref={ r => this.nameInput = r } className="cl-name pr-04em" type="text" placeholder="시나리오"
-                                   value={ this.state.isCreateMode?Scenario.scnaNm:scna.scnaNm }
+                            <input ref={ r => this.nameInput = r } className="cl-name pr-04em" type="text" placeholder="제목을 입력하세요."
+                                   value={ scna.scnaNm }
                                    onChange={this.onChangeName}/>
                             :
                             <span className="cl-name">{scna.scnaNm}</span>
@@ -478,7 +502,10 @@ class IotModeSetting extends Component {
                     { ACTION_SCENARIO ?
                         <div>
                             <h5>{scna.msg || '사용자 Automation' }</h5>
-                            <span className="desc">{ (this.state.isCreateMode?moment():moment(scna.regDt)).format('YYYY년 MM월 DD일') }</span>
+                            <span className="desc">{
+                                (this.state.isCreateMode?'다양한 센서와 IoT기기를 통해 자동화된 제어가 가능합니다.'
+                                    : moment(scna.regDt).format('YYYY년 MM월 DD일'))}
+                            </span>
                         </div> :
 
                         <span className="desc">{ scna.msg }</span>

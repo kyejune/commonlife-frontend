@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import Iot from "../../../scripts/iot";
 import IconLoader from "../../ui/IconLoader";
 import newAutomationSrc from 'images/etc-2@3x.png';
+import withRouter from "react-router-dom/es/withRouter";
 
 class Automations extends Component {
 
@@ -16,18 +17,25 @@ class Automations extends Component {
         }
     }
 
+
+    componentDidUpdate ( prevProps ) {
+        if( this.props.location !== prevProps.location && this.props.location.pathname === '/iot/scenario' )
+            this.loadData();
+    }
+
+
     componentDidMount() {
         this.loadData();
     }
 
-    loadData=()=>{
+    loadData = () => {
         Iot.getScenarioes(data => {
             this.setState({items: data.data});
         });
     }
 
-    onRemoveItem( item ){
-        Iot.removeAutomation( item.scnaId, this.loadData );
+    onRemoveItem(item) {
+        Iot.removeAutomation(item.scnaId, this.loadData);
     }
 
 
@@ -38,8 +46,8 @@ class Automations extends Component {
                 <IconLoader src={item.imgSrc}/>
                 <h4 className="cl__title">{item.scnaNm || 'scnaNm 안들어옴'}</h4>
 
-                {this.state.editable?
-                    <button className="cl-delete__button ml-auto" onClick={ ()=> this.onRemoveItem( item ) }/>
+                {this.state.editable ?
+                    <button className="cl-delete__button ml-auto" onClick={() => this.onRemoveItem(item)}/>
                     :
                     <Link to={`/iot/scenario/${item.scnaId}`} className="ml-auto cl-ctrl__button"/>
                 }
@@ -57,9 +65,10 @@ class Automations extends Component {
             </header>
 
             <div className="cl-flex fs-14 ml-1em mr-1em mt-1em mb-1em">
-                <h5 className="fs-14 cl-bold">자동화 <span className="color-primary">{ List.length }</span></h5>
+                <h5 className="fs-14 cl-bold">자동화 <span className="color-primary">{List.length}</span></h5>
 
-                <button className="ml-auto cl--underline" onClick={ ()=> this.setState({ editable: !this.state.editable }) }>
+                <button className="ml-auto cl--underline"
+                        onClick={() => this.setState({editable: !this.state.editable})}>
                     목록 편집
                 </button>
             </div>
@@ -73,4 +82,4 @@ class Automations extends Component {
     }
 }
 
-    export default Automations;
+export default withRouter(Automations);

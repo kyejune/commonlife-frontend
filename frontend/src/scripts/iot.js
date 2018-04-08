@@ -168,7 +168,7 @@ export default {
         });
 
         axios.all(deletes)
-            .then( response => {
+            .then( () => {
                this.getMy( callback );
             });
     },

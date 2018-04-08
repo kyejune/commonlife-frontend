@@ -32,7 +32,7 @@ class IotBtnLg extends Component {
         const { btId,
             btImgSrc, btLeft, deviceId,
             btRightIconType, btRightText, btSubTitle,
-            btTitle, btTitleUnit, btType,
+            btTitle, btTitleUnit, btType, myIotId,
         } = this.props;
 
         const off = (btType === 'device' && btRightText === 'off');
@@ -44,7 +44,9 @@ class IotBtnLg extends Component {
             case "information":
                 BottomLeft = <div className="cl-bold">{btLeft}</div>;
                 BottomRight = <div>{btRightText}</div>;
-                // link = `${this.props.location.pathname}/info/0`; 지금은 연결할 페이지 없음
+
+                // 날씨는 연결안되게 막아야됨
+                link = `${this.props.location.pathname}/info/${myIotId}`;// 지금은 연결할 페이지 없음
                 break;
 
             case "device":

@@ -56,7 +56,6 @@ class MyEditor extends Component {
 
     removeItem=()=>{
         Iot.removeMyIot( this.state.checks, ()=>{
-           console.log('삭제 성공');
            this.setState({
                checks:[],
            });
@@ -69,7 +68,7 @@ class MyEditor extends Component {
             return { idx: index, name: m.btTitle, imgSrc:m.btImgSrc,  ...m }
         });
 
-        if( MyIots.length === 0 ) return <div/>;
+        // if( MyIots.length === 0 ) return <div/>;
 
         const selectedLen = this.state.checks.length;
 

@@ -8,8 +8,6 @@ import WithTitle from 'components/ui/WithTitle';
 import IotBtnMode from 'components/ui/IotBtnMode';
 import IotBtnLg from 'components/ui/IotBtnLg';
 
-import IotIcAddMode from 'images/combined-shape@3x.png';
-
 import IotIcAdd from 'images/service-manage@3x.png';
 import ModeManageSrc from 'images/mode-manage@3x.png';
 import {observer} from "mobx-react";
@@ -27,6 +25,7 @@ import TimesSelector from "../ui/TimesSelector";
 import TimeSelector from "../ui/TimeSelector";
 import Automations from "../drawers/iot/Automations";
 import RightArrowSrc from 'images/ic-favorite-24-px-blue@3x.png';
+import Information from "../drawers/iot/Information";
 
 class HomeIoT extends Component {
 
@@ -118,7 +117,7 @@ class HomeIoT extends Component {
 		return <div className="cl-tab--iot">
 			<div className="cl-home-iot">
 				<div className="cl-fitted-box pb-3em">
-					<WithTitle titleName="MODE"/>
+					<WithTitle titleName="Smart Mode"/>
 
 					<div className="cl-iot-mode">
 						<ul className="cl-iot-mode__list">
@@ -137,7 +136,7 @@ class HomeIoT extends Component {
 						</ul>
 					</div>
 
-					<WithTitle titleName="My IoT"/>
+					<WithTitle titleName="My Service"/>
 
 					<div className="cl-my-iot">
 						<ul className="cl-my-iot__list">
@@ -187,8 +186,8 @@ class HomeIoT extends Component {
                 <IotModeEditor/>
 			</DrawerWrapper>
 
-            <DrawerWrapper drawer="iot-information-detail" title="인포메이션" back >
-                <div>상세정보</div>
+            <DrawerWrapper drawer="iot-information-detail" title="인포메이션" back lightgray>
+                <Information/>
             </DrawerWrapper>
 
             {/* IoT 모드 설정 변경 || 모드 추가 > 시나리오 */}
@@ -219,7 +218,7 @@ class HomeIoT extends Component {
             </DrawerWrapper>
 
             {/* Iot 센서 목록 */}
-            <DrawerWrapper drawer="iot-sensor-list" title="IoT 센서 추가" close >
+            <DrawerWrapper drawer="iot-sensor-list" title="IoT 센서 추가" close darkgray >
                 <IotAddingSensorList/>
             </DrawerWrapper>
 
@@ -230,7 +229,7 @@ class HomeIoT extends Component {
             </DrawerWrapper>
 
             {/* 밖에 끄집어낼 가치정보 목록 */}
-            <DrawerWrapper drawer="iot-adding-information" title="가치정보 관리" back darkgray >
+            <DrawerWrapper drawer="iot-adding-information" title="가치정보 추가" back darkgray >
                 <ExposableEditor/>
             </DrawerWrapper>
 

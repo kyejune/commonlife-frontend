@@ -91,7 +91,7 @@ class DrawerInjector extends Component{
 
 
             {/* 신규 알림... */}
-            <DrawerWrapper drawer="notifications">
+            <DrawerWrapper drawer="notifications" close>
                 <NotificationCenter/>
             </DrawerWrapper>
 

@@ -62,7 +62,7 @@ class IotModeChange extends Component {
 							<span>{Store.modeModal.targetName}</span>
 						</div>
 						<p className="cl-iot-mode-progress__paragraph">
-							{Store.modeModal.targetName} 설정시 보안설정이 강화되며,<br/>귀가시 자동해제 됩니다.
+							{Store.modeModal.targetName}로 바로 전환합니다.
 						</p>
 					</div>
 
@@ -88,7 +88,7 @@ class IotModeChange extends Component {
 							<span>{Store.modeModal.targetName}</span>
 						</div>
 						<p className="cl-iot-mode-progress__paragraph">
-							{Store.modeModal.targetName}를<br/>즉시 실행합니다.
+							{Store.modeModal.targetName}로 바로 전환합니다.
 						</p>
 
 						<div className="cl-iot-mode-progress__on-bullet">
@@ -117,7 +117,7 @@ class IotModeChange extends Component {
 							<span>{Store.modeModal.targetName}</span>
 						</div>
 						<p className="cl-iot-mode-progress__paragraph">
-							{Store.modeModal.targetName}가<br/>적용되었습니다.
+							{Store.modeModal.targetName}로 전환되었습니다.
 						</p>
 
 						<div className="cl-iot-mode-progress__on-bullet">
@@ -149,7 +149,7 @@ class IotModeChange extends Component {
 							<span>{Store.modeModal.targetName}</span>
 						</div>
 						<p className="cl-iot-mode-progress__paragraph">
-							{Store.modeModal.targetName} 종료시 보안설정이 해제되며,<br/>일상 모드로 자동 전환됩니다.
+							{Store.modeModal.targetName}를 해제합니다.
 						</p>
 					</div>
 
@@ -175,7 +175,7 @@ class IotModeChange extends Component {
 							<span>{Store.modeModal.targetName}</span>
 						</div>
 						<p className="cl-iot-mode-progress__paragraph">
-							{Store.modeModal.targetName}를<br/>즉시 종료합니다.
+							{Store.modeModal.targetName}를<br/>해제 합니다.
 						</p>
 
 						<div className="cl-iot-mode-progress__off-bullet">
@@ -203,7 +203,7 @@ class IotModeChange extends Component {
 							<span>{Store.modeModal.targetName}</span>
 						</div>
 						<p className="cl-iot-mode-progress__paragraph">
-							{Store.modeModal.targetName}<br/>종료되었습니다.
+							{Store.modeModal.targetName}<br/>가 해제되었습니다.
 						</p>
 
 						<div className="cl-iot-mode-progress__off-bullet">

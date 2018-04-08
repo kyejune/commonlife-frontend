@@ -43,7 +43,7 @@ scna:{
 export const Scenario = observable({
 
     scna:[{
-        msg:'사용자 Automation',
+        msg:'자동화(Automation)',
         scnaNm: undefined,
     }],
 
@@ -58,7 +58,7 @@ export const Scenario = observable({
 const Store = observable({
 
     api:host,
-    cmplxId:'125',
+    cmplxId:'127',
     homeId:'1',
 
     // 모든 지점 목록
