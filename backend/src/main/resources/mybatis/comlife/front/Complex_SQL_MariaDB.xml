@@ -63,6 +63,7 @@
   <select id="selectComplexSimpleInfoList" resultType="ComplexSimpleInfo">
     SELECT
       CMPLX.CMPLX_ID,
+      GRP_TYPE.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_ID,
       GRP_TYPE.CMPLX_GRP_TYPE AS CMPLX_GRP,
       CMPLX.CMPLX_NM, -- COMPLEX NAME
       CMPLX.ADDR,     -- 일반 주소
@@ -73,7 +74,7 @@
       CMPLX_EXT.CL_LOGO_IMG_SRC -- CommonLife's LOGO Image Source
     FROM
       COMPLEX_M AS CMPLX
-        LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
+        LEFT JOIN
       COMPLEX_M_EXT AS CMPLX_EXT
           ON CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
         LEFT JOIN
@@ -82,12 +83,14 @@
         LEFT JOIN
       COMPLEX_GRP_TYPE_M AS GRP_TYPE
           ON GRP.CMPLX_GRP_TYPE_ID = GRP_TYPE.CMPLX_GRP_TYPE_ID
-
-
     WHERE
       CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
+       AND
+      GRP_TYPE.CMPLX_GRP_TYPE_ID > 0
+        AND
+      !ISNULL(GRP_TYPE.CMPLX_GRP_TYPE_ID)
     ORDER BY
-      CMPLX.CMPLX_NM ASC
+      CMPLX_GRP_ID, CMPLX.CMPLX_NM ASC
     ;
   </select>
 
