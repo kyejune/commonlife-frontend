@@ -110,7 +110,7 @@ public class IotControlServiceImpl implements IotControlService {
                 // do!
                 scnaId = (Integer)datum.get("scnaId");
                 if( scnaId == null ) {
-                    throw new IotControlOperationFailedException("오토메이션을 실행 할 수 없습니다.");
+                    throw new IotControlOperationFailedException("자동화를 실행 할 수 없습니다.");
                 }
 
                 try {
@@ -129,7 +129,7 @@ public class IotControlServiceImpl implements IotControlService {
                 } catch( SocketException se ) {
                     // socket is closed
                     if( "Socket closed".equals(se.getMessage())) {
-                        throw new IotControlTimeoutException("'오토메이션 실행 시간이 초과하였습니다.");
+                        throw new IotControlTimeoutException("'자동화 실행 시간이 초과하였습니다.");
                     } else {
                         throw se;
                     }
