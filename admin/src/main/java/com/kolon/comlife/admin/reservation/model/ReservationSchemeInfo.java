@@ -25,6 +25,8 @@ public class ReservationSchemeInfo {
     private String activateDuration;
     private String maintenanceStartAt;
     private String maintenanceEndAt;
+    private String options;
+    private String precautions;
     private String delYn;
     private String regDttm;
     private String updDttm;
@@ -195,6 +197,22 @@ public class ReservationSchemeInfo {
 
     public void setMaintenanceEndAt(String maintenanceEndAt) {
         this.maintenanceEndAt = maintenanceEndAt;
+    }
+
+    public String getOptions() {
+        return options;
+    }
+
+    public void setOptions(String options) {
+        this.options = options;
+    }
+
+    public String getPrecautions() {
+        return precautions;
+    }
+
+    public void setPrecautions(String precautions) {
+        this.precautions = precautions;
     }
 
     public String getDelYn() {

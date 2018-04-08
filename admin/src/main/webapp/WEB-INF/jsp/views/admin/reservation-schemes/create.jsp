@@ -130,13 +130,10 @@
                                     </div>
                                 </div>
 
-                                    <%--타입 A, B에서만 입력하는 필드들--%>
-                                <div class="type-group type-group-a type-group-b">
-                                    <div class="form-group">
-                                        <label>재고</label>
-                                        <input type="number" name="inStock" class="form-control" value="0">
-                                        <p class="text-info">* 0으로 설정하면 재고 체크 안함</p>
-                                    </div>
+                                <div class="form-group">
+                                    <label>재고</label>
+                                    <input type="number" name="inStock" class="form-control" value="0">
+                                    <p class="text-info">* 0으로 설정하면 재고 체크 안함</p>
                                 </div>
 
                                 <div class="form-group">
@@ -159,6 +156,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
+                                    <label>포함사항</label>
+                                    <textarea name="options" rows="3" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
                                     <label>시설 옵션</label>
                                     <div>
                                         <c:forEach var="amenity" items="${amenities}">
@@ -172,6 +173,10 @@
                                         </c:forEach>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label>주의사항</label>
+                                    <textarea name="precautions" rows="5" class="form-control"></textarea>
+                                </div>
                                 <div>
                                     <button class="btn btn-primary">전송</button>
                                 </div>
@@ -183,20 +188,6 @@
         </div>
     </tiles:putAttribute>
     <tiles:putAttribute name="js">
-        <script>
-            $( function() {
-                $( '.type-group' ).hide();
-                $( '.type-group-a' ).show();
-
-                $( 'select[name=reservationType]' ).on( 'change', function( event ) {
-                    var $select = $( event.currentTarget );
-                    var type = $select.val().toLowerCase();
-
-                    $( '.type-group' ).hide();
-                    $( '.type-group-' + type ).show();
-                } );
-            } );
-        </script>
         <script>
             $( function() {
                 $( '.datepicker' ).each( function( index, element ) {

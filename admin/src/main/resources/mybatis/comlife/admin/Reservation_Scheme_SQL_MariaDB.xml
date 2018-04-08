@@ -56,6 +56,8 @@
                          `ACTIVATE_DURATION`,
                          `MAINTENANCE_START_AT`,
                          `MAINTENANCE_END_AT`,
+                         `OPTIONS`,
+                         `PRECAUTIONS`,
                          `DEL_YN`,
                          `REG_DTTM`,
                          `UPD_DTTM`)
@@ -79,6 +81,8 @@
                          #{activateDuration},
                          #{maintenanceStartAt},
                          #{maintenanceEndAt},
+                         #{options},
+                         #{precautions},
                          #{delYn},
                          CURRENT_TIMESTAMP,
                          CURRENT_TIMESTAMP);

@@ -109,6 +109,8 @@ public class ReservationSchemeController {
             , @RequestParam( value = "activateDuration", required = false ) String activateDuration
             , @RequestParam( value = "maintenanceStartAt", required = false ) String maintenanceStartAt
             , @RequestParam( value = "maintenanceEndAt", required = false ) String maintenanceEndAt
+            , @RequestParam( value = "options", required = false ) String options
+            , @RequestParam( value = "precautions", required = false ) String precautions
             , @RequestParam( value = "delYn", required = false ) String delYn
             ) {
 
@@ -133,6 +135,8 @@ public class ReservationSchemeController {
         info.setActivateDuration( activateDuration );
         info.setMaintenanceStartAt( maintenanceStartAt );
         info.setMaintenanceEndAt( maintenanceEndAt );
+        info.setOptions( options );
+        info.setPrecautions( precautions );
         info.setDelYn( delYn );
 
         service.create( info );
