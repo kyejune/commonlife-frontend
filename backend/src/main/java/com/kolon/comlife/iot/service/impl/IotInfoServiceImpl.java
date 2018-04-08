@@ -206,7 +206,12 @@ public class IotInfoServiceImpl implements IotInfoService {
                 (int complexId, int homeId, String userId, boolean resultSimplify) throws Exception {
         IotButtonListInfo buttonList;
 
-        buttonList = this.getMyIotButtonListInternal(complexId, homeId, userId, resultSimplify);
+        try {
+            buttonList = this.getMyIotButtonListInternal(complexId, homeId, userId, resultSimplify);
+        } catch( IotInfoNoDataException e ) {
+            // 가져올 데이터가 없는 경우, 빈 값을 반환 함
+            buttonList = new IotButtonListInfo();
+        }
 
         buttonList.setMsg("My IOT의 IOT 버튼 목록 및 정보 가져오기");
 
