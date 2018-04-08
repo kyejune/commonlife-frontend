@@ -106,6 +106,8 @@ public class IotControlServiceImpl implements IotControlService {
                 } else {
                     throw new IotControlOperationFailedException("지원하지 않는 기능입니다.");
                 }
+                break;
+
             case "automation":
                 // do!
                 scnaId = (Integer)datum.get("scnaId");
@@ -207,7 +209,7 @@ public class IotControlServiceImpl implements IotControlService {
         // 3. 기기 명령 수행
         try {
             String execUrl = String.format( IOK_CONTROL_DEVICE_EXECUTE_FMT_PATH, clientId );
-            logger.debug(" URL PATH: switchToMode(): " + execUrl);
+            logger.debug(" URL PATH:" + execUrl);
             requester = new HttpPutRequester(
                     httpClient,
                     serviceProperties.getByKey(IOK_CONTROL_HOST_PROP_GROUP, IOK_CONTROL_HOST_PROP_KEY),
@@ -266,6 +268,7 @@ public class IotControlServiceImpl implements IotControlService {
                 if( expectedStatus != null &&
                         expectedStatus.equals((String)ctrlMsg.getValue()) ) {
                     // 변경 성공 --> do nothing
+                    logger.info(">>> Client ID:" +  clientId + "/ value: " + expectedStatus);
                     break;
                 } else {
                     // 변경 값이 아직 바뀌지 않은 경우

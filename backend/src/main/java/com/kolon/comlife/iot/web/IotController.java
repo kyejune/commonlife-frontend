@@ -30,6 +30,8 @@ import java.util.Map;
 public class IotController {
     private static final Logger logger = LoggerFactory.getLogger(IotController.class);
 
+    private static final String TEST_USER_ID = "yunakim";
+
     @Autowired
     private IotControlService iotControlService;
 
@@ -121,7 +123,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             buttonList = iotInfoService.getMyIotButtonList(complexId, homeId, userId, true);
@@ -154,7 +156,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             buttonList = iotInfoService.getMyIotButtonListById(complexId, homeId, userId, buttonId, true);
@@ -187,7 +189,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             buttonInfo = iotControlService.executeMyIotButtonPrimeFunction(complexId, homeId, userId, buttonId);
@@ -685,7 +687,10 @@ public class IotController {
         IotModeOrAutomationListInfo modeList;
         IotModeAutomationIdInfo updateModeInfo;
         int                     modeAutomationId = -1;
-        String                  userId       = "baek"; // todo : authInfo에서 가져올 것
+        String                  userId;
+
+        // todo : authInfo에서 가져올 것
+        userId = TEST_USER_ID;
 
         // Mode에서 scnaId 가져오기
         try {
@@ -740,7 +745,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             buttonsList = iotInfoService.getMyIotButtonListAvailable(complexId, homeId, userId );
@@ -773,7 +778,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             buttonsList = iotInfoService.getMyIotAutomationListAvailable(complexId, homeId, userId );
@@ -839,7 +844,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             buttonsList = iotInfoService.getMyIotDevicesListByRoomAvailable(complexId, homeId, userId, roomId );
@@ -871,7 +876,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             deviceGroupList = iotInfoService.getMyIotDeviceCategoryListAvailable(complexId, homeId, userId );
@@ -904,7 +909,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             buttonsList = iotInfoService.getMyIotDevicesListByCategoryAvailable(complexId, homeId, userId, categoryCode );
@@ -938,7 +943,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             buttonsList = iotInfoService.getMyIotValueInfoListAvailable(complexId, homeId, userId );
@@ -976,7 +981,7 @@ public class IotController {
         List<Map<String, Object>> myIotIdList;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         myIotIdList = (List<Map<String, Object>>)body.get("data");
         if( myIotIdList == null ) {
@@ -1019,7 +1024,7 @@ public class IotController {
         List<Map<String, Object>> myIotIdOrderList;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         myIotIdOrderList = (List<Map<String, Object>>)body.get("data");
         if( myIotIdOrderList == null ) {
@@ -1062,7 +1067,7 @@ public class IotController {
         String            userId;
 
         // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        userId = TEST_USER_ID;
 
         try {
             buttonList = iotInfoService.deleteMyIotButtonListById(complexId, homeId, userId, buttonId, true);
@@ -1123,7 +1128,10 @@ public class IotController {
     {
         IotModeAutomationInfo automationInfo = new IotModeAutomationInfo();
         IotModeAutomationIdInfo createdAutomationInfo;
-        String userId = "baek"; // todo: autoInfo 값에서 가져올 것
+        String userId;
+
+        // todo: autoInfo 값에서 가져올 것
+        userId = TEST_USER_ID;
 
         body.get("scnaIfAply");
         body.get("scnaIfSpc");
@@ -1188,7 +1196,10 @@ public class IotController {
     {
         IotModeAutomationInfo automationInfo;
         IotModeAutomationIdInfo updateAutomationInfo;
-        String                userId = "baek"; // todo : authInfo에서 가져올 것
+        String                userId;
+
+        // todo : authInfo에서 가져올 것
+        userId = TEST_USER_ID;
 
         try {
             automationInfo = this.convertModeAutomationRequestBody( body );
