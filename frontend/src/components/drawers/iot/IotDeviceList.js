@@ -42,9 +42,14 @@ class IotDeviceCategory extends Component {
 
 		if( action === 'scenario' ){
             props.updateTitle( '추가할 기기목록' );
-            // props.setBackPath( undefined );
 		}
 		else{
+
+			// 시나리오에서는 콜백을 받아야해서 drawer를 바로 띄우고, 나머지는 router연결해서 띄움.. 닫힐때 모드를 분기 처리
+			if( action === 'ctrl' || action === 'my' ){
+				props.setCloseMode( false );
+			}
+
             props.updateTitle( isRoom ? '공간별 기기목록' : '기기별 기기목록' );
 		}
 

@@ -16,6 +16,7 @@ class DrawerContentHolder extends Component {
 
         this.state = {
             title: props.title,
+            close: props.close,
         }
     }
 
@@ -35,7 +36,7 @@ class DrawerContentHolder extends Component {
 
         Store.popDrawer();
 
-        if( !this.props.close ){
+        if( !this.state.close ){
             if( this.state.backPath )
                 this.props.history.replace( this.state.backPath );
             else
@@ -43,16 +44,23 @@ class DrawerContentHolder extends Component {
         }
     }
 
+    // 제목을 동적으로 변경시킬때
     updateTitle( title ){
         this.setState({
             title: title,
         })
     }
 
+    // 뒤로가기 버튼을 눌렀을때 이동할 패스를 history.goBack대신 강제 지정
     setBackPath( path ){
         this.setState({
             backPath: path,
         });
+    }
+
+    // 닫힘모드를 강제 지정, false: 라우터와 함께 닫힘, true: 라우터 이동없이 닫힘
+    setCloseMode( bool ){
+        this.setState({ close: bool });
     }
 
 
@@ -92,6 +100,7 @@ class DrawerContentHolder extends Component {
                 updateTitle: title=> this.updateTitle(title),
                 setBackPath: path=> this.setBackPath(path),
                 close: ()=>this.onClose(),
+                setCloseMode: bool => this.setCloseMode( bool ),
                 ...Store.getDrawerData( this.props.drawer ),
             })
         );

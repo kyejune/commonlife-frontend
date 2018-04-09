@@ -234,6 +234,8 @@ class IotModeSetting extends Component {
     * @params type: sensor, time, duration, device
     * */
     onRemoveItem=( item, type )=> {
+        if( !window.confirm('삭제 하시겠습니까?') ) return;
+
         let newEditingData = Object.assign( {}, this.state.editingData );
         let searchIdx;
 

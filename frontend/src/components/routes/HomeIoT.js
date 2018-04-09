@@ -224,7 +224,7 @@ class HomeIoT extends Component {
 
 
             {/* 밖에 끄집어낼 시나리오 목록 */}
-            <DrawerWrapper drawer="iot-adding-automation" title="시나리오 관리" back darkgray >
+            <DrawerWrapper drawer="iot-adding-automation" title="자동화 추가" back darkgray >
                 <ExposableEditor/>
             </DrawerWrapper>
 
