@@ -138,7 +138,7 @@ class HomeIoT extends Component {
 
 					<WithTitle titleName="My Service"/>
 
-					<div className="cl-my-iot">
+					<div className="cl-my-iot pb-3em">
 						<ul className="cl-my-iot__list">
 							{ MyIots.map(( iot, index )=>{
                                 	return <li key={index} className="col cl-my-iot__list-item">

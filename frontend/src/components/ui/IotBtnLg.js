@@ -70,7 +70,12 @@ class IotBtnLg extends Component {
                 break;
 
             case "automation":
-                BottomLeft = <div className="cl-bold">{Store.auth.name}</div>;
+                BottomLeft = <div className="cl-bold">{ btLeft }</div>;
+                BottomRight = <div className="cl-flex">
+                    <img src={IotIcOn} alt="특성 이미지" width="21" height="20"/>
+                    <span className="uppercase cl-my-iot-ic__label">{btRightText}</span>
+                </div>;
+
                 clickFunc = () => this.onClickAutomaion( btId, btTitle );
                 break;
             default :
