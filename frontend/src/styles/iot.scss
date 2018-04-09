@@ -1,261 +1,261 @@
 .cl-iot-mode {
-  position: relative;
-  top: -16px;
-  width: 100vw;
-  height: 77px;
-  margin-bottom: -12px;
-  padding-top: 12px;
-  white-space: nowrap;
-  overflow-y: hidden;
-  overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
+    position: relative;
+    top: -16px;
+    width: 100vw;
+    height: 77px;
+    margin-bottom: -12px;
+    padding-top: 12px;
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
 .cl-iot-mode__list-item {
-  display: inline-block;
-  width: 150px;
-  margin: 0 4px;
-  vertical-align: middle;
+    display: inline-block;
+    width: 150px;
+    margin: 0 4px;
+    vertical-align: middle;
 
-  & > button {
-    height: 65px;
-  }
+    & > button {
+        height: 65px;
+    }
 
-  &:first-child {
-    margin-left: 8px;
-  }
+    &:first-child {
+        margin-left: 8px;
+    }
 }
 
 .cl-iot-mode__button {
-  position: relative;
-  display: inline-block;
-  vertical-align: baseline;
-  width: 150px;
-  padding: 7px 0;
-  opacity: 0.7;
-  border-radius: 4px;
-  background-color: #ffffff;
-  box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
-  text-align: left;
-  font-size: 17px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.87);
-
-  &.cl-iot-mode__button--expand {
-    width: 235px;
-  }
-
-  &.cl-iot-mode-progress__button {
-    display: block;
-    margin: 0 auto;
-    opacity: 1;
-    border: 1px solid #CCCCCC;
-    box-shadow: none;
-
-    &.cl-iot-mode__button--active {
-      border: 1px solid #4C4C4C;
-    }
-  }
-
-  img {
+    position: relative;
     display: inline-block;
-    width: 45px;
-    margin-left: 8px;
-    margin-right: 6px;
-    vertical-align: bottom;
-  }
-
-  span, .cl-name {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: calc(100% - 65px);
+    vertical-align: baseline;
+    width: 150px;
+    padding: 7px 0;
+    opacity: 0.7;
+    border-radius: 4px;
+    background-color: #ffffff;
+    box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+    text-align: left;
     font-size: 17px;
-  }
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87);
 
-  input.cl-name {
-    text-align: center;
-  }
+    &.cl-iot-mode__button--expand {
+        width: 235px;
+    }
+
+    &.cl-iot-mode-progress__button {
+        display: block;
+        margin: 0 auto;
+        opacity: 1;
+        border: 1px solid #CCCCCC;
+        box-shadow: none;
+
+        &.cl-iot-mode__button--active {
+            border: 1px solid #4C4C4C;
+        }
+    }
+
+    img {
+        display: inline-block;
+        width: 45px;
+        margin-left: 8px;
+        margin-right: 6px;
+        vertical-align: bottom;
+    }
+
+    span, .cl-name {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: calc(100% - 65px);
+        font-size: 17px;
+    }
+
+    input.cl-name {
+        text-align: center;
+    }
 }
 
 .cl-iot-mode__button--active {
-  @extend .cl-iot-mode__button;
+    @extend .cl-iot-mode__button;
 
-  opacity: 1;
+    opacity: 1;
 
-  &:before {
-    content: '';
-    position: absolute;
-    top: -14px;
-    right: -7px;
-    width: 32px;
-    height: 32px;
-    background-image: url("images/io-t-on-bt@3x.png");
-    background-size: 32px;
-  }
+    &:before {
+        content: '';
+        position: absolute;
+        top: -14px;
+        right: -7px;
+        width: 32px;
+        height: 32px;
+        background-image: url("images/io-t-on-bt@3x.png");
+        background-size: 32px;
+    }
 }
 
 .cl-iot-mode__button--inactive {
-  @extend .cl-iot-mode__button;
+    @extend .cl-iot-mode__button;
 
-  opacity: 1;
+    opacity: 1;
 
-  &:before {
-    content: '';
-    position: absolute;
-    top: -14px;
-    right: -7px;
-    width: 32px;
-    height: 32px;
-    background-image: url("images/io-t-on-bt-off@3x.png");
-    background-size: 32px;
-  }
+    &:before {
+        content: '';
+        position: absolute;
+        top: -14px;
+        right: -7px;
+        width: 32px;
+        height: 32px;
+        background-image: url("images/io-t-on-bt-off@3x.png");
+        background-size: 32px;
+    }
 }
 
 .cl-iot-mode__add-mode-button {
 
-  height: 65px;
-
-  a {
-    opacity: 1;
-    background-color: transparent;
-    box-shadow: none;
-    position: relative;
-    display: inline-block;
-    width: 150px;
     height: 65px;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-  }
 
-  img {
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    margin: 0;
-    padding: 0;
-  }
+    a {
+        opacity: 1;
+        background-color: transparent;
+        box-shadow: none;
+        position: relative;
+        display: inline-block;
+        width: 150px;
+        height: 65px;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 0;
+    }
 }
 
 .cl-my-iot__list {
-  display: grid;
-  grid-template-columns: repeat(2, calc(50vw - 12px));
-  grid-gap: 8px;
-  padding-left: 8px;
+    display: grid;
+    grid-template-columns: repeat(2, calc(50vw - 12px));
+    grid-gap: 8px;
+    padding-left: 8px;
 }
 
 .cl-my-iot__list-item {
-  position: relative;
-  height: calc(50vw - 12px);
+    position: relative;
+    height: calc(50vw - 12px);
 }
 
 .cl-my-iot-service-manage {
-  display: inline-block;
-  width: 150px;
-  height: 65px;
-  margin-top: 30px;
-  margin-left: calc(50% - 75px);
+    display: inline-block;
+    width: 150px;
+    height: 65px;
+    margin-top: 30px;
+    margin-left: calc(50% - 75px);
 }
 
 .cl-my-iot__button {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  padding: 0 15px;
-  border-radius: 4px;
-  background-color: #ffffff;
-  box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
-  text-align: left;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 0 15px;
+    border-radius: 4px;
+    background-color: #ffffff;
+    box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+    text-align: left;
 
-  &.cl-my-iot__button--off {
-    background-color: #A2A2A2;
-    color: #D0D0D0;
+    &.cl-my-iot__button--off {
+        background-color: #A2A2A2;
+        color: #D0D0D0;
 
-    h3 {
-      color: #D0D0D0;
+        h3 {
+            color: #D0D0D0;
+        }
     }
-  }
 }
 
 .cl-my-iot-ic__label {
-  max-width: 30px;
-  width: inherit;
-  @extend .cl-ellipsis;
+    max-width: 30px;
+    width: inherit;
+    @extend .cl-ellipsis;
 }
 
 .cl-my-iot__ic-alert {
-  position: absolute;
-  top: 15px;
-  right: 15px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
 
-  img {
-    width: 16px;
-  }
+    img {
+        width: 16px;
+    }
 }
 
 .cl-my-iot__paragraph {
-  margin: 0;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.5);
+    margin: 0;
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .cl-my-iot__content {
-  height: calc(100% - 45px);
-  display: flex;
-  flex-flow: column wrap;
-  padding-top: 7px;
+    height: calc(100% - 45px);
+    display: flex;
+    flex-flow: column wrap;
+    padding-top: 7px;
 
-  .cl-my-iot__icons {
-    position: absolute;
-    left: 15px;
-    bottom: 45px;
-  }
+    .cl-my-iot__icons {
+        position: absolute;
+        left: 15px;
+        bottom: 45px;
+    }
 }
 
 .cl-my-iot__bottom {
-  display: flex;
-  display: -webkit-flex;
-  justify-content: space-between;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  height: 45px;
-  align-items: center;
+    display: flex;
+    display: -webkit-flex;
+    justify-content: space-between;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    height: 45px;
+    align-items: center;
 }
 
 .cl-my-iot__label {
-  align-self: center;
-  margin: 0;
-  font-size: 15px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.87);
+    align-self: center;
+    margin: 0;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87);
 }
 
 .cl-my-iot__status {
-  align-self: center;
+    align-self: center;
 }
 
 .cl-my-iot__text {
-  position: relative;
-  padding-left: 3px;
-  font-size: 14px;
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.87);
+    position: relative;
+    padding-left: 3px;
+    font-size: 14px;
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.87);
 }
 
 .cl-my-iot__bullet {
-  display: inline-block;
-  position: relative;
-  top: 4px;
+    display: inline-block;
+    position: relative;
+    top: 4px;
 
-  img {
-    width: 21px;
-  }
+    img {
+        width: 21px;
+    }
 }
 
 .cl-my-iot__button--automation {
-  background-color: #F6F4E8;
+    background-color: #F6F4E8;
 }
 
 //.cl-my-iot__button--toggle {
@@ -329,18 +329,18 @@
 //}
 
 .cl-my-iot__button--add {
-  background-color: transparent;
-  box-shadow: none;
-  text-align: center;
+    background-color: transparent;
+    box-shadow: none;
+    text-align: center;
 
-  img {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 150px;
-    height: 65px;
-    transform: translate(-50%, -50%);
-  }
+    img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 150px;
+        height: 65px;
+        transform: translate(-50%, -50%);
+    }
 }
 
 //.cl-my-iot__button--set {
@@ -350,619 +350,661 @@
 //}
 
 .cl-iot__help-button {
-  width: 100%;
-  margin: 25px 0;
-  font-size: 13px;
-  font-weight: 500;
-  text-align: center;
-  text-decoration: underline;
-  color: rgba(0, 0, 0, 0.5);
+    width: 100%;
+    margin: 25px 0;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: center;
+    text-decoration: underline;
+    color: rgba(0, 0, 0, 0.5);
 }
 
 .cl__thumb {
-  width: 45px;
-  margin-right: 10px;
+    width: 45px;
+    margin-right: 10px;
 }
 
 .cl__thumb--rounded {
-  @extend .cl__thumb;
-  border-radius: 50%;
-  background-color: #f3f3f3;
-  border: 1px solid #DBDBDB;
+    @extend .cl__thumb;
+    border-radius: 50%;
+    background-color: #f3f3f3;
+    border: 1px solid #DBDBDB;
 }
 
 /* Iot Vertical List */
 .abs__list--common {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  padding: 12px 18px 12px 12px;
-  background-color: #EEEEEE;
-  box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
-  margin-bottom: 5px;
-  border-radius: 2px;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
+    padding: 12px 18px 12px 12px;
+    background-color: #EEEEEE;
+    box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+    margin-bottom: 5px;
+    border-radius: 2px;
 
-  //.cl__thumb{
-  //    width: 45px;
-  //    margin-right: 10px;
-  //}
-  //
-  //.
-  // cl__thumb--rounded{
-  //    @extend .cl__thumb;
-  //    border-radius: 50%;
-  //    background-color: #f3f3f3;
-  //    border: 1px solid #DBDBDB;
-  //}
+    //.cl__thumb{
+    //    width: 45px;
+    //    margin-right: 10px;
+    //}
+    //
+    //.
+    // cl__thumb--rounded{
+    //    @extend .cl__thumb;
+    //    border-radius: 50%;
+    //    background-color: #f3f3f3;
+    //    border: 1px solid #DBDBDB;
+    //}
 
-  .cl__title {
-    font-size: 17px;
-    color: rgba(0, 0, 0, 0.87);
-    font-weight: 600;
-  }
-
-  .cl__desc {
-    font-size: 12px;
-    color: rgba(0, 0, 0, 0.5);
-  }
-
-  .cl__handle {
-    height: 45px;
-    width: 50px;
-    background-image: url("images/ic-bar-light@3x.png");
-    background-size: 29px;
-    background-position: right center;
-    background-repeat: no-repeat;
-  }
-
-  .cl-next__button {
-    width: 24px;
-    height: 24px;
-    background-image: url("images/ic-favorite-24-px-blue@3x.png");
-    background-size: contain;
-  }
-
-  &.cl-iot-device__li--checkbox {
-    padding-top: 22px;
-    padding-bottom: 22px;
-
-    &.cl--checked {
-      background-color: #E7E7E7;
+    .cl__title {
+        font-size: 17px;
+        color: rgba(0, 0, 0, 0.87);
+        font-weight: 600;
     }
-  }
+
+    .cl__desc {
+        font-size: 12px;
+        color: rgba(0, 0, 0, 0.5);
+    }
+
+    .cl__handle {
+        height: 45px;
+        width: 50px;
+        background-image: url("images/ic-bar-light@3x.png");
+        background-size: 29px;
+        background-position: right center;
+        background-repeat: no-repeat;
+    }
+
+    .cl-next__button {
+        width: 24px;
+        height: 24px;
+        background-image: url("images/ic-favorite-24-px-blue@3x.png");
+        background-size: contain;
+    }
+
+    &.cl-iot-device__li--checkbox {
+        padding-top: 22px;
+        padding-bottom: 22px;
+
+        &.cl--checked {
+            background-color: #E7E7E7;
+        }
+    }
 }
 
 .cl-iot__li--expand {
-  @extend .abs__list--common;
-  padding-top: 26px;
-  padding-bottom: 26px;
-  margin-bottom: 0;
+    @extend .abs__list--common;
+    padding-top: 26px;
+    padding-bottom: 26px;
+    margin-bottom: 0;
 }
 
 .abs__list--dark {
-  color: #D1D1D2;
-  background-color: transparent;
-  border-bottom: 1px solid #373A3F;
-  padding-right: 7px;
+    color: #D1D1D2;
+    background-color: transparent;
+    border-bottom: 1px solid #373A3F;
+    padding-right: 7px;
 
-  .cl__title, .cl__desc {
-    color: #fafafa;
-    opacity: 0.8;
-  }
+    .cl__title, .cl__desc {
+        color: #fafafa;
+        opacity: 0.8;
+    }
 
-  .cl__desc {
-    opacity: 0.5;
-  }
+    .cl__desc {
+        opacity: 0.5;
+    }
 
-  .cl__thumb--rounded {
-    background-color: white;
-  }
+    .cl__thumb--rounded {
+        background-color: white;
+    }
 
-  .cl__thumb--rounded--off {
-    @extend .cl__thumb--rounded;
-    background-color: #C0C1C3;
-  }
+    .cl__thumb--rounded--off {
+        @extend .cl__thumb--rounded;
+        background-color: #C0C1C3;
+    }
 }
 
 .cl-iot-vertical-list {
 
-  padding: 8px;
-  background-color: #d2d2d2;
-  min-height: 100%;
+    padding: 8px;
+    background-color: #d2d2d2;
+    min-height: 100%;
 
-  &.cl-bg--iot {
-    background-color: #EEEEEE;
-    min-height: calc(100vh - 97px - 50px);
-    padding-bottom: 50px !important;
+    &.cl-bg--iot {
+        background-color: #EEEEEE;
+        min-height: calc(100vh - 97px - 50px);
+        padding-bottom: 50px !important;
 
-    & > li {
-      &:last-child {
-        box-shadow: none;
-        border-top: 1px solid #E2E2E2;
-      }
-    }
-  }
-
-  p, h4 {
-    margin-bottom: 0;
-    line-height: 1em;
-  }
-
-  li {
-    @extend .abs__list--common;
-
-    &.cl-bg--inner {
-      @extend .cl-bg--darkgray;
-      box-shadow: inset 1px 0 2px 0 rgba(0, 0, 0, 0.12),
-      inset 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+        & > li {
+            &:last-child {
+                box-shadow: none;
+                border-top: 1px solid #E2E2E2;
+            }
+        }
     }
 
-    &:last-child {
-      margin-bottom: 2em;
+    p, h4 {
+        margin-bottom: 0;
+        line-height: 1em;
     }
-  }
-
-  // 약간 큰 사이즈
-  .cl__list--middle {
-    padding-top: 22px;
-    padding-bottom: 22px;
-  }
-
-  // 흰 배경
-  &.cl-bg--light {
-    li {
-      background-color: #F4F4F4;
-    }
-  }
-
-  &.cl-bg--transparent {
-    background: transparent none;
-  }
-
-  &.cl-bg--strongdark {
-    background-color: #3F4248;
-    padding: 8px 0;
-
-    li{
-      @extend .abs__list--dark;
-      border-color: #484B50;
-    }
-  }
-
-  // 검은배경 위에..
-  &.cl-bg--dark {
 
     li {
-      @extend .abs__list--dark;
+        @extend .abs__list--common;
+
+        &.cl-bg--inner {
+            @extend .cl-bg--darkgray;
+            box-shadow: inset 1px 0 2px 0 rgba(0, 0, 0, 0.12),
+            inset 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+        }
+
+        &:last-child {
+            margin-bottom: 2em;
+        }
     }
-  }
 
-  // 꽉찬 화면
-  &.cl--full {
-    padding: 0;
-
-    li {
-      padding: 27px 14px;
-      margin-bottom: 0;
-      border-radius: 0;
-
-      .cl__thumb {
-        width: 56px;
-      }
+    // 약간 큰 사이즈
+    .cl__list--middle {
+        padding-top: 22px;
+        padding-bottom: 22px;
     }
-  }
+
+    // 흰 배경
+    &.cl-bg--light {
+        li {
+            background-color: #F4F4F4;
+        }
+    }
+
+    &.cl-bg--transparent {
+        background: transparent none;
+    }
+
+    &.cl-bg--strongdark {
+        background-color: #3F4248;
+        padding: 8px 0;
+
+        li {
+            @extend .abs__list--dark;
+            border-color: #484B50;
+        }
+    }
+
+    // 검은배경 위에..
+    &.cl-bg--dark {
+
+        li {
+            @extend .abs__list--dark;
+        }
+    }
+
+    // 꽉찬 화면
+    &.cl--full {
+        padding: 0;
+
+        li {
+            padding: 27px 14px;
+            margin-bottom: 0;
+            border-radius: 0;
+
+            .cl__thumb {
+                width: 56px;
+            }
+        }
+    }
 }
 
 .cl__list--dragging {
-  z-index: 1000;
-  p, h4 {
-    margin-bottom: 0;
-    line-height: 1em;
-  }
+    z-index: 1000;
+    p, h4 {
+        margin-bottom: 0;
+        line-height: 1em;
+    }
 
-  @extend .abs__list--common;
-  @extend .abs__list--dark;
-  background-color: transparent;
-  position: relative;
+    @extend .abs__list--common;
+    @extend .abs__list--dark;
+    background-color: transparent;
+    position: relative;
 
-  &:before {
-    content: '';
-    position: absolute;
-    width: calc(100% + 20px);
-    height: calc(100% + 6px);
-    margin-left: -20px;
-    background-color: rgba(0, 0, 0, 0.2);
-    z-index: 0;
-  }
+    &:before {
+        content: '';
+        position: absolute;
+        width: calc(100% + 20px);
+        height: calc(100% + 6px);
+        margin-left: -20px;
+        background-color: rgba(0, 0, 0, 0.2);
+        z-index: 0;
+    }
 
-  * {
-    z-index: 1;
-  }
+    * {
+        z-index: 1;
+    }
 
-  .cl__checkbox {
-    visibility: hidden;
-  }
+    .cl__checkbox {
+        visibility: hidden;
+    }
 }
 
 .cl-ctrl__button {
-  background-image: url("images/iot-ic-control-btn-lg@3x.png");
-  background-size: contain;
-  width: 40px;
-  height: 45px;
-  background-repeat: no-repeat;
-  background-position: right center;
+    background-image: url("images/iot-ic-control-btn-lg@3x.png");
+    background-size: contain;
+    width: 40px;
+    height: 45px;
+    background-repeat: no-repeat;
+    background-position: right center;
 }
 
 //IotModeChange
 .cl-iot-mode-progress {
-  position: relative;
-  height: 100%;
+    position: relative;
+    height: 100%;
 }
 
 .cl-iot-mode-progress__top {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 52px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 52px;
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.24), 0 0 2px 0 rgba(0, 0, 0, 0.12);
 
-  h3 {
-    margin: 0;
-    font-size: 16px;
-    font-weight: 500;
-    color: #fafafa;
-  }
+    h3 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 500;
+        color: #fafafa;
+    }
 }
 
 .cl-iot-mode-progress__top-on {
-  @extend .cl-iot-mode-progress__top;
+    @extend .cl-iot-mode-progress__top;
 
-  background-color: #1654A3;
+    background-color: #1654A3;
 }
 
 .cl-iot-mode-progress__top-off {
-  @extend .cl-iot-mode-progress__top;
+    @extend .cl-iot-mode-progress__top;
 
-  background-color: #000000;
+    background-color: #000000;
 }
 
 .cl-iot-mode-progress__content {
-  background-color: #F5F5F5;
-  height: 100%;
-  padding: 52px 15px 60px;
+    background-color: #F5F5F5;
+    height: 100%;
+    padding: 52px 15px 60px;
 }
 
 .cl-iot-mode-progress__bottom {
-  display: flex;
-  position: absolute;
-  width: calc(100vw - 30px);
-  bottom: 20px;
+    display: flex;
+    position: absolute;
+    width: calc(100vw - 30px);
+    bottom: 20px;
 }
 
 .cl-iot-mode-progress__btn {
-  padding: 8px 30px 12px;
-  font-size: 14px;
-  font-weight: bold;
-  letter-spacing: 0.3px;
+    padding: 8px 30px 12px;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 0.3px;
 }
 
 .cl-iot-mode-progress__btn-link {
-  @extend .cl-iot-mode-progress__btn;
+    @extend .cl-iot-mode-progress__btn;
 
-  color: #4a4a4a;
+    color: #4a4a4a;
 }
 
 .cl-iot-mode-progress__btn-primary {
-  @extend .cl-iot-mode-progress__btn;
+    @extend .cl-iot-mode-progress__btn;
 
-  margin-left: auto;
-  border-radius: 2px;
-  background-color: #1654A3;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24), 0 0 1px 0 rgba(0, 0, 0, 0.12);
-  color: #ffffff;
+    margin-left: auto;
+    border-radius: 2px;
+    background-color: #1654A3;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24), 0 0 1px 0 rgba(0, 0, 0, 0.12);
+    color: #ffffff;
 
-  &:disabled {
-    opacity: 0.2;
-  }
+    &:disabled {
+        opacity: 0.2;
+    }
 }
 
 .cl-iot-mode-progress__btn-primary--disabled {
-  @extend .cl-iot-mode-progress__btn-primary;
+    @extend .cl-iot-mode-progress__btn-primary;
 
-  opacity: 0.2;
+    opacity: 0.2;
 }
 
 .cl-iot-mode-progress__btn-dark {
-  @extend .cl-iot-mode-progress__btn;
+    @extend .cl-iot-mode-progress__btn;
 
-  margin-left: auto;
-  border-radius: 2px;
-  background-color: #000000;
-  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24), 0 0 1px 0 rgba(0, 0, 0, 0.12);
-  color: #ffffff;
+    margin-left: auto;
+    border-radius: 2px;
+    background-color: #000000;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24), 0 0 1px 0 rgba(0, 0, 0, 0.12);
+    color: #ffffff;
 
-  &:disabled {
-    opacity: 0.2;
-  }
+    &:disabled {
+        opacity: 0.2;
+    }
 }
 
 .cl-iot-mode-progress__btn-dark--disabled {
-  @extend .cl-iot-mode-progress__btn-dark;
+    @extend .cl-iot-mode-progress__btn-dark;
 
-  opacity: 0.2;
+    opacity: 0.2;
 }
 
 .cl-iot-mode-progress__ready {
-  .cl-iot-mode-progress__middle {
-    position: absolute;
-    top: 50%;
-    width: calc(100% - 30px);
-    transform: translateY(-50%);
-  }
+    .cl-iot-mode-progress__middle {
+        position: absolute;
+        top: 50%;
+        width: calc(100% - 30px);
+        transform: translateY(-50%);
+    }
 }
 
 .cl-iot-mode-progress__progress,
 .cl-iot-mode-progress__done {
-  .cl-iot-mode-progress__middle {
-    height: 422px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    width: calc(100% - 30px);
-  }
+    .cl-iot-mode-progress__middle {
+        height: 422px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: calc(100% - 30px);
+    }
 
-  .cl-iot-connect-progress {
-    width: 265px;
-    margin: 139px auto;
-  }
+    .cl-iot-connect-progress {
+        width: 265px;
+        margin: 139px auto;
+    }
 }
 
 .cl-iot-mode-progress__paragraph {
-  margin-top: 20px;
-  opacity: 0.7;
-  font-size: 20px;
-  font-weight: 300;
-  line-height: 1.25;
-  letter-spacing: -0.3px;
-  text-align: center;
-  color: #000000;
+    margin-top: 20px;
+    opacity: 0.7;
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 1.25;
+    letter-spacing: -0.3px;
+    text-align: center;
+    color: #000000;
 }
 
 // 슬라이더 스위치
 .cl-iot-switch {
-  position: relative;
-  display: inline-block;
-  width: 34px;
-  height: 14px;
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 14px;
 
-  input {
-    display: none;
-  }
+    input {
+        display: none;
+    }
 
-  input:checked + .cl-iot-switch-slider {
-    background-color: #AAC6E6;
-  }
+    input:checked + .cl-iot-switch-slider {
+        background-color: #AAC6E6;
+    }
 
-  input:checked + .cl-iot-switch-slider:before {
-    background-color: #1754A3;
-    box-shadow: 0 0.5px 0.5px 0 rgba(0, 0, 0, 0.24), 0 0 0.5px 0 rgba(0, 0, 0, 0.12);;
-  }
+    input:checked + .cl-iot-switch-slider:before {
+        background-color: #1754A3;
+        box-shadow: 0 0.5px 0.5px 0 rgba(0, 0, 0, 0.24), 0 0 0.5px 0 rgba(0, 0, 0, 0.12);;
+    }
 
-  input:focus + .cl-iot-switch-slider {
-    box-shadow: 0 0 1px #AAC6E6;
-  }
+    input:focus + .cl-iot-switch-slider {
+        box-shadow: 0 0 1px #AAC6E6;
+    }
 
-  input:checked + .cl-iot-switch-slider:before {
-    -webkit-transform: translateX(20px);
-    -ms-transform: translateX(20px);
-    transform: translateX(20px);
-  }
+    input:checked + .cl-iot-switch-slider:before {
+        -webkit-transform: translateX(20px);
+        -ms-transform: translateX(20px);
+        transform: translateX(20px);
+    }
 }
 
 .cl-iot-switch-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 34px;
-  background-color: #B5B4B4;
-  -webkit-transition: .3s;
-  transition: .3s;
-
-  &:before {
     position: absolute;
-    content: "";
-    height: 20px;
-    width: 20px;
-    left: -3px;
-    bottom: -2.5px;
-    border-radius: 50%;
-    background-color: #F8F8F8;
-    box-shadow: 0 0.5px 0.5px 0 rgba(0, 0, 0, 0.24), 0 0 0.5px 0 rgba(0, 0, 0, 0.12);
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 34px;
+    background-color: #B5B4B4;
     -webkit-transition: .3s;
     transition: .3s;
-  }
+
+    &:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: -3px;
+        bottom: -2.5px;
+        border-radius: 50%;
+        background-color: #F8F8F8;
+        box-shadow: 0 0.5px 0.5px 0 rgba(0, 0, 0, 0.24), 0 0 0.5px 0 rgba(0, 0, 0, 0.12);
+        -webkit-transition: .3s;
+        transition: .3s;
+    }
 }
 
 // 슬라이더
 .cl-iot-slider {
 
-  .cl-slider {
-    width: 70%;
-    margin-left: 3%;
-  }
+    .cl-slider {
+        width: 70%;
+        margin-left: 3%;
+    }
 }
 
 .cl-iot-slider__num {
-  color: rgba(0, 0, 0, 0.87);
-  font-size: 12px;
+    color: rgba(0, 0, 0, 0.87);
+    font-size: 12px;
 }
 
 .cl-iot-slider__min {
-  @extend .cl-iot-slider__num;
-  width: 10%;
-  text-align: left;
+    @extend .cl-iot-slider__num;
+    width: 10%;
+    text-align: left;
 }
 
 .cl-iot-slider__max {
-  @extend .cl-iot-slider__num;
-  width: 12%;
-  text-align: right;
+    @extend .cl-iot-slider__num;
+    width: 12%;
+    text-align: right;
 }
 
 // 하단 옵션용 푸터
 footer.cl-opts__footer {
-  padding: 10px 10px 8px 20px;
-  transition: bottom 0.3s ease-out;
-  box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.24), 0 0 4px 0 rgba(0, 0, 0, 0.12);
-  height: inherit;
-  min-height: 50px;
-  transform: translateZ(0);
+    padding: 10px 10px 8px 20px;
+    transition: bottom 0.3s ease-out;
+    box-shadow: 0 -4px 4px 0 rgba(0, 0, 0, 0.24), 0 0 4px 0 rgba(0, 0, 0, 0.12);
+    height: inherit;
+    min-height: 50px;
+    transform: translateZ(0);
 
-  &.cl-opts__footer--hide {
-    bottom: -50px;
-  }
+    &.cl-opts__footer--hide {
+        bottom: -50px;
+    }
 
-  .name--strong {
-    font-size: 16px;
-    font-weight: 700;
-    color: rgba(0, 0, 0, 0.6);
-  }
+    .name--strong {
+        font-size: 16px;
+        font-weight: 700;
+        color: rgba(0, 0, 0, 0.6);
+    }
 }
 
 // 모드 설정 변경, 및 시나리오 생성 페이지
 header.cl-mode-setting__header {
-  @extend .cl-bg--lightgray;
-  padding: 30px 15px 18px 15px;
-  height: auto;
+    @extend .cl-bg--lightgray;
+    padding: 30px 15px 18px 15px;
+    height: auto;
 
-  .cl-iot-mode__button {
-    display: block;
-    margin: 0 auto 18px auto;
-    opacity: 1;
+    .cl-iot-mode__button {
+        display: block;
+        margin: 0 auto 18px auto;
+        opacity: 1;
 
-    span {
-      color: rgba(0, 0, 0, 0.9);
-      font-weight: 500;
-      letter-spacing: -0.1em;
+        span {
+            color: rgba(0, 0, 0, 0.9);
+            font-weight: 500;
+            letter-spacing: -0.1em;
+        }
     }
-  }
 
-  .desc {
-    font-size: 14px;
-    text-align: left;
-    opacity: 0.7;
-    line-height: 1.38em;
-  }
+    .desc {
+        font-size: 14px;
+        text-align: left;
+        opacity: 0.7;
+        line-height: 1.38em;
+    }
 }
 
 .cl-iot-add__button--light {
 
-  display: block;
-  text-align: center;
-  margin: 0 auto;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
 
-  p {
-    color: #6E7074;
-    font-size: 12px;
-    margin-top: 0.4em;
-  }
+    p {
+        color: #6E7074;
+        font-size: 12px;
+        margin-top: 0.4em;
+    }
 }
 
 .cl-iot-control-list {
-  li > a {
-    @extend .cl-flex;
-    width: 100%;
-  }
+    li > a {
+        @extend .cl-flex;
+        width: 100%;
+    }
 }
 
 /* 기기 상세 옵션 */
 .cl-iot-options {
 
-  input[type=text] {
-    width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, .2);
-    padding-bottom: 0.5em;
-  }
+    input[type=text] {
+        width: 100%;
+        border-bottom: 1px solid rgba(0, 0, 0, .2);
+        padding-bottom: 0.5em;
+    }
 
-  select {
-    width: 100%;
-    border-bottom: 1px solid rgba(0, 0, 0, .2);
-    border-radius: 0;
-    padding-bottom: 0.5em;
-    margin: 2em 0.3em 0 0.3em;
-    background: transparent url('images/ic-arrow-down@3x.png') no-repeat;
-    background-size: contain;
-    background-position: right -4px;
-  }
+    select {
+        width: 100%;
+        border-bottom: 1px solid rgba(0, 0, 0, .2);
+        border-radius: 0;
+        padding-bottom: 0.5em;
+        margin: 2em 0.3em 0 0.3em;
+        background: transparent url('images/ic-arrow-down@3x.png') no-repeat;
+        background-size: contain;
+        background-position: right -4px;
+    }
 }
 
 /* 시나리오/모드에 붙어있는 기기리스트 */
 .cl-device-props-of-scna__list {
 
-  li {
-    //pointer-events: none;
+    li {
+        //pointer-events: none;
 
-    & > *:last-child {
-      pointer-events: none;
+        & > *:last-child {
+            pointer-events: none;
+        }
+
+        &.cl--editable {
+
+            & > *:last-child {
+                pointer-events: auto;
+            }
+        }
+
     }
 
-    &.cl--editable {
+    .cl-device-of-scna-toggle__button {
+        pointer-events: none;
 
-      & > *:last-child {
-        pointer-events: auto;
-      }
+        &.cl--editable {
+            pointer-events: auto;
+        }
     }
-
-  }
-
-  .cl-device-of-scna-toggle__button {
-    pointer-events: none;
-
-    &.cl--editable {
-      pointer-events: auto;
-    }
-  }
 
 }
 
+.cl-iot-expose-link-group {
 
+    text-align: center;
+    padding-bottom: 3em;
 
-.cl-iot-expose-link-group{
+    a {
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        background-color: #626469;
+        width: 50px;
+        height: 50px;
+        border-radius: 12px;
+        border: 1px solid rgba(0, 0, 0, 0.5);
+        margin: 0 27px;
+    }
 
-  text-align: center;
-  padding-bottom: 3em;
+    img {
+        margin-top: 5px;
+    }
 
-  a{
-    position: relative;
-    display: inline-block;
-    vertical-align: middle;
-    background-color: #626469;
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    border: 1px solid rgba( 0, 0, 0, 0.5 );
-    margin: 0 27px;
-  }
+    p {
+        position: absolute;
+        white-space: nowrap;
+        left: 50%;
+        top: 100%;
+        transform: translateX(-50%);
+        font-weight: bold;
+    }
+}
 
-  img{
-    margin-top: 5px;
-  }
-
-  p{
-    position: absolute;
+// 인포메이션 시작
+.cl-iot-info-tab {
+    width: 100vw;
+    height: 77px;
     white-space: nowrap;
-    left: 50%;
-    top: 100%;
-    transform: translateX(-50%);
-    font-weight: bold;
-  }
+    overflow-y: hidden;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14);
 }
+
+.cl-iot-info-tab__item {
+    display: inline-block;
+    width: 84px;
+    height: 77px;
+    border-bottom: 2px solid #B0B0B0;
+    background-color: rgba(155,155,155,0.2);
+
+    img {
+        width: 41px;
+    }
+
+    span {
+        display: block;
+        margin-top: -5px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #000000;
+    }
+}
+
+.cl-iot-info-tab__item--active {
+    @extend .cl-iot-info-tab__item;
+
+    border-bottom: 2px solid #1654A3;
+    background-color: #ffffff;
+
+    &:active, &:focus {
+        border-bottom: 2px solid #1654A3;
+    }
+}
+
+// 인포메이션 끝
