@@ -5,7 +5,7 @@
 
     <select id="selectImageInfo" parameterType="java.util.Map" resultType="imageInfo">
         SELECT
-          `IMG`.
+          `IMG`.*,
           `IMG_TYPE`.`TYPE_NM` AS PARENT_TYPE_NM
         FROM
           `CL_IMAGE_INFO` AS IMG
@@ -49,6 +49,7 @@
                 `PARENT_TYPE`,
                 `USR_ID`,
                 `MIME_TYPE`,
+                `IMAGE_SIZE`,
                 `FILE_PATH`,
                 `FILE_NM`,
                 `REG_DTTM`,
@@ -59,6 +60,7 @@
                 #{parentType},
                 #{usrId},
                 #{mimeType},
+                #{imageSize},
                 #{filePath},
                 #{fileNm},
                 CURRENT_TIMESTAMP,

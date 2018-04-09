@@ -76,9 +76,9 @@ public class ImageStoreServiceImpl implements ImageStoreService {
      * @param s3Client
      * @return ResponseEntity
      */
-    private byte[] getFile( AmazonS3  s3Client,
+    private InputStream getObjectInputStream( AmazonS3  s3Client,
                             String    bucket,
-                            String    objectKey) throws OperationFailedException {
+                            String    objectKey) {
         byte[]      outputFile;
         S3Object    object;
         InputStream objectData;
@@ -86,21 +86,22 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         object = s3Client.getObject( new GetObjectRequest( bucket, objectKey ) );
         objectData = object.getObjectContent();
 
-        try {
-            outputFile = IOUtils.toByteArray( objectData );
-        }
-        catch( IOException e ) {
-            logger.error( e.getMessage() );
-            throw new OperationFailedException("해당 이미지를 가져올 수 없습니다.");
-        }
+//        try {
+//            outputFile = IOUtils.toByteArray( objectData );
+//        }
+//        catch( IOException e ) {
+//            logger.error( e.getMessage() );
+//            throw new OperationFailedException("해당 이미지를 가져올 수 없습니다.");
+//        }
 
-        return outputFile;
+        return objectData;
     }
 
 
-    public ImageInfo createImage(byte[] inputData, String imageType, String fileExt ) throws OperationFailedException {
+    public ImageInfo createImage(InputStream inputStream, long imageSize, String imageType, String fileExt )
+            throws OperationFailedException
+    {
         ImageInfo       imageInfo = new ImageInfo();
-        InputStream     stream = new ByteArrayInputStream( inputData );
         ObjectMetadata  metadata = new ObjectMetadata();
         AmazonS3        s3Client = getS3Client();
         UUID            uuid;
@@ -125,21 +126,22 @@ public class ImageStoreServiceImpl implements ImageStoreService {
 
         // Execution - file upload
         try {
+            metadata.setContentLength( imageSize );
+            metadata.setContentType( "image/" + fileExt );
+
             s3Client.putObject(
                     new PutObjectRequest(
-                            serviceProp.getByKey(PROP_GROUP, S3_BUCKET_UPLOAD), objectPath, stream, metadata ) );
+                            serviceProp.getByKey(PROP_GROUP, S3_BUCKET_UPLOAD), objectPath, inputStream, metadata ) );
         } catch( AmazonServiceException ae ) {
             logger.error(ae.getMessage());
             throw new OperationFailedException("업로드가 실패하였습니다.");
         }
 
-        metadata.setContentLength( inputData.length );
-        metadata.setContentType( "image/" + fileExt );
-
         imageInfo.setMimeType( metadata.getContentType() );
         imageInfo.setFilePath( objectPath );
         imageInfo.setFileNm( fileName );
         imageInfo.setParentType( imageTypeIdx );
+        imageInfo.setImageSize( imageSize );
 
         // Execution - table update
         imageInfo = imageInfoDAO.setImageFile( imageInfo );
@@ -148,30 +150,33 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         return imageInfo;
     }
 
-    public byte[] getPostFile( PostFileInfo postFileInfo) throws OperationFailedException {
-        byte[] outputFile;
+    public ImageInfo getImageByIdx( int idx ) throws IOException {
+        ImageInfo    imageInfo;
+        InputStream  inputStream;
 
-        outputFile = this.getFile(
-                getS3Client(),
-                serviceProp.getByKey(PROP_GROUP, S3_BUCKET_UPLOAD),
-                postFileInfo.getFilePath() );
+        imageInfo = imageInfoDAO.getImageFile( idx );
+        inputStream = this.getObjectInputStream( getS3Client(),
+                                                 serviceProp.getByKey(PROP_GROUP, S3_BUCKET_UPLOAD),
+                                                 imageInfo.getFilePath() );
 
-        return outputFile;
+        imageInfo.setImageByteArray( IOUtils.toByteArray( inputStream ) );
+
+        return imageInfo;
     }
-
-    public byte[] getPostFileBySize( PostFileInfo postFileInfo, String size ) throws OperationFailedException {
-        byte[] outputFile;
-        String objectPath;
-
-        // 새로운 File Path를 가져오기
-        objectPath = postFileInfo.getFilePath();
-        objectPath = objectPath.replace( "origin/", "resize/" + size + "/" );
-
-        outputFile = this.getFile(
-                getS3Client(),
-                serviceProp.getByKey(PROP_GROUP, S3_BUCKET_DOWNLOAD),
-                objectPath );
-
-        return outputFile;
-    }
+//
+//    public byte[] getPostFileBySize( PostFileInfo postFileInfo, String size ) throws OperationFailedException {
+//        byte[] outputFile;
+//        String objectPath;
+//
+//        // 새로운 File Path를 가져오기
+//        objectPath = postFileInfo.getFilePath();
+//        objectPath = objectPath.replace( "origin/", "resize/" + size + "/" );
+//
+//        outputFile = this.getFile(
+//                getS3Client(),
+//                serviceProp.getByKey(PROP_GROUP, S3_BUCKET_DOWNLOAD),
+//                objectPath );
+//
+//        return outputFile;
+//    }
 }

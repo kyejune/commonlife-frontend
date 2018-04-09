@@ -2,6 +2,8 @@ package com.kolon.comlife.imageStore.model;
 
 import org.apache.ibatis.type.Alias;
 
+import java.io.InputStream;
+
 @Alias("imageInfo")
 public class ImageInfo {
     private int     imageIdx;
@@ -12,11 +14,15 @@ public class ImageInfo {
     private int     usrId;
     private String  host;
     private String  mimeType;
+    private long    imageSize;
     private String  fileNm;
     private String  filePath;
     private String  delYn;
     private String  regDttm;
     private String  updDttm;
+
+    private InputStream imageInputStream;
+    private byte[]      imageByteArray;
 
     public String getImageType() {
         return imageType;
@@ -82,6 +88,14 @@ public class ImageInfo {
         this.mimeType = mimeType;
     }
 
+    public long getImageSize() {
+        return imageSize;
+    }
+
+    public void setImageSize(long imageSize) {
+        this.imageSize = imageSize;
+    }
+
     public String getFileNm() {
         return fileNm;
     }
@@ -120,5 +134,21 @@ public class ImageInfo {
 
     public void setUpdDttm(String updDttm) {
         this.updDttm = updDttm;
+    }
+
+    public InputStream getImageInputStream() {
+        return imageInputStream;
+    }
+
+    public void setImageInputStream(InputStream imageInputStream) {
+        this.imageInputStream = imageInputStream;
+    }
+
+    public byte[] getImageByteArray() {
+        return imageByteArray;
+    }
+
+    public void setImageByteArray(byte[] imageByteArray) {
+        this.imageByteArray = imageByteArray;
     }
 }
