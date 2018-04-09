@@ -116,6 +116,14 @@ public class IotControlServiceImpl implements IotControlService {
                 }
 
                 try {
+                    Map          msgScna = new HashMap();
+                    ObjectMapper mapper = new ObjectMapper();
+                    String       jsonInString;
+                    Map<String, String> scnaResult;
+
+                    msgScna.put("scna_type", "normal");
+                    jsonInString = mapper.writeValueAsString( msgScna );
+
                     String execUrl = String.format(
                             IOK_CONTROL_SCENARIO_EXECUTE_FMT_PATH,
                             scnaId.intValue(),
@@ -126,8 +134,18 @@ public class IotControlServiceImpl implements IotControlService {
                             httpClient,
                             serviceProperties.getByKey(IOK_CONTROL_HOST_PROP_GROUP, IOK_CONTROL_HOST_PROP_KEY),
                             execUrl);
-                    result = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
-                    logger.debug(" >>>> RESULT >>> " + result.toString());
+                    requester.setBody(jsonInString);
+                    scnaResult = requester.executeWithTimeout(IOK_CONTROL_TIMEOUT_SEC);
+                    logger.debug(" >>>> RESULT >>> " + scnaResult.toString());
+
+                    if( !(scnaResult.get("errMsg").equals("Success")) ) {
+                        logger.error( " >>>> Automation 실행 실패 >>> \n\t>>" +
+                                      execUrl +  "\n\t>>" +
+                                      scnaResult.toString() );
+                        throw new IotControlOperationFailedException("자동화를 실행 할 수 없습니다.");
+                    }
+
+                    // 성공!
                 } catch( SocketException se ) {
                     // socket is closed
                     if( "Socket closed".equals(se.getMessage())) {
@@ -138,7 +156,6 @@ public class IotControlServiceImpl implements IotControlService {
                 } catch( Exception e) {
                     throw e;
                 }
-
                 break;
             case "information":
                 throw new IotControlOperationFailedException("지원하지 않는 기능입니다.");

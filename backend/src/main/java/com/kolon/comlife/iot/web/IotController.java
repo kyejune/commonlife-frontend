@@ -30,6 +30,7 @@ import java.util.Map;
 public class IotController {
     private static final Logger logger = LoggerFactory.getLogger(IotController.class);
 
+    // todo: 사용자 아이디를 토큰에서 받아올 수 있도록 변경
     private static final String TEST_USER_ID = "yunakim";
 
     @Autowired
