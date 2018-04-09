@@ -2,9 +2,13 @@ import React, {Component} from 'react';
 import LogoSrc from 'images/logo@2x.png';
 import PrivatePolicy from "./PrivatePolicy";
 import BranchList from "../ui/BranchList";
-import {withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import UserInputs from "./UserInputs";
 import HouseHolderInputs from "./HouseHolderInputs";
+import Net from "../../scripts/net";
+import {MakingUserData} from "../../scripts/store";
+import Welcome from "./Welcome";
+import classNames from 'classnames';
 
 
 class Join extends Component {
@@ -14,17 +18,15 @@ class Join extends Component {
 
         this.state = {
             step: parseInt(new URLSearchParams(props.location.search).get('step')) || 0,
-            data: {
-                branch: { cmplxId: undefined }, // 등록 지점
-            },
-        }
+        };
 
         this.STEP_INFO = [
             {name: '사용자 등록', msg: '약관 동의'},
             {name: '사용자 등록', msg: '1. 등록 지점을 선택하세요.'},
             {name: '사용자 등록', msg: '2. 세대주 정보 입력'},
+            {name: '사용자 등록', msg: '2. 사용자 정보 입력'},
             {name: '환영합니다', msg: '등록완료'},
-        ]
+        ];
     }
 
     componentDidUpdate(prevProps) {
@@ -42,45 +44,59 @@ class Join extends Component {
 
     onNext = () => {
         // 검증 후
-        if( this.validate() )
+        if (!this.validate()) return;
+
+        if (this.state.step === 2) {
+
+            const { branch, houseHolder } = MakingUserData;
+
+            // 세대주 인증번호 통과하면 다음 스텝으로 진행
+            Net.confirmHouseHolderPhoneAuthNumber( branch.cmplxId, houseHolder.dong, houseHolder.ho,
+                houseHolder.name, houseHolder.phone, houseHolder.certReqId, houseHolder.certId, res => {
+                    this.setState({step: this.state.step + 1});
+                });
+
+        }else if( this.state.step === 3 ){
+
+            const { branch, houseHolder, user } = MakingUserData;
+
+            //confirmUserPhoneAuthNumber( branchId, dongId, hoId, hhname, hhphone, certReq, certId, phone, callback ){
+            Net.confirmUserPhoneAuthNumber( branch.cmplxId, houseHolder.dong, houseHolder.ho,
+                houseHolder.name, houseHolder.phone, user.certReqId, user.certId, user.phone, res => {
+                    this.setState({step: this.state.step + 1});
+                });
+
+        } else {
             this.setState({step: this.state.step + 1});
+        }
     }
-
-    /* 각 스텝별 처리 */
-    onChangeBranch = branchItem => {
-
-        this.setState({
-            data: {...this.state.data, branch: branchItem }
-        });
-    }
-
-
-
 
     /* Validation */
-    validate=()=>{
+    validate = () => {
         let inCorrectMsg = null;
         const data = this.state.data;
 
-        switch( this.state.step ){
+        switch (this.state.step) {
             case 1:
-                if( data.branch.cmplxId === undefined )
+                if (MakingUserData.branch.cmplxId === undefined)
                     inCorrectMsg = '등록 지점을 선택하세요.';
 
                 break;
             case 2:
-
+                if (!this.houseHolder.validate())
+                    inCorrectMsg = '입력 양식을 맞춰 주시기 바랍니다.';
                 break;
 
             case 3:
-
+                if (!this.user.validate())
+                    inCorrectMsg = '입력 양식을 맞춰 주시기 바랍니다.';
                 break;
         }
 
         const IS_PASS = (inCorrectMsg === null);
 
-        if( !IS_PASS )
-            alert( inCorrectMsg );
+        if (!IS_PASS)
+            alert(inCorrectMsg);
 
         return IS_PASS;
     }
@@ -89,27 +105,32 @@ class Join extends Component {
     render() {
 
         const {STEP_INFO} = this;
-        const {step, data} = this.state;
+        const {step} = this.state;
         const IS_START = (step === 0);
+        const IS_END = (step === 4);
         const INFO = STEP_INFO[step];
 
         let component;
-        switch( step ){
+        switch (step) {
             case 0:
                 component = <PrivatePolicy/>;
-            break;
+                break;
 
             case 1:
-                component = <BranchList value={data.branch.cmplxId} onChange={this.onChangeBranch}/>;
-            break;
+                component = <BranchList/>;
+                break;
 
             case 2:
-                component = <HouseHolderInputs branch={data.branch} />;
-            break;
+                component = <HouseHolderInputs ref={ r => this.houseHolder = r }/>;
+                break;
 
             case 3:
-                component = <UserInputs/>;
-            break;
+                component = <UserInputs ref={ r => this.user = r }/>;
+                break;
+
+            case 4:
+                component = <Welcome/>
+                break;
         }
 
 
@@ -131,19 +152,26 @@ class Join extends Component {
             </header>
 
 
-            <div className="pb-3em">
+            <div className={ classNames( "pb-3em", { "cl-join-welcome-wrap": step==4 } ) }>
                 {component}
             </div>
 
             <footer className="cl-opts__footer cl-flex cl-bg--darkgray">
 
-                {IS_START ?
-                    <span className="mr-auto">위 정책에 동의하고 시작합니다.</span> :
-                    [<button key="prev" className="mr-auto" onClick={this.onPrev}>이전</button>, <span key="pager">{ `${step+1}/3` }</span>]
+                {IS_END && <Link to="/login" className="ml-auto mr-auto cl-bold color-primary">로그인</Link> }
+
+                {IS_START&& <span className="mr-auto">위 정책에 동의하고 시작합니다.</span> }
+
+                {step > 0 && step < 4 && [
+                    <button key="prev" className="mr-auto" onClick={this.onPrev}>이전</button>,
+                    <span key="pager">{`${step}/3`}</span>]
                 }
+
+                {!IS_END &&
                 <button className="color-primary cl-bold ml-auto" onClick={this.onNext}>
                     {IS_START ? "확인" : "다음"}
                 </button>
+                }
 
             </footer>
 
