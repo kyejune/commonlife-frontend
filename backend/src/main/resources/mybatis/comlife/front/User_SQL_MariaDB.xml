@@ -19,7 +19,6 @@
         )
         ON DUPLICATE KEY
 	    UPDATE
-	      DEL_YN="N",
 	      UPD_DTTM=CURRENT_TIMESTAMP;
     </insert>
 
