@@ -434,8 +434,6 @@ public class UserRegistrationController {
                     .body( new SimpleMsgInfo( "인증이 실패하였습니다." ) );
         }
 
-        userInfo.getUsrId();
-
         // parameter 체크 및 이미지 생성에 전달
         try {
             imageBase64.parseBase64(file);
@@ -452,7 +450,7 @@ public class UserRegistrationController {
                     imageBytes.length,
                     imageType,
                     imageBase64.getFileType(),
-                    -1);
+                    userInfo.getUsrId() );
         } catch( OperationFailedException e ) {
             e.printStackTrace();
             return ResponseEntity

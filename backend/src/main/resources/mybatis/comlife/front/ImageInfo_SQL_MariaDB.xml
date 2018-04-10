@@ -47,6 +47,7 @@
             INSERT INTO  `CL_IMAGE_INFO`
             (
                 `PARENT_TYPE`,
+                `PARENT_IDX`,
                 `USR_ID`,
                 `MIME_TYPE`,
                 `IMAGE_SIZE`,
@@ -58,6 +59,7 @@
             VALUES
             (
                 #{parentType},
+                #{parentIdx},
                 #{usrId},
                 #{mimeType},
                 #{imageSize},

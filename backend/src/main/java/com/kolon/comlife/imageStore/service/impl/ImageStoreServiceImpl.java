@@ -133,6 +133,7 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         imageInfo.setFileNm( fileName );
         imageInfo.setParentType( imageTypeIdx );
         imageInfo.setImageSize( imageSize );
+        imageInfo.setParentIdx( parentIdx );
 
         // Execution - table update
         imageInfo = imageInfoDAO.setImageFile( imageInfo );
