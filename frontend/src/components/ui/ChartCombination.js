@@ -8,7 +8,6 @@ class ChartCombination extends Component {
 
 		let selectedIndex = 5; // 선택된 놈
 		let startNum = 12;
-		// let startNum =
 
 		/*
 		* path 그리기
@@ -26,10 +25,13 @@ class ChartCombination extends Component {
                 // 4 points that make a bar
                 const PS = getPoints(d, i); // 데이터는 LB 위치부터 반시계 방향으로 들어옴
 				let path = '';
-				const BL = { x:PS[0][0], y:PS[0][1] };
-				const TL = { x:PS[1][0], y:PS[1][1] };
-				const TR = { x:PS[2][0], y:PS[2][1] };
-				const BR = { x:PS[3][0], y:PS[3][1] };
+
+				const OFFSET_Y = 8; // 밑에 axis랑 떨어뜨릴 목적
+
+				const BL = { x:PS[0][0], y:PS[0][1] - OFFSET_Y };
+				const TL = { x:PS[1][0], y:PS[1][1] - OFFSET_Y };
+				const TR = { x:PS[2][0], y:PS[2][1] - OFFSET_Y };
+				const BR = { x:PS[3][0], y:PS[3][1] - OFFSET_Y };
 				const R = 7;
 
                 path += `M ${BL.x}, ${BL.y - R} L ${TL.x}, ${TL.y + R}, Q ${TL.x}, ${TL.y}, ${TL.x + R}, ${TL.y}, Q ${TR.x}, ${TR.y}, ${TR.x}, ${TR.y + R}, `;
@@ -62,13 +64,8 @@ class ChartCombination extends Component {
 							break;
 
 						case 'data2':
-							let color;
-
-                            console.log( data );
-
                             if( data.id_org ) return '#9B9B9B';
                             return ( index === selectedIndex )?'#1052a5':'#FFFFFF';
-
 							break;
 					}
 				},
@@ -82,7 +79,6 @@ class ChartCombination extends Component {
 							else			return `${num}월`;
 						},
 					},
-
 				},
 				y: {
 					show: false
