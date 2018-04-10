@@ -17,6 +17,7 @@
         "eject": "react-scripts eject"
     },
     "dependencies": {
+        "c3": "^0.5.2",
         "convert-time": "^0.3.0",
         "cordova-android": "^7.0.0",
         "cordova-ios": "^4.5.4",

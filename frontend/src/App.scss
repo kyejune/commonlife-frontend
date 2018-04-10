@@ -10,6 +10,7 @@ body {
 @import "~react-id-swiper/src/styles/css/swiper.css";
 @import '~rc-slider/assets/index.css';
 @import '~rc-tooltip/assets/bootstrap.css';
+@import '~c3/c3.css';
 @import "styles/vendors/boost-on.scss";
 @import "styles/md-overwrite.scss";
 @import "styles/common.scss";
@@ -26,3 +27,4 @@ body {
 @import "styles/checkbox.scss";
 @import "styles/lifeinfo";
 @import "styles/auth";
+@import "styles/chart";

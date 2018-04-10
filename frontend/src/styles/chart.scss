@@ -1,0 +1,13 @@
+.cl-chart__combination {
+    width: calc(100% - 40px);
+    margin: 0 auto;
+
+    .c3-shape {
+        border-radius: 50%;
+
+        &:before {
+            content: '';
+            border-radius: 50%;
+        }
+    }
+}
