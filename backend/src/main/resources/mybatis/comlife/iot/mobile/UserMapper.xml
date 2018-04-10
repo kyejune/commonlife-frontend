@@ -277,9 +277,16 @@
 	<update id="updateUserTempPw" parameterType="requestParam">
 		<![CDATA[
 		UPDATE  USR_INFO
-		  SET USER_PW = #{tempPw}
-		 WHERE 1=1
-		   AND USER_ID = #{userId}
+		 SET  USER_PW = #{tempPw}
+		WHERE
+				USR_INFO.HEAD_ID IN
+				(
+					SELECT HEAD_ID
+					FROM HOME_HEAD_M
+					WHERE HEAD_NM = #{headNm} AND  CELL = #{headCell}
+				)
+			AND
+				USER_ID = #{userId}  AND CELL = #{userCell};
 		]]>
 	</update>
 

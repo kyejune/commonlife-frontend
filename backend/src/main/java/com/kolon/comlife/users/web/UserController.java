@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
+import com.kolon.comlife.imageStore.model.ImageInfo;
 import com.kolon.comlife.users.util.IokUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.controller.MobileUserController;
@@ -32,6 +33,8 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
+    // todo: refactoring: IOK 코드 수정을 최소로 하려고 Controller를 호출
+    //   transaction 이슈가 발생하므로 별도 서비스 구현하여 통합하도록 해야함
     @Autowired
     protected MobileUserController mobileUserController;
 
@@ -81,6 +84,8 @@ public class UserController {
             } else {
                 retMsg = "로그인에 성공하였습니다."; // todo: message 옮기기
             }
+
+
         } catch( Exception e ) {
             return IokUtil.convertExceptionToResponse( e );
         }

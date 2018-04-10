@@ -876,7 +876,12 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 		parameter.put("headCell", strHeadCell);
 
 		List<Object> resList = this.listBySqlId(NAMESPACE+"searchUserId", parameter);
-		if (resList != null) {
+        if( resList == null || resList.size() < 1 ) {
+        	// 아이디를 찾지 못한 경우, NULL 반환
+            return null;
+        }
+
+        if (resList != null) {
 			int nSize = resList.size();
 			String sUserId = "";
 

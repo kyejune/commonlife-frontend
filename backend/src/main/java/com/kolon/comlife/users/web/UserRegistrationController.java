@@ -22,6 +22,7 @@ import com.kolon.comlife.users.util.IokUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.controller.MobileUserCertNoController;
 import com.kolonbenit.iot.mobile.controller.MobileUserController;
+import com.kolonbenit.iot.mobile.service.MobileUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,9 @@ public class UserRegistrationController {
 
     @Autowired
     private MobileUserController mobileUserController;
+
+    @Autowired
+    private MobileUserService mobileUserService;
 
     @Autowired
     private MobileUserCertNoController mobileUserCertNoController;
@@ -473,4 +477,83 @@ public class UserRegistrationController {
                 .status(HttpStatus.OK)
                 .body(new SimpleMsgInfo("프로필 사진이 업데이트 되었습니다."));
     }
+
+
+    /**
+     * 4. 사용자 ID 찾기
+     */
+    @GetMapping(
+            value = "/findUserId",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity findUserId( HttpServletRequest request,
+                                      @RequestParam("headNm")   String headNm,
+                                      @RequestParam("headCell") String headCell,
+                                      @RequestParam("userNm")   String userNm,
+                                      @RequestParam("userCell") String userCell ) {
+        RequestParameter parameter = new RequestParameter();
+        Map<String, Object> ret;
+
+        parameter.put("headNm", headNm);
+        parameter.put("headCell", headCell);
+        parameter.put("userNm", userNm);
+        parameter.put("userCell", userCell);
+
+        try {
+            ret = mobileUserService.searchUserId( parameter );
+            if( ret == null ) {
+                return ResponseEntity
+                        .status( HttpStatus.NOT_FOUND )
+                        .body( new SimpleMsgInfo("입력한 정보가 틀리거나 사용자가 존재하지 않습니다.") );
+            }
+        } catch ( Exception e ) {
+            logger.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.CONFLICT )
+                    .body(new SimpleErrorInfo(
+                            "아이디 찾기가 실패하였습니다. 잠시 후에 다시 시도하세요. 만약, 문제가 지속된다면 지원센터에 문의하세요.") );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("아이디가 사용자 휴대폰으로 전송되었습니다.") );
+    }
+
+    /**
+     * 5. 사용자 비밀번호 재설정
+     */
+    @GetMapping(
+            value = "/resetPwd",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity resetPwd( HttpServletRequest request,
+                                      @RequestParam("headNm")   String headNm,
+                                      @RequestParam("headCell") String headCell,
+                                      @RequestParam("userId")   String userId,
+                                      @RequestParam("userCell") String userCell ) {
+        RequestParameter parameter = new RequestParameter();
+        Map<String, Object> ret;
+
+        parameter.put("headNm", headNm);
+        parameter.put("headCell", headCell);
+        parameter.put("userId", userId);
+        parameter.put("userCell", userCell);
+
+        try {
+            ret = mobileUserService.searchUserPw( parameter );
+            if( ret == null ) {
+                return ResponseEntity
+                        .status( HttpStatus.NOT_FOUND )
+                        .body( new SimpleMsgInfo("입력한 정보가 틀리거나 사용자가 존재하지 않습니다.") );
+            }
+        } catch ( Exception e ) {
+            logger.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.CONFLICT )
+                    .body(new SimpleErrorInfo(
+                            "비밀번호 재설정이 실패하였습니다. 잠시 후에 다시 시도하세요. 만약, 문제가 지속된다면 지원센터에 문의하세요.") );
+        }
+
+        return ResponseEntity
+                .status( HttpStatus.OK )
+                .body( new SimpleMsgInfo("임시 비밀번호를 사용자 휴대폰 번호로 전송하였습니다. 로그인 즉시 비밀번호를 변경해주세요.") );
+    }
+
+
 }
