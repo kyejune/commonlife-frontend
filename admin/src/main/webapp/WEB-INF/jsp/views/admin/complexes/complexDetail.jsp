@@ -499,7 +499,7 @@
                                         </label>
                                         <div class="col-sm-6 form-control-static">
                                             <button
-                                                    onclick="window.open('/admin/info/categoryList.do?cmplxId=125')"
+                                                    onclick="window.open('/admin/info/categoryList.do?cmplxId=${complexDetail.cmplxId}')"
                                                     type="button"
                                                     class="btn btn-block btn-outline btn-default">
                                                 새로운 창에서 열기
@@ -530,7 +530,7 @@
                                         </label>
                                         <div class="col-sm-6 form-control-static">
                                             <button
-                                                    onclick="window.open('/admin/support/categoryList.do?cmplxId=125')"
+                                                    onclick="window.open('/admin/support/categoryList.do?cmplxId=${complexDetail.cmplxId}')"
                                                     type="button"
                                                     class="btn btn-block btn-outline btn-default">
                                                 새로운 창에서 열기

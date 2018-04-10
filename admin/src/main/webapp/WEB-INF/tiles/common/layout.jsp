@@ -8,6 +8,11 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    // CSRF
+    <meta name="_csrf" content="${_csrf.token}"/>
+    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+
     <link href="/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="/resources/font-awesome/css/font-awesome.css" rel="stylesheet">
     <link href="/resources/css/plugins/jasny/jasny-bootstrap.min.css" rel="stylesheet">

@@ -183,11 +183,17 @@
 
             console.log(updateList);
 
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var h = {};
+
+            h[header] = token;
             if( confirm("변경 사항을 적용하시겠습니까?") ) {
                 $.ajax({
                     url : '/admin/support/procIns.do?cmplxId=${cmplxId}',
                     type : 'post',
                     dataType: 'json',
+                    headers: h,
                     data: window.JSON.stringify(updateList),
                     contentType:"application/json; charset=UTF-8",
                     success: function (rs) {
