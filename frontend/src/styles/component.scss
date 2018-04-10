@@ -1356,11 +1356,11 @@ a.cl-map__link--branch{
     position: relative;
 }
 
-//.cl-chart__gauge{
-//    background: transparent url('images/gauge-bg@3x.png') no-repeat;
-//    background-size: contain;
-//    background-position: center 90%;
-//}
+.cl-gauge-bg{
+    background: transparent url('images/gauge-bg@3x.png') no-repeat;
+    background-size: 320px auto;
+    background-position: center 8px;
+}
 
 .cl-gauge-arrow{
     position: absolute;
