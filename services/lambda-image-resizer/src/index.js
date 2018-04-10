@@ -26,6 +26,7 @@ const ThumbnailSizes = {
         {size: 1280, alias: 'l'}
     ],
     TICKET: [
+        {size: 192, alias: 's'},
         {size: 640, alias: 'm'},
         {size: 1280, alias: 'l'}
     ],
@@ -33,6 +34,11 @@ const ThumbnailSizes = {
         {size: 128, alias: 's', type: 'crop'},
         {size: 256, alias: 'm', type: 'crop'},
         {size: 512, alias: 'l', type: 'crop'}
+    ],
+    RESV: [
+        {size: 192, alias: 's'},
+        {size: 640, alias: 'm'},
+        {size: 1280, alias: 'l'}
     ],
     sizeFromKey: function(key) {
         const type = key.split('/')[1];
@@ -46,6 +52,8 @@ const ThumbnailSizes = {
             return ThumbnailSizes.TICKET;
         } else if (type === 'complex') {
             return ThumbnailSizes.COMPLEX;
+        } else if (type === 'resv') {
+            return ThumbnailSizes.RESV;
         }
 
         return null;
