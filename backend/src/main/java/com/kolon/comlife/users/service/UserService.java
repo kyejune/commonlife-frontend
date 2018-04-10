@@ -9,4 +9,5 @@ public interface UserService {
 
     List<PostUserInfo> getUserListForPostById(List<Integer> ids);
     List<UserInfo> getUserListById(List<Integer> ids );
+    UserInfo getUsrIdByUserIdAndPwd( String userId, String userPw );
 }

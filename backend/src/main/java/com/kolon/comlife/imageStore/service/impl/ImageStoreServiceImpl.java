@@ -6,32 +6,28 @@ import com.amazonaws.auth.AWSStaticCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.*;
 import com.amazonaws.util.IOUtils;
+import com.kolon.comlife.imageStore.exception.ImageNotFoundException;
 import com.kolon.comlife.imageStore.model.ImageInfo;
 import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.imageStore.service.ImageStoreService;
-import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.postFile.service.exception.OperationFailedException;
-import com.kolon.comlife.postFile.service.impl.PostFileStoreServiceImpl;
 import com.kolon.common.prop.ServicePropertiesMap;
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
 @Service("imageStoreService")
 public class ImageStoreServiceImpl implements ImageStoreService {
-    private static final Logger logger = LoggerFactory.getLogger(PostFileStoreServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(ImageStoreServiceImpl.class);
 
     private static final String IMAGE_STORE_BASE_PATH = "origin/";
 
@@ -86,19 +82,11 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         object = s3Client.getObject( new GetObjectRequest( bucket, objectKey ) );
         objectData = object.getObjectContent();
 
-//        try {
-//            outputFile = IOUtils.toByteArray( objectData );
-//        }
-//        catch( IOException e ) {
-//            logger.error( e.getMessage() );
-//            throw new OperationFailedException("해당 이미지를 가져올 수 없습니다.");
-//        }
-
         return objectData;
     }
 
 
-    public ImageInfo createImage(InputStream inputStream, long imageSize, String imageType, String fileExt )
+    public ImageInfo createImage(InputStream inputStream, long imageSize, String imageType, String fileExt, int parentIdx)
             throws OperationFailedException
     {
         ImageInfo       imageInfo = new ImageInfo();
@@ -108,6 +96,7 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         String          fileName;
         String          objectPath;
         Integer         imageTypeIdx;
+        String          mimeType;
 
         // Validation
         if( !(ImageInfoUtil.isSupportedType( imageType )) ) {
@@ -126,13 +115,15 @@ public class ImageStoreServiceImpl implements ImageStoreService {
 
         // Execution - file upload
         try {
+            mimeType = "image/" + fileExt.toLowerCase();
             metadata.setContentLength( imageSize );
-            metadata.setContentType( "image/" + fileExt );
+            metadata.setContentType( mimeType );
 
             s3Client.putObject(
                     new PutObjectRequest(
                             serviceProp.getByKey(PROP_GROUP, S3_BUCKET_UPLOAD), objectPath, inputStream, metadata ) );
         } catch( AmazonServiceException ae ) {
+            ae.printStackTrace();
             logger.error(ae.getMessage());
             throw new OperationFailedException("업로드가 실패하였습니다.");
         }
@@ -150,11 +141,14 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         return imageInfo;
     }
 
-    public ImageInfo getImageByIdx( int idx ) throws IOException {
+    public ImageInfo getImageByIdx( int idx ) throws IOException, ImageNotFoundException {
         ImageInfo    imageInfo;
         InputStream  inputStream;
 
         imageInfo = imageInfoDAO.getImageFile( idx );
+        if( imageInfo == null ) {
+            throw new ImageNotFoundException("이미지가 없습니다.");
+        }
         inputStream = this.getObjectInputStream( getS3Client(),
                                                  serviceProp.getByKey(PROP_GROUP, S3_BUCKET_UPLOAD),
                                                  imageInfo.getFilePath() );
@@ -163,20 +157,45 @@ public class ImageStoreServiceImpl implements ImageStoreService {
 
         return imageInfo;
     }
-//
-//    public byte[] getPostFileBySize( PostFileInfo postFileInfo, String size ) throws OperationFailedException {
-//        byte[] outputFile;
-//        String objectPath;
-//
-//        // 새로운 File Path를 가져오기
-//        objectPath = postFileInfo.getFilePath();
-//        objectPath = objectPath.replace( "origin/", "resize/" + size + "/" );
-//
-//        outputFile = this.getFile(
-//                getS3Client(),
-//                serviceProp.getByKey(PROP_GROUP, S3_BUCKET_DOWNLOAD),
-//                objectPath );
-//
-//        return outputFile;
-//    }
+
+    public ImageInfo getImageByIdxAndSize( int idx, String sizeStr ) throws IOException, ImageNotFoundException {
+        ImageInfo    imageInfo;
+        String       objectPath;
+        InputStream  inputStream;
+
+        imageInfo = imageInfoDAO.getImageFile( idx );
+
+        objectPath = imageInfo.getFilePath();
+        objectPath = objectPath.replace( "origin/", "resize/" + sizeStr + "/" );
+
+        try {
+            // 썸네일 이미지 셋팅
+            inputStream = this.getObjectInputStream( getS3Client(),
+                                                 serviceProp.getByKey(PROP_GROUP, S3_BUCKET_DOWNLOAD),
+                                                 objectPath );
+            imageInfo.setImageByteArray(IOUtils.toByteArray(inputStream));
+        } catch (AmazonS3Exception e ) {
+            if( e.getStatusCode() == HttpStatus.SC_NOT_FOUND ) {
+                // 해당 파일은 존재하지 않음 - Service: Amazon S3; Status Code: 404; Error Code: NoSuchKey....
+                // 작은 이미지가 없는 경우, 원본이미지 반환
+                try {
+                    // 원본 이미지 셋팅
+                    inputStream = this.getObjectInputStream( getS3Client(),
+                                                             serviceProp.getByKey(PROP_GROUP, S3_BUCKET_DOWNLOAD),
+                                                             imageInfo.getFilePath() );
+
+                    imageInfo.setImageByteArray(IOUtils.toByteArray(inputStream));
+                } catch (AmazonS3Exception e2 ) {
+                    if( e2.getStatusCode() == HttpStatus.SC_NOT_FOUND ) {
+                        throw new ImageNotFoundException("해당 이미지가 없습니다.");
+                    }
+                    throw e2;
+                }
+            } else {
+                throw e;
+            }
+        }
+
+        return imageInfo;
+    }
 }

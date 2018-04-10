@@ -52,7 +52,7 @@ public class PostFileController {
     // Response Header 생성. 현재는 MIME Type 을 지정하는 역할만을 수행한다.
     private HttpHeaders getFileTypeHeaders( String type ) {
         final HttpHeaders headers = new HttpHeaders();
-        switch ( type ) {
+        switch ( type.toLowerCase() ) {
             case "image/png" :
                 headers.setContentType(MediaType.IMAGE_PNG);
                 break;

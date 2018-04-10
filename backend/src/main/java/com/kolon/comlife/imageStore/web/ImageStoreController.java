@@ -4,18 +4,17 @@ import com.kolon.comlife.common.model.ErrorInfo;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.example.web.ExampleController;
+import com.kolon.comlife.imageStore.exception.ImageBase64Exception;
+import com.kolon.comlife.imageStore.exception.ImageNotFoundException;
+import com.kolon.comlife.imageStore.model.ImageBase64;
 import com.kolon.comlife.imageStore.model.ImageInfo;
 import com.kolon.comlife.imageStore.service.ImageStoreService;
-import com.kolon.comlife.postFile.model.PostFileInfo;
-import com.kolon.comlife.postFile.service.PostFileService;
-import com.kolon.comlife.postFile.service.PostFileStoreService;
 import com.kolon.comlife.postFile.service.exception.OperationFailedException;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,12 +23,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.bind.DatatypeConverter;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -44,7 +42,7 @@ public class ImageStoreController {
     // Response Header 생성. 현재는 MIME Type 을 지정하는 역할만을 수행한다.
     private HttpHeaders getFileTypeHeaders( String type ) {
         final HttpHeaders headers = new HttpHeaders();
-        switch ( type ) {
+        switch ( type.toLowerCase() ) {
             case "image/png" :
                 headers.setContentType(MediaType.IMAGE_PNG);
                 break;
@@ -56,6 +54,7 @@ public class ImageStoreController {
                 headers.setContentType(MediaType.IMAGE_JPEG);
                 break;
             default :
+
         }
 
         return headers;
@@ -68,16 +67,12 @@ public class ImageStoreController {
     public ResponseEntity createImageWithType( MultipartHttpServletRequest request,
                                                @PathVariable("imageType") String imageType) {
         AuthUserInfo      currUser = AuthUserInfoUtil.getAuthUserInfo( request );
-        int               usrId;
+        int               usrId = -1;
         ImageInfo         uploadedImageInfo;
-        byte[]            imageBytes;
         Iterator<String>  iter;
         MultipartFile     mpf;
         String fileName;
         String fileExt;
-
-        // UpperCase로 변환
-        imageType = imageType.toUpperCase();
 
         if( currUser != null ) {
             logger.debug(">>> CmplxId: " + currUser.getCmplxId());
@@ -92,20 +87,27 @@ public class ImageStoreController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body( new SimpleErrorInfo("업로드할 파일이 없습니다.") );
         }
 
+        // 첫번째 값만 체크
         mpf = request.getFile( iter.next() );
+        logger.debug("MPF NAME>>>> " + mpf.getName() );
+
+        if( !"file".equals( mpf.getName() ) ) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleErrorInfo("'file'값이 존재하지 않습니다.") );
+        }
+
         try {
-            System.out.println("file length : " + mpf.getBytes().length);
+            logger.debug("file length : " + mpf.getBytes().length);
+
             fileName = mpf.getOriginalFilename();
-            System.out.println("file name : " + fileName );
+            logger.debug("file name : " + fileName );
 
             fileExt = fileName.substring(fileName.lastIndexOf(".") + 1);
-
             try {
                 uploadedImageInfo = imageStoreService.createImage(
                                         mpf.getInputStream(),
                                         mpf.getSize(),
                                         imageType,
-                                        fileExt );
+                                        fileExt, -1);
             } catch(OperationFailedException e) {
                 logger.error(e.getMessage());
                 return ResponseEntity.status(HttpStatus.CONFLICT).body( new SimpleErrorInfo( e.getMessage() ) );
@@ -119,68 +121,73 @@ public class ImageStoreController {
         return ResponseEntity.status(HttpStatus.OK).body( uploadedImageInfo );
     }
 
-//
-//    @CrossOrigin
-//    @PostMapping(
-//            value = "/",
-//            produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity createPostFile( HttpServletRequest request,
-//                                       @RequestBody HashMap<String, String> params ) {
-//        AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
-//        int          usrId;
-//        PostFileInfo postFileInfo;
-//        byte[]       imageBytes;
-//
-//        logger.debug(">>> CmplxId: " + currUser.getCmplxId());
-//        logger.debug(">>> UserId: " + currUser.getUserId());
-//        logger.debug(">>> UsrId: " + currUser.getUsrId());
-//
-//        usrId = currUser.getUsrId();
-//
-//        String base64 = params.get( "file" );
-//
-//        if( base64 == null ) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleMsgInfo( "file은 필수 입력 항목입니다." ));
-//        }
-//
-//        String[] base64Components = base64.split(",");
-//
-//        if (base64Components.length != 2) {
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleMsgInfo( "잘못된 데이터입니다." ));
-//        }
-//
-//        String base64Data = base64Components[0];
-//        String fileType = base64Data.substring(base64Data.indexOf('/') + 1, base64Data.indexOf(';'));
-//        String base64Image = base64Components[1];
-//        imageBytes = DatatypeConverter.parseBase64Binary(base64Image);
-//
-//        try {
-//            // Upload to S3
-//            postFileInfo = storeService.createPostFile( imageBytes, fileType );
-//            postFileInfo.setUsrId( usrId );
-//
-//            // 테이블 업데이트
-//            postFileInfo = postFileService.setPostFile(postFileInfo);
-//        } catch(OperationFailedException e) {
-//            return ResponseEntity
-//                    .status(HttpStatus.BAD_REQUEST)
-//                    .body( new SimpleMsgInfo( "이미지 업로드가 실패하였습니다." ));
-//        }
-//
-//        return ResponseEntity.status(HttpStatus.OK).body( postFileInfo );
-//    }
+    @CrossOrigin
+    @PostMapping(
+            value = "/{imageType}/b64",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity createImageWithTypeByB64( HttpServletRequest request,
+                                                    @PathVariable("imageType") String imageType,
+                                                    @RequestBody HashMap<String, String> params ) {
+        AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+        int          usrId;
+        ImageInfo    uploadedImageInfo;
+        String       base64;
+        ImageBase64  imageBase64 = new ImageBase64();
+        byte[]       imageBytes;
 
-    @GetMapping(
-            value = "/{id}"
-    )
+        if( currUser != null ) {
+            logger.debug(">>> CmplxId: " + currUser.getCmplxId());
+            logger.debug(">>> UserId: " + currUser.getUserId());
+            logger.debug(">>> UsrId: " + currUser.getUsrId());
+
+            usrId = currUser.getUsrId();
+        }
+
+        base64 = params.get( "file" );
+        if( base64 == null ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( new SimpleMsgInfo( "file은 필수 입력 항목입니다." ));
+        }
+
+        try {
+            imageBase64.parseBase64(base64);
+        } catch( ImageBase64Exception e ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( new SimpleMsgInfo( e.getMessage() ));
+        }
+
+        imageBytes = imageBase64.getByteData();
+        try {
+            uploadedImageInfo = imageStoreService.createImage(
+                    new ByteArrayInputStream( imageBytes ),
+                    imageBytes.length,
+                    imageType,
+                    imageBase64.getFileType(),
+                    -1);
+        } catch( OperationFailedException e ) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( new SimpleMsgInfo( e.getMessage() ) );
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body( uploadedImageInfo );
+    }
+
+    @GetMapping( value = "/{id}" )
     public ResponseEntity getImageByIdx( @PathVariable( "id" ) int id ) {
-        byte[]              outputFile;
         HttpHeaders         headers ;
         ImageInfo           imageInfo;
 
         try {
             imageInfo = imageStoreService.getImageByIdx( id );
-        } catch ( IOException e ) {
+        } catch ( ImageNotFoundException e ){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body( new SimpleErrorInfo( e.getMessage()) );
+        } catch ( Exception e ) {
             logger.error( e.getMessage() );
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)
@@ -188,66 +195,65 @@ public class ImageStoreController {
         }
 
         headers = getFileTypeHeaders( imageInfo.getMimeType() );
-        //        postFileInfo = postFileService.getPostFile( id );
-//        if( postFileInfo == null ) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new SimpleErrorInfo("해당하는 이미지가 없습니다."));
-//        }
+        logger.debug(">> " + headers.getContentType() );
 
-//        logger.debug(">>>> postFileInfo" + postFileInfo);
-//        logger.debug(">>>> postIdx:" + postFileInfo.getPostIdx());
-//        logger.debug(">>>> filePath:" + postFileInfo.getFilePath());
-//        logger.debug(">>>> postFileIdx:" + postFileInfo.getPostFileIdx());
+        logger.debug(">>>> imageInfo"     + imageInfo);
+        logger.debug(">>>> parentIdx:"    + imageInfo.getParentIdx());
+        logger.debug(">>>> parentType:"   + imageInfo.getParentType());
+        logger.debug(">>>> parentTypeNm:" + imageInfo.getParentTypeNm());
+        logger.debug(">>>> filePath:"     + imageInfo.getFilePath());
 
         return new ResponseEntity(imageInfo.getImageByteArray(), headers, HttpStatus.OK);
     }
 
-//    @GetMapping(
-//            value = "/{id}/{size}"
-//    )
-//    public ResponseEntity getPostSmallFile( @PathVariable( "id" ) int id, @PathVariable( "size" ) String size ) {
-//        byte[]       outputFile;
-//        HttpHeaders  headers;
-//        PostFileInfo postFileInfo;
-//
-//        postFileInfo = postFileService.getPostFile( id );
-//        if( postFileInfo == null ) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body( new SimpleErrorInfo("해당하는 이미지가 없습니다."));
-//        }
-//        logger.debug(">>>> postFileInfo" + postFileInfo);
-//        logger.debug(">>>> postIdx:" + postFileInfo.getPostIdx());
-//        logger.debug(">>>> filePath:" + postFileInfo.getFilePath());
-//        logger.debug(">>>> postFileIdx:" + postFileInfo.getPostFileIdx());
-//
-//        try {
-//            outputFile = storeService.getPostFileBySize( postFileInfo, size );
-//        } catch( OperationFailedException e ) {
-//            return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( null );
-//        }
-//
-//        // Set Header
-//        headers = getFileTypeHeaders( postFileInfo.getMimeType() );
-//
-//        return new ResponseEntity(outputFile, headers, HttpStatus.OK);
-//    }
-//
-//    @DeleteMapping(
-//            value = "/{id}"
-//    )
-//    public ResponseEntity deleteImageInfo( @PathVariable("id") int id ) {
+    @GetMapping( value = "/{id}/{size}" )
+    public ResponseEntity getImageByIdxAndSize( @PathVariable( "id" ) int id, @PathVariable( "size" ) String sizeStr ) {
+        HttpHeaders         headers ;
+        ImageInfo           imageInfo;
+
+        try {
+            imageInfo = imageStoreService.getImageByIdxAndSize(id, sizeStr);
+        } catch ( ImageNotFoundException e ){
+            return ResponseEntity
+                    .status(HttpStatus.NOT_FOUND)
+                    .body( new SimpleErrorInfo( e.getMessage()) );
+        } catch ( Exception e ) {
+            logger.error( e.getMessage() );
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body( new SimpleErrorInfo("이미지를 가져오는 과정에서 오류가 발생했습니다. "));
+        }
+
+        headers = getFileTypeHeaders( imageInfo.getMimeType() );
+        logger.debug(">> " + headers.getContentType() );
+
+        logger.debug(">>>> imageInfo"     + imageInfo);
+        logger.debug(">>>> parentIdx:"    + imageInfo.getParentIdx());
+        logger.debug(">>>> parentType:"   + imageInfo.getParentType());
+        logger.debug(">>>> parentTypeNm:" + imageInfo.getParentTypeNm());
+        logger.debug(">>>> filePath:"     + imageInfo.getFilePath());
+
+        return new ResponseEntity(imageInfo.getImageByteArray(), headers, HttpStatus.OK);
+    }
+
+    @DeleteMapping(
+            value = "/{id}"
+    )
+    public ResponseEntity deleteImageInfo( @PathVariable("id") int id ) {
 //        PostFileInfo postFileInfo = postFileService.getPostFile( id );
-////
-////        AmazonS3 s3Client = getS3Client();
-////
-////        String key = postFileInfo.getFilePath();
-////
-////        s3Client.deleteObject(
-////                new DeleteObjectRequest(
-////                        serviceProp.getByKey(PROP_GROUP, S3_UPLOAD_BUCKET), key ) );
-//        return ResponseEntity
-//                    .status( HttpStatus.NOT_IMPLEMENTED)
-//                    .body(new SimpleErrorInfo("해당 기능은 지원하지 않습니다. "));
-//    }
 //
+//        AmazonS3 s3Client = getS3Client();
+//
+//        String key = postFileInfo.getFilePath();
+//
+//        s3Client.deleteObject(
+//                new DeleteObjectRequest(
+//                        serviceProp.getByKey(PROP_GROUP, S3_UPLOAD_BUCKET), key ) );
+        return ResponseEntity
+                    .status( HttpStatus.NOT_IMPLEMENTED)
+                    .body(new SimpleErrorInfo("해당 기능은 지원하지 않습니다. "));
+    }
+
 
     @ExceptionHandler(IllegalArgumentException.class)
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)

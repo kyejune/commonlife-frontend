@@ -15,7 +15,8 @@ public class ImageInfoUtil {
     public final static String SIZE_SUFFIX_LARGE  = "/l";
 
     public final static String IMAGE_TYPE_ARTICLE = "FEED"; // Feed, Event, Notice
-    public final static String IMAGE_TYPE_PROFILE = "PROFILE"; // User 및 Admin 프로필 사진
+    public final static String IMAGE_TYPE_PROFILE = "PROFILE"; // User 프로필 사진
+    public final static String IMAGE_TYPE_ADMINPROFILE = "ADMINPROFILE"; // Admin 프로필 사진
     public final static String IMAGE_TYPE_TICKET  = "TICKET";  // 지원 접수시, 업로드하는 이미지
     public final static String IMAGE_TYPE_COMPLEX = "COMPLEX"; // 현장 대표(로고) 이미지 업로드
     public final static String IMAGE_TYPE_RESV    = "RESV"; // 예액 관련 이미지
@@ -33,13 +34,14 @@ public class ImageInfoUtil {
                 supportedImageTypes = new HashMap<>();
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_ARTICLE, "Y");
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_PROFILE, "Y");
+                supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_ADMINPROFILE, "Y");
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_TICKET,  "Y");
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_COMPLEX, "Y");
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_RESV,    "Y");
             }
         }
 
-        return ( supportedImageTypes.get(imageType) != null &&
-                 "Y".equals( supportedImageTypes.get(imageType)) );
+        return ( supportedImageTypes.get(imageType.toUpperCase()) != null &&
+                 "Y".equals( supportedImageTypes.get(imageType.toUpperCase())) );
     }
 }

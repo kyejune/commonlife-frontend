@@ -96,6 +96,7 @@ public class PostFileStoreServiceImpl implements PostFileStoreService {
         ObjectMetadata metadata = new ObjectMetadata();
         AmazonS3 s3Client = getS3Client();
         UUID uuid;
+        String mimeType;
         
         uuid = UUID.randomUUID();
         String objectPath = POST_IMG_BASE_PATH + uuid.toString() + "." + fileType;
@@ -109,8 +110,9 @@ public class PostFileStoreServiceImpl implements PostFileStoreService {
             throw new OperationFailedException("업로드가 실패하였습니다.");
         }
 
+        mimeType = "image/" + fileType.toLowerCase();
         metadata.setContentLength( inputData.length );
-        metadata.setContentType( "image/" + fileType );
+        metadata.setContentType( mimeType );
         postFile.setMimeType( metadata.getContentType() );
         postFile.setFilePath( objectPath );
 

@@ -5,8 +5,17 @@ import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
+import com.kolon.comlife.imageStore.exception.ImageBase64Exception;
+import com.kolon.comlife.imageStore.model.ImageBase64;
+import com.kolon.comlife.imageStore.model.ImageInfo;
+import com.kolon.comlife.imageStore.model.ImageInfoUtil;
+import com.kolon.comlife.imageStore.service.ImageStoreService;
+import com.kolon.comlife.postFile.service.exception.OperationFailedException;
 import com.kolon.comlife.users.exception.NotAcceptedUserIdException;
+import com.kolon.comlife.users.exception.UserNotExistException;
+import com.kolon.comlife.users.exception.UsersGeneralException;
 import com.kolon.comlife.users.model.AgreementInfo;
+import com.kolon.comlife.users.model.UserInfo;
 import com.kolon.comlife.users.service.UserRegistrationService;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.comlife.users.util.IokUtil;
@@ -23,6 +32,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.io.ByteArrayInputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,17 +42,23 @@ import java.util.Map;
 public class UserRegistrationController {
     private static final Logger logger = LoggerFactory.getLogger(UserRegistrationController.class);
 
-    @Resource(name = "registrationService")
+    @Autowired
     private UserRegistrationService regService;
 
-    @Resource(name = "complexService")
-    private ComplexService complexService;   // todo: replaced with MobileUserController
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ComplexService complexService;
 
     @Autowired
     private MobileUserController mobileUserController;
 
     @Autowired
     private MobileUserCertNoController mobileUserCertNoController;
+
+    @Autowired
+    private ImageStoreService imageStoreService;
 
 
     /**
@@ -338,10 +355,11 @@ public class UserRegistrationController {
     @PostMapping(
             value = "/newUser",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity registerNewUser(HttpServletRequest request) {
+    public ResponseEntity registerNewUser(HttpServletRequest request) throws Exception {
         RequestParameter parameter;
         Map<String, Object> result;
         boolean resFlag;
+        UserInfo userInfo;
 
         parameter = IokUtil.buildRequestParameter(request);
 
@@ -362,12 +380,88 @@ public class UserRegistrationController {
                     .status(HttpStatus.SERVICE_UNAVAILABLE)
                     .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
         }
-
         resFlag = IokUtil.getResFlag(result);
         if (!resFlag) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(IokUtil.lowerMsgKeyName(result));
         }
 
+        try {
+            userInfo = regService.setUserExt( parameter.getString("userId"), parameter.getString("userPw"));
+        } catch( UserNotExistException e ){
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body( new SimpleErrorInfo( e.getMessage() ));
+        } catch( UsersGeneralException e ){
+            logger.error(e.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body( new SimpleErrorInfo( e.getMessage() ));
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(IokUtil.lowerMsgKeyName(result));
+    }
+
+    /**
+     * 3-5. 이미지 업로드
+     */
+    @PostMapping(
+            value = "/newUser/photo",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity uploadPhoto( HttpServletRequest request,
+                                       @RequestBody HashMap<String, String> bodyParams ) {
+        UserInfo userInfo;
+        ImageInfo imageInfo;
+
+        String userId = bodyParams.get("userId");
+        String userPw = bodyParams.get("userPw");
+        String file   = bodyParams.get("file");
+        ImageBase64 imageBase64 = new ImageBase64();
+        byte[]       imageBytes;
+        String imageType = ImageInfoUtil.IMAGE_TYPE_PROFILE;
+
+        if(userId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleErrorInfo( "userId를 입력하세요." ));
+        }
+        if(userPw == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleErrorInfo( "userPw를 입력하세요." ));
+        }
+        if(file == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleErrorInfo( "file를 입력하세요." ));
+        }
+
+        //등록된 회원
+        userInfo = userService.getUsrIdByUserIdAndPwd( userId, userPw );
+        if( userInfo == null ) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body( new SimpleMsgInfo( "인증이 실패하였습니다." ) );
+        }
+
+        userInfo.getUsrId();
+
+        // parameter 체크 및 이미지 생성에 전달
+        try {
+            imageBase64.parseBase64(file);
+        } catch( ImageBase64Exception e ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( new SimpleMsgInfo( e.getMessage() ));
+        }
+
+        imageBytes = imageBase64.getByteData();
+        try {
+            imageInfo = imageStoreService.createImage(
+                    new ByteArrayInputStream( imageBytes ),
+                    imageBytes.length,
+                    imageType,
+                    imageBase64.getFileType(),
+                    -1);
+        } catch( OperationFailedException e ) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body( new SimpleMsgInfo( e.getMessage() ) );
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new SimpleMsgInfo("프로필 사진이 업데이트 되었습니다."));
     }
 }

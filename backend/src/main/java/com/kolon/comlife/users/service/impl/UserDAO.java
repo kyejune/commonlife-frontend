@@ -6,7 +6,9 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository("userDAO")
 public class UserDAO {
@@ -19,5 +21,18 @@ public class UserDAO {
 
     public List<UserInfo> getUserListById(List<Integer> ids) {
         return sqlSession.selectList( "User.selectUserListById", ids );
+    }
+
+    public int setUserExt( int usrId ) {
+        Map params = new HashMap();
+        params.put("usrId", Integer.valueOf(usrId ) );
+        return sqlSession.insert("User.insertUserExt", params );
+    }
+
+    public UserInfo getUsrIdByUserIdAndPwd( String userId, String userPw ) {
+        Map params = new HashMap();
+        params.put("userId", userId);
+        params.put("userPw", userPw);
+        return sqlSession.selectOne( "User.selectUsrIdByUserIdAndPw", params );
     }
 }

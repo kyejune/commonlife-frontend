@@ -67,6 +67,7 @@ public class TicketFileStoreServiceImpl implements TicketFileStoreService {
         ObjectMetadata  metadata = new ObjectMetadata();
         AmazonS3        s3Client = this.getS3Client();
         UUID uuid;
+        String mimeType;
 
         uuid = UUID.randomUUID();
         String objectPath = TICKET_IMG_BASE_PATH + uuid.toString() + "." + fileType;
@@ -80,8 +81,9 @@ public class TicketFileStoreServiceImpl implements TicketFileStoreService {
             throw new OperationFailedException("업로드가 실패하였습니다.");
         }
 
+        mimeType = "image/" + fileType.toLowerCase();
         metadata.setContentLength( inputData.length );
-        metadata.setContentType( "image/" + fileType );
+        metadata.setContentType( mimeType );
         ticketFile.setMimeType( metadata.getContentType() );
         ticketFile.setFilePath( objectPath );
 

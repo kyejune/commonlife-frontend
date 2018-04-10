@@ -105,12 +105,16 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		String userId = "";
 
 
-
 		/*********************************************************************/
 		/* Token  임시로 DB에서 받아오기 */
 		/*********************************************************************/
 		String sToken = mHeader.get("token");
 		String secretKey  ="";
+
+		// Header에 token이 없는 경우, 파라미터로 부터 token 값을 가져옴
+		if( sToken == null ) {
+			sToken = request.getParameter("token");
+		}
 
 		// TODO: 개발 디버깅 용도입니다. 개발 완료되면 삭제 할 것
 		logger.debug("forceAuthTokenYN>>>> " + this.forceAuthTokenYN);
