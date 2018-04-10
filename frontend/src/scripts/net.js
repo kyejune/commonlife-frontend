@@ -251,4 +251,29 @@ export default {
             });
     },
 
+    registNewUser( branchId, dongId, hoId, hhname, hhphone, name, phone, certId, certDate, id, password, callback ){
+        // {{API_HOST}}/users/registration/newUser?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userNm=사용자KIM2&userCell=01050447244&userCertId=34&smsChkYn=Y&smsChkDt=2018-02-10 14:42:22&userId=newuser201&userPw=fumT4DmfVP/X+RgvSg1CBNA6QAberSGDf0Iu49s0cMSlundj0QVHqTM+hS6BcVyY
+        axios.post(`${Store.api}/users/registration/newUser?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${hhname}&headCell=${hhphone}&userNm=${name}&userCell=${phone}&userCertId=${certId}&smsChkYn=Y&smsChkDt=${certDate}&userId=${id}&userPw=${password}`)
+            .then( response => {
+                callback( response.data );
+            });
+    },
+
+
+    login( id, password, callback ){
+
+        // password =
+
+        const GCM = 'dvCS7UlJeXA:APA91bEBwTT8oS8uHwFS1yzZrzUPt2p3IhsYlHW_N1onsJCqNoSX4jkNwR_KsH1kmJzmLIXjivF7l8O99JfvCjt8siZkNpIFHQFHQfFlLAi0CrF7TUmAwVKOEYmswggq6yTo4EFmxgeb';
+        const DEVICE_ID = '0b5a32e31439a5ce3d0b6511900a03b7';
+
+        axios.get(`${Store.api}/users/login?userId=${id}&userPw=${password}&gcmRegId=${GCM}&deviceId=${DEVICE_ID}`)
+            .then( response =>{
+
+                console.log( '로그인 성공:', response );
+
+                callback( response.data );
+            })
+    }
+
 };

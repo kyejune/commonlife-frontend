@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import LogoSrc from 'images/logo@2x.png';
+import LogoSrc from 'images/logo@3x.png';
 import PrivatePolicy from "./PrivatePolicy";
 import BranchList from "../ui/BranchList";
 import {Link, withRouter} from "react-router-dom";
@@ -9,7 +9,7 @@ import Net from "../../scripts/net";
 import {MakingUserData} from "../../scripts/store";
 import Welcome from "./Welcome";
 import classNames from 'classnames';
-
+import moment from "moment/moment";
 
 class Join extends Component {
 
@@ -63,13 +63,24 @@ class Join extends Component {
             //confirmUserPhoneAuthNumber( branchId, dongId, hoId, hhname, hhphone, certReq, certId, phone, callback ){
             Net.confirmUserPhoneAuthNumber( branch.cmplxId, houseHolder.dong, houseHolder.ho,
                 houseHolder.name, houseHolder.phone, user.certReqId, user.certId, user.phone, res => {
-                    this.setState({step: this.state.step + 1});
+                    this.registerUser();
                 });
 
         } else {
             this.setState({step: this.state.step + 1});
         }
     }
+
+    // 새 회원으로 등록
+    registerUser(){
+        const { branch, houseHolder, user } = MakingUserData;
+        //registNewUser( branchId, dongId, hoId, hhname, hhphone, name, phone, certId, certDate, id, password, callback ){//2018-02-10 14:42:22
+        Net.registNewUser( branch.cmplxId, houseHolder.dong, houseHolder.ho, houseHolder.name, houseHolder.phone, user.name, user.phone, user.certReqId, moment().format('YYYY-MM-DD hh:mm:ss'), user.id, user.password, res=>{
+            this.setState({step: this.state.step + 1});
+        } );
+    }
+
+
 
     /* Validation */
     validate = () => {

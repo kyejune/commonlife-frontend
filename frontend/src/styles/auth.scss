@@ -20,6 +20,22 @@
     }
 }
 
+.cl-logo-pack{
+    color: #cfcfcf;
+
+    .cl-logo__img{
+        margin-right: 10px;
+        width: 37px;
+        height: 37px;
+    }
+
+    p{
+        color: #cfcfcf;
+        margin-top: 0;
+        line-height: 1em;
+    }
+}
+
 .cl-join {
     background-color: #2E3036;
 }
@@ -125,6 +141,24 @@
     }
 }
 
+//.cl__input--white{
+//    margin-top: 0.9em;
+//    padding-bottom: 0.7em;
+//    width: 100%;
+//    color: rgb( 127, 127, 127 );
+//    border-bottom: 0.5px solid rgb( 127, 127, 127 );
+//
+//    &.cl--disabled{
+//        pointer-events: none;
+//        opacity: 0.3;
+//    }
+//
+//    &:focus{
+//        border-bottom: 0.5px solid #80d6ff;
+//    }
+//}
+
+
 .cl__button--dark{
     font-size: 13px;
     font-weight: 700;
@@ -140,3 +174,75 @@
     }
 }
 
+/* 로그인 페이지 */
+.cl-login{
+
+    &:before, &:after{
+        content:'';
+        position: absolute;
+        width: 25px;
+        height: 50px;
+        background-color: $md-primary-color;
+    }
+
+    &:before{
+        top: 0;
+        left: 0;
+        clip-path: polygon(0% 0%, 100% 0%, 0% 100%);
+    }
+
+    &:after{
+        right:0;
+        bottom: 0;
+        clip-path: polygon(100% 0%, 100% 100%, 0% 100%);
+    }
+
+    .cl-close__button--black{
+        position: absolute;
+        top: 23px;
+        right: 23px;
+    }
+
+
+    .cl-logo-pack{
+        margin-top: 25%;
+        margin-left: 23px;
+    }
+
+    .cl-input-container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100%;
+        padding: 0 26px;
+        transform: translate( -50%, -50% );
+
+        h2{
+            font-size: 40px;
+            font-weight: 500;
+            margin-bottom: 0.8em;
+        }
+    }
+
+    .cl-login__footer{
+        @extend .cl-flex;
+        height: 22px;
+        position: absolute;
+        left: 0;
+        bottom: 30px;
+        width: 100%;
+        padding: 0 26px;
+    }
+
+    .cl-confirm__button{
+        pointer-events: none;
+        opacity: 0.2;
+
+        &.cl--ready{
+            pointer-events: auto;
+            opacity: 1;
+            color: rgba(222, 76, 53, 0.87);
+        }
+    }
+
+}

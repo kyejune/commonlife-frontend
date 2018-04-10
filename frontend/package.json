@@ -53,6 +53,7 @@
         "query-string": "^5.0.1",
         "react-date-range": "^0.9.4",
         "react-day-picker": "^7.0.7",
+        "react-device-storage": "^1.0.0",
         "react-draggable": "^3.0.5",
         "react-id-swiper": "^1.6.1",
         "react-iscroll": "^2.0.3",

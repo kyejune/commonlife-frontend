@@ -1,17 +1,46 @@
 import React, {Component} from 'react';
 import {MakingUserData} from "../../scripts/store";
 import {observer} from "mobx-react";
-import DefaultSrc from "images/profile-thumb-img-big-default@3x.png";
+import Net from "../../scripts/net";
+import DeviceStorage from 'react-device-storage';
 
 class Welcome extends Component {
 
+    selectPicture() {
 
-    constructor(props){
-        super(props);
+        if( navigator.camera ) {
 
-        this.state = {
-
+            navigator.camera.getPicture(
+                (base64) => this.gettedPicture(base64),
+                (msg) => this.failedPicture(msg),
+                {
+                    quality: 100,
+                    sourceType: 0,
+                    destinationType: 0
+                });
         }
+
+    }
+
+    gettedPicture(base64) {
+
+        const b64 = 'data:image/jpeg;base64,' + base64;
+
+        // Net.uploadImg( b64, data => {
+        //
+        //     console.log( 'uploadedImage:', data );
+        //
+        //     this.setState({
+        //         base64Img: b64,
+        //         imageId: data.postFileIdx,
+        //         isUploading: false,
+        //     });
+        // });
+
+    }
+
+    failedPicture(message) {
+        console.log( 'failedPicture:', message );
     }
 
 
