@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 
+import ChartCombination from '../../ui/ChartCombination';
+import ChartGauge from "../../ui/ChartGauge";
+
 import IotIcGraph from 'images/iot-info-status-1@3x.png';
 import IotIcWater from 'images/iot-info-status-6@3x.png';
 import IotIcHot from 'images/iot-info-status-5@3x.png';
@@ -23,19 +26,234 @@ class Information extends Component {
 	InfoContent () {
 		switch ( this.state.tabIndex ) {
 			case 0:
-				return <div>content1</div>;
+				return <div>
+					<div className="cl-flex cl-info-month-select">
+						<div className="cl-info-month-select__month">
+							<select name="" id="">
+								<option value="">2018년 5월</option>
+								<option value="">2018년 4월</option>
+								<option value="">2018년 3월</option>
+								<option value="">2018년 2월</option>
+								<option value="">2018년 1월</option>
+								<option value="">2017년 12월</option>
+							</select>
+						</div>
+						<div className="cl-info-month-select__type">
+							<select name="" id="" >
+								<option value="">월별보기</option>
+								<option value="">월별보기</option>
+							</select>
+						</div>
+					</div>
+					<ChartCombination/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>229.3Kw</h3>
+							<p>전월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1258.2Kw</h3>
+							<p>당월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1350.4Kw</h3>
+							<p>당월예상</p>
+						</li>
+					</ul>
+					<ChartGauge/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>2단계</h3>
+							<p>누진단계</p>
+						</li>
+					</ul>
+				</div>;
 				break;
 			case 1:
-				return <div>content2</div>;
+				return <div>
+					<div className="cl-flex cl-info-month-select">
+						<div className="cl-info-month-select__month">
+							<select name="" id="">
+								<option value="">2018년 5월</option>
+								<option value="">2018년 4월</option>
+								<option value="">2018년 3월</option>
+								<option value="">2018년 2월</option>
+								<option value="">2018년 1월</option>
+								<option value="">2017년 12월</option>
+							</select>
+						</div>
+						<div className="cl-info-month-select__type">
+							<select name="" id="" >
+								<option value="">월별보기</option>
+								<option value="">월별보기</option>
+							</select>
+						</div>
+					</div>
+					<ChartCombination/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>229.3Kw</h3>
+							<p>전월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1258.2Kw</h3>
+							<p>당월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1350.4Kw</h3>
+							<p>당월예상</p>
+						</li>
+					</ul>
+					<ChartGauge/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>2단계</h3>
+							<p>누진단계</p>
+						</li>
+					</ul>
+				</div>;
 				break;
 			case 2:
-				return <div>content3</div>;
+				return <div>
+					<div className="cl-flex cl-info-month-select">
+						<div className="cl-info-month-select__month">
+							<select name="" id="">
+								<option value="">2018년 5월</option>
+								<option value="">2018년 4월</option>
+								<option value="">2018년 3월</option>
+								<option value="">2018년 2월</option>
+								<option value="">2018년 1월</option>
+								<option value="">2017년 12월</option>
+							</select>
+						</div>
+						<div className="cl-info-month-select__type">
+							<select name="" id="" >
+								<option value="">월별보기</option>
+								<option value="">월별보기</option>
+							</select>
+						</div>
+					</div>
+					<ChartCombination/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>229.3Kw</h3>
+							<p>전월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1258.2Kw</h3>
+							<p>당월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1350.4Kw</h3>
+							<p>당월예상</p>
+						</li>
+					</ul>
+					<ChartGauge/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>2단계</h3>
+							<p>누진단계</p>
+						</li>
+					</ul>
+				</div>;
 				break;
 			case 3:
-				return <div>content4</div>;
+				return <div>
+					<div className="cl-flex cl-info-month-select">
+						<div className="cl-info-month-select__month">
+							<select name="" id="">
+								<option value="">2018년 5월</option>
+								<option value="">2018년 4월</option>
+								<option value="">2018년 3월</option>
+								<option value="">2018년 2월</option>
+								<option value="">2018년 1월</option>
+								<option value="">2017년 12월</option>
+							</select>
+						</div>
+						<div className="cl-info-month-select__type">
+							<select name="" id="" >
+								<option value="">월별보기</option>
+								<option value="">월별보기</option>
+							</select>
+						</div>
+					</div>
+					<ChartCombination/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>229.3Kw</h3>
+							<p>전월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1258.2Kw</h3>
+							<p>당월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1350.4Kw</h3>
+							<p>당월예상</p>
+						</li>
+					</ul>
+					<ChartGauge/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>2단계</h3>
+							<p>누진단계</p>
+						</li>
+					</ul>
+				</div>;
 				break;
 			case 4:
-				return <div>content5</div>;
+				return <div>
+					<div className="cl-flex cl-info-month-select">
+						<div className="cl-info-month-select__month">
+							<select name="" id="">
+								<option value="">2018년 5월</option>
+								<option value="">2018년 4월</option>
+								<option value="">2018년 3월</option>
+								<option value="">2018년 2월</option>
+								<option value="">2018년 1월</option>
+								<option value="">2017년 12월</option>
+							</select>
+						</div>
+						<div className="cl-info-month-select__type">
+							<select name="" id="" >
+								<option value="">월별보기</option>
+								<option value="">월별보기</option>
+							</select>
+						</div>
+					</div>
+					<ChartCombination/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>229.3Kw</h3>
+							<p>전월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1258.2Kw</h3>
+							<p>당월누적</p>
+						</li>
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>1350.4Kw</h3>
+							<p>당월예상</p>
+						</li>
+					</ul>
+					<ChartGauge/>
+
+					<ul className="cl-info-month-box">
+						<li className="cl-flex cl-info-month-box__item">
+							<h3>2단계</h3>
+							<p>누진단계</p>
+						</li>
+					</ul>
+				</div>;
 				break;
 			default:
 				return <div>내용이 없습니다</div>;

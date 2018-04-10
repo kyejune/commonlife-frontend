@@ -1,0 +1,120 @@
+.cl-iot-info-content {
+    padding-top: 77px;
+}
+
+.cl-iot-info-tab {
+    position: fixed;
+    top: 56px;
+    z-index: 99;
+    width: 100vw;
+    height: 77px;
+    white-space: nowrap;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14);
+}
+
+.cl-iot-info-tab__item {
+    display: inline-block;
+    width: 84px;
+    height: 77px;
+    border-bottom: 2px solid #B0B0B0;
+    background-color: #F0F0F0;
+
+    img {
+        width: 41px;
+    }
+
+    span {
+        display: block;
+        margin-top: -5px;
+        font-size: 14px;
+        font-weight: 500;
+        color: #000000;
+    }
+}
+
+.cl-iot-info-tab__item--active {
+    @extend .cl-iot-info-tab__item;
+
+    border-bottom: 2px solid #1654A3;
+    background-color: #ffffff;
+
+    &:active, &:focus {
+        border-bottom: 2px solid #1654A3;
+    }
+}
+
+.cl-info-month-select {
+    width: calc( 100% - 40px );
+    margin: 30px auto;
+}
+
+.cl-info-month-select__layout {
+    border: 1px solid #CCCCCC;
+    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.5);
+    background-image: url("images/iot-info-ic-carrot-down@3x.png");
+    background-repeat: no-repeat;
+    background-size: 15px;
+    background-position: 90% center;
+    height: 42px;
+    overflow: hidden;
+
+    select {
+        background: transparent;
+        border: none;
+        font-size: 14px;
+        height: 42px;
+        padding-left: 18px;
+
+        width: 100%;
+        color: rgba(0, 0, 0, 0.87);
+    }
+}
+
+.cl-info-month-select__month {
+    @extend .cl-info-month-select__layout;
+
+    width: 60%;
+    border-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.cl-info-month-select__type {
+    @extend .cl-info-month-select__layout;
+
+    width: 40%;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.cl-info-month-box {
+    width: calc(100% - 40px);
+    margin: 15px auto 30px;
+    border: 1px solid #CCCCCC;
+    border-bottom: 0;
+}
+.cl-info-month-box__item {
+    height: 74px;
+    padding: 0 20px;
+    border-bottom: 1px solid #CCCCCC;
+    background-color: #ffffff;
+
+    h3 {
+        margin: 0;
+        font-size: 20px;
+        color: rgba(0, 0, 0, 0.87);
+    }
+
+    p {
+        @extend .ml-auto;
+        margin-top: 0;
+        margin-bottom: 0;
+        font-size: 12px;
+        color: #6B6B6B;
+    }
+}
+

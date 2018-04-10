@@ -11,3 +11,9 @@
         }
     }
 }
+
+.cl-chart__gauge {
+    .c3-gauge-value {
+        display: none !important;
+    }
+}
