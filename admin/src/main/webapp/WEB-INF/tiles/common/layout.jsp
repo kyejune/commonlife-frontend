@@ -15,6 +15,8 @@
     <!-- FooTable -->
     <link href="/resources/css/plugins/footable/footable.core.css" rel="stylesheet">
     <link href="/resources/css/plugins/datapicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="/resources/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
+    <link href="/resources/css/plugins/fullcalendar/fullcalendar.print.css" rel="stylesheet">
 
     <link href="/resources/css/animate.css" rel="stylesheet">
     <link href="/resources/css/style.css" rel="stylesheet">
@@ -50,6 +52,7 @@
     <script src="/resources/js/inspinia.js"></script>
     <script src="/resources/js/plugins/pace/pace.min.js"></script>
     <script src="/resources/js/plugins/datapicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="/resources/js/plugins/fullcalendar/fullcalendar.min.js"></script>
 
     <tiles:insertAttribute name="js" />
 </body>

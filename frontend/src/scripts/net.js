@@ -58,8 +58,22 @@ export default {
     getFeed( type, page, callback ){
         axios.get( `${Store.api}/posts/?postType=${type}&page=${(page+1)||1}`)
             .then( response =>{
-                Store[type] = Store[type].concat(( response.data.data )); //  추후 페이지별로 삽입 시켜주기
-                console.log( 'get data ', type, page, response.data.data );
+                let prevStack = Store[type];
+                let newStack = response.data.data.filter( item => {
+                    let sames = prevStack.filter( prevItem => {
+                            return (prevItem.postIdx === item.postIdx);
+                        }
+                    );
+
+                    return ( sames.length === 0 );
+                });
+
+                Store[type] = Store[type].concat( newStack );
+
+
+
+                // = Store[type].concat(( response.data.data )); //  추후 페이지별로 삽입 시켜주기
+                // console.log( 'get data ', type, page, response.data.data );
 
                 if( callback ) callback( response.data );
 
@@ -204,9 +218,8 @@ export default {
 
     // 사용자 휴대폰 인증번호 요청
     requestUserPhoneAuthNumber( branchId, dongId, hoId, hhname, hhphone, name, phone, certNo, callback ){
-        axios.get(`${Store.api}/users/registration/certHeadCellNo?
-                    cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(hhname)}&headCell=${hhphone}
-                    &userCertId=${certNo}&userNm=${name}&userCell=${phone}`)
+        // console.log( 'rpa:', branchId, dongId, hoId, hhname, hhphone, name, phone, certNo );
+        axios.get(`${Store.api}/users/registration/certUserCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(hhname)}&headCell=${hhphone}&userCertId=${certNo}&userNm=${name}&userCell=${phone}`)
             .then( response => {
                 callback( response.data );
             });
@@ -215,20 +228,27 @@ export default {
     // 세대주 휴대폰 인증번호 확인
     confirmHouseHolderPhoneAuthNumber( branchId, dongId, hoId, name, phone, certNo, hhCertNo, callback ){
         // {{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=37&headCertNum=652038
-        axios.post(`${Store.api}/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}
-                                                                   &headCell=${phone}&userCetId=${certNo}&headCertNum=${hhCertNo}`)
+        axios.post(`${Store.api}/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}&headCell=${phone}&userCertId=${certNo}&headCertNum=${hhCertNo}`)
             .then( response => {
                 callback( response.data );
             });
     },
 
-    confirmUserPhoneAuthNumber( branchId, dongId, hoId, name, phone, certNo, hhCertNo, callback ){
-        // {{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=37&headCertNum=652038
-        axios.post(`${Store.api}/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}
-                                                                   &headCell=${phone}&userCetId=${certNo}&headCertNum=${hhCertNo}`)
+    // 사용자 휴대폰 인증번호 확인
+    confirmUserPhoneAuthNumber( branchId, dongId, hoId, hhname, hhphone, certReq, certId, phone, callback ){
+        // {{API_HOST}}/users/registration/certUserCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=34&userCertNum=361016&userCell=01050447244
+        axios.post(`${Store.api}/users/registration/certUserCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${hhname}&headCell=${hhphone}&userCertId=${certReq}&userCertNum=${certId}&userCell=${phone}`)
             .then( response => {
                 callback( response.data );
             });
-    }
+    },
+
+    checkIdDuplicate( newId, callback ){
+        //{{API_HOST}}/users/registration/existedUser/NEWUSER
+        axios.get(`${Store.api}/users/registration/existedUser/${newId}`)
+            .then( response => {
+               callback( response.data );
+            });
+    },
 
 };

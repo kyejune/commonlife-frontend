@@ -66,7 +66,7 @@ export default class LikeShareAndSome extends Component{
         if( window.plugins ) {
             window.plugins.calendar.createEventInteractively(
                 title, (eventCmplxNm||'') + (eventPlaceNm||''), content,
-                new Date(this.props.qa[0]), new Date(this.props.qa[1]),
+                new Date(this.props.calendar[0]), new Date(this.props.calendar[1]),
 
                 ()=>{
                     alert('달력에 추가되었습니다.');

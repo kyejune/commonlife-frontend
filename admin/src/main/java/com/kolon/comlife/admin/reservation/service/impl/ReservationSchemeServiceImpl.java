@@ -28,8 +28,9 @@ public class ReservationSchemeServiceImpl implements ReservationSchemeService {
     }
 
     @Override
-    public int create(ReservationSchemeInfo info) {
-        return dao.create( info );
+    public ReservationSchemeInfo create(ReservationSchemeInfo info) {
+        dao.create( info );
+        return dao.latest();
     }
 
     @Override

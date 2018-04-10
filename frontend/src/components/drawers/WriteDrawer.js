@@ -101,7 +101,11 @@ class WriteDrawer extends BottomDrawer {
     }
 
     failedPicture(message) {
-        alert(message);
+        //alert(message);
+
+        this.setState({
+            isUploading: false,
+        });
     }
 
     clearPicture() {

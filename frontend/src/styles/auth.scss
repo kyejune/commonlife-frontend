@@ -1,90 +1,142 @@
-.cl-close__button--black{
-  width: 37px;
-  height: 37px;
-  background:transparent url('images/ic-favorite-24-px-black@3x.png') no-repeat;
-  background-size: 24px;
-  background-position: right 0;
-  opacity: 0.6;
-}
-
-.cl-full-page{
-  .cl-opts__footer{
-    position: fixed;
-    background-color: #EEEEEE;
-    height: 50px;
-    width: 100vw;
-    bottom: 0;
-    z-index: 10;
-    padding-left: 18px;
-    padding-right: 25px;
-  }
-}
-
-.cl-join{
-  background-color: #2E3036;
-}
-
-.cl-join__header{
-  background-color: white;
-  padding: 22px;
-  color: black;
-
-  .cl-logo__img{
+.cl-close__button--black {
     width: 37px;
     height: 37px;
-    margin-right: 10px;
-  }
-
-  .cl-logo__text{
-    line-height: 1em;
-    color: #BFBFBF !important;
-  }
-
-
-  h1{
-    margin-top: 74px;
-    margin-bottom: 15px;
-    color: black;
-    font-size: 40px;
-  }
-
-  p{
-    margin-top: 0;
-    font-size: 14px;
-    color: #7F7F7F;
-  }
+    background: transparent url('images/ic-favorite-24-px-black@3x.png') no-repeat;
+    background-size: 24px;
+    background-position: right 0;
+    opacity: 0.6;
 }
 
+.cl-full-page {
+    .cl-opts__footer {
+        position: fixed;
+        background-color: #EEEEEE;
+        height: 50px;
+        width: 100vw;
+        bottom: 0;
+        z-index: 10;
+        padding-left: 18px;
+        padding-right: 25px;
+    }
+}
 
+.cl-join {
+    background-color: #2E3036;
+}
 
+.cl-join__header {
+    background-color: white;
+    padding: 22px;
+    color: black;
+
+    .cl-logo__img {
+        width: 37px;
+        height: 37px;
+        margin-right: 10px;
+    }
+
+    .cl-logo__text {
+        line-height: 1em;
+        color: #BFBFBF !important;
+    }
+
+    h1 {
+        margin-top: 74px;
+        margin-bottom: 15px;
+        color: black;
+        font-size: 40px;
+    }
+
+    p {
+        margin-top: 0;
+        font-size: 14px;
+        color: #7F7F7F;
+    }
+}
 
 // 개인정보 취급방침
-.cl-private-policy{
+.cl-private-policy {
 
-  padding: 30px 22px;
+    padding: 30px 22px;
 
-  h3{
-    font-size: 14px;
-  }
+    h3 {
+        font-size: 14px;
+    }
 
-  p{
-    font-size: 12px;
-    color: #818286;
-  }
+    p {
+        font-size: 12px;
+        color: #818286;
+    }
 
 }
-
 
 // 사용자 등록: 세대주 정보 입력
-.cl-join-householder{
+.cl-join-householder {
 
+    .cl-bg--black30 {
 
-  .cl-bg--black30{
-
-  }
-
+    }
 
 }
 
+.cl-input-container {
+    padding: 30px 24px;
 
+    input {
+        //display: block;
+        font-size: 16px;
+    }
+}
+
+// 다크테마 인풋들
+.cl__select--dark{
+    position: relative;
+    color: white;
+    font-size: 16px;
+    opacity: 0.5;
+    min-width: 100px;
+    background: transparent url('images/down-arrow-white@3x.png') no-repeat;
+    background-position: right calc( 50% - 4px );
+    background-size: 24px;
+    padding-right: 24px;
+    padding-bottom: 8px;
+    border-bottom: 0.5px solid rgb( 127, 127, 127 );
+
+    &:focus{
+        border-radius: 0;
+        border-bottom: 0.5px solid #80d6ff;
+    }
+}
+
+.cl__input--dark{
+    margin-top: 0.9em;
+    padding-bottom: 0.7em;
+    width: 100%;
+    color: rgb( 127, 127, 127 );
+    border-bottom: 0.5px solid rgb( 127, 127, 127 );
+
+    &.cl--disabled{
+        pointer-events: none;
+        opacity: 0.3;
+    }
+
+    &:focus{
+        border-bottom: 0.5px solid #80d6ff;
+    }
+}
+
+.cl__button--dark{
+    font-size: 13px;
+    font-weight: 700;
+    margin: 14px 0;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 2px;
+    background-color: #858586;
+
+    &.cl--disabled{
+        pointer-events: none;
+        opacity: 0.3;
+    }
+}
 

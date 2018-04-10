@@ -8,7 +8,7 @@
         FROM
                 `RESERVATION_SCHEMES`
         WHERE
-                1=1
+                `DEL_YN` = 'N'
                 <choose>
                     <when test='ids != null'>
                         AND
@@ -88,4 +88,59 @@
                          CURRENT_TIMESTAMP);
         ]]>
     </insert>
+
+    <select id="latest" resultType="reservationSchemeInfo">
+        <![CDATA[
+            SELECT  *
+            FROM    `RESERVATION_SCHEMES`
+            WHERE   `DEL_YN` = 'N'
+            AND
+                    `IDX` = LAST_INSERT_ID()
+        ]]>
+    </select>
+
+    <update id="update" parameterType="reservationSchemeInfo">
+        <![CDATA[
+            UPDATE
+                    `RESERVATION_SCHEMES`
+            SET
+                    `CMPLX_IDX` = #{cmplxIdx},
+                    `PARENT_IDX` = #{parentIdx},
+                    `CODE` = #{code},
+                    `RESERVATION_TYPE` = #{reservationType},
+                    `TITLE` = #{title},
+                    `SUMMARY` = #{summary},
+                    `DESCRIPTION` = #{description},
+                    `IS_OPEN` = #{isOpen},
+                    `START_DT` = #{startDt},
+                    `START_TIME` = #{startTime},
+                    `END_DT` = #{endDt},
+                    `END_TIME` = #{endTime},
+                    `AVAILABLE_IN_WEEKEND` = #{availableInWeekend},
+                    `POINT` = #{point},
+                    `AMOUNT` = #{amount},
+                    `IN_STOCK` = #{inStock},
+                    `MAX_QTY` = #{maxQty},
+                    `ACTIVATE_DURATION` = #{activateDuration},
+                    `MAINTENANCE_START_AT` = #{maintenanceStartAt},
+                    `MAINTENANCE_END_AT` = #{maintenanceEndAt},
+                    `OPTIONS` = #{options},
+                    `PRECAUTIONS` = #{precautions},
+                    `DEL_YN` = #{delYn},
+                    `UPD_DTTM` = CURRENT_TIMESTAMP
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </update>
+
+    <update id="delete" parameterType="reservationSchemeInfo">
+        <![CDATA[
+            UPDATE
+                    `RESERVATION_SCHEMES`
+            SET
+                    `DEL_YN` = 'Y'
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </update>
 </mapper>

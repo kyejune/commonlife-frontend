@@ -57,6 +57,7 @@
         "react-id-swiper": "^1.6.1",
         "react-iscroll": "^2.0.3",
         "react-md": "^1.2.10",
+        "react-nl2br": "^0.4.0",
         "react-router-dom": "^4.2.2",
         "react-scroll-box": "^0.3.5",
         "react-sortable": "^2.0.0",

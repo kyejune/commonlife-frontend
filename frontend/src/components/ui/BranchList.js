@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import classNames from "classnames";
 import Net from "../../scripts/net";
 import MapLink from "./MapLink";
+import {MakingUserData} from "../../scripts/store";
+import {observer} from "mobx-react";
 
 class BranchList extends Component {
 
@@ -30,23 +32,17 @@ class BranchList extends Component {
 
 
     onClickBranch = (item) => {
-        if (this.props.onChange)
-            this.props.onChange( item );
+        MakingUserData.branch = item;
     }
 
 
     render() {
-
-        let {value} = this.props;
         let {items} = this.state;
-
-        console.log( value );
-        if( !value ) value = { cmplxId: -1 }; // 기본값
 
         return <ul className="cl-branch-list pt-3em">
             {items.map((item, index) => {
                 return <li key={index}
-                           className={classNames("cl-branch-item", {"cl--selected": item.cmplxId === value })}>
+                           className={classNames("cl-branch-item", {"cl--selected": item.cmplxId === MakingUserData.branch.cmplxId })}>
                     <div className="cl-flex h-100">
                         <button onClick={() => this.onClickBranch(item)} className="cl-flex text-left">
                             <div className="cl-avatar-border">
@@ -67,4 +63,4 @@ class BranchList extends Component {
 }
 
 
-export default BranchList;
+export default observer(BranchList);

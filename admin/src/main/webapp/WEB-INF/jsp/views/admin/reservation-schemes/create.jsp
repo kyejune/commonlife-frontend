@@ -38,12 +38,24 @@
                                 <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
                                 <input type="hidden" name="redirectTo" value="${redirectTo}">
                                 <div class="form-group">
-                                    <label>현장</label>
+                                    <label>소속 현장</label>
                                     <div>
                                         <c:forEach var="complex" items="${complexes}">
                                             <label class="radio-inline">
                                                 <input type="radio" name="cmplxIdx" value="${complex.cmplxId}"
                                                        required <c:if test="${cmplxIdx == complex.cmplxId}"> checked </c:if> >
+                                                    ${complex.cmplxNm}
+                                            </label>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>접근 허용 현장</label>
+                                    <div>
+                                        <c:forEach var="complex" items="${complexes}">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="allowCmplxIdxes[]" value="${complex.cmplxId}"
+                                                       <c:if test="${cmplxIdx == complex.cmplxId}"> checked </c:if> >
                                                     ${complex.cmplxNm}
                                             </label>
                                         </c:forEach>
