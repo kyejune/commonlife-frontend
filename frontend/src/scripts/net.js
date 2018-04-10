@@ -58,8 +58,22 @@ export default {
     getFeed( type, page, callback ){
         axios.get( `${Store.api}/posts/?postType=${type}&page=${(page+1)||1}`)
             .then( response =>{
-                Store[type] = Store[type].concat(( response.data.data )); //  추후 페이지별로 삽입 시켜주기
-                console.log( 'get data ', type, page, response.data.data );
+                let prevStack = Store[type];
+                let newStack = response.data.data.filter( item => {
+                    let sames = prevStack.filter( prevItem => {
+                            return (prevItem.postIdx === item.postIdx);
+                        }
+                    );
+
+                    return ( sames.length === 0 );
+                });
+
+                Store[type] = Store[type].concat( newStack );
+
+
+
+                // = Store[type].concat(( response.data.data )); //  추후 페이지별로 삽입 시켜주기
+                // console.log( 'get data ', type, page, response.data.data );
 
                 if( callback ) callback( response.data );
 

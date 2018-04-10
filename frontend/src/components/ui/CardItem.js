@@ -80,7 +80,7 @@ class CardItem extends Component {
 
         let imgAddr;
         if (this.state.postFiles.length > 0 ) {
-            imgAddr = Store.api + this.state.postFiles[0].largePath;
+            imgAddr = Store.api + this.state.postFiles[0].mediumPath;
         }
 
         let duration;
@@ -164,7 +164,7 @@ class CardItem extends Component {
                         join={this.state.rsvYn === 'Y' && !this.state.rsvFlag}
                         joined={this.state.rsvYn === 'Y' && this.state.rsvFlag}
                         joinFulled={this.state.rsvCount >= this.state.rsvMaxCnt}
-                        qa={ (this.state.inquiryYn === 'Y' )?(this.state.inquiryType === 'P'?'tel:':'mailto:') + this.state.inquiryInfo:false }
+                        // qa={ (this.state.inquiryYn === 'Y' )?(this.state.inquiryType === 'P'?'tel:':'mailto:') + this.state.inquiryInfo:false }
 
                         data={{...this.props.cardData}}
                     />
