@@ -16,15 +16,10 @@ class FindAuth extends Component {
             hhphone:'',
             id:'',
             phone:'',
-            reqCertId:'',
-            certId:''
+            name:'',
         }
     }
 
-
-    reqCertId=()=>{
-
-    }
 
     render() {
 
@@ -62,10 +57,15 @@ class FindAuth extends Component {
                 />
 
 
-                {MODE==='password' &&
+                {MODE==='password' ?
                 <input type="text" className="cl__input--dark mt-2em" placeholder="사용자 아이디"
                        value={this.state.id}
                        onChange={ evt=>this.setState({ id: evt.target.value })}
+                />
+                    :
+                <input type="text" className="cl__input--dark mt-2em" placeholder="사용자 이름"
+                       value={this.state.name}
+                       onChange={ evt=>this.setState({ name: evt.target.value })}
                 />
                 }
 
@@ -74,12 +74,12 @@ class FindAuth extends Component {
                        onChange={ evt=>this.setState({ phone: evt.target.value })}
                 />
 
-                <button className="cl__button--dark" onClick={ this.reqCertId }>인증번호 요청</button>
+                {/*<button className="cl__button--dark" onClick={ this.reqCertId }>인증번호 요청</button>*/}
 
-                <input type="number" className="cl__input--dark" placeholder="휴대폰 인증번호 입력"
-                       value={this.state.certId}
-                       onChange={ evt=>this.setState({ certId: evt.target.value })}
-                />
+                {/*<input type="number" className="cl__input--dark" placeholder="휴대폰 인증번호 입력"*/}
+                       {/*value={this.state.certId}*/}
+                       {/*onChange={ evt=>this.setState({ certId: evt.target.value })}*/}
+                {/*/>*/}
 
             </div>;
 

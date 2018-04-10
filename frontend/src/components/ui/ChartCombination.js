@@ -6,8 +6,43 @@ class ChartCombination extends Component {
 
 	componentDidMount () {
 
+		let selectedIndex = 5; // 선택된 놈
+		let startNum = 12;
+		// let startNum =
+
+		/*
+		* path 그리기
+		* M x y 이동
+		* L x y 라인 그리기
+		* H x 수평 그리기
+		* V y 수직 그리기
+		* // 상대좌표는 소문자
+		* Q 꺽이는 x y 도착 x y
+		*
+		* */
+        c3.chart.internal.fn.generateDrawBar = function (barIndices, isSub) {
+                let getPoints = this.generateGetBarPoints(barIndices, isSub);
+            return function (d, i) {
+                // 4 points that make a bar
+                const PS = getPoints(d, i); // 데이터는 LB 위치부터 반시계 방향으로 들어옴
+				let path = '';
+				const BL = { x:PS[0][0], y:PS[0][1] };
+				const TL = { x:PS[1][0], y:PS[1][1] };
+				const TR = { x:PS[2][0], y:PS[2][1] };
+				const BR = { x:PS[3][0], y:PS[3][1] };
+				const R = 7;
+
+                path += `M ${BL.x}, ${BL.y - R} L ${TL.x}, ${TL.y + R}, Q ${TL.x}, ${TL.y}, ${TL.x + R}, ${TL.y}, Q ${TR.x}, ${TR.y}, ${TR.x}, ${TR.y + R}, `;
+				path += `L ${BR.x}, ${BR.y - R}, Q ${BR.x}, ${BR.y}, ${BR.x - R}, ${BR.y} Q ${BL.x}, ${BL.y}, ${BL.x}, ${BL.y - R} z`
+
+                return path;
+            }
+        }
+
+
 		let chart = c3.generate( {
 			bindto: '#cl-chart__combination',
+
 			data: {
 				columns: [
 					[ 'data1', 200, 130, 90, 240, 130, 220 ],
@@ -17,16 +52,37 @@ class ChartCombination extends Component {
 					data1: 'bar',
 					data2: 'line',
 				},
-				colors: {
-					data1: '#1654A3',
-					data2: '#000000',
-				}
+
+                color:(color, data )=>{
+					const {id, index} = data;
+
+					switch( id ){
+						case 'data1':
+							return ( index === selectedIndex )?'#80D6FF':'#D1D1D1';
+							break;
+
+						case 'data2':
+							let color;
+
+                            console.log( data );
+
+                            if( data.id_org ) return '#9B9B9B';
+                            return ( index === selectedIndex )?'#1052a5':'#FFFFFF';
+
+							break;
+					}
+				},
 			},
 			axis: {
 				x: {
 					tick: {
-						values: [ 12, 1, 2, 3, 4, 5 ],
-					}
+						format: x => {
+							let num = (x + startNum)%12;
+							if( num === 0 ) return '12월';
+							else			return `${num}월`;
+						},
+					},
+
 				},
 				y: {
 					show: false
@@ -41,9 +97,13 @@ class ChartCombination extends Component {
 			size: {
 				height: 160
 			},
+            point: {
+                r: 8,
+				tick: 2,
+            },
 			bar: {
 				width: 14,
-			},
+			}
 		} )
 
 	}
