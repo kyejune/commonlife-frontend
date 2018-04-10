@@ -27,4 +27,9 @@ public class UserSerivceImpl implements UserService {
     public UserInfo getUsrIdByUserIdAndPwd( String userId, String userPw ) {
         return userDAO.getUsrIdByUserIdAndPwd( userId, userPw );
     }
+
+    @Override
+    public boolean isExistedUser( String userId ) {
+        return (userDAO.getUsrIdByUserId( userId ) != null);
+    }
 }

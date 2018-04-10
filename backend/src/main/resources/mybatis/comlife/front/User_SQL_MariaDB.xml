@@ -19,7 +19,6 @@
         )
         ON DUPLICATE KEY
 	    UPDATE
-	      DEL_YN="N",
 	      UPD_DTTM=CURRENT_TIMESTAMP;
     </insert>
 
@@ -62,7 +61,7 @@
     </select>
 
     <select id="selectUsrIdByUserIdAndPw" parameterType="java.util.List" resultType="userInfo">
-        /* ID리스트로 사용자 조회 */
+        /* ID/PASSWORD로 USR_ID 가져오기*/
         SELECT
           USR_ID,
           USER_ID
@@ -70,6 +69,16 @@
           USR_INFO
         WHERE
           USER_ID=#{userId} AND USER_PW=#{userPw}
+    </select>
+
+    <select id="selectUsrIdByUserId" parameterType="java.util.List" resultType="userInfo">
+        /* ID 중복 검사 확인*/
+        SELECT
+          USER_ID
+        FROM
+          USR_INFO
+        WHERE
+          USER_ID=#{userId}
     </select>
 
     <select id="selectUserRelatedInfo" parameterType="Map" resultType="Map">

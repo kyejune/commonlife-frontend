@@ -35,4 +35,10 @@ public class UserDAO {
         params.put("userPw", userPw);
         return sqlSession.selectOne( "User.selectUsrIdByUserIdAndPw", params );
     }
+
+    public UserInfo getUsrIdByUserId( String userId ) {
+        Map params = new HashMap();
+        params.put("userId", userId);
+        return sqlSession.selectOne( "User.selectUsrIdByUserId", params );
+    }
 }
