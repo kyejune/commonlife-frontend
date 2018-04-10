@@ -41,6 +41,16 @@ public class ReservationController {
     @Resource(name = "reservationService")
     private ReservationService service;
 
+    @RequestMapping(value = "calendar.do")
+    public ModelAndView calReservationScheme (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+    ) {
+        return mav;
+    }
+
     @RequestMapping(value = "list.do")
     public ModelAndView listReservationScheme (
             HttpServletRequest request
@@ -131,7 +141,7 @@ public class ReservationController {
 
         logger.debug( "---------- qty: " + qty );
 
-//        service.create( info );
+        service.create( info );
 
         return "redirect:" + redirectTo;
     }

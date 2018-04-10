@@ -77,6 +77,8 @@
                 <ul class="nav nav-second-level callapse">
                     <li><a href="/admin/reservation-amenities/list.do">예약 시설 옵션 관리</a></li>
                     <li><a href="/admin/reservation-groups/list.do">예약 그룹 관리</a></li>
+                    <li><a href="/admin/reservations/list.do">예약 현황 (목록형)</a></li>
+                    <li><a href="/admin/reservations/list.do">예약 현황 (달력형)</a></li>
                 </ul>
             </li>
         </ul>

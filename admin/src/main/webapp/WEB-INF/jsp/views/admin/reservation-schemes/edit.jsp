@@ -51,11 +51,23 @@
                                         </c:forEach>
                                     </div>
                                 </div>
-                                <c:if test="${parentIdx != 0}">
+                                <div class="form-group">
+                                    <label>접근 허용 현장</label>
+                                    <div>
+                                        <c:forEach var="complex" items="${complexes}">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="allowCmplxIdxes[]" value="${complex.cmplxId}"
+                                                <c:if test="${cmplxIdx == complex.cmplxId}"> checked </c:if> >
+                                                    ${complex.cmplxNm}
+                                            </label>
+                                        </c:forEach>
+                                    </div>
+                                </div>
+                                <c:if test="${group != null}">
                                 <div class="form-group">
                                     <label>예약 그룹</label>
                                     <div>
-                                        <input type="hidden" name="parentIdx" value="${parentIdx}">
+                                        <input type="hidden" name="parentIdx" value="${group.idx}">
                                         <input type="text" class="form-control" readonly value="${group.title}">
                                     </div>
                                 </div>
@@ -161,17 +173,29 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>시설 옵션</label>
-                                    <div>
-                                        <c:forEach var="amenity" items="${amenities}">
-                                            <label class="checkbox-inline">
-                                                <input type="checkbox" name="amenities[]" value="${amenity.idx}"> ${amenity.name}
-                                            </label>
-                                        </c:forEach>
+                                    <div class="form-group">
+                                        <label>시설 옵션</label>
+                                        <div>
+                                            <c:forEach var="amenity" items="${amenities}">
+                                                <label class="checkbox-inline">
+                                                    <input type="checkbox" name="amenities[]" value="${amenity.idx}">
+                                                    <span style="background: #666; padding: 2px; display: inline-block; margin-right: 0.5em;">
+                                                        <img src="/admin/reservation-amenities/icon.do?idx=${amenity.iconIdx}" style="width: 18px;" alt="">
+                                                    </span>
+                                                        ${amenity.name}
+                                                </label>
+                                            </c:forEach>
+                                        </div>
                                     </div>
                                 </div>
-                                <div>
-                                    <button class="btn btn-primary">전송</button>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <button class="btn btn-primary">전송</button>
+                                    </div>
+                                    <div class="col-xs-6 text-right">
+                                        <a href="/admin/reservations/create.do?groupIdx=${scheme.parentIdx}&schemeIdx=${scheme.idx}"
+                                           class="btn btn-default">이 형식의 예약 추가</a>
+                                    </div>
                                 </div>
                             </form>
                         </div>

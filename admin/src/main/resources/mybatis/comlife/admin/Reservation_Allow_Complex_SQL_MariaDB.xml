@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReservationAllowComplex">
+    <select id="index" parameterType="java.util.Map" resultType="reservationAllowComplexInfo">
+        SELECT
+                *
+        FROM
+                `RESERVATION_ALLOW_COMPLEX`
+        WHERE
+                1=1
+                <choose>
+                    <when test='ids != null'>
+                        AND
+                            IDX IN
+                            <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
+                                #{id}
+                            </foreach>
+                    </when>
+                </choose>
+    </select>
+    <select id="show" parameterType="java.util.Map" resultType="reservationAllowComplexInfo">
+        <![CDATA[
+            SELECT
+                    *
+            FROM
+                    `RESERVATION_ALLOW_COMPLEX`
+            WHERE
+                    `IDX` = #{idx}
+        ]]>
+    </select>
+    <insert id="create" parameterType="reservationAllowComplexInfo">
+        <![CDATA[
+            INSERT INTO `RESERVATION_ALLOW_COMPLEX`
+                        (`COMPLEX_IDX`,
+                         `SCHEME_IDX`)
+            VALUES      (#{complexIdx},
+                         #{schemeIdx});
+        ]]>
+    </insert>
+
+    <update id="delete" parameterType="java.util.HashMap">
+        DELETE
+        FROM    `RESERVATION_ALLOW_COMPLEX`
+        WHERE
+                1=1
+                <choose>
+                    <when test='idx != null'>
+                        AND
+                            `IDX` = #{idx}
+                    </when>
+                    <when test='schemeIdx != null'>
+                        AND
+                            `SCHEME_IDX` = #{schemeIdx}
+                    </when>
+                </choose>
+    </update>
+</mapper>

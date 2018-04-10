@@ -5,7 +5,7 @@
     <tiles:putAttribute name="contents">
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>예약 관리</h2>
+                <h2>예약 현황</h2>
                 <ol class="breadcrumb">
                     <li>
                         <a href="/">Home</a>
@@ -14,7 +14,7 @@
                         예약 관리
                     </li>
                     <li class="active">
-                        <a>예약 관리</a>
+                        <a>예약 현황</a>
                     </li>
                 </ol>
             </div>
@@ -45,7 +45,8 @@
                                     <th class="text-center">종료시작</th>
                                     <th class="text-center">포인트</th>
                                     <th class="text-center">금액</th>
-                                    <th class="text-center">수량</th>
+                                    <%--<th class="text-center">수량</th>--%>
+                                    <th class="text-center">삭제</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -59,17 +60,17 @@
                                         <td class="text-center">${reservation.endTime}</td>
                                         <td class="text-center">${reservation.point}</td>
                                         <td class="text-center">${reservation.amount}</td>
-                                        <td class="text-center">${reservation.qty}</td>
-                                        <%--<td>--%>
-                                            <%--<a href="/admin/reservation-schemes/edit.do?idx=${scheme.idx}" class="btn btn-xs btn-success">수정</a>--%>
-                                        <%--</td>--%>
+                                        <td class="text-center">
+                                            <form action="/admin/reservations/delete.do" method="post">
+                                                <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+                                                <input type="hidden" name="idx" value="${reservation.idx}">
+                                                <button class="btn btn-xs btn-danger">삭제</button>
+                                            </form>
+                                        </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
-                            <div class="text-right">
-                                <a href="/admin/reservations/create.do" class="btn btn-primary">예약 형식 추가</a>
-                            </div>
                         </div>
                     </div>
                 </div>

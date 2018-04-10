@@ -28,6 +28,8 @@ public class ReservationSchemeDAO {
         return sqlSession.insert("ReservationScheme.create", info);
     }
 
+    public ReservationSchemeInfo latest() { return sqlSession.selectOne( "ReservationScheme.latest" ); }
+
     public int update(ReservationSchemeInfo info) {
         return sqlSession.update("ReservationScheme.update", info);
     }
