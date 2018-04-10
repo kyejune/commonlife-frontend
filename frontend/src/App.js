@@ -16,6 +16,7 @@ import Playground from 'components/Playground';
 import DrawerInjector from "./components/drawers/DrawerInjector";
 import Join from "./components/auth/Join";
 import Login from "./components/auth/Login";
+import FindAuth from "./components/auth/FindAuth";
 
 
 class App extends Component {
@@ -96,6 +97,7 @@ class App extends Component {
                     {/* 회원가입, 로그인 */}
                     <Route path="/join/:step?" component={Join}/>
                     <Route path="/login" component={Login}/>
+                    <Route path="/find/:mode" component={FindAuth}/>
 
                 </div>
 

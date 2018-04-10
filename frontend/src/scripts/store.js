@@ -87,8 +87,8 @@ export const MakingUserData = observable({
         phone:'',
         certId:'',
         mail:'',
-        id:'',
-        password:'',
+        id:'aaaa',
+        password:'aaaaaa',
         passwordConfirm:'',
     }
 });

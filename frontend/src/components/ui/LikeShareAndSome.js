@@ -41,7 +41,7 @@ export default class LikeShareAndSome extends Component{
 		if( window.plugins )
 		    window.plugins.socialsharing.shareWithOptions(options);
 		else
-		    alert('모바일 전용 기능');
+		    console.log('공유', this.props.data );
 	}
 
 	likeItem( id ){
