@@ -46,13 +46,22 @@
     </tiles:putAttribute>
     <tiles:putAttribute name="js">
         <script>
+            var events = [];
+            <c:forEach var="reservation" items="${reservations}">
+            events.push( {
+                title: '${reservation.scheme.title}',
+                start: moment( '${reservation.startDt}' ).toDate(),
+                end: moment( '${reservation.endDt}' ).toDate()
+            } );
+            </c:forEach>
             $( function() {
                 $('#calendar').fullCalendar({
                     header: {
                         left: 'prev,next',
                         center: 'title',
                         right: 'month,agendaWeek,agendaDay'
-                    }
+                    },
+                    events: events
                 });
             } );
         </script>

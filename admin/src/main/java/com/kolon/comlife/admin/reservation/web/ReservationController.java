@@ -41,25 +41,8 @@ public class ReservationController {
     @Resource(name = "reservationService")
     private ReservationService service;
 
-    @RequestMapping(value = "calendar.do")
-    public ModelAndView calReservationScheme (
-            HttpServletRequest request
-            , HttpServletResponse response
-            , ModelAndView mav
-            , HttpSession session
-    ) {
-        return mav;
-    }
-
-    @RequestMapping(value = "list.do")
-    public ModelAndView listReservationScheme (
-            HttpServletRequest request
-            , HttpServletResponse response
-            , ModelAndView mav
-            , HttpSession session
-    ) {
+    private List<ReservationInfo> getReservationList() {
         List<ReservationInfo> reservations = service.index();
-
         List<Integer> ids = new ArrayList<Integer>();
         for (ReservationInfo item :
                 reservations) {
@@ -70,7 +53,6 @@ public class ReservationController {
         if( ids.size() > 0 ) {
             params.put( "ids", ids );
         }
-
         List<ReservationSchemeInfo> schemes = schemeService.index( params );
 
         for (ReservationInfo item : reservations) {
@@ -81,6 +63,30 @@ public class ReservationController {
             }
         }
 
+        return reservations;
+    }
+
+    @RequestMapping(value = "calendar.do")
+    public ModelAndView calReservationScheme (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+    ) {
+        List<ReservationInfo> reservations = this.getReservationList();
+        mav.addObject( "reservations", reservations );
+
+        return mav;
+    }
+
+    @RequestMapping(value = "list.do")
+    public ModelAndView listReservationScheme (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+    ) {
+        List<ReservationInfo> reservations = this.getReservationList();
         mav.addObject( "reservations", reservations );
 
         return mav;
