@@ -52,7 +52,7 @@
                         left: 'prev,next',
                         center: 'title',
                         right: 'month,agendaWeek,agendaDay'
-                    },
+                    }
                 });
             } );
         </script>
