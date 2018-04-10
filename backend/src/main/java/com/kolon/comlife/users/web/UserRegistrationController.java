@@ -360,16 +360,27 @@ public class UserRegistrationController {
         Map<String, Object> result;
         boolean resFlag;
         UserInfo userInfo;
+        String userId;
+        String userPw;
 
         parameter = IokUtil.buildRequestParameter(request);
+        userId = parameter.getString("userId");
+        userPw = parameter.getString("userPw");
 
         // User id validation
         try {
-            regService.isAcceptedUserId(parameter.getString("userId"));
+            regService.isAcceptedUserId( userId );
         } catch (NotAcceptedUserIdException e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(new SimpleErrorInfo( e.getMessage() ));
+        }
+
+        // 중복 가입인지 확인
+        if( userService.isExistedUser( userId ) ) {
+            return ResponseEntity
+                    .status(HttpStatus.CONFLICT)
+                    .body( new SimpleMsgInfo( "이미 가입이 완료되었습니다." ) );
         }
 
         try {
