@@ -46,7 +46,7 @@ public class SmsSenderServiceImpl implements SmsSenderService {
         sendList.add( msgSet );
 
         try {
-//            logger.info( (serviceProp == null) );
+            logger.debug( ">>>>>>>>> trying to send a message! " );
             logger.info( httpClient.toString() );
             logger.info( SMS_SENDER_PATH );
             requester = new HttpPostRequester( httpClient,
