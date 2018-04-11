@@ -4,6 +4,7 @@ import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.reservation.model.*;
 import com.kolon.comlife.admin.reservation.service.*;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -97,6 +98,7 @@ public class ReservationSchemeController {
             , @RequestParam( value = "parentIdx", required = false, defaultValue = "0") int parentIdx
             , @RequestParam( value = "code", required = false ) String code
             , @RequestParam( value = "reservationType", required = false ) String reservationType
+            , @RequestParam( value = "images[]", required = false ) String[] images
             , @RequestParam( value = "title", required = false ) String title
             , @RequestParam( value = "summary", required = false ) String summary
             , @RequestParam( value = "description", required = false ) String description
@@ -124,6 +126,7 @@ public class ReservationSchemeController {
         info.setParentIdx( parentIdx );
         info.setCode( code );
         info.setReservationType( reservationType );
+        info.setImages( StringUtils.join( images, "," ) );
         info.setTitle( title );
         info.setSummary( summary );
         info.setDescription( description );
