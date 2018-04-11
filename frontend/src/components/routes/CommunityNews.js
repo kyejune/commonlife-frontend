@@ -13,6 +13,10 @@ class CommunityNews extends Component {
         this.isLoading = false;
         this.page = 0;
         this.maxPage = 1;
+
+        this.state = {
+            isEmpty: false,
+        }
     }
 
 
@@ -21,7 +25,6 @@ class CommunityNews extends Component {
     }
 
     loadPage=( targetPage )=>{
-        console.log( targetPage, this.maxPage );
         if( targetPage >= this.maxPage ) return;
 
         this.isLoading = true;
@@ -30,6 +33,8 @@ class CommunityNews extends Component {
             this.page = res.currentPage - 1;
             this.maxPage = res.totalPages - 1;
             this.isLoading = false;
+
+            this.setState({ isEmpty: ( Store.news.length === 0 ) });
         });
     }
 
@@ -46,17 +51,26 @@ class CommunityNews extends Component {
     }
 
 	render () {
-		return (
+
+        let Content;
+
+        if( this.state.isEmpty ){
+            Content = <div className="cl-content--empty"/>;
+        }else{
+            Content = Store.news.map( ( card, index ) => {
+                return (
+                    <CardItem key={index} list="/community/news" cardData={card}/>
+                )
+            } )
+        }
+
+
+
+        return (
             <div ref={ r => this.scrollBox = r } className="cl-fitted-box">
 
                 <div className="cl-card-items">
-
-					{ Store.news.map( ( card, index ) => {
-						return (
-                            <CardItem key={index} list="/community/news" cardData={card}/>
-						)
-					} ) }
-
+					{ Content }
                 </div>
             </div>
 		)

@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import Net from "../../../scripts/net";
+import Store from "../../../scripts/store";
 import {MakingUserData} from "../../../scripts/store";
+import DeviceStorage from "react-device-storage";
+import {withRouter} from "react-router-dom";
 
 
 /* https://www.npmjs.com/package/simple-react-validator */
@@ -72,6 +75,20 @@ class Profile extends Component {
         }
     }
 
+    logout=()=>{
+        const S = new DeviceStorage().localStorage();
+        S.delete('savedId');
+        S.delete('isSave');
+        S.delete('token');
+
+        Store.auth = { ...Store.auth, token: undefined };
+        Store.isAuthorized = false;
+        setTimeout(()=>{
+            this.props.history.push('/login');
+        }, 0 );
+
+    }
+
     render() {
 
         return <div className="cl-profile drawer-fitted-box--b">
@@ -82,7 +99,7 @@ class Profile extends Component {
                 </div>
                 <button className="cl-edit__button"/>
 
-                <h4>조성우</h4>
+                <h4>{Store.auth.name}</h4>
                 <p>sungwoo@gmail.com</p>
             </div>
 
@@ -165,6 +182,11 @@ class Profile extends Component {
                        value={this.state.passwordconfirm} onChange={ (e)=> this.setState({ passwordconfirm: e.target.value }) }
                 />
                 {this.validator.message('passwordConfirm', this.state.passwordconfirm, `required|min:6|max:12|same:${this.state.password}`)}
+
+
+
+                <p className="color-white50 fs-12 mt-1em">※ 기타 사용자 정보변경시 관리자에게 문의해 주세요.</p>
+                <button className="cl__button--dark mt-2em" onClick={this.logout}>다른 아이디로 로그인</button>
             </div>
 
 
@@ -178,4 +200,4 @@ class Profile extends Component {
 }
 
 
-export default Profile;
+export default withRouter(Profile);

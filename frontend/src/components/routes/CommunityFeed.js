@@ -12,6 +12,10 @@ class CommunityFeed extends Component {
 		this.isLoading = false;
 		this.page = 0;
 		this.maxPage = 1;
+
+		this.state = {
+			isEmpty: false,
+		}
 	}
 
 
@@ -20,7 +24,6 @@ class CommunityFeed extends Component {
 	}
 
 	loadPage=( targetPage )=>{
-		console.log( targetPage, this.maxPage );
 		if( targetPage >= this.maxPage ) return;
 
 		this.isLoading = true;
@@ -29,6 +32,8 @@ class CommunityFeed extends Component {
         	this.page = res.currentPage - 1;
         	this.maxPage = res.totalPages - 1;
         	this.isLoading = false;
+
+        	this.setState({ isEmpty: ( Store.feed.length === 0 ) });
 		});
 	}
 
@@ -47,15 +52,23 @@ class CommunityFeed extends Component {
 
 	render () {
 
+		let Content;
+
+		if( this.state.isEmpty ){
+			Content = <div className="cl-content--empty"/>;
+		}else{
+            Content = Store.feed.map( ( card, index ) => {
+                return (
+                    <CardItem key={index} list="/community/feed" cardData={card}/>
+                )
+            } )
+		}
+
 		return (
 			<div ref={ r => this.scrollBox = r } className="cl-fitted-box" onScroll={ this.onScroll } >
 
 				<div className="cl-card-items">
-					{ Store.feed.map( ( card, index ) => {
-						return (
-							<CardItem key={index} list="/community/feed" cardData={card}/>
-						)
-					} ) }
+					{ Content }
 				</div>
 			</div>
 		)

@@ -15,7 +15,7 @@ class LandingPage extends Component {
 
         if(ID){
 
-            Net.checkAuth( ID, logined=>{
+            Net.checkAuth( logined=>{
                 if( logined ) this.props.history.push('/community/feed');
                 else          this.props.history.push('/login');
             });

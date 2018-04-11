@@ -12,6 +12,10 @@ class CommunityEvent extends Component {
         this.isLoading = false;
         this.page = 0;
         this.maxPage = 1;
+
+        this.state = {
+            isEmpty: false,
+        }
     }
 
 
@@ -29,6 +33,8 @@ class CommunityEvent extends Component {
             this.page = res.currentPage - 1;
             this.maxPage = res.totalPages - 1;
             this.isLoading = false;
+
+            this.setState({ isEmpty: ( Store.event.length === 0 ) });
         });
     }
 
@@ -45,15 +51,25 @@ class CommunityEvent extends Component {
     }
 
 	render () {
+
+        let Content;
+
+        if( this.state.isEmpty ){
+            Content = <div className="cl-content--empty"/>;
+        }else{
+            Content = Store.event.map( ( card, index ) => {
+                return (
+                    <CardItem key={index} list="/community/event" cardData={card}/>
+                )
+            } );
+        }
+
+
 		return (
 			<div ref={ r => this.scrollBox = r } className="cl-fitted-box">
 
 				<div className="cl-card-items">
-					{ Store.event.map( ( card, index ) => {
-						return (
-							<CardItem key={index} list="/community/event" cardData={card}/>
-						)
-					} ) }
+					{ Content }
 				</div>
 
 			</div>

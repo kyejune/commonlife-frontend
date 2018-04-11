@@ -6,6 +6,8 @@
 
 
 .cl-content--empty{
+    position: relative;
+
     &:before{
         content:'콘덴츠가 없습니다.';
         position: absolute;

@@ -1,14 +1,22 @@
 import Store from 'scripts/store.js';
 import axios from 'axios';
+import DeviceStorage from "react-device-storage";
 
-// axios.defaults.baseURL = 'http://localhost:8080'// host;
-axios.defaults.headers.common['api_key'] = 'acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70';
+
+
+
+axios.defaults.baseURL = Store.api;
+// axios.defaults.headers.common['api_key'] = 'acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70';
+axios.defaults.headers.common['token'] = undefined;
 axios.defaults.headers.common['Content-Type'] = 'application/json; charset=UTF-8';
 
 // Add a request interceptor
 axios.interceptors.request.use(function (config) {
     // Do something before request is sent
     document.querySelector('#spinner').classList.add('cl-status--ajax');
+
+    console.log( 'config:', config );
+    config.headers.token = Store.auth.token;
 
     return config;
 }, function (error) {
@@ -56,7 +64,10 @@ axios.interceptors.response.use(function (response) {
 export default {
 ///posts/?postType=feed&page=2
     getFeed( type, page, callback ){
-        axios.get( `${Store.api}/posts/?postType=${type}&page=${(page+1)||1}`)
+
+        console.log( 'A of getFeed:', axios.defaults );
+
+        axios.get( `/posts/?postType=${type}&page=${(page+1)||1}`)
             .then( response =>{
                 let prevStack = Store[type];
                 let newStack = response.data.data.filter( item => {
@@ -93,7 +104,7 @@ export default {
 
         if( data ) callback( data );
         else{
-            axios.get( `${Store.api}/posts/${postIdx}` )
+            axios.get( `/posts/${postIdx}` )
                 .then( response => {
                    callback( response.data );
                 });
@@ -123,12 +134,12 @@ export default {
     setJoin( id, bool, callback ){
 
         if( bool ){
-            axios.post( `${Store.api}/posts/${id}/rsv/` )
+            axios.post( `/posts/${id}/rsv/` )
                 .then( response => {
                    callback( response.data );
                 });
         }else{
-            axios.delete( `${Store.api}/posts/${id}/rsv/` )
+            axios.delete( `/posts/${id}/rsv/` )
                 .then( response => {
                     callback( response.data );
                 });
@@ -194,7 +205,7 @@ export default {
 
     // 동 목록 가져오기
     getDongsInBranch( branchId, callback ){
-        axios.get( `${Store.api}/users/registration/complexes/${branchId}` )
+        axios.get( `/users/registration/complexes/${branchId}` )
             .then( response => {
                callback( response.data.data );
             });
@@ -202,7 +213,7 @@ export default {
 
     // 호 목록 가져오기
     getNumbersInBranch( branchId, dongId, callback ){
-        axios.get( `${Store.api}/users/registration/complexes/${branchId}/${dongId}` )
+        axios.get( `/users/registration/complexes/${branchId}/${dongId}` )
             .then( response => {
                 callback( response.data.data );
             });
@@ -210,7 +221,7 @@ export default {
 
     // 세대주 휴대폰 인증번호 요청
     requestHouseHolderPhoneAuthNumber( branchId, dongId, hoId, name, phone, callback ){
-        axios.get(`${Store.api}/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}&headCell=${phone}`)
+        axios.get(`/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}&headCell=${phone}`)
             .then( response => {
                 callback( response.data );
             });
@@ -219,7 +230,7 @@ export default {
     // 사용자 휴대폰 인증번호 요청
     requestUserPhoneAuthNumber( branchId, dongId, hoId, hhname, hhphone, name, phone, certNo, callback ){
         // console.log( 'rpa:', branchId, dongId, hoId, hhname, hhphone, name, phone, certNo );
-        axios.get(`${Store.api}/users/registration/certUserCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(hhname)}&headCell=${hhphone}&userCertId=${certNo}&userNm=${name}&userCell=${phone}`)
+        axios.get(`/users/registration/certUserCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(hhname)}&headCell=${hhphone}&userCertId=${certNo}&userNm=${name}&userCell=${phone}`)
             .then( response => {
                 callback( response.data );
             });
@@ -228,7 +239,7 @@ export default {
     // 세대주 휴대폰 인증번호 확인
     confirmHouseHolderPhoneAuthNumber( branchId, dongId, hoId, name, phone, certNo, hhCertNo, callback ){
         // {{API_HOST}}/users/registration/certHeadCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=37&headCertNum=652038
-        axios.post(`${Store.api}/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}&headCell=${phone}&userCertId=${certNo}&headCertNum=${hhCertNo}`)
+        axios.post(`/users/registration/certHeadCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${encodeURIComponent(name)}&headCell=${phone}&userCertId=${certNo}&headCertNum=${hhCertNo}`)
             .then( response => {
                 callback( response.data );
             });
@@ -237,7 +248,7 @@ export default {
     // 사용자 휴대폰 인증번호 확인
     confirmUserPhoneAuthNumber( branchId, dongId, hoId, hhname, hhphone, certReq, certId, phone, callback ){
         // {{API_HOST}}/users/registration/certUserCellNo?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userCertId=34&userCertNum=361016&userCell=01050447244
-        axios.post(`${Store.api}/users/registration/certUserCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${hhname}&headCell=${hhphone}&userCertId=${certReq}&userCertNum=${certId}&userCell=${phone}`)
+        axios.post(`/users/registration/certUserCellNo?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${hhname}&headCell=${hhphone}&userCertId=${certReq}&userCertNum=${certId}&userCell=${phone}`)
             .then( response => {
                 callback( response.data );
             });
@@ -245,7 +256,7 @@ export default {
 
     checkIdDuplicate( newId, callback ){
         //{{API_HOST}}/users/registration/existedUser/NEWUSER
-        axios.get(`${Store.api}/users/registration/existedUser/${newId}`)
+        axios.get(`/users/registration/existedUser/${newId}`)
             .then( response => {
                callback( response.data );
             });
@@ -253,7 +264,7 @@ export default {
 
     registNewUser( branchId, dongId, hoId, hhname, hhphone, name, phone, certId, certDate, id, password, callback ){
         // {{API_HOST}}/users/registration/newUser?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userNm=사용자KIM2&userCell=01050447244&userCertId=34&smsChkYn=Y&smsChkDt=2018-02-10 14:42:22&userId=newuser201&userPw=fumT4DmfVP/X+RgvSg1CBNA6QAberSGDf0Iu49s0cMSlundj0QVHqTM+hS6BcVyY
-        axios.post(`${Store.api}/users/registration/newUser?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${hhname}&headCell=${hhphone}&userNm=${name}&userCell=${phone}&userCertId=${certId}&smsChkYn=Y&smsChkDt=${certDate}&userId=${id}&userPw=${password}`)
+        axios.post(`/users/registration/newUser?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${hhname}&headCell=${hhphone}&userNm=${name}&userCell=${phone}&userCertId=${certId}&smsChkYn=Y&smsChkDt=${certDate}&userId=${id}&userPw=${password}`)
             .then( response => {
                 callback( response.data );
             });
@@ -266,7 +277,7 @@ export default {
     // "file": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAA6lBMVEUAAAAXQl8XQmAXQV4YPloWRmUZNlAXP1wYPloXRGIWSWcYP1wVTm4YQV4YPVcZOlQXQV0ZOVQZOlUWR2YXRWMYPVkVTm4YQl8ZOFEYQV0aM0wUU3YYQV0XQl8XQ2AYQFwXPloXPVgXQF0SPVoBIkLp7vEmS2YWRGMMN1QHNFMNNVIEME8BKknz9vfu8PKpuMKfr7uInq10jZ5cdolVcogrUmwbRWEWO1fS2+DL1NrO0detu8aar72XpbKOobCDlqV2kqN4kaFqhJZjgZRRZHo6WnIWSmkvT2guTGciSGMTOlYNOFUGLksACS7w+BDIAAAAHHRSTlMA7Z7SZS4H5jsJ/O3l3tTOy769npaVfnV1aGgoe5kp8wAAAMZJREFUGNNFj9VyAlEQBSfZZSHuPjPXYBUIThR3+f/fYbkU0G+nq85Dw46Mc5uBI2dPxAE/evv9SlqglFK92Jm7JMQoSZI26mwOwM1KItls1MdFpcU1wEOAFM7Lv/+Fz6JWFwCnAoXxO/l1vRQZdZIKZjL4V2mMCuFCWoEYNr9q3+lFia1Alsvpz6zXH8RtKwhV7JeGrUp5ZSgVz+dSGKxVq10/ZroC8NwJIuZTopZSri25E4IYKaB779DKmvjmA468Oc47WDZI7RlDwZXI7gAAAABJRU5ErkJggg=="
     uploadUserProfileImage( id, pw, base64img, callback ){
         //{{API_HOST}}/users/registration/newUser/photo
-        axios.post( `${Store.api}/users/registration/newUser/photo`, { userId:id, userPw:pw, file:base64img })
+        axios.post( `/users/registration/newUser/photo`, { userId:id, userPw:pw, file:base64img })
             .then( response =>{
                callback( response.data );
             });
@@ -276,7 +287,7 @@ export default {
     login( id, password, callback ){
 
         // password =
-        axios.get(`${Store.api}/users/login?userId=${id}&userPw=${password}&gcmRegId=${Store.gcm}&deviceId=${Store.deviceId}`)
+        axios.get(`/users/login?userId=${id}&userPw=${password}&gcmRegId=${Store.gcm}&deviceId=${Store.deviceId}`)
             .then( response =>{
 
                 console.log( '로그인 성공:', response );
@@ -289,13 +300,16 @@ export default {
                 Store.auth = { name:DATA.userNm, id:DATA.userId, token:DATA.token, key:DATA.usrId };
                 Store.isAuthorized = true;
 
+                const S = new DeviceStorage().localStorage();
+                S.save( 'token', DATA.token );
+
                 callback( response.data );
             })
     },
 
     findId( hhname, hhphone, name, phone, callback ){
         // {{API_HOST}}/users/registration/findUserId?headNm=김영헌&headCell=01050447244&userNm=김연아&userCell=01050447244
-        axios.get(`${Store.api}/users/registration/findUserId?headNm=${hhname}&headCell=${hhphone}&userNm=${name}&userCell=${phone}`)
+        axios.get(`/users/registration/findUserId?headNm=${hhname}&headCell=${hhphone}&userNm=${name}&userCell=${phone}`)
             .then( response => {
                 callback( response.data );
             });
@@ -303,26 +317,50 @@ export default {
 
     resetPassword( hhname, hhphone, id, phone, callback ){
         // {{API_HOST}}/users/registration/resetPwd?headNm=김영헌&headCell=01050447244&userId=yunakim&userCell=01050447244
-        axios.get(`${Store.api}/users/registration/resetPwd?headNm=${hhname}&headCell=${hhphone}&userId=${id}&userCell=${phone}`)
+        axios.get(`/users/registration/resetPwd?headNm=${hhname}&headCell=${hhphone}&userId=${id}&userCell=${phone}`)
             .then( response => {
                 callback( response.data );
             });
     },
 
-    checkAuth( id, callback ){
+
+    // 토큰 검사
+    checkAuth( callback ){
       //{{API_HOST}}/users/status?userId=baek
-      axios.get( `${Store.api}/users/status?userId=${id}`)
-          .then( response => {
-                const BOOL = (response.data.status === '0001');
-                Store.isAuthorized = true;
-                callback( BOOL );
-          });
+      // axios.get( `/users/status?userId=${id}`)
+      //     .then( response => {
+      //           const BOOL = (response.data.status === '0001');
+      //           Store.isAuthorized = true;
+      //           callback( BOOL );
+      //     });
+        let bool = false;
+
+        const S = new DeviceStorage().localStorage();
+
+        const TOKEN = S.read( 'token' ) || Store.auth.token;
+        console.log('검사할 토큰:', TOKEN );
+
+        bool = (TOKEN !== undefined);
+
+        if( bool ){
+            Store.auth = { ...Store.auth, token: TOKEN };
+        }
+
+        // 토큰 체크하는 Api가 아직 없어서 임시로 있으면 무조건 통과
+
+        setTimeout( ()=>{
+
+            Store.isAuthorized = bool;
+            callback( bool );
+
+        }, 0 );
+
     },
 
 
     tokenUpdate(){
     //{{API_HOST}}/users/pushToken?gcmRegId=dvCS7UlJeXA:APA91bEBwTT8oS8uHwFS1yzZrzUPt2p3IhsYlHW_N1onsJCqNoSX4jkNwR_KsH1kmJzmLIXjivF7l8O99JfvCjt8siZkNpIFHQFHQfFlLAi0CrF7TUmAwVKOEYmswggq6yTo4EFmxgeb&deviceId=0b5a32e31439a5ce3d0b6511900a03b7
-        axios.get( `${Store.api}/users/pushToken?gcmRegId=${Store.auth.token}`)
+        axios.get( `/users/pushToken?gcmRegId=${Store.auth.token}`)
             .then( response => {
                 console.log( 'token update:', response );
             });

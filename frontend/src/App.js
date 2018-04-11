@@ -48,7 +48,7 @@ class App extends Component {
 
         if(ID){
 
-            Net.checkAuth( ID, bool=>{
+            Net.checkAuth( bool=>{
                 if( bool ) Store.isAuthorized = true;
                 else       this.props.history.push('/login');
             });
