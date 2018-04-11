@@ -68,7 +68,11 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 
-		String[] arrPermitUri = {"MobileUserController", "MobileUserCertNoController"};
+		String[] arrPermitUri = {
+				"MobileUserController",
+				"MobileUserCertNoController",
+				"/users"
+		};
 		String[] arrLimitUri = {"mobileUserLogin", "mobileUserLogout", "mobileUserLoginConfirm"};
 
 		System.out.println("URL : " + url);
