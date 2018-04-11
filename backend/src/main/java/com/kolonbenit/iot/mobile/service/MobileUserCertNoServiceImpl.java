@@ -2,7 +2,7 @@ package com.kolonbenit.iot.mobile.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kolonbenit.benitware.common.util.CommandUtil;
+import com.kolon.common.messaging.service.SmsSenderService;
 import com.kolonbenit.benitware.common.util.FormattingUtil;
 import com.kolonbenit.benitware.common.util.httpClient.HttpClientUtil;
 import com.kolonbenit.benitware.common.util.mcache.JedisHelper;
@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,6 +33,10 @@ import java.util.Properties;
 
 @Service
 public class MobileUserCertNoServiceImpl extends BaseIbatisDao<Object, Object> implements MobileUserCertNoService {
+
+	// COMMON Life services
+	@Resource(name = "smsSenderService")
+	SmsSenderService smsSender;
 
 	/**
 	 * Logger for this class and subclasses
@@ -255,7 +260,9 @@ public class MobileUserCertNoServiceImpl extends BaseIbatisDao<Object, Object> i
 			String sMessage = MessageFormat.format(msg, sCertNum);
 			
 			try {
-				CommandUtil.runCommandSMS(strHeadCell, sMessage);
+//				CommandUtil.runCommandSMS(strHeadCell, sMessage);
+				smsSender.send(strHeadCell, sMessage);
+
 				resMsg = props.getProperty("mobile.send.cert.0001");	//인증번호가 SMS로 발송되었습니다.
 				rtnSuccess = true;
 			} catch (Exception e) {
@@ -284,7 +291,7 @@ public class MobileUserCertNoServiceImpl extends BaseIbatisDao<Object, Object> i
 		String resMsg = "";
 
 		String strOrgUserCell = parameter.getString("userCell");
-		String strOrgHeadCell = parameter.getString("headCell");		
+		String strOrgHeadCell = parameter.getString("headCell");
 		String strUserCell = FormattingUtil.cellPhoneNumHyphen(strOrgUserCell);
 		String strHeadCell = FormattingUtil.cellPhoneNumHyphen(strOrgHeadCell);
 
@@ -296,7 +303,7 @@ public class MobileUserCertNoServiceImpl extends BaseIbatisDao<Object, Object> i
 		if ( !parameter.containsKey("cmplxId") ) {
 			parameter.put("cmplxId", "");
 		}
-		
+
 		if ( !parameter.containsKey("dong") ) {
 			parameter.put("dong", "");
 		}
@@ -307,17 +314,17 @@ public class MobileUserCertNoServiceImpl extends BaseIbatisDao<Object, Object> i
 		// ID 찾기, PW 찾기, 회원가입
 		ResultSetMap checkHeadMap = null; //(ResultSetMap) this.getBySqlId(NAMESPACE+"checkMember" + certType, parameter);
 		ResultSetMap checkMemberMap = null;
-		
+
 		checkHeadMap = (ResultSetMap) this.getBySqlId(NAMESPACE+"checkHeadCert" , parameter);	//동호/단지에 해당하는 세대주 정보
-		
-		
-		
+
+
+
 		if (checkHeadMap != null) {
 			isHeadSuccess = true;
 		}
 
 		if (isHeadSuccess) {
-			
+
 			String sCertNum = RandomStringUtils.randomNumeric(6).toString();
 			Date expireDate = DateUtils.addMinutes(new Date(), 2);
 
@@ -327,37 +334,39 @@ public class MobileUserCertNoServiceImpl extends BaseIbatisDao<Object, Object> i
 
 			//MobileSessionUtils.setSessionObject(this.CERTIFICATION_NUMBER_SESSION_KEY, certMap, 0);
 			//2017.11.20 인증번호 세션관리에서 DB관리로 변경함(서버 2대로 운영시 센션 공유 문제발생)
-			
+
 			parameter.put("certNo", sCertNum);
 			parameter.put("certDt", expireDate);
 			parameter.put("headId", checkHeadMap.get("headId"));
 
 			this.insertBySqlId(NAMESPACE+"updateUserRegCertM", parameter);
-			
-			
+
+
 			String msg = props.getProperty("mobile.send.sms.cert.num");
 
 			//String sRegistNm = parameter.getString("userNm");
 			//if (sRegistNm != null && !"".equals(sRegistNm)) {
 			//	msg += " [" +sRegistNm+ "]";
 			//}
-			
+
 			String sMessage = MessageFormat.format(msg, sCertNum);
-			
+
 			try {
-				CommandUtil.runCommandSMS(strUserCell, sMessage);
+//				CommandUtil.runCommandSMS(strUserCell, sMessage);
+				smsSender.send( strUserCell, sMessage );
+
 				resMsg = props.getProperty("mobile.send.cert.0001");	//인증번호가 SMS로 발송되었습니다.
 				rtnSuccess = true;
 			} catch (Exception e) {
 				isHeadSuccess = false;
 				resMsg = props.getProperty("mobile.send.cert.0002");	//인증번호 발송 처리중 오류가 발생했습니다.
 			}
-								
-			
+
+
 		} else {
 			resMsg = props.getProperty("mobile.common.not.found");			//세대주 정보가 존재하지 않습니다.
 		}
-			
+
 		resMap.put("userCertId", parameter.get("userCertId"));
 		resMap.put("resFlag", rtnSuccess);
 		resMap.put("msg", resMsg);

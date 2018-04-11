@@ -19,8 +19,10 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.TimeZone;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
+import com.kolon.common.messaging.service.SmsSenderService;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.time.DateFormatUtils;
@@ -47,7 +49,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 //import com.iot.mobile.cvnet.ImageMovie;
-import com.kolonbenit.benitware.common.util.CommandUtil;
 import com.kolonbenit.benitware.common.util.FormattingUtil;
 import com.kolonbenit.benitware.common.util.JwtUtil;
 //import com.kolonbenit.benitware.common.util.MobileSessionUtils;
@@ -64,13 +65,14 @@ import redis.clients.jedis.Jedis;
 import com.kolonbenit.benitware.common.util.token.KeyMaker;
 import com.kolonbenit.benitware.common.util.token.TokenKey;
 import com.kolonbenit.benitware.common.util.StringUtil;
-import com.kolonbenit.benitware.common.util.httpClient.HttpClientUtil;
 
-import redis.clients.jedis.Jedis;
 import com.kolon.common.helper.JedisHelper;
 
 @Service
 public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> implements MobileUserService {
+	// COMMON Life Service
+	@Resource(name = "smsSenderService")
+	SmsSenderService smsSender;
 
 	/**
 	 * Logger for this class and subclasses
@@ -898,7 +900,8 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 			}
 			String message = sb.toString();
 
-			CommandUtil.runCommandSMS(strUserCell, message);
+//			CommandUtil.runCommandSMS(strUserCell, message);
+			smsSender.send(strUserCell, message);
 		}
 		return resMap;
 	}
@@ -938,7 +941,8 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 			String msg = props.getProperty("mobile.send.sms.search.pwd");
 			String message = MessageFormat.format(msg, strTempPlainPw);
 
-			CommandUtil.runCommandSMS(strUserCell, message);
+//			CommandUtil.runCommandSMS(strUserCell, message);
+			smsSender.send( strUserCell, message );
 		}
 		return resMap;
 	}
@@ -1151,7 +1155,8 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 				String sMessage = MessageFormat.format(msg, sCertNum);
 				
 				try {
-					CommandUtil.runCommandSMS(strCell, sMessage);
+//					CommandUtil.runCommandSMS(strCell, sMessage);
+					smsSender.send( strCell, sMessage );
 					resMsg = props.getProperty("mobile.send.cert.0001");	//인증번호가 SMS로 발송되었습니다.
 					rtnSuccess = true;
 				} catch (Exception e) {

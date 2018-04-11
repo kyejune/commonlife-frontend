@@ -3,7 +3,6 @@ package com.kolon.comlife.iot.service.impl;
 import com.google.common.base.CaseFormat;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.iot.exception.IotInfoGeneralException;
 import com.kolon.comlife.iot.exception.IotInfoNoDataException;
 import com.kolon.comlife.iot.exception.IotInfoUpdateFailedException;
