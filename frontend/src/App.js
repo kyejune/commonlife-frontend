@@ -17,6 +17,11 @@ import DrawerInjector from "./components/drawers/DrawerInjector";
 import Join from "./components/auth/Join";
 import Login from "./components/auth/Login";
 import FindAuth from "./components/auth/FindAuth";
+import LandingPage from "./components/LandingPage";
+import DeviceStorage from "react-device-storage";
+import Net from "./scripts/net";
+import Store from "./scripts/store";
+import {observer} from "mobx-react";
 
 
 class App extends Component {
@@ -26,6 +31,31 @@ class App extends Component {
 
         this.state = {
             scrolled: false,
+        }
+
+
+        // 앱 복귀시 로그인 체크 다시
+        document.addEventListener("resume", ()=>{
+            Store.isAuthorized = false;
+            setTimeout( this.checkAuth, 0 );
+
+        }, false );
+    }
+
+    checkAuth=()=>{
+        const S = this.storage = new DeviceStorage().localStorage();
+        const ID = S.read('savedId') || Store.auth.id;
+
+        if(ID){
+
+            Net.checkAuth( ID, bool=>{
+                if( bool ) Store.isAuthorized = true;
+                else       this.props.history.push('/login');
+            });
+
+        }else{
+
+            this.props.history.push('/login');
         }
     }
 
@@ -55,56 +85,58 @@ class App extends Component {
     }
 
     render() {
+        console.log( 'App isAuthorized', Store.isAuthorized );
 
-        return (
-            <HashRouter>
-
+        return <HashRouter>
                 <div className={classNames({
                     'App': true,
                     'cl-app--expand': this.state.scrolled
                 })}>
 
-                    <Header/>
+                    {Store.isAuthorized ? <div>
+                            <Header/>
+
+                            <div className="app-content">
+
+                                <Route component={DrawerInjector}/>
+
+                                <Switch>
+                                    <Route path="/community/:tab?/:id?/:drawer?" component={Community}/>
 
 
-                    <div className="app-content">
-
-                        <Route component={DrawerInjector}/>
-
-                        <Switch>
-                            <Route path="/community/:tab?/:id?/:drawer?" component={Community}/>
+                                    <Route path="/iot/:action?/:option1?/:option2?/:option3?/:option4?/:option5?" component={HomeIoT}/>
 
 
-                            <Route path="/iot/:action?/:option1?/:option2?/:option3?/:option4?/:option5?" component={HomeIoT}/>
+                                    <Route path="/info/:cate?/:option1?/:option2?" component={LifeInfo}/>
 
 
-                            <Route path="/info/:cate?/:option1?/:option2?" component={LifeInfo}/>
+                                    <Route path="/reservation/:id?/:add?" component={Reservation}/>
 
 
-                            <Route path="/reservation/:id?/:add?" component={Reservation}/>
+                                    <Route path="/playground" component={Playground}/>
 
+                                    <Route component={Community}/>
+                                </Switch>
 
-                            <Route path="/playground" component={Playground}/>
+                            </div>
+                            <Footer/>
+                        </div>
+                        :
 
-                            <Route component={Community}/>
-                        </Switch>
-
-                    </div>
-
-                    <Footer/>
-
-
-                    {/* 회원가입, 로그인 */}
-                    <Route path="/join/:step?" component={Join}/>
-                    <Route path="/login" component={Login}/>
-                    <Route path="/find/:mode" component={FindAuth}/>
+                        <div>
+                            <Route component={LandingPage} exact />
+                            {/* 회원가입, 로그인 */}
+                            <Route path="/join/:step?" component={Join}/>
+                            <Route path="/login" component={Login}/>
+                            <Route path="/find/:mode" component={FindAuth}/>
+                        </div>
+                    }
 
                 </div>
 
-            </HashRouter>
-        );
+            </HashRouter>;
 
     }
 }
 
-export default App;
+export default observer(App);

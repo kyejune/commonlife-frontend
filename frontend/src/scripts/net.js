@@ -276,11 +276,7 @@ export default {
     login( id, password, callback ){
 
         // password =
-
-        const GCM = 'dvCS7UlJeXA:APA91bEBwTT8oS8uHwFS1yzZrzUPt2p3IhsYlHW_N1onsJCqNoSX4jkNwR_KsH1kmJzmLIXjivF7l8O99JfvCjt8siZkNpIFHQFHQfFlLAi0CrF7TUmAwVKOEYmswggq6yTo4EFmxgeb';
-        const DEVICE_ID = '0b5a32e31439a5ce3d0b6511900a03b7';
-
-        axios.get(`${Store.api}/users/login?userId=${id}&userPw=${password}&gcmRegId=${GCM}&deviceId=${DEVICE_ID}`)
+        axios.get(`${Store.api}/users/login?userId=${id}&userPw=${password}&gcmRegId=${Store.gcm}&deviceId=${Store.deviceId}`)
             .then( response =>{
 
                 console.log( '로그인 성공:', response );
@@ -291,10 +287,46 @@ export default {
                 Store.cmplxId = DATA.cmplxId;
                 Store.homeId = DATA.homeId;
                 Store.auth = { name:DATA.userNm, id:DATA.userId, token:DATA.token, key:DATA.usrId };
-
+                Store.isAuthorized = true;
 
                 callback( response.data );
             })
-    }
+    },
+
+    findId( hhname, hhphone, name, phone, callback ){
+        // {{API_HOST}}/users/registration/findUserId?headNm=김영헌&headCell=01050447244&userNm=김연아&userCell=01050447244
+        axios.get(`${Store.api}/users/registration/findUserId?headNm=${hhname}&headCell=${hhphone}&userNm=${name}&userCell=${phone}`)
+            .then( response => {
+                callback( response.data );
+            });
+    },
+
+    resetPassword( hhname, hhphone, id, phone, callback ){
+        // {{API_HOST}}/users/registration/resetPwd?headNm=김영헌&headCell=01050447244&userId=yunakim&userCell=01050447244
+        axios.get(`${Store.api}/users/registration/resetPwd?headNm=${hhname}&headCell=${hhphone}&userId=${id}&userCell=${phone}`)
+            .then( response => {
+                callback( response.data );
+            });
+    },
+
+    checkAuth( id, callback ){
+      //{{API_HOST}}/users/status?userId=baek
+      axios.get( `${Store.api}/users/status?userId=${id}`)
+          .then( response => {
+                const BOOL = (response.data.status === '0001');
+                Store.isAuthorized = true;
+                callback( BOOL );
+          });
+    },
+
+
+    tokenUpdate(){
+    //{{API_HOST}}/users/pushToken?gcmRegId=dvCS7UlJeXA:APA91bEBwTT8oS8uHwFS1yzZrzUPt2p3IhsYlHW_N1onsJCqNoSX4jkNwR_KsH1kmJzmLIXjivF7l8O99JfvCjt8siZkNpIFHQFHQfFlLAi0CrF7TUmAwVKOEYmswggq6yTo4EFmxgeb&deviceId=0b5a32e31439a5ce3d0b6511900a03b7
+        axios.get( `${Store.api}/users/pushToken?gcmRegId=${Store.auth.token}`)
+            .then( response => {
+                console.log( 'token update:', response );
+            });
+
+    },
 
 };

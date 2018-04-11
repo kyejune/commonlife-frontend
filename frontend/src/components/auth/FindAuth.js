@@ -3,6 +3,7 @@ import classNames from "classnames";
 import LogoSrc from 'images/logo@3x.png';
 import TagComponent from "../ui/TagComponent";
 import {Link, withRouter} from "react-router-dom";
+import Net from "../../scripts/net";
 
 class FindAuth extends Component {
 
@@ -18,6 +19,19 @@ class FindAuth extends Component {
             phone:'',
             name:'',
         }
+    }
+
+
+    findId=()=>{
+        Net.findId( this.state.hhname, this.state.hhphone, this.state.name, this.state.phone, ()=>{
+           this.setState({ isComplete: true });
+        });
+    }
+
+    resetPW=()=>{
+        Net.resetPassword( this.state.hhname, this.state.hhphone, this.state.id, this.state.phone, ()=>{
+            this.setState({ isComplete: true });
+        });
     }
 
 
@@ -85,7 +99,7 @@ class FindAuth extends Component {
 
 
             Footer = <footer className="cl-opts__footer cl-flex cl-bg--darkgray">
-                <button className="color-primary cl-bold ml-auto">{T.title}</button>
+                <button className="color-primary cl-bold ml-auto" onClick={ MODE==='id'?this.findId:this.resetPW }>{T.title}</button>
             </footer>
 
         }else{

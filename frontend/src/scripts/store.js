@@ -97,7 +97,13 @@ export const MakingUserData = observable({
 
 const Store = observable({
 
+    isAuthorized: false,
+
     api:host,
+    gcm:'dvCS7UlJeXA:APA91bEBwTT8oS8uHwFS1yzZrzUPt2p3IhsYlHW_N1onsJCqNoSX4jkNwR_KsH1kmJzmLIXjivF7l8O99JfvCjt8siZkNpIFHQFHQfFlLAi0CrF7TUmAwVKOEYmswggq6yTo4EFmxgeb',
+    deviceId:'0b5a32e31439a5ce3d0b6511900a03b7',
+
+
     cmplxId:'127',
     homeId:'1',
 

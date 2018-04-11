@@ -13,28 +13,24 @@ class Login extends Component {
 
         const S = this.storage = new DeviceStorage().localStorage();
 
-        let sevedId = S.read('savedId');
+        const isSaveId = S.read('isSaveId')||false;
 
         this.state = {
-            id:sevedId||'',
+            id:isSaveId?(S.read('savedId')||''):'',
             pw:'',
-            isSaveId: sevedId?true:false,
+            isSaveId: isSaveId //sevedId?true:false,
         }
 
     }
 
     onChangeSaveId= evt =>{
         this.setState({ isSaveId: evt.target.checked });
+        this.storage.save( 'isSaveId', evt.target.checked );
     }
 
     onLogin=()=>{
 
-        if( this.state.isSaveId )
-            this.storage.save( 'savedId', this.state.id );
-        else
-            this.storage.delete( 'savedId');
-
-
+        this.storage.save( 'savedId', this.state.id );
 
         Net.login( this.state.id, this.state.pw, res=>{
            this.props.history.push('/');
@@ -45,7 +41,7 @@ class Login extends Component {
     render() {
         return <div className="cl-login cl-full-page cl-bg--white">
 
-            <button className="cl-close__button--black" onClick={this.props.history.goBack}/>
+            {/*<button className="cl-close__button--black" onClick={this.props.history.goBack}/>*/}
 
             <div className="cl-flex cl-logo-pack">
                 <img className="cl-logo__img" src={LogoSrc}/>
