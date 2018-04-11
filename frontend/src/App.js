@@ -85,7 +85,6 @@ class App extends Component {
     }
 
     render() {
-        console.log( 'App isAuthorized', Store.isAuthorized );
 
         return <HashRouter>
                 <div className={classNames({
