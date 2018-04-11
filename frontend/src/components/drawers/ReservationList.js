@@ -12,20 +12,30 @@ import ReserveIcPlus from 'images/page-1@3x.png';
 import ReserveIcNext from 'images/shape-time-next@3x.png';
 import ReserveIcTime from 'images/shape-time-plus@3x.png';
 import ReserveIcAlert from 'images/alert-icon-red@3x.png';
+import net from "../../scripts/net";
+import TitleWithoutSelect from "../ui/TitleWithoutSelect";
 
 
 class ReservationList extends Component{
 
-	componentWillMount(){
+	componentDidMount(){
 		// ContentHolder에 전달
 		this.props.updateTitle(
 			<h2 className="md-title md-title--toolbar cl-ellipsis">
 				<span>Reservation</span>
 			</h2>
 		);
+
+		net.getReservationGroup( this.props.match.params.add, data => {
+			this.setState( { group: data } );
+		} );
 	}
 
 	render(){
+
+		if( !this.state || !this.state.group ) {
+			return '';
+		}
 
 		return (
 			<div className="cl-reservation-list">
@@ -37,16 +47,39 @@ class ReservationList extends Component{
 						<img src={ReserveGroupHome} alt=""
 							 className="cl-reservation-list__info-type-img"/>
 						<div className="cl-reservation-list__info-text">
-							<h4>생활 서비스</h4>
-							<p className="cl-ellipsis">세탁배달, 청소서비스, 음식배달외 3</p>
+							<h4>{ this.state.group.title }</h4>
+							<p className="cl-ellipsis">{ this.state.group.summary }</p>
 						</div>
 					</div>
-					<p className="cl-reservation-list__info-paragraph">COMMON Life에서 제공하는 생활편의 서비스입니다.</p>
+					<p className="cl-reservation-list__info-paragraph">{ this.state.group.description }</p>
 				</div>
 
-				<SelectWithTitle/>
+				{ ( this.state && this.state.group ) &&
+                <TitleWithoutSelect label={ '서비스' } displayLength={ this.state.group.schemes.length } />
+				}
 
 				<ul className="cl-reservation__list--service">
+					{
+						this.state.group.schemes.map( ( scheme, key ) => {
+							return <li className="cl-reservation__list-item cl-reservation__notice" key={ key }>
+                                <div>
+                                    <div className="cl-flex-between">
+                                        <img src={ReserveServiceCleaning} alt=""
+                                             className="cl-reservation__list-item-type-img"/>
+                                        <div className="cl-reservation__list-item-text">
+                                            <h5>{ scheme.title }</h5>
+                                            <p className="cl-ellipsis">{ scheme.summary }</p>
+                                        </div>
+                                        <Link to={'/reservation/0'} className="cl-reservation__list-item-bullet">
+                                            <img src={ReserveIcPlus} alt=""/>
+                                            <span>예약하기</span>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </li>
+						} )
+					}
+					{ 1 === 0 && <div>
 					<li className="cl-reservation__list-item cl-reservation__alert">
 						<div>
 							<div className="cl-flex-between">
@@ -134,6 +167,7 @@ class ReservationList extends Component{
 							</div>
 						</div>
 					</li>
+                    </div> }
 				</ul>
 			</div>
 		)
