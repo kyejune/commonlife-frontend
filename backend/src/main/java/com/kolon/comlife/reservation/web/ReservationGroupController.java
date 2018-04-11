@@ -32,10 +32,16 @@ public class ReservationGroupController {
     @GetMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity index(HttpServletRequest request) {
-        List<ReservationGroupInfo> groups = service.index( new HashMap() );
+    public ResponseEntity index(
+            HttpServletRequest request
+            , @RequestParam( value = "cmplxIdx", required = false, defaultValue = "0" ) int cmplxIdx
+    ) {
+        HashMap groupParams = new HashMap();
+        groupParams.put( "cmplxIdx", cmplxIdx );
+        List<ReservationGroupInfo> groups = service.index( groupParams );
 
         // 현재 그룹에 속해있는 스키마들을 가져온다
+        /*
         List<Integer> ids = new ArrayList<Integer>();
         for ( ReservationGroupInfo group: groups ) {
             ids.add( group.getIdx() );
@@ -43,8 +49,17 @@ public class ReservationGroupController {
         HashMap<String, Object> params = new HashMap<String, Object>();
         params.put( "ids", ids );
         List<ReservationSchemeInfo> schems = schemeService.index( params );
+        //*/
 
-        return ResponseEntity.status( HttpStatus.OK ).body( groups );
+        HashMap schemeParams = new HashMap();
+        schemeParams.put( "cmplxIdx", cmplxIdx );
+        List<ReservationSchemeInfo> schemes = schemeService.index( schemeParams );
+
+        HashMap result = new HashMap();
+        result.put( "groups", groups );
+        result.put( "schemes", schemes );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
     @CrossOrigin

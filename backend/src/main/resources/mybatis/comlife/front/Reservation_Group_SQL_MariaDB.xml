@@ -6,7 +6,7 @@
     <select id="index" parameterType="java.util.Map" resultType="reservationGroupInfo">
         SELECT *
         FROM   `RESERVATION_GROUPS`
-        WHERE  1=1
+        WHERE  `DEL_YN` = 'N'
         <choose>
             <when test='ids != null'>
                 AND
@@ -15,11 +15,18 @@
                     #{id}
                 </foreach>
             </when>
+            <when test='cmplxIdx != null'>
+                AND
+                CMPLX_IDX = #{cmplxIdx}
+            </when>
         </choose>
     </select>
 
     <select id="show" parameterType="java.util.Map" resultType="reservationGroupInfo">
-
+        SELECT *
+        FROM   `RESERVATION_GROUPS`
+        WHERE  `DEL_YN` = 'N'
+        AND    `IDX` = #{idx}
     </select>
 
     <insert id="create" parameterType="reservationGroupInfo">
