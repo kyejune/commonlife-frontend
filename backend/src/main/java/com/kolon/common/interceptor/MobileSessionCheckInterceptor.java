@@ -71,7 +71,8 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		String[] arrPermitUri = {
 				"MobileUserController",
 				"MobileUserCertNoController",
-				"/users"
+				"/users",
+				"/postFiles"
 		};
 		String[] arrLimitUri = {"mobileUserLogin", "mobileUserLogout", "mobileUserLoginConfirm"};
 
