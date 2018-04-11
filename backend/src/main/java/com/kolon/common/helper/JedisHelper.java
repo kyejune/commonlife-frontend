@@ -86,7 +86,8 @@ public class JedisHelper {
      *            사용 완료된 제디스 객체
      */
     final public void returnResource(Jedis jedis) {
-        this.pool.returnResource(jedis);
+        jedis.close();
+//        this.pool.returnResource(jedis);
     }
 
     /**
