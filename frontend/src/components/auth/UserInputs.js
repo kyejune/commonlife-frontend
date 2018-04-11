@@ -18,6 +18,14 @@ class UserInputs extends Component {
                 rule: (val, options)=>{
                     return val === options[0];
                 }
+            },
+
+            mail:{
+                message:'The :attribute must be a valid email address.',
+                rule: val =>{
+                    const R = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    return R.test( val );
+                }
             }
         });
 
@@ -123,7 +131,7 @@ class UserInputs extends Component {
                        value={ user.mail }
                        onChange={ evt=> MakingUserData.user = { ...user, mail: evt.target.value }}
                 />
-                {this.validator.message('사용자 이메일', user.mail, `required|email`)}
+                {this.validator.message('사용자 이메일', user.mail, `required|mail`)}
 
 
                 {/* 사용자 휴대폰 번호 */}
