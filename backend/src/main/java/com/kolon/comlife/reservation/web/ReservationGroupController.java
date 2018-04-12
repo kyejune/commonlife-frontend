@@ -53,6 +53,7 @@ public class ReservationGroupController {
 
         HashMap schemeParams = new HashMap();
         schemeParams.put( "cmplxIdx", cmplxIdx );
+        schemeParams.put( "groupIdx", 0 );
         List<ReservationSchemeInfo> schemes = schemeService.index( schemeParams );
 
         HashMap result = new HashMap();
