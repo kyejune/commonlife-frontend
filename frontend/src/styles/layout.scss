@@ -153,10 +153,11 @@ body.cl-dom--added{
     }
 }
 
-.cl-tab--info{
+.cl-info-container.cl-tab--info{
     .cl-fitted-box{
         @extend .abs-scroll;
         height: calc( 100vh - 56px*2 - 158px );
+        transiton: $dur height ease-in-out;
     }
 }
 
@@ -273,9 +274,7 @@ body.cl-dom--added{
 
         .cl-tab--info{
             .cl-fitted-box{
-                position: absolute;
-                bottom: 0;
-                height: calc( 100vh - 85px );
+                height: calc( 100vh - 56px );
             }
         }
 
@@ -323,6 +322,11 @@ body.cl-dom--added{
 
 .cl-bg--strongdark{
     background-color: #3F4248;
+    color: white;
+}
+
+.cl-bg--statusdark{
+    background-color: #6A6D72;
     color: white;
 }
 

@@ -11,15 +11,19 @@ import Status from "../drawers/lifeInfo/Status";
 import Profile from "../drawers/lifeInfo/Profile";
 import ContentPage from "../drawers/lifeInfo/ContentPage";
 import Net from "../../scripts/net";
+import IconLoader from "../ui/IconLoader";
+import StatusDetail from "../drawers/lifeInfo/StatusDetail";
 
 class LifeInfo extends Component {
 
     componentDidMount() {
         this.updateRoute();
 
-        // Net.getInfoPage( data=>{
-        //
-        // });
+        Net.getInfoPage( data=>{
+
+            this.setState( data );
+            console.log( 'info dashboard:', data );
+        });
 
     }
 
@@ -44,8 +48,8 @@ class LifeInfo extends Component {
                 guide: 'info-subject',
             },
 
-            benefit: {
-                benefit: 'info-subject',
+            benefits: {
+                benefits: 'info-subject',
             },
 
             profile: {
@@ -75,82 +79,56 @@ class LifeInfo extends Component {
     }
 
     render() {
+        if( ! this.state ) return <div/>;
+
+        const { cmplxNm, dong, ho, infoList, notice, point, startDt, userImgSrc, userNm } = this.state;
 
         return <div className="cl-info-container cl-tab--info">
             <div className="cl-bg--black">
 
-                <div className="cl-second-header cl-profile-card">
+                <div className="cl-fitted-box">
+
+                <div className="cl-profile-card cl-second-header">
                     <div className="cl-flex cl-summary">
-                        <div className="cl-avatar"/>
+                        <div className="cl-avatar" style={{ backgroundImage: `url(${userImgSrc})` }}/>
                         <div>
-                            <h4>김정신</h4>
-                            <p>역삼하우스 101동 202호</p>
+                            <h4>{userNm}</h4>
+                            <p>{`${cmplxNm} ${dong}동 ${ho}호`}</p>
                         </div>
                     </div>
 
                     <Link className="cl-edit color-primary" to="/info/profile">ProfileEdit</Link>
 
                     <footer className="cl-profile-card__footer cl-flex">
-                        <p>입주일: 2017년 4월 1일</p>
-                        <p className="ml-auto">포인트: 25</p>
+                        <p>입주일: {startDt}</p>
+                        <p className="ml-auto">포인트: ${point}</p>
                     </footer>
                 </div>
 
-                <div className="cl-fitted-box">
+
 
                     <div className="cl-info-notice">
                         <h4>Notice</h4>
                         <Link to="/info/notice/0" className="cl-ellipsis--3" style={{'WebkitBoxOrient': 'vertical'}}>
-                            역삼동 하우징 엘레베이터 정기검진 안내말씀 드립니다.<br/>
-                            8월 30일 오후1시 부터 약 1시간동안 역삼동 하우징 101동<br/>
-                            엘레베이터 정기검진으로 인하여...
+                            {notice}
                         </Link>
                     </div>
 
 
                     <ul className="cl-info-dashboard__list">
 
-                        <li>
-                            <Link to="/community/event">
-                                <img className="cl__thumb--rounded" src={"icons/cl_life-10.svg"} alt="svg"/>
-                                <p>Event Feed</p>
-                            </Link>
-                        </li>
+                        { infoList.map( (item, key)=>{
 
-                        <li>
-                            <Link to="/info/support">
-                                <img className="cl__thumb--rounded" src={"icons/cl_life-11.svg"} alt="svg"/>
-                                <p>Living Support</p>
-                            </Link>
-                        </li>
+                            const TO = ( item.infoKey === 'event' )?'/community/event':`/info/${item.infoKey}`;
 
-                        <li>
-                            <Link to="/info/guide">
-                                <img className="cl__thumb--rounded" src={"icons/cl_life-12.svg"} alt="svg"/>
-                                <p>Living Guide</p>
-                            </Link>
-                        </li>
-
-                        <li>
-                            <Link to="/info/benefit">
-                                <img className="cl__thumb--rounded" src={"icons/cl_life-9.svg"} alt="svg"/>
-                                <p>Benefits</p>
-                            </Link>
-                        </li>
-
-                        <li>
-                            <Link to="/info/status">
-                                <img className="cl__thumb--rounded" src={"icons/cl_life-7.svg"} alt="svg"/>
-                                <p>My Status</p>
-                            </Link>
-                        </li>
-
-                        <li>
-                            <Link to="/info/profile">
-                                <img className="cl__thumb--rounded" src={"icons/cl_life-8.svg"} alt="svg"/>
-                                <p>Profile</p>
-                            </Link>
-                        </li>
+                            return <li key={key}>
+                                <Link to={TO}>
+                                    <IconLoader className="cl__thumb--rounded" src={ item.imgSrc }/>
+                                    <p>{ item.infoNm }</p>
+                                </Link>
+                            </li>
+                          })
+                        }
 
                     </ul>
                 </div>
@@ -178,15 +156,14 @@ class LifeInfo extends Component {
                 <ContentPage/>
             </DrawerWrapper>
 
-
-            {/* 리방가이드 목록 */}
-            {/*<DrawerWrapper drawer="info-guide" title="Living Guide" back >*/}
-            {/*<SubjectList type="guide"/>*/}
-            {/*</DrawerWrapper>*/}
+            {/* My Status */}
+            <DrawerWrapper drawer="info-status" title="My Status" darkgray back>
+                <Status/>
+            </DrawerWrapper>
 
             {/* My Status */}
-            <DrawerWrapper drawer="info-status" title="My Status" back>
-                <Status/>
+            <DrawerWrapper drawer="info-status-detail" statusdark back>
+                <StatusDetail/>
             </DrawerWrapper>
 
             {/* Profile */}

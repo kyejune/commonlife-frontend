@@ -1,26 +1,54 @@
 import React, { Component } from 'react';
+import Net from "../../../scripts/net";
+import IconLoader from "../../ui/IconLoader";
+import Link from "react-router-dom/es/Link";
 
 class Status extends Component {
+
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            branch:'',
+            desc:'',
+            list:[],
+        }
+    }
+
+    componentDidMount(){
+        Net.getInfoSubjectListOf('status', res=>{
+            console.log( 'status:', res );
+            this.setState({
+                branch: res.cmplxNm,
+                desc: `${res.headNm} 세대`,// | ${}동 ${}호`,
+                list: res.infoList,
+            })
+        });
+    }
+
+
     render() {
-        return <div>
+        return <div className="cl-info-status">
+
+            <li className="cl-card-item">
+                <h4 className="cl-name">역삼동 하우징</h4>
+                <p className="cl-desc">
+                    조성우 세대 | 101동 1002호
+                </p>
+            </li>
+
             <ul className="cl-status-vertical-list">
-               <li className="cl-card-item--dark">
-                   <h4 className="cl-name">
-                       역삼동 하우징
-                       <span className="cl-desc">(서울시 서초구 강남대로 373)</span>
-                   </h4>
-                   <p className="cl-desc">
-                       101동 1002호 <span>조성우 세대</span>
-                   </p>
-               </li>
+
+                {this.state.list.map( (item, key)=>{
+                  return <li key={key}>
+                      <Link className="cl-flex w-100" to={`/info/status/${item.myStatusIdx}`}>
+                          <h4 className="cl__title">{item.myStatusNm}</h4>
+                          <div className="cl-next__button ml-auto"/>
+                      </Link>
+                  </li>
+                })}
+
             </ul>
-
-
-            <footer className="cl-opts__footer cl-flex">
-                <button className="ml-auto pr-1em">
-                    <span className="color-primary cl-bold">확인</span>
-                </button>
-            </footer>
 
         </div>
     }

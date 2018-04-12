@@ -209,7 +209,7 @@
     width: 40px;
     height: 40px;
     background-image: url('images/profile-thumb-img@3x.png');
-    background-size: contain;
+    background-size: cover;
     clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
 }
 

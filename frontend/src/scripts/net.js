@@ -397,10 +397,37 @@ export default {
 
     // My Info
     getInfoPage( callback ){
-        axios.get('/info')
+        axios.get('/info/')
             .then( response=>{
                 callback( response.data );
             });
-    }
+    },
+
+    // 공지상세
+    getNoticeDetail( callback ){
+        axios.get('/info/notice' )
+            .then( response=>{
+                callback( response.data );
+            });
+    },
+
+    // 인포페이지 클릭하면 나오는 페이지들...
+    getInfoSubjectListOf( type, callback ){
+        axios.get('/info/' + type )
+            .then( response=>{
+                callback( response.data );
+            });
+    },
+
+
+    // 리빙가이드, 베네핏 목록
+    getInfoDetailOf( type, idx, callback ){
+        axios.get( `/info/${type}/${idx}` )
+            .then( response=>{
+                callback( response.data );
+            });
+    },
+
+
 
 };

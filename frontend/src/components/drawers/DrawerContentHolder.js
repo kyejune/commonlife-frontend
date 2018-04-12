@@ -123,7 +123,8 @@ class DrawerContentHolder extends Component {
                     {"cl-bg--lightgray":this.props.lightgray },
                     {"cl-bg--darkgray":this.props.darkgray },
                     {"cl-bg--deepdark":this.props.deepdark },
-                    {"cl-bg--strongdark":this.props.strongdark }
+                    {"cl-bg--strongdark":this.props.strongdark },
+                    {"cl-bg--statusdark":this.props.statusdark }
                     )}>
 
                     {childrenWithProps}
