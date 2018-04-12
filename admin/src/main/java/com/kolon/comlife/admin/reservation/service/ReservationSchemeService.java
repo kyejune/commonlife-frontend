@@ -9,6 +9,6 @@ public interface ReservationSchemeService {
     public List<ReservationSchemeInfo> index( Map params );
     public ReservationSchemeInfo show( int idx );
     public ReservationSchemeInfo create( ReservationSchemeInfo info );
-    public int update( ReservationSchemeInfo info );
+    public ReservationSchemeInfo update( ReservationSchemeInfo info );
     public int delete( ReservationSchemeInfo info );
 }

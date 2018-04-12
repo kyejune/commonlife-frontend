@@ -262,7 +262,7 @@ public class ReservationSchemeController {
         info.setPrecautions( precautions );
         info.setDelYn( delYn );
 
-        ReservationSchemeInfo savedInfo = service.create( info );
+        ReservationSchemeInfo savedInfo = service.update( info );
 
         HashMap params = new HashMap();
         params.put( "schemeIdx", info.getIdx() );

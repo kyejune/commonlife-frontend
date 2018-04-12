@@ -34,8 +34,9 @@ public class ReservationSchemeServiceImpl implements ReservationSchemeService {
     }
 
     @Override
-    public int update(ReservationSchemeInfo info) {
-        return dao.update( info );
+    public ReservationSchemeInfo update(ReservationSchemeInfo info) {
+        dao.update( info );
+        return dao.show( info.getIdx() );
     }
 
     @Override
