@@ -71,12 +71,10 @@ public class ReservationGroupController {
         ReservationGroupInfo info = service.show( id );
 
         // 현재 그룹에 속해있는 스키마들을 가져온다
-        List<Integer> ids = new ArrayList<Integer>();
-        ids.add( info.getIdx() );
         HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put( "ids", ids );
-        List<ReservationSchemeInfo> schems = schemeService.index( params );
-        info.setSchemes( schems );
+        params.put( "cmplxIdx", id );
+        List<ReservationSchemeInfo> schemes = schemeService.index( params );
+        info.setSchemes( schemes );
 
         return ResponseEntity.status( HttpStatus.OK ).body( info );
     }
