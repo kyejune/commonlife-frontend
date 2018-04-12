@@ -71,8 +71,8 @@ public class ReservationGroupController {
         ReservationGroupInfo info = service.show( id );
 
         // 현재 그룹에 속해있는 스키마들을 가져온다
-        HashMap<String, Object> params = new HashMap<String, Object>();
-        params.put( "cmplxIdx", id );
+        HashMap params = new HashMap();
+        params.put( "groupIdx", id );
         List<ReservationSchemeInfo> schemes = schemeService.index( params );
         info.setSchemes( schemes );
 
