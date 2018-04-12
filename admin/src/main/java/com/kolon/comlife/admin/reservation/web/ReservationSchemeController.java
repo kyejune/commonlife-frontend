@@ -156,11 +156,13 @@ public class ReservationSchemeController {
             allowComplexService.create( i );
         }
 
-        for (int element : amenities) {
-            ReservationAmenitySchemeInfo i = new ReservationAmenitySchemeInfo();
-            i.setAmenityIdx( element );
-            i.setSchemeIdx( savedInfo.getIdx() );
-            amenitySchemeService.create( i );
+        if( amenities != null ) {
+            for (int element : amenities) {
+                ReservationAmenitySchemeInfo i = new ReservationAmenitySchemeInfo();
+                i.setAmenityIdx( element );
+                i.setSchemeIdx( savedInfo.getIdx() );
+                amenitySchemeService.create( i );
+            }
         }
 
         return "redirect:" + redirectTo;
@@ -274,11 +276,13 @@ public class ReservationSchemeController {
         }
 
         amenitySchemeService.delete( params );
-        for (int element : amenities) {
-            ReservationAmenitySchemeInfo i = new ReservationAmenitySchemeInfo();
-            i.setAmenityIdx( element );
-            i.setSchemeIdx( savedInfo.getIdx() );
-            amenitySchemeService.create( i );
+        if( amenities != null ) {
+            for (int element : amenities) {
+                ReservationAmenitySchemeInfo i = new ReservationAmenitySchemeInfo();
+                i.setAmenityIdx( element );
+                i.setSchemeIdx( savedInfo.getIdx() );
+                amenitySchemeService.create( i );
+            }
         }
 
         return "redirect:" + redirectTo;
