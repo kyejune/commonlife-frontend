@@ -102,9 +102,7 @@ class ReservationDetail extends Component {
                         // "cabinet"
                     ]
                 },
-                "notice": [
-                    data.precautions
-                ]
+                "notice": data.precautions.split( '\n' )
             };
 
             if( data.images ) {
