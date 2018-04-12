@@ -104,6 +104,11 @@ public class InfoController {
                              "\n- 점검 예상 시간 9:00 ~ 14:00 중 1시간 ");
         postInfo.setTitle("'역삼동 하우스' 엘리베이터 점검 안내");
         postInfo.setDelYn("N");
+        postInfo.setLikesCount(1);
+        postInfo.setMyLikeFlag(true);
+        postInfo.setRegDttm("2018-03-27 07:34:59.0");
+        postInfo.setUpdDttm("2018-03-27 07:34:59.0");
+        postInfo.setRsvYn("N");
         postInfo.setRsvMaxCnt(0);
         postInfo.setRsvCount(0);
         postInfo.setRsvFlag(false);
