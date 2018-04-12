@@ -1,5 +1,7 @@
 package com.kolon.comlife.info.web;
 
+import com.kolon.comlife.common.model.DataListInfo;
+import com.kolon.comlife.info.model.CategoryInfo;
 import com.kolon.comlife.info.model.InfoData;
 import com.kolon.comlife.info.model.InfoMain;
 import com.kolon.comlife.post.model.PostInfo;
@@ -158,15 +160,173 @@ public class InfoController {
         return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoNoticeMockValue() );
     }
 
+    private List<CategoryInfo> getInfoLivingGuideMockValue() {
 
+        List categoryList = new ArrayList();
+        CategoryInfo category;
+
+        category = new CategoryInfo();
+        category.setCateIdx( 1 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "유용한 정보" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-1");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder(1);
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        category = new CategoryInfo();
+        category.setCateIdx( 2 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "예약관련 안내" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-2");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder(2);
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        category = new CategoryInfo();
+        category.setCateIdx( 3 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "편의시설 안내" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-3");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder(3);
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        category = new CategoryInfo();
+        category.setCateIdx( 4 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "게스트관련 안내" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-1");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder(4);
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        category = new CategoryInfo();
+        category.setCateIdx( 5 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "개인정보 취급 정책 안내" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-2");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder( 5 );
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        category = new CategoryInfo();
+        category.setCateIdx( 6 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "서비스 약관" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-3");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder( 6 );
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        category = new CategoryInfo();
+        category.setCateIdx( 6 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "서비스 약관" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-3");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder( 6 );
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        category = new CategoryInfo();
+        category.setCateIdx( 7 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "커뮤니티 가이드라인" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-3");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder( 7 );
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        return categoryList;
+    }
 
     @CrossOrigin
     @GetMapping(
             value = "/guide",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getInfoGuide(HttpServletRequest request) {
+        DataListInfo dataListInfo = new DataListInfo();
 
-        return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoNoticeMockValue() );
+        dataListInfo.setData( this.getInfoLivingGuideMockValue() );
+        dataListInfo.setMsg("Living Guide 목록 가져오기");
+
+        return ResponseEntity.status( HttpStatus.OK ).body( dataListInfo );
+    }
+
+    private List<CategoryInfo> getInfoBenefitsMockValue() {
+
+        List categoryList = new ArrayList();
+        CategoryInfo category;
+
+        category = new CategoryInfo();
+        category.setCateIdx( 10 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "역삼휘트니스 센터 25%" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-1");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder(1);
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        category = new CategoryInfo();
+        category.setCateIdx( 12 );
+        category.setCmplxId( 125 );
+        category.setCateNm( "프레쉬 코드 셀러드 - 25%" );
+        category.setCateId(null);
+        category.setImgSrc("cl_house-2");
+        category.setDesc("~~~ ~~~");
+        category.setDispOrder(2);
+        category.setSetYn("Y");
+        category.setDelYn("N");
+        category.setRegDttm("2018-03-29 06:48:47.0");
+        category.setUpdDttm("2018-03-29 06:48:47.0");
+        categoryList.add(category);
+
+        return categoryList;
     }
 
     @CrossOrigin
@@ -175,7 +335,12 @@ public class InfoController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getInfoBenefits(HttpServletRequest request) {
 
-        return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoNoticeMockValue() );
+        DataListInfo dataListInfo = new DataListInfo();
+
+        dataListInfo.setData( this.getInfoBenefitsMockValue() );
+        dataListInfo.setMsg("Benefits 목록 가져오기");
+
+        return ResponseEntity.status( HttpStatus.OK ).body( dataListInfo );
     }
 
 
