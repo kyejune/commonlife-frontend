@@ -5,7 +5,6 @@ import com.kolon.comlife.info.model.InfoMain;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.users.model.PostUserInfo;
-import com.kolon.comlife.users.model.UserInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/info/*")
@@ -61,9 +59,9 @@ public class InfoController {
         dataList.add( data );
 
         data = new InfoData();
-        data.setInfoKey("benifits");
+        data.setInfoKey("benefits");
         data.setImgSrc("cl_life-9");
-        data.setInfoNm("Benifits");
+        data.setInfoNm("Benefits");
         dataList.add( data );
 
         data = new InfoData();
@@ -151,7 +149,6 @@ public class InfoController {
         return postInfo;
     }
 
-
     @CrossOrigin
     @GetMapping(
             value = "/notice",
@@ -160,5 +157,26 @@ public class InfoController {
 
         return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoNoticeMockValue() );
     }
+
+
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/guide",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getInfoGuide(HttpServletRequest request) {
+
+        return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoNoticeMockValue() );
+    }
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/benefits",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getInfoBenefits(HttpServletRequest request) {
+
+        return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoNoticeMockValue() );
+    }
+
 
 }
