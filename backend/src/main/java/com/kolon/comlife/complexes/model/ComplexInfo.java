@@ -18,6 +18,12 @@ public class ComplexInfo extends ComplexInfoBase {
     private String mapSrc;
     private String logoImgSrc;  // LOGO IMAGE SOURCE
     private String mnlSrc;      // ??
+    private String clCmplxNm;       // CL_CMPLX_NM
+    private String clCmplxAddr;     // CL_CMPLX_ADDR
+    private String clMapSrc;   // CL_MAP_SRC
+    private String clLogoImgSrc;    // CL_LOGO_IMG_SRC
+
+
 
     public ComplexInfo() {
         super(0,null, null);
@@ -55,6 +61,38 @@ public class ComplexInfo extends ComplexInfoBase {
         this.mapSrc = mapSrc;
         this.logoImgSrc = logoImgSrc;
         this.mnlSrc = mnlSrc;
+    }
+
+    public String getClCmplxNm() {
+        return clCmplxNm;
+    }
+
+    public void setClCmplxNm(String clCmplxNm) {
+        this.clCmplxNm = clCmplxNm;
+    }
+
+    public String getClCmplxAddr() {
+        return clCmplxAddr;
+    }
+
+    public void setClCmplxAddr(String clCmplxAddr) {
+        this.clCmplxAddr = clCmplxAddr;
+    }
+
+    public String getClMapSrc() {
+        return clMapSrc;
+    }
+
+    public void setClMapSrc(String clMapSrc) {
+        this.clMapSrc = clMapSrc;
+    }
+
+    public String getClLogoImgSrc() {
+        return clLogoImgSrc;
+    }
+
+    public void setClLogoImgSrc(String clLogoImgSrc) {
+        this.clLogoImgSrc = clLogoImgSrc;
     }
 
     public String getCmplxCd() {

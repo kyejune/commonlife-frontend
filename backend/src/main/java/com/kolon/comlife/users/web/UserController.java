@@ -1,13 +1,12 @@
 package com.kolon.comlife.users.web;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
-import com.kolon.comlife.imageStore.model.ImageInfo;
+import com.kolon.comlife.complexes.model.ComplexInfo;
+import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.users.util.IokUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
-import com.kolonbenit.iot.mobile.controller.MobileUserController;
+import com.kolonbenit.iot.mobile.service.MobileUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 @RestController
@@ -33,10 +29,12 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    // todo: refactoring: IOK 코드 수정을 최소로 하려고 Controller를 호출
-    //   transaction 이슈가 발생하므로 별도 서비스 구현하여 통합하도록 해야함
     @Autowired
-    protected MobileUserController mobileUserController;
+    MobileUserService mobileUserService;
+
+    @Autowired
+    ComplexService complexService;
+
 
     /**
      * @description 중복 로그인을 체크하고 모바일 로그인을 처리한다.
@@ -54,12 +52,13 @@ public class UserController {
         String              retMsg;
         boolean             resFlag;
         String              resType;
+        ComplexInfo         cmplxInfo;
 
         parameter = IokUtil.buildRequestParameter(request);
 
         try {
             // 1. 기존 다른 기기에서의 로그인 여부 확인
-            resultMobileUser = mobileUserController.mobileUserLoginConfirm( parameter, null );
+            resultMobileUser = mobileUserService.mobileUserLoginConfirm( parameter );
             resFlag = IokUtil.getResFlag( resultMobileUser );
             resType = IokUtil.getResType( resultMobileUser );
 
@@ -70,7 +69,7 @@ public class UserController {
             }
 
             // 2. 새롭게 로그인
-            resultMobileUser = mobileUserController.mobileUserLogin( parameter, null );
+            resultMobileUser = mobileUserService.mobileUserLogin( parameter );
             resFlag = IokUtil.getResFlag( resultMobileUser );
             if( !resFlag ) {
                 return ResponseEntity
@@ -85,15 +84,20 @@ public class UserController {
                 retMsg = "로그인에 성공하였습니다."; // todo: message 옮기기
             }
 
+            cmplxInfo = complexService.getComplexById( ((Integer)resultMobileUser.get("CMPLX_ID")).intValue() );
+
 
         } catch( Exception e ) {
             return IokUtil.convertExceptionToResponse( e );
         }
 
-
         result = new HashMap();
         result.put("msg", retMsg);
         result.put("cmplxId", resultMobileUser.get("CMPLX_ID"));
+        result.put("cmplxNm", cmplxInfo.getClCmplxNm());   // COMMONLife Complex Name
+        result.put("cmplxAddr", cmplxInfo.getClCmplxAddr());   // COMMONLife Complex Address
+        result.put("mapSrc", cmplxInfo.getClMapSrc());   // COMMONLife Complex Address
+        result.put("logoImgSrc", cmplxInfo.getClLogoImgSrc());   // COMMONLife Complex Address
         result.put("homeId", resultMobileUser.get("HOME_ID"));
         result.put("userId", resultMobileUser.get("USER_ID"));
         result.put("usrId", resultMobileUser.get("USR_ID"));
@@ -120,23 +124,22 @@ public class UserController {
     public ResponseEntity updateGcmRegId( HttpServletRequest request )
     {
         RequestParameter    parameter;
-        Map<String, Object> result;
-        boolean             resFlag;
+        int nCnt;
 
         parameter = IokUtil.buildRequestParameter( request );
 
         try {
-            result = mobileUserController.modifyGcmRegInfoIntro( parameter, null );
-            resFlag = IokUtil.getResFlag( result );
-
-            if( !resFlag ) {
-                return ResponseEntity.status( HttpStatus.NOT_FOUND ).body( result );
+            nCnt = mobileUserService.modifyGcmRegInfoIntro(parameter);
+            if( nCnt < 1 ) {
+                return ResponseEntity
+                        .status( HttpStatus.NOT_FOUND )
+                        .body( new SimpleErrorInfo("해당 기기를 찾을 수 없습니다.") );
             }
         } catch( Exception e ) {
             return IokUtil.convertExceptionToResponse( e );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( result );
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("업데이트하였습니다.") );
     }
 
 
@@ -162,7 +165,7 @@ public class UserController {
 
         try {
             parameter.put( IOK_HEADER_TOKEN_KEY, token );
-            result = mobileUserController.mobileUserTokenUpdate( parameter, null , token);
+            result = mobileUserService.tokenUpdate(parameter);
             resFlag = IokUtil.getResFlag( result );
 
             if( !resFlag ) {
@@ -199,8 +202,7 @@ public class UserController {
 
         parameter = IokUtil.buildRequestParameter( request );
         try {
-            result = mobileUserController.mobileUserLoginStatus( parameter, null );
-            // todo: refactoring
+            result = mobileUserService.mobileUserLoginStatus(parameter);
             resType = IokUtil.getResType( result );
             result.put("status", resType);
             result.remove("resType");
@@ -229,25 +231,25 @@ public class UserController {
     public ResponseEntity logoutUser( HttpServletRequest request ) {
 
         RequestParameter    parameter;
-        Map<String, Object> result;
-        boolean             resFlag;
+        boolean             isSuccess;
 
         parameter = IokUtil.buildRequestParameter( request );
 
         try {
-            result = mobileUserController.mobileUserLogout( parameter, null);
-            resFlag = IokUtil.getResFlag( result );
+            isSuccess = mobileUserService.mobileUserLogout(parameter);
+            if (isSuccess) {
+                parameter.getRequest().getSession().invalidate();
+            }
         } catch( Exception e ) {
             return IokUtil.convertExceptionToResponse( e );
         }
 
-        if(!resFlag) {
+        if(!isSuccess) {
             return ResponseEntity
                     .status( HttpStatus.UNAUTHORIZED )
                     .body( new SimpleErrorInfo("사용자 정보가 없습니다."));
         }
 
-        // todo: message 통합
         return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("로그아웃 되었습니다."));
     }
 

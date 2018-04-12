@@ -27,7 +27,7 @@ import com.kolonbenit.benitware.common.util.MobileSessionUtils;
 
 //import lombok.extern.slf4j.Slf4j;
 
-@Controller
+//@Controller
 //@RequestMapping("/mobile/controller/MobileUserController")
 //@Slf4j
 public class MobileUserController {
@@ -37,13 +37,13 @@ public class MobileUserController {
 	 */
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	
-	@Autowired
+//	@Autowired
 	private MobileUserService mobileUserService;
 	
-	@Autowired
+//	@Autowired
 	private MobileApplianceService mobileApplianceService;
 
-	@Autowired
+//	@Autowired
 	private MessageSource messageSource;
 
 	private final Locale locale = Locale.KOREA;
@@ -291,8 +291,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "listComplexInfo.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "listComplexInfo.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> listComplexInfo(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
 
@@ -315,8 +315,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "listDongInfo.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "listDongInfo.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> listDongInfo(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
 		List<Object> list = mobileUserService.listDongInfo(parameter);
@@ -338,8 +338,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "listHoInfo.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "listHoInfo.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> listHoInfo(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
 
@@ -363,8 +363,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "checkUserId.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "checkUserId.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> checkUserId(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
 
@@ -396,8 +396,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "searchUserId.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "searchUserId.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> searchUserId(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
 		Map<String, Object> userIdMap = mobileUserService.searchUserId(parameter);
@@ -427,8 +427,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "searchUserPw.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "searchUserPw.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> searchUserPw(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
 		Map<String, Object> userPwMap = mobileUserService.searchUserPw(parameter);
@@ -458,8 +458,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "registerMember.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "registerMember.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> registerMember(RequestParameter parameter, ModelMap model) throws Exception {
 		return mobileUserService.registerMember(parameter);
 	}
@@ -477,8 +477,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "reqCertNumber.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "reqCertNumber.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> reqCertNumber(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = mobileUserService.sendCertificationNumber(parameter);
 		//if ( (boolean) resMap.get("resFlag") ) {
@@ -499,8 +499,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "confirmCertNumber.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "confirmCertNumber.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> confirmCertNumber(RequestParameter parameter, ModelMap model) throws Exception {
 		return mobileUserService.confirmCertificationNumber(parameter);
 	}
@@ -517,8 +517,8 @@ public class MobileUserController {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@RequestMapping(value = "getUserInfoProcess.do", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
+//	@RequestMapping(value = "getUserInfoProcess.do", produces = MediaType.APPLICATION_JSON_VALUE)
+//	@ResponseBody
 	public Map<String, Object> getUserInfoProcess(RequestParameter parameter, ModelMap model) throws Exception {
 		Map<String, Object> resMap = new HashMap<>();
 

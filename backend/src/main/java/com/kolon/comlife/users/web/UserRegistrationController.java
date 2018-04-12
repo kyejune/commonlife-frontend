@@ -22,10 +22,12 @@ import com.kolon.comlife.users.util.IokUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.controller.MobileUserCertNoController;
 import com.kolonbenit.iot.mobile.controller.MobileUserController;
+import com.kolonbenit.iot.mobile.service.MobileUserCertNoService;
 import com.kolonbenit.iot.mobile.service.MobileUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -33,9 +35,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.Response;
 import java.io.ByteArrayInputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 @RestController
@@ -53,16 +57,20 @@ public class UserRegistrationController {
     private ComplexService complexService;
 
     @Autowired
-    private MobileUserController mobileUserController;
+    private ImageStoreService imageStoreService;
 
+
+    // IOK mobile user services
     @Autowired
     private MobileUserService mobileUserService;
 
     @Autowired
-    private MobileUserCertNoController mobileUserCertNoController;
+    private MobileUserCertNoService mobileUserCertNoService;
 
     @Autowired
-    private ImageStoreService imageStoreService;
+    private MessageSource messageSource;
+
+    private final Locale locale = Locale.KOREA;
 
 
     /**
@@ -109,16 +117,14 @@ public class UserRegistrationController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getComplexDongList(HttpServletRequest request, @PathVariable("id") int id) {
         RequestParameter parameter;
-        Map<String, Object> result;
-        List<String> dongList;    // 동 목록
+        List<Object> dongList;    // 동 목록
         DataListInfo retBody;
 
         parameter = IokUtil.buildRequestParameter(request);
 
         try {
             parameter.put("cmplxId", id);
-
-            result = mobileUserController.listDongInfo(parameter, null);
+            dongList = mobileUserService.listDongInfo(parameter);
         } catch (Exception e) {
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity
@@ -126,7 +132,6 @@ public class UserRegistrationController {
                     .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
         }
 
-        dongList = (List) ((Map) result.get("DATA")).get("DONG");
         if (dongList.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -146,8 +151,7 @@ public class UserRegistrationController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getComplexDongHoList(HttpServletRequest request, @PathVariable("id") int id, @PathVariable("dong") String dong) {
         RequestParameter parameter;
-        Map<String, Object> result;
-        List<String> hoList;    // 호 목록
+        List<Object> hoList;    // 호 목록
         DataListInfo retBody;
 
         parameter = IokUtil.buildRequestParameter(request);
@@ -156,7 +160,7 @@ public class UserRegistrationController {
             parameter.put("cmplxId", id);
             parameter.put("dong", dong);
 
-            result = mobileUserController.listHoInfo(parameter, null);
+            hoList = mobileUserService.listHoInfo(parameter);
         } catch (Exception e) {
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity
@@ -164,7 +168,6 @@ public class UserRegistrationController {
                     .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
         }
 
-        hoList = (List) ((Map) result.get("DATA")).get("HO");
         if (hoList.isEmpty()) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
@@ -191,7 +194,7 @@ public class UserRegistrationController {
         parameter = IokUtil.buildRequestParameter(request);
 
         try {
-            result = mobileUserCertNoController.reqHeadCertNumber(parameter, null);
+            result = mobileUserCertNoService.sendHeadCertificationNumber(parameter);
         } catch (Exception e) {
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity
@@ -226,8 +229,9 @@ public class UserRegistrationController {
         parameter = IokUtil.buildRequestParameter(request);
 
         try {
-            result = mobileUserCertNoController.confirmHeadCertNumber(parameter, null);
+            result = mobileUserCertNoService.confirmHeadCertificationNumber(parameter);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity
                     .status(HttpStatus.SERVICE_UNAVAILABLE)
@@ -255,6 +259,7 @@ public class UserRegistrationController {
         RequestParameter parameter;
         Map<String, Object> result;
         boolean resFlag;
+        String msg;
 
         parameter = IokUtil.buildRequestParameter(request);
 
@@ -268,7 +273,7 @@ public class UserRegistrationController {
 
         try {
             parameter.put("userId", userId);
-            result = mobileUserController.checkUserId(parameter, null);
+            result = mobileUserService.checkUserId(parameter);
         } catch (Exception e) {
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity
@@ -276,12 +281,14 @@ public class UserRegistrationController {
                     .body(new SimpleErrorInfo("일시적으로 서비스에 문제가 있습니다."));
         }
 
-        resFlag = IokUtil.getResFlag(result);
-        if (!resFlag) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(IokUtil.lowerMsgKeyName(result));
+        if( result == null ) {
+            String[] userIdArray = { parameter.getString("userId") };
+            msg = messageSource.getMessage("mobile.check.userid.0002", userIdArray, locale);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SimpleErrorInfo( msg ));
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(IokUtil.lowerMsgKeyName(result));
+        msg = messageSource.getMessage("mobile.check.userid.0001", null, locale);
+        return ResponseEntity.status(HttpStatus.OK).body(new SimpleMsgInfo( msg ));
     }
 
 
@@ -301,7 +308,7 @@ public class UserRegistrationController {
         parameter = IokUtil.buildRequestParameter(request);
 
         try {
-            result = mobileUserCertNoController.reqUserCertNumber(parameter, null);
+            result = mobileUserCertNoService.sendUserCertificationNumber(parameter);
         } catch (Exception e) {
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity
@@ -331,7 +338,7 @@ public class UserRegistrationController {
         parameter = IokUtil.buildRequestParameter(request);
 
         try {
-            result = mobileUserCertNoController.confirmUserCertNumber(parameter, null);
+            result = mobileUserCertNoService.confirmUserCertificationNumber(parameter);
         } catch (Exception e) {
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity
@@ -388,7 +395,7 @@ public class UserRegistrationController {
         }
 
         try {
-            result = mobileUserController.registerMember(parameter, null);
+            result = mobileUserService.registerMember(parameter);
         } catch (Exception e) {
             logger.error("Failed to call: " + e.getMessage());
             return ResponseEntity

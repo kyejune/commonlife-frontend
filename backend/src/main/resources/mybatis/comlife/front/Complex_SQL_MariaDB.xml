@@ -82,7 +82,7 @@
 
     <select id="selectComplexById" parameterType="ComplexInfo" resultType="ComplexInfo">
     SELECT
-      CMPLX_ID,
+      C.CMPLX_ID,
       CMPLX_CD,  -- COMPLEX CODE
       CMPLX_NM, -- COMPLEX NAME
       CMPLX_S_NM, -- COMPLEX SUB NAME
@@ -100,13 +100,22 @@
       IMG_SRC,
       MAP_SRC,
       LOGO_IMG_SRC, -- LOGO IMAGE SOURCE
-      MNL_SRC -- ??
+      MNL_SRC, -- ??
+      CL_CMPLX_NM,
+      CL_CMPLX_ADDR,
+      CL_MAP_SRC,
+      CL_LOGO_IMG_SRC,
+      FEED_WRITE_ALLOW_YN,
+      IOT_USE_YN
     FROM
-      COMPLEX_M
+      COMPLEX_M AS C
+        LEFT JOIN
+      COMPLEX_M_EXT AS C_E
+          ON C.CMPLX_ID = C_E.CMPLX_ID
     WHERE
-      CMPLX_ID = #{cmplxId}
+      C.CMPLX_ID = #{cmplxId}
       AND
-      COMPLEX_M.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
+      C.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
     ;
   </select>
 
