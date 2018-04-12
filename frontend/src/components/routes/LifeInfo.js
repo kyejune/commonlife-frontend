@@ -10,11 +10,17 @@ import SubjectList from "../drawers/lifeInfo/SubjectList";
 import Status from "../drawers/lifeInfo/Status";
 import Profile from "../drawers/lifeInfo/Profile";
 import ContentPage from "../drawers/lifeInfo/ContentPage";
+import Net from "../../scripts/net";
 
 class LifeInfo extends Component {
 
     componentDidMount() {
         this.updateRoute();
+
+        // Net.getInfoPage( data=>{
+        //
+        // });
+
     }
 
     componentDidUpdate(prevProps) {
@@ -52,7 +58,6 @@ class LifeInfo extends Component {
 
 
         };
-
 
         const cate = this.props.match.params.cate;
         const map = compMap[cate];

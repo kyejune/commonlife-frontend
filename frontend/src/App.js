@@ -82,11 +82,20 @@ class App extends Component {
 
         }, true);
 
+        if( this.router ) {
+            // 마지막 라우터 주소 저장
+            this.router.history.listen(location => {
+                const S = new DeviceStorage().localStorage();
+                const PATH = location.pathname;
+                if (PATH.indexOf('/community') === 0 || PATH.indexOf('/reservation') === 0 || PATH.indexOf('/iot') === 0 || PATH.indexOf('/info') === 0)
+                    S.save('location', location.pathname);
+            });
+        }
     }
 
     render() {
 
-        return <HashRouter>
+        return <HashRouter ref={ r => this.router = r }>
                 <div className={classNames({
                     'App': true,
                     'cl-app--expand': this.state.scrolled
