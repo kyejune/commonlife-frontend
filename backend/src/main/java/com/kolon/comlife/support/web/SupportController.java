@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/info/support/*")
+@RequestMapping("/info")
 public class SupportController {
 
     private static final Logger logger = LoggerFactory.getLogger(SupportController.class);
@@ -50,7 +50,7 @@ public class SupportController {
      */
     @CrossOrigin
     @GetMapping(
-            value = "/",
+            value = "/support",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getSupportCategoryList( HttpServletRequest request ) {
 
@@ -83,7 +83,7 @@ public class SupportController {
     }
 
     @PostMapping(
-            value = "/ticket",
+            value = "/support/ticket",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity submitTicket( HttpServletRequest request,
                                         @RequestBody Map args ) throws Exception {
@@ -127,7 +127,7 @@ public class SupportController {
 
     @CrossOrigin
     @PostMapping(
-            value = "/ticketFiles",
+            value = "/support/ticketFiles",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createTicketFile( HttpServletRequest request,
                                           @RequestBody HashMap<String, String> params ) {
