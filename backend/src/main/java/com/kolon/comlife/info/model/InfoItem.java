@@ -3,13 +3,18 @@ package com.kolon.comlife.info.model;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import org.apache.ibatis.type.Alias;
 
-@Alias("categoryInfo")
-public class CategoryInfo extends SimpleMsgInfo {
-    private int    cateIdx;
-    private int    cmplxId;
-    private String cateNm;
+@Alias("infoItem")
+public class InfoItem extends SimpleMsgInfo {
 
+    private int    itemIdx;
+    private String itemNm;
+
+    private int    cmplxId;
+
+    private int    cateIdx;
+    private String cateNm;
     private String cateId;
+
     private String imgSrc;
     private String desc;
     private int    dispOrder;
@@ -18,6 +23,22 @@ public class CategoryInfo extends SimpleMsgInfo {
 
     private String regDttm;
     private String updDttm;
+
+    public String getItemNm() {
+        return itemNm;
+    }
+
+    public void setItemNm(String itemNm) {
+        this.itemNm = itemNm;
+    }
+
+    public int getItemIdx() {
+        return itemIdx;
+    }
+
+    public void setItemIdx(int itemIdx) {
+        this.itemIdx = itemIdx;
+    }
 
     public int getCateIdx() {
         return cateIdx;
