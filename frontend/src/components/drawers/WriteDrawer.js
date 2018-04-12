@@ -23,6 +23,7 @@ class WriteDrawer extends BottomDrawer {
             isUploading: false,
             postType: type,
             postResult: null,
+            supportIndex: index,
         }
 
         if( type === 'support' ) this.props.updateTitle('문의하기');
@@ -69,35 +70,24 @@ class WriteDrawer extends BottomDrawer {
     gettedPicture(base64) {
 
         const b64 = 'data:image/jpeg;base64,' + base64;
+        let uploadFunc;
 
-        Net.uploadImg( b64, data => {
+        if( this.state.postType === 'support')
+            uploadFunc = Net.uploadTicketImg;
+        else
+            uploadFunc = Net.uploadImg;
 
+
+        uploadFunc( b64, data => {
             console.log( 'uploadedImage:', data );
 
             this.setState({
                 base64Img: b64,
-                imageId: data.postFileIdx,
+                imageId: data.postFileIdx || data.tktFileIdx,
                 isUploading: false,
             });
-        });
 
-        // {
-        //     "postFileIdx": 3,
-        //     "postIdx": 0,
-        //     "usrId": 0,
-        //     "host": null,
-        //     "mimeType": "image/png",
-        //     "fileName": null,
-        //     "filePath": "origin/article/1519456812764.png",
-        //     "delYn": "N",
-        //     "regDttm": "2018-02-24 16:20:13.0",
-        //     "updDttm": "2018-02-24 16:20:13.0",
-        //     "post": null,
-        //     "originPath": "/postFiles/3",
-        //     "smallPath": "/postFiles/3/s/",
-        //     "mediumPath": "/postFiles/3/m/",
-        //     "largePath": "/postFiles/3/l/"
-        // }
+        });
     }
 
     failedPicture(message) {
@@ -122,32 +112,45 @@ class WriteDrawer extends BottomDrawer {
             return;
         }
 
-        let data = {
-            postType: this.state.postType,
-            content: this.state.content.replace(/\n{2,}/g, '\n\n' ), // 2줄 이상만 묶어버리기
-            postFiles: []
-        };
+        const Files = [];
+        let data;
+        let makeFunc;
 
-        if( this.state.imageId )
-            data.postFiles.push( this.state.imageId );
+        // 데이터 만들기
+        if( this.state.postType === 'support'){
+            makeFunc = Net.makeTicket;
+            data = {
+                cateIdx: this.state.supportIndex,
+                content: this.state.content.replace(/\n{2,}/g, '\n\n'), // 2줄 이상만 묶어버리기
+                ticketFiles: Files
+            };
 
-        // 임시로 블락
-        if( this.state.postType !== 'feed' ){
-            alert( '문의 하기는 api뭐 호출하지' );
-            return;
+        }else {
+            makeFunc = Net.makePost;
+            data = {
+                postType: this.state.postType,
+                content: this.state.content.replace(/\n{2,}/g, '\n\n'), // 2줄 이상만 묶어버리기
+                postFiles: Files
+            };
         }
 
+        if( this.state.imageId ){
+            if( this.state.postType === 'support' ) data.ticketFiles.push( this.state.imageId );
+            else                                    data.postFiles.push( this.state.imageId );
+        }
 
-        Net.makePost(data, ( success, response ) => {
+        // 보내기
+        makeFunc(data, ( success, response ) => {
 
-            // 목록 갱신
             if( success && this.state.postType === 'feed' )
                 Net.getFeed('feed', 0 );
+
 
             if( success )
                 this.setState({ postResult: "성공적으로 완료되었습니다." } );
             else
                 this.setState({ postResult: "잠시 뒤에 다시 시도해주십시요." });
+
         });
     }
 
@@ -177,7 +180,7 @@ class WriteDrawer extends BottomDrawer {
 
                 <footer className="cl-flex-between">
 
-                    {(this.state.postType==='support' && this.state.content.length === 0 )&&
+                    {(this.state.postType==='support' && this.state.content.length === 0 && this.state.base64Img === null )&&
                     <p className="cl-write-noti">가능한 빠른 시일내에 이메일을 통해 연락드립니다.</p>
                     }
 
