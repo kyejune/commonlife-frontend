@@ -8,10 +8,7 @@ import com.kolon.comlife.users.model.PostUserInfo;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -393,7 +390,7 @@ public class InfoController {
 
     @CrossOrigin
     @GetMapping(
-            value = "/mystatus",
+            value = "/status",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getInfoMyStatus(HttpServletRequest request) {
 
@@ -405,6 +402,36 @@ public class InfoController {
 
         return ResponseEntity.status( HttpStatus.OK ).body( myStatusMain );
     }
+
+    private MyStatusInfoDetail getInfoMyStatusDetailMockValue(int myStatusIdx ) {
+        MyStatusInfoDetail myStatus = new MyStatusInfoDetail();
+
+        myStatus.setDownloadLink(
+                "http://www.kolonglobal.com/_inc/lib/filedown.asp" +
+                "?idx=1471&fname=%ED%95%9C%ED%99%94%ED%88%AC%EC%9E%90%EC%A6%9D%EA%B6" +
+                "%8C%5F%EC%BD%94%EC%98%A4%EB%A1%B1%EA%B8%80%EB%A1%9C%EB%B2%8C%5F20170306084157%2Epdf");
+        myStatus.setMyStatusIdx( myStatusIdx );
+        myStatus.setMyStatusNm( "12월 (2017년)" );
+        myStatus.setChargesDate("2018년 3월");
+        myStatus.setTotalCharges(865900);
+        myStatus.setRentalCharges(805280);
+        myStatus.setElectricityCharges(15280);
+        myStatus.setGasCharges(15280);
+        myStatus.setWaterCharges(15280);
+        myStatus.setParkingCharges(15280);
+
+        return myStatus;
+    }
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/status/{myStatusIdx}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getInfoMyStatusDetail(HttpServletRequest request,
+                                                @PathVariable("myStatusIdx") int myStatusIdx ) {
+        return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoMyStatusDetailMockValue( myStatusIdx ) );
+    }
+
 
 
 }
