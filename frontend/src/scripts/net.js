@@ -177,7 +177,7 @@ export default {
     },
 
     getReservation( id, callback ){
-        axios.get( './dummy/reservation.json' )
+        axios.get( 'http://localhost:3000/dummy/reservation.json' )
             .then( response => {
                 callback( response.data['0'] );
             } );
@@ -380,5 +380,16 @@ export default {
             });
 
     },
+
+
+
+
+    // My Info
+    getInfoPage( callback ){
+        axios.get('/info')
+            .then( response=>{
+                callback( response.data );
+            });
+    }
 
 };

@@ -2,23 +2,6 @@
 import axios from 'axios';
 import {observable} from 'mobx';
 import Store from "./store";
-// import SimpleJsonFilter from 'simple-json-filter/index';
-
-
-// let sjf = new SimpleJsonFilter();
-
-
-// axios.defaults.baseURL = 'http://localhost:8080'// host;
-// axios.defaults.headers.common['api_key'] = 'acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70';
-// axios.defaults.headers.common['Content-Type'] = 'application/json; charset=UTF-8';
-
-// axios.interceptors.response.use(null, function(err) {
-//     console.log( err.response );
-//
-//
-//     return Promise.reject(err);
-// });
-
 
 /*
 * name: 출력할 이름
@@ -53,8 +36,8 @@ export default {
     getIotAll() {
 
         axios.all([
-            axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes`),
-            axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`)
+            axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes`),
+            axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`)
         ]).then(axios.spread((modeRes, iotRes) => {
 
             // 편의상 순서 맞추는건 이쪽에서 해서 보내줌
@@ -67,7 +50,7 @@ export default {
     },
 
     getMode() {
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes`)
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes`)
             .then(response => {
                 response.data.data.sort(sortBySortOrder);
                 Modes.replace(response.data.data);
@@ -75,7 +58,7 @@ export default {
     },
 
     getMy( callback ) {
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`)
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`)
             .then(response => {
                 response.data.data.sort(sortBySortOrder);
                 MyIots.replace(response.data.data);
@@ -90,8 +73,8 @@ export default {
     * */
     getDeviceCategories( additional, callback) {
         axios.all([
-            axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${ Store.homeId + (additional?'/myiot':'')}/rooms/${ additional?'available':''}`),
-            axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${ Store.homeId + (additional?'/myiot':'')}/deviceCategory/${ additional?'available':''}`)
+            axios.get(`/iot/complexes/${Store.cmplxId}/homes/${ Store.homeId + (additional?'/myiot':'')}/rooms/${ additional?'available':''}`),
+            axios.get(`/iot/complexes/${Store.cmplxId}/homes/${ Store.homeId + (additional?'/myiot':'')}/deviceCategory/${ additional?'available':''}`)
         ]).then(axios.spread((place, device) => {
             callback(place.data.data, device.data.data);
         }));
@@ -101,7 +84,7 @@ export default {
     * @params additional 추가 가능한 목록만 가져올것인지 다 가져올것인지...
     * */
     getDevicesByCategory( additional, isRoom, cateId, callback) {
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${ (additional?'myiot/':'') + (isRoom ? 'rooms' : 'deviceCategory')}/${cateId}/devices${ additional?'/available':'' }`)
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${ (additional?'myiot/':'') + (isRoom ? 'rooms' : 'deviceCategory')}/${cateId}/devices${ additional?'/available':'' }`)
             .then(response => {
                 callback( true, response.data.data);
             })
@@ -117,7 +100,7 @@ export default {
     //        return { myIotId: id };
     //     });
     //
-    //     axios.post( `${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, { data: data } )
+    //     axios.post( `/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, { data: data } )
     //         .then( response => {
     //             this.getMy(); // 추가되면 대시보드 my목록 재로딩
     //             callback( true );
@@ -135,7 +118,7 @@ export default {
     changeIotMode(modeId, value, callback) {
         console.log(`changeIotMode: ${modeId}의 값을 ${value}로 변경`);
 
-        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${modeId}/switchTo`)
+        axios.put(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${modeId}/switchTo`)
             .then(response => {
                 callback();
             });
@@ -143,7 +126,7 @@ export default {
 
     /* 모드 정렬 변경 */
     reAlignIotMode(map, callback) {
-        axios.post(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/order`, map)
+        axios.post(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/order`, map)
             .then(response => {
                 callback();
             });
@@ -152,7 +135,7 @@ export default {
 
     /* My Iot 정렬 변경 */
     reAlignMyIot(map, callback) {
-        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, {data: map } )
+        axios.put(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, {data: map } )
             .then(response => {
                 callback();
                 this.getMy();
@@ -164,7 +147,7 @@ export default {
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/myiot/buttons/12
 
         const deletes = ids.map( id => {
-           return axios.delete(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot/buttons/${id}`)
+           return axios.delete(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot/buttons/${id}`)
         });
 
         axios.all(deletes)
@@ -178,7 +161,7 @@ export default {
     getExposableListOfDashboard( type, callback ){
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/myiot/automation/available
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/myiot/valueInfo/available
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot/${type}/available`)
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot/${type}/available`)
             .then(response => {
                 callback( response.data.data );
             });
@@ -190,7 +173,7 @@ export default {
             return { myIotId:id }
         });
 
-        axios.post(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, { data: map })
+        axios.post(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot`, { data: map })
             .then( response=>{
                callback();
             });
@@ -201,7 +184,7 @@ export default {
     //{{API_HOST}}/iot/complexes/125/homes/1/automation/actors
     /* 시나리오 생성시 사용할 추가할수 있는 기기, 센서*/
     getAddibleItemOfScenario( type, callback ){
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${type}`)
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${type}`)
             .then(response => {
                 callback(response.data);
             });
@@ -211,7 +194,7 @@ export default {
     /* 모드 상세 가져오기 */
     //{{API_HOST}}/iot/complexes/125/homes/1/automation/140
     getScenarioDetail( modeString, id, callback) {
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${modeString}/${id}`)
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${modeString}/${id}`)
             .then(response => {
                 callback(response.data);
             });
@@ -251,7 +234,7 @@ export default {
 
         Store.myModal = { status:0, name:data.thingsNm, value: valueName };
         console.log( data, `의 값을 ${value}로 변경`, Store.modeModal );
-        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}/${params}`)
+        axios.put(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}/${params}`)
             .then(response => {
                 callback( true );
                 Store.myModal = { status:1, name:data.thingsNm, value: valueName };
@@ -264,7 +247,7 @@ export default {
 
     getDeviceInfo( deviceId, callback) {
         console.log('deviceInfo:', deviceId);
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}`)
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}`)
             .then(response => {
                 callback(response.data.data);
             });
@@ -273,7 +256,7 @@ export default {
     /* 시나리오에 소속된 device 정보 반환 */
     getDeviceOfScan( scnaId, deviceId, callback ){
         //  - {{API_HOST}}/iot/complexes/125/homes/1/automation/123/actors/11
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${scnaId}/actors/${deviceId}`)
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${scnaId}/actors/${deviceId}`)
             .then(response => {
                 callback(response.data.data);
             });
@@ -285,7 +268,7 @@ export default {
     updateAutomation( mode, modeId, data, callback ){
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/automation/128
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/modes/CM01103
-        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${mode}/${modeId}`, data )
+        axios.put(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/${mode}/${modeId}`, data )
             .then(response => {
                 callback(response.data);
             });
@@ -294,7 +277,7 @@ export default {
     // 29: 시나리오/오토메이션 생성
     createAutomation( data, callback ){
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/automation
-        axios.post(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation`, data )
+        axios.post(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation`, data )
             .then(response => {
                 callback(response.data);
             });
@@ -303,7 +286,7 @@ export default {
     // 43: 오토메이션 삭제
     removeAutomation( id, callback ){
         // {{API_HOST}}/iot/complexes/125/homes/1/automation/190
-        axios.delete(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${id}` )
+        axios.delete(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${id}` )
             .then(response => {
                 callback(response.data);
             });
@@ -312,7 +295,7 @@ export default {
     // 44. 전체 시나리오 리스트 조회
     getScenarioes( callback ){
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/automation
-        axios.get(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation` )
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation` )
             .then(response => {
                 callback(response.data);
             });
@@ -328,7 +311,7 @@ export default {
 
         Store.myModal = { status:0, name:name, value: value };
 
-        axios.put(`${Store.api}/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot/buttons/${id}/action`)
+        axios.put(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/myiot/buttons/${id}/action`)
             .then(response => {
                 callback( true );
                 Store.myModal = { status:1, name:name, value: value };
