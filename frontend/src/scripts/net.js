@@ -33,6 +33,9 @@ axios.interceptors.response.use(function (response) {
 
     document.querySelector('#spinner').classList.remove('cl-status--ajax');
 
+    // iot내에 변경쪽에서는 시스템 알럿 사용 안함
+    const USE_SYSTEM_ALERT = ( Store.modeModal === null && Store.myModal === null );
+
     // 에러 상황일 경우 iot모달이 있으면 처리
     if( error.response === undefined || error.response.status !== 200) {
 
@@ -53,7 +56,8 @@ axios.interceptors.response.use(function (response) {
         }
     }
 
-    alert( (error.response?error.response.data.msg:error) || '잠시 후 다시 이용해 주시기 바랍니다.');
+    if( USE_SYSTEM_ALERT )
+        alert( (error.response?error.response.data.msg:error) || '잠시 후 다시 이용해 주시기 바랍니다.');
 
     // Do something with response error
     return Promise.reject(error);
