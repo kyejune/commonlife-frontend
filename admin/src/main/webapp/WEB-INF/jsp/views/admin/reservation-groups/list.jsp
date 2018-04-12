@@ -127,7 +127,7 @@
                                         <th class="text-center">수량 제한</th>
                                         <th class="text-center">화면 표시</th>
                                         <th class="text-center">수정</th>
-                                            <%--<th>보기</th>--%>
+                                        <th class="text-center">삭제</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -152,12 +152,19 @@
                                             <td>
                                                 <a href="/admin/reservation-schemes/edit.do?idx=${scheme.idx}" class="btn btn-xs btn-info">수정</a>
                                             </td>
+                                            <td class="text-center">
+                                                <form action="/admin/reservation-schemes/delete.do" method="post">
+                                                    <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+                                                    <input type="hidden" name="idx" value="${scheme.idx}">
+                                                    <button class="btn btn-xs btn-danger">삭제</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
                                 </table>
                                 <div class="text-right">
-                                    <a href="/admin/reservation-schemes/create.do?cmplxIdx=125&parentIdx=0" class="btn btn-white">그룹 없는 예약 틀 추가</a>
+                                    <a href="/admin/reservation-schemes/create.do?cmplxIdx=${cmplxIdx}&parentIdx=0" class="btn btn-white">그룹 없는 예약 틀 추가</a>
                                 </div>
                             </c:if>
                         </div>
