@@ -21,7 +21,7 @@ public class ReservationDAO {
     public ReservationInfo show( int idx ) {
         HashMap params = new HashMap<String, Object>();
         params.put("idx", idx);
-        return sqlSession.selectOne( "Reservation.index", params );
+        return sqlSession.selectOne( "Reservation.show", params );
     }
 
     public int create(ReservationInfo info) {

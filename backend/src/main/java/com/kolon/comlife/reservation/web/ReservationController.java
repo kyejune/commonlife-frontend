@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/reservations/*")
@@ -199,56 +200,56 @@ public class ReservationController {
                 .body( new SimpleErrorInfo( "OK" ) );
     }
 
-    @CrossOrigin
-    @PostMapping(
-            value = "/",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity store(
-            HttpServletRequest request
-            , @RequestParam( value = "parentIdx", required = false ) int parentIdx
-            , @RequestParam( value = "usrId", required = false ) int usrId
-            , @RequestParam( value = "startDt", required = false ) String startDt
-            , @RequestParam( value = "startTime", required = false ) String startTime
-            , @RequestParam( value = "endDt", required = false ) String endDt
-            , @RequestParam( value = "endTime", required = false ) String endTime
-            , @RequestParam( value = "qty", required = false ) int qty
-    ) {
-        ReservationSchemeInfo scheme = schemeService.show( parentIdx );
-
-        // 반드시 스키마 정보가 있어야 한다
-        if( scheme == null ) {
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "예약 정보를 찾을 수 없습니다." ) );
-        }
-
-        ReservationInfo info = new ReservationInfo();
-        info.setParentIdx( parentIdx );
-        info.setUsrID( usrId );
-        info.setStartDt( startDt );
-        info.setStartTime( startTime );
-        info.setEndDt( endDt );
-        info.setEndTime( endTime );
-        info.setQty( qty );
-
-        // 스키마로부터 포인트와 금액 정보 내려받는다
-        // 스키마가 변경되어도 예약 당시의 포인트/금액 정보는 유지되어야 하기 때문에 별도로 기록해야 한다
-        info.setPoint( scheme.getPoint() );
-        info.setAmount( scheme.getAmount() );
-
-        switch ( scheme.getReservationType() ) {
-            case "A" :
-                return bookTypeA( scheme, info );
-            case "B" :
-                return bookTypeB( scheme, info );
-            case "C" :
-                return bookTypeC( scheme, info );
-            default :
-                return ResponseEntity
-                        .status( HttpStatus.BAD_REQUEST )
-                        .body( new SimpleErrorInfo( "알 수 없는 예약 유형입니다." ) );
-        }
-    }
+//    @CrossOrigin
+//    @PostMapping(
+//            value = "/",
+//            produces = MediaType.APPLICATION_JSON_VALUE)
+//    public ResponseEntity store(
+//            HttpServletRequest request
+//            , @RequestParam( value = "parentIdx", required = false ) int parentIdx
+//            , @RequestParam( value = "usrId", required = false ) int usrId
+//            , @RequestParam( value = "startDt", required = false ) String startDt
+//            , @RequestParam( value = "startTime", required = false ) String startTime
+//            , @RequestParam( value = "endDt", required = false ) String endDt
+//            , @RequestParam( value = "endTime", required = false ) String endTime
+//            , @RequestParam( value = "qty", required = false ) int qty
+//    ) {
+//        ReservationSchemeInfo scheme = schemeService.show( parentIdx );
+//
+//        // 반드시 스키마 정보가 있어야 한다
+//        if( scheme == null ) {
+//            return ResponseEntity
+//                    .status( HttpStatus.BAD_REQUEST )
+//                    .body( new SimpleErrorInfo( "예약 정보를 찾을 수 없습니다." ) );
+//        }
+//
+//        ReservationInfo info = new ReservationInfo();
+//        info.setParentIdx( parentIdx );
+//        info.setUsrID( usrId );
+//        info.setStartDt( startDt );
+//        info.setStartTime( startTime );
+//        info.setEndDt( endDt );
+//        info.setEndTime( endTime );
+//        info.setQty( qty );
+//
+//        // 스키마로부터 포인트와 금액 정보 내려받는다
+//        // 스키마가 변경되어도 예약 당시의 포인트/금액 정보는 유지되어야 하기 때문에 별도로 기록해야 한다
+//        info.setPoint( scheme.getPoint() );
+//        info.setAmount( scheme.getAmount() );
+//
+//        switch ( scheme.getReservationType() ) {
+//            case "A" :
+//                return bookTypeA( scheme, info );
+//            case "B" :
+//                return bookTypeB( scheme, info );
+//            case "C" :
+//                return bookTypeC( scheme, info );
+//            default :
+//                return ResponseEntity
+//                        .status( HttpStatus.BAD_REQUEST )
+//                        .body( new SimpleErrorInfo( "알 수 없는 예약 유형입니다." ) );
+//        }
+//    }
 
     @CrossOrigin
     @GetMapping(
@@ -259,5 +260,42 @@ public class ReservationController {
         ReservationInfo info = service.show( id );
 
         return ResponseEntity.status( HttpStatus.OK ).body( info );
+    }
+
+    @CrossOrigin
+    @PostMapping(
+            value = "/",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity store(
+            HttpServletRequest request
+            , @RequestBody HashMap<String, Object> params
+    ) {
+        int parentIdx = Integer.parseInt( params.get( "parentIdx" ).toString() );
+        String startDt = params.get( "startDt" ).toString();
+        String startTime = params.get( "startTime" ).toString();
+        String endDt = params.get( "endDt" ).toString();
+        String endTime = params.get( "endTime" ).toString();
+
+        // 예약 틀
+        ReservationSchemeInfo scheme = schemeService.show( parentIdx );
+
+        ReservationInfo info = new ReservationInfo();
+        info.setUsrID( 14 ); // TODO: 사용자 아이디 입력
+        info.setStatus( "RESERVED" );
+        info.setStartDt( startDt );
+        info.setStartTime( startTime );
+        info.setEndDt( endDt );
+        info.setEndTime( endTime );
+        info.setQty( 1 );
+
+        // 틀에서 내려받을 자료들
+        info.setParentIdx( scheme.getIdx() );
+        info.setPoint( scheme.getPoint() );
+        info.setAmount( scheme.getAmount() );
+
+        service.create( info );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( null );
     }
 }

@@ -1,5 +1,7 @@
 package com.kolon.comlife.reservation.web;
 
+import com.kolon.comlife.complexes.model.ComplexInfo;
+import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.reservation.model.ReservationGroupInfo;
 import com.kolon.comlife.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.reservation.service.ReservationGroupService;
@@ -28,6 +30,9 @@ public class ReservationSchemeController {
     @Resource(name = "reservationGroupService")
     ReservationGroupService schemeService;
 
+    @Resource(name = "complexService")
+    ComplexService complexService;
+
     @CrossOrigin
     @GetMapping(
             value = "/",
@@ -44,6 +49,8 @@ public class ReservationSchemeController {
     )
     public ResponseEntity show( HttpServletRequest request, @PathVariable("id") int id ) {
         ReservationSchemeInfo info = service.show( id );
+        ComplexInfo complex = complexService.getComplexById( info.getCmplxIdx() );
+        info.setComplex( complex );
 
         return ResponseEntity.status( HttpStatus.OK ).body( info );
     }

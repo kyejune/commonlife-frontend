@@ -1,13 +1,16 @@
 package com.kolon.comlife.reservation.model;
 
+import com.kolon.comlife.complexes.model.ComplexInfo;
 import org.apache.ibatis.type.Alias;
 
 @Alias("reservationSchemeInfo")
 public class ReservationSchemeInfo {
     private int idx;
+    private int cmplxIdx;
     private int parentIdx;
     private String code;
     private String reservationType;
+    private String images;
     private String title;
     private String summary;
     private String description;
@@ -24,9 +27,13 @@ public class ReservationSchemeInfo {
     private String activateDuration;
     private String maintenanceStartAt;
     private String maintenanceEndAt;
+    private String options;
+    private String precautions;
     private String delYn;
     private String regDttm;
     private String updDttm;
+
+    private ComplexInfo complex;
 
     public int getIdx() {
         return idx;
@@ -34,6 +41,14 @@ public class ReservationSchemeInfo {
 
     public void setIdx(int idx) {
         this.idx = idx;
+    }
+
+    public int getCmplxIdx() {
+        return cmplxIdx;
+    }
+
+    public void setCmplxIdx(int cmplxIdx) {
+        this.cmplxIdx = cmplxIdx;
     }
 
     public int getParentIdx() {
@@ -58,6 +73,14 @@ public class ReservationSchemeInfo {
 
     public void setReservationType(String reservationType) {
         this.reservationType = reservationType;
+    }
+
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 
     public String getTitle() {
@@ -188,6 +211,22 @@ public class ReservationSchemeInfo {
         this.maintenanceEndAt = maintenanceEndAt;
     }
 
+    public String getOptions() {
+        return options;
+    }
+
+    public void setOptions(String options) {
+        this.options = options;
+    }
+
+    public String getPrecautions() {
+        return precautions;
+    }
+
+    public void setPrecautions(String precautions) {
+        this.precautions = precautions;
+    }
+
     public String getDelYn() {
         return delYn;
     }
@@ -210,5 +249,13 @@ public class ReservationSchemeInfo {
 
     public void setUpdDttm(String updDttm) {
         this.updDttm = updDttm;
+    }
+
+    public ComplexInfo getComplex() {
+        return complex;
+    }
+
+    public void setComplex(ComplexInfo complex) {
+        this.complex = complex;
     }
 }

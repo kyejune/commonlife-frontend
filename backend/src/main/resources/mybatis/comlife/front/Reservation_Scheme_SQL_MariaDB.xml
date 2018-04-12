@@ -34,7 +34,14 @@
     </select>
 
     <select id="show" parameterType="java.util.Map" resultType="reservationSchemeInfo">
-
+        SELECT
+        *
+        FROM
+        `RESERVATION_SCHEMES`
+        WHERE
+        `DEL_YN` = 'N'
+        AND
+        `IDX` = #{idx}
     </select>
 
     <insert id="create" parameterType="reservationSchemeInfo">
