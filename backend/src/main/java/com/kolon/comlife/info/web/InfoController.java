@@ -1,9 +1,7 @@
 package com.kolon.comlife.info.web;
 
 import com.kolon.comlife.common.model.DataListInfo;
-import com.kolon.comlife.info.model.CategoryInfo;
-import com.kolon.comlife.info.model.InfoData;
-import com.kolon.comlife.info.model.InfoMain;
+import com.kolon.comlife.info.model.*;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.users.model.PostUserInfo;
@@ -341,6 +339,71 @@ public class InfoController {
         dataListInfo.setMsg("Benefits 목록 가져오기");
 
         return ResponseEntity.status( HttpStatus.OK ).body( dataListInfo );
+    }
+
+
+
+    private MyStatusMain getMyStatusMainMockValue() {
+        MyStatusInfo myStatusInfo;
+        MyStatusMain myStatusMain = new MyStatusMain();
+        List infoList = new ArrayList();
+
+        myStatusMain.setCmplxNm("역삼동 하우징 따복하우스");
+        myStatusMain.setHeadNm("조성우");
+        myStatusMain.setStartDt("2017-06-20");
+
+        myStatusInfo = new MyStatusInfo();
+        myStatusInfo.setMyStatusIdx( 10 );
+        myStatusInfo.setMyStatusNm("3월 (2018년)");
+        infoList.add(myStatusInfo);
+
+        myStatusInfo = new MyStatusInfo();
+        myStatusInfo.setMyStatusIdx( 9 );
+        myStatusInfo.setMyStatusNm("2월 (2018년)");
+        infoList.add(myStatusInfo);
+
+        myStatusInfo = new MyStatusInfo();
+        myStatusInfo.setMyStatusIdx( 8 );
+        myStatusInfo.setMyStatusNm("1월 (2018년)");
+        infoList.add(myStatusInfo);
+
+        myStatusInfo = new MyStatusInfo();
+        myStatusInfo.setMyStatusIdx( 7 );
+        myStatusInfo.setMyStatusNm("12월 (2017년)");
+        infoList.add(myStatusInfo);
+
+        myStatusInfo = new MyStatusInfo();
+        myStatusInfo.setMyStatusIdx( 6 );
+        myStatusInfo.setMyStatusNm("11월 (2017년)");
+        infoList.add(myStatusInfo);
+
+        myStatusInfo = new MyStatusInfo();
+        myStatusInfo.setMyStatusIdx( 5 );
+        myStatusInfo.setMyStatusNm("10월 (2017년)");
+        infoList.add(myStatusInfo);
+
+        myStatusInfo = new MyStatusInfo();
+        myStatusInfo.setMyStatusIdx( 4 );
+        myStatusInfo.setMyStatusNm("9월 (2017년)");
+        infoList.add(myStatusInfo);
+
+        myStatusMain.setInfoList( infoList );
+        return myStatusMain;
+    }
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/mystatus",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getInfoMyStatus(HttpServletRequest request) {
+
+        MyStatusMain myStatusMain;
+
+        myStatusMain = this.getMyStatusMainMockValue();
+
+        myStatusMain.setMsg("MyStatus 첫 페이지");
+
+        return ResponseEntity.status( HttpStatus.OK ).body( myStatusMain );
     }
 
 
