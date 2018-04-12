@@ -35,9 +35,14 @@ class TimeScheduler extends Component {
             />
         });
 
+
+        // 예약시간 세팅: 1~24 시간단위 30분은 0.5
+        const START = this.props.start || 12;
+        const DURATION = this.props.duration || 1;
+
         this.state = {
-            start: starts[0]*.5 + props.min,
-            hour: 0.5,
+            start: START,// starts[0]*.5 + props.min,
+            hour: DURATION,
             W: W,
             remains: starts,
             disabledEl: disabled,
@@ -107,7 +112,7 @@ class TimeScheduler extends Component {
         if( targetHour <= 0 || targetHour > this.props.maxWidth ) return;
 
         this.timeEl.style.width = `${ targetHour * this.state.W * 2 }px`;
-        this.handleEl.style.transform = `translate(${ targetHour * this.state.W * 2 }px, 0px)`;
+        // this.handleEl.style.transform = `translate(${ targetHour * this.state.W * 2 }px, 0px)`;
 
         // !! draggable 내부의 x값도 바꿔놔야 버튼으로 조절 후 드래그 할때 오차가 안생김
         this.draggableHandle.setState({ x: targetHour * this.state.W * 2 });
@@ -140,6 +145,8 @@ class TimeScheduler extends Component {
         const MIN = this.props.min;
         const HALF_LEN = (this.props.max - MIN) * 2;
 
+        console.log( 'ts:', MIN, this.props.max, HALF_LEN );
+
         // 30분 단위로 그리기
         let halfHours = [...Array(HALF_LEN)].map((e, i) => {
             let timeString;
@@ -160,18 +167,20 @@ class TimeScheduler extends Component {
                                            cancel=".cl-area-handle"
                                            onDrag={() => this.timeDrag()}
                 >
-                    <div className="cl-area--selected" ref={ref => this.timeEl = ref}>
+                    <div className="cl-area--selected" ref={ref => this.timeEl = ref} style={{ width: W * this.state.hour * 2 }}>
                         <Draggable key="time-handler"
                                    ref={ ref => this.draggableHandle = ref }
                                    axis="x"
                                    grid={[W]}
-                                   defaultPosition={{x: W, y: 0}}
+                                   defaultPosition={{x: W * this.state.hour * 2, y: 0}}
                                    bounds={{left: W, right: W * 2 * this.props.maxWidth}}
                                    onStart={() => this.handleStart()}
                                    onDrag={() => this.handleDrag()}
                                    onStop={() => this.handleStop()}
                         >
-                            <span className="cl-area-handle" ref={ref => this.handleEl = ref}/>
+                            <span className="cl-area-handle" ref={ref => this.handleEl = ref}
+                                  style={{ transform: `translate(${ this.state.hour * W * 2 }px, 0px)` }}
+                            />
                         </Draggable>
                     </div>
                 </Draggable>;
