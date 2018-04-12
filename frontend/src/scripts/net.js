@@ -429,5 +429,20 @@ export default {
     },
 
 
+    /* Ticket 작성 및 Ticket용 파일올리기 */
+    uploadTicketImg( base64, callback ){
+        axios.post( '/info/support/ticketFiles', { file:  base64 } )
+            .then( response => {
+                callback( response.data );
+            });
+    },
+
+    makeTicket( data, callback ) {
+        axios.post('/info/support/ticket/', data )
+            .then(response => {
+                callback(true, response);
+            });
+    }
+
 
 };
