@@ -42,6 +42,7 @@
         </div>
     </div>
     <!-- Mainly scripts -->
+    <script src="/resources/js/underscore-min.js"></script>
     <script src="/resources/js/jquery-3.1.1.min.js"></script>
     <script src="/resources/js/bootstrap.min.js"></script>
     <script src="/resources/js/plugins/moment/moment.js"></script>

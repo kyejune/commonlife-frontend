@@ -9,13 +9,13 @@ class SelectWithTitle extends Component {
 	render () {
 
 		return <div className="cl-flex-between cl-select-with-title">
-			<h5>그룹4</h5>
+			<h5>그룹 { this.props.displayLength || 0 }</h5>
 			<div className="cl-select-with-title__select">
 				<select name="" id="">
 					<option value="">선택지역보기</option>
 					{
 						Store.complexes.map( ( item, key ) => {
-							return <option key={ key } value={ item.cmplxId }>{ item.cmplxNm }</option>
+							return <option key={ key } value={ item.cmplxId }>{ item.cmplxGrp + ' | ' + item.cmplxNm }</option>
 						} )
 					}
 				</select>

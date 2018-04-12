@@ -24,7 +24,7 @@ INSERT INTO EXAMPLE VALUES ('test2');
 ------------------------------------------------------------------------------------------------------
 
 ---- 사용자 보안 정책 정보 ----
-CREATE TABLE `USR_REG_AGREEMENT` (
+CREATE TABLE `CL_USR_REG_AGREEMENT` (
   `ID` int(11) NOT NULL AUTO_INCREMENT,
   `USE_YN` char(1) NOT NULL DEFAULT 'N',
   `CONTENT` varchar(8000) DEFAULT NULL,

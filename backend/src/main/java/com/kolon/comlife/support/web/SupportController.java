@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/info/livingSupport/*")
+@RequestMapping("/info/support/*")
 public class SupportController {
 
     private static final Logger logger = LoggerFactory.getLogger(SupportController.class);
@@ -50,7 +50,7 @@ public class SupportController {
      */
     @CrossOrigin
     @GetMapping(
-            value = "/category",
+            value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getSupportCategoryList( HttpServletRequest request ) {
 
@@ -58,7 +58,6 @@ public class SupportController {
         SupportCategoryInfo        cateInfoParam;
         List<SupportCategoryInfo>  cateInfoList;
         DataListInfo               retCateInfoList;
-
 
         logger.debug(">>> CmplxId: " + currUser.getCmplxId());
         logger.debug(">>> UserId: " + currUser.getUserId());

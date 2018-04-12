@@ -17,9 +17,17 @@
                                 #{id}
                             </foreach>
                     </when>
+                </choose>
+                <choose>
                     <when test='groupIdx != null'>
                         AND
                             `PARENT_IDX` = #{groupIdx}
+                    </when>
+                </choose>
+                <choose>
+                    <when test='cmplxIdx != null'>
+                        AND
+                            `CMPLX_IDX` = #{cmplxIdx}
                     </when>
                 </choose>
     </select>
@@ -40,6 +48,7 @@
                          `PARENT_IDX`,
                          `CODE`,
                          `RESERVATION_TYPE`,
+                         `IMAGES`,
                          `TITLE`,
                          `SUMMARY`,
                          `DESCRIPTION`,
@@ -65,6 +74,7 @@
                          #{parentIdx},
                          #{code},
                          #{reservationType},
+                         #{images},
                          #{title},
                          #{summary},
                          #{description},
@@ -108,6 +118,7 @@
                     `PARENT_IDX` = #{parentIdx},
                     `CODE` = #{code},
                     `RESERVATION_TYPE` = #{reservationType},
+                    `IMAGES` = #{images},
                     `TITLE` = #{title},
                     `SUMMARY` = #{summary},
                     `DESCRIPTION` = #{description},

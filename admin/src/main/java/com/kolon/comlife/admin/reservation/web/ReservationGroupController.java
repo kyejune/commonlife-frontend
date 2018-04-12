@@ -61,6 +61,15 @@ public class ReservationGroupController {
         mav.addObject( "groups", groups );
         mav.addObject( "complexes", complexes );
 
+        if( cmplxIdx != 0 ) {
+            HashMap schemeParams = new HashMap();
+            schemeParams.put( "cmplxIdx", cmplxIdx );
+            schemeParams.put( "groupIdx", 0 );
+            List<ReservationSchemeInfo> schemes = schemeService.index( schemeParams );
+
+            mav.addObject( "schemes", schemes );
+        }
+
         return mav;
     }
 

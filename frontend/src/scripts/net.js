@@ -162,6 +162,20 @@ export default {
             } );
     },
 
+    getReservationGroups( id, callback ){
+        axios.get( Store.api + '/reservation-groups/?cmplxIdx=' + id )
+            .then( response => {
+                callback( response.data );
+            } );
+    },
+
+    getReservationGroup( id, callback ){
+        axios.get( Store.api + '/reservation-groups/' + id )
+            .then( response => {
+                callback( response.data );
+            } );
+    },
+
     getReservation( id, callback ){
         axios.get( './dummy/reservation.json' )
             .then( response => {

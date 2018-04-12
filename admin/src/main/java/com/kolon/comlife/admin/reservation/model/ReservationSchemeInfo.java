@@ -9,6 +9,7 @@ public class ReservationSchemeInfo {
     private int parentIdx;
     private String code;
     private String reservationType;
+    private String images;
     private String title;
     private String summary;
     private String description;
@@ -69,6 +70,14 @@ public class ReservationSchemeInfo {
 
     public void setReservationType(String reservationType) {
         this.reservationType = reservationType;
+    }
+
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 
     public String getTitle() {

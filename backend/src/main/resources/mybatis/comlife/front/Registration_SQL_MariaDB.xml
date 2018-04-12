@@ -19,7 +19,9 @@
           CONTENT,
           CONTENT_DATE
         FROM
-          USR_REG_AGREEMENT
+          CL_USR_REG_AGREEMENT
+        WHERE
+          USE_YN='Y'
         ORDER BY
           CONTENT_DATE DESC
         LIMIT 1

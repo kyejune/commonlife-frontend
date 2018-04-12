@@ -29,7 +29,8 @@ class ReservationDetail extends Component {
             data.options.map( opt => {
                 if (opt.type === 'date')
                     data.dates = [ new Date( opt.value ), new Date( opt.value ) ];
-                else if( opt.type === 'dateRange')
+                else if( opt.type === 'dateRagit status' +
+                    'nge')
                     data.dates = [ new Date( opt.value[0] ), new Date( opt.value[1] ) ];
                 return null;
             });

@@ -21,8 +21,18 @@ import ReserveIcPlus from 'images/page-1@3x.png';
 import { observer } from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
 import net from '../../scripts/net';
+import TitleWithoutSelect from "../ui/TitleWithoutSelect";
 
 class Reservation extends Component {
+
+	constructor( props ) {
+		super( props );
+
+		this.state = {
+			groups: [],
+			schemes: [],
+		}
+	}
 
 	componentDidMount () {
 		this.updateRoute();
@@ -30,6 +40,10 @@ class Reservation extends Component {
 		// TODO: 어차피 Store 에서 관리할거면 로드하는 위치가 여기가 아니어도 될 것 같은데..
 		net.getComplexes( data=> {
 			Store.complexes = data;
+		} );
+
+		net.getReservationGroups( Store.cmplxId, data => {
+			this.setState( { groups: data.groups, schemes: data.schemes } );
 		} );
 	}
 
@@ -45,7 +59,7 @@ class Reservation extends Component {
 		// id위치에 특정 단어가 들어올때 처리
 		if( this.props.match.params.id === 'history' )
 			Store.pushDrawer( 'reservation-history' );
-		if( this.props.match.params.id === 'list' )
+		if( this.props.match.params.id === 'group' )
 			Store.pushDrawer( 'reservation-list' );
 		// id위치에 일반적으로 숫자가 들어오면 상세보기
 		else if( this.props.match.params.id )
@@ -73,139 +87,64 @@ class Reservation extends Component {
 
 			<div className="cl-fitted-box">
 
-				<SelectWithTitle/>
+				<SelectWithTitle displayLength={ this.state.groups.length }/>
 
 				<ul className="cl-reservation__list--group">
-					<li className="cl-reservation__list-item">
-						<Link to={'/reservation/list'}>
-							<div className="cl-flex-between">
-								<img src={ReserveGroupHome} alt="" className="cl-reservation__list-item-type-img"/>
-								<div className="cl-reservation__list-item-text">
-									<h5>생활 서비스</h5>
-									<p className="cl-ellipsis">세탁배달, 청소서비스, 음식배달외 3</p>
-								</div>
-								<img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
-							</div>
-						</Link>
-					</li>
-					<li className="cl-reservation__list-item">
-						<div>
-							<div className="cl-flex-between">
-								<img src={ReserveGroupTool} alt="" className="cl-reservation__list-item-type-img"/>
-								<div className="cl-reservation__list-item-text">
-									<h5>생활 서비스</h5>
-									<p className="cl-ellipsis">세탁배달, 청소서비스, 음식배달외 3</p>
-								</div>
-								<img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
-							</div>
-						</div>
-					</li>
-					<li className="cl-reservation__list-item">
-						<div>
-							<div className="cl-flex-between">
-								<img src={ReserveGroupStore} alt="" className="cl-reservation__list-item-type-img"/>
-								<div className="cl-reservation__list-item-text">
-									<h5>생활 서비스</h5>
-									<p className="cl-ellipsis">세탁배달, 청소서비스, 음식배달외 3</p>
-								</div>
-								<img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
-							</div>
-						</div>
-					</li>
-					<li className="cl-reservation__list-item">
-						<div>
-							<div className="cl-flex-between">
-								<img src={ReserveGroupEtc} alt="" className="cl-reservation__list-item-type-img"/>
-								<div className="cl-reservation__list-item-text">
-									<h5>생활 서비스</h5>
-									<p className="cl-ellipsis">세탁배달, 청소서비스, 음식배달외 3</p>
-								</div>
-								<img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
-							</div>
-						</div>
-					</li>
+					{
+						this.state.groups.map( ( group, key ) => {
+							return <li className="cl-reservation__list-item" key={ key }>
+                                <Link to={'/reservation/group/' + group.idx }>
+                                    <div className="cl-flex-between">
+                                        {group.icon === 'HOME' &&
+                                        <img src={ReserveGroupHome} alt=""
+                                             className="cl-reservation__list-item-type-img"/>
+                                        }
+                                        {group.icon === 'TOOL' &&
+                                        <img src={ReserveGroupTool} alt=""
+                                             className="cl-reservation__list-item-type-img"/>
+                                        }
+                                        {group.icon === 'STORE' &&
+                                        <img src={ReserveGroupStore} alt=""
+                                             className="cl-reservation__list-item-type-img"/>
+                                        }
+                                        {group.icon === 'ETC' &&
+                                        <img src={ReserveGroupEtc} alt=""
+                                             className="cl-reservation__list-item-type-img"/>
+                                        }
+                                        <div className="cl-reservation__list-item-text">
+                                            <h5>{ group.title }</h5>
+                                            <p className="cl-ellipsis">{ group.summary }</p>
+                                        </div>
+                                        <img src={ReserveGroupArrow} alt="" className="cl-reservation__list-item-bullet"/>
+                                    </div>
+                                </Link>
+                            </li>
+						} )
+                    }
 				</ul>
 
-				<SelectWithTitle/>
+				<TitleWithoutSelect label={ '서비스' } displayLength={ this.state.schemes.length }/>
 
 				<ul className="cl-reservation__list--service">
-					<li className="cl-reservation__list-item">
-						<div>
-							<div className="cl-flex-between">
-								<img src={ReserveServiceLaundry} alt="" className="cl-reservation__list-item-type-img"/>
-								<div className="cl-reservation__list-item-text">
-									<h5>세탁 서비스</h5>
-									<p className="cl-ellipsis">배달 1일전 예약가능</p>
-								</div>
-								<Link to={'/reservation/0'} className="cl-reservation__list-item-bullet">
-									<img src={ReserveIcPlus} alt=""/>
-									<span>예약하기</span>
-								</Link>
-							</div>
-						</div>
-					</li>
-					<li className="cl-reservation__list-item cl-reservation__notice">
-						<div>
-							<div className="cl-flex-between">
-								<img src={ReserveServiceCleaning} alt=""
-									 className="cl-reservation__list-item-type-img"/>
-								<div className="cl-reservation__list-item-text">
-									<h5>청소 서비스</h5>
-									<p className="cl-ellipsis">외부 서비스업체 사정에 따라 변경 또는 취소의 여지가 있을 수도 있습니다.</p>
-								</div>
-								<Link to={'/reservation/0'} className="cl-reservation__list-item-bullet">
-									<img src={ReserveIcPlus} alt=""/>
-									<span>예약하기</span>
-								</Link>
-							</div>
-						</div>
-					</li>
-					<li className="cl-reservation__list-item">
-						<div>
-							<div className="cl-flex-between">
-								<img src={ReserveServiceCleaning} alt=""
-									 className="cl-reservation__list-item-type-img"/>
-								<div className="cl-reservation__list-item-text">
-									<h5>청소 서비스</h5>
-									<p className="cl-ellipsis">외부 서비스업체 사정에 따라 변경 또는 취소의 여지가 있을 수도 있습니다.</p>
-								</div>
-								<Link to={'/reservation/0'} className="cl-reservation__list-item-bullet">
-									<img src={ReserveIcPlus} alt=""/>
-									<span>예약하기</span>
-								</Link>
-							</div>
-						</div>
-					</li>
-					<li className="cl-reservation__list-item">
-						<div>
-							<div className="cl-flex-between">
-								<img src={ReserveServiceFood} alt="" className="cl-reservation__list-item-type-img"/>
-								<div className="cl-reservation__list-item-text">
-									<h5>음식배달</h5>
-									<p className="cl-ellipsis">배달 1일전 예약가능</p>
-								</div>
-								<Link to={'/reservation/0'} className="cl-reservation__list-item-bullet">
-									<img src={ReserveIcPlus} alt=""/>
-									<span>예약하기</span>
-								</Link>
-							</div>
-						</div>
-					</li>
-					<li className="cl-reservation__list-item">
-						<div>
-							<div className="cl-flex-between">
-								<img src={ReserveServiceCarwash} alt="" className="cl-reservation__list-item-type-img"/>
-								<div className="cl-reservation__list-item-text">
-									<h5>세차서비스</h5>
-									<p className="cl-ellipsis">배달 1일전 예약가능</p>
-								</div>
-								<Link to={'/reservation/0'} className="cl-reservation__list-item-bullet">
-									<img src={ReserveIcPlus} alt=""/>
-									<span>예약하기</span>
-								</Link>
-							</div>
-						</div>
-					</li>
+					{
+						this.state.schemes.map( ( scheme, key ) => {
+							return <li className="cl-reservation__list-item" key={ key }>
+                                <div>
+                                    <div className="cl-flex-between">
+                                        <img src={ReserveServiceLaundry} alt="" className="cl-reservation__list-item-type-img"/>
+                                        <div className="cl-reservation__list-item-text">
+                                            <h5>{ scheme.title }</h5>
+                                            <p className="cl-ellipsis">{ scheme.summary }</p>
+                                        </div>
+                                        <Link to={'/reservation/0'} className="cl-reservation__list-item-bullet">
+                                            <img src={ReserveIcPlus} alt=""/>
+                                            <span>예약하기</span>
+                                        </Link>
+                                    </div>
+                                </div>
+                            </li>
+						} )
+                    }
 				</ul>
 
 			</div>
