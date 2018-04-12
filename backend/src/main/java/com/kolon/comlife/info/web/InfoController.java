@@ -1,6 +1,7 @@
 package com.kolon.comlife.info.web;
 
 import com.kolon.comlife.common.model.DataListInfo;
+import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.info.model.*;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.postFile.model.PostFileInfo;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/info/*")
@@ -452,6 +455,34 @@ public class InfoController {
         return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoMyStatusDetailMockValue( myStatusIdx ) );
     }
 
+    private Map<String, Object> getInfoProfileMockValue() {
+        Map ret = new HashMap();
 
+        ret.put("userImgSrc" , "https://clback.cyville.net/imageStore/55");
+        ret.put("userId", "yunakim");
+        ret.put("userNm", "김유나");
+        ret.put("email", "yunakim@gmail.com");
+
+        ret.put("cmplxNm", "역삼동 하우징");
+        ret.put("cmplxAddr", "yunakim@gmail.com");
+
+        return ret;
+    }
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/profile",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getInfoProfile(HttpServletRequest request ) {
+        return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoProfileMockValue() );
+    }
+
+    @CrossOrigin
+    @PutMapping(
+            value = "/profile",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity setInfoProfile(HttpServletRequest request ) {
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("업데이트 되었습니다"));
+    }
 
 }
