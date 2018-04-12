@@ -70,7 +70,7 @@ class ReservationList extends Component{
                                             <h5>{ scheme.title }</h5>
                                             <p className="cl-ellipsis">{ scheme.summary }</p>
                                         </div>
-                                        <Link to={'/reservation/0'} className="cl-reservation__list-item-bullet">
+                                        <Link to={'/reservation/' + scheme.idx} className="cl-reservation__list-item-bullet">
                                             <img src={ReserveIcPlus} alt=""/>
                                             <span>예약하기</span>
                                         </Link>

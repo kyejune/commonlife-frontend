@@ -8,7 +8,8 @@ import completeSrc from 'images/complete-bt-blueicon@3x.png';
 import DateOne from "components/ui/DateOne";
 import DatePeriod from "components/ui/DatePeriod";
 import { Link } from 'react-router-dom';
-
+import Store from "../../scripts/store";
+import moment from "moment";
 
 class ReservationDetail extends Component {
 
@@ -17,27 +18,158 @@ class ReservationDetail extends Component {
 
         this.state = {
             loaded: false,
-            available: false,
+            available: true,
             booked: false,
             reserved: false,
         };
 
-
         DB.getReservation(this.props.match.params.id, data => {
             data.loaded = true;
 
-            data.options.map( opt => {
-                if (opt.type === 'date')
-                    data.dates = [ new Date( opt.value ), new Date( opt.value ) ];
-                else if( opt.type === 'dateRagit status' +
-                    'nge')
-                    data.dates = [ new Date( opt.value[0] ), new Date( opt.value[1] ) ];
-                return null;
-            });
+            const result = {
+                "loaded": true,
+                "pictures": [
+                    {
+                        "thumbnail": "https://placeimg.com/640/480/arch"
+                    },
+                    {
+                        "thumbnail": "https://placeimg.com/480/640/nature"
+                    },
+                    {
+                        "thumbnail": "https://placeimg.com/300/300/tech"
+                    },
+                    {
+                        "thumbnail": "https://placeimg.com/640/480/animals"
+                    },
+                    {
+                        "thumbnail": "https://placeimg.com/640/480/arch"
+                    }
+                ],
+                "where": data.title,
+                "description": data.description,
+                "branch": data.complex.cmplxNm,
+                "map": "맵 링크",
+                "options": [
+                    // {
+                    //     "type": "date",
+                    //     "value": "2018-02-15",
+                    //     "min": "2018-02-01",
+                    //     "max": "2018-12-30"
+                    // },
+                    // {
+                    //     "type": "dateRange",
+                    //     "value": [
+                    //         "2018-02-27",
+                    //         "2018-02-28"
+                    //     ],
+                    //     "min": "2018-02-01",
+                    //     "max": "2018-03-10",
+                    //     "days": 3,
+                    //     "minDays": 2,
+                    //     "maxDays": 4
+                    // },
+                    // {
+                    //     "type": "info",
+                    //     "title": "예약가능",
+                    //     "info": "20석 / 총 80석"
+                    // },
+                    // {
+                    //     "type": "select",
+                    //     "title": "옵션",
+                    //     "value": 0,
+                    //     "options": [
+                    //         "소형창고 222m",
+                    //         "중형창고 333m",
+                    //         "대형창고 444m"
+                    //     ]
+                    // },
+                    // {
+                    //     "type": "counter",
+                    //     "title": "수량",
+                    //     "value": 1,
+                    //     "min": 1,
+                    //     "max": 3
+                    // },
 
-            this.setState(data);
-            this.props.updateTitle(data.where); // ContentHolder에 전달
+                ],
+                "cost": data.point,
+                "balance": 0,
+                "inclusion": {
+                    "comment": data.options,
+                    "icons": [
+                        // "fridge",
+                        // "tv",
+                        // "cabinet"
+                    ]
+                },
+                "notice": [
+                    data.precautions
+                ]
+            };
+
+            if( data.images ) {
+                result.pictures = data.images.split( ',' ).map( image => {
+                    return { thumbnail: Store.api + "/imageStore/" + image }
+                } );
+            }
+
+            // 오늘 그리고 내일
+            const now = moment();
+            const tommorow = moment().add( 1, 'days' );
+
+            if( data.reservationType === 'A' ) {
+                result.options.push({
+                    "type": "date",
+                    "value": now.format('YYYY-MM-DD'),
+                    "min": moment(data.startDt, 'YYYY-MM-DD').format('YYYY-MM-DD'),
+                    "max": moment(data.endDt, 'YYYY-MM-DD').format('YYYY-MM-DD')
+                });
+                result.options.push( {
+                    "type": "time",
+                    "value": parseInt( now.format( 'HH' ), 10 ),
+                    "start": 0,
+                    "end": 24,
+                    "selected": []
+                    // "maxWidth": 3,
+                    // "selected": [
+                    //     {
+                    //         "start": 9,
+                    //         "end": 10
+                    //     },
+                    //     {
+                    //         "start": 12,
+                    //         "end": 14
+                    //     }
+                    // ]
+                } );
+
+                // TimeScheduler 조정용 date 객체 삽입
+                result.dates = [ now.toDate(), now.toDate() ];
+            }
+            else if( data.reservationType === 'B' ) {
+                result.options.push({
+                    "type": "dateRange",
+                    "value": [
+                        now.format('YYYY-MM-DD'),
+                        moment().add(1, 'day').format('YYYY-MM-DD')
+                    ],
+                    "min": moment(data.startDt, 'YYYY-MM-DD').format('YYYY-MM-DD'),
+                    "max": moment(data.endDt, 'YYYY-MM-DD').format('YYYY-MM-DD')
+                });
+
+                // TimeScheduler 조정용 date 객체 삽입
+                result.dates = [ now.toDate(), tommorow.toDate() ];
+            }
+
+            // 원본 데이터도 바인딩 시켜둔다
+            result.scheme = data;
+
+            this.setState( result );
+            this.props.updateTitle( data.title );
         });
+
+        // 함수 스코프 바인딩
+        this.reserve = this.reserve.bind( this );
     }
 
     addFloat(integer) {
@@ -48,7 +180,21 @@ class ReservationDetail extends Component {
 
     // 예약하기
     reserve() {
-        this.setState({reserved: true});
+        let parentIdx = this.props.match.params.id;
+        let startDt = moment( this.state.dates[ 0 ] ).format( 'YYYY-MM-DD' );
+        let startTime = moment( this.state.dates[ 0 ] ).format( 'HH:mm' );
+        let endDt =  moment( this.state.dates[ 1 ] ).format( 'YYYY-MM-DD' );
+        let endTime = moment( this.state.dates[ 1 ] ).format( 'HH:mm' );
+
+        DB.createReservation( {
+            parentIdx,
+            startDt,
+            startTime,
+            endDt,
+            endTime,
+        }, () => {
+            this.setState({reserved: true});
+        } );
     }
 
     // 대기요청하기
@@ -146,10 +292,10 @@ class ReservationDetail extends Component {
             {
                 return <TimeScheduler // 24시간 기준으로 기입!!
                     key="time"
-                    maxWidth={3} // 최대시간, min-width는 0.5로 고정
-                    min={10} // 예약가능한 시작 시간
-                    max={20} // 예야가능한 마지막 시간
-                    scheduled={[{start: 10, end: 11}, {start: 15, end: 17}]} // 기 예약된 내용
+                    // maxWidth={3} // 최대시간, min-width는 0.5로 고정
+                    min={opt.start} // 예약가능한 시작 시간
+                    max={opt.end} // 예야가능한 마지막 시간
+                    scheduled={[]} // 기 예약된 내용
                     onUpdate={ data => this.onUpdateTimeSchedule( data ) }
                 />
             }

@@ -181,10 +181,17 @@ export default {
     },
 
     getReservation( id, callback ){
-        axios.get( 'http://localhost:3000/dummy/reservation.json' )
+        axios.get( Store.api + '/reservation-schemes/' + id )
             .then( response => {
-                callback( response.data['0'] );
+                callback( response.data );
             } );
+    },
+
+    createReservation( data, callback ) {
+        axios.post( Store.api + '/reservations/', data )
+            .then( response => {
+                callback( response.data );
+            } )
     },
 
 
