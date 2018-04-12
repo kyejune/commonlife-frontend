@@ -145,8 +145,6 @@ class TimeScheduler extends Component {
         const MIN = this.props.min;
         const HALF_LEN = (this.props.max - MIN) * 2;
 
-        console.log( 'ts:', MIN, this.props.max, HALF_LEN );
-
         // 30분 단위로 그리기
         let halfHours = [...Array(HALF_LEN)].map((e, i) => {
             let timeString;
