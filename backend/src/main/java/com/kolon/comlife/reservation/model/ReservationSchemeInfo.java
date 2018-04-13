@@ -18,9 +18,9 @@ public class ReservationSchemeInfo {
     private String description;
     private String isOpen;
     private String startDt;
-    private String startTime;
     private String endDt;
-    private String endTime;
+    private String openTime;
+    private String closeTime;
     private String availableInWeekend;
     private int point;
     private int amount;
@@ -126,14 +126,6 @@ public class ReservationSchemeInfo {
         this.startDt = startDt;
     }
 
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
     public String getEndDt() {
         return endDt;
     }
@@ -142,12 +134,20 @@ public class ReservationSchemeInfo {
         this.endDt = endDt;
     }
 
-    public String getEndTime() {
-        return endTime;
+    public String getOpenTime() {
+        return openTime;
     }
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
+    public void setOpenTime(String openTime) {
+        this.openTime = openTime;
+    }
+
+    public String getCloseTime() {
+        return closeTime;
+    }
+
+    public void setCloseTime(String closeTime) {
+        this.closeTime = closeTime;
     }
 
     public String getAvailableInWeekend() {
