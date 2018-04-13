@@ -442,7 +442,38 @@ export default {
             .then(response => {
                 callback(true, response);
             });
-    }
+    },
+
+
+    // 프로필 페이지
+    getProfileInfo( callback ){
+        axios.get('/info/profile' )
+            .then( response=>{
+                callback( response.data );
+            });
+    },
+
+    changeProfileImage( base64img, callback ){
+        axios.post( '/imageStore/profile/b64', { file:base64img })
+            .then( response =>{
+                callback( response.data );
+            });
+    },
+
+    changeEmail( address, callback ){
+        axios.put( '/info/profile', { newEmail: address } )
+            .then( response=>{
+               callback( response.data );
+            });
+    },
+
+    changePassword( oldPw, newPw, callback ){
+        axios.put( '/info/profile', { oldUserPw:oldPw, newUserPw:newPw })
+            .then( response=>{
+               callback( response.data );
+            });
+    },
+
 
 
 };
