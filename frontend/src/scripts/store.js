@@ -1,5 +1,6 @@
 import {observable} from 'mobx';
 import { Drawer } from 'react-md';
+import Cookie from 'js-cookie';
 
 let host = 'https://clback.cyville.net';
 if( window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' )
@@ -9,13 +10,16 @@ if( window.location.hostname === 'localhost' || window.location.hostname === '12
 if( window.location.protocol === 'file:' && window.location.pathname.includes('CoreSimulator') )
     host = 'http://192.168.0.100:8080';
 
+// Cookie.set( 'force-look-localhost', true );
+// Cookie.set( 'force-look-localhost', false );
 
 // 덮어쓰기
 // host = 'https://cl-stage.cyville.net'; // 클라 전달용
 // host = 'http://localhost:8080';      // ykim 로컬 테스트용
 // host = 'https://cl-stage.cyville.net'; // 클라 전달용
-// host = 'https://clback.cyville.net'; // 테스트용
-
+if( !Cookie.get( 'force-look-localhost' ) ) {
+    host = 'https://clback.cyville.net'; // 테스트용
+}
 
 // 생성용 시나리오/자동화 객체
 /*
