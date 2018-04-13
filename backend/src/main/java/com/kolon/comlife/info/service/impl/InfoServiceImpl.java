@@ -7,7 +7,10 @@ import com.kolon.comlife.info.model.InfoMain;
 import com.kolon.comlife.info.service.InfoService;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.post.service.impl.PostDAO;
+import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.postFile.service.exception.NoDataException;
+import com.kolon.comlife.postFile.service.impl.PostFileDAO;
+import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.model.UserExtInfo;
 import com.kolon.comlife.users.service.impl.UserDAO;
 import com.kolon.common.model.AuthUserInfo;
@@ -16,7 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -24,7 +29,7 @@ import java.util.List;
 public class InfoServiceImpl implements InfoService {
     private static final Logger logger = LoggerFactory.getLogger( InfoServiceImpl.class );
 
-    private String NO_NOTICE = "공지 사항이 없습니다.";
+    private String NO_NOTICE = null; // 공지사항 없는 경우, null 값 전송
 
     @Autowired
     UserDAO userDAO;
@@ -38,6 +43,10 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     PostDAO postDAO;
 
+    @Autowired
+    PostFileDAO postFileDAO;
+
+    @Override
     public InfoMain getInfoMain( AuthUserInfo authUserInfo ) throws NoDataException {
         InfoMain       infoMain = new InfoMain();
         ComplexInfo    cmplxInfo;
@@ -87,6 +96,50 @@ public class InfoServiceImpl implements InfoService {
         infoMain.setInfoList( infoDataList );
 
         return infoMain;
+    }
+
+
+    @Override
+    public PostInfo getInfoNoticeByComplexId( int cmplxId ) throws NoDataException {
+
+        int                noticeIdx;
+        ComplexInfo        cmplxInfo;
+        PostInfo           postInfo;
+        PostFileInfo       postFile;
+        List<PostFileInfo> postFileList;
+        List<Integer>      userIds;
+        List<PostUserInfo> userList;
+
+        cmplxInfo = complexDAO.selectComplexById( cmplxId );
+
+        if( "Y".equals( cmplxInfo.getNoticeYn() )) {
+            userIds = new ArrayList<>();
+
+            // usrId는 상관 없음
+            noticeIdx = cmplxInfo.getNoticeIdx();
+
+            postInfo = postDAO.selectPost( noticeIdx, -1 );
+
+            userIds.add(postInfo.getUsrId());
+            userList = userDAO.getUserListForPostById( userIds );
+            if( userList == null || userList.size() < 1 ) {
+                throw new NoDataException("해당 게시물 정보를 가져올 수 없습니다.");
+            }
+            postInfo.setUser( userList.get(0) );
+
+            postFileList = postFileDAO.getPostFilesByPostId( noticeIdx );
+            if( postFileList != null && postFileList.size() > 0 ) {
+                postFile = postFileList.get(0);
+
+                // PostInfo에 이미지 파일 연결
+                postInfo.getPostFiles().add( postFile );
+            }
+        } else {
+            postInfo = new PostInfo();
+            postInfo.setContent( NO_NOTICE );
+        }
+
+        return postInfo;
     }
 
 }
