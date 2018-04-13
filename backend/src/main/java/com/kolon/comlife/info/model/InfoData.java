@@ -1,5 +1,8 @@
 package com.kolon.comlife.info.model;
 
+import org.apache.ibatis.type.Alias;
+
+
 public class InfoData {
     String infoKey;
     String imgSrc;

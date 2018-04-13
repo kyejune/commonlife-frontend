@@ -19,17 +19,23 @@ public class PostDAO {
     @Resource
     private SqlSession sqlSession;
 
-    public PostInfo selectPost(int id, int usrId) {
+    public PostInfo selectPost(int postIdx, int usrId) {
         Map<String, Integer> selectParams = new HashMap<>();
 
         selectParams.put( "usrId", Integer.valueOf(usrId) );
-        selectParams.put( "postIdx", Integer.valueOf(id) );
+        selectParams.put( "postIdx", Integer.valueOf(postIdx) );
         selectParams.put( "cmplxId", null );
         selectParams.put( "postType", null );
         selectParams.put( "limit", null );
         selectParams.put( "offset", null );
 
         return sqlSession.selectOne( "Post.selectPostList", selectParams );
+    }
+
+    public PostInfo selectPostContentOnly(int postIdx) {
+        Map<String, Integer> selectParams = new HashMap<>();
+        selectParams.put( "postIdx", Integer.valueOf(postIdx) );
+        return sqlSession.selectOne( "Post.selectPostContentOnly", selectParams );
     }
 
     public int countPostList() {

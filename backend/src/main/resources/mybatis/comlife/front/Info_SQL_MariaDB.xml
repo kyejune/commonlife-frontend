@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Info">
+    <select id="selectInfoDataListByCmplxId" parameterType="java.util.Map" resultType="infoData">
+        <![CDATA[
+            SELECT
+                CATE.CATE_ID AS INFO_KEY,
+                CATE.IMG_SRC AS IMG_SRC,
+                CATE.CATE_NM AS INFO_NM,
+                CONF.DISP_ORDER AS DISP_ORDER
+            FROM
+                CL_INFO_CONF AS CONF
+                    LEFT JOIN
+                CL_INFO_CATE AS CATE
+                  ON CATE.CATE_IDX = CONF.CATE_IDX AND CONF.CMPLX_ID = 127
+            ORDER BY DISP_ORDER ASC
+            ;
+        ]]>
+    </select>
+
+
+
+</mapper>

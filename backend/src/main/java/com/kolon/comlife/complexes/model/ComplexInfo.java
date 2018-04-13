@@ -22,8 +22,25 @@ public class ComplexInfo extends ComplexInfoBase {
     private String clCmplxAddr;     // CL_CMPLX_ADDR
     private String clMapSrc;   // CL_MAP_SRC
     private String clLogoImgSrc;    // CL_LOGO_IMG_SRC
+    private String noticeYn;
+    private int noticeIdx;
 
 
+    public String getNoticeYn() {
+        return noticeYn;
+    }
+
+    public void setNoticeYn(String noticeYn) {
+        this.noticeYn = noticeYn;
+    }
+
+    public int getNoticeIdx() {
+        return noticeIdx;
+    }
+
+    public void setNoticeIdx(int noticeIdx) {
+        this.noticeIdx = noticeIdx;
+    }
 
     public ComplexInfo() {
         super(0,null, null);

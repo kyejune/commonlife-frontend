@@ -41,7 +41,7 @@
                 LIMIT 1
             ) AS IMG_SRC,
             IFNULL(USER_ALIAS, USER_NM) AS USER_ALIAS,
-            CMPLX_NM
+            CL_CMPLX_NM AS CMPLX_NM
         FROM
           USR_INFO
             LEFT JOIN
@@ -50,6 +50,9 @@
             JOIN
           COMPLEX_M
               ON USR_INFO.CMPLX_ID = COMPLEX_M.CMPLX_ID
+            LEFT JOIN
+          COMPLEX_M_EXT
+              ON COMPLEX_M.CMPLX_ID = COMPLEX_M_EXT.CMPLX_ID
         WHERE
             USR_INFO.USR_ID
         IN

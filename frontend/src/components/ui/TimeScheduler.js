@@ -20,22 +20,24 @@ class TimeScheduler extends Component {
 
     // 기 예약된 부분 제작
     makeState=( props )=>{
+        // console.log('TS:', props );
         let S = {};
 
         const W = 26;
-        const MIN = props.min;
+        const MIN = parseFloat( props.min );
+        const MAX = parseFloat( props.max );
 
         // 최초 시작타임 계산용
-        let starts = [...Array(( props.max - MIN) * 2)].map((e, i) => {
+        let starts = [...Array(( MAX - MIN) * 2)].map((e, i) => {
             return i
         });
 
         // 예약시간 세팅: 1~24 시간단위 30분은 0.5
-        let START = props.start || 12;
-        let DURATION = props.duration || 1;
+        let START = parseFloat(props.start) || 12;
+        let DURATION = parseFloat(props.duration) || 1;
         if( this.state ){
-            START = this.state.start;
-            DURATION = this.state.duration || 1;
+            START = parseFloat(this.state.start);
+            DURATION = parseFloat(this.state.hour) || 1;
         }
 
         let offset = 0;
@@ -57,6 +59,9 @@ class TimeScheduler extends Component {
         S.W = W;
         S.remains = starts;
         S.disabledEl = disableds;
+        S.min = MIN;
+
+        // console.log( 'S:', S );
 
         return S;
     }
@@ -85,9 +90,9 @@ class TimeScheduler extends Component {
     }
 
     // 타임존 드래그용 이벤트 헨들러
-    timeDrag() {
+    timeDrag=()=> {
         setTimeout(() => {
-            this.setState({start: (this.timeEl.style.transform.match(/\d+/g)[0] / this.state.W) * .5 + this.props.min});
+            this.setState({start: (this.timeEl.style.transform.match(/\d+/g)[0] / this.state.W) * .5 + this.state.min});
             this.updateTimeSize();
         }, 0);
     }
@@ -98,6 +103,8 @@ class TimeScheduler extends Component {
         const S = this.state.start;
         const H = this.state.hour;
         const R = this.state.remains;
+
+        console.log( S );
 
         let selected = [...Array(H * 2)].map((e, i) => {
             return ( S - this.props.min )*2 + i;

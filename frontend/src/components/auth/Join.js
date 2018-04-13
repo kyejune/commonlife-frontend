@@ -17,7 +17,7 @@ class Join extends Component {
         super(props);
 
         this.state = {
-            step: parseInt(new URLSearchParams(props.location.search).get('step')) || 0,
+            step: parseInt(new URLSearchParams(props.location.search).get('step'), 10) || 0,
         };
 
         this.STEP_INFO = [
@@ -32,7 +32,7 @@ class Join extends Component {
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location)
             this.setState({
-                step: parseInt(new URLSearchParams(this.props.location.search).get('step')) || 0
+                step: parseInt(new URLSearchParams(this.props.location.search).get('step'), 10) || 0
             });
     }
 
