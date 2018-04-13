@@ -27,8 +27,8 @@ class ReservationDetail extends Component {
 			data.loaded = true;
 
 			const result = {
-				"loaded": true,
-				"pictures": [
+				loaded: true,
+				pictures: [
 					{
 						"thumbnail": "https://placeimg.com/640/480/arch"
 					},
@@ -45,29 +45,11 @@ class ReservationDetail extends Component {
 						"thumbnail": "https://placeimg.com/640/480/arch"
 					}
 				],
-				"where": data.title,
-				"description": data.description,
-				"branch": data.complex.cmplxNm,
-				"map": "맵 링크",
+				where: data.title,
+				description: data.description,
+				branch: data.complex.cmplxNm,
+				map: "https://www.google.com/maps/search/" + data.complex.addr.toString().split( ' ' ).join( '+' ),
 				"options": [
-					// {
-					//     "type": "date",
-					//     "value": "2018-02-15",
-					//     "min": "2018-02-01",
-					//     "max": "2018-12-30"
-					// },
-					// {
-					//     "type": "dateRange",
-					//     "value": [
-					//         "2018-02-27",
-					//         "2018-02-28"
-					//     ],
-					//     "min": "2018-02-01",
-					//     "max": "2018-03-10",
-					//     "days": 3,
-					//     "minDays": 2,
-					//     "maxDays": 4
-					// },
 					// {
 					//     "type": "info",
 					//     "title": "예약가능",
@@ -379,7 +361,7 @@ class ReservationDetail extends Component {
 				<div className="cl-opt-sec cl-flex-between cl-opt-sec--branch">
 					<div className="cl-label">지점</div>
 					<div>{this.state.branch}</div>
-					<button className="cl-map__link"/>
+					<button className="cl-map__link" onClick={ () => window.open( this.state.map )}/>
 				</div>
 
 				{Options}
