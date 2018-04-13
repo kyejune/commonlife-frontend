@@ -23,9 +23,26 @@ public class ImageInfoUtil {
 
     private static Map<String, String> supportedImageTypes = null;
 
+    private static String IMAGE_STORE_BASE_PATH = "/imageStore";
+
+    private static String getImageTypePathInternal(String imageType) {
+        return imageType.toLowerCase();
+    }
+
     public static String getImageTypePath(String imageType) {
 
-        return imageType.toLowerCase() + "/";
+        return getImageTypePathInternal(imageType) + "/";
+    }
+
+    public static String getImagePath( String sizeSuffix, int imageIdx ) {
+        StringBuilder strBuilder = new StringBuilder();
+
+        strBuilder.append( IMAGE_STORE_BASE_PATH );
+        strBuilder.append( "/" );
+        strBuilder.append( imageIdx );
+        strBuilder.append( sizeSuffix );
+
+        return strBuilder.toString();
     }
 
     public static boolean isSupportedType( String imageType ) {

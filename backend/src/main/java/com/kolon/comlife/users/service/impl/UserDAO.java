@@ -1,11 +1,13 @@
 package com.kolon.comlife.users.service.impl;
 
 import com.kolon.comlife.users.model.PostUserInfo;
+import com.kolon.comlife.users.model.UserExtInfo;
 import com.kolon.comlife.users.model.UserInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +23,18 @@ public class UserDAO {
 
     public List<UserInfo> getUserListById(List<Integer> ids) {
         return sqlSession.selectList( "User.selectUserListById", ids );
+    }
+
+    public UserInfo getUserById( int usrId ) {
+        List<Integer> usrIdList = new ArrayList<>();
+        usrIdList.add( new Integer( usrId ) );
+        return sqlSession.selectOne( "User.selectUserListById", usrIdList );
+    }
+
+    public UserExtInfo getUserExtById( int usrId ) {
+        List<Integer> usrIdList = new ArrayList<>();
+        usrIdList.add( new Integer( usrId ) );
+        return sqlSession.selectOne( "User.selectUserListById", usrIdList );
     }
 
     public int setUserExt( int usrId ) {
