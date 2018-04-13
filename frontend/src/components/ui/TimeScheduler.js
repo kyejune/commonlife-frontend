@@ -10,19 +10,36 @@ class TimeScheduler extends Component {
 
     constructor(props) {
         super(props);
+        this.state = this.makeState( props );
+    }
 
+    componentWillReceiveProps( nextProps ){
+        this.setState( this.makeState( nextProps ) );
+        setTimeout( this.updateTimeSize, 0 );
+    }
+
+    // 기 예약된 부분 제작
+    makeState=( props )=>{
+        let S = {};
 
         const W = 26;
-        const MIN = this.props.min;
+        const MIN = props.min;
 
         // 최초 시작타임 계산용
-        let starts = [...Array((this.props.max - MIN) * 2)].map((e, i) => {
+        let starts = [...Array(( props.max - MIN) * 2)].map((e, i) => {
             return i
         });
 
-        // 기 예약된 부분 빗금 부분 미리 생성
+        // 예약시간 세팅: 1~24 시간단위 30분은 0.5
+        let START = props.start || 12;
+        let DURATION = props.duration || 1;
+        if( this.state ){
+            START = this.state.start;
+            DURATION = this.state.duration || 1;
+        }
+
         let offset = 0;
-        let disabled = props.scheduled.map((schedule, i) => {
+        let disableds = props.scheduled.map((schedule, i) => {
 
             let h = (schedule.start - MIN) * 2;
             let hLen = (schedule.end - schedule.start) * 2;
@@ -35,19 +52,13 @@ class TimeScheduler extends Component {
             />
         });
 
+        S.start = START;
+        S.hour = DURATION;
+        S.W = W;
+        S.remains = starts;
+        S.disabledEl = disableds;
 
-        // 예약시간 세팅: 1~24 시간단위 30분은 0.5
-        const START = this.props.start || 12;
-        const DURATION = this.props.duration || 1;
-
-        this.state = {
-            start: START,// starts[0]*.5 + props.min,
-            hour: DURATION,
-            W: W,
-            remains: starts,
-            disabledEl: disabled,
-            incorrect: false,
-        }
+        return S;
     }
 
     // 핸들 드래그용 이벤트 헨들러
@@ -65,7 +76,7 @@ class TimeScheduler extends Component {
     }//
 
 
-    syncTimeSize() {
+    syncTimeSize=()=>{
         let x = this.handleEl.style.transform.match(/\d+/g)[0];
         this.timeEl.style.width = `${x}px`;
 
@@ -82,13 +93,11 @@ class TimeScheduler extends Component {
     }
 
     // 타임존 위치나 크기가 변경될때, 기 예약된 부분과 hitTest
-    updateTimeSize() {
+    updateTimeSize=()=>{
         // start, hour은 시간단위로 기록되있고, remains는 index로 기록되있음
         const S = this.state.start;
         const H = this.state.hour;
         const R = this.state.remains;
-
-        // console.log( 'updateTimeSize) start:', S, ' hour:', H );
 
         let selected = [...Array(H * 2)].map((e, i) => {
             return ( S - this.props.min )*2 + i;
