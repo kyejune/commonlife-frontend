@@ -48,6 +48,8 @@ class TimeScheduler extends Component {
             disabledEl: disabled,
             incorrect: false,
         }
+
+        console.log("TimeScheduler.props:", props );
     }
 
     // 핸들 드래그용 이벤트 헨들러
@@ -142,13 +144,13 @@ class TimeScheduler extends Component {
     render() {
 
         const W = this.state.W;
-        const MIN = this.props.min;
+        const MIN = parseFloat(this.props.min);
         const HALF_LEN = (this.props.max - MIN) * 2;
 
         // 30분 단위로 그리기
         let halfHours = [...Array(HALF_LEN)].map((e, i) => {
             let timeString;
-            let h = i / 2 + this.props.min;
+            let h = i / 2 + MIN;
             let disabledAreas, selectedArea;
 
             // 시간단위 표시
