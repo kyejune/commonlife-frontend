@@ -1,6 +1,8 @@
 package com.kolon.comlife.info.web;
 
+import com.amazonaws.services.xray.model.Http;
 import com.kolon.comlife.common.model.DataListInfo;
+import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
@@ -11,6 +13,7 @@ import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.postFile.service.exception.NoDataException;
 import com.kolon.comlife.users.model.PostUserInfo;
+import com.kolon.comlife.users.model.UserExtInfo;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
@@ -381,34 +384,63 @@ public class InfoController {
         return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoMyStatusDetailMockValue( myStatusIdx ) );
     }
 
-    private Map<String, Object> getInfoProfileMockValue() {
-        Map ret = new HashMap();
-
-        ret.put("userImgSrc" , "https://clback.cyville.net/imageStore/55");
-        ret.put("userId", "yunakim");
-        ret.put("userNm", "김유나");
-        ret.put("email", "yunakim@gmail.com");
-
-        ret.put("cmplxNm", "역삼동 하우징");
-        ret.put("cmplxAddr", "서울시 강남구 역삼로 123");
-
-        return ret;
-    }
-
     @CrossOrigin
     @GetMapping(
             value = "/profile",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getInfoProfile(HttpServletRequest request ) {
-        return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoProfileMockValue() );
+
+        AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+        InfoUserProfile userProfile;
+
+        try {
+            userProfile = infoService.getInfoProfile( authUserInfo );
+        } catch( NoDataException e ) {
+            logger.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( e.getMessage() );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( userProfile  );
     }
 
     @CrossOrigin
     @PutMapping(
             value = "/profile",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity setInfoProfile(HttpServletRequest request ) {
-        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("업데이트 되었습니다"));
+    public ResponseEntity setInfoProfile( HttpServletRequest request,
+                                          @RequestBody Map<String, String> bodyMap ) {
+
+        AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+        InfoUserProfile userProfile;
+        String newEmail = bodyMap.get("newEmail");
+        String oldUserPw = bodyMap.get("oldUserPw");
+        String newUserPw = bodyMap.get("newUserPw");
+
+        try {
+            if( newEmail != null && (oldUserPw == null || newUserPw == null) ) {
+                // Email 변경
+                logger.debug("email 변경!");
+                userProfile = infoService.updateInfoProfileEmail( authUserInfo, newEmail );
+            } else if( (oldUserPw != null && newUserPw != null) && newEmail == null ) {
+                // 암호 변경
+                logger.debug("암호 변경!");
+                userProfile = infoService.updateInfoProfileUserPw( authUserInfo, oldUserPw, newUserPw );
+            } else {
+                logger.error("잘못된 파라미터입니다.");
+                return ResponseEntity
+                        .status( HttpStatus.BAD_REQUEST )
+                        .body( new SimpleErrorInfo("잘못된 파라미터입니다.") );
+            }
+        } catch( NoDataException e ) {
+            logger.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( new SimpleErrorInfo(e.getMessage()) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( userProfile );
     }
 
 }

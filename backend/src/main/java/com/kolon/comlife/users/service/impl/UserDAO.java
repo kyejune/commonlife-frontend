@@ -55,4 +55,21 @@ public class UserDAO {
         params.put("userId", userId);
         return sqlSession.selectOne( "User.selectUsrIdByUserId", params );
     }
+
+    public int updateUserEmail( String newEmail, int usrId, String userId ) {
+        Map params = new HashMap();
+        params.put("newEmail",  newEmail);
+        params.put("usrId",     Integer.valueOf( usrId ));
+        params.put("userId",    userId);
+        return sqlSession.update( "User.updateUserEmail", params );
+    }
+
+    public int updateUserPw( String oldUserPw, String newUserPw, int usrId, String userId ) {
+        Map params = new HashMap();
+        params.put("oldUserPw",  oldUserPw);
+        params.put("newUserPw",  newUserPw);
+        params.put("usrId",     Integer.valueOf( usrId ));
+        params.put("userId",    userId);
+        return sqlSession.update( "User.updateUserPw", params );
+    }
 }
