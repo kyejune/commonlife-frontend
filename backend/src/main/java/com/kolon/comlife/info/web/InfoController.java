@@ -2,10 +2,21 @@ package com.kolon.comlife.info.web;
 
 import com.kolon.comlife.common.model.DataListInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
+import com.kolon.comlife.complexes.model.ComplexInfo;
+import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.info.model.*;
+import com.kolon.comlife.info.service.InfoService;
+import com.kolon.comlife.info.service.impl.InfoServiceImpl;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.postFile.model.PostFileInfo;
+import com.kolon.comlife.postFile.service.exception.NoDataException;
 import com.kolon.comlife.users.model.PostUserInfo;
+import com.kolon.comlife.users.service.UserService;
+import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.servlet.AuthUserInfoUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +31,16 @@ import java.util.Map;
 @RestController
 @RequestMapping("/info/*")
 public class InfoController {
+    private static final Logger logger = LoggerFactory.getLogger( InfoController.class );
 
+    @Autowired
+    InfoService infoService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    ComplexService complexService;
 
     private InfoMain getInfoMockValue( ) {
         InfoMain infoMainData = new InfoMain();
@@ -87,7 +107,31 @@ public class InfoController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getInfoMain(HttpServletRequest request) {
 
-        return ResponseEntity.status( HttpStatus.OK ).body( this.getInfoMockValue() );
+        AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+        InfoMain     infoMain;
+
+        authUserInfo.getHomeId();
+        authUserInfo.getUsrId();
+        authUserInfo.getUserId();
+
+        try {
+            infoMain = infoService.getInfoMain( authUserInfo );
+        } catch( NoDataException e ) {
+            logger.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( e.getMessage() );
+        }
+
+//        infoMain.setUserImgSrc("https://clback.cyville.net/imageStore/55");
+//        infoMain.setUserNm( authUserInfo.getUserNm() );
+//        infoMain.setCmplxNm( cmplxInfo.getClCmplxNm() );
+//        infoMain.setDong("101");
+//        infoMain.setHo("202");
+//        infoMain.setStartDt("2017-04-01");
+//        infoMain.setPoint(125);
+
+        return ResponseEntity.status( HttpStatus.OK ).body( infoMain );
     }
 
     private PostInfo getInfoNoticeMockValue( ) {

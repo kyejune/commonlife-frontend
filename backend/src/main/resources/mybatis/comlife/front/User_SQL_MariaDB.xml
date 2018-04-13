@@ -58,15 +58,37 @@
         </foreach>
     </select>
 
-    <select id="selectUserListById" parameterType="java.util.List" resultType="userInfo">
+    <select id="selectUserListById" parameterType="java.util.List" resultType="userExtInfo">
         /* ID리스트로 사용자 조회 */
         SELECT
-                *
+            U.*,
+            (
+              SELECT IMAGE_IDX
+              FROM CL_IMAGE_INFO AS I
+                JOIN CL_IMAGE_TYPE AS T
+                ON I.PARENT_TYPE =  T.TYPE_IDX AND T.TYPE_NM = 'profile'
+              WHERE I.PARENT_IDX = U.USR_ID
+              ORDER BY IMAGE_IDX DESC
+              LIMIT 1
+            ) AS IMAGE_IDX ,
+            UE.USER_ALIAS,
+            H.HEAD_NM AS HEAD_NM,
+            H.START_DT AS START_DT,
+            HE.POINTS AS POINTS
         FROM
-                USR_INFO
+            USR_INFO AS U
+            LEFT JOIN
+            USR_INFO_EXT AS UE
+              ON U.USR_ID = UE.USR_ID
+            JOIN
+            HOME_HEAD_M AS H
+              ON U.HEAD_ID = H.HEAD_ID
+            LEFT JOIN
+            HOME_HEAD_M_EXT AS HE
+              ON HE.HOME_HEAD_ID = H.HEAD_ID
         WHERE
-                USR_ID
-                IN
+            U.USR_ID
+            IN
         <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
             #{item}
         </foreach>
