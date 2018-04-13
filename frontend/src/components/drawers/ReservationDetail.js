@@ -115,6 +115,9 @@ class ReservationDetail extends Component {
             const now = moment();
             const tommorow = moment().add( 1, 'days' );
 
+            const start = moment( data.openTime, 'HH:mm:ss.000000' ).format( 'HH' );
+            const end = moment( data.closeTime, 'HH:mm:ss.000000' ).format( 'HH' );
+
             if( data.reservationType === 'A' ) {
                 result.options.push({
                     "type": "date",
@@ -125,8 +128,8 @@ class ReservationDetail extends Component {
                 result.options.push( {
                     "type": "time",
                     "value": parseInt( now.format( 'HH' ), 10 ),
-                    "start": 0,
-                    "end": 24,
+                    start,
+                    end,
                     "selected": []
                     // "maxWidth": 3,
                     // "selected": [
