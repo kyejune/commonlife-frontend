@@ -20,6 +20,10 @@ a {
     //&>*{
     //  text-decoration: none;
     //}
+
+    &.cl--disabled{
+        pointer-events: none;
+    }
 }
 
 ul {

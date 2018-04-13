@@ -13,6 +13,7 @@ import ContentPage from "../drawers/lifeInfo/ContentPage";
 import Net from "../../scripts/net";
 import IconLoader from "../ui/IconLoader";
 import StatusDetail from "../drawers/lifeInfo/StatusDetail";
+import classNames from 'classnames';
 
 class LifeInfo extends Component {
 
@@ -109,7 +110,7 @@ class LifeInfo extends Component {
 
                     <div className="cl-info-notice">
                         <h4>Notice</h4>
-                        <Link to="/info/notice/0" className="cl-ellipsis--3" style={{'WebkitBoxOrient': 'vertical'}}>
+                        <Link to="/info/notice/0" className={ classNames("cl-ellipsis--3", {'cl--disabled':notice === null})} style={{'WebkitBoxOrient': 'vertical'}}>
                             {notice}
                         </Link>
                     </div>
