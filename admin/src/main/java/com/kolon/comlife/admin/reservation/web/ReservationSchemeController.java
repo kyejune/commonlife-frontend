@@ -104,12 +104,12 @@ public class ReservationSchemeController {
             , @RequestParam( value = "description", required = false ) String description
             , @RequestParam( value = "isOpen", required = false ) String isOpen
             , @RequestParam( value = "startDt", required = false ) String startDt
-            , @RequestParam( value = "startTime", required = false ) String startTime
+            , @RequestParam( value = "startTime", required = false, defaultValue = "00:00") String startTime
             , @RequestParam( value = "endDt", required = false ) String endDt
-            , @RequestParam( value = "endTime", required = false ) String endTime
+            , @RequestParam( value = "endTime", required = false, defaultValue = "23:59") String endTime
             , @RequestParam( value = "availableInWeekend", required = false ) String availableInWeekend
             , @RequestParam( value = "point", required = false ) int point
-            , @RequestParam( value = "amount", required = false ) int amount
+            , @RequestParam( value = "amount", required = false, defaultValue = "0") int amount
             , @RequestParam( value = "inStock", required = false ) int inStock
             , @RequestParam( value = "maxQty", required = false ) int maxQty
             , @RequestParam( value = "activateDuration", required = false ) String activateDuration
@@ -220,12 +220,12 @@ public class ReservationSchemeController {
             , @RequestParam( value = "description", required = false ) String description
             , @RequestParam( value = "isOpen", required = false ) String isOpen
             , @RequestParam( value = "startDt", required = false ) String startDt
-            , @RequestParam( value = "startTime", required = false ) String startTime
+            , @RequestParam( value = "startTime", required = false, defaultValue = "00:00") String startTime
             , @RequestParam( value = "endDt", required = false ) String endDt
-            , @RequestParam( value = "endTime", required = false ) String endTime
+            , @RequestParam( value = "endTime", required = false, defaultValue = "23:59") String endTime
             , @RequestParam( value = "availableInWeekend", required = false ) String availableInWeekend
             , @RequestParam( value = "point", required = false ) int point
-            , @RequestParam( value = "amount", required = false ) int amount
+            , @RequestParam( value = "amount", required = false, defaultValue = "0") int amount
             , @RequestParam( value = "inStock", required = false ) int inStock
             , @RequestParam( value = "maxQty", required = false ) int maxQty
             , @RequestParam( value = "activateDuration", required = false ) String activateDuration
