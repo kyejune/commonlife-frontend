@@ -54,7 +54,6 @@ class App extends Component {
             });
 
         }else{
-
             this.props.history.push('/login');
         }
     }

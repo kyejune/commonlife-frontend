@@ -40,9 +40,7 @@ class People extends Component{
         return (
         	<div>
 				{ this.state.users.map( ( user, index ) => {
-					return (
-						<LikeList key={index} {...user}/>
-					)
+					return <LikeList key={index} {...user}/>
 				} ) }
 
 				<div className="cl-like__dim"/>

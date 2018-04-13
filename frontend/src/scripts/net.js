@@ -15,7 +15,7 @@ axios.interceptors.request.use(function (config) {
     // Do something before request is sent
     document.querySelector('#spinner').classList.add('cl-status--ajax');
 
-    console.log( 'config:', config );
+    // console.log( 'config:', config );
     config.headers.token = Store.auth.token;
 
     return config;
