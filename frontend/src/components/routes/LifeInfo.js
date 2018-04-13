@@ -90,7 +90,7 @@ class LifeInfo extends Component {
 
                 <div className="cl-profile-card cl-second-header">
                     <div className="cl-flex cl-summary">
-                        <div className="cl-avatar" style={{ backgroundImage: `url(${userImgSrc})` }}/>
+                        <div className="cl-avatar" style={{ backgroundImage: `url(${ Store.api + userImgSrc})` }}/>
                         <div>
                             <h4>{userNm}</h4>
                             <p>{`${cmplxNm} ${dong}동 ${ho}호`}</p>

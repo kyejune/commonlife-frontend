@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import TagComponent from "../../ui/TagComponent";
 import Net from "../../../scripts/net";
 import moment from "moment";
+import Store from "../../../scripts/store";
    
 class NoticeDetail extends Component {
 
@@ -29,7 +30,7 @@ class NoticeDetail extends Component {
 
         let userImgStyle;
         if( this.state.user.imgSrc )
-            userImgStyle = {backgroundImage:`url(${this.state.user.imgSrc})`};
+            userImgStyle = {backgroundImage:`url(${ Store.api + this.state.user.imgSrc})`};
 
         return (
             <div className="cl-notice-detail">
