@@ -111,7 +111,7 @@ class LifeInfo extends Component {
                     <div className="cl-info-notice">
                         <h4>Notice</h4>
                         <Link to="/info/notice/0" className={ classNames("cl-ellipsis--3", {'cl--disabled':notice === null})} style={{'WebkitBoxOrient': 'vertical'}}>
-                            {notice}
+                            { notice || '등록된 공지사항이 없습니다.'}
                         </Link>
                     </div>
 

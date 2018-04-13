@@ -15,7 +15,27 @@ class TimeScheduler extends Component {
 
     componentWillReceiveProps( nextProps ){
         this.setState( this.makeState( nextProps ) );
-        setTimeout( this.updateTimeSize, 0 );
+
+        if( nextProps.scheduled ){
+            setTimeout( ()=>{ // hitTest다시
+                const S = this.state.start;
+                const H = this.state.hour;
+                const R = this.state.remains;
+
+                // console.log( S, H, R );
+
+                let selected = [...Array(H * 2)].map((e, i) => {
+                    return ( S - this.props.min )*2 + i;
+                });
+
+                // 인덱스 값 기준으로 hitTest
+                let available = selected.every(val => {
+                    return R.includes(val);
+                });
+
+                this.setState({ incorrect: !available });
+            }, 0 );
+        }
     }
 
     // 기 예약된 부분 제작
@@ -40,15 +60,20 @@ class TimeScheduler extends Component {
             DURATION = parseFloat(this.state.hour) || 1;
         }
 
-        let offset = 0;
+        let offset = 0;;
         let disableds = props.scheduled.map((schedule, i) => {
 
             let h = (schedule.start - MIN) * 2;
             let hLen = (schedule.end - schedule.start) * 2;
 
-            starts.splice(h - offset, hLen); // 이미 예약된 부분을 시작 영역에서 삭제
             offset = hLen; // 시작위치를 다시 조정
 
+            for( let d=0; d<hLen; d++ ){
+                let deleteIdx = starts.indexOf( h + d );
+                if( deleteIdx >= 0 ){
+                    starts.splice( deleteIdx, 1 );
+                }
+            }
             return <div className="cl-area--disabled" key={i}
                         style={{left: W * h, width: hLen * W + 1}}
             />
@@ -104,8 +129,6 @@ class TimeScheduler extends Component {
         const H = this.state.hour;
         const R = this.state.remains;
 
-        console.log( S );
-
         let selected = [...Array(H * 2)].map((e, i) => {
             return ( S - this.props.min )*2 + i;
         });
@@ -119,7 +142,7 @@ class TimeScheduler extends Component {
 
         // 변경 알려주기
         if( this.props.onUpdate )
-            this.props.onUpdate( { start: this.float2Time( this.state.start ), end: this.float2Time( this.state.start + this.state.hour ), correct:available } );
+            this.props.onUpdate( { start: this.float2Time( S ), end: this.float2Time( S + H ), correct:available } );
     }
 
     // 버튼으로 시간 조절

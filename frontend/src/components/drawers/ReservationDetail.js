@@ -34,6 +34,7 @@ class ReservationDetail extends Component {
 			available: true,
 			booked: false,
 			reserved: false,
+            correctTime: true,
 		};
 
 		DB.getReservationScheme( this.props.match.params.id, data => {
@@ -191,6 +192,12 @@ class ReservationDetail extends Component {
 
 	// 예약하기
 	reserve() {
+
+	    if( this.timeEl && !this.state.correctTime ){
+	        alert('유효한 시간을 선택하여 주시기 바랍니다.');
+	        return
+        }
+
 		let parentIdx = this.props.match.params.id;
 		let startDt = moment( this.state.dates[ 0 ] ).format( 'YYYY-MM-DD' );
 		let startTime = moment( this.state.dates[ 0 ] ).format( 'HH:mm' );
@@ -214,7 +221,7 @@ class ReservationDetail extends Component {
 	}
 
 	// 타임스케쥴러 업데이트
-	onUpdateTimeSchedule( data ) {
+	onUpdateTimeSchedule=( data )=> {
 		let { start, end } = data;
 		let starts = start.split( ':' );
 		let ends = end.split( ':' );
@@ -224,6 +231,8 @@ class ReservationDetail extends Component {
 
 		this.state.dates[ 1 ].setHours( ends[ 0 ] );
 		this.state.dates[ 1 ].setMinutes( ends[ 1 ] );
+
+		this.setState({ correctTime: data.correct });
 	}
 
 	// 날짜 업데이트
@@ -301,11 +310,12 @@ class ReservationDetail extends Component {
 			else if ( opt.type === 'time' ) {
 				return <TimeScheduler // 24시간 기준으로 기입!!
 					key="time"
+                    ref={ r => this.timeEl = r }
 					// maxWidth={3} // 최대시간, min-width는 0.5로 고정
 					min={opt.start} // 예약가능한 시작 시간
 					max={opt.end} // 예야가능한 마지막 시간
 					scheduled={this.state.reservedSchedules} // 기 예약된 내용
-					onUpdate={data => this.onUpdateTimeSchedule( data )}
+					onUpdate={ this.onUpdateTimeSchedule }
 				/>
 			}
 			else if ( opt.type === 'counter' ) {
