@@ -118,8 +118,31 @@
           USER_ID=#{userId}
     </select>
 
-    <select id="selectUserInfoByUserId" parameterType="Map" resultType="Map">
-      SELECT
-    </select>
+
+    <update id="updateUserEmail" parameterType="java.util.Map">
+        UPDATE
+          `USR_INFO`
+        SET
+          `EMAIL` = #{newEmail}
+        WHERE
+          `USR_ID` = #{usrId}
+            AND
+          `USER_ID` = #{userId}
+        ;
+    </update>
+
+    <update id="updateUserPw" parameterType="java.util.Map">
+        UPDATE
+          `USR_INFO`
+        SET
+          `USER_PW` = #{newUserPw}
+        WHERE
+          `USER_PW` = #{oldUserPw}
+            AND
+          `USER_ID` = #{userId}
+            AND
+          `USR_ID` = #{usrId}
+        ;
+    </update>
 
 </mapper>

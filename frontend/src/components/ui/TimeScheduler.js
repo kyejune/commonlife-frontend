@@ -40,7 +40,6 @@ class TimeScheduler extends Component {
 
     // 기 예약된 부분 제작
     makeState=( props )=>{
-        // console.log('TS:', props );
         let S = {};
 
         const W = 26;
@@ -85,8 +84,6 @@ class TimeScheduler extends Component {
         S.remains = starts;
         S.disabledEl = disableds;
         S.min = MIN;
-
-        // console.log( 'S:', S );
 
         return S;
     }
