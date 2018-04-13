@@ -106,7 +106,9 @@
       CL_MAP_SRC,
       CL_LOGO_IMG_SRC,
       FEED_WRITE_ALLOW_YN,
-      IOT_USE_YN
+      IOT_USE_YN,
+      NOTICE_YN,
+      NOTICE_IDX
     FROM
       COMPLEX_M AS C
         LEFT JOIN

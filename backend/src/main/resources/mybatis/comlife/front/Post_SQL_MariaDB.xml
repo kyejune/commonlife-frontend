@@ -109,6 +109,18 @@
         </if>
     </select>
 
+    <select id="selectPostContentOnly" parameterType="java.util.Map" resultType="postInfo">
+        SELECT
+            POST_IDX,
+            CONTENT,
+            REG_DTTM,
+            UPD_DTTM
+        FROM
+            POST
+        WHERE
+            POST_IDX = #{postIdx};
+    </select>
+
     <select id="selectLatestPost" resultType="postInfo">
     <![CDATA[
         SELECT
