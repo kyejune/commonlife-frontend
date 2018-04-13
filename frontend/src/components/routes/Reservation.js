@@ -56,7 +56,7 @@ class Reservation extends Component {
 		// id위치에 특정 단어가 들어올때 처리
 		if( this.props.match.params.id === 'history' )
 			Store.pushDrawer( 'reservation-history' );
-		if( this.props.match.params.id === 'group' )
+		else if( this.props.match.params.id === 'group' )
 			Store.pushDrawer( 'reservation-list' );
 		// id위치에 일반적으로 숫자가 들어오면 상세보기
 		else if( this.props.match.params.id )

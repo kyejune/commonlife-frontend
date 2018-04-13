@@ -20,7 +20,6 @@ class TimeScheduler extends Component {
 
     // 기 예약된 부분 제작
     makeState=( props )=>{
-        // console.log('TS:', props );
         let S = {};
 
         const W = 26;
@@ -60,8 +59,6 @@ class TimeScheduler extends Component {
         S.remains = starts;
         S.disabledEl = disableds;
         S.min = MIN;
-
-        // console.log( 'S:', S );
 
         return S;
     }
@@ -103,8 +100,6 @@ class TimeScheduler extends Component {
         const S = this.state.start;
         const H = this.state.hour;
         const R = this.state.remains;
-
-        console.log( S );
 
         let selected = [...Array(H * 2)].map((e, i) => {
             return ( S - this.props.min )*2 + i;
