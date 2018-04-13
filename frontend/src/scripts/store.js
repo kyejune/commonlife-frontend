@@ -1,5 +1,6 @@
 import {observable} from 'mobx';
 import { Drawer } from 'react-md';
+import Cookie from 'js-cookie';
 
 let host = 'https://clback.cyville.net';
 if( window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' )
@@ -9,13 +10,19 @@ if( window.location.hostname === 'localhost' || window.location.hostname === '12
 if( window.location.protocol === 'file:' && window.location.pathname.includes('CoreSimulator') )
     host = 'http://192.168.0.100:8080';
 
+// 쿠키를 설정/삭제해 API 서버 주소를 고정시킬 수 있다.
+// Cookie.set( 'force-look-localhost', true );
+// Cookie.remove( 'force-look-localhost' );
 
 // 덮어쓰기
 // host = 'https://cl-stage.cyville.net'; // 클라 전달용
 // host = 'http://localhost:8080';      // ykim 로컬 테스트용
 // host = 'https://cl-stage.cyville.net'; // 클라 전달용
-// host = 'https://clback.cyville.net'; // 테스트용
+if( !Cookie.get( 'force-look-localhost' ) ) {
+    host = 'https://clback.cyville.net'; // 테스트용
+}
 
+console.log( 'api host: ' + host );
 
 // 생성용 시나리오/자동화 객체
 /*
