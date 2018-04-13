@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {withRouter} from 'react-router';
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
 import TimeScheduler from 'components/ui/TimeScheduler';
 import SwiperViewer from 'components/ui/SwiperViewer';
 import Counter from 'components/ui/Counter';
@@ -13,411 +13,424 @@ import moment from "moment";
 
 class ReservationDetail extends Component {
 
-    constructor(props) {
-        super(props);
+	constructor( props ) {
+		super( props );
 
-        this.state = {
-            loaded: false,
-            available: true,
-            booked: false,
-            reserved: false,
-        };
+		this.state = {
+			loaded: false,
+			available: true,
+			booked: false,
+			reserved: false,
+		};
 
-        DB.getReservation(this.props.match.params.id, data => {
-            data.loaded = true;
+		DB.getReservation( this.props.match.params.id, data => {
+			data.loaded = true;
 
-            const result = {
-                "loaded": true,
-                "pictures": [
-                    {
-                        "thumbnail": "https://placeimg.com/640/480/arch"
-                    },
-                    {
-                        "thumbnail": "https://placeimg.com/480/640/nature"
-                    },
-                    {
-                        "thumbnail": "https://placeimg.com/300/300/tech"
-                    },
-                    {
-                        "thumbnail": "https://placeimg.com/640/480/animals"
-                    },
-                    {
-                        "thumbnail": "https://placeimg.com/640/480/arch"
-                    }
-                ],
-                "where": data.title,
-                "description": data.description,
-                "branch": data.complex.cmplxNm,
-                "map": "맵 링크",
-                "options": [
-                    // {
-                    //     "type": "date",
-                    //     "value": "2018-02-15",
-                    //     "min": "2018-02-01",
-                    //     "max": "2018-12-30"
-                    // },
-                    // {
-                    //     "type": "dateRange",
-                    //     "value": [
-                    //         "2018-02-27",
-                    //         "2018-02-28"
-                    //     ],
-                    //     "min": "2018-02-01",
-                    //     "max": "2018-03-10",
-                    //     "days": 3,
-                    //     "minDays": 2,
-                    //     "maxDays": 4
-                    // },
-                    // {
-                    //     "type": "info",
-                    //     "title": "예약가능",
-                    //     "info": "20석 / 총 80석"
-                    // },
-                    // {
-                    //     "type": "select",
-                    //     "title": "옵션",
-                    //     "value": 0,
-                    //     "options": [
-                    //         "소형창고 222m",
-                    //         "중형창고 333m",
-                    //         "대형창고 444m"
-                    //     ]
-                    // },
-                    // {
-                    //     "type": "counter",
-                    //     "title": "수량",
-                    //     "value": 1,
-                    //     "min": 1,
-                    //     "max": 3
-                    // },
+			const result = {
+				"loaded": true,
+				"pictures": [
+					{
+						"thumbnail": "https://placeimg.com/640/480/arch"
+					},
+					{
+						"thumbnail": "https://placeimg.com/480/640/nature"
+					},
+					{
+						"thumbnail": "https://placeimg.com/300/300/tech"
+					},
+					{
+						"thumbnail": "https://placeimg.com/640/480/animals"
+					},
+					{
+						"thumbnail": "https://placeimg.com/640/480/arch"
+					}
+				],
+				"where": data.title,
+				"description": data.description,
+				"branch": data.complex.cmplxNm,
+				"map": "맵 링크",
+				"options": [
+					// {
+					//     "type": "date",
+					//     "value": "2018-02-15",
+					//     "min": "2018-02-01",
+					//     "max": "2018-12-30"
+					// },
+					// {
+					//     "type": "dateRange",
+					//     "value": [
+					//         "2018-02-27",
+					//         "2018-02-28"
+					//     ],
+					//     "min": "2018-02-01",
+					//     "max": "2018-03-10",
+					//     "days": 3,
+					//     "minDays": 2,
+					//     "maxDays": 4
+					// },
+					// {
+					//     "type": "info",
+					//     "title": "예약가능",
+					//     "info": "20석 / 총 80석"
+					// },
+					// {
+					//     "type": "select",
+					//     "title": "옵션",
+					//     "value": 0,
+					//     "options": [
+					//         "소형창고 222m",
+					//         "중형창고 333m",
+					//         "대형창고 444m"
+					//     ]
+					// },
+					// {
+					//     "type": "counter",
+					//     "title": "수량",
+					//     "value": 1,
+					//     "min": 1,
+					//     "max": 3
+					// },
 
-                ],
-                "cost": data.point,
-                "balance": 0,
-                "inclusion": {
-                    "comment": data.options,
-                    "icons": [
-                        // "fridge",
-                        // "tv",
-                        // "cabinet"
-                    ]
-                },
-                "notice": data.precautions.split( '\n' )
-            };
+				],
+				"cost": data.point,
+				"balance": 0,
+				"inclusion": {
+					"comment": data.options,
+					"icons": [
+						// "fridge",
+						// "tv",
+						// "cabinet"
+					]
+				},
+				"notice": data.precautions.split( '\n' )
+			};
 
-            if( data.images ) {
-                result.pictures = data.images.split( ',' ).map( image => {
-                    return { thumbnail: Store.api + "/imageStore/" + image }
-                } );
-            }
+			if ( data.images ) {
+				result.pictures = data.images.split( ',' ).map( image => {
+					return { thumbnail: Store.api + "/imageStore/" + image }
+				} );
+			}
 
-            // 오늘 그리고 내일
-            const now = moment();
-            const tommorow = moment().add( 1, 'days' );
+			// 오늘 그리고 내일
+			const now = moment();
+			const tommorow = moment().add( 1, 'days' );
 
-            const start = moment( data.openTime, 'HH:mm:ss.000000' ).format( 'HH' );
-            const end = moment( data.closeTime, 'HH:mm:ss.000000' ).format( 'HH' );
+			if ( data.reservationType === 'A' ) {
+				result.options.push( {
+					type: "date",
+					value: now.format( 'YYYY-MM-DD' ),
+					min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
+					max: moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
+				} );
 
-            if( data.reservationType === 'A' ) {
-                result.options.push({
-                    "type": "date",
-                    "value": now.format('YYYY-MM-DD'),
-                    "min": moment(data.startDt, 'YYYY-MM-DD').format('YYYY-MM-DD'),
-                    "max": moment(data.endDt, 'YYYY-MM-DD').format('YYYY-MM-DD')
-                });
-                result.options.push( {
-                    "type": "time",
-                    "value": parseInt( now.format( 'HH' ), 10 ),
-                    start,
-                    end,
-                    "selected": []
-                    // "maxWidth": 3,
-                    // "selected": [
-                    //     {
-                    //         "start": 9,
-                    //         "end": 10
-                    //     },
-                    //     {
-                    //         "start": 12,
-                    //         "end": 14
-                    //     }
-                    // ]
-                } );
+				// start, end에는 반드시 Number 형 데이터가 들어가야 한다.
+				result.options.push( {
+					type: "time",
+					value: parseInt( now.format( 'HH' ), 10 ),
+					start: parseInt( moment( data.openTime, 'HH:mm:ss.000000' ).format( 'HH' ), 10 ),
+					end: parseInt( moment( data.closeTime, 'HH:mm:ss.000000' ).format( 'HH' ), 10 ),
+					// selected: []
+					// "maxWidth": 3,
+					// "selected": [
+					//     {
+					//         "start": 9,
+					//         "end": 10
+					//     },
+					//     {
+					//         "start": 12,
+					//         "end": 14
+					//     }
+					// ]
+				} );
 
-                // TimeScheduler 조정용 date 객체 삽입
-                result.dates = [ now.toDate(), now.toDate() ];
-            }
-            else if( data.reservationType === 'B' ) {
-                result.options.push({
-                    "type": "dateRange",
-                    "value": [
-                        now.format('YYYY-MM-DD'),
-                        moment().add(1, 'day').format('YYYY-MM-DD')
-                    ],
-                    "min": moment(data.startDt, 'YYYY-MM-DD').format('YYYY-MM-DD'),
-                    "max": moment(data.endDt, 'YYYY-MM-DD').format('YYYY-MM-DD')
-                });
+				// TimeScheduler 조정용 date 객체 삽입
+				result.dates = [ now.toDate(), now.toDate() ];
+			}
+			else if ( data.reservationType === 'B' ) {
+				result.options.push( {
+					type: "dateRange",
+					value: [
+						now.format( 'YYYY-MM-DD' ),
+						moment().add( 1, 'day' ).format( 'YYYY-MM-DD' )
+					],
+					min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
+					max: moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
+				} );
 
-                // TimeScheduler 조정용 date 객체 삽입
-                result.dates = [ now.toDate(), tommorow.toDate() ];
-            }
+				// TimeScheduler 조정용 date 객체 삽입
+				result.dates = [ now.toDate(), tommorow.toDate() ];
+			}
+			else if ( data.reservationType === 'C' ) {
+				result.options.push( {
+					"type": "date",
+					"value": now.format( 'YYYY-MM-DD' ),
+					"min": moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
+					"max": moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
+				} );
+			}
 
-            // 원본 데이터도 바인딩 시켜둔다
-            result.scheme = data;
+			// 원본 데이터도 바인딩 시켜둔다
+			result.scheme = data;
+			result.reservedSchedules = [
+				{ start: 13, end: 14 },
+				{ start: 15, end: 16 },
+			];
 
-            this.setState( result );
-            this.props.updateTitle( data.title );
-        });
+			setTimeout( () => {
+				this.setState( {
+					reservedSchedules: [
+						{ start: 15, end: 16 }
+					]
+				} );
+				console.log( 'schedule updated!' );
+			}, 4000 );
 
-        // 함수 스코프 바인딩
-        this.reserve = this.reserve.bind( this );
-    }
+			this.setState( result );
+			this.props.updateTitle( data.title );
+		} );
 
-    addFloat(integer) {
-        if (parseInt(integer, 10) === integer) integer += '.0';
-        return integer;
-    }
+		// 함수 스코프 바인딩
+		this.reserve = this.reserve.bind( this );
+	}
 
-
-    // 예약하기
-    reserve() {
-        let parentIdx = this.props.match.params.id;
-        let startDt = moment( this.state.dates[ 0 ] ).format( 'YYYY-MM-DD' );
-        let startTime = moment( this.state.dates[ 0 ] ).format( 'HH:mm' );
-        let endDt =  moment( this.state.dates[ 1 ] ).format( 'YYYY-MM-DD' );
-        let endTime = moment( this.state.dates[ 1 ] ).format( 'HH:mm' );
-
-        DB.createReservation( {
-            parentIdx,
-            startDt,
-            startTime,
-            endDt,
-            endTime,
-        }, () => {
-            this.setState({reserved: true});
-        } );
-    }
-
-    // 대기요청하기
-    book() {
-        this.setState({booked: true});
-    }
-
-    // 타임스케쥴러 업데이트
-    onUpdateTimeSchedule( data ){
-        let { start, end } = data;
-        let starts = start.split(':');
-        let ends = end.split(':');
-
-        this.state.dates[0].setHours( starts[0] );
-        this.state.dates[0].setMinutes( starts[1] );
-
-        this.state.dates[1].setHours( ends[0] );
-        this.state.dates[1].setMinutes( ends[1] );
-    }
-
-    // 날짜 업데이트
-    onUpdateDate( fromTo ){
-
-        for( let i=0; i<2; i++ ){
-            let d = this.state.dates[i];
-            let n = fromTo[i];
-
-            let hour = d.getHours();
-            let minute = d.getMinutes();
-
-            this.state.dates[i].setFullYear( n.getFullYear() );
-            this.state.dates[i].setMonth( n.getMonth() );
-            this.state.dates[i].setDate( n.getDate() );
-            this.state.dates[i].setHours( hour );
-            this.state.dates[i].setMinutes( minute );
-        }
-    }
-
-    // 캘린더에 추가 =
-    addSchedule(){
-
-        if( window.plugins )
-            window.plugins.calendar.createEventInteractively( this.state.where, this.state.branch, this.state.description, this.state.dates[0], this.state.dates[1], this.addedSchedule, null );
-        else
-            this.addedSchedule();
-    }
-
-    addedSchedule(){
-        alert('추가됨');
-    }
-
-    render() {
+	addFloat( integer ) {
+		if ( parseInt( integer, 10 ) === integer ) integer += '.0';
+		return integer;
+	}
 
 
-        if (this.state.loaded === false) {
-            return <div>loading..</div>;
-        }
+	// 예약하기
+	reserve() {
+		let parentIdx = this.props.match.params.id;
+		let startDt = moment( this.state.dates[ 0 ] ).format( 'YYYY-MM-DD' );
+		let startTime = moment( this.state.dates[ 0 ] ).format( 'HH:mm' );
+		let endDt = moment( this.state.dates[ 1 ] ).format( 'YYYY-MM-DD' );
+		let endTime = moment( this.state.dates[ 1 ] ).format( 'HH:mm' );
+
+		DB.createReservation( {
+			parentIdx,
+			startDt,
+			startTime,
+			endDt,
+			endTime,
+		}, () => {
+			this.setState( { reserved: true } );
+		} );
+	}
+
+	// 대기요청하기
+	book() {
+		this.setState( { booked: true } );
+	}
+
+	// 타임스케쥴러 업데이트
+	onUpdateTimeSchedule( data ) {
+		let { start, end } = data;
+		let starts = start.split( ':' );
+		let ends = end.split( ':' );
+
+		this.state.dates[ 0 ].setHours( starts[ 0 ] );
+		this.state.dates[ 0 ].setMinutes( starts[ 1 ] );
+
+		this.state.dates[ 1 ].setHours( ends[ 0 ] );
+		this.state.dates[ 1 ].setMinutes( ends[ 1 ] );
+	}
+
+	// 날짜 업데이트
+	onUpdateDate( fromTo ) {
+
+		for ( let i = 0; i < 2; i++ ) {
+			let d = this.state.dates[ i ];
+			let n = fromTo[ i ];
+
+			let hour = d.getHours();
+			let minute = d.getMinutes();
+
+			this.state.dates[ i ].setFullYear( n.getFullYear() );
+			this.state.dates[ i ].setMonth( n.getMonth() );
+			this.state.dates[ i ].setDate( n.getDate() );
+			this.state.dates[ i ].setHours( hour );
+			this.state.dates[ i ].setMinutes( minute );
+		}
+	}
+
+	// 캘린더에 추가 =
+	addSchedule() {
+
+		if ( window.plugins )
+			window.plugins.calendar.createEventInteractively( this.state.where, this.state.branch, this.state.description, this.state.dates[ 0 ], this.state.dates[ 1 ], this.addedSchedule, null );
+		else
+			this.addedSchedule();
+	}
+
+	addedSchedule() {
+		alert( '추가됨' );
+	}
+
+	render() {
 
 
-        // 포함사항 아이콘
-        let Icons = this.state.inclusion.icons.map((label, i) => {
-            return <i key={i} className={`cl-inclusion-ic cl-${label}`}/>
-        });
-
-        // 공지사항
-        let Notices = this.state.notice.map((n, i) => {
-            return <li key={i}>{n}</li>
-        });
-
-        // 옵션들 추가
-        let Options = this.state.options.map((opt, i) => {
-
-            if( opt.type === 'date' )
-            {
-                return <DateOne key="date" {...opt}
-                                onUpdate={ data => this.onUpdateDate( [new Date(data), new Date(data)] ) }/>
-            }
-            else if( opt.type === 'dateRange')
-            {
-                return <DatePeriod key="date-range" {...opt}
-                                   onUpdate={ (from, to ) => this.onUpdateDate( [new Date(from), new Date(to)] ) } />
-            }
-            else if (opt.type === 'select')
-            {
-                let Opts = opt.options.map((o, i) => {
-                    return <option value={i} key={i}>{o}</option>
-                });
-
-                return <div className="cl-opt-sec cl-flex" key="select">
-                    <div className="cl-label">{opt.title||"옵션"}</div>
-                    <select name="" id="">{Opts}</select>
-                </div>
-            }
-            else if (opt.type === 'time')
-            {
-                return <TimeScheduler // 24시간 기준으로 기입!!
-                    key="time"
-                    // maxWidth={3} // 최대시간, min-width는 0.5로 고정
-                    min={opt.start} // 예약가능한 시작 시간
-                    max={opt.end} // 예야가능한 마지막 시간
-                    scheduled={[]} // 기 예약된 내용
-                    onUpdate={ data => this.onUpdateTimeSchedule( data ) }
-                />
-            }
-            else if (opt.type === 'counter')
-            {
-                return <div className="cl-opt-sec" key="counter">
-                    <div className="cl-label">{opt.title}</div>
-                    <Counter {...opt} />
-                </div>
-            }
-            else if (opt.type === 'info')
-            {
-                return <div className="cl-opt-sec cl-flex" key="info">
-                    <div className="cl-label">{opt.title}</div>
-                    <div>{opt.info}</div>
-                </div>
-            }
-            else
-            {
-                return '';
-            }
-
-        });
-
-        // 푸터 버튼
-        let FooterBtns;
-        if (this.state.reserved || this.state.booked) {
-            FooterBtns = [
-                <span key="blank"/>,
-                <button key="confirm"><img src={completeSrc} alt="완료버튼" width="97" height="36"/></button>
-            ];
-        } else {
-            FooterBtns = [
-                <button key="cancel">취소</button>,
-                <button key="reserve" className="cl-plus-label__button" onClick={() => this.reserve()}>예약하기</button>
-            ];
-        }
+		if ( this.state.loaded === false ) {
+			return <div>loading..</div>;
+		}
 
 
-        return <div className="cl-reservation-detail pb-3em">
+		// 포함사항 아이콘
+		let Icons = this.state.inclusion.icons.map( ( label, i ) => {
+			return <i key={i} className={`cl-inclusion-ic cl-${label}`}/>
+		} );
 
-            {!this.state.reserved &&
-            <Link to={ '/reservation/0/thumbnails' }>
-			    <SwiperViewer thumbnails={this.state.pictures} viewType={'rectangle'}/>
-            </Link>
-            }
+		// 공지사항
+		let Notices = this.state.notice.map( ( n, i ) => {
+			return <li key={i}>{n}</li>
+		} );
+
+		// 옵션들 추가
+		let Options = this.state.options.map( ( opt, i ) => {
+
+			if ( opt.type === 'date' ) {
+				return <DateOne key="date" {...opt}
+								onUpdate={data => this.onUpdateDate( [ new Date( data ), new Date( data ) ] )}/>
+			}
+			else if ( opt.type === 'dateRange' ) {
+				return <DatePeriod key="date-range" {...opt}
+								   onUpdate={( from, to ) => this.onUpdateDate( [ new Date( from ), new Date( to ) ] )}/>
+			}
+			else if ( opt.type === 'select' ) {
+				let Opts = opt.options.map( ( o, i ) => {
+					return <option value={i} key={i}>{o}</option>
+				} );
+
+				return <div className="cl-opt-sec cl-flex" key="select">
+					<div className="cl-label">{opt.title || "옵션"}</div>
+					<select name="" id="">{Opts}</select>
+				</div>
+			}
+			else if ( opt.type === 'time' ) {
+				return <TimeScheduler // 24시간 기준으로 기입!!
+					key="time"
+					// maxWidth={3} // 최대시간, min-width는 0.5로 고정
+					min={opt.start} // 예약가능한 시작 시간
+					max={opt.end} // 예야가능한 마지막 시간
+					scheduled={ this.state.reservedSchedules } // 기 예약된 내용
+					onUpdate={data => this.onUpdateTimeSchedule( data )}
+				/>
+			}
+			else if ( opt.type === 'counter' ) {
+				return <div className="cl-opt-sec" key="counter">
+					<div className="cl-label">{opt.title}</div>
+					<Counter {...opt} />
+				</div>
+			}
+			else if ( opt.type === 'info' ) {
+				return <div className="cl-opt-sec cl-flex" key="info">
+					<div className="cl-label">{opt.title}</div>
+					<div>{opt.info}</div>
+				</div>
+			}
+			else {
+				return '';
+			}
+
+		} );
+
+		// 푸터 버튼
+		let FooterBtns;
+		if ( this.state.reserved || this.state.booked ) {
+			FooterBtns = [
+				<span key="blank"/>,
+				<button key="confirm"><img src={completeSrc} alt="완료버튼" width="97" height="36"/></button>
+			];
+		} else {
+			FooterBtns = [
+				<button key="cancel">취소</button>,
+				<button key="reserve" className="cl-plus-label__button" onClick={() => this.reserve()}>예약하기</button>
+			];
+		}
 
 
-            {/* 선택 옵션 */}
-            <div className="cl-reservation-option">
+		return <div className="cl-reservation-detail pb-3em">
 
-                <div className="cl-opt-sec cl-opt-sec--title">
-                    <h3>
-                        {this.state.where}
-                        {this.state.reserved&&" 예약이 완료되었습니다."}
-                        {this.state.booked&&<span className="cl-booked">(대기요청 완료)</span>}
-                    </h3>
-
-                    {!this.state.reserved && !this.state.booked &&
-                    <p>{this.state.description}</p>
-                    }
-                </div>
-
-                <div className="cl-opt-sec cl-flex-between cl-opt-sec--branch">
-                    <div className="cl-label">지점</div>
-                    <div>{this.state.branch}</div>
-                    <button className="cl-map__link"/>
-                </div>
-
-                {Options}
-
-                {!this.state.available && <div>
-                    <button onClick={() => this.book()} className="cl-reservation-book__button">대기요청 예약</button>
-                </div>}
+			{!this.state.reserved &&
+			<Link to={'/reservation/0/thumbnails'}>
+				<SwiperViewer thumbnails={this.state.pictures} viewType={'rectangle'}/>
+			</Link>
+			}
 
 
-            </div>
+			{/* 선택 옵션 */}
+			<div className="cl-reservation-option">
+
+				<div className="cl-opt-sec cl-opt-sec--title">
+					<h3>
+						{this.state.where}
+						{this.state.reserved && " 예약이 완료되었습니다."}
+						{this.state.booked && <span className="cl-booked">(대기요청 완료)</span>}
+					</h3>
+
+					{!this.state.reserved && !this.state.booked &&
+					<p>{this.state.description}</p>
+					}
+				</div>
+
+				<div className="cl-opt-sec cl-flex-between cl-opt-sec--branch">
+					<div className="cl-label">지점</div>
+					<div>{this.state.branch}</div>
+					<button className="cl-map__link"/>
+				</div>
+
+				{Options}
+
+				{!this.state.available && <div>
+					<button onClick={() => this.book()} className="cl-reservation-book__button">대기요청 예약</button>
+				</div>}
 
 
-            {/* 하단 정보 출력 부분 */}
-            <div className="cl-reservation-info">
+			</div>
 
-                <div className="cl-credit cl-flex-between">
-                    <div className="cl-label">{this.state.reserved ? "잔여 크레딧" : "예약 크레딧/잔여 크레딧"}</div>
-                    <div className="cl-secondary">
-                        { !this.state.reserved&&
-                            <span className="cl-bold">
-                                -{this.addFloat(this.state.cost)}/
+
+			{/* 하단 정보 출력 부분 */}
+			<div className="cl-reservation-info">
+
+				<div className="cl-credit cl-flex-between">
+					<div className="cl-label">{this.state.reserved ? "잔여 크레딧" : "예약 크레딧/잔여 크레딧"}</div>
+					<div className="cl-secondary">
+						{!this.state.reserved &&
+						<span className="cl-bold">
+                                -{this.addFloat( this.state.cost )}/
                             </span>
-                        }{this.addFloat(this.state.balance)}
-                    </div>
-                </div>
+						}{this.addFloat( this.state.balance )}
+					</div>
+				</div>
 
-                <div className="cl-inclusion">
-                    <div className="cl-label">포함사항</div>
-                    <p className="cl-desc">
-                        {this.state.inclusion.comment}
-                    </p>
-                    <div className="cl-icons">
-                        {Icons}
-                    </div>
-                </div>
+				<div className="cl-inclusion">
+					<div className="cl-label">포함사항</div>
+					<p className="cl-desc">
+						{this.state.inclusion.comment}
+					</p>
+					<div className="cl-icons">
+						{Icons}
+					</div>
+				</div>
 
-                <ul className="cl-notice">
-                    {Notices}
-                </ul>
+				<ul className="cl-notice">
+					{Notices}
+				</ul>
 
-                {( this.state.reserved || this.state.booked )&&
-                <div className="cl-reserved">
-                    <button onClick={()=> this.addSchedule() }>나의 캘린더에 등록</button>
-                    <button>예약변경 및 취소</button>
-                </div>}
+				{( this.state.reserved || this.state.booked ) &&
+				<div className="cl-reserved">
+					<button onClick={() => this.addSchedule()}>나의 캘린더에 등록</button>
+					<button>예약변경 및 취소</button>
+				</div>}
 
-            </div>
+			</div>
 
-            <footer className="cl-flex-between">
-                {FooterBtns}
-            </footer>
-        </div>
-    }
+			<footer className="cl-flex-between">
+				{FooterBtns}
+			</footer>
+		</div>
+	}
 }
 
 
-export default withRouter(ReservationDetail);
+export default withRouter( ReservationDetail );

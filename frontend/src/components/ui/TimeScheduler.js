@@ -48,8 +48,6 @@ class TimeScheduler extends Component {
             disabledEl: disabled,
             incorrect: false,
         }
-
-        console.log("TimeScheduler.props:", props );
     }
 
     // 핸들 드래그용 이벤트 헨들러
