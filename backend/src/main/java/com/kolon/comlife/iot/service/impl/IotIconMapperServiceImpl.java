@@ -75,26 +75,26 @@ public class IotIconMapperServiceImpl implements IotIconMapperService {
     private Map<String, String> initRoomIconMapping() {
         Map<String, String> iconMap = new HashMap<>();
 
-        iconMap.put("AD00300", "cl_house-1"); // 현관
-        iconMap.put("AD00301", "cl_house-1"); // 현관
-        iconMap.put("AD00302", "cl_room-9"); // 현관
-        iconMap.put("AD00303", "cl_room-7"); // 거실
+        iconMap.put("AD00300", "cl_house-1"); // 아파트 공용
+        iconMap.put("AD00301", "cl_device-7"); // 공용부
+        iconMap.put("AD00302", "cl_life-1"); // 현관
+        iconMap.put("AD00303", "cl_room-1"); // 거실
         iconMap.put("AD00304", "cl_bath-4"); // 화장실1/거실화장실
-        iconMap.put("AD00305", "cl_bath-4"); // 화장실2/안방화장실
-        iconMap.put("AD00306", "cl_bath-4"); // 화장실3
-        iconMap.put("AD00307", "cl_room-1"); // 안방
-        iconMap.put("AD00308", "cl_room-3"); // 방1/침실
-        iconMap.put("AD00309", "cl_room-5"); // 방2/서재
-        iconMap.put("AD00310", "cl_room-6"); // 방3/옷방
-        iconMap.put("AD00311", "cl_room-6"); // 방4/침실
+        iconMap.put("AD00305", "cl_bath-2"); // 화장실2/안방화장실
+        iconMap.put("AD00306", "cl_bath-1"); // 화장실3
+        iconMap.put("AD00307", "cl_room-4"); // 안방
+        iconMap.put("AD00308", "cl_room-2"); // 방1/침실
+        iconMap.put("AD00309", "cl_room-6"); // 방2/서재
+        iconMap.put("AD00310", "cl_room-5"); // 방3/옷방
+        iconMap.put("AD00311", "cl_room-7"); // 방4/침실
         iconMap.put("AD00312", "cl_device-29"); // 베란다1
-        iconMap.put("AD00313", "cl_device-29"); // 베란다2
-        iconMap.put("AD00314", "cl_device-29"); // 베란다3
-        iconMap.put("AD00315", "cl_kitchen-8"); // 주방
+        iconMap.put("AD00313", "cl_device-30"); // 베란다2
+        iconMap.put("AD00314", "cl_device-30"); // 베란다3
+        iconMap.put("AD00315", "cl_room-3"); // 주방
         iconMap.put("AD00316", "cl_room-8"); // 창고
-        iconMap.put("AD00317", "cl_room-8"); // 실외기실
-        iconMap.put("AD00318", "cl_room-8"); // 창문
-        iconMap.put("AD00319", "cl_room-8"); // 다용도실
+        iconMap.put("AD00317", "cl_device-24"); // 실외기실
+        iconMap.put("AD00318", "cl_room-10"); // 창문
+        iconMap.put("AD00319", "cl_room-7"); // 다용도실
 
         return  iconMap;
     }
