@@ -146,7 +146,7 @@ const Store = observable({
 
     getDrawerData: key => {
         let data = null;
-        let has = Store.drawer.some( drawerInfo => {
+        Store.drawer.some( drawerInfo => {
             if( drawerInfo.key === key ) data = drawerInfo.data;
             return drawerInfo.key === key;
         });

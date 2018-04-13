@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Store from "../../scripts/store";
-import {observer} from "mobx-react";
 
 /* 예약하기 메인 페이지 및 상세 페이지에서 좌측 타이틀과, 우측 셀렉박스 구성 */
 class TitleWithoutSelect extends Component {

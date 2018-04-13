@@ -163,7 +163,7 @@ class HomeIoT extends Component {
                                         </div>
                                         <div className="cl-my-iot__bottom cl-flex pt-04em">
                                             <div className="cl-bold color-black">목록보기</div>
-                                            <img className="cl-flex" src={RightArrowSrc} width="24" height="24"/>
+                                            <img className="cl-flex" src={RightArrowSrc} width="24" height="24" alt=""/>
                                         </div>
                                     </div>
                                 </Link>

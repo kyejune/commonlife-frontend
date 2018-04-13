@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import IconSrc from 'images/ic-plus-24-px-copy-2@3x.png';
 
 
 /* 원하는 지도를 띄울 맵 태그 */
