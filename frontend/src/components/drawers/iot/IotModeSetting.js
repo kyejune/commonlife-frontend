@@ -7,10 +7,9 @@ import Iot from "../../../scripts/iot";
 import checkSrc from 'images/ic-check@3x.png';
 import classNames from 'classnames';
 import moment from 'moment';
-import Store, {Scenario} from 'scripts/store';
-import {observer} from 'mobx-react';
+import Store, { Scenario } from 'scripts/store';
+import { observer } from 'mobx-react';
 import addSrc from 'images/combined-shape-plus@3x.png';
-
 
 /*
 *
@@ -224,7 +223,7 @@ class IotModeSetting extends Component {
         // deviceId로 중복 아이템이 안생기게 검사
         const newItems = items.filter(item => {
             return !this.state.editingData.scnaThings.some(t => {
-                return parseInt(t.deviceId) === parseInt(item.deviceId);
+                return parseInt(t.deviceId, 10) === parseInt(item.deviceId, 10);
             });
         });
 
@@ -267,6 +266,7 @@ class IotModeSetting extends Component {
                 // searchIdx = newEditingData.scnaThings.indexOf( item );
                 item.chk = 'N';
                 break;
+			default :
         }
 
         console.log('newEditingData:', newEditingData);

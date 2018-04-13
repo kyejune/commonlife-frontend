@@ -96,7 +96,7 @@ class IotDeviceOfScan extends Component {
         let d = data.data;
         console.log('디바이스 아이템 상세 변경:', data.data.moAttr, ": ", value, data.data);
 
-        let obj= { ...d };
+        // let obj= { ...d };
         d.stsValue = value;
 
         // UI에 반영되게

@@ -1,10 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Net from "../../scripts/net";
-import classNames from "classnames";
 import SimpleReactValidator from "simple-react-validator";
 import axios from 'axios';
-import Store, {MakingUserData} from "../../scripts/store";
-import {observer} from "mobx-react";
+import Store, { MakingUserData } from "../../scripts/store";
+import { observer } from "mobx-react";
 
 class HouseHolderInputs extends Component {
 

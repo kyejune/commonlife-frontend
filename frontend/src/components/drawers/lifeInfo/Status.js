@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Net from "../../../scripts/net";
-import IconLoader from "../../ui/IconLoader";
 import Link from "react-router-dom/es/Link";
 
 class Status extends Component {

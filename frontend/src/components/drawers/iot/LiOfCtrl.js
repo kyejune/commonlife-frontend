@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import IconLoader from "../../ui/IconLoader";
-import Link from "react-router-dom/es/Link";
 
 class LiOfCtrl extends Component {
 

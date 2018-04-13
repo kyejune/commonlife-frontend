@@ -1,8 +1,7 @@
-import React, {Component} from 'react';
-import {MakingUserData} from "../../scripts/store";
-import {observer} from "mobx-react";
+import React, { Component } from 'react';
+import { MakingUserData } from "../../scripts/store";
+import { observer } from "mobx-react";
 import Net from "../../scripts/net";
-import DeviceStorage from 'react-device-storage';
 import DefautSrc from 'images/profile-thumb-img-big-default@3x.png';
 
 class Welcome extends Component {

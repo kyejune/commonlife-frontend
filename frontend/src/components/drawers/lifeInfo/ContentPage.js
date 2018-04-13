@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import TagComponent from "../../ui/TagComponent";
-import Net from "../../../scripts/net";
 
 class ContentPage extends Component {
 

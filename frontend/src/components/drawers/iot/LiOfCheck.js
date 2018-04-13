@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import IconLoader from "../../ui/IconLoader";
-import Checkbox from "../../ui/Checkbox";
 import classNames from 'classnames';
-   
+
 class LiOfCheck extends Component {
 
     constructor(props){

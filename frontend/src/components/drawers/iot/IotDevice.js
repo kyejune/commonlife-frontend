@@ -1,12 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import IconLoader from 'components/ui/IconLoader';
 import IotSlider from "../../ui/IotSlider";
 import Iot from "../../../scripts/iot";
-import {withRouter} from "react-router-dom";
-import checkSrc from 'images/ic-check@3x.png';
+import { withRouter } from "react-router-dom";
 import SimpleJsonFilter from 'simple-json-filter/index';
 import Switch from "../../ui/Switch";
-import classNames from "classnames";
 
 
 let sjf = new SimpleJsonFilter();

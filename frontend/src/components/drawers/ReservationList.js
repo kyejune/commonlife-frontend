@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
-import SelectWithTitle from 'components/ui/SelectWithTitle';
 import { Link } from 'react-router-dom';
 
 import ReserveGroupHome from 'images/r-icon-1@3x.png';

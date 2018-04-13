@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import DateSelector from "./DateSelector";
-import classNames from "classnames";
 import Store from "../../scripts/store";
 
 class TimeSelector extends Component {
@@ -32,7 +31,7 @@ class TimeSelector extends Component {
         let {am, hour, minute} = this.state;
 
         if (am.toString() === 'false') {
-            hour = parseInt(hour) + 12;
+            hour = parseInt(hour, 10) + 12;
         }
 
         // 전달할 데이터

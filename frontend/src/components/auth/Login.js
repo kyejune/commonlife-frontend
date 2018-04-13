@@ -44,7 +44,7 @@ class Login extends Component {
             {/*<button className="cl-close__button--black" onClick={this.props.history.goBack}/>*/}
 
             <div className="cl-flex cl-logo-pack">
-                <img className="cl-logo__img" src={LogoSrc}/>
+                <img className="cl-logo__img" src={LogoSrc} alt=""/>
                 <div className="cl-logo__text">
                     <span className="fs-36 cl-bold">COMMON Life</span>
                     <p className="fs-10">Membership</p>

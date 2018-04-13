@@ -1,11 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import Iot from "../../../scripts/iot";
 import LiOfCheck from "./LiOfCheck";
 import classNames from "classnames";
 import checkSrc from 'images/ic-check@3x.png';
-import {Scenario} from "../../../scripts/store";
-import {withRouter} from "react-router-dom";
-import Store from "../../../scripts/store";
+import Store, { Scenario } from "../../../scripts/store";
+import { withRouter } from "react-router-dom";
+import _ from 'underscore';
 
 /* 시나리오에서 추가할 센서 리스트, 생성 편집 */
 class IotAddingSensorList extends Component {
@@ -28,7 +28,9 @@ class IotAddingSensorList extends Component {
                 data: data
             });
 
-            this.state.addedData.scnaIfOption = data.scnaIfOption;
+            const clonedState = _.clone( this.state );
+			clonedState.addedData.scnaIfOption = data.scnaIfOption;
+			this.setState( clonedState );
         });
     }
 
@@ -136,22 +138,21 @@ class IotAddingSensorList extends Component {
         if (this.state.data === null) return <div/>;
 
         let Sensors = [];
-        let data = this.state.data;
 
         // 일반 센서추가
-        Sensors = data.scnaIfThings.map((item, index) => {
+        Sensors = this.state.data.scnaIfThings.map((item, index) => {
             return <LiOfCheck key={index} icon={item.imgSrc} name={item.stsNm} onChange={ bool => this.onChangeCheck( bool, `${item.stsId}-${item.thingsId}-${item.deviceId}` ) }/>
         });
 
         // 특정 시간
-        Sensors = Sensors.concat(data.scnaIfSpc.map(item => {
+        Sensors = Sensors.concat(this.state.data.scnaIfSpc.map(item => {
             return <LiOfCheck key="time" icon={item.imgSrc} name="특정 시간"
                               checked={this.state.time}
                               onChange={ bool => this.onChangeCheck( bool, 'time' ) }/>
         }));
 
         // 시간 구간
-        Sensors = Sensors.concat(data.scnaIfAply.map(item => {
+        Sensors = Sensors.concat(this.state.data.scnaIfAply.map(item => {
             return <LiOfCheck key="time-range" icon={item.imgSrc} name="구간 시간"
                               checked={this.state.duration}
                               onChange={ bool => this.onChangeCheck( bool, 'duration' ) }/>
