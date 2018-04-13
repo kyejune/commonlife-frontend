@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.kolon.common.helper.JedisHelper;
 import com.kolon.common.model.AuthUserInfo;
-import com.kolon.common.prop.SystemPropertiesMap;
 import com.kolon.common.servlet.AuthUserInfoUtil;
 //import com.kolon.common.servlet.UserInfoHttpServletRequest;
 import com.kolonbenit.benitware.framework.xplaform.domain.ResultSetMap;
@@ -18,6 +17,7 @@ import com.kolonbenit.benitware.common.util.StringUtil;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -56,6 +56,23 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		this.forceAuthToken = forceAuthToken;
 	}
 
+	// 인증 없이 항상 접속이 허용됨 (token 체크 항상 안함)
+	static String[] ALWAYS_PERMITTED_URI = {
+			"/users/registration",    	// 회원 가입 Controller
+			"/postFiles"				// Feed 파일 업로드/다운로드
+	};
+
+	// 인증 없이 접속 허용, 만약 인증토큰이 있다면 인증정보를 함께 Controller로 전달 (token이 있는 경우에 추가)
+	static String[] PERMITTED_AND_AUTH_POPULATED_URI = {
+			"/imageStore"    			// ImageStore
+	};
+
+	static String[] arrLimitUri = {
+			"mobileUserLogin",
+			"mobileUserLogout",
+			"mobileUserLoginConfirm"
+	};
+
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
@@ -68,17 +85,9 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 			return true;
 		}
 
-		String[] arrPermitUri = {
-				"MobileUserController",
-				"MobileUserCertNoController",
-				"/users",
-				"/postFiles"
-		};
-		String[] arrLimitUri = {"mobileUserLogin", "mobileUserLogout", "mobileUserLoginConfirm"};
+		logger.debug("URL : " + url);
 
-		System.out.println("URL : " + url);
-
-		for (String sPermitUri : arrPermitUri) {
+		for (String sPermitUri : ALWAYS_PERMITTED_URI) {
 			if (url.indexOf(sPermitUri) > -1) {
 
 				System.out.println("sPermitUri : " + sPermitUri);
@@ -87,13 +96,12 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 
 //						System.out.println("sLimitUri : " + sLimitUri);
 //						System.out.println("url.indexOf(sLimitUri) : " + url.indexOf(sLimitUri));
-				System.out.println("패스");
+				System.out.println("토큰 체크 패스");
 				return true;
 //					}
 //				}
 			}
 		}
-
 
 
 		Map<String, String> mHeader = getHeadersInfo(request);
@@ -144,6 +152,17 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		String userNm = "";
 		String usrId = "";
 
+		// PERMITTED_AND_AUTH_POPULATED_URI의 해당 값은 성공 처리
+		if( sToken == null ) {
+			for (String sPermitUri : PERMITTED_AND_AUTH_POPULATED_URI) {
+				if (url.indexOf(sPermitUri) > -1) {
+					logger.debug("Token out, request is accepted! " + sToken);
+					response.setStatus( HttpStatus.OK.value() );
+					return true;
+				}
+			}
+		}
+
 		try {
 
 			logger.debug("◆◆◆◆  Master  ◆◆◆◆");
@@ -154,8 +173,9 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 			logger.debug("Step 2. Token");
 //            logger.info("Token ({}) is...({})",sToken, tokenString);
 
+            // token이 존재하지 않은 경우(로그인 되지 않은 경우), 체크
 			if (tokenString == null) {
-				// Connection release
+                // Connection release
 				helper.returnResource(jedis);
 
 				logger.debug("Token Out!!!" + sToken);

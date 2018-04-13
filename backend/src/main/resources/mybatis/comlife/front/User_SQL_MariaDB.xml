@@ -27,7 +27,19 @@
         SELECT
             USR_INFO.USR_ID,
             USER_NM,
-            IFNULL(AVATAR_IMG_SRC, NULL) AS IMG_SRC,
+            (
+              SELECT
+                CONCAT('/imageStore/', IMAGE_IDX, '/m')
+              FROM
+                CL_IMAGE_INFO JOIN
+                CL_IMAGE_TYPE
+                  ON CL_IMAGE_INFO.PARENT_TYPE = CL_IMAGE_TYPE.TYPE_IDX AND CL_IMAGE_TYPE.TYPE_NM = 'profile'
+              WHERE
+                CL_IMAGE_INFO.DEL_YN = 'N' AND
+                CL_IMAGE_INFO.PARENT_IDX = USR_INFO.USR_ID
+              ORDER BY IMAGE_IDX DESC
+                LIMIT 1
+            ) AS IMG_SRC,
             IFNULL(USER_ALIAS, USER_NM) AS USER_ALIAS,
             CMPLX_NM
         FROM
@@ -81,7 +93,7 @@
           USER_ID=#{userId}
     </select>
 
-    <select id="selectUserRelatedInfo" parameterType="Map" resultType="Map">
+    <select id="selectUserInfoByUserId" parameterType="Map" resultType="Map">
       SELECT
     </select>
 

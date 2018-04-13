@@ -80,6 +80,8 @@ public class ImageStoreController {
             logger.debug(">>> UsrId: " + currUser.getUsrId());
 
             usrId = currUser.getUsrId();
+        } else {
+            usrId = -1; // default value
         }
 
         iter = request.getFileNames();
@@ -107,7 +109,8 @@ public class ImageStoreController {
                                         mpf.getInputStream(),
                                         mpf.getSize(),
                                         imageType,
-                                        fileExt, -1);
+                                        fileExt,
+                                        usrId );
             } catch(OperationFailedException e) {
                 logger.error(e.getMessage());
                 return ResponseEntity.status(HttpStatus.CONFLICT).body( new SimpleErrorInfo( e.getMessage() ) );
@@ -141,6 +144,8 @@ public class ImageStoreController {
             logger.debug(">>> UsrId: " + currUser.getUsrId());
 
             usrId = currUser.getUsrId();
+        } else {
+            usrId = -1; // default value
         }
 
         base64 = params.get( "file" );
@@ -165,7 +170,7 @@ public class ImageStoreController {
                     imageBytes.length,
                     imageType,
                     imageBase64.getFileType(),
-                    -1);
+                    usrId );
         } catch( OperationFailedException e ) {
             e.printStackTrace();
             return ResponseEntity
