@@ -2,8 +2,10 @@ package com.kolon.comlife.reservation.web;
 
 import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
+import com.kolon.comlife.reservation.model.ReservationAmenityInfo;
 import com.kolon.comlife.reservation.model.ReservationGroupInfo;
 import com.kolon.comlife.reservation.model.ReservationSchemeInfo;
+import com.kolon.comlife.reservation.service.ReservationAmenityService;
 import com.kolon.comlife.reservation.service.ReservationGroupService;
 import com.kolon.comlife.reservation.service.ReservationSchemeService;
 import org.slf4j.Logger;
@@ -33,6 +35,9 @@ public class ReservationSchemeController {
     @Resource(name = "complexService")
     ComplexService complexService;
 
+    @Resource(name = "reservationAmenityService")
+    ReservationAmenityService amenityService;
+
     @CrossOrigin
     @GetMapping(
             value = "/",
@@ -51,6 +56,11 @@ public class ReservationSchemeController {
         ReservationSchemeInfo info = service.show( id );
         ComplexInfo complex = complexService.getComplexById( info.getCmplxIdx() );
         info.setComplex( complex );
+
+        HashMap params = new HashMap();
+        params.put( "schemeIdx", info.getIdx() );
+        List<ReservationAmenityInfo> amenities = amenityService.index( params );
+        info.setAmenities( amenities );
 
         return ResponseEntity.status( HttpStatus.OK ).body( info );
     }
