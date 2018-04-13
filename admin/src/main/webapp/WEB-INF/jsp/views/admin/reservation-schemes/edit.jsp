@@ -102,11 +102,13 @@
                                 </div>
                                 <div class="form-group">
                                     <label>예약 개요</label>
-                                    <textarea name="summary" rows="3" class="form-control">${scheme.summary}</textarea>
+                                    <input type="text" class="form-control" name="summary" value="${scheme.summary}">
+                                    <p class="text-success">* 목록에 표시되는 한줄짜리 예약 소개입니다.</p>
                                 </div>
                                 <div class="form-group">
                                     <label>예약 상세</label>
                                     <textarea name="description" rows="6" class="form-control">${scheme.description}</textarea>
+                                    <p class="text-success">* 예약 화면에서 표시되는 여러줄의 소개 내용입니다.</p>
                                 </div>
                                 <div class="form-group">
                                     <label>예약 가능일</label>
@@ -124,28 +126,49 @@
                                 <div class="form-group">
                                     <label>사용 포인트</label>
                                     <input type="number" name="point" class="form-control" value="${scheme.point}">
+                                    <p class="text-success">* 정수로만 입력할 수 있습니다.</p>
                                 </div>
-                                <div class="form-group">
-                                    <label>금액</label>
-                                    <input type="number" name="amount" class="form-control" value="${scheme.amount}">
-                                    <p class="text-info">* 0으로 설정하면 금액 청구 비활성</p>
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-6 form-group">
+                                        <label>개시일</label>
+                                        <div class="input-group">
+                                            <input type="text" name="startDt" class="form-control datepicker" data-format="YYYY-MM-DD" value="${scheme.startDt}">
+                                            <span class="input-group-addon">일 부터</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-md-6 form-group">
+                                        <label>마감일</label>
+                                        <div class="input-group">
+                                            <input type="text" name="endDt" class="form-control datepicker" data-format="YYYY-MM-DD" value="${scheme.endDt}">
+                                            <span class="input-group-addon">일 까지 예약 목록에 표시됨</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <p class="text-success">* 설정된 날짜가 지나면 예약 목록상에서 사라집니다.</p>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>예약 개시일</label>
-                                    <input type="text" name="startDt" class="form-control datepicker" data-format="YYYY-MM-DD" value="${scheme.startDt}">
+
+                                <div class="row">
+                                    <div class="col-xs-12 col-md-6 form-group">
+                                        <label>여는 시각</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control datepicker" name="openTime" data-format="HH" value="<c:out default="00" value="${scheme.openTime}"/>">
+                                            <span class="input-group-addon">시 부터</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12 col-md-6 form-group">
+                                        <label>닫는 시각</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control datepicker" name="closeTime" data-format="HH" value="<c:out default="23" value="${scheme.closeTime}"/>">
+                                            <span class="input-group-addon">시 까지 운영</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-12">
+                                        <p class="text-success">* 사용자는 이 시간대 사이에서만 예약을 신청할 수 있습니다.</p>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>예약 개시 시각</label>
-                                    <input type="text" name="startTime" class="form-control datepicker" data-format="HH:mm" value="${scheme.startTime}">
-                                </div>
-                                <div class="form-group">
-                                    <label>예약 마감일</label>
-                                    <input type="text" name="endDt" class="form-control datepicker" data-format="YYYY-MM-DD" value="${scheme.endDt}">
-                                </div>
-                                <div class="form-group">
-                                    <label>예약 마감 시각</label>
-                                    <input type="text" name="endTime" class="form-control datepicker" data-format="HH:mm" value="${scheme.endTime}">
-                                </div>
+
                                 <div class="form-group">
                                     <label>주말 예약 가능</label>
                                     <div>
@@ -165,14 +188,14 @@
                                     <div class="form-group">
                                         <label>재고</label>
                                         <input type="number" name="inStock" class="form-control" value="0">
-                                        <p class="text-info">* 0으로 설정하면 재고 체크 안함</p>
+                                        <p class="text-success">* 0으로 설정하면 재고 체크 안함</p>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
                                     <label>최대 예약 수량</label>
                                     <input type="number" name="maxQty" class="form-control" value="0">
-                                    <p class="text-info">* 0으로 설정하면 체크 안함</p>
+                                    <p class="text-success">* 0으로 설정하면 체크 안함</p>
                                 </div>
 
                                 <div class="form-group">
@@ -189,20 +212,26 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <div class="form-group">
-                                        <label>시설 옵션</label>
-                                        <div>
-                                            <c:forEach var="amenity" items="${amenities}">
-                                                <label class="checkbox-inline">
-                                                    <input type="checkbox" name="amenities[]" value="${amenity.idx}">
-                                                    <span style="background: #666; padding: 2px; display: inline-block; margin-right: 0.5em;">
-                                                        <img src="/admin/reservation-amenities/icon.do?idx=${amenity.iconIdx}" style="width: 18px;" alt="">
-                                                    </span>
-                                                        ${amenity.name}
-                                                </label>
-                                            </c:forEach>
-                                        </div>
+                                    <label>포함사항</label>
+                                    <textarea name="options" rows="3" class="form-control" placeholder="예) 세제, 비누, 수건 제공">${scheme.options}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>시설 옵션</label>
+                                    <div>
+                                        <c:forEach var="amenity" items="${amenities}">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" name="amenities[]" value="${amenity.idx}">
+                                                <span style="background: #666; padding: 2px; display: inline-block; margin-right: 0.5em;">
+                                                    <img src="/admin/reservation-amenities/icon.do?idx=${amenity.iconIdx}" style="width: 18px;" alt="">
+                                                </span>
+                                                    ${amenity.name}
+                                            </label>
+                                        </c:forEach>
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>주의사항</label>
+                                    <textarea name="precautions" rows="5" class="form-control" placeholder="예) 다음 분을 위해 종료 5분전에 정리를 부탁드립니다.">${scheme.precautions}</textarea>
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-6">

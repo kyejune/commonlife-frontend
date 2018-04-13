@@ -13,8 +13,8 @@ public class ReservationAmenityDAO {
     @Resource
     private SqlSession sqlSession;
 
-    public List<ReservationAmenityInfo> index() {
-        return sqlSession.selectList( "ReservationAmenity.index" );
+    public List<ReservationAmenityInfo> index(HashMap params) {
+        return sqlSession.selectList( "ReservationAmenity.index", params );
     }
 
     public ReservationAmenityInfo show( int idx ) {

@@ -42,61 +42,95 @@
         ]]>
     </select>
     <insert id="create" parameterType="reservationSchemeInfo">
-        <![CDATA[
-            INSERT INTO `RESERVATION_SCHEMES`
-                        (`CMPLX_IDX`,
-                         `PARENT_IDX`,
-                         `CODE`,
-                         `RESERVATION_TYPE`,
-                         `IMAGES`,
-                         `TITLE`,
-                         `SUMMARY`,
-                         `DESCRIPTION`,
-                         `IS_OPEN`,
-                         `START_DT`,
-                         `START_TIME`,
-                         `END_DT`,
-                         `END_TIME`,
-                         `AVAILABLE_IN_WEEKEND`,
-                         `POINT`,
-                         `AMOUNT`,
-                         `IN_STOCK`,
-                         `MAX_QTY`,
-                         `ACTIVATE_DURATION`,
-                         `MAINTENANCE_START_AT`,
-                         `MAINTENANCE_END_AT`,
-                         `OPTIONS`,
-                         `PRECAUTIONS`,
-                         `DEL_YN`,
-                         `REG_DTTM`,
-                         `UPD_DTTM`)
-            VALUES      (#{cmplxIdx},
-                         #{parentIdx},
-                         #{code},
-                         #{reservationType},
-                         #{images},
-                         #{title},
-                         #{summary},
-                         #{description},
-                         #{isOpen},
-                         #{startDt},
-                         #{startTime},
-                         #{endDt},
-                         #{endTime},
-                         #{availableInWeekend},
-                         #{point},
-                         #{amount},
-                         #{inStock},
-                         #{maxQty},
-                         #{activateDuration},
-                         #{maintenanceStartAt},
-                         #{maintenanceEndAt},
-                         #{options},
-                         #{precautions},
-                         #{delYn},
-                         CURRENT_TIMESTAMP,
-                         CURRENT_TIMESTAMP);
-        ]]>
+        INSERT INTO `RESERVATION_SCHEMES`
+                    (`CMPLX_IDX`,
+                     `PARENT_IDX`,
+                     `CODE`,
+                     `RESERVATION_TYPE`,
+                     `IMAGES`,
+                     `TITLE`,
+                     `SUMMARY`,
+                     `DESCRIPTION`,
+                     `IS_OPEN`,
+                     `START_DT`,
+                    <choose>
+                        <when test='startTime != null'>
+                            `START_TIME`,
+                        </when>
+                    </choose>
+                     `END_DT`,
+                    <choose>
+                        <when test='endTime != null'>
+                            `END_TIME`,
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='openTime != null'>
+                            `OPEN_TIME`,
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='closeTime != null'>
+                            `CLOSE_TIME`,
+                        </when>
+                    </choose>
+                     `AVAILABLE_IN_WEEKEND`,
+                     `POINT`,
+                     `AMOUNT`,
+                     `IN_STOCK`,
+                     `MAX_QTY`,
+                     `ACTIVATE_DURATION`,
+                     `MAINTENANCE_START_AT`,
+                     `MAINTENANCE_END_AT`,
+                     `OPTIONS`,
+                     `PRECAUTIONS`,
+                     `DEL_YN`,
+                     `REG_DTTM`,
+                     `UPD_DTTM`)
+        VALUES      (#{cmplxIdx},
+                     #{parentIdx},
+                     #{code},
+                     #{reservationType},
+                     #{images},
+                     #{title},
+                     #{summary},
+                     #{description},
+                     #{isOpen},
+                     #{startDt},
+                    <choose>
+                        <when test='startTime != null'>
+                            #{startTime},
+                        </when>
+                    </choose>
+                     #{endDt},
+                    <choose>
+                        <when test='endTime != null'>
+                            #{endTime},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='openTime != null'>
+                            #{openTime},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='closeTime != null'>
+                            #{closeTime},
+                        </when>
+                    </choose>
+                     #{availableInWeekend},
+                     #{point},
+                     #{amount},
+                     #{inStock},
+                     #{maxQty},
+                     #{activateDuration},
+                     #{maintenanceStartAt},
+                     #{maintenanceEndAt},
+                     #{options},
+                     #{precautions},
+                     #{delYn},
+                     CURRENT_TIMESTAMP,
+                     CURRENT_TIMESTAMP);
     </insert>
 
     <select id="latest" resultType="reservationSchemeInfo">
@@ -110,38 +144,54 @@
     </select>
 
     <update id="update" parameterType="reservationSchemeInfo">
-        <![CDATA[
-            UPDATE
-                    `RESERVATION_SCHEMES`
-            SET
-                    `CMPLX_IDX` = #{cmplxIdx},
-                    `PARENT_IDX` = #{parentIdx},
-                    `CODE` = #{code},
-                    `RESERVATION_TYPE` = #{reservationType},
-                    `IMAGES` = #{images},
-                    `TITLE` = #{title},
-                    `SUMMARY` = #{summary},
-                    `DESCRIPTION` = #{description},
-                    `IS_OPEN` = #{isOpen},
-                    `START_DT` = #{startDt},
-                    `START_TIME` = #{startTime},
-                    `END_DT` = #{endDt},
-                    `END_TIME` = #{endTime},
-                    `AVAILABLE_IN_WEEKEND` = #{availableInWeekend},
-                    `POINT` = #{point},
-                    `AMOUNT` = #{amount},
-                    `IN_STOCK` = #{inStock},
-                    `MAX_QTY` = #{maxQty},
-                    `ACTIVATE_DURATION` = #{activateDuration},
-                    `MAINTENANCE_START_AT` = #{maintenanceStartAt},
-                    `MAINTENANCE_END_AT` = #{maintenanceEndAt},
-                    `OPTIONS` = #{options},
-                    `PRECAUTIONS` = #{precautions},
-                    `DEL_YN` = #{delYn},
-                    `UPD_DTTM` = CURRENT_TIMESTAMP
-            WHERE
-                    `IDX` = #{idx}
-        ]]>
+        UPDATE
+                `RESERVATION_SCHEMES`
+        SET
+                `CMPLX_IDX` = #{cmplxIdx},
+                `PARENT_IDX` = #{parentIdx},
+                `CODE` = #{code},
+                `RESERVATION_TYPE` = #{reservationType},
+                `IMAGES` = #{images},
+                `TITLE` = #{title},
+                `SUMMARY` = #{summary},
+                `DESCRIPTION` = #{description},
+                `IS_OPEN` = #{isOpen},
+                `START_DT` = #{startDt},
+                `END_DT` = #{endDt},
+                <choose>
+                    <when test='startTime != null'>
+                        `START_TIME` = #{startTime},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='endTime != null'>
+                        `END_TIME` = #{endTime},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='openTime != null'>
+                        `OPEN_TIME` = #{openTime},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='closeTime != null'>
+                        `CLOSE_TIME` = #{closeTime},
+                    </when>
+                </choose>
+                `AVAILABLE_IN_WEEKEND` = #{availableInWeekend},
+                `POINT` = #{point},
+                `AMOUNT` = #{amount},
+                `IN_STOCK` = #{inStock},
+                `MAX_QTY` = #{maxQty},
+                `ACTIVATE_DURATION` = #{activateDuration},
+                `MAINTENANCE_START_AT` = #{maintenanceStartAt},
+                `MAINTENANCE_END_AT` = #{maintenanceEndAt},
+                `OPTIONS` = #{options},
+                `PRECAUTIONS` = #{precautions},
+                `DEL_YN` = #{delYn},
+                `UPD_DTTM` = CURRENT_TIMESTAMP
+        WHERE
+                `IDX` = #{idx}
     </update>
 
     <update id="delete" parameterType="reservationSchemeInfo">

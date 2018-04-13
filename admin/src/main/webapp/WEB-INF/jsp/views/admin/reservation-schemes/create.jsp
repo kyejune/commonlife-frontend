@@ -141,14 +141,14 @@
                                     <div class="col-xs-12 col-md-6 form-group">
                                         <label>여는 시각</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control datepicker" name="openHour" data-format="HH">
+                                            <input type="text" class="form-control datepicker" name="openTime" data-format="HH">
                                             <span class="input-group-addon">시 부터</span>
                                         </div>
                                     </div>
                                     <div class="col-xs-12 col-md-6 form-group">
                                         <label>닫는 시각</label>
                                         <div class="input-group">
-                                            <input type="text" class="form-control datepicker" name="closeHour" data-format="HH">
+                                            <input type="text" class="form-control datepicker" name="closeTime" data-format="HH">
                                             <span class="input-group-addon">시 까지 운영</span>
                                         </div>
                                     </div>

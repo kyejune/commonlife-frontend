@@ -5,6 +5,7 @@ import com.kolon.comlife.reservation.service.ReservationAmenityService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 
 @Service("reservationAmenityService")
@@ -13,8 +14,8 @@ public class ReservationAmenityServiceImpl implements ReservationAmenityService 
     ReservationAmenityDAO dao;
 
     @Override
-    public List<ReservationAmenityInfo> index() {
-        return dao.index();
+    public List<ReservationAmenityInfo> index(HashMap params) {
+        return dao.index( params );
     }
 
     @Override

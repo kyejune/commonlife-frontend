@@ -104,9 +104,9 @@ public class ReservationSchemeController {
             , @RequestParam( value = "description", required = false ) String description
             , @RequestParam( value = "isOpen", required = false ) String isOpen
             , @RequestParam( value = "startDt", required = false ) String startDt
-            , @RequestParam( value = "startTime", required = false, defaultValue = "00:00") String startTime
             , @RequestParam( value = "endDt", required = false ) String endDt
-            , @RequestParam( value = "endTime", required = false, defaultValue = "23:59") String endTime
+            , @RequestParam( value = "openTime", required = false, defaultValue = "00") String openTime
+            , @RequestParam( value = "closeTime", required = false, defaultValue = "24") String closeTime
             , @RequestParam( value = "availableInWeekend", required = false ) String availableInWeekend
             , @RequestParam( value = "point", required = false ) int point
             , @RequestParam( value = "amount", required = false, defaultValue = "0") int amount
@@ -132,9 +132,10 @@ public class ReservationSchemeController {
         info.setDescription( description );
         info.setIsOpen( isOpen );
         info.setStartDt( startDt );
-        info.setStartTime( startTime );
         info.setEndDt( endDt );
-        info.setEndTime( endTime );
+        // 시간 값만 받기 때문에 HH:mm:ss 형식으로 설정
+        info.setOpenTime( openTime + ":00:00" );
+        info.setCloseTime( closeTime + ":00:00" );
         info.setAvailableInWeekend( availableInWeekend );
         info.setPoint( point );
         info.setAmount( amount );
@@ -220,9 +221,9 @@ public class ReservationSchemeController {
             , @RequestParam( value = "description", required = false ) String description
             , @RequestParam( value = "isOpen", required = false ) String isOpen
             , @RequestParam( value = "startDt", required = false ) String startDt
-            , @RequestParam( value = "startTime", required = false, defaultValue = "00:00") String startTime
             , @RequestParam( value = "endDt", required = false ) String endDt
-            , @RequestParam( value = "endTime", required = false, defaultValue = "23:59") String endTime
+            , @RequestParam( value = "openTime", required = false, defaultValue = "00" ) String openTime
+            , @RequestParam( value = "closeTime", required = false, defaultValue = "24" ) String closeTime
             , @RequestParam( value = "availableInWeekend", required = false ) String availableInWeekend
             , @RequestParam( value = "point", required = false ) int point
             , @RequestParam( value = "amount", required = false, defaultValue = "0") int amount
@@ -247,9 +248,10 @@ public class ReservationSchemeController {
         info.setDescription( description );
         info.setIsOpen( isOpen );
         info.setStartDt( startDt );
-        info.setStartTime( startTime );
         info.setEndDt( endDt );
-        info.setEndTime( endTime );
+        // 시간 값만 받기 때문에 HH:mm:ss 형식으로 설정
+        info.setOpenTime( openTime + ":00:00" );
+        info.setCloseTime( closeTime + ":00:00" );
         info.setAvailableInWeekend( availableInWeekend );
         info.setPoint( point );
         info.setAmount( amount );

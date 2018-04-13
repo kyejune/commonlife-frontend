@@ -16,7 +16,7 @@
         <choose>
             <when test='ids != null'>
                 AND
-                    IDX IN
+                    `RESERVATION_AMENITIES`.`IDX` IN
                     <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
                         #{id}
                     </foreach>
