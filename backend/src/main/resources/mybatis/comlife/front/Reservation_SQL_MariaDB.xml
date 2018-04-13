@@ -3,9 +3,36 @@
 
 <mapper namespace="Reservation">
 
-    <select id="index" parameterType="java.util.Map" resultType="reservationGroupInfo">
+    <select id="index" parameterType="java.util.Map" resultType="reservationInfo">
         SELECT *
-        FROM   `RESERVATION_GROUPS`
+        FROM   `RESERVATIONS`
+        WHERE  1=1
+        <choose>
+            <when test='ids != null'>
+                AND
+                IDX IN
+                <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </when>
+        </choose>
+        <choose>
+            <when test='schemeIdx != null'>
+                AND
+                PARENT_IDX = #{schemeIdx}
+            </when>
+        </choose>
+        <choose>
+            <when test='startDt != null'>
+                AND
+                START_DT = #{startDt}
+            </when>
+        </choose>
+    </select>
+
+    <select id="show" parameterType="java.util.Map" resultType="reservationInfo">
+        SELECT *
+        FROM   `RESERVATIONS`
         WHERE  1=1
         <choose>
             <when test='ids != null'>
@@ -18,21 +45,33 @@
         </choose>
     </select>
 
-    <select id="show" parameterType="java.util.Map" resultType="reservationGroupInfo">
-
-    </select>
-
-    <insert id="create" parameterType="reservationGroupInfo">
+    <insert id="create" parameterType="reservationInfo">
         INSERT INTO
         `RESERVATIONS`
         (
             `PARENT_IDX`,
             `USR_ID`,
             `STATUS`,
-            `START_DT`,
-            `START_TIME`,
-            `END_DT`,
-            `END_TIME`,
+            <choose>
+                <when test='startDt != null'>
+                    `START_DT`,
+                </when>
+            </choose>
+            <choose>
+                <when test='startTime != null'>
+                    `START_TIME`,
+                </when>
+            </choose>
+            <choose>
+                <when test='endDt != null'>
+                    `END_DT`,
+                </when>
+            </choose>
+            <choose>
+                <when test='endTime != null'>
+                    `END_TIME`,
+                </when>
+            </choose>
             `POINT`,
             `AMOUNT`,
             `QTY`,
@@ -44,10 +83,26 @@
   	        #{parentIdx},
   	        #{usrID},
   	        #{status},
-  	        #{startDt},
-  	        #{startTime},
-  	        #{endDt},
-  	        #{endTime},
+            <choose>
+                <when test='startDt != null'>
+                    #{startDt},
+                </when>
+            </choose>
+            <choose>
+                <when test='startTime != null'>
+                    #{startTime},
+                </when>
+            </choose>
+            <choose>
+                <when test='endDt != null'>
+                    #{endDt},
+                </when>
+            </choose>
+            <choose>
+                <when test='endTime != null'>
+                    #{endTime},
+                </when>
+            </choose>
   	        #{point},
   	        #{amount},
   	        #{qty},

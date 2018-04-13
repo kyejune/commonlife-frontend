@@ -13,6 +13,19 @@ import moment from "moment";
 
 class ReservationDetail extends Component {
 
+	getReservationOnDate( date ) {
+		DB.getReservationOnDate( this.props.match.params.id, date, data => {
+			this.setState( { reservedSchedules: data.map( res => {
+				let start = moment( res.startTime, 'HH:mm:ss.000000' ).format( 'HH:mm' ).replace( ':00', '' ).replace( ':30', '.5' );
+				let end = moment( res.endTime, 'HH:mm:ss.000000' ).format( 'HH:mm' ).replace( ':00', '' ).replace( ':30', '.5' );
+				return {
+					start: Number( start ),
+					end: Number( end ),
+				}
+			} ) } );
+		} );
+	}
+
 	constructor( props ) {
 		super( props );
 
@@ -23,7 +36,7 @@ class ReservationDetail extends Component {
 			reserved: false,
 		};
 
-		DB.getReservation( this.props.match.params.id, data => {
+		DB.getReservationScheme( this.props.match.params.id, data => {
 			data.loaded = true;
 
 			const result = {
@@ -127,6 +140,9 @@ class ReservationDetail extends Component {
 
 				// TimeScheduler 조정용 date 객체 삽입
 				result.dates = [ now.toDate(), now.toDate() ];
+
+				// 기존 예약 내용 로드
+				this.getReservationOnDate( moment().format( 'YYYY-MM-DD' ) );
 			}
 			else if ( data.reservationType === 'B' ) {
 				result.options.push( {
@@ -156,19 +172,7 @@ class ReservationDetail extends Component {
 
 			// 원본 데이터도 바인딩 시켜둔다
 			result.scheme = data;
-			result.reservedSchedules = [
-				{ start: 13, end: 14 },
-				{ start: 15, end: 16 },
-			];
-
-			setTimeout( () => {
-				this.setState( {
-					reservedSchedules: [
-						{ start: 15, end: 16 }
-					]
-				} );
-				console.log( 'schedule updated!' );
-			}, 4000 );
+			result.reservedSchedules = [];
 
 			this.setState( result );
 			this.props.updateTitle( data.title );
@@ -176,6 +180,7 @@ class ReservationDetail extends Component {
 
 		// 함수 스코프 바인딩
 		this.reserve = this.reserve.bind( this );
+		this.getReservationOnDate = this.getReservationOnDate.bind( this );
 	}
 
 	addFloat( integer ) {
@@ -237,6 +242,8 @@ class ReservationDetail extends Component {
 			this.state.dates[ i ].setHours( hour );
 			this.state.dates[ i ].setMinutes( minute );
 		}
+
+		this.getReservationOnDate( moment( fromTo[ 0 ] ).format( 'YYYY-MM-DD' ) );
 	}
 
 	// 캘린더에 추가 =

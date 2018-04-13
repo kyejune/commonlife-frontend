@@ -180,11 +180,18 @@ export default {
             } );
     },
 
-    getReservation( id, callback ){
+    getReservationScheme( id, callback ){
         axios.get( Store.api + '/reservation-schemes/' + id )
             .then( response => {
                 callback( response.data );
             } );
+    },
+
+    getReservationOnDate( id, date, callback ) {
+		axios.get( Store.api + '/reservation-schemes/' + id + '/reservations?startDt=' + date )
+			.then( response => {
+				callback( response.data );
+			} );
     },
 
     createReservation( data, callback ) {
@@ -193,7 +200,6 @@ export default {
                 callback( response.data );
             } )
     },
-
 
     /* Post작성 */
     uploadImg( base64, callback ){

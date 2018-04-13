@@ -4,10 +4,12 @@ import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.reservation.model.ReservationAmenityInfo;
 import com.kolon.comlife.reservation.model.ReservationGroupInfo;
+import com.kolon.comlife.reservation.model.ReservationInfo;
 import com.kolon.comlife.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.reservation.service.ReservationAmenityService;
 import com.kolon.comlife.reservation.service.ReservationGroupService;
 import com.kolon.comlife.reservation.service.ReservationSchemeService;
+import com.kolon.comlife.reservation.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -31,6 +33,9 @@ public class ReservationSchemeController {
 
     @Resource(name = "reservationGroupService")
     ReservationGroupService schemeService;
+
+    @Resource(name = "reservationService")
+    ReservationService reservationService;
 
     @Resource(name = "complexService")
     ComplexService complexService;
@@ -63,5 +68,22 @@ public class ReservationSchemeController {
         info.setAmenities( amenities );
 
         return ResponseEntity.status( HttpStatus.OK ).body( info );
+    }
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/{id}/reservations",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity reservations(
+            HttpServletRequest request
+            , @PathVariable("id") int id
+    ) {
+        HashMap params = new HashMap();
+        params.put( "schemeIdx", id );
+        params.put( "startDt", request.getParameter( "startDt" ) );
+        List<ReservationInfo> reservations = reservationService.index( params );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( reservations );
     }
 }
