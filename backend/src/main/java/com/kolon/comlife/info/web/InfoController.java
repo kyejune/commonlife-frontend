@@ -464,7 +464,7 @@ public class InfoController {
         ret.put("email", "yunakim@gmail.com");
 
         ret.put("cmplxNm", "역삼동 하우징");
-        ret.put("cmplxAddr", "yunakim@gmail.com");
+        ret.put("cmplxAddr", "서울시 강남구 역삼로 123");
 
         return ret;
     }
