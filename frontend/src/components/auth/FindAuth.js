@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import classNames from "classnames";
 import LogoSrc from 'images/logo@3x.png';
 import TagComponent from "../ui/TagComponent";
-import {Link, withRouter} from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Net from "../../scripts/net";
 
 class FindAuth extends Component {
@@ -132,7 +131,7 @@ class FindAuth extends Component {
 
             <header className="cl-join__header">
                 <div className="cl-flex">
-                    <img className="cl-logo__img" src={LogoSrc}/>
+                    <img className="cl-logo__img" src={LogoSrc} alt=""/>
                     <div className="cl-logo__text">
                         <span className="fs-36 cl-bold">COMMON Life</span> <br/>
                         <span className="fs-10">Membership</span>
