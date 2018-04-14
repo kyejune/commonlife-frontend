@@ -410,3 +410,37 @@ body.cl-dom--added{
         min-height: calc(100vh - 56px);
     }
 }
+
+.cl-header__branch-btn {
+    margin-left: 9px;
+    padding-right: 20px;
+    font-size: 16px;
+    font-weight: bold;
+    background-image: url("images/arrow-drop-down-28@3x.png");
+    background-repeat: no-repeat;
+    background-position: right center;
+    background-size: 19px;
+}
+
+.cl-header__alert-btn {
+    width: 46px;
+    height: 46px;
+    margin-right: 4px;
+    justify-content: center;
+
+    img {
+        width: 26px;
+        height:26px;
+        opacity: 0.7;
+    }
+}
+
+.cl-header__logo {
+    margin-left: 12px;
+    width: 30px;
+    height: 30px;
+}
+
+header {
+    border-bottom: 1px solid #1B65C1;
+}

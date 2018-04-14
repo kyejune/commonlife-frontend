@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
-import logo from 'images/logo@2x.png';
-import alert from 'images/alert-icon-top-28@2x.png';
+import logo from 'images/logo.svg';
+import alert from 'images/noti-24-px-copy.svg';
 import Store from "../../scripts/store";
 
 class Header extends Component {
@@ -22,13 +22,13 @@ class Header extends Component {
             <header
                 className="md-paper md-toolbar md-background--primary md-toolbar--text-white cl-flex">
 
-                <img className="ml-05em" src={logo} alt="로고 이미지" width="40" height="40"/>
+                <img className="cl-header__logo" src={logo} alt="로고 이미지" width="40" height="40"/>
 
-                <button className="md-title md-title--toolbar" onClick={ this.openBranchList }>
+                <button className="md-title md-title--toolbar cl-header__branch-btn" onClick={ this.openBranchList }>
                     역삼하우징
                 </button>
 
-                <button className="ml-auto mr-05em"
+                <button className="ml-auto cl-flex cl-header__alert-btn"
                         onClick={ this.openNotificationCenter }
                         type="button"
                 >

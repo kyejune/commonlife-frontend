@@ -43,6 +43,17 @@ $md-secondary-color: #f4ca5c;
   overflow: auto;
 }
 
+.md-toolbar {
+  @media screen and (min-width: 320px) {
+    height: 46px !important;
+  }
+}
+
+.md-title--toolbar {
+  @media screen and (min-width: 320px) {
+    line-height: 46px !important;
+  }
+}
 
 // Drawer하단에서 나오기 추가
 .md-drawer--bottom{
@@ -95,6 +106,30 @@ $md-secondary-color: #f4ca5c;
 
 .md-drawer--fixed{
   bottom: initial;
+}
+
+.cl-tab--community {
+  .md-tab-indicator {
+    height: 4px !important;
+  }
+}
+
+.md-tab {
+  height: 45px !important;
+  padding-bottom: 16px !important;
+  //border-bottom: 4px solid $md-primary-color;
+
+  .md-tab-label {
+    font-weight: 400 !important;
+  }
+
+  &.md-tab--inactive {
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  &.md-tab--active {
+    //border-bottom: 4px solid #F2C86C;
+  }
 }
 
 

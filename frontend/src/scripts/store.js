@@ -5,7 +5,8 @@ import Cookie from 'js-cookie';
 let host = 'https://clback.cyville.net';
 if( window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' )
     host = 'http://localhost:8080';
-    
+	// host = 'https://clback.cyville.net';
+
 // 아이폰 디바이스 테스트용 주소
 if( window.location.protocol === 'file:' && window.location.pathname.includes('CoreSimulator') )
     host = 'http://192.168.0.100:8080';
