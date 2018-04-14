@@ -229,7 +229,7 @@ class IotDevice extends Component {
                             <div className="w-85">
                                 <input type="text"
                                        placeholder="TEXT를 입력해주세요."
-                                       defaultValue={ item.currStsKor }
+                                       defaultValue={ item.currSts || item.currStsKor }
                                        onChange={ event => this.onChangeInputText( event.target.value, index ) }
                                 />
                             </div>

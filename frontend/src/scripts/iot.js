@@ -117,7 +117,9 @@ export default {
     /* 모드 버튼 클릭시 on/off 변경 */
     changeIotMode(modeId, value, callback) {
         console.log(`changeIotMode: ${modeId}의 값을 ${value}로 변경`);
+        //Store.modeModal
 
+        //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/modes/turnOff : 끌때 사용
         axios.put(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${modeId}/switchTo`)
             .then(response => {
                 callback();
@@ -213,6 +215,7 @@ export default {
 
         let {deviceId, protcKey, maxLinkYn, minLinkYn} = data;
         let valueName = value.toString();
+        let method = axios.put;
 
         // 로봇청소기는 protcKey값이 달라진다.
         if( maxLinkYn === 'Y' && minLinkYn === 'Y' )
@@ -228,13 +231,15 @@ export default {
 
             case 'inputtext':
                 // 관련장비 기기명 변경은 api주소가 다름
+                method = axios.post;
                 params = `desc?value=${encodeURIComponent(value)}`;
                 break;
         }
 
         Store.myModal = { status:0, name:data.thingsNm, value: valueName };
-        console.log( data, `의 값을 ${value}로 변경`, Store.modeModal );
-        axios.put(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}/${params}`)
+        console.log( data, `의 값을 ${value}로 변경`, Store.modeModal, params );
+
+        method(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/devices/${deviceId}/${params}`)
             .then(response => {
                 callback( true );
                 Store.myModal = { status:1, name:data.thingsNm, value: valueName };
