@@ -14,6 +14,7 @@
         <package name="com.kolon.comlife.board.model" />
         <package name="com.kolon.comlife.complexes.model" />
         <package name="com.kolon.comlife.example.model" />
+        <package name="com.kolon.comlife.homeHead.model" />
         <package name="com.kolon.comlife.iot.model" />
         <package name="com.kolon.comlife.like.model" />
         <package name="com.kolon.comlife.post.model" />

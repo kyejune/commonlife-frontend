@@ -4,6 +4,8 @@ import com.kolon.comlife.reservation.model.ReservationGroupInfo;
 import com.kolon.comlife.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.reservation.service.ReservationGroupService;
 import com.kolon.comlife.reservation.service.ReservationSchemeService;
+import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -39,6 +41,9 @@ public class ReservationGroupController {
         HashMap groupParams = new HashMap();
         groupParams.put( "cmplxIdx", cmplxIdx );
         List<ReservationGroupInfo> groups = service.index( groupParams );
+
+        AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+        logger.debug( ">>>>>>>>>>>>>>>>>>>>>>>>>>>>> authUserInfo: " + authUserInfo );
 
         // 현재 그룹에 속해있는 스키마들을 가져온다
         /*
