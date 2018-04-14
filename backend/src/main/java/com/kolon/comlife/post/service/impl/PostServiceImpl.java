@@ -125,10 +125,10 @@ public class PostServiceImpl implements PostService {
             // 사용자 정보 Map 생성
             for( PostUserInfo user : userList ) {
 
-                if( user.getImageIdx() > 0 ) {
+                if( user.getImageIdx() > -1 ) {
                     user.setImgSrc( imageStoreService.getImageFullPathByIdx( user.getImageIdx(), ImageInfoUtil.SIZE_SUFFIX_SMALL ) );
                 } else {
-                    user.setImgSrc( "#" ); // todo:
+                    user.setImgSrc( null ); // 이미지 없는 경우, NULL 셋팅
                 }
                 userListMap.put( Integer.valueOf(user.getUsrId()), user );
             }
