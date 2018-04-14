@@ -196,6 +196,15 @@ export default {
             });
     },
 
+    // 시나리오 편집시 생성 가능한 목록만 가져오기 기기, 센서
+    //{{API_HOST}}/iot/complexes/127/homes/1/automation/1/conditions/available
+    //{{API_HOST}}/iot/complexes/127/homes/1/automation/1/actors/available
+    getAddibleItemOfEdigingScenario( type, scenerioId, callback ){
+        axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/automation/${scenerioId}/${type}/available`)
+            .then(response => {
+                callback(response.data);
+            });
+    },
 
     /* 모드 상세 가져오기 */
     //{{API_HOST}}/iot/complexes/125/homes/1/automation/140

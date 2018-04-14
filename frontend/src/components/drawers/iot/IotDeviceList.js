@@ -61,12 +61,21 @@ class IotDeviceCategory extends Component {
         // 목록 가져오기
 		if( this.state.action === 'scenario' )
 		{
-			Iot.getAddibleItemOfScenario( 'actors', data =>{
-                this.setState({
-                    deviceData: data.scnaThings,
-                    addingList: [],
+			if( this.props.isCreate ) {
+                Iot.getAddibleItemOfScenario('actors', data => {
+                    this.setState({
+                        deviceData: data.scnaThings,
+                        addingList: [],
+                    });
                 });
-			});
+            }else{
+                Iot.getAddibleItemOfEdigingScenario('actors', this.props.target, data => {
+                    this.setState({
+                        deviceData: data.scnaThings,
+                        addingList: [],
+                    });
+                });
+			}
 		}
 		else
 		{

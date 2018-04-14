@@ -23,15 +23,31 @@ class IotAddingSensorList extends Component {
     }
 
     componentWillMount() {
-        Iot.getAddibleItemOfScenario('conditions', data => {
-            this.setState({
-                data: data
+
+        if( this.props.isCreate ) {
+
+            Iot.getAddibleItemOfScenario('conditions', data => {
+                this.setState({
+                    data: data
+                });
+
+                const clonedState = _.clone(this.state);
+                clonedState.addedData.scnaIfOption = data.scnaIfOption;
+                this.setState(clonedState);
             });
 
-            const clonedState = _.clone( this.state );
-			clonedState.addedData.scnaIfOption = data.scnaIfOption;
-			this.setState( clonedState );
-        });
+        }else{
+
+            Iot.getAddibleItemOfEdigingScenario('conditions', this.props.target, data => {
+                this.setState({
+                    data: data
+                });
+
+                const clonedState = _.clone(this.state);
+                clonedState.addedData.scnaIfOption = data.scnaIfOption;
+                this.setState(clonedState);
+            });
+        }
     }
 
     onChangeCheck( bool, itemKey ){

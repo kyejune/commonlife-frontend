@@ -247,11 +247,17 @@ class IotModeSetting extends Component {
 
         switch (type) {
             case 'time':
-                if (newEditingData.scnaIfSpc.length > 0) newEditingData.scnaIfSpc[0].chk = 'N';
+                if (newEditingData.scnaIfSpc.length > 0){
+                    newEditingData.scnaIfSpc[0].chk = 'N';
+                    newEditingData.scnaIfSpc.length = 0;
+                }
                 break;
 
             case 'duration':
-                if (newEditingData.scnaIfAply.length > 0) newEditingData.scnaIfAply[0].chk = 'N';
+                if (newEditingData.scnaIfAply.length > 0){
+                    newEditingData.scnaIfAply[0].chk = 'N';
+                    newEditingData.scnaIfAply.length = 0;
+                }
                 break;
 
             case 'sensor':
@@ -544,6 +550,7 @@ class IotModeSetting extends Component {
                         <button className="cl-iot-add__button--light pb-3em"
                                 onClick={() => Store.pushDrawer('iot-sensor-list', {
                                     isCreate: isCreateMode,
+                                    target: this.state.editTarget,
                                     callback: this.gettedAddingSensors
                                 })}>
                             <img src={addSrc} alt="센서추가" width="40" height="40"/>
@@ -566,9 +573,10 @@ class IotModeSetting extends Component {
                         <button className="cl-iot-add__button--light pb-3em"
                                 onClick={() => Store.pushDrawer('iot-device-category-detail', {
                                     isCreate: isCreateMode,
+                                    target: this.state.editTarget,
                                     callback: this.gettedAddingDevices
                                 })}>
-                            <img src={addSrc} alt="센서추가" width="40" height="40"/>
+                            <img src={addSrc} alt="기기추가" width="40" height="40"/>
                         </button>
                         }
                     </div>
