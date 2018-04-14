@@ -56,8 +56,15 @@ axios.interceptors.response.use(function (response) {
         }
     }
 
-    if( USE_SYSTEM_ALERT )
-        alert( (error.response?error.response.data.msg:error) || '잠시 후 다시 이용해 주시기 바랍니다.');
+    if( USE_SYSTEM_ALERT ){
+        const ERROR_MSG = (error.response ? error.response.data.msg : error) || '잠시 후 다시 이용해 주시기 바랍니다.';
+        //navigator.notification.alert(message, alertCallback, [title], [buttonName])
+        if( navigator.notification ){
+            navigator.notification.alert( ERROR_MSG, ()=>{}, 'CommonLife', '확인' );
+        }else {
+            alert( ERROR_MSG );
+        }
+    }
 
     // Do something with response error
     return Promise.reject(error);
