@@ -355,7 +355,7 @@ class ReservationDetail extends Component {
 		return <div className="cl-reservation-detail pb-3em">
 
 			{!this.state.reserved &&
-			<Link to={'/reservation/0/thumbnails'}>
+			<Link to={'/reservation/' + this.props.match.params.id + '/thumbnails'}>
 				<SwiperViewer thumbnails={this.state.pictures} viewType={'rectangle'}/>
 			</Link>
 			}

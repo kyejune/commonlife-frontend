@@ -158,7 +158,7 @@ class Reservation extends Component {
 
 			{/* 이미지상세보기 */}
 			<DrawerWrapper drawer="reservation-thumbnails">
-				<DrawerSwiperViewer/>
+				<DrawerSwiperViewer {...this.props}/>
 			</DrawerWrapper>
 
 			{/* 예약 목록 */}
