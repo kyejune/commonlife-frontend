@@ -1,11 +1,12 @@
-package com.kolon.comlife.admin.support.web;
+package com.kolon.comlife.admin.info.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
-import com.kolon.comlife.admin.support.exception.SupportGeneralException;
-import com.kolon.comlife.admin.support.model.SupportCategoryInfo;
-import com.kolon.comlife.admin.support.service.SupportService;
+import com.kolon.comlife.admin.info.exception.InfoGeneralException;
+import com.kolon.comlife.admin.info.model.model.InfoData;
+import com.kolon.comlife.admin.info.service.InfoService;
+import com.kolon.comlife.admin.support.exception.NoDataException;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import org.slf4j.Logger;
@@ -26,17 +27,17 @@ import java.util.List;
 import java.util.Map;
 
 
-@Controller("supportController")
-@RequestMapping("admin/support/*")
-public class SupportController {
+@Controller("infoController")
+@RequestMapping("admin/info/*")
+public class InfoController {
 
-    private static final Logger logger = LoggerFactory.getLogger(SupportController.class);
+    private static final Logger logger = LoggerFactory.getLogger(InfoController.class);
 
     @Autowired
     private ComplexService complexService;
 
     @Autowired
-    private SupportService supportService;
+    private InfoService infoService;
 
     @GetMapping( value = "categoryList.do" )
     public ModelAndView categoryList (
@@ -44,44 +45,50 @@ public class SupportController {
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
-            , @ModelAttribute("categoryInfo") SupportCategoryInfo categoryInfo
+            , @ModelAttribute("cmplxId") int cmplxId
     ) {
-        ComplexInfoDetail         complexInfo;
-        List<SupportCategoryInfo> categoryList;
+
+        ComplexInfoDetail complexInfo;
+        List<InfoData> categoryList;
         String                    categoryListJson;
-        ObjectMapper              mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
         try {
-            complexInfo = complexService.getComplexById(categoryInfo.getCmplxId());
+            complexInfo = complexService.getComplexById( cmplxId );
             if( complexInfo == null ) {
                 return mav.addObject( "error",
-                                      "해당 현장에 대한 정보가 없습니다. 문제가 지속되면 담당자에게 문의하세요.");
+                        "해당 현장에 대한 정보가 없습니다. 문제가 지속되면 담당자에게 문의하세요.");
             }
 
-            categoryList = supportService.getCategoryInfoByComplexId(categoryInfo);
+            categoryList = infoService.getInfoDataList( cmplxId );
             if( categoryList == null ) {
                 return mav.addObject( "error",
-                                      "해당 현장에 대한 지원 분류 정보가 없습니다. 문제가 지속되면 담당자에게 문의하세요.");
+                        "해당 현장에 대한 INFO 정보가 없습니다. 문제가 지속되면 담당자에게 문의하세요.");
             }
-        } catch( SupportGeneralException e ) {
+        } catch( NoDataException e ) {
+            logger.error( e.getMessage() );
             return mav.addObject(
                     "error",
                     e.getMessage() );
+        } catch ( Exception e ) {
+            logger.error( e.getMessage() );
+            return mav.addObject(
+                    "error",
+                    "내부 오류가 발생했습니다. 문제가 지속되면 담당자에게 문의하세요.");
         }
 
         try {
             categoryListJson = mapper.writeValueAsString(categoryList);
+            logger.debug(">>>>>>>>>>>>> categorListJson: " + categoryListJson);
         } catch( Exception e) {
             return mav.addObject(
                     "error",
                     "작업 처리과정에 에러가 발생했습니다. 문제가 지속되면 담당자에게 문의하세요.");
         }
 
-        mav.addObject("complexInfo", complexInfo );
-        mav.addObject("categoryInfo", categoryInfo); // Parameters
-        // JSON value
+        mav.addObject("complexInfo",  complexInfo );
         mav.addObject("categoryList", categoryListJson);
-        mav.addObject("cmplxId", categoryInfo.getCmplxId());
+        mav.addObject("cmplxId",      complexInfo.getCmplxId());
 
         return mav;
     }
@@ -98,15 +105,15 @@ public class SupportController {
             , @RequestBody List<Map<String, Object>> dispOrderParam
             , @RequestParam("cmplxId") int cmplxId
     ) {
-        List<SupportCategoryInfo> dispOrderList;
+        List<InfoData> dispOrderList;
 
-        if (cmplxId < 1) {
+        if( cmplxId < 1 ) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(new SimpleErrorInfo("잘못된 현장아이디(cmplxId)를 입력했습니다. 다시 확인하세요."));
         }
 
-        if (dispOrderParam == null) {
+        if( dispOrderParam == null ) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(new SimpleErrorInfo("업데이트 할 내용이 없습니다. 전송 내용을 다시 확인하세요. "));
@@ -114,28 +121,32 @@ public class SupportController {
 
 
         dispOrderList = new ArrayList<>();
-        for (Map e : dispOrderParam) {
-            SupportCategoryInfo cateInfo = new SupportCategoryInfo();
+        for( Map e: dispOrderParam ) {
+            InfoData cateInfo = new InfoData();
 
-            cateInfo.setCateIdx(Integer.parseInt((String) e.get("cateIdx")));
-            cateInfo.setCmplxId(cmplxId);
-            cateInfo.setDispOrder(((Integer) e.get("dispOrder")).intValue());
-            cateInfo.setDelYn((String) e.get("delYn"));
+
+            cateInfo.setInfoKey( (String) e.get("infoKey")  );
+            cateInfo.setCmplxId( cmplxId );
+            cateInfo.setDispOrder( ((Integer)e.get("dispOrder")).intValue() );
+            cateInfo.setDelYn( (String) e.get("delYn") );
 
             dispOrderList.add(cateInfo);
 
 
-            logger.debug(">>> " + cateInfo.getCateIdx());
-            logger.debug(">>> " + cateInfo.getDispOrder());
-            logger.debug(">>> " + cateInfo.getDelYn());
+            logger.debug(">>> " + cateInfo.getInfoKey() );
+            logger.debug(">>> " + cateInfo.getDispOrder() );
+            logger.debug(">>> " + cateInfo.getDelYn() );
             logger.debug("----");
         }
 
         try {
-            supportService.updateCategoryInfoDisplayByComplexId(dispOrderList);
-        } catch (SupportGeneralException e) {
-            logger.error(e.getMessage());
+            infoService.updateCategoryInfoDisplayByComplexId( dispOrderList );
+        } catch( InfoGeneralException e ) {
+            logger.error( e.getMessage() );
             e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleMsgInfo(e.getMessage()) );
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(new SimpleMsgInfo("업데이트를 완료했습니다."));

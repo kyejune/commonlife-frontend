@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Info">
+    <select id="selectInfoDataListByCmplxId" parameterType="java.util.Map" resultType="infoData">
+        <![CDATA[
+            SELECT
+                #{cmplxId}    AS CMPLX_ID,
+                CATE.CATE_IDX AS INFO_KEY,
+                CATE.IMG_SRC  AS IMG_SRC,
+                CATE.CATE_NM  AS INFO_NM,
+                IFNULL(CONF.DISP_ORDER, 9999) AS DISP_ORDER,
+                IF (DEL_YN = "N", "Y", "N") AS SET_YN,
+                IFNULL(CONF.DEL_YN, "Y") AS DEL_YN,
+                CONF.REG_DTTM AS REG_DTTM,
+                CONF.UPD_DTTM AS UPD_DTTM
+            FROM
+                CL_INFO_CATE AS CATE LEFT JOIN
+                CL_INFO_CONF AS CONF
+                  ON CATE.CATE_IDX = CONF.CATE_IDX AND CMPLX_ID = #{cmplxId}
+            ORDER BY
+                DISP_ORDER ASC
+            ;
+        ]]>
+    </select>
+
+    <update  id="updateCategoryDisplayOrder" parameterType="infoData" >
+        INSERT INTO
+            CL_INFO_CONF
+            (
+                CMPLX_ID,
+                CATE_IDX,  -- CATE_IDX == infoKey
+                DISP_ORDER,
+                DEL_YN
+            )
+        VALUES
+            (
+                #{cmplxId}, #{infoKey}, #{dispOrder}, #{delYn}
+            )
+            ON DUPLICATE KEY
+        UPDATE
+            UPD_DTTM=CURRENT_TIMESTAMP,
+            DEL_YN=#{delYn},
+            DISP_ORDER=#{dispOrder};
+    </update>
+
+
+
+
+</mapper>
