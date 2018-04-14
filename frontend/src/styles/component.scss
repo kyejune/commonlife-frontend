@@ -207,6 +207,18 @@
     background-image: url('images/profile-thumb-img@3x.png');
     background-size: cover;
     clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 9;
+        width: 40px;
+        height: 40px;
+        background-color: rgba(0,0,0,0.05);
+        clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
+    }
 }
 
 
@@ -960,7 +972,7 @@ a.cl-map__link--branch{
     z-index: 9;
     width: 100vw;
     height: 100vh;
-    //background-color: rgba(0,0,0,0.85);
+    //background-color: rgba(0,0,0,0.9);
 
     .cl-iot-connect-progress {
         position: relative;
@@ -1431,4 +1443,8 @@ a.cl-map__link--branch{
 
 .c3-gauge-value{
     display: none !important;
+}
+
+.cl-branch-selector {
+    //
 }

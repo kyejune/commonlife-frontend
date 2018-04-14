@@ -172,7 +172,7 @@ body.cl-dom--added{
     &>div{
         width: 100vw;
         height: 100vh;
-        background-color: rgba( 0, 0, 0, 0.85 );
+        background-color: rgba( 0, 0, 0, 0.9 );
     }
 }
 
@@ -354,7 +354,7 @@ body.cl-dom--added{
 }
 
 .cl-header--reservation {
-    min-height: 145px;
+    min-height: 125px;
     background-color: #2e3137;
     color: white;
 
@@ -398,17 +398,18 @@ body.cl-dom--added{
 }
 
 .cl-select-with-title__select {
-    width: 125px;
+    width: 200px;
     height: 33px;
     overflow: hidden;
+    border-radius: 6px;
     background-image: url("images/cl-select-with-title-select-bullet@2x.png");
     background-repeat: no-repeat;
-    background-position: 90% 50%;
-    background-size: 12px;
-    background-color: rgba(255,255,255,0.4);
+    background-position: 95% center;
+    background-size: 10px;
+    background-color: rgba(255,255,255,0.3);
 
     select {
-        width: 125px;
+        width: 200px;
         height: 33px;
         padding: 7px 5px 5px 14px;
         background: transparent;

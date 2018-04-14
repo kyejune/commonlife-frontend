@@ -72,8 +72,8 @@ class IotModeChange extends Component {
 							취소
 						</button>
 						<button onClick={()=>this.setProgress()}
-								className="cl-iot-mode-progress__btn-primary">
-							확인
+								className="cl-flex cl-iot-mode-progress__btn-primary">
+							<span>확인</span>
 						</button>
 					</div>
 				</div>;

@@ -1,12 +1,14 @@
 .swiper-slide {
     padding: 35% 0;
     text-align: center;
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
 .cl-swiper-viewer {
+    margin-top: -2px;
+
     .swiper-slide {
         height: calc(100vh - 56px);
     }

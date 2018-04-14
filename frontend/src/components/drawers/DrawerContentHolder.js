@@ -69,7 +69,7 @@ class DrawerContentHolder extends Component {
         let CustomHeader, CloseButton;
         if( this.props.match.params.drawer === 'like' ){
             /* LIKE용 헤더 */
-            CustomHeader = <header className="md-paper md-paper--2 md-toolbar md-background--primary md-toolbar--text-white md-toolbar--fixed">
+            CustomHeader = <header className="md-paper md-toolbar md-background--primary md-toolbar--text-white md-toolbar--fixed">
                 <button type="button"
                         onClick={ ()=> this.onClose() }
                         className="md-btn md-btn--flat md-btn--text md-pointer--hover md-text md-inline-block md-btn--toolbar md-toolbar--action-left cl-back__button">
@@ -82,7 +82,7 @@ class DrawerContentHolder extends Component {
         if( this.props.back ){
 
             CloseButton = <button onClick={ ()=> this.onClose() } className="cl-back__button ml-1em">
-                <img src={ closeSrc } alt="이전" width="20" height="20"/>
+                <img src={ closeSrc } alt="이전" width="16" height="16"/>
             </button>
 
         }else{

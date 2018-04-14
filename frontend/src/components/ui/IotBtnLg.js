@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import IotIcAlert from 'images/alert-icon-black@3x.png';
+// import IotIcAlert from 'images/alert-icon-black@3x.png';
 import IotIcSet from 'images/io-t-i-con-b-copy@3x.png';
 import IotIcOn from 'images/io-t-i-con-b@3x.png';
 import IotIcOff from 'images/io-t-i-con-b-off@3x.png';
@@ -45,7 +45,7 @@ class IotBtnLg extends Component {
             case "information":
                 BottomLeft = <div className="cl-bold">{btLeft}</div>;
                 BottomRight = <div>{btRightText}</div>;
-                rtIcon = <i className="cl-my-iot__ic-alert"><img src={IotIcAlert} alt=""/></i>;
+                // rtIcon = <i className="cl-my-iot__ic-alert"><img src={IotIcAlert} alt=""/></i>;
 
                 // 날씨는 연결안되게 막아야됨
                 // link = `${this.props.location.pathname}/info/${myIotId}`;// 지금은 연결할 페이지 없음
@@ -97,8 +97,8 @@ class IotBtnLg extends Component {
 
                 <div className="cl-my-iot__content">
                     <div>
-                        <h3 className="cl-bold mt-01em uppercase w-85 cl-wrap">
-                            <span className="cl-bold">{btTitle}</span>
+                        <h3 className="mt-01em uppercase cl-wrap">
+                            <span>{btTitle}</span>
                             {btTitleUnit}
                         </h3>
                         <p className="cl-my-iot__paragraph">{btSubTitle}</p>
@@ -108,7 +108,7 @@ class IotBtnLg extends Component {
 
                 </div>
 
-                <div className="cl-my-iot__bottom cl-flex pt-04em">
+                <div className="cl-my-iot__bottom cl-flex">
                     {BottomLeft}
                     {BottomRight}
                 </div>

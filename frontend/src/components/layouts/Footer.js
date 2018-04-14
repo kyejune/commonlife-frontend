@@ -25,7 +25,7 @@ const WriteButton = () => {
 
 
 const IotButton = () => {
-    return <Link className="cl-iot-run__button md-background--primary" to="/iot/ctrl"
+    return <Link className="md-paper--2 cl-iot-run__button md-background--primary" to="/iot/ctrl"
     >
         <img src={IotSrc} alt="IoT제어" width="20" height="20"/>
     </Link>

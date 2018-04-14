@@ -41,7 +41,7 @@ class BranchSeletor extends Component {
         });
 
 
-        return <div className="drawer-fitted-box--b">
+        return <div className="drawer-fitted-box--b cl-branch-selector">
                 <div className="cl-status-vertical-list">
                     <div className="cl-card-item--dark">
                         <h4 className="cl-name">

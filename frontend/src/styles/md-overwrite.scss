@@ -63,6 +63,10 @@ $md-secondary-color: #f4ca5c;
 }
 
 .md-drawer {
+    .md-paper--2 {
+        box-shadow: none !important;
+    }
+
     header {
         .md-btn {
             min-width: auto;

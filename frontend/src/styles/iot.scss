@@ -86,8 +86,8 @@
     &:before {
         content: '';
         position: absolute;
-        top: -14px;
-        right: -7px;
+        top: -11px;
+        right: -8px;
         width: 32px;
         height: 32px;
         background-image: url("images/io-t-on-bt@3x.png");
@@ -206,12 +206,23 @@
     height: calc(100% - 45px);
     display: flex;
     flex-flow: column wrap;
-    padding-top: 7px;
+    padding-top: 12px;
+
+    h3 {
+        width: 100%;
+        font-size: 23px;
+        line-height: 24px;
+        letter-spacing: -0.3px;
+
+        span {
+            font-weight: 500;
+        }
+    }
 
     .cl-my-iot__icons {
         position: absolute;
-        left: 15px;
-        bottom: 45px;
+        left: 8px;
+        bottom: 49px;
     }
 }
 
@@ -220,7 +231,7 @@
     display: -webkit-flex;
     justify-content: space-between;
     border-top: 1px solid rgba(0, 0, 0, 0.1);
-    height: 45px;
+    height: 43px;
     align-items: center;
 }
 
@@ -666,6 +677,7 @@
     background-color: #1654A3;
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.24), 0 0 1px 0 rgba(0, 0, 0, 0.12);
     color: #ffffff;
+    justify-content: center;
 
     &:disabled {
         opacity: 0.2;
