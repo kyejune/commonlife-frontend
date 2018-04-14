@@ -11,6 +11,7 @@ public class ReservationGroupInfo {
     private String icon;
     private String title;
     private String summary;
+    private String description;
     private String delYn;
     private String regDttm;
     private String updDttm;
@@ -58,6 +59,14 @@ public class ReservationGroupInfo {
 
     public void setSummary(String summary) {
         this.summary = summary;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getDelYn() {

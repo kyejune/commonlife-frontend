@@ -61,8 +61,12 @@
                                     <input type="text" class="form-control" name="title" required>
                                 </div>
                                 <div class="form-group">
-                                    <label>한줄설명</label>
+                                    <label>한 줄 설명</label>
                                     <input type="text" class="form-control" name="summary" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>상세 설명</label>
+                                    <textarea name="description" rows="5" class="form-control"></textarea>
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary">전송</button>

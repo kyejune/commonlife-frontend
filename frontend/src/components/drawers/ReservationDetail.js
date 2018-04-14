@@ -10,6 +10,7 @@ import DatePeriod from "components/ui/DatePeriod";
 import { Link } from 'react-router-dom';
 import Store from "../../scripts/store";
 import moment from "moment";
+import nl2br from 'react-nl2br';
 
 class ReservationDetail extends Component {
 
@@ -371,7 +372,7 @@ class ReservationDetail extends Component {
 					</h3>
 
 					{!this.state.reserved && !this.state.booked &&
-					<p>{this.state.description}</p>
+					<p>{ nl2br( this.state.description ) }</p>
 					}
 				</div>
 

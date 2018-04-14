@@ -96,6 +96,7 @@ public class ReservationGroupController {
             , @RequestParam( value = "cmplxIdx" ) int cmplxIdx
             , @RequestParam( value = "title" ) String title
             , @RequestParam( value = "summary" ) String summary
+            , @RequestParam( value = "description", required = false ) String description
             , @RequestParam( value = "icon", required = false ) String icon
             ) {
 
@@ -103,6 +104,7 @@ public class ReservationGroupController {
         info.setCmplxIdx( cmplxIdx );
         info.setTitle( title );
         info.setSummary( summary );
+        info.setDescription( description );
         info.setIcon( icon );
 
         service.create( info );
@@ -138,12 +140,14 @@ public class ReservationGroupController {
             , @RequestParam( value = "cmplxIdx" ) int cmplxIdx
             , @RequestParam( value = "title" ) String title
             , @RequestParam( value = "summary" ) String summary
+            , @RequestParam( value = "description", required = false ) String description
             , @RequestParam( value = "icon", required = false ) String icon
     ) {
         ReservationGroupInfo group = service.show( idx );
         group.setCmplxIdx( cmplxIdx );
         group.setTitle( title );
         group.setSummary( summary );
+        group.setDescription( description );
         group.setIcon( icon );
 
         service.update( group );

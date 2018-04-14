@@ -40,42 +40,53 @@
         ]]>
     </select>
     <insert id="create" parameterType="reservationGroupInfo">
-        <![CDATA[
-            INSERT INTO `RESERVATION_GROUPS`
-                        (
-                            `CMPLX_IDX`,
-                            `ICON`,
-                            `TITLE`,
-                            `SUMMARY`,
-                            `DEL_YN`,
-                            `REG_DTTM`,
-                            `UPD_DTTM`
-                        )
-                        VALUES
-                        (
-                            #{cmplxIdx},
-                            #{icon},
-                            #{title},
-                            #{summary},
-                            'N',
-                            CURRENT_TIMESTAMP,
-                            CURRENT_TIMESTAMP
-                        );
-        ]]>
+        INSERT INTO `RESERVATION_GROUPS`
+                    (
+                        `CMPLX_IDX`,
+                        `ICON`,
+                        `TITLE`,
+                        `SUMMARY`,
+                        <choose>
+                            <when test='description != null'>
+                                `DESCRIPTION`,
+                            </when>
+                        </choose>
+                        `DEL_YN`,
+                        `REG_DTTM`,
+                        `UPD_DTTM`
+                    )
+                    VALUES
+                    (
+                        #{cmplxIdx},
+                        #{icon},
+                        #{title},
+                        #{summary},
+                        <choose>
+                            <when test='description != null'>
+                                #{description},
+                            </when>
+                        </choose>
+                        'N',
+                        CURRENT_TIMESTAMP,
+                        CURRENT_TIMESTAMP
+                    );
     </insert>
     <update id="update" parameterType="reservationGroupInfo">
-        <![CDATA[
-            UPDATE
-                    `RESERVATION_GROUPS`
-            SET
-                    `CMPLX_IDX` = #{cmplxIdx},
-                    `ICON` = #{icon},
-                    `TITLE` = #{title},
-                    `SUMMARY` = #{summary},
-                    `UPD_DTTM` = #{updDttm}
-            WHERE
-                    `IDX` = #{idx}
-        ]]>
+        UPDATE
+                `RESERVATION_GROUPS`
+        SET
+                `CMPLX_IDX` = #{cmplxIdx},
+                `ICON` = #{icon},
+                `TITLE` = #{title},
+                `SUMMARY` = #{summary},
+                <choose>
+                    <when test='description != null'>
+                        `DESCRIPTION` = #{description},
+                    </when>
+                </choose>
+                `UPD_DTTM` = #{updDttm}
+        WHERE
+                `IDX` = #{idx}
     </update>
     <update id="delete" parameterType="reservationGroupInfo">
         <![CDATA[
