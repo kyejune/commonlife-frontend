@@ -1,7 +1,7 @@
-package com.kolon.comlife.support.service;
+package com.kolon.comlife.info.service;
 
-import com.kolon.comlife.support.model.TicketFileInfo;
-import com.kolon.comlife.support.model.TicketInfo;
+import com.kolon.comlife.info.model.TicketFileInfo;
+import com.kolon.comlife.info.model.TicketInfo;
 
 import java.util.List;
 

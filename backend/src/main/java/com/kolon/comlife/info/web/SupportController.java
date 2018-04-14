@@ -1,16 +1,16 @@
-package com.kolon.comlife.support.web;
+package com.kolon.comlife.info.web;
 
 import com.kolon.comlife.common.model.DataListInfo;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
-import com.kolon.comlife.support.exception.OperationFailedException;
-import com.kolon.comlife.support.exception.SupportGeneralException;
-import com.kolon.comlife.support.model.SupportCategoryInfo;
-import com.kolon.comlife.support.model.TicketFileInfo;
-import com.kolon.comlife.support.model.TicketInfo;
-import com.kolon.comlife.support.service.SupportService;
-import com.kolon.comlife.support.service.TicketFileStoreService;
-import com.kolon.comlife.support.service.TicketService;
+import com.kolon.comlife.info.exception.OperationFailedException;
+import com.kolon.comlife.info.exception.SupportGeneralException;
+import com.kolon.comlife.info.model.SupportCategoryInfo;
+import com.kolon.comlife.info.model.TicketFileInfo;
+import com.kolon.comlife.info.model.TicketInfo;
+import com.kolon.comlife.info.service.SupportService;
+import com.kolon.comlife.info.service.TicketFileStoreService;
+import com.kolon.comlife.info.service.TicketService;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;

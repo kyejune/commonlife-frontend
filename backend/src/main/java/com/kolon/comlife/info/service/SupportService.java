@@ -1,8 +1,8 @@
-package com.kolon.comlife.support.service;
+package com.kolon.comlife.info.service;
 
 
-import com.kolon.comlife.support.exception.SupportGeneralException;
-import com.kolon.comlife.support.model.SupportCategoryInfo;
+import com.kolon.comlife.info.exception.SupportGeneralException;
+import com.kolon.comlife.info.model.SupportCategoryInfo;
 
 import java.util.List;
 

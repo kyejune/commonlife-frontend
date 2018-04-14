@@ -1,4 +1,4 @@
-package com.kolon.comlife.support.service.impl;
+package com.kolon.comlife.info.service.impl;
 
 
 import com.amazonaws.AmazonServiceException;
@@ -11,9 +11,9 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
-import com.kolon.comlife.support.exception.OperationFailedException;
-import com.kolon.comlife.support.model.TicketFileInfo;
-import com.kolon.comlife.support.service.TicketFileStoreService;
+import com.kolon.comlife.info.exception.OperationFailedException;
+import com.kolon.comlife.info.model.TicketFileInfo;
+import com.kolon.comlife.info.service.TicketFileStoreService;
 import com.kolon.common.prop.ServicePropertiesMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.sql.Timestamp;
 import java.util.UUID;
 
 @Service("ticketFileStoreService")
