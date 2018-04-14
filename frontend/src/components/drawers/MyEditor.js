@@ -23,9 +23,9 @@ class MyEditor extends Component {
         }
     }
 
-    componentWillUnmount(){
-        Iot.getMy();
-    }
+    // componentWillUnmount(){
+    //     Iot.getMy();
+    // }
 
     onCheck = ( values )=>{
 

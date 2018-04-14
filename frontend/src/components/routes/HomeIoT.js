@@ -30,13 +30,16 @@ import Information from "../drawers/iot/Information";
 class HomeIoT extends Component {
 
 	componentDidMount () {
-		Iot.getIotAll();
+		// Iot.getIotAll();
 		this.updateRoute();
 	}
 
 	componentDidUpdate ( prevProps ) {
 		if( this.props.location !== prevProps.location )
 			this.updateRoute();
+
+		// 페이지 진입시마다 새로 고침
+        if( this.props.location.pathname == '/iot' ) Iot.getIotAll();
 	}
 
 	updateRoute ( data ) {

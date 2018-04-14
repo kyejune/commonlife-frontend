@@ -17,9 +17,9 @@ class IotModeEditor extends Component {
         }
     }
 
-    componentWillUnmount(){
-        Iot.getMode();
-    }
+    // componentWillUnmount(){
+    //     //Iot.getMode();
+    // }
 
     onCheck = ( values )=>{
         this.setState( { selectedId: values.length===0?null:values[0].mode });
