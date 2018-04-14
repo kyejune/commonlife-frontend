@@ -260,6 +260,7 @@ public class UserRegistrationController {
         Map<String, Object> result;
         boolean resFlag;
         String msg;
+        Map ret = new HashMap();
 
         parameter = IokUtil.buildRequestParameter(request);
 
@@ -284,11 +285,17 @@ public class UserRegistrationController {
         if( result == null ) {
             String[] userIdArray = { parameter.getString("userId") };
             msg = messageSource.getMessage("mobile.check.userid.0002", userIdArray, locale);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new SimpleErrorInfo( msg ));
+
+
+            ret.put("isExisted", false);
+            ret.put("msg", msg);
+            return ResponseEntity.status(HttpStatus.OK).body( ret );
         }
 
         msg = messageSource.getMessage("mobile.check.userid.0001", null, locale);
-        return ResponseEntity.status(HttpStatus.OK).body(new SimpleMsgInfo( msg ));
+        ret.put("isExisted", true);
+        ret.put("msg", msg);
+        return ResponseEntity.status(HttpStatus.OK).body( ret );
     }
 
 
