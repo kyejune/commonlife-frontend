@@ -11,7 +11,7 @@
                 CONF.DISP_ORDER AS DISP_ORDER
             FROM
                 CL_INFO_CONF AS CONF
-                    LEFT JOIN
+                   JOIN
                 CL_INFO_CATE AS CATE
                   ON CATE.CATE_IDX = CONF.CATE_IDX AND CONF.CMPLX_ID = #{cmplxId}
             WHERE CONF.DEL_YN ='N'
