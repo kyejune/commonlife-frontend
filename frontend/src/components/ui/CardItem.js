@@ -80,7 +80,7 @@ class CardItem extends Component {
 
         let imgAddr;
         if (this.state.postFiles.length > 0 ) {
-            imgAddr = Store.api + this.state.postFiles[0].mediumPath;
+            imgAddr = this.state.postFiles[0].mediumPath;
         }
 
         let duration;
