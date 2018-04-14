@@ -66,6 +66,10 @@
                                     <input type="text" class="form-control" name="summary" required value="${group.summary}">
                                 </div>
                                 <div class="form-group">
+                                    <label>상세 설명</label>
+                                    <textarea name="description" rows="5" class="form-control">${group.description}</textarea>
+                                </div>
+                                <div class="form-group">
                                     <button class="btn btn-primary">전송</button>
                                 </div>
                             </form>

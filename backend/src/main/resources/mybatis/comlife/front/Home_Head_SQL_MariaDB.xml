@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="HomeHead">
+
+    <select id="index" parameterType="java.util.Map" resultType="homeHeadInfo">
+        SELECT
+        *
+        FROM
+        `HOME_HEAD_M`
+        LEFT JOIN
+        `HOME_HEAD_M_EXT`
+        ON
+        `HOME_HEAD_M`.`HEAD_ID` = `HOME_HEAD_M_EXT`.`HOME_HEAD_ID`
+        WHERE  1=1
+        <choose>
+            <when test='ids != null'>
+                AND
+                `HOME_HEAD_M`.`HEAD_ID` IN
+                <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </when>
+        </choose>
+    </select>
+
+    <select id="show" parameterType="java.util.Map" resultType="homeHeadInfo">
+        SELECT
+        *
+        FROM
+        `HOME_HEAD_M`
+        LEFT JOIN
+        `HOME_HEAD_M_EXT`
+        ON
+        `HOME_HEAD_M`.`HEAD_ID` = `HOME_HEAD_M_EXT`.`HOME_HEAD_ID`
+        WHERE
+        1=1
+        <choose>
+            <when test='idx != null'>
+                AND
+                `HOME_HEAD_M`.`HEAD_ID` = #{idx}
+            </when>
+        </choose>
+        <choose>
+            <when test='headId != null'>
+                AND
+                `HOME_HEAD_M`.`HEAD_ID` = #{headId}
+            </when>
+        </choose>
+    </select>
+
+</mapper>

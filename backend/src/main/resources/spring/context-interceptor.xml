@@ -23,17 +23,16 @@
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
+            <mvc:mapping path="/users/myinfo" />
+            <mvc:mapping path="/users/myComplexGroup" />
             <mvc:mapping path="/users/debug/authUserInfo" />
+            <mvc:mapping path="/imageStore/**" />
+            <mvc:mapping path="/info/**" />
             <bean id="mobileSessionCheckInterceptor" class="com.kolon.common.interceptor.MobileSessionCheckInterceptor" />
         </mvc:interceptor>
         <mvc:interceptor>
-            <!--<mvc:mapping path="/users/**" />-->
             <mvc:mapping path="/posts/**" />
             <mvc:mapping path="/postFiles/**" />
-            <mvc:mapping path="/imageStore/**" />
-            <!--<mvc:mapping path="/users/**" />-->
-            <mvc:mapping path="/info/**" />
-            <!--<mvc:mapping path="/imageStore/**" />-->
             <bean id="sessionCheckPostsInterceptor" class="com.kolon.common.interceptor.MobileSessionCheckInterceptor" >
                 <property name="forceAuthTokenYN" value="#{prop_dev['forceAuthTokenYN']}" />
                 <property name="forceAuthToken" value="#{prop_dev['forceAuthToken']}" />

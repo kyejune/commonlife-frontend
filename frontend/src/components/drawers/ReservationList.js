@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {withRouter} from 'react-router';
 import { Link } from 'react-router-dom';
+import nl2br from 'react-nl2br';
 
 import ReserveGroupHome from 'images/r-icon-1@3x.png';
 import ReserveServiceLaundry from 'images/rs-icon-1@3x.png';
@@ -40,7 +41,7 @@ class ReservationList extends Component{
 			<div className="cl-reservation-list">
 				<div className="cl-reservation-list__info">
 					<div className="cl-reservation-list__info-credit">
-						예약가능 크레딧: <span>75.0</span>
+						{/*예약가능 크레딧: <span>75.0</span>*/}
 					</div>
 					<div className="cl-flex-between">
 						<img src={ReserveGroupHome} alt=""
@@ -50,7 +51,7 @@ class ReservationList extends Component{
 							<p className="cl-ellipsis">{ this.state.group.summary }</p>
 						</div>
 					</div>
-					<p className="cl-reservation-list__info-paragraph">{ this.state.group.description }</p>
+					<p className="cl-reservation-list__info-paragraph">{ nl2br( this.state.group.description ) }</p>
 				</div>
 
 				{ ( this.state && this.state.group ) &&

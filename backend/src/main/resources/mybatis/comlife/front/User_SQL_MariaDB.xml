@@ -27,9 +27,9 @@
         SELECT
             USR_INFO.USR_ID,
             USER_NM,
-            (
+            IFNULL((
               SELECT
-                IFNULL(IMAGE_IDX, -1)
+                IMAGE_IDX
               FROM
                 CL_IMAGE_INFO JOIN
                 CL_IMAGE_TYPE
@@ -39,7 +39,7 @@
                 CL_IMAGE_INFO.PARENT_IDX = USR_INFO.USR_ID
               ORDER BY IMAGE_IDX DESC
                 LIMIT 1
-            ) AS IMAGE_IDX,
+            ), -1) AS IMAGE_IDX,
             IFNULL(USER_ALIAS, USER_NM) AS USER_ALIAS,
             CL_CMPLX_NM AS CMPLX_NM
         FROM

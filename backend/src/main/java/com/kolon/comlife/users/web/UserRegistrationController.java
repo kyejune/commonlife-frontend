@@ -59,7 +59,6 @@ public class UserRegistrationController {
     @Autowired
     private ImageStoreService imageStoreService;
 
-
     // IOK mobile user services
     @Autowired
     private MobileUserService mobileUserService;

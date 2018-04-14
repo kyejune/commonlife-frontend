@@ -8,7 +8,7 @@
         A.CMPLX_NM AS CMPLX_NM,
         A.CMPLX_S_NM AS CMPLX_S_NM,
         B.CMPLX_GRP_TYPE AS CMPLX_GRP,
-        B.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_ID,
+        B.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_TYPE_ID,
         A.CL_LOGO_IMG_SRC AS CL_LOGO_IMG_SRC,
         A.CL_MAP_SRC AS CL_MAP_SRC,
         A.CMPLX_CD AS CMPLX_CD,
@@ -124,7 +124,7 @@
     <select id="selectComplexSimpleInfoList" resultType="ComplexSimpleInfo">
     SELECT
       CMPLX.CMPLX_ID,
-      GRP_TYPE.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_ID,
+      GRP_TYPE.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_TYPE_ID,
       GRP_TYPE.CMPLX_GRP_TYPE AS CMPLX_GRP,
       CMPLX.CMPLX_NM, -- COMPLEX NAME
       CMPLX.ADDR,     -- 일반 주소
@@ -151,8 +151,45 @@
         AND
       !ISNULL(GRP_TYPE.CMPLX_GRP_TYPE_ID)
     ORDER BY
-      CMPLX_GRP_ID, CMPLX.CMPLX_NM ASC
+      CMPLX_GRP_TYPE_ID, CMPLX.CMPLX_NM ASC
     ;
   </select>
+
+
+    <select id="selectComplexListInSameGroup" parameterType="java.util.Map" resultType="ComplexSimpleInfo">
+    SELECT
+        CMPLX.CMPLX_ID,
+        GRP_TYPE.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_TYPE_ID,
+        GRP_TYPE.CMPLX_GRP_TYPE AS CMPLX_GRP,
+        CMPLX.CMPLX_NM, -- COMPLEX NAME
+        CMPLX.ADDR,     -- 일반 주소
+        CMPLX.ADDR_DTL, -- 상세 주소
+        CMPLX.ADDR1,
+        CMPLX.ADDR2,
+        CMPLX_EXT.CL_MAP_SRC,     -- CommonLife's Map Src/Url
+        CMPLX_EXT.CL_LOGO_IMG_SRC -- CommonLife's LOGO Image Source
+    FROM
+        COMPLEX_M AS CMPLX
+          LEFT JOIN
+        COMPLEX_M_EXT AS CMPLX_EXT
+            ON CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
+          LEFT JOIN
+        COMPLEX_GRP_M AS GRP
+            ON GRP.CMPLX_ID = CMPLX.CMPLX_ID
+          LEFT JOIN
+        COMPLEX_GRP_TYPE_M AS GRP_TYPE
+            ON GRP.CMPLX_GRP_TYPE_ID = GRP_TYPE.CMPLX_GRP_TYPE_ID
+    WHERE
+        CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
+          AND
+        GRP_TYPE.CMPLX_GRP_TYPE_ID =
+            (
+              SELECT  CMPLX_GRP_TYPE_ID FROM COMPLEX_GRP_M WHERE CMPLX_ID= #{cmplxId}
+            )
+    ORDER BY
+        CMPLX_GRP_TYPE_ID, CMPLX.CMPLX_NM ASC
+    ;
+    </select>
+
 
 </mapper>
