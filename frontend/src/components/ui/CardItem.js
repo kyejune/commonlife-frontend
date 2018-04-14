@@ -141,7 +141,7 @@ class CardItem extends Component {
                     {PostType !== 'event' &&
                     <div className="cl-card-item-content mb-1em mt-1em">
                         <Link to={PostLink}>
-                            <p>
+                            <p className="cl-ellipsis--5" style={{ WebkitBoxOrient: 'vertical' }}>
                                 <TagComponent content={this.state.content} nolink />
                             </p>
                         </Link>

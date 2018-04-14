@@ -40,6 +40,7 @@ class CardItemDetailDrawer extends Component {
         Net.setJoin( this.state.postIdx, bool, res => {
             let obj = Object.assign({}, this.state);
                 obj.rsvFlag = bool;// 실서버 반영되면 반전 시켜줘야됨
+                obj.rsvCount = res.rsvCount;
             this.setState(obj);
         });
     }

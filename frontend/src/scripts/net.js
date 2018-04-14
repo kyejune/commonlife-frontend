@@ -85,10 +85,10 @@ export default {
 
                 Store[type] = Store[type].concat( newStack );
 
-
-
-                // = Store[type].concat(( response.data.data )); //  추후 페이지별로 삽입 시켜주기
-                // console.log( 'get data ', type, page, response.data.data );
+                // 정렬
+                Store[type] = Store[type].sort((a,b)=>{
+                    return new Date(b.updDttm).getTime() - new Date(a.updDttm).getTime();
+                });
 
                 if( callback ) callback( response.data );
 

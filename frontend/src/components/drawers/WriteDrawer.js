@@ -8,6 +8,7 @@ import checkSrc from 'images/ic-check@3x.png';
 import previewSrc from 'images/img-preview-holder@3x.png';
 import Store from "../../scripts/store";
 import AlertSrc from "images/alert-icon-red@3x.png"
+import classNames from 'classnames';
 
 class WriteDrawer extends BottomDrawer {
 
@@ -209,7 +210,7 @@ class WriteDrawer extends BottomDrawer {
                 <div className="cl-dim--complete">
                     <img src={AlertSrc} alt="알림"/>
                     <p>{this.state.postResult}</p>
-                    <button onClick={this.onClose}>확인</button>
+                    <button onClick={this.onClose} style={classNames({ "cl--disabled":this.state.isUploading })} >확인</button>
                 </div>
                 }
 

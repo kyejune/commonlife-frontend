@@ -51,6 +51,13 @@ button, select, input {
     }
 }
 
+button{
+    &.cl--disabled{
+        pointer-events: none;
+        opacity: 0.6;
+    }
+}
+
 h1, h2, h3, h4, h5, p {
     margin-bottom: 0;
 }
@@ -220,7 +227,7 @@ input:focus, textarea:focus {
     }
 }
 
-@for $i from 2 to 5 {
+@for $i from 2 to 6 {
 
     /* 여러줄 말줄임 표시 */
     .cl-ellipsis--#{$i} {

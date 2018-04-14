@@ -69,11 +69,11 @@ export default class LikeShareAndSome extends Component{
                 new Date(this.props.calendar[0]), new Date(this.props.calendar[1]),
 
                 ()=>{
-                    alert('달력에 추가되었습니다.');
+                    // alert('달력에 추가되었습니다.');
                 },
 
                 ()=>{
-                    alert('달력에 추가되지 않았습니다.');
+                    // alert('달력에 추가되지 않았습니다.');
                 }
             );
         }
