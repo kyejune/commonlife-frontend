@@ -120,7 +120,11 @@ export default {
         //Store.modeModal
 
         //{{API_HOST}}/iot/complexes/{{cmplxId}}/homes/{{homeId}}/modes/turnOff : 끌때 사용
-        axios.put(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${modeId}/switchTo`)
+        let path = '';
+        if( value ) path = `/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/${modeId}/switchTo`;
+        else        path = `/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes/turnOff`;
+
+        axios.put( path )
             .then(response => {
                 callback();
             });

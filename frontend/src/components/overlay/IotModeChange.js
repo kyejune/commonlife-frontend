@@ -203,11 +203,11 @@ class IotModeChange extends Component {
 							<span>{Store.modeModal.targetName}</span>
 						</div>
 						<p className="cl-iot-mode-progress__paragraph">
-							{Store.modeModal.targetName}<br/>가 해제되었습니다.
+							{Store.modeModal.targetName}가 해제되었습니다.
 						</p>
 
 						<div className="cl-iot-mode-progress__off-bullet">
-							<IotConnectionProgress/>
+                            <IotConnectionProgress className="cl--done"/>
 						</div>
 					</div>
 					<div className="cl-iot-mode-progress__bottom">
