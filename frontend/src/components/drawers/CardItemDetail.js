@@ -85,11 +85,11 @@ class CardItemDetailDrawer extends Component {
 
         let userThumb = {};
         if (this.state.user.imgSrc )
-            userThumb.backgroundImage = `url(${ Store.api + this.state.user.imgSrc})`;
+            userThumb.backgroundImage = `url(${this.state.user.imgSrc})`;
 
         let imgAddr;
         if (this.state.postFiles.length > 0 ) {
-            imgAddr = Store.api + this.state.postFiles[0].largePath;
+            imgAddr = this.state.postFiles[0].largePath;
         }
 
         let duration;

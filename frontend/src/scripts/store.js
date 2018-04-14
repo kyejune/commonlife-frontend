@@ -62,24 +62,24 @@ export const Scenario = observable({
 
 export const MakingUserData = observable({
     branch: {
-        addr:
-            "경기 과천시 코오롱로 11 (별양동, 코오롱)",
-        addr1:
-            "경기",
-        addr2:
-            "과천시",
-        addrDtl:
-            "10층 (별양동 코오롱타워 본관)",
-        clLogoImgSrc:
-            null,
-        clMapSrc:
-            null,
-        cmplxGrp:
-            "COMMON Life",
-        cmplxId:
-            127,
-        cmplxNm:
-            "따복하우스1차 베니트 개발",
+        // addr:
+        //     "경기 과천시 코오롱로 11 (별양동, 코오롱)",
+        // addr1:
+        //     "경기",
+        // addr2:
+        //     "과천시",
+        // addrDtl:
+        //     "10층 (별양동 코오롱타워 본관)",
+        // clLogoImgSrc:
+        //     null,
+        // clMapSrc:
+        //     null,
+        // cmplxGrp:
+        //     "COMMON Life",
+        // cmplxId:
+        //     127,
+        // cmplxNm:
+        //     "따복하우스1차 베니트 개발",
     },
     houseHolder:{
         name:'김영헌',
@@ -94,8 +94,8 @@ export const MakingUserData = observable({
         phone:'',
         certId:'',
         mail:'',
-        id:'aaaa',
-        password:'aaaaaa',
+        id:'',
+        password:'',
         passwordConfirm:'',
     }
 });

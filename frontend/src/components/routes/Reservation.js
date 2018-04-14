@@ -82,7 +82,7 @@ class Reservation extends Component {
 
 			<HeaderOfReservation/>
 
-			<div className="cl-fitted-box">
+			<div className="cl-fitted-box pb-5em">
 
 				<SelectWithTitle displayLength={ this.state.groups.length }/>
 

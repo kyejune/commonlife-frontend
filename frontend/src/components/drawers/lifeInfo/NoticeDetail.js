@@ -30,7 +30,7 @@ class NoticeDetail extends Component {
 
         let userImgStyle;
         if( this.state.user.imgSrc )
-            userImgStyle = {backgroundImage:`url(${ Store.api + this.state.user.imgSrc})`};
+            userImgStyle = {backgroundImage:`url(${this.state.user.imgSrc})`};
 
         return (
             <div className="cl-notice-detail">

@@ -26,7 +26,7 @@ class LikeList extends Component{
 
         let userThumb = {}
         if ( this.props && this.props.imgSrc )
-            userThumb.backgroundImage = `url(${ Store.api + this.props.imgSrc})`;
+            userThumb.backgroundImage = `url(${this.props.imgSrc})`;
 
 		return <div className="cl-like-item">
 			<div className="cl-flex">

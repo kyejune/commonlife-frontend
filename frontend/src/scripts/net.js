@@ -224,11 +224,17 @@ export default {
 
 
     /* Auth */
+    getPolicy( callback ){
+      axios.get('/users/registration/agreement')
+          .then( response=>{
+             callback( response.data );
+          });
+    },
 
     // 등록 지점 가져오기
     getBranch( callback ){
         // {{API_HOST}}/users/registration/complexes/
-        axios.get( Store.api + '/users/registration/complexes' )
+        axios.get( '/users/registration/complexes' )
             .then( response => {
                 callback( response.data.data );
             });

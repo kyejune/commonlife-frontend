@@ -4,6 +4,7 @@ import Net from "../../scripts/net";
 import MapLink from "./MapLink";
 import {MakingUserData} from "../../scripts/store";
 import {observer} from "mobx-react";
+import Store from "../../scripts/store";
 
 class BranchList extends Component {
 
