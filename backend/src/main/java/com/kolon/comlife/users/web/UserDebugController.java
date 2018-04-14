@@ -91,7 +91,11 @@ public class UserDebugController {
         logger.debug(">>>>>>>>>>>>>>>>>> authUserInfo >>>>>>>");
         Map<String, String> result = new HashMap();
 
+        if( AuthUserInfoUtil.isAuthUserInfoExisted( request ) ) {
+
+        }
         AuthUserInfo userInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+
 
         if( userInfo != null ) {
             logger.debug(">>>>  there are authUserInfo");

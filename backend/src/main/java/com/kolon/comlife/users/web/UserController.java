@@ -110,7 +110,37 @@ public class UserController {
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
+    @GetMapping(
+            value="/myinfo",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getMyStatus( HttpServletRequest request ) {
+        Map result = new HashMap();
+        AuthUserInfo userInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+        ComplexInfo cmplxInfo;
 
+        if( !AuthUserInfoUtil.isAuthUserInfoExisted( request )) {
+            logger.debug(">>>>  인증되지 않은 사용자 입니다");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo("인증되지 않은 사용자 입니다"));
+        }
+
+        cmplxInfo = complexService.getComplexById( userInfo.getCmplxId() );
+        logger.debug(">>>>  there are authUserInfo");
+        result.put("cmplxId", String.valueOf( userInfo.getCmplxId() ));
+        result.put("homeId", String.valueOf( userInfo.getHomeId() ));
+        result.put("userId", userInfo.getUserId());
+        result.put("usrId", String.valueOf( userInfo.getUsrId() ));
+        result.put("userNm", userInfo.getUserNm());
+        result.put("tokenOrg", userInfo.getTokenOrg());
+        result.put("secretKey", userInfo.getSecretKey());
+        result.put("issueDate", userInfo.getIssueDate());
+        result.put("expireDate", userInfo.getExpireDate());
+        result.put("cmplxNm", cmplxInfo.getClCmplxNm());
+        result.put("cmplxAddr", cmplxInfo.getClCmplxAddr());
+
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
+    }
 
 
     /**

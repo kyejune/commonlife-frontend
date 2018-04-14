@@ -65,7 +65,8 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 	// 인증 없이 접속 허용, 만약 인증토큰이 있다면 인증정보를 함께 Controller로 전달 (token이 있는 경우에 추가)
 	static String[] PERMITTED_AND_AUTH_POPULATED_URI = {
 			"/imageStore",    			// ImageStore
-			"/users/"					// UserController
+			"/users/",					// UserController
+			"/users/myinfo"
 	};
 
 	static String[] arrLimitUri = {
