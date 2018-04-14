@@ -18,12 +18,6 @@ public class UserExtInfo extends UserInfo {
         this.userAlias = userAlias;
     }
 
-    public String getImageSrc() {
-        return ImageInfoUtil.getImagePath(
-                ImageInfoUtil.SIZE_SUFFIX_MEDIUM,
-                this.imageIdx );
-    }
-
     public int getImageIdx() {
         return imageIdx;
     }

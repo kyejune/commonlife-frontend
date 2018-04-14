@@ -16,5 +16,8 @@ public interface ImageStoreService {
 
     ImageInfo getImageByIdxAndSize( int idx, String sizeStr ) throws IOException, ImageNotFoundException ;
 
+    String getImageFullPathByIdx( int imageIdx );
+
+    String getImageFullPathByIdx( int imageIdx, String imageSizeSuffix  );
 
 }

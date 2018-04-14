@@ -2,6 +2,8 @@ package com.kolon.comlife.info.service.impl;
 
 import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.service.impl.ComplexDAO;
+import com.kolon.comlife.imageStore.model.ImageInfoUtil;
+import com.kolon.comlife.imageStore.service.ImageStoreService;
 import com.kolon.comlife.info.model.InfoData;
 import com.kolon.comlife.info.model.InfoMain;
 import com.kolon.comlife.info.model.InfoUserProfile;
@@ -45,6 +47,9 @@ public class InfoServiceImpl implements InfoService {
     @Autowired
     PostFileDAO postFileDAO;
 
+    @Autowired
+    ImageStoreService imageStoreService;
+
     @Override
     public InfoMain getInfoMain( AuthUserInfo authUserInfo ) throws NoDataException {
         InfoMain       infoMain = new InfoMain();
@@ -53,6 +58,7 @@ public class InfoServiceImpl implements InfoService {
         UserExtInfo    userInfo;
         List<InfoData> infoDataList;
         PostInfo       postInfo;
+        String         imgFullPath;
 
         cmplxId = authUserInfo.getCmplxId();
         userInfo = userDAO.getUserExtById( authUserInfo.getUsrId() );
@@ -68,8 +74,12 @@ public class InfoServiceImpl implements InfoService {
             infoDataList = new ArrayList<>();
         }
 
+        imgFullPath = imageStoreService.getImageFullPathByIdx(
+                                userInfo.getImageIdx(),
+                                ImageInfoUtil.SIZE_SUFFIX_MEDIUM );
+
         // Info Main 기본 정보
-        infoMain.setUserImgSrc( userInfo.getImageSrc() );
+        infoMain.setUserImgSrc( imgFullPath );
         infoMain.setUserNm( userInfo.getUserNm() );
         infoMain.setCmplxNm( cmplxInfo.getClCmplxNm() );
         infoMain.setDong( userInfo.getDong() );
@@ -145,6 +155,7 @@ public class InfoServiceImpl implements InfoService {
         ComplexInfo     cmplxInfo;
         UserExtInfo     userInfo;
         InfoUserProfile userProfile = new InfoUserProfile();
+        String          imgFullPath;
 
         userInfo = userDAO.getUserExtById( authUserInfo.getUsrId() );
         if( userInfo == null ) {
@@ -158,7 +169,10 @@ public class InfoServiceImpl implements InfoService {
             throw new NoDataException("사용자 정보를 찾을 수 없습니다." );
         }
 
-        userProfile.setUserImgSrc( userInfo.getImageSrc() );
+        imgFullPath = imageStoreService.getImageFullPathByIdx(
+                            userInfo.getImageIdx(),
+                            ImageInfoUtil.SIZE_SUFFIX_MEDIUM );
+        userProfile.setUserImgSrc( imgFullPath );
         userProfile.setUserId( userInfo.getUserId() );
         userProfile.setUserNm( userInfo.getUserNm() );
         userProfile.setEmail( userInfo.getEmail() );

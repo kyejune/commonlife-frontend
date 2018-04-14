@@ -1,10 +1,13 @@
 package com.kolon.comlife.imageStore.model;
 
+import com.kolon.common.prop.ServicePropertiesMap;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ImageInfoUtil {
-
     /**
      * 아래의 SIZE_SUFFIX_??? 및 IMAGE_TYPE_???의 값은 lambda-image-resizer의 설정값과 동일하게 유지해야합니다.
      * 설정값(ThumnailSizes)은 /services/lambda-image-resizer/src/index.js 에서 찾을 수 있습니다.

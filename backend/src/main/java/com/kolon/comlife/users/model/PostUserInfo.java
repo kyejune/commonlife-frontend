@@ -6,6 +6,7 @@ public class PostUserInfo {
     private String userAlias;
     private String cmplxNm;
     private String imgSrc;
+    private int imageIdx;
 
     public PostUserInfo() {
     }
@@ -48,5 +49,13 @@ public class PostUserInfo {
 
     public void setImgSrc(String imgSrc) {
         this.imgSrc = imgSrc;
+    }
+
+    public int getImageIdx() {
+        return imageIdx;
+    }
+
+    public void setImageIdx(int imageIdx) {
+        this.imageIdx = imageIdx;
     }
 }

@@ -31,7 +31,7 @@ public class UserDAO {
         return sqlSession.selectOne( "User.selectUserListById", usrIdList );
     }
 
-    public UserExtInfo getUserExtById( int usrId ) {
+    public UserExtInfo  getUserExtById( int usrId ) {
         List<Integer> usrIdList = new ArrayList<>();
         usrIdList.add( new Integer( usrId ) );
         return sqlSession.selectOne( "User.selectUserListById", usrIdList );

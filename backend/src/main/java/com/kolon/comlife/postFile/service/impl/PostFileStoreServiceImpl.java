@@ -41,6 +41,10 @@ public class PostFileStoreServiceImpl implements PostFileStoreService {
     private static final String S3_UPLOAD_BUCKET   = "UP_S3_NAME";
     private static final String S3_DOWNLOAD_BUCKET = "DN_S3_NAME";
 
+    private static final String FILE_SERVER_HOST   = "FILE_SERVER_HOST";
+
+    private static final String DOWNLOAD_PATH = "/postFiles";
+
     @Resource(name = "servicePropertiesMap")
     ServicePropertiesMap serviceProp;
 
@@ -145,4 +149,14 @@ public class PostFileStoreServiceImpl implements PostFileStoreService {
 
         return outputFile;
     }
+
+    public String getImageFullPathByIdx( int imageIdx ) {
+        return serviceProp.getByKey(PROP_GROUP, FILE_SERVER_HOST) + DOWNLOAD_PATH + "/" + imageIdx;
+    }
+
+    public String getImageFullPathByIdx( int imageIdx, String imageSizeSuffix  ) {
+        return serviceProp.getByKey(PROP_GROUP, FILE_SERVER_HOST) + DOWNLOAD_PATH + "/" + imageIdx + imageSizeSuffix;
+    }
+
+
 }

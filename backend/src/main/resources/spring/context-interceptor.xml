@@ -27,6 +27,7 @@
             <bean id="mobileSessionCheckInterceptor" class="com.kolon.common.interceptor.MobileSessionCheckInterceptor" />
         </mvc:interceptor>
         <mvc:interceptor>
+            <mvc:mapping path="/users/**" />
             <mvc:mapping path="/posts/**" />
             <mvc:mapping path="/postFiles/**" />
             <mvc:mapping path="/imageStore/**" />

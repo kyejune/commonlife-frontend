@@ -1,19 +1,22 @@
 package com.kolon.comlife.post.service.impl;
 
 import com.kolon.comlife.common.model.PaginateInfo;
+import com.kolon.comlife.imageStore.model.ImageInfoUtil;
+import com.kolon.comlife.imageStore.service.ImageStoreService;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.post.service.PostService;
 import com.kolon.comlife.postFile.model.PostFileInfo;
+import com.kolon.comlife.postFile.service.PostFileStoreService;
 import com.kolon.comlife.postFile.service.impl.PostFileDAO;
 import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.service.impl.UserDAO;
+import com.kolon.common.prop.ServicePropertiesMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +24,6 @@ import java.util.Map;
 
 @Service("postService")
 public class PostServiceImpl implements PostService {
-
     private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
 
     @Autowired
@@ -32,6 +34,17 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private PostFileDAO postFileDAO;
+
+    @Autowired
+    private PostFileStoreService postFileStoreService;
+
+
+    @Resource(name = "servicePropertiesMap")
+    private ServicePropertiesMap serviceProp;
+
+    @Autowired
+    private ImageStoreService imageStoreService;
+
 
     @Override
     public PostInfo getPostById(int id, int currUsrId ) throws Exception {
@@ -63,6 +76,9 @@ public class PostServiceImpl implements PostService {
         postFileList = postFileDAO.getPostFilesByPostIds( postIdxs );
         if( postFileList != null && postFileList.size() > 0 ) {
             postFile = postFileList.get(0);
+            String fullPath = postFileStoreService.getImageFullPathByIdx( postFile.getPostFileIdx() );
+            logger.debug(">>>>>>>>> " + fullPath );
+            postFile.setOriginPath( fullPath );
 
             // PostInfo에 이미지 파일 연결
             postInfo.getPostFiles().add( postFile );
@@ -108,6 +124,12 @@ public class PostServiceImpl implements PostService {
 
             // 사용자 정보 Map 생성
             for( PostUserInfo user : userList ) {
+
+                if( user.getImageIdx() > 0 ) {
+                    user.setImgSrc( imageStoreService.getImageFullPathByIdx( user.getImageIdx(), ImageInfoUtil.SIZE_SUFFIX_SMALL ) );
+                } else {
+                    user.setImgSrc( "#" ); // todo:
+                }
                 userListMap.put( Integer.valueOf(user.getUsrId()), user );
             }
 
@@ -132,6 +154,7 @@ public class PostServiceImpl implements PostService {
             for( PostInfo post : postInfoList ) {
                 for( PostFileInfo postFile : postFileList ) {
                     if( post.getPostIdx() == postFile.getPostIdx() ) {
+                        postFile.setOriginPath( postFileStoreService.getImageFullPathByIdx( postFile.getPostFileIdx() ));
                         post.getPostFiles().add( postFile );
                     }
                 }
@@ -200,4 +223,5 @@ public class PostServiceImpl implements PostService {
 
         return deletedPostInfo;
     }
+
 }

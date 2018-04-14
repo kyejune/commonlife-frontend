@@ -1,7 +1,9 @@
 package com.kolon.comlife.postFile.model;
 
+import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.post.model.PostInfo;
 import org.apache.ibatis.type.Alias;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Alias("postFileInfo")
 public class PostFileInfo {
@@ -16,6 +18,11 @@ public class PostFileInfo {
     private String delYn;
     private String regDttm;
     private String updDttm;
+
+    private String originPath;
+    private String smallPath;
+    private String mediumPath;
+    private String largePath;
 
     public int getPostFileIdx() {
         return postFileIdx;
@@ -117,16 +124,19 @@ public class PostFileInfo {
     /*
         이미지 경로
      */
+    public void setOriginPath(String originPath) {
+        this.originPath = originPath;
+    }
     public String getOriginPath() {
-        return "/postFiles/" + this.postFileIdx;
+        return this.originPath;
     }
     public String getSmallPath() {
-        return "/postFiles/" + this.postFileIdx + "/s/";
+        return this.originPath + ImageInfoUtil.SIZE_SUFFIX_SMALL;
     }
     public String getMediumPath() {
-        return "/postFiles/" + this.postFileIdx + "/m/";
+        return this.originPath + ImageInfoUtil.SIZE_SUFFIX_MEDIUM;
     }
     public String getLargePath() {
-        return "/postFiles/" + this.postFileIdx + "/l/";
+        return this.originPath + ImageInfoUtil.SIZE_SUFFIX_LARGE;
     }
 }

@@ -1,6 +1,8 @@
 package com.kolon.comlife.like.web;
 
 import com.kolon.comlife.common.model.SimpleErrorInfo;
+import com.kolon.comlife.imageStore.model.ImageInfoUtil;
+import com.kolon.comlife.imageStore.service.ImageStoreService;
 import com.kolon.comlife.like.model.LikeInfo;
 import com.kolon.comlife.like.model.LikeStatusInfo;
 import com.kolon.comlife.like.service.LikeService;
@@ -11,6 +13,7 @@ import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +29,14 @@ import java.util.List;
 public class LikeController {
     private static final Logger logger = LoggerFactory.getLogger(PostController.class);
 
-    @Resource(name = "likeService")
+    @Autowired
     private LikeService likeService;
-    @Resource(name = "userService")
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    ImageStoreService imageStoreService;
 
     @CrossOrigin
     @GetMapping(
@@ -56,6 +63,9 @@ public class LikeController {
             for( LikeInfo like : likes ) {
                 for( PostUserInfo user : userList ) {
                     if( like.getUsrId() == user.getUsrId() ) {
+                        user.setImgSrc(
+                                imageStoreService.getImageFullPathByIdx(
+                                    user.getImageIdx(), ImageInfoUtil.SIZE_SUFFIX_SMALL ) );
                         like.setUser( user );
                     }
                 }

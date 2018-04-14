@@ -5,6 +5,8 @@ import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.users.util.IokUtil;
+import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.servlet.AuthUserInfoUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.service.MobileUserService;
 import org.slf4j.Logger;
@@ -107,6 +109,8 @@ public class UserController {
         result.put("expireDate", resultMobileUser.get("EXPIRE_DATE"));
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
+
+
 
 
     /**
@@ -229,6 +233,7 @@ public class UserController {
             value="/logout",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity logoutUser( HttpServletRequest request ) {
+        AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
 
         RequestParameter    parameter;
         boolean             isSuccess;

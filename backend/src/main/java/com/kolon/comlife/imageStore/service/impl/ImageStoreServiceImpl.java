@@ -29,9 +29,14 @@ import java.util.*;
 public class ImageStoreServiceImpl implements ImageStoreService {
     private static final Logger logger = LoggerFactory.getLogger(ImageStoreServiceImpl.class);
 
+    private static final String DOWNLOAD_PATH = "/imageStore";
+
     private static final String IMAGE_STORE_BASE_PATH = "origin/";
 
     private static final String PROP_GROUP         = "IMAGE_STORE";
+
+    private static final String SERVER_HOST        = "SERVER_HOST";
+
     private static final String S3_ACCESS_KEY      = "S3_ACCESS_KEY";
     private static final String S3_ACCESS_SECRET   = "S3_ACCESS_SECRET";
     private static final String S3_BUCKET_REGION   = "S3_BUCKET_REGION"; // ex) "ap-northeast-2"
@@ -45,7 +50,6 @@ public class ImageStoreServiceImpl implements ImageStoreService {
 
     @Autowired
     ImageInfoDAO imageInfoDAO;
-
 
     /**
      * AWS S3 Client 객체 생성
@@ -198,5 +202,13 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         }
 
         return imageInfo;
+    }
+
+    public String getImageFullPathByIdx( int imageIdx ) {
+        return serviceProp.getByKey(PROP_GROUP, SERVER_HOST) + DOWNLOAD_PATH + "/" + imageIdx;
+    }
+
+    public String getImageFullPathByIdx( int imageIdx, String imageSizeSuffix  ) {
+        return serviceProp.getByKey(PROP_GROUP, SERVER_HOST) + DOWNLOAD_PATH + "/" + imageIdx + imageSizeSuffix;
     }
 }
