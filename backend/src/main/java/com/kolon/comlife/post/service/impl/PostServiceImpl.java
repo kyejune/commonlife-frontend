@@ -53,6 +53,7 @@ public class PostServiceImpl implements PostService {
         List<PostUserInfo>   userList;
         PostFileInfo         postFile;
         List<PostFileInfo>   postFileList;
+        PostUserInfo         userInfo;
 
         PostInfo  postInfo;
 
@@ -70,14 +71,18 @@ public class PostServiceImpl implements PostService {
             throw new Exception("해당 게시물을 가져올 수 없습니다.");
         }
         // 게시물의 사용자 정보 연결
-        postInfo.setUser( userList.get(0) );
+        userInfo = userList.get(0);
+        userInfo.setImgSrc(
+                imageStoreService.getImageFullPathByIdx(
+                        userInfo.getImageIdx(), ImageInfoUtil.SIZE_SUFFIX_SMALL ) );
+        postInfo.setUser( userInfo );
 
         postIdxs.add(id);
         postFileList = postFileDAO.getPostFilesByPostIds( postIdxs );
         if( postFileList != null && postFileList.size() > 0 ) {
             postFile = postFileList.get(0);
             String fullPath = postFileStoreService.getImageFullPathByIdx( postFile.getPostFileIdx() );
-            logger.debug(">>>>>>>>> " + fullPath );
+            logger.debug(">>>>>>>>> postFile:" + fullPath );
             postFile.setOriginPath( fullPath );
 
             // PostInfo에 이미지 파일 연결
