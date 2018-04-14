@@ -201,6 +201,13 @@ export default {
 			} );
     },
 
+    getHomeHead( callback ) {
+        axios.get( Store.api + '/home-head/' )
+            .then( response => {
+                callback( response.data );
+            } );
+    },
+
     createReservation( data, callback ) {
         axios.post( Store.api + '/reservations/', data )
             .then( response => {
