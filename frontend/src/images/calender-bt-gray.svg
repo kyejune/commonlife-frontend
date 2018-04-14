@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="107" height="36" viewBox="0 0 107 36">
+    <g fill="none" fill-rule="evenodd" opacity=".5">
+        <text fill="#000" font-family="NotoSansCJKkr-Medium, Noto Sans CJK KR" font-size="14" font-weight="400" transform="translate(5 5)">
+            <tspan x="29.225" y="18">달력에 추가</tspan>
+        </text>
+        <path d="M5 5h26v26H5z"/>
+        <path fill="#000" d="M24.32 10.778h-.903V8.972H21.61v1.806H14.39V8.972h-1.806v1.806h-.902a1.797 1.797 0 0 0-1.797 1.805l-.009 12.64c0 .992.803 1.805 1.806 1.805h12.638a1.81 1.81 0 0 0 1.806-1.806V12.583a1.81 1.81 0 0 0-1.806-1.805zm-12.64 4.514h12.64v9.93H11.68v-9.93zm1.806 1.805H18v4.514h-4.514v-4.514z"/>
+    </g>
+</svg>

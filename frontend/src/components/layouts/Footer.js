@@ -10,14 +10,17 @@ import Src2 from 'images/ic-menu-2.png';
 import Src3 from 'images/ic-menu-3.png';
 import IotSrc from 'images/iot-run@3x.png';
 import Link from "react-router-dom/es/Link";
+import Write from "images/ic-write.svg";
 
 
 const WriteButton = () => {
     return <Button floating primary
-                   iconClassName="fa fa-pencil fa-2x"
+                   // iconClassName="fa fa-pencil fa-2x"
                    className="cl-write__button"
                    onClick={() => Store.pushDrawer('write', { type:'feed' } )}
-    />
+    >
+        <img src={Write} alt=""/>
+    </Button>
 }
 
 

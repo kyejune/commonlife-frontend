@@ -147,7 +147,7 @@ class CardItemDetailDrawer extends Component {
 
                     {/* event라면 장소등 노출.. */}
                     {PostType === 'event' &&
-                    <div className="mt-06em mb-1em">
+                    <div className="mt-08em">
                         <h6 className="cl-flex cl-dates">
                             {duration}
                         </h6>

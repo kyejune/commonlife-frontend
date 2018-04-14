@@ -99,7 +99,7 @@ class CardItem extends Component {
                     {PostType === 'event' && imgAddr &&
                     <Link to={PostLink}>
                         <div key={this.state.postIdx + '-bg'} className="cl-card-item__bg--event" style={{ backgroundImage:`url(${ imgAddr })`}}>
-                            <h5 className="cl-title">{ this.state.title }</h5>
+                            <h5 className="cl-title cl-ellipsis--2">{ this.state.title }</h5>
                         </div>
                     </Link>
                     }
@@ -127,7 +127,7 @@ class CardItem extends Component {
 
                     {/* event라면 장소등 노출.. */}
                     {PostType === 'event' &&
-                    <div className="mt-06em mb-1em">
+                    <div className="mt-08em mb-03em">
                         <h6 className="cl-flex cl-dates">
                             {duration}
                         </h6>
@@ -141,7 +141,7 @@ class CardItem extends Component {
                     {PostType !== 'event' &&
                     <div className="cl-card-item-content mb-1em mt-1em">
                         <Link to={PostLink}>
-                            <p className="cl-ellipsis--5" style={{ WebkitBoxOrient: 'vertical' }}>
+                            <p className="cl-ellipsis--5 cl-card-item-content__paragraph" style={{ WebkitBoxOrient: 'vertical' }}>
                                 <TagComponent content={this.state.content} nolink />
                             </p>
                         </Link>

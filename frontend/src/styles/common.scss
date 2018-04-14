@@ -138,6 +138,14 @@ input:focus, textarea:focus {
     border-radius: 50%;
 }
 
+.cl-write__button {
+    img {
+        width: 21px !important;
+        height: 21px !important;
+        opacity: 1 !important;
+    }
+}
+
 .App #cl-footer .cl-iot-run__button img {
     width: 20px;
     height: 20px;

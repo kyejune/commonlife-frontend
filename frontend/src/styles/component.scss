@@ -9,7 +9,7 @@
     position: relative;
 
     &:before{
-        content:'콘덴츠가 없습니다.';
+        content:'콘텐츠가 없습니다.';
         position: absolute;
         top: 0;
         left: 0;
@@ -242,15 +242,24 @@
     }
 
     h5 {
+        min-height: 27px;
+        max-height: 54px;
+        overflow: hidden;
         position: absolute;
-        bottom: 10px;
+        bottom: 5px;
         color: white;
         width: calc(100% - 30px);
         z-index: 1;
         margin-left: 15px;
         margin-bottom: 11px;
-        font-size: 22px;
-        font-weight: bold;
+        font-size: 24px;
+        font-weight: 600;
+        line-height: 27px;
+        display: -webkit-box;
+        text-overflow: ellipsis;
+        word-wrap: break-word;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 }
 
@@ -259,11 +268,10 @@
 }
 
 .cl-card-item {
-
-    background-color: white;
-    padding: 15px 15px 10px 15px;
+    background-color: #f4f4f4;
+    padding: 13px 15px 10px 15px;
     border-radius: 2px;
-    box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.14);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
     overflow: hidden;
 
 
@@ -299,7 +307,7 @@
 
     .cl-dates{
 
-        margin-bottom: 0em;
+        margin-bottom: 0;
 
         .cl__date{
           font-weight: bold;
@@ -314,18 +322,25 @@
     .cl-name{
         font-weight: bold;
         margin-bottom: 0;
-        font-size: 14px;
+        font-size: 15px;
     }
 
     .cl-desc{
+        margin-top: -2px;
+        font-size: 13px;
         color: #9b9b9b;
-        font-size: 14px;
     }
 
     hr {
-        magin: 0;
-        border: 1px solid #cfcfcf;
+        margin: 22px 0 10px;
+        border: 1px solid rgba(207, 207, 207, 0.5);
         border-bottom: 0;
+    }
+
+    &.cl-card-item--event {
+        hr {
+            margin-top: 0 !important;
+        }
     }
 }
 
@@ -347,23 +362,27 @@
     box-shadow: none;
 }
 
-
+.cl-card-item-content__paragraph {
+    line-height: 22px;
+    letter-spacing: -0.2px;
+}
 
 .cl-card-item-detail-content{
     padding: 15px 15px 80px 15px;
     color: #C9CACC;
+    line-height: 22px;
 }
 
 .cl-card-item__button {
     position: relative;
     height: 28px;
     margin: 0;
-    padding: 0;
-    font-weight: 400;
+    font-weight: 500;
     text-align: left;
     color: #8C8C8C;
     transition: all 0.3s ease-in-out;
     padding: 0 3px 0;
+    font-size: 14px;
 
 
     &:last-child{
@@ -433,11 +452,12 @@
     .cl-card-item--event{
 
         .cl-title{
+            padding-top: 9px;
+            padding-bottom: 22px;
             font-weight: bold;
             font-size: 24px;
-            padding-bottom: 24px;
             line-height: 1.2em;
-            border-bottom: 1px solid #cfcfcf;
+            border-bottom: 1px solid rgba(207, 207, 207, 0.7);
         }
     }
 
@@ -534,19 +554,40 @@
         &+.cl-counter__button{
             margin-left: -20px;
         }
+
+        //&:hover {
+        //    span {
+        //        border-bottom: 2px solid #F2C86C;
+        //    }
+        //}
     }
 
     .cl-like__button, .cl-counter__button {
-        color: #000000;
+        color: rgba( 0, 0, 0, 0.5 );
+
         z-index: 1;
     }
 
     .cl-like--liked{
-        color: rgba( 0, 0, 0, 0.5 );
+        color: #000000;
+
+        span {
+            border-bottom: 2px solid #F2C86C;
+        }
     }
 
     a {
         text-decoration: none;
+    }
+
+    .cl-card-item__button--cal {
+        height: 36px;
+        margin-right: -2px;
+
+        img {
+            width: 107px;
+            height: 36px;
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import qaSrc from 'images/contact-bt-gray@3x.png';
-import calSrc from 'images/calender-bt-gray@3x.png';
+import calSrc from 'images/calender-bt-gray.svg';
 import joinSrc from 'images/rsvp-normal@3x.png';
 import joinedSrc from 'images/rsvp-activity@3x.png';
 import Net from 'scripts/net.js';
@@ -83,7 +83,7 @@ export default class LikeShareAndSome extends Component{
 
         let Share, Cal, Join, Joined, Qa;
         if( this.props.share )
-            Share = <button className="cl-card-item__button" onClick={() => this.shareItem()}>SHARE</button>;
+            Share = <button className="cl-card-item__button" onClick={() => this.shareItem()}><span>SHARE</span></button>;
 
         if( this.props.join )
             Join = <button  className={classNames(
@@ -104,8 +104,8 @@ export default class LikeShareAndSome extends Component{
             </a>;
 
         if( this.props.calendar )
-            Cal = <button className="cl-card-item__button">
-                <img src={calSrc} alt="달력에추가" height="19" onClick={ this.addCalendar }/>
+            Cal = <button className="cl-card-item__button cl-card-item__button--cal">
+                <img src={calSrc} alt="달력에추가" height="36" onClick={ this.addCalendar }/>
             </button>;
 
 
@@ -115,7 +115,7 @@ export default class LikeShareAndSome extends Component{
 
                 {/* Like 노출 */}
                 <button className={ classNames("cl-card-item__button", "cl-like__button", { "cl-like--liked":this.state.liked } )}
-                        onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }>LIKE</button>
+                        onClick={ ()=> this.likeItem( this.props.like.to.match(/\d+/)[0]) }><span>LIKE</span></button>
 
                 {this.state.count > 0 &&
                 <Link className="cl-counter__button cl-flex" to={this.props.like.to}>

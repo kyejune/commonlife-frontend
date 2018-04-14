@@ -108,6 +108,7 @@ body.cl-dom--added{
     -webkit-overflow-scrolling: touch;
     overflow-y: scroll;
     height: calc( 100vh - 56px*2 - 48px );
+    min-height: calc(100vh - 49px * 2);
 }
 
 .cl-full-page{
@@ -197,7 +198,7 @@ body.cl-dom--added{
         position: fixed;
         bottom: 0;
         width: 100vw;
-        height: 56px;
+        height: 52px;
         background-color: #ffffff;
         transition: bottom $dur ease-out;
 
@@ -205,11 +206,13 @@ body.cl-dom--added{
             position: relative;
             width: 100vw;
             background-color: #ffffff;
+            -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 10px 1px rgba(0, 0, 0, 0.14), 0 3px 14px 3px rgba(0, 0, 0, 0.12), 0 4px 5px 0 rgba(0, 0, 0, 0.2);
         }
 
         .md-bottom-nav--fixed {
             font-size: 0;
-            padding-top: 2px;
+            padding-top: 0;
         }
 
         img {
@@ -220,10 +223,9 @@ body.cl-dom--added{
         }
 
         .md-bottom-nav-label {
-            color: #1052a5;
             font-size: 12px;
             line-height: 1.1em;
-            color: rgba(0, 0, 0, 0.4);
+            color: rgba(16, 82, 165, 0.4);
             transition: color 0.4s;
         }
 
@@ -238,24 +240,35 @@ body.cl-dom--added{
             }
 
         }
+
+        .md-bottom-nav {
+            height: 52px !important;
+            padding: 0 12px 0 !important;
+        }
     }
 
     // 스크롤해서 위아래 메뉴 치울때,
     &.cl-app--expand {
 
-        height: calc( 100vh + 56px );
+        height: calc( 100vh + 52px );
 
         &>header{
-            margin-top: -56px;
+            margin-top: -52px;
         }
 
 
         #cl-footer {
-            bottom: -56px;
+            bottom: -52px;
         }
 
         .cl-write__button, .cl-iot-run__button{
             bottom: 1em;
+
+            img {
+                width: 21px !important;
+                height: 21px !important;
+                opacity: 1 !important;
+            }
         }
 
 
@@ -274,7 +287,7 @@ body.cl-dom--added{
 
         .cl-tab--info{
             .cl-fitted-box{
-                height: calc( 100vh - 56px );
+                height: calc( 100vh - 52px );
             }
         }
 
