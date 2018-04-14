@@ -3,13 +3,23 @@ package com.kolon.comlife.complexes.model;
 public class ComplexInfoBase {
     protected int    cmplxId;            // ID, PK
     protected String cmplxGrp;           // COMPLEX GROUP
+    protected int    cmplxGrpTypeId;     // COMPLEX GROUP TYPE ID
     protected String cmplxNm;            // COMPLEX NAME
-    private   String comlifeLogoImgSrc;  // LOGO IMAGE SOURCE
+
 
     public ComplexInfoBase(int cmplxId, String cmplxGrp, String cmplxNm) {
         this.cmplxId = cmplxId;
         this.cmplxGrp = cmplxGrp;
         this.cmplxNm = cmplxNm;
+    }
+
+
+    public int getCmplxGrpTypeId() {
+        return cmplxGrpTypeId;
+    }
+
+    public void setCmplxGrpTypeId(int cmplxGrpTypeId) {
+        this.cmplxGrpTypeId = cmplxGrpTypeId;
     }
 
     public int getCmplxId() {

@@ -31,5 +31,11 @@ public class ComplexServiceImpl implements ComplexService {
     }
 
     @Override
-    public List<ComplexSimpleInfo> getComplexSimpleList() { return complexDAO.selectComplexInfoList(); };
+    public List<ComplexSimpleInfo> getComplexSimpleList() { return complexDAO.selectComplexInfoList(); }
+
+    @Override
+    public List<ComplexSimpleInfo> getComplexListInSameGroup( int cmplxId ) {
+        return complexDAO.selectComplexListInSameGroup( cmplxId );
+    }
 }
+

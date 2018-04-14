@@ -7,10 +7,14 @@ import java.util.List;
 
 public interface ComplexService {
 
-    public ComplexInfo getComplexById(int id);
+    ComplexInfo getComplexById(int id);
 
-    public List<ComplexInfo> getComplexList();
+    List<ComplexInfo> getComplexList();
 
-    public List<ComplexSimpleInfo> getComplexSimpleList();
+    List<ComplexSimpleInfo> getComplexSimpleList();
+
+    List<ComplexSimpleInfo> getComplexListInSameGroup( int cmplxId );
+
+
 }
 

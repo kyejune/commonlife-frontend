@@ -1,8 +1,10 @@
 package com.kolon.comlife.users.web;
 
+import com.kolon.comlife.common.model.DataListInfo;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.complexes.model.ComplexInfo;
+import com.kolon.comlife.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.users.util.IokUtil;
 import com.kolon.common.model.AuthUserInfo;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -142,6 +145,26 @@ public class UserController {
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
+    @GetMapping(
+            value="/myComplexGroup",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getMyComplexList( HttpServletRequest request ) {
+        DataListInfo result = new DataListInfo();
+        AuthUserInfo userInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+        List<ComplexSimpleInfo> cmplxInfoList;
+
+        if( !AuthUserInfoUtil.isAuthUserInfoExisted( request )) {
+            logger.debug(">>>>  인증되지 않은 사용자 입니다");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo("인증되지 않은 사용자 입니다"));
+        }
+
+        cmplxInfoList = complexService.getComplexListInSameGroup( userInfo.getCmplxId() );
+        result.setData( cmplxInfoList );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
+    }
 
     /**
      * @description  모바일에서 푸시 토큰이 갱신될 경우, DB 업데이트 처리한다.

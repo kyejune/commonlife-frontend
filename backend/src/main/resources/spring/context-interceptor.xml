@@ -24,6 +24,7 @@
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/users/myinfo" />
+            <mvc:mapping path="/users/myComplexGroup" />
             <mvc:mapping path="/users/debug/authUserInfo" />
             <mvc:mapping path="/imageStore/**" />
             <mvc:mapping path="/info/**" />
