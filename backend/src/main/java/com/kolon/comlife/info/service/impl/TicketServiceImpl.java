@@ -1,8 +1,8 @@
-package com.kolon.comlife.support.service.impl;
+package com.kolon.comlife.info.service.impl;
 
-import com.kolon.comlife.support.model.TicketFileInfo;
-import com.kolon.comlife.support.model.TicketInfo;
-import com.kolon.comlife.support.service.TicketService;
+import com.kolon.comlife.info.model.TicketFileInfo;
+import com.kolon.comlife.info.model.TicketInfo;
+import com.kolon.comlife.info.service.TicketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

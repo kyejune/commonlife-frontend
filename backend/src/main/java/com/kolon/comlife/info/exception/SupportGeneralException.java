@@ -1,4 +1,4 @@
-package com.kolon.comlife.support.exception;
+package com.kolon.comlife.info.exception;
 
 public class SupportGeneralException extends  Exception {
 

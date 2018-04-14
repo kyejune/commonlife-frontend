@@ -1,10 +1,10 @@
-package com.kolon.comlife.support.service.impl;
+package com.kolon.comlife.info.service.impl;
 
 import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.service.impl.ComplexDAO;
-import com.kolon.comlife.support.exception.SupportGeneralException;
-import com.kolon.comlife.support.model.SupportCategoryInfo;
-import com.kolon.comlife.support.service.SupportService;
+import com.kolon.comlife.info.exception.SupportGeneralException;
+import com.kolon.comlife.info.model.SupportCategoryInfo;
+import com.kolon.comlife.info.service.SupportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
-package com.kolon.comlife.support.service.impl;
+package com.kolon.comlife.info.service.impl;
 
-import com.kolon.comlife.support.model.SupportCategoryInfo;
+import com.kolon.comlife.info.model.SupportCategoryInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 

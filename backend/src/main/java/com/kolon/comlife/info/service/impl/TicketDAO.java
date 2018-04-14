@@ -1,8 +1,7 @@
-package com.kolon.comlife.support.service.impl;
+package com.kolon.comlife.info.service.impl;
 
-import com.kolon.comlife.postFile.model.PostFileInfo;
-import com.kolon.comlife.support.model.TicketFileInfo;
-import com.kolon.comlife.support.model.TicketInfo;
+import com.kolon.comlife.info.model.TicketFileInfo;
+import com.kolon.comlife.info.model.TicketInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

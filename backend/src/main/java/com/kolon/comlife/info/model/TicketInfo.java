@@ -1,4 +1,4 @@
-package com.kolon.comlife.support.model;
+package com.kolon.comlife.info.model;
 
 import org.apache.ibatis.type.Alias;
 
