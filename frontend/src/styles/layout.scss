@@ -173,7 +173,8 @@ body.cl-dom--added{
     }
 }
 
-.cl-tab--news {
+.cl-tab--news,
+.cl-notice-detail {
     .cl-avatar {
         background-image: url("images/profile-thumb-img-news@3x.png");
     }
