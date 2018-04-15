@@ -37,10 +37,7 @@ public class PostController {
 
     @Resource(name = "postService")
     private PostService postService;
-    @Resource(name = "userService")
-    private UserService userService;
-    @Resource(name = "postFileService")
-    private PostFileService postFileService;
+
 
     @CrossOrigin
     @GetMapping(
@@ -51,14 +48,27 @@ public class PostController {
         AuthUserInfo         currUser = AuthUserInfoUtil.getAuthUserInfo( request );
         PaginateInfo         paginateInfo;
         Map<String, Object>  postParams = new HashMap<>();
+        int                  cmplxId;
+        String               page;
+        int                  pageNum;
 
-        logger.debug(">>> CmplxId: " + currUser.getCmplxId());
-        logger.debug(">>> UserId: " + currUser.getUserId());
-        logger.debug(">>> UsrId: " + currUser.getUsrId());
+        logger.debug(">>> currUser>CmplxId: " + currUser.getCmplxId());
+        logger.debug(">>> currUser>UserId: " + currUser.getUserId());
+        logger.debug(">>> currUser>UsrId: " + currUser.getUsrId());
 
-        int    complexId = currUser.getCmplxId();
-        String page = request.getParameter( "page" );
-        int    pageNum = StringUtil.parseInt(page, 1);
+        try {
+            if (request.getParameter("cmplxId") != null) {
+                cmplxId = StringUtil.parseInt(request.getParameter("cmplxId"), currUser.getCmplxId());
+            } else {
+                cmplxId = currUser.getCmplxId();
+            }
+            page = request.getParameter("page");
+            pageNum = StringUtil.parseInt(page, 1);
+        } catch( NumberFormatException e ) {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleErrorInfo("잘못된 파라미터가 입력되었습니다. "));
+        }
 
         String postType = request.getParameter("postType");
         if( postType != null ) {
@@ -75,7 +85,7 @@ public class PostController {
 
         postParams.put( "limit", LIMIT_COUNT);
         postParams.put( "pageNum", Integer.valueOf(pageNum) );
-        postParams.put( "cmplxId", Integer.valueOf(complexId) );
+        postParams.put( "cmplxId", Integer.valueOf(cmplxId) );
         postParams.put( "usrId", currUser.getUsrId() );
 
         // 포스트 목록 추출
@@ -99,18 +109,27 @@ public class PostController {
         PostInfo           newPost = new PostInfo();
         PostInfo           retPost;
 
-        List<PostFileInfo> postFiles;
         List<Integer>      postFilesIdList;
-        AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
-        int          usrId = -1;
-        int          cmplxId = -1;
+        AuthUserInfo       currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+        int                usrId;
+        int                cmplxId;
 
-        logger.debug(">>> CmplxId: " + currUser.getCmplxId());
-        logger.debug(">>> UserId: " + currUser.getUserId());
-        logger.debug(">>> UsrId: " + currUser.getUsrId());
+        logger.debug(">>> currUser>CmplxId: " + currUser.getCmplxId());
+        logger.debug(">>> currUser>UserId: " + currUser.getUserId());
+        logger.debug(">>> currUser>UsrId: " + currUser.getUsrId());
 
-        usrId = currUser.getUsrId();
-        cmplxId = currUser.getCmplxId();
+        try {
+            usrId = currUser.getUsrId();
+            if( request.getParameter( "cmplxId" ) != null ) {
+                cmplxId = StringUtil.parseInt( request.getParameter( "cmplxId" ), currUser.getCmplxId() );
+            } else {
+                cmplxId = currUser.getCmplxId();
+            }
+        } catch( NumberFormatException e ) {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleErrorInfo("잘못된 cmplxId 값이 입력되었습니다. "));
+        }
 
         newPost.setUsrId( usrId );
         newPost.setCmplxId( cmplxId );
@@ -153,12 +172,6 @@ public class PostController {
                     .status( HttpStatus.NOT_FOUND )
                     .body( new SimpleErrorInfo("해당 게시물을 열람할 수 없습니다. ") );
         }
-
-//        if( currUser.getCmplxId() != result.getCmplxId() ) {
-//            return ResponseEntity
-//                    .status( HttpStatus.UNAUTHORIZED )
-//                    .body( new SimpleErrorInfo("해당 게시물을 열람할 수 없습니다. ") );
-//        }
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
