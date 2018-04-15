@@ -63,8 +63,6 @@ public class IotInfoServiceImpl implements IotInfoService {
 
     private static final String USER_SCENARIO_MODE_CODE = "CM01199";
 
-    private static final String AUTOMATION_DEFUALT_ICON = "cl_icon_default"; // todo: IMG/ICON Mapper로 옮길 것
-
 
     @Autowired
     private IotIconMapperService iconService;
@@ -75,6 +73,38 @@ public class IotInfoServiceImpl implements IotInfoService {
     @Autowired
     private CloseableHttpClient httpClient;
 
+    private Map<String, MyButtonStatus> myButtonStatusMap;
+
+
+    public IotInfoServiceImpl() {
+
+        // MyIOT 버튼(My Service 버튼)의 상태에 따른 동작/Icon표시를 위한 맵파일
+        // todo: 추후, ICON 및 텍스트 정보를 IOK 쪽으로 옮겨야 한다. (임시 임시)
+        Map<String, MyButtonStatus> statusMap = new HashMap();
+
+        statusMap.put( "on",             new MyButtonStatus("on",             true,"켜져있습니다") );
+        statusMap.put( "off",            new MyButtonStatus("off",            false,"꺼져있습니다") );
+        statusMap.put( "auto",           new MyButtonStatus("auto",           true,"자동상태입니다") );
+        statusMap.put( "unplug",         new MyButtonStatus("unplug",         false,"꺼져있습니다") );
+        statusMap.put( "opened",         new MyButtonStatus("opened",         true,"열려있습니다") );
+        statusMap.put( "closed",         new MyButtonStatus("closed",         false,"닫혀있습니다") );
+        statusMap.put( "stopped",        new MyButtonStatus("stopped",        false,"정지해있습니다") );
+        statusMap.put( "sleep",          new MyButtonStatus("sleep",          true,"잠자는 중") );
+        statusMap.put( "wakeup",         new MyButtonStatus("wakeup",         false,"활동 중") );
+        statusMap.put( "detected",       new MyButtonStatus("detected",       true,"검출 되었습니다") );
+        statusMap.put( "undetected",     new MyButtonStatus("undetected",     false,"검출되지 않았습니다") );
+        statusMap.put( "true",           new MyButtonStatus("true",           true,"참입니다") );
+        statusMap.put( "false",          new MyButtonStatus("false",          false,"거짓입니다") );
+        statusMap.put( "lock",           new MyButtonStatus("lock",           true,"잠겨있습니다") );
+        statusMap.put( "unlock",         new MyButtonStatus("unlock",         false,"잠금이 해제되었습니다") );
+        statusMap.put( "Cooktop_01" ,    new MyButtonStatus("Cooktop_01",     true,"동작 중입니다") );
+        statusMap.put( "Cooktop_0",      new MyButtonStatus("Cooktop_0",      false,"동작 중이 아닙니다") );
+        statusMap.put( "Smarton_LockOn", new MyButtonStatus("Smarton_LockOn", true,"잠겨있습니다") );
+        statusMap.put( "Smarton_LockOn", new MyButtonStatus("Smarton_LockOn", false,"열려있습니다") );
+
+        this.myButtonStatusMap = statusMap;
+    }
+
 
     /**
      * 1. '모드'의 전체 목록 가져오기 at Dashboard
@@ -83,6 +113,8 @@ public class IotInfoServiceImpl implements IotInfoService {
         IotModeOrAutomationListInfo modesList = new IotModeOrAutomationListInfo();
         HttpGetRequester requester;
         Map<String, Map> result;
+
+
 
         requester = new HttpGetRequester(
                 httpClient,
@@ -547,7 +579,7 @@ public class IotInfoServiceImpl implements IotInfoService {
 
         // 아이콘 체크
         if( scnaInfo.get("icon") == null || "".equals( scnaInfo.get("icon") )) {
-            scnaInfo.put("icon", AUTOMATION_DEFUALT_ICON);
+            scnaInfo.put("icon", iconService.getIconAutomationDefault());
         }
 
         try {
@@ -1104,7 +1136,7 @@ public class IotInfoServiceImpl implements IotInfoService {
         scnaInfo.put("useYn", "Y");
         scnaInfo.put("userId", (userId != null) ? userId : "");
         if( scnaInfo.get("icon") == null ) {
-            scnaInfo.put("icon", AUTOMATION_DEFUALT_ICON);
+            scnaInfo.put("icon", iconService.getIconAutomationDefault());
         }
 
         Map populateData = new HashMap();
@@ -1694,8 +1726,33 @@ public class IotInfoServiceImpl implements IotInfoService {
             if( v != null ) {
                 switch(v) {
                     case "MB01701":     // device
+                        MyButtonStatus btStatus = this.myButtonStatusMap.get( e.get("CURR_STS") );
+
                         e.put("BT_TYPE", "device");
                         e.put("MY_IOT_ID", String.valueOf(e.get("M_ID")));
+
+                        // device의 ON/OFF 표시
+                        if( btStatus != null ) {
+                            e.put( "BT_ON_OFF", btStatus.isStatus() ? "on" : "off" );
+
+                            // 기기의 현재 상태에 따른, 상세 정보 btSubTitle에 입력
+                            if( e.get("BT_SUB_TITLE") == null || "".equals(e.get("BT_SUB_TITLE")) ) {
+                                // 상태 텍스트 설정
+                                e.put("BT_SUB_TITLE", btStatus.getText() );
+                                // 아이콘 상태 설정
+                                if( btStatus.isStatus() ) {
+                                    // true ==> do nothing
+                                } else {
+                                    // false ==> "_off" 추가
+                                    if( e.get("BT_IMG_SRC") != null ) {
+                                        e.put("BT_IMG_SRC", e.get("BT_IMG_SRC") + "-off" );
+                                    }
+                                }
+                            }
+                        } else {
+                            e.put( "BT_ON_OFF", "on" );
+                        }
+
                         if(e.get("BT_IMG_SRC") == null) {
                             e.put("BT_IMG_SRC", iconService.getIotDefaultIcon());
                         }
@@ -1703,7 +1760,11 @@ public class IotInfoServiceImpl implements IotInfoService {
                         // BT_RIGHT_ICON_TYPE(btRightIconType) 결정
                         if( (e.get("BINARY_YN") != null) && (e.get("BINARY_YN").equals("Y")) ) {
                             if( e.get("STS_CNT").equals(new Integer(1)) ) {
+
+                                // Button 타입으로 설정
                                 e.put("BT_RIGHT_ICON_TYPE", "button");
+
+
                             } else {
                                 e.put("BT_RIGHT_ICON_TYPE", "detail");
                             }

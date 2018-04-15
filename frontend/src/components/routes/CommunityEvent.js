@@ -19,8 +19,10 @@ class CommunityEvent extends Component {
         }
 
         intercept( Store, 'communityCmplxId', change=>{
-            Store.event = [];
-            setTimeout( this.loadPage, 0 );
+            if( change.newValue != Store.communityCmplxId ) {
+                Store.event = [];
+                setTimeout(this.loadPage, 0);
+            }
 
             return change;
         } );

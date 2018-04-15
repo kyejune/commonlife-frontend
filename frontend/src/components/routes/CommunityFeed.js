@@ -19,8 +19,11 @@ class CommunityFeed extends Component {
 		}
 
         intercept( Store, 'communityCmplxId', change=>{
-        	Store.feed = [];
-            setTimeout( this.loadPage, 0 );
+
+        	if( change.newValue != Store.communityCmplxId ) {
+                Store.feed = [];
+                setTimeout(this.loadPage, 0);
+            }
 
             return change;
 		} );
