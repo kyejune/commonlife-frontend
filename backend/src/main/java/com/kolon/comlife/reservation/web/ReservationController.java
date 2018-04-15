@@ -94,21 +94,7 @@ public class ReservationController {
                     .body( new SimpleErrorInfo( "종료 일시가 시작 일시보다 우선할 수 없습니다." ) );
         }
 
-        // TODO: 관리자가 최소 예약 시간을 설정할 필요가 있는지?
-        if( endDttm.getTime() - startDttm.getTime() < ( 60 * 60 ) ) {
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "60분보다 작은 시간으로 예약할 수 없습니다." ) );
-        }
-
-        // TODO: 관리자가 예약 단위를 설정할 필요가 있는지?
-        if( ( endDttm.getTime() - startDttm.getTime() ) % ( 60 * 60 ) != 0 ) {
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "60분보다 작은 단위로 예약할 수 없습니다." ) );
-        }
-
-        // TODO: 수량 체크 필요
+        info.setStatus( ReservationInfo.RESERVED );
 
         service.create( info );
 
@@ -160,7 +146,7 @@ public class ReservationController {
                     .body( new SimpleErrorInfo( "종료 일시가 시작 일시보다 우선할 수 없습니다." ) );
         }
 
-        // TODO: 수량 체크 필요
+        info.setStatus( ReservationInfo.RESERVED );
 
         service.create( info );
 
@@ -196,8 +182,7 @@ public class ReservationController {
                     .body(new SimpleErrorInfo("시작 일시를 과거로 설정할 수 없습니다."));
         }
 
-        // TODO: 예약 상태 체크 필요
-        info.setStatus( ReservationInfo.RESERVED );
+        info.setStatus( ReservationInfo.IN_QUEUE );
 
         service.create( info );
 
@@ -205,57 +190,6 @@ public class ReservationController {
                 .status( HttpStatus.OK )
                 .body( new SimpleErrorInfo( "OK" ) );
     }
-
-//    @CrossOrigin
-//    @PostMapping(
-//            value = "/",
-//            produces = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity store(
-//            HttpServletRequest request
-//            , @RequestParam( value = "parentIdx", required = false ) int parentIdx
-//            , @RequestParam( value = "usrId", required = false ) int usrId
-//            , @RequestParam( value = "startDt", required = false ) String startDt
-//            , @RequestParam( value = "startTime", required = false ) String startTime
-//            , @RequestParam( value = "endDt", required = false ) String endDt
-//            , @RequestParam( value = "endTime", required = false ) String endTime
-//            , @RequestParam( value = "qty", required = false ) int qty
-//    ) {
-//        ReservationSchemeInfo scheme = schemeService.show( parentIdx );
-//
-//        // 반드시 스키마 정보가 있어야 한다
-//        if( scheme == null ) {
-//            return ResponseEntity
-//                    .status( HttpStatus.BAD_REQUEST )
-//                    .body( new SimpleErrorInfo( "예약 정보를 찾을 수 없습니다." ) );
-//        }
-//
-//        ReservationInfo info = new ReservationInfo();
-//        info.setParentIdx( parentIdx );
-//        info.setUsrID( usrId );
-//        info.setStartDt( startDt );
-//        info.setStartTime( startTime );
-//        info.setEndDt( endDt );
-//        info.setEndTime( endTime );
-//        info.setQty( qty );
-//
-//        // 스키마로부터 포인트와 금액 정보 내려받는다
-//        // 스키마가 변경되어도 예약 당시의 포인트/금액 정보는 유지되어야 하기 때문에 별도로 기록해야 한다
-//        info.setPoint( scheme.getPoint() );
-//        info.setAmount( scheme.getAmount() );
-//
-//        switch ( scheme.getReservationType() ) {
-//            case "A" :
-//                return bookTypeA( scheme, info );
-//            case "B" :
-//                return bookTypeB( scheme, info );
-//            case "C" :
-//                return bookTypeC( scheme, info );
-//            default :
-//                return ResponseEntity
-//                        .status( HttpStatus.BAD_REQUEST )
-//                        .body( new SimpleErrorInfo( "알 수 없는 예약 유형입니다." ) );
-//        }
-//    }
 
     @CrossOrigin
     @GetMapping(
@@ -353,7 +287,6 @@ public class ReservationController {
 
         ReservationInfo info = new ReservationInfo();
         info.setUsrID( idx );
-        info.setStatus( "RESERVED" );
         info.setStartDt( startDt );
         info.setStartTime( startTime );
         info.setEndDt( endDt );
@@ -365,8 +298,17 @@ public class ReservationController {
         info.setPoint( scheme.getPoint() );
         info.setAmount( scheme.getAmount() );
 
-        service.create( info );
-
-        return ResponseEntity.status( HttpStatus.OK ).body( null );
+        switch ( scheme.getReservationType() ) {
+            case "A" :
+                return bookTypeA( scheme, info );
+            case "B" :
+                return bookTypeB( scheme, info );
+            case "C" :
+                return bookTypeC( scheme, info );
+            default :
+                return ResponseEntity
+                        .status( HttpStatus.BAD_REQUEST )
+                        .body( new SimpleErrorInfo( "알 수 없는 예약 유형입니다." ) );
+        }
     }
 }
