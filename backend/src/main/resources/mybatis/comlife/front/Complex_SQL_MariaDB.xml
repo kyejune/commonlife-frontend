@@ -2,192 +2,137 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="Complex">
-    <select id="selectComplexList" resultType="ComplexInfo">
-    SELECT
-        A.CMPLX_ID AS CMPLX_ID,
-        A.CMPLX_NM AS CMPLX_NM,
-        A.CMPLX_S_NM AS CMPLX_S_NM,
-        B.CMPLX_GRP_TYPE AS CMPLX_GRP,
-        B.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_TYPE_ID,
-        A.CL_LOGO_IMG_SRC AS CL_LOGO_IMG_SRC,
-        A.CL_MAP_SRC AS CL_MAP_SRC,
-        A.CMPLX_CD AS CMPLX_CD,
-        A.LATI_POS AS LATI_POS,
-        A.LONG_POS AS LONG_POS,
-        A.UNIT_CNT AS UNIT_CNT,
-        A.ADDR AS ADDR,
-        A.ADDR_DTL AS ADDR_DTL,
-        A.ADDR1 AS ADDR1,
-        A.ADDR2 AS ADDR2,
-        ROW_NUMBER() OVER(ORDER BY CMPLX_GRP, CMPLX_NM ASC) AS RNUM,
-		COUNT(1) OVER() AS TOT
-    FROM
-    (
-        SELECT
-            CMPLX.CMPLX_ID AS CMPLX_ID,
-            CMPLX.CMPLX_CD AS CMPLX_CD,
-            CMPLX.CMPLX_NM AS CMPLX_NM, -- COMPLEX NAME
-            CMPLX.CMPLX_S_NM AS CMPLX_S_NM,
-            CMPLX.LATI_POS AS LATI_POS,
-            CMPLX.LONG_POS AS LONG_POS,
-            CMPLX.UNIT_CNT AS UNIT_CNT,
-            CMPLX.ADDR     AS ADDR, 	-- 일반 주소
-            CMPLX.ADDR_DTL,
-            CMPLX.ADDR1,
-            CMPLX.ADDR2,
-            CMPLX.LOC1_NM,
-            CMPLX.LOC2_NM,
-            CMPLX.POST_NO,
-            CMPLX.IMG_SRC,
-            CMPLX.MAP_SRC,
-            CMPLX.LOGO_IMG_SRC,
-            CMPLX.ADMIN_ID AS IOK_ADMIN_ID,
-            CMPLX.REG_ID AS IOK_REG_ID,
-            CMPLX.REG_DT AS IOK_REG_DT,
-            CMPLX.CHG_ID AS IOK_CHG_ID,
-            CMPLX.CHG_DT AS IOK_CHG_DT,
-            CMPLX_EXT.CL_MAP_SRC AS CL_MAP_SRC,
-            CMPLX_EXT.CL_LOGO_IMG_SRC AS CL_LOGO_IMG_SRC,
-            CMPLX_EXT.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
-            CMPLX_EXT.REG_DT AS REG_DT,
-            CMPLX_EXT.REG_ADMIN_IDX AS REG_ADMIN_IDX,
-            CMPLX_EXT.UPD_DT AS UPD_DT,
-            CMPLX_EXT.UPD_ADMIN_IDX AS UPD_ADMIN_IDX
-        FROM
-            COMPLEX_M AS CMPLX
-              LEFT JOIN
-            COMPLEX_M_EXT AS CMPLX_EXT
-        ON
-            CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
-        WHERE
-            CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
-    ) AS A
-      LEFT JOIN
-    (
-        SELECT
-            CMPLX_ID,
-            CMPLX_GRP_TYPE,
-            GRP.CMPLX_GRP_TYPE_ID
-        FROM
-          COMPLEX_GRP_TYPE_M AS GRP_TYPE
-            LEFT JOIN
-          COMPLEX_GRP_M AS GRP
-        ON
-          GRP_TYPE.CMPLX_GRP_TYPE_ID = GRP.CMPLX_GRP_TYPE_ID
-    ) AS B
-      ON A.CMPLX_ID = B.CMPLX_ID
-    ORDER BY RNUM
-    ;
+    <select id="selectComplexList" parameterType="java.util.Map" resultType="ComplexInfo">
+	SELECT
+	    G_T.CMPLX_GRP_TYPE_ID   AS CMPLX_GRP_TYPE_ID,
+		G_T.CMPLX_GRP_TYPE      AS CMPLX_GRP,
+		C.CMPLX_ID              AS CMPLX_ID,
+		C.CMPLX_CD              AS CMPLX_CD,
+		C_E.CL_CMPLX_NM         AS CMPLX_NM,    -- COMMON Life에서 사용하는 현장이름
+		C.CMPLX_S_NM            AS CMPLX_S_NM,
+		C.LATI_POS              AS LATI_POS,
+		C.LONG_POS              AS LONG_POS,
+		C.UNIT_CNT              AS UNIT_CNT,
+		C_E.CL_CMPLX_ADDR       AS ADDR, 	    -- COMMON Life에서 사용하는 현장주소
+		C.ADDR_DTL              AS ADDR_DTL,
+		C.ADDR1                 AS ADDR1,
+		C.ADDR2                 AS ADDR2,
+		C.LOC1_NM               AS LOC1_NM,
+		C.LOC2_NM               AS LOC2_NM,
+		C.POST_NO               AS POST_NO,
+		C.IMG_SRC               AS IMG_SRC,
+		C.MAP_SRC               AS MAP_SRC,
+		C.LOGO_IMG_SRC          AS LOGO_IMG_SRC,
+		C.ADMIN_ID              AS IOK_ADMIN_ID,
+		C.REG_ID                AS IOK_REG_ID,
+		C.REG_DT                AS IOK_REG_DT,
+		C.CHG_ID                AS IOK_CHG_ID,
+		C.CHG_DT                AS IOK_CHG_DT,
+		C_E.CL_CMPLX_NM         AS CL_CMPLX_NM,
+		C_E.CL_CMPLX_ADDR       AS CL_CMPLX_ADDR,
+		C_E.CL_MAP_SRC          AS CL_MAP_SRC,
+		C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC,
+		C_E.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
+		C_E.IOT_USE_YN          AS IOT_USE_YN,
+		C_E.NOTICE_YN           AS NOTICE_YN,
+		C_E.NOTICE_IDX          AS NOTICE_IDX,
+		C_E.REG_DT              AS REG_DT,
+		C_E.REG_ADMIN_IDX       AS REG_ADMIN_IDX,
+		C_E.UPD_DT              AS UPD_DT,
+		C_E.UPD_ADMIN_IDX       AS UPD_ADMIN_IDX
+	FROM
+		COMPLEX_M AS C
+			LEFT JOIN
+		COMPLEX_M_EXT AS C_E
+				ON C.CMPLX_ID = C_E.CMPLX_ID
+			LEFT JOIN
+		COMPLEX_GRP_M AS G
+				ON C.CMPLX_ID = G.CMPLX_ID
+			LEFT JOIN
+		COMPLEX_GRP_TYPE_M AS G_T
+				ON G_T.CMPLX_GRP_TYPE_ID = G.CMPLX_GRP_TYPE_ID
+	WHERE
+	    <if test="cmplxId != null">
+        C.CMPLX_ID = #{cmplxId}
+            AND
+        </if>
+		C.CMPLX_GB_CD = "AD01102"  -- 현장 중, COMMON Life(민간+공공)용도의 현장은 GB_CD가 'AD01102' 값으로 설정 됨
+			AND
+		G_T.CMPLX_GRP_TYPE_ID > 0  -- NULL= 미분류, 0=준비중, 1=민간, 2=공공
+			AND
+		!ISNULL(G_T.CMPLX_GRP_TYPE_ID)
+	ORDER BY
+		G.CMPLX_GRP_TYPE_ID, C.CMPLX_NM DESC
+	;
     </select>
-
-    <select id="selectComplexById" parameterType="ComplexInfo" resultType="ComplexInfo">
-    SELECT
-      C.CMPLX_ID,
-      CMPLX_CD,  -- COMPLEX CODE
-      CMPLX_NM, -- COMPLEX NAME
-      CMPLX_S_NM, -- COMPLEX SUB NAME
-      LATI_POS,
-      LONG_POS,
-      UNIT_CNT, -- 개수
-      ADDR,
-      ADDR_DTL, -- 상세 주소
-      ADDR1,
-      ADDR2,
-      LOC1_NM,
-      LOC2_NM,
-      LOC3_NM,
-      POST_NO,
-      IMG_SRC,
-      MAP_SRC,
-      LOGO_IMG_SRC, -- LOGO IMAGE SOURCE
-      MNL_SRC, -- ??
-      CL_CMPLX_NM,
-      CL_CMPLX_ADDR,
-      CL_MAP_SRC,
-      CL_LOGO_IMG_SRC,
-      FEED_WRITE_ALLOW_YN,
-      IOT_USE_YN,
-      NOTICE_YN,
-      NOTICE_IDX
-    FROM
-      COMPLEX_M AS C
-        LEFT JOIN
-      COMPLEX_M_EXT AS C_E
-          ON C.CMPLX_ID = C_E.CMPLX_ID
-    WHERE
-      C.CMPLX_ID = #{cmplxId}
-      AND
-      C.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
-    ;
-  </select>
 
     <select id="selectComplexSimpleInfoList" resultType="ComplexSimpleInfo">
     SELECT
-      CMPLX.CMPLX_ID,
-      GRP_TYPE.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_TYPE_ID,
-      GRP_TYPE.CMPLX_GRP_TYPE AS CMPLX_GRP,
-      CMPLX.CMPLX_NM, -- COMPLEX NAME
-      CMPLX.ADDR,     -- 일반 주소
-      CMPLX.ADDR_DTL, -- 상세 주소
-      CMPLX.ADDR1,
-      CMPLX.ADDR2,
-      CMPLX_EXT.CL_MAP_SRC,     -- CommonLife's Map Src/Url
-      CMPLX_EXT.CL_LOGO_IMG_SRC -- CommonLife's LOGO Image Source
+        C.CMPLX_ID              AS CMPLX_ID,
+        G_T.CMPLX_GRP_TYPE_ID   AS CMPLX_GRP_TYPE_ID,  -- 미분류,민간 or 공공
+        G_T.CMPLX_GRP_TYPE      AS CMPLX_GRP,          -- CMPLX_GRP_TYPE_ID의 이름
+        C_E.CL_CMPLX_NM         AS CMPLX_NM,           -- 앱내 표시되는 현장 이름 (COMPLEX NAME)
+        C_E.CL_CMPLX_ADDR       AS ADDR,               -- 앱내 표시되는 현장 주소
+        C.ADDR_DTL              AS ADDR_DTL,           -- 현장 상세 주소 (IOK에서 정의)
+        C.ADDR1                 AS ADDR1,
+        C.ADDR2                 AS ADDR2,
+        C_E.CL_MAP_SRC          AS CL_MAP_SRC,         -- 앱내 지도 링크 (full path URL)
+        C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC     -- 앱내 표시되는 이미지 (full path URL)
     FROM
-      COMPLEX_M AS CMPLX
-        LEFT JOIN
-      COMPLEX_M_EXT AS CMPLX_EXT
-          ON CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
-        LEFT JOIN
-      COMPLEX_GRP_M AS GRP
-          ON GRP.CMPLX_ID = CMPLX.CMPLX_ID
-        LEFT JOIN
-      COMPLEX_GRP_TYPE_M AS GRP_TYPE
-          ON GRP.CMPLX_GRP_TYPE_ID = GRP_TYPE.CMPLX_GRP_TYPE_ID
+        COMPLEX_M AS CMPLX
+          LEFT JOIN
+        COMPLEX_M_EXT AS C_E
+            ON C.CMPLX_ID = C_E.CMPLX_ID
+          LEFT JOIN
+        COMPLEX_GRP_M AS G
+            ON G.CMPLX_ID = C.CMPLX_ID
+          LEFT JOIN
+        COMPLEX_GRP_TYPE_M AS G
+            ON C_E.CMPLX_GRP_TYPE_ID = G_T.CMPLX_GRP_TYPE_ID
     WHERE
-      CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
-       AND
-      GRP_TYPE.CMPLX_GRP_TYPE_ID > 0
-        AND
-      !ISNULL(GRP_TYPE.CMPLX_GRP_TYPE_ID)
+        C.CMPLX_GB_CD = 'AD01102'   -- 현장 중, COMMON Life(민간+공공)용도의 현장은 GB_CD가 'AD01102' 값으로 설정 됨
+          AND
+        G_T.CMPLX_GRP_TYPE_ID > 0  -- NULL= 미분류, 0=준비중, 1=민간, 2=공공
+          AND
+        !ISNULL(G_T.CMPLX_GRP_TYPE_ID)
     ORDER BY
-      CMPLX_GRP_TYPE_ID, CMPLX.CMPLX_NM ASC
+        CMPLX_GRP_TYPE_ID, C.CMPLX_NM ASC
     ;
   </select>
 
 
     <select id="selectComplexListInSameGroup" parameterType="java.util.Map" resultType="ComplexSimpleInfo">
     SELECT
-        CMPLX.CMPLX_ID,
-        GRP_TYPE.CMPLX_GRP_TYPE_ID AS CMPLX_GRP_TYPE_ID,
-        GRP_TYPE.CMPLX_GRP_TYPE AS CMPLX_GRP,
-        CMPLX.CMPLX_NM, -- COMPLEX NAME
-        CMPLX.ADDR,     -- 일반 주소
-        CMPLX.ADDR_DTL, -- 상세 주소
-        CMPLX.ADDR1,
-        CMPLX.ADDR2,
-        CMPLX_EXT.CL_MAP_SRC,     -- CommonLife's Map Src/Url
-        CMPLX_EXT.CL_LOGO_IMG_SRC -- CommonLife's LOGO Image Source
+        C.CMPLX_ID              AS CMPLX_ID,
+        G_T.CMPLX_GRP_TYPE_ID   AS CMPLX_GRP_TYPE_ID, -- 미분류,민간 or 공공
+        G_T.CMPLX_GRP_TYPE      AS CMPLX_GRP,         -- CMPLX_GRP_TYPE_ID의 이름
+        C.CMPLX_NM              AS CMPLX_NM,          -- 앱내 표시되는 현장 이름 (COMPLEX NAME)
+        C.ADDR                  AS ADDR,              -- 앱내 표시되는 현장 주소
+        C.ADDR_DTL              AS ADDR_DTL,          -- 현장 상세 주소 (IOK에서 정의)
+        C.ADDR1                 AS ADDR1,
+        C.ADDR2                 AS ADDR2,
+        C_E.CL_MAP_SRC          AS CL_MAP_SRC,         -- 앱내 지도 링크 (full path URL)
+        C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC     -- 앱내 표시되는 이미지 (full path URL)
     FROM
-        COMPLEX_M AS CMPLX
+        COMPLEX_M AS C
           LEFT JOIN
-        COMPLEX_M_EXT AS CMPLX_EXT
-            ON CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
+        COMPLEX_M_EXT AS C_E
+            ON C.CMPLX_ID = C_E.CMPLX_ID
           LEFT JOIN
-        COMPLEX_GRP_M AS GRP
-            ON GRP.CMPLX_ID = CMPLX.CMPLX_ID
+        COMPLEX_GRP_M AS G
+            ON G.CMPLX_ID = C.CMPLX_ID
           LEFT JOIN
-        COMPLEX_GRP_TYPE_M AS GRP_TYPE
-            ON GRP.CMPLX_GRP_TYPE_ID = GRP_TYPE.CMPLX_GRP_TYPE_ID
+        COMPLEX_GRP_TYPE_M AS G_T
+            ON G.CMPLX_GRP_TYPE_ID = G_T.CMPLX_GRP_TYPE_ID
     WHERE
-        CMPLX.CMPLX_GB_CD = 'AD01102'   -- # CommonLife현장 == 'AD01102'
+        C.CMPLX_GB_CD = 'AD01102'   -- 현장 중, COMMON Life(민간+공공)용도의 현장은 GB_CD가 'AD01102' 값으로 설정 됨
           AND
-        GRP_TYPE.CMPLX_GRP_TYPE_ID =
+        G_T.CMPLX_GRP_TYPE_ID =
             (
               SELECT  CMPLX_GRP_TYPE_ID FROM COMPLEX_GRP_M WHERE CMPLX_ID= #{cmplxId}
             )
     ORDER BY
-        CMPLX_GRP_TYPE_ID, CMPLX.CMPLX_NM ASC
+        CMPLX_GRP_TYPE_ID, C.CMPLX_NM ASC
     ;
     </select>
 

@@ -21,14 +21,15 @@ public class ComplexDAO {
     @Resource
     private SqlSession sqlSession;
 
-    public ComplexInfo selectComplexById(int id) {
-        ComplexInfo complex = new ComplexInfo();
-        complex.setCmplxId(id);
-        return sqlSession.selectOne("Complex.selectComplexById", complex );
+    public ComplexInfo selectComplexById( int id ) {
+        Map params = new HashMap();
+        params.put( "cmplxId", Integer.valueOf( id ) );
+        return sqlSession.selectOne("Complex.selectComplexList", params );
     }
 
     public List<ComplexInfo> selectComplexList() {
-        return sqlSession.selectList("Complex.selectComplexList" );
+        Map params = new HashMap();
+        return sqlSession.selectList("Complex.selectComplexList", params );
     }
 
     public List<ComplexSimpleInfo> selectComplexInfoList() {
