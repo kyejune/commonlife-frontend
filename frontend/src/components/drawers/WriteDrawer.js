@@ -58,7 +58,7 @@ class WriteDrawer extends BottomDrawer {
                 (base64) => this.gettedPicture(base64),
                 (msg) => this.failedPicture(msg),
                 {
-                    quality: 100,
+                    quality: 50,
                     sourceType: 0,
                     destinationType: 0
                 });
@@ -68,7 +68,7 @@ class WriteDrawer extends BottomDrawer {
         }
     }
 
-    gettedPicture(base64) {
+    gettedPicture=(base64)=> {
 
         const b64 = 'data:image/jpeg;base64,' + base64;
         let uploadFunc;
@@ -91,7 +91,7 @@ class WriteDrawer extends BottomDrawer {
         });
     }
 
-    failedPicture(message) {
+    failedPicture=(message)=>{
         //alert(message);
 
         this.setState({
@@ -143,8 +143,11 @@ class WriteDrawer extends BottomDrawer {
         // 보내기
         makeFunc(data, ( success, response ) => {
 
-            if( success && this.state.postType === 'feed' )
+            if( success && this.state.postType === 'feed' ){
+                Store.feed = [];
                 Net.getFeed('feed', 0 );
+            }
+
 
 
             if( success )
@@ -198,7 +201,7 @@ class WriteDrawer extends BottomDrawer {
                         <span>{ msg }</span>
                     </button>
 
-                    <button className="cl-flex" onClick={()=> this.complete()} >
+                    <button className={ classNames( "cl-flex", { "cl--disabled":this.state.isUploading })} onClick={()=> this.complete()} >
                         <img src={checkSrc} width="28" height="28" className="mr-03em" alt="완료"/>
                         <span className="color-primary">완료</span>
                     </button>
@@ -210,7 +213,7 @@ class WriteDrawer extends BottomDrawer {
                 <div className="cl-dim--complete">
                     <img src={AlertSrc} alt="알림"/>
                     <p>{this.state.postResult}</p>
-                    <button onClick={this.onClose} className={ classNames({ "cl--disabled":this.state.isUploading })} >확인</button>
+                    <button onClick={this.onClose}>확인</button>
                 </div>
                 }
 
