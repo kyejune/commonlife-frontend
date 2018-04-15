@@ -1272,7 +1272,7 @@ a.cl-map__link--branch{
 /* 시간 선택기  */
 .cl-time-selector{
     @extend .cl-flex;
-    margin: 4px 23px 2px 23px;
+    margin: 4px 0 2px;
     border-bottom: 1px solid #CCCCCC;
     background-color: #E9E9E9;
     //margin-top: 4px;
@@ -1309,7 +1309,7 @@ a.cl-map__link--branch{
 
 /* 날짜 선택기 */
 .cl-date-selector{
-    margin: 0 10px;
+    margin: 0;
     background-color: #E9E9E9;
     white-space: nowrap;
 
@@ -1317,19 +1317,16 @@ a.cl-map__link--branch{
 
         font-size: 14px;
         width: calc( 100% / 7 );
-        height: 50px;// calc( 100% / 7 );
-        border-right: solid 1px rgba(0,0,0,0.4);
+        height: 50px - 3px;
+        border-right: solid 1px rgba(0,0,0,0.2);
+        background-color: rgba(255, 255, 255, 0.2);
+        border-radius: 0;
 
         &.cl--selected{
             background-color: #4a90e2;
             color: white;
             font-weight: bold;
-            border-radius: 3px;
-            border: 2px solid #195fb1;
-            margin-left: -1px;
             box-sizing: content-box;
-            width: calc( 100% / 7 - 3px );
-            height: 50px - 3px;
         }
 
         &.cl--disabled{
