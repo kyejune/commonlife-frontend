@@ -35,8 +35,9 @@ class HeaderOfReservation extends Component {
 			</Link>
 
 			<Link to={ '/reservation/history' } className="cl-reservation__link-recent-reserve cl-reservation__link-recent-reserve--ready">
-				<i><img src={recentReserveReady} alt="" height="20"/></i>
+				{/*<i><img src={recentReserveReady} alt="" height="20"/></i>*/}
 				{/*<span>예약대기</span>*/}
+				<span>&nbsp;</span>
 				{/*<span className="cl-reservation__link-recent-reserve-count">0</span>*/}
 			</Link>
 
