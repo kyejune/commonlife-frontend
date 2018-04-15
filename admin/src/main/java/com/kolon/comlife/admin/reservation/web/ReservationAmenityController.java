@@ -38,6 +38,7 @@ import javax.servlet.http.HttpSession;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -87,7 +88,7 @@ public class ReservationAmenityController {
             , ModelAndView mav
             , HttpSession session
     ) {
-        List<ReservationAmenityInfo> amenities = service.index();
+        List<ReservationAmenityInfo> amenities = service.index( new HashMap() );
 
         mav.addObject( "amenities", amenities );
 

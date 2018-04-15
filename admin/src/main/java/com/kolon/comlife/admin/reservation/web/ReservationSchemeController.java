@@ -71,7 +71,7 @@ public class ReservationSchemeController {
         List<ComplexInfo> complexes = complexService.getComplexList();
         mav.addObject( "complexes", complexes );
 
-        List<ReservationAmenityInfo> amenities = amenityService.index();
+        List<ReservationAmenityInfo> amenities = amenityService.index( new HashMap() );
         mav.addObject( "amenities", amenities );
 
         mav.addObject( "cmplxIdx", cmplxIdx );
@@ -187,7 +187,7 @@ public class ReservationSchemeController {
         List<ComplexInfo> complexes = complexService.getComplexList();
         mav.addObject( "complexes", complexes );
 
-        List<ReservationAmenityInfo> amenities = amenityService.index();
+        List<ReservationAmenityInfo> amenities = amenityService.index( new HashMap() );
         mav.addObject( "amenities", amenities );
 
         mav.addObject( "cmplxIdx", cmplxIdx );
@@ -195,6 +195,11 @@ public class ReservationSchemeController {
 
         ReservationSchemeInfo scheme = service.show( idx );
         mav.addObject( "scheme", scheme );
+
+        HashMap params = new HashMap();
+        params.put( "schemeIdx", scheme.getIdx() );
+        List<ReservationAmenityInfo> schemeAmenities = amenityService.indexOfSchemes( params );
+        scheme.setAmenities( schemeAmenities );
 
         if( scheme.getParentIdx() != 0 ) {
             ReservationGroupInfo group = groupService.show( scheme.getParentIdx() );
@@ -219,6 +224,7 @@ public class ReservationSchemeController {
             , @RequestParam( value = "code", required = false ) String code
             , @RequestParam( value = "icon", required = false ) String icon
             , @RequestParam( value = "reservationType", required = false ) String reservationType
+            , @RequestParam( value = "images[]", required = false ) String[] images
             , @RequestParam( value = "title", required = false ) String title
             , @RequestParam( value = "summary", required = false ) String summary
             , @RequestParam( value = "description", required = false ) String description
@@ -247,6 +253,7 @@ public class ReservationSchemeController {
         info.setCode( code );
         info.setIcon( icon );
         info.setReservationType( reservationType );
+        info.setImages( StringUtils.join( images, "," ) );
         info.setTitle( title );
         info.setSummary( summary );
         info.setDescription( description );

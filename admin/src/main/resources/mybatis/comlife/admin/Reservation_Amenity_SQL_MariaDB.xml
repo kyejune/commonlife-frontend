@@ -19,6 +19,33 @@
                     </when>
                 </choose>
     </select>
+    <select id="indexOfSchemes" parameterType="java.util.Map" resultType="reservationAmenityInfo">
+        SELECT
+        *
+        FROM
+        `RESERVATION_AMENITIES`
+        JOIN
+        `RESERVATION_AMENITY_SCHEME_REATIONS`
+        ON
+        `RESERVATION_AMENITIES`.`IDX` = `RESERVATION_AMENITY_SCHEME_REATIONS`.`AMENITY_IDX`
+        WHERE
+        `DEL_YN` = 'N'
+        <choose>
+            <when test='ids != null'>
+                AND
+                `RESERVATION_AMENITIES`.`IDX` IN
+                <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </when>
+        </choose>
+        <choose>
+            <when test='schemeIdx != null'>
+                AND
+                `RESERVATION_AMENITY_SCHEME_REATIONS`.`SCHEME_IDX` = #{schemeIdx}
+            </when>
+        </choose>
+    </select>
     <select id="show" parameterType="java.util.Map" resultType="reservationAmenityInfo">
         <![CDATA[
             SELECT

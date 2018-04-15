@@ -229,7 +229,11 @@
                                     <div>
                                         <c:forEach var="amenity" items="${amenities}">
                                             <label class="checkbox-inline">
-                                                <input type="checkbox" name="amenities[]" value="${amenity.idx}">
+                                                <input type="checkbox" name="amenities[]" value="${amenity.idx}"
+                                                <c:forEach var="e" items="${scheme.amenities}">
+                                                    <c:if test="${e.idx == amenity.idx}"> checked </c:if>
+                                                </c:forEach>
+                                                >
                                                 <span style="background: #666; padding: 2px; display: inline-block; margin-right: 0.5em;">
                                                     <img src="/admin/reservation-amenities/icon.do?idx=${amenity.iconIdx}" style="width: 18px;" alt="">
                                                 </span>
@@ -237,6 +241,11 @@
                                             </label>
                                         </c:forEach>
                                     </div>
+                                </div>
+                                <div>
+                                    <c:forEach var="e" items="${scheme.amenities}">
+                                        ${ e.name }
+                                    </c:forEach>
                                 </div>
                                 <div class="form-group">
                                     <label>주의사항</label>
