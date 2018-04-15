@@ -416,7 +416,7 @@ class ReservationDetail extends Component {
 							this.state.scheme.amenities.map( ( item, key ) => {
 								return <span key={ key } style={{ marginRight: '1em' }}>
 									<img src={ Store.api + '/reservation-amenities/' + item.iconIdx + '/icon' }
-										 style={{ width: '18px', display: 'inline-block', marginRight: '0.5em' }} alt=""/>
+										 style={{ height: '12px', display: 'inline-block', marginRight: '0.3em' }} alt=""/>
 									{ item.name }
 								</span>
 							} )
