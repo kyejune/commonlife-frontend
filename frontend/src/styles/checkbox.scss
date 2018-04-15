@@ -1,15 +1,29 @@
 .cl__checkbox{
   width: 14px;
   height: 14px;
-  background-color: rgba(255, 255, 255, 0.7);
-  border: 1px solid #6B6D70;
+  background-color: transparent;////rgba(255, 255, 255, 0.7);
+  border: 1px solid #ACACAC;
   border-radius: 3px;
 
   &.cl--checked{
     background-color: #80d6ff;
-    border-color: #80d6ff;
-    background-image: url('images/ic-check@3x.png');
+    border-color: #25539F;
+    background-image: url('images/ic-iot-checked-blue@3x.png');
     background-size: 14px;
     background-position: center;
   }
+}
+
+.cl-bg--dark, .cl-bg--strongdark {
+
+  .cl__checkbox{
+    border-color: #686A6E;
+
+    &.cl--checked{
+        background-image: url('images/ic-check@3x.png');
+        background-color: #94D5FB;
+        border-color: #94D5FB;
+    }
+  }
+
 }
