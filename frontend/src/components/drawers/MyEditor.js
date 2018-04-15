@@ -77,7 +77,8 @@ class MyEditor extends Component {
                 <EditableList items={ items }
                               strongdark
                               onCheck={ this.onCheck } clear={ selectedLen === 0 }
-                              onAlign={ this.onAlign } />
+                              onAlign={ this.onAlign }
+                />
 
 
                 <div className="cl-iot-expose-link-group">

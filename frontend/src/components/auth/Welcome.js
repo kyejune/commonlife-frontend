@@ -75,7 +75,7 @@ class Welcome extends Component {
                 </p>
 
 
-                <div className="cl-thumb-container text-center mt-6em">
+                <div className="cl-thumb-container text-center">
                     <img src={ this.state.thumb } alt="" onClick={ this.selectPicture }/>
                     <p className="fs-20 color-white cl-bold mt-1em">{user.id || '사용자 아이디'}</p>
                     <p className="color-white50">{ `${user.name} ${user.mail}` }</p>

@@ -45,7 +45,7 @@ class IotModeEditor extends Component {
 
         return (
             <div>
-                <EditableList items={ items } radio onCheck={ this.onCheck } onAlign={ this.onAlign } />
+                <EditableList items={ items } radio strongdark onCheck={ this.onCheck } onAlign={ this.onAlign }/>
 
                 <footer className={ classNames( "cl-opts__footer", {"cl-opts__footer--hide":this.state.selectedId === null })  }>
                     <Link to={`/iot/mode/${this.state.selectedId}`} className="cl-flex">

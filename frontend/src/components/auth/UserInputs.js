@@ -45,6 +45,7 @@ class UserInputs extends Component {
             this.forceUpdate();
         }
 
+
         return BOOL;
     }
 

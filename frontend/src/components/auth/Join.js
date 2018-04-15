@@ -175,7 +175,7 @@ class Join extends Component {
 
             </div>
 
-            <footer className="cl-opts__footer cl-flex cl-bg--darkgray">
+            <footer className="cl-opts__footer cl-flex">
 
                 {IS_END && <Link to="/login" className="ml-auto mr-auto cl-bold color-primary">로그인</Link>}
 

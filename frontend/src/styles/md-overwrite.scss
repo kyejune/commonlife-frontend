@@ -45,6 +45,11 @@ $md-secondary-color: #f4ca5c;
 .md-toolbar {
     @media screen and (min-width: 320px) {
         height: 46px !important;
+
+        .md-btn--text {
+            margin-top: 4px !important;
+            margin-bottom: 4px !important;
+        }
     }
 }
 

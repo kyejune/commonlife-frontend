@@ -36,7 +36,7 @@ class NotificationCenter extends Component {
                         <IconLoader src={undefined}/>
                         <div>
                             <h4 className="cl__title">노티제목</h4>
-                            <p className="cl__desc mt-05em">노티 구구절절</p>
+                            <p className="cl__desc mt-02em">노티 구구절절</p>
                         </div>
 
                         <div className="ml-auto">
@@ -50,7 +50,7 @@ class NotificationCenter extends Component {
                         <IconLoader src={undefined}/>
                         <div>
                             <h4 className="cl__title">노티제목</h4>
-                            <p className="cl__desc mt-05em">
+                            <p className="cl__desc mt-02em">
                                 노티 구구절절<br/>
                                 예약내용 구구절절
                             </p>
