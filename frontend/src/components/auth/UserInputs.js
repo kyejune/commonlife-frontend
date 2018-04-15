@@ -60,7 +60,7 @@ class UserInputs extends Component {
         // console.log(MakingUserData.user.id, '아이디 중복확인');
         Net.checkIdDuplicate( MakingUserData.user.id, res=>{
             alert( res.msg );
-            this.setState({ checkedId: res.isExisted });
+            this.setState({ checkedId: !res.isExisted });
         });
     }
 
