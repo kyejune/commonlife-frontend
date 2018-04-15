@@ -72,9 +72,15 @@ public class PostServiceImpl implements PostService {
         }
         // 게시물의 사용자 정보 연결
         userInfo = userList.get(0);
-        userInfo.setImgSrc(
-                imageStoreService.getImageFullPathByIdx(
-                        userInfo.getImageIdx(), ImageInfoUtil.SIZE_SUFFIX_SMALL ) );
+
+        if( userInfo.getImageIdx() > -1 ) {
+            userInfo.setImgSrc(
+                    imageStoreService.getImageFullPathByIdx(
+                            userInfo.getImageIdx(), ImageInfoUtil.SIZE_SUFFIX_SMALL ) );
+        } else {
+            userInfo.setImgSrc( null ); // 이미지 없는 경우, NULL 셋팅
+        }
+
         postInfo.setUser( userInfo );
 
         postIdxs.add(id);

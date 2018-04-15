@@ -258,7 +258,10 @@
         <script>
             $( function() {
                 var HOST = 'http://localhost:8080';
-                if( window.location.hostname !== 'localhost' ) {
+                if( window.location.hostname === 'cl-stage-admin.cyville.net' ) {
+                    HOST = 'https://cl-stage.cyville.net';
+                }
+                else if( window.location.hostname !== 'localhost' ) {
                     HOST = 'https://clback.cyville.net';
                 }
 

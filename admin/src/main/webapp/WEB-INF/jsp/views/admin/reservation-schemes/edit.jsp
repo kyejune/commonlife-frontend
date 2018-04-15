@@ -97,7 +97,7 @@
                                     <div id="thumbnails">
                                         <c:if test="${scheme.images != null}">
                                             <c:forEach var="image" items="${scheme.images.split(',')}">
-                                                <div class="thumbnail-viewer" style="background-image: url( http://localhost:8080/imageStore/${image} );">
+                                                <div class="thumbnail-viewer" data-image="/imageStore/${image}">
                                                     <input type="hidden" name="images[]" value="${image}">
                                                     <button class="delete">&times;</button>
                                                 </div>
@@ -289,7 +289,10 @@
         <script>
             $( function() {
                 var HOST = 'http://localhost:8080';
-                if( window.location.hostname !== 'localhost' ) {
+                if( window.location.hostname === 'cl-stage-admin.cyville.net' ) {
+                    HOST = 'https://cl-stage.cyville.net';
+                }
+                else if( window.location.hostname !== 'localhost' ) {
                     HOST = 'https://clback.cyville.net';
                 }
 
@@ -335,6 +338,12 @@
                 // 이미지 삭제
                 $( document ).on( 'click', '.thumbnail-viewer .delete', function( event ) {
                     $( event.currentTarget ).closest( '.thumbnail-viewer' ).remove();
+                } );
+
+                // 썸네일 이미지 표시
+                $( '.thumbnail-viewer' ).each( function( index, element ) {
+                    var $element = $( element );
+                    $element.css( 'backgroundImage', 'url(' + HOST + $element.data( 'image' ) + ')')
                 } );
             } );
         </script>
