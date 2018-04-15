@@ -1,6 +1,7 @@
 package com.kolon.comlife.admin.reservation.service.impl;
 
 import com.kolon.comlife.admin.reservation.model.ReservationInfo;
+import com.kolon.comlife.admin.reservation.string.Reservation;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -33,5 +34,13 @@ public class ReservationDAO {
 
     public int delete( ReservationInfo info ) {
         return sqlSession.delete("Reservation.delete", info);
+    }
+
+    public List<ReservationInfo> queue() {
+        return sqlSession.selectList( "Reservation.queue" );
+    }
+
+    public int updateStatus( ReservationInfo info ) {
+        return sqlSession.update( "Reservation.updateStatus", info );
     }
 }

@@ -162,4 +162,58 @@ public class ReservationController {
         return mav;
     }
 
+    @RequestMapping(value = "queue.do")
+    public ModelAndView queueList (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+    ) {
+        List<ReservationInfo> reservations = service.queue();
+
+        List<Integer> ids = new ArrayList<Integer>();
+        for (ReservationInfo item :
+                reservations) {
+            ids.add( item.getParentIdx() );
+        }
+
+        HashMap params = new HashMap<String, Object>();
+        if( ids.size() > 0 ) {
+            params.put( "ids", ids );
+        }
+        List<ReservationSchemeInfo> schemes = schemeService.index( params );
+
+        for (ReservationInfo item : reservations) {
+            for (ReservationSchemeInfo scheme : schemes) {
+                if (scheme.getIdx() == item.getParentIdx()) {
+                    item.setScheme(scheme);
+                }
+            }
+        }
+
+        mav.addObject( "reservations", reservations );
+
+        return mav;
+    }
+
+    @RequestMapping(value = "edit-queue.do"
+            , method = RequestMethod.POST
+    )
+    public String editReservationStatus (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , HttpSession session
+            , @RequestParam( value = "idx" ) int idx
+            , @RequestParam( value = "status" ) String status
+    ) {
+
+        // 예약 틀
+        ReservationInfo info = service.show( idx );
+        info.setStatus( status );
+
+        service.updateStatus( info );
+
+        return "redirect:" + request.getHeader( "referer" );
+    }
+
 }

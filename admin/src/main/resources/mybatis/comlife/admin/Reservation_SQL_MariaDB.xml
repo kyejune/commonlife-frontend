@@ -49,4 +49,27 @@
                          CURRENT_TIMESTAMP);
         ]]>
     </insert>
+
+    <select id="queue" resultType="reservationInfo">
+        SELECT
+        `RESERVATIONS`.*,
+        `RESERVATION_SCHEMES`.`RESERVATION_TYPE`
+        FROM
+        `RESERVATIONS`
+        LEFT JOIN
+        `RESERVATION_SCHEMES`
+        ON
+        `RESERVATIONS`.`PARENT_IDX` = `RESERVATION_SCHEMES`.`IDX`
+        WHERE
+        `RESERVATION_SCHEMES`.`RESERVATION_TYPE` = 'C'
+    </select>
+
+    <update id="updateStatus" parameterType="reservationInfo">
+        UPDATE
+        `RESERVATIONS`
+        SET
+        `STATUS` = #{status}
+        WHERE
+        `IDX` = #{idx}
+    </update>
 </mapper>
