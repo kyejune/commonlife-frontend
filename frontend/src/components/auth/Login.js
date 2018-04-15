@@ -33,7 +33,17 @@ class Login extends Component {
         this.storage.save( 'savedId', this.state.id );
 
         Net.login( this.state.id, this.state.pw, res=>{
-           this.props.history.push('/');
+
+
+            // 최초 방문은 웰컴 페이지로
+            if( this.storage.read('visited') ){
+                this.props.history.push('/community/feed');
+            }else{
+                this.storage.save('visited', true );
+                this.props.history.push('/welcome');
+            }
+
+
         });
 
     }

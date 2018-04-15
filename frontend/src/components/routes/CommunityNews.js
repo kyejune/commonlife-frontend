@@ -20,8 +20,10 @@ class CommunityNews extends Component {
         }
 
         intercept( Store, 'communityCmplxId', change=>{
-            Store.news = [];
-            setTimeout( this.loadPage, 0 );
+            if( change.newValue != Store.communityCmplxId ) {
+                Store.news = [];
+                setTimeout(this.loadPage, 0);
+            }
 
             return change;
         } );

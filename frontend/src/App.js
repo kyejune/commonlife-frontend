@@ -22,6 +22,7 @@ import DeviceStorage from "react-device-storage";
 import Net from "./scripts/net";
 import Store from "./scripts/store";
 import {observer} from "mobx-react";
+import Walkt from "./components/Walkt";
 
 
 class App extends Component {
@@ -56,6 +57,8 @@ class App extends Component {
         }else{
             this.props.history.push('/login');
         }
+
+        // this.props.history.push('/welcome');
     }
 
 
@@ -138,7 +141,10 @@ class App extends Component {
                         </div>
                     }
 
+                    <Route path="/welcome" component={Walkt}/>
+
                 </div>
+
 
             </HashRouter>;
 
