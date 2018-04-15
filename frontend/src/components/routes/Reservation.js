@@ -14,6 +14,9 @@ import ReserveGroupTool from 'images/r-icon-2@3x.png';
 import ReserveGroupStore from 'images/r-icon-3@3x.png';
 import ReserveGroupEtc from 'images/r-icon-4@3x.png';
 import ReserveServiceLaundry from 'images/rs-icon-1@3x.png';
+import ReserveServiceCleaning from 'images/rs-icon-2@3x.png';
+import ReserveServiceFood from 'images/rs-icon-3@3x.png';
+import ReserveServiceCarwash from 'images/rs-icon-4@3x.png';
 import ReserveIcPlus from 'images/page-1@3x.png';
 import { observer } from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
@@ -132,7 +135,22 @@ class Reservation extends Component {
 							return <li className="cl-reservation__list-item" key={ key }>
                                 <div>
                                     <div className="cl-flex-between">
-                                        <img src={ReserveServiceLaundry} alt="" className="cl-reservation__list-item-type-img"/>
+										{ scheme.icon === 'CLEANING' &&
+										<img src={ReserveServiceCleaning} alt=""
+											 className="cl-reservation__list-item-type-img"/>
+										}
+										{ scheme.icon === 'LAUNDRY' &&
+										<img src={ReserveServiceLaundry} alt=""
+											 className="cl-reservation__list-item-type-img"/>
+										}
+										{ scheme.icon === 'FOOD' &&
+										<img src={ReserveServiceFood} alt=""
+											 className="cl-reservation__list-item-type-img"/>
+										}
+										{ scheme.icon === 'CARWASH' &&
+										<img src={ReserveServiceCarwash} alt=""
+											 className="cl-reservation__list-item-type-img"/>
+										}
                                         <div className="cl-reservation__list-item-text">
                                             <h5>{ scheme.title }</h5>
                                             <p className="cl-ellipsis">{ scheme.summary }</p>

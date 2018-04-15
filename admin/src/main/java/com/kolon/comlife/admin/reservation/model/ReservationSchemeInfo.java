@@ -8,6 +8,7 @@ public class ReservationSchemeInfo {
     private int cmplxIdx;
     private int parentIdx;
     private String code;
+    private String icon;
     private String reservationType;
     private String images;
     private String title;
@@ -64,6 +65,14 @@ public class ReservationSchemeInfo {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getReservationType() {

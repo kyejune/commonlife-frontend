@@ -97,6 +97,7 @@ public class ReservationSchemeController {
             , @RequestParam( value = "allowCmplxIdxes[]" ) int[] allowCmplxIdxes
             , @RequestParam( value = "parentIdx", required = false, defaultValue = "0") int parentIdx
             , @RequestParam( value = "code", required = false ) String code
+            , @RequestParam( value = "icon", required = false ) String icon
             , @RequestParam( value = "reservationType", required = false ) String reservationType
             , @RequestParam( value = "images[]", required = false ) String[] images
             , @RequestParam( value = "title", required = false ) String title
@@ -125,6 +126,7 @@ public class ReservationSchemeController {
         info.setCmplxIdx( cmplxIdx );
         info.setParentIdx( parentIdx );
         info.setCode( code );
+        info.setIcon( icon );
         info.setReservationType( reservationType );
         info.setImages( StringUtils.join( images, "," ) );
         info.setTitle( title );
@@ -215,6 +217,7 @@ public class ReservationSchemeController {
             , @RequestParam( value = "allowCmplxIdxes[]" ) int[] allowCmplxIdxes
             , @RequestParam( value = "parentIdx", required = false, defaultValue = "0") int parentIdx
             , @RequestParam( value = "code", required = false ) String code
+            , @RequestParam( value = "icon", required = false ) String icon
             , @RequestParam( value = "reservationType", required = false ) String reservationType
             , @RequestParam( value = "title", required = false ) String title
             , @RequestParam( value = "summary", required = false ) String summary
@@ -242,6 +245,7 @@ public class ReservationSchemeController {
         info.setCmplxIdx( cmplxIdx );
         info.setParentIdx( parentIdx );
         info.setCode( code );
+        info.setIcon( icon );
         info.setReservationType( reservationType );
         info.setTitle( title );
         info.setSummary( summary );

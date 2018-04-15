@@ -73,11 +73,20 @@
                                 </div>
                                 </c:if>
                                 <div class="form-group">
+                                    <label>아이콘</label>
+                                    <select name="icon" class="form-control">
+                                        <option value="CLEANING" <c:if test="${scheme.icon == 'CLEANING'}"> selected </c:if> >CLEANING</option>
+                                        <option value="LAUNDRY" <c:if test="${scheme.icon == 'LAUNDRY'}"> selected </c:if> >LAUNDRY</option>
+                                        <option value="FOOD" <c:if test="${scheme.icon == 'FOOD'}"> selected </c:if> >FOOD</option>
+                                        <option value="CARWASH" <c:if test="${scheme.icon == 'CARWASH'}"> selected </c:if> >CARWASH</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label>예약 유형</label>
                                     <select name="reservationType" class="form-control">
-                                        <option value="A" <c:if test="${scheme.reservationType == 'A'}"></c:if> >예약 A: 시간 단위 대여</option>
-                                        <option value="B" <c:if test="${scheme.reservationType == 'B'}"></c:if> >예약 B: 일자 단위 대여</option>
-                                        <option value="C" <c:if test="${scheme.reservationType == 'C'}"></c:if> >예약 C: 장기 대여</option>
+                                        <option value="A" <c:if test="${scheme.reservationType == 'A'}"> selected </c:if> >예약 A: 시간 단위 대여</option>
+                                        <option value="B" <c:if test="${scheme.reservationType == 'B'}"> selected </c:if> >예약 B: 일자 단위 대여</option>
+                                        <option value="C" <c:if test="${scheme.reservationType == 'C'}"> selected </c:if> >예약 C: 장기 대여</option>
                                     </select>
                                 </div>
                                 <div class="form-group">

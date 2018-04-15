@@ -64,8 +64,22 @@ class ReservationList extends Component{
 							return <li className="cl-reservation__list-item cl-reservation__notice" key={ key }>
                                 <div>
                                     <div className="cl-flex-between">
-                                        <img src={ReserveServiceCleaning} alt=""
-                                             className="cl-reservation__list-item-type-img"/>
+										{ scheme.icon === 'CLEANING' &&
+										<img src={ReserveServiceCleaning} alt=""
+											 className="cl-reservation__list-item-type-img"/>
+										}
+										{ scheme.icon === 'LAUNDRY' &&
+										<img src={ReserveServiceLaundry} alt=""
+											 className="cl-reservation__list-item-type-img"/>
+										}
+										{ scheme.icon === 'FOOD' &&
+										<img src={ReserveServiceFood} alt=""
+											 className="cl-reservation__list-item-type-img"/>
+										}
+										{ scheme.icon === 'CARWASH' &&
+										<img src={ReserveServiceCarwash} alt=""
+											 className="cl-reservation__list-item-type-img"/>
+										}
                                         <div className="cl-reservation__list-item-text">
                                             <h5>{ scheme.title }</h5>
                                             <p className="cl-ellipsis">{ scheme.summary }</p>

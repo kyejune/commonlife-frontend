@@ -71,6 +71,15 @@
                                 </div>
                                 </c:if>
                                 <div class="form-group">
+                                    <label>아이콘</label>
+                                    <select name="icon" class="form-control">
+                                        <option value="CLEANING">CLEANING</option>
+                                        <option value="LAUNDRY">LAUNDRY</option>
+                                        <option value="FOOD">FOOD</option>
+                                        <option value="CARWASH">CARWASH</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
                                     <label>이미지</label>
                                     <div class="form-group">
                                         <input type="file" id="image-selector" multiple accept="image/*">
