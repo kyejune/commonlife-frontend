@@ -114,9 +114,11 @@ const Store = observable({
 
     cmplxId:'127',
     homeId:'1',
+    communityCmplxId:'127',
 
     // 모든 지점 목록
     complexes: [],
+    complexMap:{},
 
     auth:{
       name: '아무개',

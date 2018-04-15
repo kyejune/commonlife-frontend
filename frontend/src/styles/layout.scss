@@ -65,8 +65,8 @@ body.platform--ios{
 
     .md-drawer .dialogs__content > div {
         &.drawer-fitted-box--b {
-            height: calc(100vh - 3.90625vh - 50px - 56px);
-            min-height: calc(100vh - 3.90625vh - 50px - 56px);
+            height: calc(100vh - 3.90625vh - 50px - 46px);
+            min-height: calc(100vh - 3.90625vh - 50px - 46px);
         }
     }
 }
@@ -126,8 +126,8 @@ body.cl-dom--added{
 .md-drawer .dialogs__content > div {
     &.drawer-fitted-box--b {
         @extend .abs-scroll;
-        height: calc(100vh - 50px - 56px);
-        min-height: calc(100vh - 50px - 56px);
+        height: calc(100vh - 50px - 46px);
+        min-height: calc(100vh - 50px - 46px);
 
         .cl-opts__footer {
             height: 50px;
@@ -138,6 +138,16 @@ body.cl-dom--added{
 .cl-tab--community{
     .cl-fitted-box{
         @extend .abs-scroll;
+    }
+
+    .cl-avatar {
+        background-image: url("images/profile-thumb-img-community@3x.png");
+    }
+}
+
+.cl-tab--news {
+    .cl-avatar {
+        background-image: url("images/profile-thumb-img-news@3x.png");
     }
 }
 
@@ -433,7 +443,7 @@ body.cl-dom--added{
     background-image: url("images/arrow-drop-down-28@3x.png");
     background-repeat: no-repeat;
     background-position: right center;
-    background-size: 19px;
+    background-size: 15px;
 }
 
 .cl-header__alert-btn {

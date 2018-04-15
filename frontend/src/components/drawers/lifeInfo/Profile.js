@@ -26,14 +26,16 @@ class Profile extends Component {
             editable: false,
         }
 
-        this.validator = new SimpleReactValidator({
+        this.passwordValidator = new SimpleReactValidator({
             same:{
                 message:'password mismatch',
                 rule: (val, options)=>{
                     return (val.length > 0) && (val === options[0]);
                 }
-            },
+            }
+        });
 
+        this.mailValidator = new SimpleReactValidator({
             mail:{
                 message:'The :attribute must be a valid email address.',
                 rule: val =>{
@@ -41,10 +43,11 @@ class Profile extends Component {
                     return R.test( val );
                 }
             }
-        });
+        })
     }
 
     componentDidMount(){
+        this.setState({ password:'', passwordConfirm:'' });
         this.loadData();
     }
 
@@ -59,18 +62,24 @@ class Profile extends Component {
     }
 
     changeEmail=()=>{
-        Net.changeEmail( this.state.newEmail, res => {
-           this.loadData();
-        });
+        if( this.mailValidator.allValid() ){
+            Net.changeEmail( this.state.newEmail, res => {
+                this.loadData();
+            });
+        }else{
+            this.mailValidator.showMessages();
+            this.forceUpdate();
+        }
+
     }
 
     requestChangePassword=()=>{
-        if( this.validator.allValid() ){
+        if( this.passwordValidator.allValid() ){
             Net.changePassword( this.state.currentPassword, this.state.password, res=>{
                this.setState({ editable: false });
             });
         }else{
-            this.validator.showMessages();
+            this.passwordValidator.showMessages();
             this.forceUpdate();
         }
     }
@@ -147,12 +156,12 @@ class Profile extends Component {
                 <input type="password" className="cl__input w-100" placeholder="비밀번호"
                        value={this.state.password} onChange={ (e)=> this.setState({ password: e.target.value }) }
                 />
-                {this.validator.message('password', this.state.password, 'required|min:6|max:12')}
+                {this.passwordValidator.message('password', this.state.password, 'required|min:6|max:12')}
 
                 <input type="password" className="cl__input w-100 mb-2em" placeholder="비밀번호 확인"
                        value={this.state.passwordconfirm} onChange={ (e)=> this.setState({ passwordconfirm: e.target.value }) }
                 />
-                {this.validator.message('passwordConfirm', this.state.passwordconfirm, `required|min:6|max:12|same:${this.state.password}`)}
+                {this.passwordValidator.message('passwordConfirm', this.state.passwordconfirm, `required|min:6|max:12|same:${this.state.password}`)}
 
 
                 <button className="cl__button--dark w-100" onClick={this.requestChangePassword}>비밀번호 변경 완료</button>
@@ -166,7 +175,7 @@ class Profile extends Component {
                        placeholder="이메일 주소"
                        value={this.state.newEmail} onChange={ e=> this.setState({ newEmail: e.target.value }) }
                 />
-                {this.validator.message('name', this.state.newEmail, 'required|mail', 'text-danger')}
+                {this.mailValidator.message('name', this.state.newEmail, 'required|mail', 'text-danger')}
                 <p className="color-white opacity-80 fs-12 mt-1em">※ 기타 사용자 정보변경시 관리자에게 문의해 주세요.</p>
 
                 <div className="cl-button-group mt-1em">

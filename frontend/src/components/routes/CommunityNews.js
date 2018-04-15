@@ -3,6 +3,7 @@ import {observer} from 'mobx-react';
 import CardItem from 'components/ui/CardItem';
 import Store from "scripts/store";
 import Net from "../../scripts/net";
+import {intercept} from "mobx/lib/mobx";
 
 class CommunityNews extends Component {
 
@@ -17,6 +18,13 @@ class CommunityNews extends Component {
         this.state = {
             isEmpty: false,
         }
+
+        intercept( Store, 'communityCmplxId', change=>{
+            Store.news = [];
+            setTimeout( this.loadPage, 0 );
+
+            return change;
+        } );
     }
 
 
@@ -24,7 +32,7 @@ class CommunityNews extends Component {
         this.loadPage( 0 );
     }
 
-    loadPage=( targetPage )=>{
+    loadPage=( targetPage=0 )=>{
         if( targetPage >= this.maxPage ) return;
 
         this.isLoading = true;
@@ -67,7 +75,7 @@ class CommunityNews extends Component {
 
 
         return (
-            <div ref={ r => this.scrollBox = r } className="cl-fitted-box">
+            <div ref={ r => this.scrollBox = r } className="cl-fitted-box cl-tab--news">
 
                 <div className="cl-card-items">
 					{ Content }
