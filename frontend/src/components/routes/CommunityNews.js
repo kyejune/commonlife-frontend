@@ -67,7 +67,7 @@ class CommunityNews extends Component {
 
 
         return (
-            <div ref={ r => this.scrollBox = r } className="cl-fitted-box">
+            <div ref={ r => this.scrollBox = r } className="cl-fitted-box cl-tab--news">
 
                 <div className="cl-card-items">
 					{ Content }

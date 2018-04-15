@@ -139,6 +139,16 @@ body.cl-dom--added{
     .cl-fitted-box{
         @extend .abs-scroll;
     }
+
+    .cl-avatar {
+        background-image: url("images/profile-thumb-img-community@3x.png");
+    }
+}
+
+.cl-tab--news {
+    .cl-avatar {
+        background-image: url("images/profile-thumb-img-news@3x.png");
+    }
 }
 
 .cl-tab--reservation{
@@ -433,7 +443,7 @@ body.cl-dom--added{
     background-image: url("images/arrow-drop-down-28@3x.png");
     background-repeat: no-repeat;
     background-position: right center;
-    background-size: 19px;
+    background-size: 15px;
 }
 
 .cl-header__alert-btn {

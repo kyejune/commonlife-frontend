@@ -148,8 +148,6 @@ class CardItem extends Component {
                     </div>
                     }
 
-                    <hr/>
-
                     {/* schedule, qa에 관한 데이터는 아직 기준이 명확하지 못해서 임시로 지정 */}
                     <LikeShareAndSome
                         like={{

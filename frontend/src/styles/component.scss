@@ -354,6 +354,14 @@
             margin-top: 0 !important;
         }
     }
+
+    &.cl-card-item--feed {
+        .cl-like-share {
+            padding-top: 8px;
+            margin-top: 14px;
+            border-top: 1px solid rgba(207, 207, 207, 0.7);
+        }
+    }
 }
 
 .cl-card-item--dark{
@@ -564,7 +572,7 @@
         width: 56px;
 
         &+.cl-counter__button{
-            margin-left: -20px;
+            margin-left: -22px;
         }
 
         //&:hover {
@@ -665,6 +673,7 @@ a.cl-map__link--branch{
     }
 
     .rc-slider-track {
+        z-index: 9;
         height: 2px;
         margin-left: 0;
         background-color: #0F3E78;
@@ -690,13 +699,14 @@ a.cl-map__link--branch{
         width: 2px;
         height: 2px;
         border: transparent;
-        background-color: #565656;
+        background-color: rgba(255, 255, 255,0.5);
         border-radius: 0;
     }
 
 
     .cl-handle{
         position: absolute;
+        z-index: 99;
         width: 12px;
         height: 12px;
         border-radius: 50%;
