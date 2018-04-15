@@ -1,6 +1,29 @@
 .cl-walkt{
 
+    background-color: black;
     color: white;
+
+
+    .cl-skip__button{
+        position: absolute;
+        color: rgba( 255, 255, 255, 0.5 );
+        font-size: 16px;
+        font-weight: bold;
+        top: 20px;
+        right: 5%;
+        z-index: 1;
+    }
+
+    .cl-walkt-next__button{
+        position: absolute;
+        right: 5%;
+        bottom: 20px;
+        color: white;
+        z-index: 3;
+        font-size: 16px;
+        font-weight: bold;
+        z-index: 10;
+    }
 
     footer{
         position: absolute;
@@ -8,12 +31,8 @@
         color: white;
         width: 100%;
         padding: 5%;
-        z-index: 1;
-
-        a{
-            color: white;
-            font-size: 16px;
-        }
+        z-index: 3;
+        pointer-events: none;
     }
 
     .swiper-pagination-fraction{
@@ -27,6 +46,33 @@
 
     .swiper-container{
         height: 100%;
+
+        &:before, &:after{
+            content:'';
+            background-color: #1052A5;
+            z-index: 2;
+            position: absolute;
+        }
+
+        &:before{
+            top: 0;
+            left: 0;
+            width: 25px;
+            height: 50px;
+            clip-path: polygon( 0 0, 100% 0, 0 100% );
+        }
+
+        &:after{
+            bottom: 0;
+            right: 0;
+            width: 240px;
+            height: 475px;
+            opacity: 0.4;
+            background-color: #001842;
+            clip-path: polygon( 100% 0, 100% 100%, 0 100% );
+        }
+
+
     }
 
     .cl-walkt-page{
