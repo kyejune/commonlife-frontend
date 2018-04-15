@@ -346,7 +346,7 @@ class ReservationDetail extends Component {
 			];
 		} else {
 			FooterBtns = [
-				<button key="cancel">취소</button>,
+				<button key="cancel" onClick={() => window.history.back()}>취소</button>,
 				<button key="reserve" className="cl-plus-label__button" onClick={() => this.reserve()}>예약하기</button>
 			];
 		}
