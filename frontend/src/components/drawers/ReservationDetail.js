@@ -412,6 +412,15 @@ class ReservationDetail extends Component {
 						{this.state.inclusion.comment}
 					</p>
 					<div className="cl-icons">
+						{
+							this.state.scheme.amenities.map( ( item, key ) => {
+								return <span key={ key } style={{ marginRight: '1em' }}>
+									<img src={ Store.api + '/reservation-amenities/' + item.iconIdx + '/icon' }
+										 style={{ width: '18px', display: 'inline-block', marginRight: '0.5em' }} alt=""/>
+									{ item.name }
+								</span>
+							} )
+						}
 						{Icons}
 					</div>
 				</div>
