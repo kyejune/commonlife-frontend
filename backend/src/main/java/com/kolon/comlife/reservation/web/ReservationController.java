@@ -6,6 +6,8 @@ import com.kolon.comlife.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.reservation.service.ReservationGroupService;
 import com.kolon.comlife.reservation.service.ReservationSchemeService;
 import com.kolon.comlife.reservation.service.ReservationService;
+import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -280,8 +282,16 @@ public class ReservationController {
         // 예약 틀
         ReservationSchemeInfo scheme = schemeService.show( parentIdx );
 
+        AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+
+        // TODO: 로컬에서 인증 정보가 없으면 yunamkim(userId: 632)을 기본값으로 출력한다. 추후 수정 필요.
+        int idx = 632;
+        if( authUserInfo != null ) {
+            idx = authUserInfo.getHomeId();
+        }
+
         ReservationInfo info = new ReservationInfo();
-        info.setUsrID( 14 ); // TODO: 사용자 아이디 입력
+        info.setUsrID( idx ); // TODO: 사용자 아이디 입력
         info.setStatus( "RESERVED" );
         info.setStartDt( startDt );
         info.setStartTime( startTime );
