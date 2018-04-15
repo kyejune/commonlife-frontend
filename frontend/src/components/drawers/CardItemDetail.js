@@ -24,6 +24,7 @@ class CardItemDetailDrawer extends Component {
         this.props.updateTitle('글보기');
 
         Net.getCardContent( this.props.match.params.tab, this.props.match.params.id, data => {
+            console.log( data );
             this.setState(data);
         });
     }
@@ -87,12 +88,15 @@ class CardItemDetailDrawer extends Component {
         const PostType = this.state.postType;
 
         let userThumb = {};
-        if (this.state.user.imgSrc )
+        if (this.state.user.imgSrc ) {
             userThumb.backgroundImage = `url(${this.state.user.imgSrc})`;
+        }
+
+        console.log('>>>>', this.state.user.imgSrc );
 
         let imgAddr;
         if (this.state.postFiles.length > 0 ) {
-            imgAddr = this.state.postFiles[0].largePath;
+            imgAddr = this.state.postFiles[0].mediumPath;
         }
 
         let duration;
@@ -108,12 +112,15 @@ class CardItemDetailDrawer extends Component {
             </button>;
         }
 
+        let cn = "cl-card-detail";
+        // if( PostType === 'feed' ) cn = 'cl-card-detail--feed';
 
 
-        return <div className="cl-card-detail">
+        return <div className={ cn }>
+
             {/* event 타입 아니면 이미지 노출 */}
             { imgAddr && PostType !== 'event' &&
-            <img className="cl-card-item__img" src={imgAddr} width="100%" alt="첨부 이미지"/>
+            <img className="cl-card-item__img" src={imgAddr} alt="첨부 이미지" width="100%"/>
             }
 
             {/* event 타입이면 타이틀과 bg를 노출 */}
@@ -122,8 +129,6 @@ class CardItemDetailDrawer extends Component {
             }
 
             <div className="cl-card-item-wrapper">
-
-
 
                 <div className={`cl-card-item cl-card-item--${PostType}`} key="item-info">
 

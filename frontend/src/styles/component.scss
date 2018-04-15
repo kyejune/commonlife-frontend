@@ -436,11 +436,17 @@
 }
 
 /* Card Item Detail */
+.cl-card-detail--feed{
+    .cl-card-item-wrapper{
+        margin-top: 0;
+    }
+}
+
 .cl-card-detail {
 
-    height: calc(100vh - 106px);
-    overflow-y: auto;
-    overflow-x: hidden;
+    //height: calc(100vh - 106px);
+    //overflow-y: auto;
+    //overflow-x: hidden;
 
     .cl-card-item-wrapper{
         position: sticky;
@@ -468,6 +474,7 @@
     .cl-card-item {
         padding-bottom: 1em;
         border-bottom: 1px solid #cfcfcf;
+        border-radius: 0;
     }
 
     .cl-card-item--event{
@@ -489,6 +496,11 @@
         color: white;
     }
 
+    .cl-card-item__img{
+        width: 100%;
+        height: auto;
+    }
+
 
     .cl-join-status{
         span{
@@ -502,7 +514,6 @@
             }
         }
     }
-
 }
 
 /* Like Lisk */

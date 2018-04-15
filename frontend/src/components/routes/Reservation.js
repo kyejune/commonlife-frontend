@@ -58,8 +58,6 @@ class Reservation extends Component {
 
 	updateRoute () {
 
-		console.log( 'updateRoute', Store.drawer );
-
 		// id위치에 특정 단어가 들어올때 처리
 		if( this.props.match.params.id === 'history' )
 			Store.pushDrawer( 'reservation-history' );

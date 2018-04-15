@@ -12,7 +12,7 @@ class DrawerContentHolder extends Component {
     constructor( props ){
         super( props );
 
-        console.log( 'DrawercontentHolder:', props );
+        // console.log( 'DrawercontentHolder:', props );
 
         this.state = {
             title: props.title,

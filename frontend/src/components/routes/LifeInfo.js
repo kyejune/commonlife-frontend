@@ -23,7 +23,7 @@ class LifeInfo extends Component {
 		Net.getInfoPage( data=> {
 
 			this.setState( data );
-			console.log( 'info dashboard:', data );
+			// console.log( 'info dashboard:', data );
 		} );
 
 	}

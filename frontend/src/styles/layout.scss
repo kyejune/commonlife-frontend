@@ -42,6 +42,8 @@ body.platform--ios{
     .dialogs__content{
         //margin-top: 3.90625vh;
         height: calc( 100vh - 3.90625vh - 46px );
+        -webkit-overflow-scrolling: touch;
+        transform: translateZ(0);
     }
 
     //.cl-full-page{
@@ -197,7 +199,7 @@ body.cl-dom--added{
 .cl-info-container.cl-tab--info{
     .cl-fitted-box{
         @extend .abs-scroll;
-        height: calc( 100vh - 158px );
+        height: calc( 100vh - 50px );
         //transiton: $dur height ease-in-out;
     }
 }
