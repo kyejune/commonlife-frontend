@@ -23,10 +23,6 @@ class MyEditor extends Component {
         }
     }
 
-    // componentWillUnmount(){
-    //     Iot.getMy();
-    // }
-
     onCheck = ( values )=>{
 
         let list = values.map( item=>{
