@@ -119,7 +119,7 @@
     }
 
     .cl-reservation__list-item-text {
-        width: calc( 100% - 45px - 75px );
+        width: calc( 100% - 45px - 80px );
         padding-left: 8px;
 
         h5 {
@@ -141,12 +141,13 @@
 
     .cl-reservation__list-item-bullet {
         @extend .cl-flex;
-        width: 75px;
+        width: 80px;
         opacity: 0.5;
         font-size: 14px;
         font-weight: 500;
         line-height: 1.29;
         color: #000000;
+        white-space: nowrap;
 
         img {
             width: 17px;
@@ -369,7 +370,7 @@
 
 .cl-reservation-list__info {
     position: relative;
-    padding: 30px 15px 24px;
+    padding: 19px 15px 13px;
     background-color: #ffffff;
     box-shadow: 0.5px 0 1px 0 rgba(0, 0, 0, 0.12), 0 1px 1px 0 rgba(0, 0, 0, 0.14);
 }
