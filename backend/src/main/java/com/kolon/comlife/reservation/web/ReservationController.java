@@ -58,41 +58,41 @@ public class ReservationController {
      * @return
      */
     private ResponseEntity bookTypeA( ReservationSchemeInfo scheme, ReservationInfo info ) {
-        Date startDttm;
-        Date endDttm;
-
-        try {
-            startDttm = dateFormat.parse( info.getStartDt() + " " + info.getStartTime() );
-        }
-        catch ( ParseException e ) {
-            logger.debug( "Parse Exception: " + e );
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "시작 일시가 유효하지 않습니다." ) );
-        }
-        try {
-            endDttm = dateFormat.parse( info.getEndDt() + " " + info.getEndTime() );
-        }
-        catch ( ParseException e ) {
-            logger.debug( "Parse Exception: " + e );
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "종료 일시가 유효하지 않습니다." ) );
-        }
-
-        Date now = new Date();
-
-        if( startDttm.getTime() - now.getTime() < 0 ) {
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "시작 일시를 과거로 설정할 수 없습니다." ) );
-        }
-
-        if( endDttm.getTime() - startDttm.getTime() < 0 ) {
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "종료 일시가 시작 일시보다 우선할 수 없습니다." ) );
-        }
+//        Date startDttm;
+//        Date endDttm;
+//
+//        try {
+//            startDttm = dateFormat.parse( info.getStartDt() + " " + "00:00:00" );
+//        }
+//        catch ( ParseException e ) {
+//            logger.debug( "Parse Exception: " + e );
+//            return ResponseEntity
+//                    .status( HttpStatus.BAD_REQUEST )
+//                    .body( new SimpleErrorInfo( "시작 일시가 유효하지 않습니다." ) );
+//        }
+//        try {
+//            endDttm = dateFormat.parse( info.getEndDt() + " " + "23:59:59" );
+//        }
+//        catch ( ParseException e ) {
+//            logger.debug( "Parse Exception: " + e );
+//            return ResponseEntity
+//                    .status( HttpStatus.BAD_REQUEST )
+//                    .body( new SimpleErrorInfo( "종료 일시가 유효하지 않습니다." ) );
+//        }
+//
+//        Date now = new Date();
+//
+//        if( startDttm.getTime() - now.getTime() < 0 ) {
+//            return ResponseEntity
+//                    .status( HttpStatus.BAD_REQUEST )
+//                    .body( new SimpleErrorInfo( "시작 일시를 과거로 설정할 수 없습니다." ) );
+//        }
+//
+//        if( endDttm.getTime() - startDttm.getTime() < 0 ) {
+//            return ResponseEntity
+//                    .status( HttpStatus.BAD_REQUEST )
+//                    .body( new SimpleErrorInfo( "종료 일시가 시작 일시보다 우선할 수 없습니다." ) );
+//        }
 
         info.setStatus( ReservationInfo.RESERVED );
 
@@ -110,41 +110,41 @@ public class ReservationController {
      * @return
      */
     private ResponseEntity bookTypeB( ReservationSchemeInfo scheme, ReservationInfo info ) {
-        Date startDttm;
-        Date endDttm;
-
-        try {
-            startDttm = dateFormat.parse( info.getStartDt() + " " + "00:00:00" );
-        }
-        catch ( ParseException e ) {
-            logger.debug( "Parse Exception: " + e );
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "시작 일시가 유효하지 않습니다." ) );
-        }
-        try {
-            endDttm = dateFormat.parse( info.getEndDt() + " " + "23:59:59" );
-        }
-        catch ( ParseException e ) {
-            logger.debug( "Parse Exception: " + e );
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "종료 일시가 유효하지 않습니다." ) );
-        }
-
-        Date now = new Date();
-
-        if( startDttm.getTime() - now.getTime() < 0 ) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(new SimpleErrorInfo("시작 일시를 과거로 설정할 수 없습니다."));
-        }
-
-        if( endDttm.getTime() - startDttm.getTime() < 0 ) {
-            return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST )
-                    .body( new SimpleErrorInfo( "종료 일시가 시작 일시보다 우선할 수 없습니다." ) );
-        }
+//        Date startDttm;
+//        Date endDttm;
+//
+//        try {
+//            startDttm = dateFormat.parse( info.getStartDt() + " " + "00:00:00" );
+//        }
+//        catch ( ParseException e ) {
+//            logger.debug( "Parse Exception: " + e );
+//            return ResponseEntity
+//                    .status( HttpStatus.BAD_REQUEST )
+//                    .body( new SimpleErrorInfo( "시작 일시가 유효하지 않습니다." ) );
+//        }
+//        try {
+//            endDttm = dateFormat.parse( info.getEndDt() + " " + "23:59:59" );
+//        }
+//        catch ( ParseException e ) {
+//            logger.debug( "Parse Exception: " + e );
+//            return ResponseEntity
+//                    .status( HttpStatus.BAD_REQUEST )
+//                    .body( new SimpleErrorInfo( "종료 일시가 유효하지 않습니다." ) );
+//        }
+//
+//        Date now = new Date();
+//
+//        if( startDttm.getTime() - now.getTime() < 0 ) {
+//            return ResponseEntity
+//                    .status(HttpStatus.BAD_REQUEST)
+//                    .body(new SimpleErrorInfo("시작 일시를 과거로 설정할 수 없습니다."));
+//        }
+//
+//        if( endDttm.getTime() - startDttm.getTime() < 0 ) {
+//            return ResponseEntity
+//                    .status( HttpStatus.BAD_REQUEST )
+//                    .body( new SimpleErrorInfo( "종료 일시가 시작 일시보다 우선할 수 없습니다." ) );
+//        }
 
         info.setStatus( ReservationInfo.RESERVED );
 
