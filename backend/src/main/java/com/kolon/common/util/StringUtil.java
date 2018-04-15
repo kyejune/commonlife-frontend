@@ -174,6 +174,27 @@ public class StringUtil {
         }
     }
 
+
+    /**
+     *  널일경우 일정한 형식으로 바꾼다, 텍스트 등의 숫자가 아닌 값이 들어오면 basic으로 반환함
+     * @param str 변경전 문자열
+     * @param basic 변경할 문자열
+     * @return int 변경된 숫자
+     */
+    public static int parseIntSafe(String str, int basic) {
+        if( (str == null) || (str.trim().equals(""))
+                || (str.trim().equals("null")) ) {
+            return basic;
+        } else {
+            try {
+                return Integer.parseInt(str);
+            } catch( NumberFormatException e ) {
+                return basic;
+            }
+        }
+    }
+
+
     /**
      * 대상 문자열의 strOld문자열을 strNew로 변환해 준다.(게시판등의 내용에 사용)
      * @param target 대상문자열

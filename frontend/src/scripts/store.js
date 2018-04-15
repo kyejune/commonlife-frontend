@@ -118,6 +118,7 @@ const Store = observable({
 
     // 모든 지점 목록
     complexes: [],
+    complexMap:{},
 
     auth:{
       name: '아무개',

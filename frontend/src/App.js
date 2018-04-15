@@ -100,10 +100,10 @@ class App extends Component {
                     'cl-app--expand': this.state.scrolled
                 })}>
 
-                    {Store.isAuthorized ? <div>
-                            <Header/>
+                    {Store.isAuthorized ? [
+                            <Header key="header"/>,
 
-                            <div className="app-content">
+                            <div key="app-content" className="app-content">
 
                                 <Route component={DrawerInjector}/>
 
@@ -125,9 +125,8 @@ class App extends Component {
                                     <Route component={Community}/>
                                 </Switch>
 
-                            </div>
-                            <Footer/>
-                        </div>
+                            </div>,
+                            <Footer key="footer"/>]
                         :
 
                         <div>
