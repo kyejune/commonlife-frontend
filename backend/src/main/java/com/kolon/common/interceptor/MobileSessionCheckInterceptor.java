@@ -59,7 +59,6 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 	// 인증 없이 항상 접속이 허용됨 (token 체크 항상 안함)
 	static String[] ALWAYS_PERMITTED_URI = {
 			"/users/registration",    	// 회원 가입 Controller
-			"/postFiles"				// Feed 파일 업로드/다운로드
 	};
 
 	// 인증 없이 접속 허용, 만약 인증토큰이 있다면 인증정보를 함께 Controller로 전달 (token이 있는 경우에 추가)
