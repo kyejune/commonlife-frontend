@@ -38,6 +38,12 @@
 
 .cl-join {
     background-color: #2E3036;
+
+    footer{
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+    }
 }
 
 .cl-join__header {

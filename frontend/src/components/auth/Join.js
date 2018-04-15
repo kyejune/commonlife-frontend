@@ -36,7 +36,7 @@ class Join extends Component {
             });
     }
 
-    onChangeBranch( item ){
+    onChangeBranch(item) {
         MakingUserData.branch = item;
     }
 
@@ -52,20 +52,20 @@ class Join extends Component {
 
         if (this.state.step === 2) {
 
-            const { branch, houseHolder } = MakingUserData;
+            const {branch, houseHolder} = MakingUserData;
 
             // 세대주 인증번호 통과하면 다음 스텝으로 진행
-            Net.confirmHouseHolderPhoneAuthNumber( branch.cmplxId, houseHolder.dong, houseHolder.ho,
+            Net.confirmHouseHolderPhoneAuthNumber(branch.cmplxId, houseHolder.dong, houseHolder.ho,
                 houseHolder.name, houseHolder.phone, houseHolder.certReqId, houseHolder.certId, res => {
                     this.setState({step: this.state.step + 1});
                 });
 
-        }else if( this.state.step === 3 ){
+        } else if (this.state.step === 3) {
 
-            const { branch, houseHolder, user } = MakingUserData;
+            const {branch, houseHolder, user} = MakingUserData;
 
             //confirmUserPhoneAuthNumber( branchId, dongId, hoId, hhname, hhphone, certReq, certId, phone, callback ){
-            Net.confirmUserPhoneAuthNumber( branch.cmplxId, houseHolder.dong, houseHolder.ho,
+            Net.confirmUserPhoneAuthNumber(branch.cmplxId, houseHolder.dong, houseHolder.ho,
                 houseHolder.name, houseHolder.phone, user.certReqId, user.certId, user.phone, res => {
                     this.registerUser();
                 });
@@ -76,14 +76,13 @@ class Join extends Component {
     }
 
     // 새 회원으로 등록
-    registerUser(){
-        const { branch, houseHolder, user } = MakingUserData;
+    registerUser() {
+        const {branch, houseHolder, user} = MakingUserData;
         //registNewUser( branchId, dongId, hoId, hhname, hhphone, name, phone, certId, certDate, id, password, callback ){//2018-02-10 14:42:22
-        Net.registNewUser( branch.cmplxId, houseHolder.dong, houseHolder.ho, houseHolder.name, houseHolder.phone, user.name, user.phone, user.certReqId, moment().format('YYYY-MM-DD hh:mm:ss'), user.id, user.password, res=>{
+        Net.registNewUser(branch.cmplxId, houseHolder.dong, houseHolder.ho, houseHolder.name, houseHolder.phone, user.name, user.phone, user.certReqId, moment().format('YYYY-MM-DD hh:mm:ss'), user.id, user.password, res => {
             this.setState({step: this.state.step + 1});
-        } );
+        });
     }
-
 
 
     /* Validation */
@@ -132,15 +131,16 @@ class Join extends Component {
                 break;
 
             case 1:
-                component = <BranchList className="pt-3em" defautValue={ MakingUserData.branch.cmplxId } onChange={ this.onChangeBranch }/>;
+                component = <BranchList className="pt-3em" defautValue={MakingUserData.branch.cmplxId}
+                                        onChange={this.onChangeBranch}/>;
                 break;
 
             case 2:
-                component = <HouseHolderInputs ref={ r => this.houseHolder = r }/>;
+                component = <HouseHolderInputs ref={r => this.houseHolder = r}/>;
                 break;
 
             case 3:
-                component = <UserInputs ref={ r => this.user = r }/>;
+                component = <UserInputs ref={r => this.user = r}/>;
                 break;
 
             case 4:
@@ -149,33 +149,37 @@ class Join extends Component {
         }
 
 
-        return <div className="cl-join cl-full-page cl-bg--dark">
+        return <div className="cl-join cl-bg--dark">
 
-            <header className="cl-join__header">
-                <div className="cl-flex">
-                    <img className="cl-logo__img" src={LogoSrc}/>
-                    <div className="cl-logo__text">
-                        <span className="fs-36 cl-bold">COMMON Life</span> <br/>
-                        <span className="fs-10">Membership</span>
+            <div className="cl-full-page">
+
+                <header className="cl-join__header">
+                    <div className="cl-flex">
+                        <img className="cl-logo__img" src={LogoSrc}/>
+                        <div className="cl-logo__text">
+                            <span className="fs-36 cl-bold">COMMON Life</span> <br/>
+                            <span className="fs-10">Membership</span>
+                        </div>
+
+                        <button className="cl-close__button--black ml-auto" onClick={this.props.history.goBack}/>
                     </div>
 
-                    <button className="cl-close__button--black ml-auto" onClick={this.props.history.goBack}/>
+                    <h1>{INFO.name}</h1>
+                    <p>{INFO.msg}</p>
+                </header>
+
+
+                <div className={classNames("pb-3em", {"cl-join-welcome-wrap": step == 4})}>
+                    {component}
                 </div>
 
-                <h1>{INFO.name}</h1>
-                <p>{INFO.msg}</p>
-            </header>
-
-
-            <div className={ classNames( "pb-3em", { "cl-join-welcome-wrap": step==4 } ) }>
-                {component}
             </div>
 
             <footer className="cl-opts__footer cl-flex cl-bg--darkgray">
 
-                {IS_END && <Link to="/login" className="ml-auto mr-auto cl-bold color-primary">로그인</Link> }
+                {IS_END && <Link to="/login" className="ml-auto mr-auto cl-bold color-primary">로그인</Link>}
 
-                {IS_START&& <span className="mr-auto">위 정책에 동의하고 시작합니다.</span> }
+                {IS_START && <span className="mr-auto">위 정책에 동의하고 시작합니다.</span>}
 
                 {step > 0 && step < 4 && [
                     <button key="prev" className="mr-auto" onClick={this.onPrev}>이전</button>,

@@ -25,7 +25,7 @@ class ExposableEditor extends Component {
 
     loadData(){
         Iot.getExposableListOfDashboard( this.state.target === 'auto'?'automation':'valueInfo', data=>{
-            console.log( '노출 할수 있는 목록:', data );
+            // console.log( '노출 할수 있는 목록:', data );
 
             this.setState({
                 data: data,
@@ -39,7 +39,7 @@ class ExposableEditor extends Component {
         if( bool && idx < 0 ) selects.push( data.data.myIotId );
         else if( !bool && idx >= 0 ) selects.splice( idx, 1 );
 
-        console.log( 'new selects:', selects );
+        // console.log( 'new selects:', selects );
 
         this.setState({
             selects: selects,

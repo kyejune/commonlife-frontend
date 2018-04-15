@@ -12,6 +12,12 @@ body{
 }
 
 body.platform--ios{
+
+    .cl-full-page {
+        top: 3.90625vh;
+        height: 96vh;
+    }
+
     #status-bar{
         position: fixed;
         background-color: #1052a5;
@@ -38,10 +44,10 @@ body.platform--ios{
         height: calc( 100vh - 3.90625vh - 46px );
     }
 
-    .cl-full-page{
-        top: 3.90625vh;
-        height: calc( 100vh - 3.90625vh - 50px );
-    }
+    //.cl-full-page{
+    //    top: 3.90625vh;
+    //    height: calc( 100vh - 3.90625vh - 50px );
+    //}
 
     #modal{
         &>div {
@@ -94,6 +100,28 @@ body.cl-keyboard--open{
 
     .md-drawer{
          bottom: initial;
+    }
+
+
+    .cl-login{
+        position: absolute;
+        min-height: 500px;
+
+
+        .cl-input-container{
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            transform: translateZ(0);
+        }
+
+        footer{
+            display: none;
+        }
+    }
+
+    .cl-join{
+        position: absolute;
     }
 }
 

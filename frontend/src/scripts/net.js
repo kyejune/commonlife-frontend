@@ -16,7 +16,8 @@ axios.interceptors.request.use(function (config) {
     document.querySelector('#spinner').classList.add('cl-status--ajax');
 
     // console.log( 'config:', config );
-    config.headers.token = Store.auth.token;
+    const S = new DeviceStorage().localStorage();
+    config.headers.token = S.read( 'token' ) || Store.auth.token;//Store.auth.token;
 
     return config;
 }, function (error) {
@@ -243,7 +244,7 @@ export default {
     },
 
     makePost( data, callback ){
-        axios.post( Store.api + '/posts/', data )
+        axios.post( `/posts/&cmplxId=${Store.communityCmplxId}`, data )
             .then( response => {
                 callback( true, response );
             })
@@ -251,8 +252,6 @@ export default {
                 callback( false, error );
             });
     },
-
-
 
     /* Auth */
     getPolicy( callback ){
@@ -412,23 +411,48 @@ export default {
         const TOKEN = S.read( 'token' ) || Store.auth.token;
         console.log('검사할 토큰:', TOKEN );
 
-        bool = (TOKEN !== undefined);
 
-        if( bool ){
-            Store.auth = { ...Store.auth, token: TOKEN };
-        }
+        // 사용자 정보 가져오기 및 토큰 체크
+        // {{API_HOST}}/users/myinfo
+        axios.get( '/users/myinfo' )
+            .then( response=>{
+
+                console.log( '인증 및 사용자 정보:', response );
+
+                Store.isAuthorized = true;
+
+                bool = true;
+                if( bool ){
+                    const DATA = response.data;
+                    Store.cmplxId = DATA.cmplxId;
+                    Store.communityCmplxId = DATA.cmplxId;
+                    Store.homeId = DATA.homeId;
+                    Store.auth = { name:DATA.userNm, id:DATA.userId, token:DATA.token, key:DATA.usrId };
+                    Store.isAuthorized = true;
+                }
+
+                // 지점정보 가져오기
+                this.getComplexesKeyValue();
+
+                callback( true );
+            })
+            .catch( error=>{
+                callback( false );
+            });
+
+
 
         // 토큰 체크하는 Api가 아직 없어서 임시로 있으면 무조건 통과
-        setTimeout( ()=>{
-
-            Store.isAuthorized = bool;
-            callback( bool );
-
-
-            // 지점정보 가져오기
-            this.getComplexesKeyValue();
-
-        }, 0 );
+        // setTimeout( ()=>{
+        //
+        //     Store.isAuthorized = bool;
+        //     callback( bool );
+        //
+        //
+        //     // 지점정보 가져오기
+        //     this.getComplexesKeyValue();
+        //
+        // }, 0 );
 
     },
 
