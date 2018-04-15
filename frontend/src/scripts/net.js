@@ -244,7 +244,7 @@ export default {
     },
 
     makePost( data, callback ){
-        axios.post( `/posts/&cmplxId=${Store.communityCmplxId}`, data )
+        axios.post( `/posts/?cmplxId=${Store.communityCmplxId}`, data )
             .then( response => {
                 callback( true, response );
             })
