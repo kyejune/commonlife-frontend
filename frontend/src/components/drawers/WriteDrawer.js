@@ -210,7 +210,7 @@ class WriteDrawer extends BottomDrawer {
                 <div className="cl-dim--complete">
                     <img src={AlertSrc} alt="알림"/>
                     <p>{this.state.postResult}</p>
-                    <button onClick={this.onClose} style={classNames({ "cl--disabled":this.state.isUploading })} >확인</button>
+                    <button onClick={this.onClose} className={ classNames({ "cl--disabled":this.state.isUploading })} >확인</button>
                 </div>
                 }
 
