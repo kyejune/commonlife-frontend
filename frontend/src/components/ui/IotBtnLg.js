@@ -32,10 +32,11 @@ class IotBtnLg extends Component {
         const { btId,
             btImgSrc, btLeft, deviceId,
             btRightIconType, btRightText, btSubTitle,
+            btOnOff,
             btTitle, btTitleUnit, btType, myIotId,
         } = this.props;
 
-        const off = (btType === 'device' && btRightText === 'off');
+        const off = (btType === 'device' && btOnOff === 'off');
 
         let rtIcon;
         let link;
