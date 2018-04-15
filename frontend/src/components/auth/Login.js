@@ -55,11 +55,11 @@ class Login extends Component {
             <div className="cl-input-container">
                 <h2>로그인</h2>
 
-                <input type="text" className="cl__input--dark" placeholder="ID를 입력해주세요."
+                <input type="text" className="cl__input--white" placeholder="ID를 입력해주세요."
                        value={this.state.id}
                        onChange={evt=> this.setState({ id:evt.target.value.trim() })}
                 />
-                <input type="password" className="cl__input--dark" placeholder="비밀번호를 입력해주세요."
+                <input type="password" className="cl__input--white" placeholder="비밀번호를 입력해주세요."
                        value={this.state.pw}
                        onChange={evt=> this.setState({ pw:evt.target.value.trim() })}
                 />

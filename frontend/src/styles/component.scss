@@ -652,6 +652,7 @@ a.cl-map__link--branch{
     .cl-map-pin__icon{
         width: 15px;
         height: 15px;
+        margin-right: 3px;
         background-image: url('images/ic-plus-24-px-copy-2@3x.png');
         background-size: contain;
     }
@@ -1194,7 +1195,7 @@ a.cl-map__link--branch{
         background-size: 26%;
         background-position: center center;
         background-repeat: no-repeat;
-        background-color: #48494F;
+        background-color: rgba(155, 155, 155, 0.3);
     }
 
 
@@ -1213,6 +1214,7 @@ a.cl-map__link--branch{
     p{
         margin-bottom: 1em;
         font-size: 12px;
+        line-height: 1.2em;
     }
 }
 
