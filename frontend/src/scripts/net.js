@@ -212,7 +212,14 @@ export default {
         axios.post( Store.api + '/reservations/', data )
             .then( response => {
                 callback( response.data );
-            } )
+            } );
+    },
+
+    getReservationHistory( callback ) {
+        axios.get( Store.api + '/reservations/my' )
+            .then( response => {
+				callback( response.data );
+            } );
     },
 
     /* Post작성 */

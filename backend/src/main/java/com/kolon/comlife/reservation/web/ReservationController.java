@@ -1,6 +1,8 @@
 package com.kolon.comlife.reservation.web;
 
 import com.kolon.comlife.common.model.SimpleErrorInfo;
+import com.kolon.comlife.complexes.model.ComplexInfo;
+import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.reservation.model.ReservationInfo;
 import com.kolon.comlife.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.reservation.service.ReservationGroupService;
@@ -19,8 +21,10 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 @RestController
 @RequestMapping("/reservations/*")
@@ -30,11 +34,11 @@ public class ReservationController {
     @Resource(name = "reservationService")
     ReservationService service;
 
-    @Resource(name = "reservationGroupService")
-    ReservationGroupService groupService;
-
     @Resource(name = "reservationSchemeService")
     ReservationSchemeService schemeService;
+
+    @Resource(name = "complexService")
+    ComplexService complexService;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
 
@@ -255,6 +259,63 @@ public class ReservationController {
 
     @CrossOrigin
     @GetMapping(
+            value = "/my",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity myReservations( HttpServletRequest request ) {
+        AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+
+        // TODO: 로컬에서 인증 정보가 없으면 yunamkim(userId: 632)을 기본값으로 출력한다. 추후 수정 필요.
+        int idx = 632;
+        if( authUserInfo != null ) {
+            idx = authUserInfo.getHomeId();
+        }
+
+        HashMap params = new HashMap();
+        params.put( "userId", idx );
+        List<ReservationInfo> reservations = service.index( params );
+
+        // 아이디 리스트를 뽑아 스키마 출력
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        for ( ReservationInfo e : reservations ) {
+            ids.add( e.getParentIdx() );
+        }
+
+        if( ids.size() > 0 ) {
+            HashMap schemeParams = new HashMap();
+            schemeParams.put( "ids", ids );
+            List<ReservationSchemeInfo> schemes = schemeService.index( schemeParams );
+
+            // 스키마에서 현장 아이디를 뽑아서...
+            ids = new ArrayList<Integer>();
+
+            for ( ReservationSchemeInfo s : schemes ) {
+                ids.add( s.getCmplxIdx() );
+                for ( ReservationInfo r : reservations ) {
+                    if( s.getIdx() == r.getParentIdx() ) {
+                        r.setScheme( s );
+                        continue;
+                    }
+                }
+            }
+
+            List<ComplexInfo> complexes = complexService.getComplexList();
+
+            for ( ComplexInfo c : complexes) {
+                for ( ReservationSchemeInfo s : schemes ) {
+                    if( c.getCmplxId() == s.getCmplxIdx() ) {
+                        s.setComplex( c );
+                    }
+                }
+            }
+
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( reservations );
+    }
+
+    @CrossOrigin
+    @GetMapping(
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -291,7 +352,7 @@ public class ReservationController {
         }
 
         ReservationInfo info = new ReservationInfo();
-        info.setUsrID( idx ); // TODO: 사용자 아이디 입력
+        info.setUsrID( idx );
         info.setStatus( "RESERVED" );
         info.setStartDt( startDt );
         info.setStartTime( startTime );

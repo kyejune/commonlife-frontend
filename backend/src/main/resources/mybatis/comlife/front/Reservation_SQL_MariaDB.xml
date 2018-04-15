@@ -28,21 +28,23 @@
                 START_DT = #{startDt}
             </when>
         </choose>
+        <choose>
+            <when test='userId != null'>
+                AND
+                USR_ID = #{userId}
+            </when>
+        </choose>
     </select>
 
     <select id="show" parameterType="java.util.Map" resultType="reservationInfo">
-        SELECT *
-        FROM   `RESERVATIONS`
-        WHERE  1=1
-        <choose>
-            <when test='ids != null'>
-                AND
-                IDX IN
-                <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
-                    #{id}
-                </foreach>
-            </when>
-        </choose>
+        SELECT
+        *
+        FROM
+        `RESERVATIONS`
+        WHERE
+        1=1
+        AND
+        `IDX` = #{idx}
     </select>
 
     <insert id="create" parameterType="reservationInfo">
