@@ -4,8 +4,16 @@ import logo from 'images/logo.svg';
 import alert from 'images/noti-24-px-copy.svg';
 import Store from "../../scripts/store";
 import {observer} from "mobx-react";
+import {withRouter} from "react-router-dom";
 
 class Header extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            branchType: 0, // 0: 셀렉트박스, 1: 내 지점 텍스트, 2: 안보이기
+        }
+    }
 
 
     openBranchList=()=>{
@@ -16,13 +24,53 @@ class Header extends Component {
         Store.pushDrawer( 'notifications' );
     }
 
+    componentDidMount(){
+        this.updateRoute();
+    }
+
+
+    componentDidUpdate(prevProps) {
+        if (this.props.location !== prevProps.location)
+            this.updateRoute();
+    }
+
+    updateRoute=()=>{
+
+        let pathname = this.props.location.pathname;
+
+        if( pathname.indexOf('/community') === 0 ) this.setState({ branchType: 0 });
+        else if( pathname.indexOf('/info') === 0 ) this.setState({ branchType: 2 });
+        else                                       this.setState({ branchType: 1 });
+    }
 
     render() {
 
         let name = '';
-        if( Object.keys(Store.complexMap).length > 0 && Store.communityCmplxId ){
-            name = Store.complexMap[ Store.communityCmplxId ].cmplxNm;
+
+
+        let Branch;
+        switch( this.state.branchType ){
+            case 0:
+                if( Object.keys(Store.complexMap).length > 0 && Store.communityCmplxId ){
+                    name = Store.complexMap[ Store.communityCmplxId ].cmplxNm;
+                }
+
+
+                Branch = <button className="md-title md-title--toolbar cl-header__branch-btn" onClick={ this.openBranchList }>
+                    { name }
+                </button>;
+                break;
+
+            case 1:
+
+                if( Object.keys(Store.complexMap).length > 0 && Store.cmplxId ){
+                    name = Store.complexMap[ Store.cmplxId ].cmplxNm;
+                }
+
+                Branch = <div className="cl-header__branch-label">{ name }</div>;
+                break;
         }
+
 
         return (
             <header
@@ -30,9 +78,7 @@ class Header extends Component {
 
                 <img className="cl-header__logo" src={logo} alt="로고 이미지" width="40" height="40"/>
 
-                <button className="md-title md-title--toolbar cl-header__branch-btn" onClick={ this.openBranchList }>
-                    { name }
-                </button>
+                {Branch}
 
                 <button className="ml-auto cl-flex cl-header__alert-btn"
                         onClick={ this.openNotificationCenter }
@@ -41,20 +87,9 @@ class Header extends Component {
                     <img src={alert} alt="알림 이미지"/>
                 </button>
 
-                {/*<div className="md-cell--right md-toolbar--action-right">*/}
-                    {/*<div className="md-layover md-layover--simplified md-inline-block md-menu-container">*/}
-                        {/*<button id="toolbar-colored-kebab-menu-toggle"*/}
-                                {/*onClick={ this.openNotificationCenter }*/}
-                                {/*type="button"*/}
-                                {/*className="md-btn md-btn--icon md-pointer--hover md-inline-block md-btn--toolbar">*/}
-                            {/*<img src={alert} alt="알림 이미지"/>*/}
-                        {/*</button>*/}
-                    {/*</div>*/}
-                {/*</div>*/}
-
             </header>
         );
     }
 }
 
-export default observer(Header);
+export default withRouter(observer(Header));

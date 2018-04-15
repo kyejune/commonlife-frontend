@@ -6,8 +6,10 @@ import java.util.List;
 
 public interface ReservationService {
     public List<ReservationInfo> index();
+    public List<ReservationInfo> queue();
     public ReservationInfo show( int idx );
     public int create( ReservationInfo info );
     public int update( ReservationInfo info );
     public int delete( ReservationInfo info );
+    public int updateStatus( ReservationInfo info );
 }

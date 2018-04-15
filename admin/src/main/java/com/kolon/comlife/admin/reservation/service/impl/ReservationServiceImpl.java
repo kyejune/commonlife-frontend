@@ -18,6 +18,11 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
+    public List<ReservationInfo> queue() {
+        return dao.queue();
+    }
+
+    @Override
     public ReservationInfo show(int idx) {
         return dao.show( idx );
     }
@@ -35,5 +40,10 @@ public class ReservationServiceImpl implements ReservationService {
     @Override
     public int delete(ReservationInfo info) {
         return dao.delete( info );
+    }
+
+    @Override
+    public int updateStatus(ReservationInfo info) {
+        return dao.updateStatus( info );
     }
 }

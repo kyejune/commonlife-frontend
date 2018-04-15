@@ -342,11 +342,11 @@ class ReservationDetail extends Component {
 		if ( this.state.reserved || this.state.booked ) {
 			FooterBtns = [
 				<span key="blank"/>,
-				<button key="confirm"><img src={completeSrc} alt="완료버튼" width="97" height="36"/></button>
+				<button key="confirm" onClick={() => window.history.back()}><img src={completeSrc} alt="완료버튼" width="97" height="36"/></button>
 			];
 		} else {
 			FooterBtns = [
-				<button key="cancel">취소</button>,
+				<button key="cancel" onClick={() => window.history.back()}>취소</button>,
 				<button key="reserve" className="cl-plus-label__button" onClick={() => this.reserve()}>예약하기</button>
 			];
 		}

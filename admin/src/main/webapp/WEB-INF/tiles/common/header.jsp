@@ -79,6 +79,7 @@
                     <li><a href="/admin/reservation-groups/list.do">예약 그룹 관리</a></li>
                     <li><a href="/admin/reservations/list.do">예약 현황 (목록형)</a></li>
                     <li><a href="/admin/reservations/calendar.do">예약 현황 (달력형)</a></li>
+                    <li><a href="/admin/reservations/queue.do">장기 예약 신청 관리</a></li>
                 </ul>
             </li>
         </ul>
