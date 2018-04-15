@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {observer} from 'mobx-react';
+import {intercept} from 'mobx';
 import CardItem from 'components/ui/CardItem';
 import Store from 'scripts/store';
 import Net from 'scripts/net';
@@ -16,6 +17,13 @@ class CommunityFeed extends Component {
 		this.state = {
 			isEmpty: false,
 		}
+
+        intercept( Store, 'communityCmplxId', change=>{
+        	Store.feed = [];
+            setTimeout( this.loadPage, 0 );
+
+            return change;
+		} );
 	}
 
 
@@ -23,7 +31,7 @@ class CommunityFeed extends Component {
 		this.loadPage( 0 );
 	}
 
-	loadPage=( targetPage )=>{
+	loadPage=( targetPage=0 )=>{
 		if( targetPage >= this.maxPage ) return;
 
 		this.isLoading = true;

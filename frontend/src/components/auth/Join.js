@@ -36,6 +36,10 @@ class Join extends Component {
             });
     }
 
+    onChangeBranch( item ){
+        MakingUserData.branch = item;
+    }
+
 
     /* 공통 UI */
     onPrev = () => {
@@ -128,7 +132,7 @@ class Join extends Component {
                 break;
 
             case 1:
-                component = <BranchList/>;
+                component = <BranchList className="pt-3em" defautValue={ MakingUserData.branch.cmplxId } onChange={ this.onChangeBranch }/>;
                 break;
 
             case 2:

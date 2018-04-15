@@ -36,6 +36,8 @@ axios.interceptors.response.use(function (response) {
     // iot내에 변경쪽에서는 시스템 알럿 사용 안함
     const USE_SYSTEM_ALERT = ( Store.modeModal === null && Store.myModal === null );
 
+    console.log( error );
+
     // 에러 상황일 경우 iot모달이 있으면 처리
     if( error.response === undefined || error.response.status !== 200) {
 
@@ -76,9 +78,9 @@ export default {
 ///posts/?postType=feed&page=2
     getFeed( type, page, callback ){
 
-        console.log( 'A of getFeed:', axios.defaults );
-
-        axios.get( `/posts/?postType=${type}&page=${(page+1)||1}`)
+        // console.log( 'A of getFeed:', axios.defaults );
+        //?cmplxId=127
+        axios.get( `/posts/?postType=${type}&page=${(page+1)||1}&cmplxId=${Store.communityCmplxId}`)
             .then( response =>{
                 let prevStack = Store[type];
                 let newStack = response.data.data.filter( item => {
@@ -253,9 +255,11 @@ export default {
     },
 
     // 등록 지점 가져오기
-    getBranch( callback ){
-        // {{API_HOST}}/users/registration/complexes/
-        axios.get( '/users/registration/complexes' )
+    getBranch( isAll, callback ){
+        // {{API_HOST}}/users/myComplexGroup // 내가 속한 지점만
+        // {{API_HOST}}/users/registration/complexes/ // 전체 목록
+        const PATH = isAll?'/users/registration/complexes/':'/users/myComplexGroup';
+        axios.get( PATH )
             .then( response => {
                 callback( response.data.data );
             });
@@ -354,6 +358,7 @@ export default {
 
                 const DATA = response.data;
                 Store.cmplxId = DATA.cmplxId;
+                Store.communityCmplxId = DATA.cmplxId;
                 Store.homeId = DATA.homeId;
                 Store.auth = { name:DATA.userNm, id:DATA.userId, token:DATA.token, key:DATA.usrId };
                 Store.isAuthorized = true;
