@@ -57,14 +57,14 @@ class App extends Component {
         }else{
             this.props.history.push('/login');
         }
-
-        // this.props.history.push('/welcome');
     }
 
 
     componentDidMount() {
 
-        document.addEventListener('scroll', () => {
+        this.oldTop = 0;
+
+        document.addEventListener('scroll', event => {
             let bodyTop = 0;
             let boxes = document.querySelectorAll('.cl-fitted-box');
 
@@ -73,14 +73,23 @@ class App extends Component {
             else{
                 // 탭구조라서 복수개가 존재할때 보이는 영역에만 제한
                 document.querySelectorAll('.cl-fitted-box').forEach( item => {
-                    if( item.parentElement.getAttribute('aria-hidden') === 'false' )
+                    if( item.parentElement.getAttribute('aria-hidden') === 'false' ){
                         bodyTop = item.scrollTop;
+                    }
                 });
             }
 
-            this.setState({
-                scrolled: ( bodyTop > 56 )
-            });
+            const DELTA = (this.oldTop - bodyTop );
+
+            this.oldTop = bodyTop;
+
+
+            if( Math.abs( DELTA ) > 10 ){
+                let openMode =  DELTA < 0;
+                this.setState({
+                    scrolled: openMode,//( bodyTop > 56 )
+                });
+            }
 
         }, true);
 

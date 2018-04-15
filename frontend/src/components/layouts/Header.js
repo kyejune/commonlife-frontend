@@ -80,12 +80,12 @@ class Header extends Component {
 
                 {Branch}
 
-                <button className="ml-auto cl-flex cl-header__alert-btn"
-                        onClick={ this.openNotificationCenter }
-                        type="button"
-                >
-                    <img src={alert} alt="알림 이미지"/>
-                </button>
+                {/*<button className="ml-auto cl-flex cl-header__alert-btn"*/}
+                        {/*onClick={ this.openNotificationCenter }*/}
+                        {/*type="button"*/}
+                {/*>*/}
+                    {/*<img src={alert} alt="알림 이미지"/>*/}
+                {/*</button>*/}
 
             </header>
         );

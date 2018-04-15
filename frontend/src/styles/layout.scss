@@ -135,7 +135,7 @@ body.cl-dom--added{
 .abs-scroll{
     -webkit-overflow-scrolling: touch;
     overflow-y: scroll;
-    height: calc( 100vh - 56px*2 - 48px );
+    height: calc( 100vh - 46px - 50px );
     min-height: calc(100vh - 49px * 2);
 }
 
@@ -195,8 +195,8 @@ body.cl-dom--added{
 .cl-info-container.cl-tab--info{
     .cl-fitted-box{
         @extend .abs-scroll;
-        height: calc( 100vh - 56px*2 - 158px );
-        transiton: $dur height ease-in-out;
+        height: calc( 100vh - 158px );
+        //transiton: $dur height ease-in-out;
     }
 }
 
@@ -218,7 +218,7 @@ body.cl-dom--added{
 /* Header */
 .App {
 
-    height: 100vh;
+    height: calc( 100vh + 46px );
     width: 100vw;
     //-webkit-overflow-scrolling: touch;
     //overflow-y: scroll;
@@ -325,7 +325,8 @@ body.cl-dom--added{
 
         .cl-tab--info{
             .cl-fitted-box{
-                height: calc( 100vh - 52px );
+                height: 100vh;
+                //height: calc( 100vh - 52px );
             }
         }
 
@@ -351,6 +352,7 @@ body.cl-dom--added{
     width: 100%;
     height: 100%;
     //padding-bottom: 56px;
+    transition: $dur*2 height ease-out;
 }
 
 .cl-bg--light{
@@ -458,9 +460,9 @@ body.cl-dom--added{
 }
 
 .cl-home-iot {
-    .cl-fitted-box {
-        min-height: calc(100vh - 56px);
-    }
+    //.cl-fitted-box {
+    //    min-height: calc(100vh - 56px);
+    //}
 }
 
 .cl-header__branch-btn {
@@ -479,6 +481,7 @@ body.cl-dom--added{
     padding-right: 20px;
     font-size: 16px;
     font-weight: bold;
+    letter-spacing: 0.4px;
 }
 
 .cl-header__alert-btn {
