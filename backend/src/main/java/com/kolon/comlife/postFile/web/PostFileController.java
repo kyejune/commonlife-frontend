@@ -81,11 +81,15 @@ public class PostFileController {
         PostFileInfo postFileInfo;
         byte[]       imageBytes;
 
-        logger.debug(">>> CmplxId: " + currUser.getCmplxId());
-        logger.debug(">>> UserId: " + currUser.getUserId());
-        logger.debug(">>> UsrId: " + currUser.getUsrId());
+        if( currUser != null ) {
+            logger.debug(">>> CmplxId: " + currUser.getCmplxId());
+            logger.debug(">>> UserId: " + currUser.getUserId());
+            logger.debug(">>> UsrId: " + currUser.getUsrId());
 
-        usrId = currUser.getUsrId();
+            usrId = currUser.getUsrId();
+        } else {
+            usrId = -1;
+        }
 
         String base64 = params.get( "file" );
 

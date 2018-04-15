@@ -89,6 +89,8 @@ public class UserController {
                 retMsg = "로그인에 성공하였습니다."; // todo: message 옮기기
             }
 
+
+            logger.debug(">>>>>>. cmplxId : " + ((Integer)resultMobileUser.get("CMPLX_ID")).intValue());
             cmplxInfo = complexService.getComplexById( ((Integer)resultMobileUser.get("CMPLX_ID")).intValue() );
 
 
@@ -99,10 +101,18 @@ public class UserController {
         result = new HashMap();
         result.put("msg", retMsg);
         result.put("cmplxId", resultMobileUser.get("CMPLX_ID"));
-        result.put("cmplxNm", cmplxInfo.getClCmplxNm());   // COMMONLife Complex Name
-        result.put("cmplxAddr", cmplxInfo.getClCmplxAddr());   // COMMONLife Complex Address
-        result.put("mapSrc", cmplxInfo.getClMapSrc());   // COMMONLife Complex Address
-        result.put("logoImgSrc", cmplxInfo.getClLogoImgSrc());   // COMMONLife Complex Address
+        if( cmplxInfo != null ) {
+            result.put("cmplxNm", cmplxInfo.getClCmplxNm());   // COMMONLife Complex Name
+            result.put("cmplxAddr", cmplxInfo.getClCmplxAddr());   // COMMONLife Complex Address
+            result.put("mapSrc", cmplxInfo.getClMapSrc());   // COMMONLife Complex Address
+            result.put("logoImgSrc", cmplxInfo.getClLogoImgSrc());   // COMMONLife Complex Address
+        } else {
+            result.put("cmplxNm", null);   // COMMONLife Complex Name
+            result.put("cmplxAddr", null);   // COMMONLife Complex Address
+            result.put("mapSrc", null);   // COMMONLife Complex Address
+            result.put("logoImgSrc", null);   // COMMONLife Complex Address
+        }
+
         result.put("homeId", resultMobileUser.get("HOME_ID"));
         result.put("userId", resultMobileUser.get("USER_ID"));
         result.put("headId", resultMobileUser.get("HEAD_ID"));
