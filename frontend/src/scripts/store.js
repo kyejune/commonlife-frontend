@@ -105,6 +105,14 @@ export const MakingUserData = observable({
 
 const Store = observable({
 
+    alert: msg => {
+        if( navigator.notification ){
+            navigator.notification.alert( msg, ()=>{}, 'CommonLife', '확인' );
+        }else {
+            Store.alert( msg );
+        }
+    },
+
     isAuthorized: false,
 
     api:host,

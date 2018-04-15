@@ -68,7 +68,7 @@ class Profile extends Component {
     submit = (event) => {
 
         if( this.validator.allValid() ){
-            alert('전송');
+            Store.alert('전송');
         }else{
             this.validator.showMessages();
             this.forceUpdate();

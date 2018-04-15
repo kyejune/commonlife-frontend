@@ -195,7 +195,7 @@ class ReservationDetail extends Component {
 	reserve() {
 
 	    if( this.timeEl && !this.state.correctTime ){
-	        alert('유효한 시간을 선택하여 주시기 바랍니다.');
+	        Store.alert('유효한 시간을 선택하여 주시기 바랍니다.');
 	        return
         }
 
@@ -266,7 +266,7 @@ class ReservationDetail extends Component {
 	}
 
 	addedSchedule() {
-		alert( '추가됨' );
+		Store.alert( '추가됨' );
 	}
 
 	render() {

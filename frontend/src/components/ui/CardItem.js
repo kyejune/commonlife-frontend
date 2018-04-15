@@ -36,6 +36,8 @@ class CardItem extends Component {
            let obj = Object.assign({}, this.state);
            obj.rsvFlag = bool;// 실서버 반영되면 반전 시켜줘야됨
            this.setState(obj);
+
+           Store.alert( res.msg );
         });
 
     }

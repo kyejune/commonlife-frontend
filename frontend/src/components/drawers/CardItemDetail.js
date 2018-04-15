@@ -42,6 +42,8 @@ class CardItemDetailDrawer extends Component {
                 obj.rsvFlag = bool;// 실서버 반영되면 반전 시켜줘야됨
                 obj.rsvCount = res.rsvCount;
             this.setState(obj);
+
+            Store.alert( res.msg );
         });
     }
 

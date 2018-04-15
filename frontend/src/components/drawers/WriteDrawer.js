@@ -42,7 +42,7 @@ class WriteDrawer extends BottomDrawer {
     selectPicture() {
 
         if( this.state.isUploading ){
-            alert("기존 이미지를 업로드 중입니다.");
+            Store.alert("기존 이미지를 업로드 중입니다.");
             return;
         }
 
@@ -109,7 +109,7 @@ class WriteDrawer extends BottomDrawer {
     complete() {
 
         if( this.state.content.replace(/\s/g, '') === '' ){
-            alert( '내용을 작성해주세요.' );
+            Store.alert( '내용을 작성해주세요.' );
             return;
         }
 

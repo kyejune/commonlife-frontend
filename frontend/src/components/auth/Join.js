@@ -6,7 +6,7 @@ import {Link, withRouter} from "react-router-dom";
 import UserInputs from "./UserInputs";
 import HouseHolderInputs from "./HouseHolderInputs";
 import Net from "../../scripts/net";
-import {MakingUserData} from "../../scripts/store";
+import Store, {MakingUserData} from "../../scripts/store";
 import Welcome from "./Welcome";
 import classNames from 'classnames';
 import moment from "moment/moment";
@@ -110,7 +110,7 @@ class Join extends Component {
         const IS_PASS = (inCorrectMsg === null);
 
         if (!IS_PASS)
-            alert(inCorrectMsg);
+            Store.alert(inCorrectMsg);
 
         return IS_PASS;
     }
