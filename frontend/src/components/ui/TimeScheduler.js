@@ -51,13 +51,6 @@ class TimeScheduler extends Component {
             return i
         });
 
-        // 예약시간 세팅: 1~24 시간단위 30분은 0.5
-        let START = parseFloat(props.start) || 12;
-        let DURATION = parseFloat(props.duration) || 1;
-        if( this.state ){
-            START = parseFloat(this.state.start);
-            DURATION = parseFloat(this.state.hour) || 1;
-        }
 
         let offset = 0;;
         let disableds = props.scheduled.map((schedule, i) => {
@@ -77,6 +70,14 @@ class TimeScheduler extends Component {
                         style={{left: W * h, width: hLen * W + 1}}
             />
         });
+
+        // 예약시간 세팅: 1~24 시간단위 30분은 0.5
+        let START = parseFloat(props.start) || (starts[0] + MIN);
+        let DURATION = parseFloat(props.duration) || 0.5;
+        if( this.state ){
+            START = parseFloat(this.state.start);
+            DURATION = parseFloat(this.state.hour) || 1;
+        }
 
         S.start = START;
         S.hour = DURATION;
