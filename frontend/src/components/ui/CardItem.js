@@ -133,7 +133,7 @@ class CardItem extends Component {
                         <h6 className="cl-flex cl-dates">
                             {duration}
                         </h6>
-                        <p className="cl-desc pb-05em">
+                        <p className="cl-desc">
                             {this.state.eventCmplxNm} {this.state.eventPlaceNm}
                         </p>
                     </div>
