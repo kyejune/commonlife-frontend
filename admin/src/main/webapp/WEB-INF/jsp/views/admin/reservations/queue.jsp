@@ -5,7 +5,7 @@
     <tiles:putAttribute name="contents">
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>예약 현황</h2>
+                <h2>장기 예약 신청 관리</h2>
                 <ol class="breadcrumb">
                     <li>
                         <a href="/">Home</a>
@@ -14,7 +14,7 @@
                         예약 관리
                     </li>
                     <li class="active">
-                        <a>예약 현황</a>
+                        <a>장기 예약 신청 관리</a>
                     </li>
                 </ol>
             </div>
