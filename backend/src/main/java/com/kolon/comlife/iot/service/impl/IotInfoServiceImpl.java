@@ -1749,6 +1749,8 @@ public class IotInfoServiceImpl implements IotInfoService {
                                     }
                                 }
                             }
+                        } else {
+                            e.put( "BT_ON_OFF", "on" );
                         }
 
                         if(e.get("BT_IMG_SRC") == null) {
