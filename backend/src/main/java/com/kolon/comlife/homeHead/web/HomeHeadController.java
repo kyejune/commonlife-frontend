@@ -37,7 +37,7 @@ public class HomeHeadController {
         // TODO: 로컬에서 인증 정보가 없으면 yunamkim(userId: 632)을 기본값으로 출력한다. 추후 수정 필요.
         int idx = 632;
         if( authUserInfo != null ) {
-            idx = authUserInfo.getHomeId();
+            idx = authUserInfo.getHeadId();
         }
         HomeHeadInfo info = service.show( idx );
         return ResponseEntity.status( HttpStatus.OK ).body( info );

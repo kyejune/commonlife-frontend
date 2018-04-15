@@ -105,6 +105,7 @@ public class UserController {
         result.put("logoImgSrc", cmplxInfo.getClLogoImgSrc());   // COMMONLife Complex Address
         result.put("homeId", resultMobileUser.get("HOME_ID"));
         result.put("userId", resultMobileUser.get("USER_ID"));
+        result.put("headId", resultMobileUser.get("HEAD_ID"));
         result.put("usrId", resultMobileUser.get("USR_ID"));
         result.put("userNm", resultMobileUser.get("USER_NM"));
         result.put("token", resultMobileUser.get("TOKEN"));

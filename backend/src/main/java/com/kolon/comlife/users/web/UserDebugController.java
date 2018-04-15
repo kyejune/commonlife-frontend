@@ -103,6 +103,7 @@ public class UserDebugController {
             result.put("homeId", String.valueOf( userInfo.getHomeId() ));
             result.put("userId", userInfo.getUserId());
             result.put("usrId", String.valueOf( userInfo.getUsrId() ));
+            result.put("headId", String.valueOf( userInfo.getHeadId() ));
             result.put("userNm", userInfo.getUserNm());
             result.put("tokenOrg", userInfo.getTokenOrg());
             result.put("secretKey", userInfo.getSecretKey());
