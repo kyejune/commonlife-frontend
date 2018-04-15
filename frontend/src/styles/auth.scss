@@ -269,4 +269,13 @@
     .cl-form{
         margin-bottom: 0;
     }
+
+    .cl__input {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: #ffffff;
+
+        &:focus {
+            border-bottom: solid 2px #80d6ff !important;
+        }
+    }
 }

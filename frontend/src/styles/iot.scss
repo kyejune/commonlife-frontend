@@ -883,10 +883,16 @@ header.cl-mode-setting__header {
             color: rgba(0, 0, 0, 0.9);
             font-weight: 500;
             letter-spacing: -0.1em;
+            margin-left: 0;
+            text-align: center;
         }
 
         input::placeholder {
             color: #BCBCBC;
+        }
+
+        img {
+            margin-right: 0;
         }
     }
 

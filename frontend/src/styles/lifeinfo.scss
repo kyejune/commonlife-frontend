@@ -17,18 +17,24 @@ $card-trans-time: 0.3s;
     transition: $card-trans-time padding-top ease-out;
 
     .cl-avatar {
-        width: 65px;
-        height: 65px;
+        width: 60px;
+        height: 60px;
         transition: $card-trans-time all ease-out;
+
+        &:before {
+            width: 60px;
+            height: 60px;
+        }
     }
 
     h4 {
+        margin: 0 !important;
         font-weight: bold;
         font-size: 20px;
         text-align: left;
 
         & + p {
-            font-size: 16px;
+            font-size: 13px;
         }
     }
 
@@ -39,16 +45,22 @@ $card-trans-time: 0.3s;
 
     .cl-summary {
         transition: $card-trans-time all ease-out;
-        padding: 20px 18px 16px 18px;
+        padding: 20px 18px 20px 18px;
         background-color: white;
     }
 
     .cl-profile-card__footer {
-        padding: 18px;
+        padding-left: 18px;
+        padding-right: 18px;
         background-color: white;
         bottom: 0;
         width: 100%;
-        border-top: 1px solid rgba(207, 207, 207, 0.7);
+
+        .cl-flex {
+            padding-top: 12px;
+            padding-bottom: 14px;
+            border-top: 1px solid rgba(207, 207, 207, 0.7);
+        }
     }
 
     .cl-edit {
@@ -56,6 +68,15 @@ $card-trans-time: 0.3s;
         top: 20px;
         right: 18px;
         font-weight: 500;
+        font-size: 12px;
+    }
+
+    .cl-avatar,
+    .cl-avatar-border {
+        &:before {
+            width: 100px;
+            height: 100px;
+        }
     }
 }
 
@@ -126,12 +147,21 @@ $card-trans-time: 0.3s;
     }
 }
 
+.cl-notice-detail {
+    .cl-card-item--dark {
+        .cl-desc {
+            font-size: 12px !important;
+        }
+    }
+}
+
 .cl-notice-detail__content {
     color: white;
     font-size: 24px;
     font-weight: bold;
     line-height: 1.4em;
     padding: 0.8em 0.6em 2em 0.6em;
+    word-break: keep-all;
 }
 
 .cl-info-dashboard__list {
@@ -142,8 +172,9 @@ $card-trans-time: 0.3s;
     transition: $card-trans-time margin-top ease-out;
 
     .cl__thumb--rounded {
-        width: 60px;
-        height: 60px;
+        width: 56px;
+        height: 56px;
+        margin: 0 auto;
     }
 
     li {
@@ -165,8 +196,9 @@ $card-trans-time: 0.3s;
     }
 
     p {
+        padding-top: 2px;
         color: #D2D2D3;
-        font-size: 16px;
+        font-size: 14px;
     }
 
 }
@@ -179,6 +211,7 @@ $card-trans-time: 0.3s;
         padding: 20px 18px;
         background-color: #ECECEC;
         height: inherit;
+        border-bottom: 0;
         box-shadow: 1px 0 2px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.14);
         margin-bottom: 0.2em;
 
@@ -312,8 +345,8 @@ $card-trans-time: 0.3s;
 
     .cl-edit__button {
         position: absolute;
-        top: 30px - 12px;
-        left: calc(50% + 54px - 14px);
+        top: 25px;
+        left: calc(50% + 54px - 22px);
         width: 28px;
         height: 28px;
         //box-shadow: 2px 2px 4px 0 rgba(0, 0, 0, 0.5);
@@ -328,14 +361,19 @@ $card-trans-time: 0.3s;
 .cl-profile {
 
     .cl-profile-card {
-        background-color: white;
+        background-color: #ECEDEE;
         position: relative;
         text-align: center;
-        padding: 30px 0;
+        padding: 30px 0 15px;
 
         h4 {
+            padding-top: 4px;
             text-align: center;
             margin-bottom: 0;
+        }
+
+        p {
+            margin-top: -4px;
         }
     }
 

@@ -35,10 +35,10 @@ class LivingSupportCategory extends Component {
                 <ul className="cl-iot-vertical-list cl-bg--transparent">
 
                     {this.state.list.map( (item, key)=>{
-                      return <li key={key}>
+                      return <li key={key} onClick={ ()=> this.viewWrite(item.cateIdx)}>
                           <IconLoader src={item.imgSrc}/>
                           <h4 className="cl__title">{item.cateNm}</h4>
-                          <button className="cl-next__button ml-auto" onClick={ ()=> this.viewWrite(item.cateIdx)}/>
+                          <button className="cl-next__button ml-auto"/>
                       </li>
                     })}
 

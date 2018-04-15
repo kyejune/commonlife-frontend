@@ -26,7 +26,7 @@ class Header extends Component {
 
         return (
             <header
-                className="md-paper md-toolbar md-background--primary md-toolbar--text-white cl-flex">
+                className="md-paper md-toolbar md-background--primary md-toolbar--text-white cl-flex cl-header">
 
                 <img className="cl-header__logo" src={logo} alt="로고 이미지" width="40" height="40"/>
 
