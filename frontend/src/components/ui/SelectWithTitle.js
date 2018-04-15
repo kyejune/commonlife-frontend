@@ -5,13 +5,18 @@ import {observer} from "mobx-react";
 /* 예약하기 메인 페이지 및 상세 페이지에서 좌측 타이틀과, 우측 셀렉박스 구성 */
 class SelectWithTitle extends Component {
 
+	onChange = event => {
+		if( this.props.onChange && typeof this.props.onChange === 'function' ) {
+			this.props.onChange( event );
+		}
+	};
 
 	render () {
 
 		return <div className="cl-flex-between cl-select-with-title">
 			<h5>그룹 { this.props.displayLength || 0 }</h5>
 			<div className="cl-select-with-title__select">
-				<select name="" id="">
+				<select onChange={ this.onChange }>
 					<option value="">선택지역보기</option>
 					{
 						Store.complexes.map( ( item, key ) => {

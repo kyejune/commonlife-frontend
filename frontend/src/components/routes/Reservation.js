@@ -31,6 +31,12 @@ class Reservation extends Component {
 		}
 	}
 
+	load = cmplxId => {
+		net.getReservationGroups( cmplxId, data => {
+			this.setState( { groups: data.groups, schemes: data.schemes } );
+		} );
+	};
+
 	componentDidMount () {
 		this.updateRoute();
 
@@ -39,9 +45,7 @@ class Reservation extends Component {
 			Store.complexes = data;
 		} );
 
-		net.getReservationGroups( Store.cmplxId, data => {
-			this.setState( { groups: data.groups, schemes: data.schemes } );
-		} );
+		this.load( Store.cmplxId );
 	}
 
 	componentDidUpdate ( prevProps ) {
@@ -84,7 +88,7 @@ class Reservation extends Component {
 
 			<div className="cl-fitted-box pb-5em">
 
-				<SelectWithTitle displayLength={ this.state.groups.length }/>
+				<SelectWithTitle displayLength={ this.state.groups.length } onChange={ event => this.load( event.currentTarget.value ) }/>
 
 				<ul className="cl-reservation__list--group">
 					{
