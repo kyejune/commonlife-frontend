@@ -29,12 +29,7 @@ class LandingPage extends Component {
 
     render() {
         return (
-            <div className="cl-join cl-full-page cl-bg--white">
-
-                <p className="color-white mt-8em text-center">
-                    사용자 인증 중입니다.
-                </p>
-            </div>
+            <div className="cl-join cl-full-page cl-bg--white"/>
         );
     }
 }
