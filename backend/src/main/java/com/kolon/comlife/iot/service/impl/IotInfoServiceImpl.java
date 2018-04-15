@@ -91,10 +91,10 @@ public class IotInfoServiceImpl implements IotInfoService {
         statusMap.put( "stopped",        new MyButtonStatus("stopped",        false,"정지해있습니다") );
         statusMap.put( "sleep",          new MyButtonStatus("sleep",          true,"잠자는 중") );
         statusMap.put( "wakeup",         new MyButtonStatus("wakeup",         false,"활동 중") );
-        statusMap.put( "detected",       new MyButtonStatus("detected",       true,"검출 되었습니다") );
-        statusMap.put( "undetected",     new MyButtonStatus("undetected",     false,"검출되지 않았습니다") );
-        statusMap.put( "true",           new MyButtonStatus("true",           true,"참입니다") );
-        statusMap.put( "false",          new MyButtonStatus("false",          false,"거짓입니다") );
+        statusMap.put( "detected",       new MyButtonStatus("detected",       true,"감지 되었습니다") );
+        statusMap.put( "undetected",     new MyButtonStatus("undetected",     false,"감지되지 않았습니다") );
+        statusMap.put( "true",           new MyButtonStatus("true",           true,"켜져입니다") );
+        statusMap.put( "false",          new MyButtonStatus("false",          false,"꺼져입니다") );
         statusMap.put( "lock",           new MyButtonStatus("lock",           true,"잠겨있습니다") );
         statusMap.put( "unlock",         new MyButtonStatus("unlock",         false,"잠금이 해제되었습니다") );
         statusMap.put( "Cooktop_01" ,    new MyButtonStatus("Cooktop_01",     true,"동작 중입니다") );
