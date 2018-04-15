@@ -24,7 +24,7 @@ class Profile extends Component {
             currentPassword:'',
             newEmail:'',
             editable: false,
-        }
+        };
 
         this.passwordValidator = new SimpleReactValidator({
             same:{
@@ -142,6 +142,8 @@ class Profile extends Component {
 
     render() {
 
+        console.log( Store.auth );
+
         let Form;
         if( this.state.editable ){
 
@@ -201,7 +203,7 @@ class Profile extends Component {
                 <button className="cl-edit__button" onClick={ this.changeProfileImage }/>
 
                 <h4>{ this.state.userNm }</h4>
-                <p>{ this.state.email }</p>
+                <p>{ this.state.userId }</p>
             </div>
 
             <div className="cl-where">

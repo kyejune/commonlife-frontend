@@ -108,8 +108,8 @@
         C.CMPLX_ID              AS CMPLX_ID,
         G_T.CMPLX_GRP_TYPE_ID   AS CMPLX_GRP_TYPE_ID, -- 미분류,민간 or 공공
         G_T.CMPLX_GRP_TYPE      AS CMPLX_GRP,         -- CMPLX_GRP_TYPE_ID의 이름
-        C.CMPLX_NM              AS CMPLX_NM,          -- 앱내 표시되는 현장 이름 (COMPLEX NAME)
-        C.ADDR                  AS ADDR,              -- 앱내 표시되는 현장 주소
+        C_E.CL_CMPLX_NM         AS CMPLX_NM,          -- 앱내 표시되는 현장 이름 (COMPLEX NAME)
+        C_E.CL_CMPLX_ADDR       AS ADDR,              -- 앱내 표시되는 현장 주소
         C.ADDR_DTL              AS ADDR_DTL,          -- 현장 상세 주소 (IOK에서 정의)
         C.ADDR1                 AS ADDR1,
         C.ADDR2                 AS ADDR2,

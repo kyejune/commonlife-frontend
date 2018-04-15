@@ -241,7 +241,7 @@ public class UserRegistrationController {
         if (!resFlag) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
-                    .body(new SimpleErrorInfo((String) result.get("msg")));
+                    .body( IokUtil.lowerMsgKeyName(result) );
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(IokUtil.lowerMsgKeyName(result));

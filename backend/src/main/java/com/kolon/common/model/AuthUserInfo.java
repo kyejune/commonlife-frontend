@@ -10,6 +10,7 @@ public class AuthUserInfo {
     int    cmplxId;     // 현장(table) ID
     int    usrId;       // 사용자(table) ID
     int    homeId;      // 거주지 ID
+    int    headId;      // 세대주 ID
     String userId;      // 사용자 로그인 ID
     String userNm;      // 사용자 이름
     String tokenOrg;    // Token payload
@@ -26,14 +27,24 @@ public class AuthUserInfo {
         this.homeId = -1;
     }
 
-    public AuthUserInfo( int cmplxId, int usrId, int homeId, String userId, String userNm,
-                         String tokenOrg, String secretKey, String issueDate,
-                         String expireDate, String authorizationDefault, String authorizationUserInfo,
+    public AuthUserInfo( int cmplxId,
+                         int usrId,
+                         int homeId,
+                         int headId,
+                         String userId,
+                         String userNm,
+                         String tokenOrg,
+                         String secretKey,
+                         String issueDate,
+                         String expireDate,
+                         String authorizationDefault,
+                         String authorizationUserInfo,
                          String authorizationSystem) {
         this.cmplxId = cmplxId;
         this.usrId = usrId;
         this.homeId = homeId;
         this.userId = userId;
+        this.headId = headId;
         this.userNm = userNm;
         this.tokenOrg = tokenOrg;
         this.secretKey = secretKey;
@@ -44,6 +55,13 @@ public class AuthUserInfo {
         this.authorizationSystem = authorizationSystem;
     }
 
+    public int getHeadId() {
+        return headId;
+    }
+
+    public void setHeadId(int headId) {
+        this.headId = headId;
+    }
 
     public int getUsrId() { return usrId; }
 

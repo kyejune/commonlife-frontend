@@ -39,7 +39,7 @@ class BranchSeletor extends Component {
                 </div>
 
                 <div>
-                    <h5 className="color-white fs-14 ml-2em mt-1em">서울(Seoul)</h5>
+                    {/*<h5 className="color-white fs-14 ml-2em mt-1em">서울(Seoul)</h5>*/}
                     <BranchList className="pt-2em" defaultValue={ Store.communityCmplxId } onChange={ this.onChangeBranch }/>
                 </div>
 

@@ -153,6 +153,7 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 		String homeId = "";
 		String userNm = "";
 		String usrId = "";
+		String headId = "";
 
 		// PERMITTED_AND_AUTH_POPULATED_URI의 해당 값은 성공 처리
 		if( sToken == null ) {
@@ -200,6 +201,7 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 				userId     = StringUtil.replace(tokenRedis.get("USER_ID").toString(),"\"","");
 				userNm     = StringUtil.replace(tokenRedis.get("USER_NM").toString(),"\"","");
 				usrId      = StringUtil.replace(tokenRedis.get("USR_ID").toString(),"\"","");
+				headId      = StringUtil.replace(tokenRedis.get("HEAD_ID").toString(),"\"","");
 
 //	                ObjectMapper jmapper = new ObjectMapper(); // create once, reuse
 //	                JsonNode actualObj  = jmapper.readValue(tokenString, JsonNode.class);
@@ -376,6 +378,7 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 				Integer.valueOf( cmplxId ),
 				Integer.valueOf( usrId ),
 				Integer.valueOf( homeId ),
+				Integer.valueOf( headId ),
 				userId,
 				userNm,
 				tokenOrg,

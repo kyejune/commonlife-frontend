@@ -26,7 +26,7 @@ body.platform--ios{
     }
 
     .App{
-        height: calc( 100vh - 3.90625vh + 56px );
+        height: calc( 100vh - 3.90625vh + 46px );
     }
 
     #root{
@@ -35,7 +35,7 @@ body.platform--ios{
 
     .dialogs__content{
         //margin-top: 3.90625vh;
-        height: calc( 100vh - 3.90625vh - 56px );
+        height: calc( 100vh - 3.90625vh - 46px );
     }
 
     .cl-full-page{
@@ -260,10 +260,10 @@ body.cl-dom--added{
     // 스크롤해서 위아래 메뉴 치울때,
     &.cl-app--expand {
 
-        height: calc( 100vh + 52px );
+        height: calc( 100vh + 46px );
 
         &>header{
-            margin-top: -52px;
+            margin-top: -46px;
         }
 
 
@@ -285,7 +285,7 @@ body.cl-dom--added{
         // 스크롤 영역 조절
         .cl-tab--community{
             .cl-fitted-box{
-                height: calc( 100vh - 48px - 16px ); //상단 및 패딩 제외
+                height: calc( 100vh - 48px ); //상단 및 패딩 제외
             }
         }
 

@@ -22,6 +22,7 @@ body:not(.platform--ios){
   header{
 
     height: 46px;
+    border-bottom: 0;
 
     h2.md-title--toolbar{
       font-size: 16px;
@@ -37,7 +38,7 @@ body:not(.platform--ios){
 
   .dialogs__content{
     overflow: auto;
-    height: calc( 100vh - 56px );
+    height: calc( 100vh - 46px );
 
     &>div{
       min-height: 100%;
