@@ -3,6 +3,7 @@
 
 <mapper namespace="Complex">
     <select id="selectComplexList" parameterType="java.util.Map" resultType="ComplexInfo">
+    /* 현장전체 목록 또는 특정 현장정보 가져오기 */
 	SELECT
 	    G_T.CMPLX_GRP_TYPE_ID   AS CMPLX_GRP_TYPE_ID,
 		G_T.CMPLX_GRP_TYPE      AS CMPLX_GRP,
@@ -67,6 +68,7 @@
     </select>
 
     <select id="selectComplexSimpleInfoList" resultType="ComplexSimpleInfo">
+    /* 전체 현장 목록 가져오기 - 최소정보 */
     SELECT
         C.CMPLX_ID              AS CMPLX_ID,
         G_T.CMPLX_GRP_TYPE_ID   AS CMPLX_GRP_TYPE_ID,  -- 미분류,민간 or 공공
@@ -79,7 +81,7 @@
         C_E.CL_MAP_SRC          AS CL_MAP_SRC,         -- 앱내 지도 링크 (full path URL)
         C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC     -- 앱내 표시되는 이미지 (full path URL)
     FROM
-        COMPLEX_M AS CMPLX
+        COMPLEX_M AS C
           LEFT JOIN
         COMPLEX_M_EXT AS C_E
             ON C.CMPLX_ID = C_E.CMPLX_ID
@@ -87,8 +89,8 @@
         COMPLEX_GRP_M AS G
             ON G.CMPLX_ID = C.CMPLX_ID
           LEFT JOIN
-        COMPLEX_GRP_TYPE_M AS G
-            ON C_E.CMPLX_GRP_TYPE_ID = G_T.CMPLX_GRP_TYPE_ID
+        COMPLEX_GRP_TYPE_M AS G_T
+            ON G.CMPLX_GRP_TYPE_ID = G_T.CMPLX_GRP_TYPE_ID
     WHERE
         C.CMPLX_GB_CD = 'AD01102'   -- 현장 중, COMMON Life(민간+공공)용도의 현장은 GB_CD가 'AD01102' 값으로 설정 됨
           AND
