@@ -3,6 +3,7 @@ import {observer} from 'mobx-react';
 import CardItem from 'components/ui/CardItem';
 import Store from "scripts/store";
 import Net from "../../scripts/net";
+import {intercept} from "mobx/lib/mobx";
 
 class CommunityEvent extends Component {
 
@@ -16,6 +17,13 @@ class CommunityEvent extends Component {
         this.state = {
             isEmpty: false,
         }
+
+        intercept( Store, 'communityCmplxId', change=>{
+            Store.event = [];
+            setTimeout( this.loadPage, 0 );
+
+            return change;
+        } );
     }
 
 
@@ -23,7 +31,7 @@ class CommunityEvent extends Component {
         this.loadPage( 0 );
     }
 
-    loadPage=( targetPage )=>{
+    loadPage=( targetPage=0 )=>{
         console.log( targetPage, this.maxPage );
         if( targetPage >= this.maxPage ) return;
 

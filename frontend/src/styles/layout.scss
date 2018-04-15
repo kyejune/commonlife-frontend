@@ -65,8 +65,8 @@ body.platform--ios{
 
     .md-drawer .dialogs__content > div {
         &.drawer-fitted-box--b {
-            height: calc(100vh - 3.90625vh - 50px - 56px);
-            min-height: calc(100vh - 3.90625vh - 50px - 56px);
+            height: calc(100vh - 3.90625vh - 50px - 46px);
+            min-height: calc(100vh - 3.90625vh - 50px - 46px);
         }
     }
 }
@@ -126,8 +126,8 @@ body.cl-dom--added{
 .md-drawer .dialogs__content > div {
     &.drawer-fitted-box--b {
         @extend .abs-scroll;
-        height: calc(100vh - 50px - 56px);
-        min-height: calc(100vh - 50px - 56px);
+        height: calc(100vh - 50px - 46px);
+        min-height: calc(100vh - 50px - 46px);
 
         .cl-opts__footer {
             height: 50px;

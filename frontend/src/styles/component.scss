@@ -1148,14 +1148,19 @@ a.cl-map__link--branch{
             &:after{
                 content:'';
                 position: absolute;
-                width: 29px;
-                height: 29px;
+                width: calc( 100% - 8px );//29px;
+                height: calc( 100% - 8px );///29px;
                 border-radius: 50%;
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
                 background-image: url('images/check-yellow@3x.png');
-                background-size: contain;
+                background-size: 29px;
+                background-repeat: no-repeat;
+                background-position: center;
+                background-color: rgba( 0, 0, 0, 0.6 );
+                border-radius: 0;
+                clip-path: polygon(15% 0, 100% 0, 100% 75%, 85% 100%, 0 100%, 0 25%);
             }
         }
 
@@ -1187,8 +1192,8 @@ a.cl-map__link--branch{
 
 
     .cl-avatar{
-        background-image: url("images/branch-default@3x.png");
-        background-size: 40%;
+        background-image: url("images/house-empty@3x.png");
+        background-size: 26%;
         background-position: center center;
         background-repeat: no-repeat;
         background-color: #48494F;
@@ -1456,5 +1461,7 @@ a.cl-map__link--branch{
 }
 
 .cl-branch-selector {
-    //
+    .cl-card-item--dark{
+        padding: 23px;
+    }
 }
