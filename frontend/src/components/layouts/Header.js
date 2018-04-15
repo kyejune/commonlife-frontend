@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import logo from 'images/logo.svg';
 import alert from 'images/noti-24-px-copy.svg';
 import Store from "../../scripts/store";
+import {observer} from "mobx-react";
 
 class Header extends Component {
 
@@ -18,6 +19,11 @@ class Header extends Component {
 
     render() {
 
+        let name = '';
+        if( Object.keys(Store.complexMap).length > 0 && Store.communityCmplxId ){
+            name = Store.complexMap[ Store.communityCmplxId ].cmplxNm;
+        }
+
         return (
             <header
                 className="md-paper md-toolbar md-background--primary md-toolbar--text-white cl-flex">
@@ -25,7 +31,7 @@ class Header extends Component {
                 <img className="cl-header__logo" src={logo} alt="로고 이미지" width="40" height="40"/>
 
                 <button className="md-title md-title--toolbar cl-header__branch-btn" onClick={ this.openBranchList }>
-                    역삼하우징
+                    { name }
                 </button>
 
                 <button className="ml-auto cl-flex cl-header__alert-btn"
@@ -51,4 +57,4 @@ class Header extends Component {
     }
 }
 
-export default Header;
+export default observer(Header);

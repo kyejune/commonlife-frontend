@@ -175,6 +175,14 @@ export default {
             } );
     },
 
+    // key value형태로 complex목록 가져오기, login하고 호출됨
+    getComplexesKeyValue(){
+        axios.get('/complexes/kvm/')
+            .then( response => {
+                Store.complexMap = response.data;
+            });
+    },
+
     getReservationGroups( id, callback ){
         axios.get( Store.api + '/reservation-groups/?cmplxIdx=' + id )
             .then( response => {
@@ -348,7 +356,6 @@ export default {
 
     login( id, password, callback ){
 
-        // password =
         axios.get(`/users/login?userId=${id}&userPw=${password}&gcmRegId=${Store.gcm}&deviceId=${Store.deviceId}`)
             .then( response =>{
 
@@ -365,6 +372,8 @@ export default {
 
                 const S = new DeviceStorage().localStorage();
                 S.save( 'token', DATA.token );
+
+                this.getComplexesKeyValue();
 
                 callback( response.data );
             })
@@ -410,11 +419,14 @@ export default {
         }
 
         // 토큰 체크하는 Api가 아직 없어서 임시로 있으면 무조건 통과
-
         setTimeout( ()=>{
 
             Store.isAuthorized = bool;
             callback( bool );
+
+
+            // 지점정보 가져오기
+            this.getComplexesKeyValue();
 
         }, 0 );
 

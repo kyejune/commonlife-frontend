@@ -23,12 +23,17 @@ class BranchSeletor extends Component {
 
     render() {
 
+        let b = {cmplxNm:'', addr:''};
+        if( Object.keys(Store.complexMap).length > 0 && Store.communityCmplxId ){
+            b = Store.complexMap[ Store.communityCmplxId ];
+        }
+
         return <div className="drawer-fitted-box--b cl-branch-selector cl-bg--dark">
                 <div className="cl-bg--black30">
                     <div className="cl-card-item--dark">
                         <h4 className="color-white fs-16">
-                            역삼동 하우징
-                            <span className="cl-desc ml-1em">(서울시 서초구 강남대로 373)</span>
+                            {b.cmplxNm}
+                            <span className="cl-desc ml-1em">({b.addr})</span>
                         </h4>
                     </div>
                 </div>
