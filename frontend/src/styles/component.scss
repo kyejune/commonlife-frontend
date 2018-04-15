@@ -47,7 +47,7 @@
 /* Drawer */
 .md-drawer {
 
-    background-color: #494c50;
+    background-color: #32363D;
 
     &.cl-bg--light{
         background-image: url("images/bg-3@2x.png");
@@ -432,6 +432,7 @@
 .cl-back__button {
     padding: 0;
     text-align: left;
+    width: calc(42px - 1em);
 }
 
 /* Card Item Detail */
@@ -1233,17 +1234,38 @@ a.cl-map__link--branch{
 }
 
 .cl-notification-center{
+    .cl-iot-vertical-list {
+        background-color: #32363D;
+        padding: 8px 0;
+    }
+
     .cl-iot-control-tab__item{
         width: 25%;
     }
 
     li{
+        box-shadow: none !important;
+        margin-bottom: 0 !important;
+        padding: 15px 18px 17px 12px!important;
+        align-items: end !important;
+
+        border-bottom: 1px solid rgba(250, 250, 250, 0.1) !important;
+
+        img {
+            width: 45px;
+            height: 45px;
+            margin-right: 10px;
+            background-color: #ffffff;
+            border-radius: 50%;
+        }
 
         &.cl--new{
+            align-items: center !important;
 
             .cl__title{
 
                 display: flex;
+                font-size: 18px !important;
 
                 &:after{
                     content:'';
@@ -1256,12 +1278,19 @@ a.cl-map__link--branch{
             }
         }
 
-        p{
-            line-height: 1.2em;
+        h4 {
+            font-size: 16px !important;
+            color: rgba(250, 250, 250, 0.8);
         }
 
-        .cl-next__button--gray{
-            margin-top: -0.7em;
+        p {
+            font-size: 12px;
+            line-height: 1.5em;
+        }
+
+        .cl__desc {
+            line-height: 1.3em;
+            color: rgba(250, 250, 250, 0.8);
         }
     }
 }
