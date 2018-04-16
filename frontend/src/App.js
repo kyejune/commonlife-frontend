@@ -71,12 +71,13 @@ class App extends Component {
             // 일반적인 상황에서..
             if( boxes.length === 1 ) bodyTop = boxes[0].scrollTop;
             else{
-                // 탭구조라서 복수개가 존재할때 보이는 영역에만 제한
-                document.querySelectorAll('.cl-fitted-box').forEach( item => {
-                    if( item.parentElement.getAttribute('aria-hidden') === 'false' ){
-                        bodyTop = item.scrollTop;
-                    }
-                });
+                // 탭구조라서 복수개가 존재할때 보이는 영역, Community탭 구조
+                // document.querySelectorAll('.cl-fitted-box').forEach( item => {
+                //     if( item.parentElement.getAttribute('aria-hidden') === 'false' ){
+                //         bodyTop = item.scrollTop;
+                //     }
+                // });
+                bodyTop = document.querySelector('.md-tab-panel[aria-hidden=false] .cl-card-items').scrollTop;
             }
 
             const DELTA = (this.oldTop - bodyTop );

@@ -67,7 +67,7 @@ class CommunityEvent extends Component {
         if( this.state.isEmpty ){
             Content = <div className="cl-content--empty"/>;
         }else{
-            Content = Store.event.map( ( card, index ) => {
+            Content = Store.event.concat(Store.event).map( ( card, index ) => {
                 return (
                     <CardItem key={index} list="/community/event" cardData={card}/>
                 )

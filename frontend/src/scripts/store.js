@@ -16,12 +16,12 @@ if( window.location.protocol === 'file:' && window.location.pathname.includes('C
 // Cookie.remove( 'force-look-localhost' );
 
 // 덮어쓰기
-host = 'https://cl-stage.cyville.net'; // 클라 전달용
+// host = 'https://cl-stage.cyville.net'; // 클라 전달용
 // host = 'http://localhost:8080';      // ykim 로컬 테스트용
 // host = 'https://cl-stage.cyville.net'; // 클라 전달용
-// if( !Cookie.get( 'force-look-localhost' ) ) {
-//     host = 'https://clback.cyville.net'; // 테스트용
-// }
+if( !Cookie.get( 'force-look-localhost' ) ) {
+    host = 'https://clback.cyville.net'; // 테스트용
+}
 
 console.log( 'api host: ' + host );
 

@@ -81,7 +81,6 @@ class CardItemDetailDrawer extends Component {
     }
 
     render() {
-
         if (!this.state.postIdx) return null;
 
 
