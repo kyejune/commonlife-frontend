@@ -1,8 +1,9 @@
-$dur: 0;
+$dur: 0;//0.2s;
 
 html, body{
     position: fixed;
     overflow: hidden;
+    user-select: none;
 }
 
 body{
@@ -355,7 +356,7 @@ body.cl-dom--added{
     width: 100%;
     height: 100%;
     //padding-bottom: 56px;
-    transition: $dur*2 height ease-out;
+    //transition: $dur*2 height ease-out;
 }
 
 .cl-bg--light{

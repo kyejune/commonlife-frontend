@@ -6,6 +6,7 @@ import Link from "react-router-dom/es/Link";
 import RightArrowSrc from "images/ic-arrow-right@3x.png";
 import classNames from "classnames";
 import Iot from "scripts/iot";
+import {observe} from "mobx/lib/mobx";
 
 /* 모드 목록 (편집용) */
 class IotModeEditor extends Component {
@@ -14,12 +15,14 @@ class IotModeEditor extends Component {
         super(props);
         this.state = {
             selectedId: null,
+            items:[],
         }
-    }
 
-    // componentWillUnmount(){
-    //     //Iot.getMode();
-    // }
+        observe( Modes, change=>{
+            this.setState({ items:Modes });
+            return change;
+        } );
+    }
 
     onCheck = ( values )=>{
         this.setState( { selectedId: values.length===0?null:values[0].mode });
@@ -30,6 +33,8 @@ class IotModeEditor extends Component {
             return { seqNo:values.seqNo, sortOrder: index + 1 }
         });
 
+        this.setState({ items:values });
+
         Iot.reAlignIotMode( alignMap, ()=>{
             console.log( '정렬 성공' );
         });
@@ -37,7 +42,9 @@ class IotModeEditor extends Component {
 
     render() {
 
-        const items = Modes.map( (mode, index) =>{
+        console.log( 'items:', this.state.items );
+
+        const items = this.state.items.map( (mode, index) =>{
             return { idx: index, name: mode.modeNm, ...mode }
         });
 

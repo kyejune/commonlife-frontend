@@ -26,13 +26,20 @@ class EditableList extends Component {
     }
 
     onSortEnd = ({oldIndex, newIndex}) => {
+        console.log( '정렬:', oldIndex, newIndex );
+
+        let newItems = arrayMove(this.state.items, oldIndex, newIndex);
         this.setState({
-            items: arrayMove(this.state.items, oldIndex, newIndex),
+            items: newItems,
         });
+
+        console.log( 'NEW ITEMS:', newItems );
 
         if( this.props.onAlign ) {
             this.props.onAlign( this.state.items );
         }
+
+
     }
 
     onCheckboxChange =( bool, index )=>{
@@ -63,21 +70,28 @@ class EditableList extends Component {
         );
 
 
-        const SortableItem = SortableElement(({ value }) =>
-            <li>
-                <Checkbox className="mr-1em" index={value.idx} checked={ this.state.checkeds[value.idx] } onChange={ this.onCheckboxChange }/>
+        const SortableItem = SortableElement(({ value }) => {
+
+            // console.log( value.name, value.idx, this.state.items, this.state.checkeds );
+
+            return <li>
+                <Checkbox className="mr-1em" index={value.idx} checked={this.state.checkeds[value.idx]}
+                          onChange={this.onCheckboxChange}/>
                 {/*<Link to={value.to} className="cl-flex">*/}
-                    <IconLoader className="cl__thumb--rounded" src={value.imgSrc}/>
-                    <div>
-                        <h4 className="cl__title">{value.name}</h4>
-                        {value.desc && <span className="cl__desc">{value.desc}</span>}
-                    </div>
+                <IconLoader className="cl__thumb--rounded" src={value.imgSrc}/>
+                <div>
+                    <h4 className="cl__title">{value.name}</h4>
+                    {value.desc && <span className="cl__desc">{value.desc}</span>}
+                </div>
                 {/*</Link>*/}
                 <Handle/>
             </li>
-        );
+        });
 
         const SortableList = SortableContainer(({items}) => {
+
+            console.log( items, this.state.checkeds );
+
             return (
                 <ul className={ classNames(
                     "cl-iot-vertical-list",
@@ -89,6 +103,8 @@ class EditableList extends Component {
                 </ul>
             );
         });
+
+        console.log( 'item:', this.state.items );
 
 
         return (
