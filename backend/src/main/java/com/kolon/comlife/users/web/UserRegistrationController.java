@@ -379,10 +379,13 @@ public class UserRegistrationController {
         UserInfo userInfo;
         String userId;
         String userPw;
+        String email;
 
         parameter = IokUtil.buildRequestParameter(request);
         userId = parameter.getString("userId");
         userPw = parameter.getString("userPw");
+        email = parameter.getString("mail");
+        parameter.put("email", email);  // mail ==> email로 변환
 
         // User id validation
         try {

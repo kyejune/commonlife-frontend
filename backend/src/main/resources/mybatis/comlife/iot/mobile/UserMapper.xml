@@ -371,6 +371,7 @@
 				, USER_PW
 				, USER_NM
 				, CELL
+				, EMAIL
 				, LIVE_YN
 				, SMS_CHK_YN
 				, SMS_CHK_NO
@@ -389,6 +390,7 @@
 				, #{userPw}
 				, #{userNm}
 				, #{userCell}
+				, #{email}
 				, 'N'
 				, #{smsChkYN}
 				, #{certNum}
