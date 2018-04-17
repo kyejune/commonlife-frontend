@@ -109,7 +109,7 @@ const Store = observable({
         if( navigator.notification ){
             navigator.notification.alert( msg, ()=>{}, 'CommonLife', '확인' );
         }else {
-            Store.alert( msg );
+            alert(msg);
         }
     },
 
