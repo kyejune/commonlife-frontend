@@ -57,7 +57,7 @@ class CommunityNews extends Component {
         const IS_BOTTOM = (SCROLL_VALUE >= this.scrollBox.scrollHeight - this.scrollBox.clientHeight );
 
         if( IS_TOP ) this.loadPage( 0 );
-        else if( IS_BOTTOM ) this.loadPage( this.page + 1 );
+        // else if( IS_BOTTOM ) this.loadPage( this.page + 1 );
 
         this.setState({ isMore: IS_TOP });
     }

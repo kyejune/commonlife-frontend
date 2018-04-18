@@ -126,10 +126,10 @@ class HomeIoT extends Component {
 
     onScroll=(evt)=>{
         const SCROLL_VALUE = this.scrollBox.scrollTop;
-        const IS_TOP = (SCROLL_VALUE <= -50);
+        const IS_TOP = (SCROLL_VALUE <= -100);
 
         this.setState({ isRefresh: IS_TOP });
-        if( IS_TOP && !this.state.isRefresh ) Iot.getIotAll();
+        // if( IS_TOP && !this.state.isRefresh ) Iot.getIotAll();
     }
 
 	render () {
