@@ -83,11 +83,14 @@ class App extends Component {
 
             this.oldTop = bodyTop;
 
-
             if( Math.abs( DELTA ) > 10 ){
-                let openMode =  DELTA < 0;
+                let openMode =  (DELTA < 0) && bodyTop > 0;
                 this.setState({
                     scrolled: openMode,
+                });
+            }else if( bodyTop === 0 ){
+                this.setState({
+                    scrolled: false,
                 });
             }
 

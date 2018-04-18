@@ -18,6 +18,8 @@ class CommunityNews extends Component {
 
         this.state = {
             isEmpty: false,
+            pulledTop: false,
+            isRefresh: false,
         }
 
         intercept( Store, 'communityCmplxId', change=>{
@@ -36,7 +38,7 @@ class CommunityNews extends Component {
     }
 
     loadPage=( targetPage=0 )=>{
-        if( targetPage >= this.maxPage ) return;
+        if( targetPage > 0 && targetPage >= this.maxPage ) return;
 
         this.isLoading = true;
 
@@ -45,7 +47,7 @@ class CommunityNews extends Component {
             this.maxPage = res.totalPages - 1;
             this.isLoading = false;
 
-            this.setState({ isEmpty: ( Store.news.length === 0 ) });
+            this.setState({ isEmpty: ( Store.news.length === 0 ), pulledTop: false });
         });
     }
 
@@ -56,10 +58,14 @@ class CommunityNews extends Component {
         const IS_TOP = (SCROLL_VALUE <= -10);
         const IS_BOTTOM = (SCROLL_VALUE >= this.scrollBox.scrollHeight - this.scrollBox.clientHeight );
 
-        if( IS_TOP ) this.loadPage( 0 );
-        // else if( IS_BOTTOM ) this.loadPage( this.page + 1 );
+        if( IS_BOTTOM ) this.loadPage( this.page + 1 );
 
-        this.setState({ isMore: IS_TOP });
+        this.setState({ isRefresh: IS_TOP, pulledTop:(IS_TOP||true) });
+
+        // 0으로 돌아왔고 && 밑으로 땡겨졌었다면...
+        if( SCROLL_VALUE ===  0 && this.state.pulledTop ){
+            this.loadPage( 0 );
+        }
     }
 
 	render () {
@@ -80,7 +86,7 @@ class CommunityNews extends Component {
         return (
             <div className="cl-fitted-box cl-tab--news">
 
-                <div className={ classNames( "spinner--more", { "cl--none":this.state.isEmpty||!this.state.isMore }) } />
+                <div className={ classNames( "spinner--more", { "cl--none":this.state.isEmpty||!this.state.isRefresh }) } />
 
 
                 <div className="cl-card-items" ref={ r => this.scrollBox = r } onScroll={ this.onScroll }>
