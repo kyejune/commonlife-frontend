@@ -48,6 +48,7 @@ class Profile extends Component {
     changeEmail=()=>{
         if( this.mailValidator.allValid() ){
             Net.changeEmail( this.state.newEmail, res => {
+                Store.alert('이메일이 성공적으로 변경되었습니다.');
                 this.loadData();
             });
         }else{
