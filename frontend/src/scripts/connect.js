@@ -1,8 +1,15 @@
 
 document.addEventListener('deviceready', function(){
 
+    const DEVICE = window.device;
     document.querySelector('body').classList.add('device--ready' );
-    document.querySelector('body').classList.add('platform--' + window.device.platform.toLowerCase());
+    document.querySelector('body').classList.add('platform--' + DEVICE.platform.toLowerCase());
+
+    const MODEL = DEVICE.model.toLowerCase();
+    if( MODEL.indexOf('iphone10') >= 0 )
+        document.querySelector('body').classList.add('model--iphone10');
+    else
+        document.querySelector('body').classList.add('model--' + MODEL );
 
 
     if( window.Keyboard ) {

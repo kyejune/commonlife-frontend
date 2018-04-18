@@ -87,7 +87,7 @@ class App extends Component {
             if( Math.abs( DELTA ) > 10 ){
                 let openMode =  DELTA < 0;
                 this.setState({
-                    scrolled: openMode,//( bodyTop > 56 )
+                    scrolled: openMode,
                 });
             }
 
@@ -98,8 +98,11 @@ class App extends Component {
             this.router.history.listen(location => {
                 const S = new DeviceStorage().localStorage();
                 const PATH = location.pathname;
+
+                // 마지막 이동 패스 기억
                 if (PATH.indexOf('/community') === 0 || PATH.indexOf('/reservation') === 0 || PATH.indexOf('/iot') === 0 || PATH.indexOf('/info') === 0)
                     S.save('location', location.pathname);
+
             });
         }
     }

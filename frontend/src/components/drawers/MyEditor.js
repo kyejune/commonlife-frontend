@@ -32,6 +32,10 @@ class MyEditor extends Component {
         } );
     }
 
+    componentDidMount(){
+        this.setState({ items: MyIots });
+    }
+
     onCheck = ( values )=>{
 
         let list = values.map( item=>{

@@ -26,10 +26,19 @@ import TimeSelector from "../ui/TimeSelector";
 import Automations from "../drawers/iot/Automations";
 import RightArrowSrc from 'images/ic-favorite-24-px-blue@3x.png';
 import Information from "../drawers/iot/Information";
+import classNames from "classnames";
 
 class HomeIoT extends Component {
 
-	componentDidMount () {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isRefresh: false,
+        }
+    }
+
+
+    componentDidMount () {
 		Iot.getIotAll();
 		this.updateRoute();
 	}
@@ -40,7 +49,6 @@ class HomeIoT extends Component {
             // 페이지 진입시마다 새로 고침
             if( this.props.location.pathname === '/iot' ) Iot.getIotAll();
         }
-
 	}
 
 	updateRoute ( data ) {
@@ -116,11 +124,24 @@ class HomeIoT extends Component {
 		}
 	}
 
+    onScroll=(evt)=>{
+        const SCROLL_VALUE = this.scrollBox.scrollTop;
+        const IS_TOP = (SCROLL_VALUE <= -50);
+
+        this.setState({ isRefresh: IS_TOP });
+        if( IS_TOP && !this.state.isRefresh ) Iot.getIotAll();
+    }
+
 	render () {
 
 		return <div className="cl-tab--iot">
+
 			<div className="cl-home-iot">
-				<div className="cl-fitted-box pb-3em">
+
+                <div className={ classNames( "spinner--more", "mt-6em", { "cl--none":!this.state.isRefresh }) } />
+
+
+				<div className="cl-fitted-box pb-3em" ref={ r => this.scrollBox = r } onScroll={ this.onScroll }>
 					<WithTitle titleName="Smart Mode"/>
 
 					<div className="cl-iot-mode">

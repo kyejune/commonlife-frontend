@@ -352,7 +352,7 @@ class ReservationDetail extends Component {
 		}
 
 
-		return [<div className="cl-reservation-detail pb-3em" key="rd">
+		return [<div className="cl-reservation-detail pb-3em drawer-fitted-box" key="rd">
 
 			{!this.state.reserved &&
 			<Link to={'/reservation/' + this.props.match.params.id + '/thumbnails'}>

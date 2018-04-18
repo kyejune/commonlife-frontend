@@ -24,6 +24,10 @@ class IotModeEditor extends Component {
         } );
     }
 
+    componentDidMount(){
+        this.setState({ items: Modes });
+    }
+
     onCheck = ( values )=>{
         this.setState( { selectedId: values.length===0?null:values[0].mode });
     }

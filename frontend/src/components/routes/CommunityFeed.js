@@ -4,6 +4,7 @@ import {intercept} from 'mobx';
 import CardItem from 'components/ui/CardItem';
 import Store from 'scripts/store';
 import Net from 'scripts/net';
+import classNames from 'classnames';
 
 class CommunityFeed extends Component {
 
@@ -16,6 +17,7 @@ class CommunityFeed extends Component {
 
 		this.state = {
 			isEmpty: false,
+			isMore: false,
 		}
 
         intercept( Store, 'communityCmplxId', change=>{
@@ -28,7 +30,6 @@ class CommunityFeed extends Component {
             return change;
 		} );
 	}
-
 
     componentDidMount(){
 		this.loadPage( 0 );
@@ -52,18 +53,20 @@ class CommunityFeed extends Component {
         if( this.isLoading ) return;
 
 		const SCROLL_VALUE = this.scrollBox.scrollTop;
-		// const IS_TOP = (SCROLL_VALUE <= 0);
+		const IS_TOP = (SCROLL_VALUE <= -10);
 		const IS_BOTTOM = (SCROLL_VALUE >= this.scrollBox.scrollHeight - this.scrollBox.clientHeight );
 
-		// if( IS_TOP ) this.loadPage( 0 );
-		// else if( IS_BOTTOM ) this.loadPage( this.page + 1 );
-        if( IS_BOTTOM ) this.loadPage( this.page + 1 );
+		if( IS_TOP ) this.loadPage( 0 );
+		else if( IS_BOTTOM ) this.loadPage( this.page + 1 );
+
+		this.setState({ isMore: IS_TOP });
 	}
 
 
 	render () {
 
 		let Content;
+		let Spinner;
 
 		if( this.state.isEmpty ){
 			Content = <div className="cl-content--empty"/>;
@@ -84,9 +87,11 @@ class CommunityFeed extends Component {
 		}
 
 		return (
-			<div ref={ r => this.scrollBox = r } className="cl-fitted-box" onScroll={ this.onScroll } >
+			<div className="cl-fitted-box" >
 
-				<div className="cl-card-items">
+				<div className={ classNames( "spinner--more", { "cl--none":this.state.isEmpty||!this.state.isMore }) } />
+
+				<div ref={ r => this.scrollBox = r } onScroll={ this.onScroll } className="cl-card-items">
 					{ Content }
 				</div>
 			</div>

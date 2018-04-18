@@ -4,6 +4,7 @@ import CardItem from 'components/ui/CardItem';
 import Store from "scripts/store";
 import Net from "../../scripts/net";
 import {intercept} from "mobx/lib/mobx";
+import classNames from 'classnames';
 
 class CommunityEvent extends Component {
 
@@ -52,12 +53,13 @@ class CommunityEvent extends Component {
         if( this.isLoading ) return;
 
         const SCROLL_VALUE = this.scrollBox.scrollTop;
-        // const IS_TOP = (SCROLL_VALUE <= 0);
+        const IS_TOP = (SCROLL_VALUE <= -10);
         const IS_BOTTOM = (SCROLL_VALUE >= this.scrollBox.scrollHeight - this.scrollBox.clientHeight );
 
-        // if( IS_TOP ) this.loadPage( 0 );
-        // else if( IS_BOTTOM ) this.loadPage( this.page + 1 );
-        if( IS_BOTTOM ) this.loadPage( this.page + 1 );
+        if( IS_TOP ) this.loadPage( 0 );
+        else if( IS_BOTTOM ) this.loadPage( this.page + 1 );
+
+        this.setState({ isMore: IS_TOP });
     }
 
 	render () {
@@ -76,9 +78,11 @@ class CommunityEvent extends Component {
 
 
 		return (
-			<div ref={ r => this.scrollBox = r } className="cl-fitted-box">
+			<div className="cl-fitted-box">
 
-				<div className="cl-card-items">
+                <div className={ classNames( "spinner--more", { "cl--none":this.state.isEmpty||!this.state.isMore }) } />
+
+				<div className="cl-card-items" ref={ r => this.scrollBox = r } onScroll={ this.onScroll }>
 					{ Content }
 				</div>
 

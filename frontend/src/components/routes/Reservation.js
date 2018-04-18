@@ -182,7 +182,7 @@ class Reservation extends Component {
 			</DrawerWrapper>
 
 			{/* 예약 목록 */}
-			<DrawerWrapper drawer="reservation-list" back >
+			<DrawerWrapper drawer="reservation-list" light back >
 				<ReservationList/>
 			</DrawerWrapper>
 
