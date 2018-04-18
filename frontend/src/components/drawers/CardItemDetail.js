@@ -91,7 +91,7 @@ class CardItemDetailDrawer extends Component {
             userThumb.backgroundImage = `url(${this.state.user.imgSrc})`;
         }
 
-        console.log('>>>>', this.state.user.imgSrc );
+        // console.log('>>>>', this.state.user.imgSrc );
 
         let imgAddr;
         if (this.state.postFiles.length > 0 ) {
@@ -105,10 +105,14 @@ class CardItemDetailDrawer extends Component {
 
         // 참여버튼
         let join;
-        if( this.state.rsvYn ){
-            join = <button  className="cl-card-item__button" onClick={ ()=> this.onChangeJoin( !this.state.rsvFlag ) }>
-                <img src={ this.state.rsvFlag?joinedSrc:joinSrc } alt="참석여부 결정" height="30"/>
-            </button>;
+        if( this.state.rsvYn === 'Y'){
+            join = [<div className="cl-join-status mr-auto" key="rsv-div">
+                        <span>{this.state.rsvCount}</span>
+                        <span>/{this.state.rsvMaxCnt} 참여</span>
+                    </div>,
+                <button key="rsv-btn" className="cl-card-item__button" onClick={ ()=> this.onChangeJoin( !this.state.rsvFlag ) }>
+                    <img src={ this.state.rsvFlag?joinedSrc:joinSrc } alt="참석여부 결정" height="30"/>
+                </button>];
         }
 
         let cn = "cl-card-detail";
@@ -190,11 +194,6 @@ class CardItemDetailDrawer extends Component {
 
             {PostType === 'event' &&
             <footer className="cl-opts__footer cl-flex">
-                <div className="cl-join-status mr-auto">
-                    <span>{this.state.rsvCount}</span>
-                    <span>/{this.state.rsvMaxCnt} 참여</span>
-                </div>
-
                 {join}
             </footer>
             }

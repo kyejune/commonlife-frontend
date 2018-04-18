@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Net from "../../scripts/net";
 import SimpleReactValidator from "simple-react-validator";
 import axios from 'axios';
-import Store, { MakingUserData } from "../../scripts/store";
+import Store, {MakingUserData, VALIDATOR_MSG} from "../../scripts/store";
 import { observer } from "mobx-react";
 
 class HouseHolderInputs extends Component {
@@ -17,14 +17,7 @@ class HouseHolderInputs extends Component {
         }
 
         // this.certReqId = null; // 휴대포 인증 요청 후 받은 값
-        this.validator = new SimpleReactValidator({
-            'not-undefined': {
-                message: '동',
-                rule: vals => {
-                    return (vals[0] != 'undefined' && vals[1] != 'undefined');
-                }
-            }
-        });
+        this.validator = new SimpleReactValidator( VALIDATOR_MSG );
     }
 
 
@@ -124,7 +117,7 @@ class HouseHolderInputs extends Component {
                         return <option key={item} value={item}>{item}</option>
                     })}
                 </select>
-                {this.validator.message('', [houseHolder.dong, houseHolder.ho], `not-undefined`)}
+                {this.validator.message('세대 정보', [houseHolder.dong, houseHolder.ho], 'requires')}
             </div>
 
             <div className="cl-input-container">

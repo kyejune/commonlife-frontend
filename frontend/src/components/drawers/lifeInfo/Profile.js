@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import SimpleReactValidator from 'simple-react-validator';
 import Net from "../../../scripts/net";
-import Store from "../../../scripts/store";
+import Store, {VALIDATOR_MSG} from "../../../scripts/store";
 import {MakingUserData} from "../../../scripts/store";
 import DeviceStorage from "react-device-storage";
 import {withRouter} from "react-router-dom";
@@ -26,24 +26,8 @@ class Profile extends Component {
             editable: false,
         };
 
-        this.passwordValidator = new SimpleReactValidator({
-            same:{
-                message:'password mismatch',
-                rule: (val, options)=>{
-                    return (val.length > 0) && (val === options[0]);
-                }
-            }
-        });
-
-        this.mailValidator = new SimpleReactValidator({
-            mail:{
-                message:'The :attribute must be a valid email address.',
-                rule: val =>{
-                    const R = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                    return R.test( val );
-                }
-            }
-        })
+        this.passwordValidator = new SimpleReactValidator( VALIDATOR_MSG );
+        this.mailValidator = new SimpleReactValidator( VALIDATOR_MSG );
     }
 
     componentDidMount(){

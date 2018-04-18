@@ -91,12 +91,12 @@ body.cl-keyboard--open{
 
     &.platform--ios{
         .cl-shrink{
-            height: calc( 96.1vh - 56px - 50px );
+            height: calc( 96.1vh - 46px - 45px );
         }
     }
 
     .cl-shrink{
-        height: calc( 100vh - 56px - 50px );
+        height: calc( 100vh - 46px - 45px );
     }
 
 
