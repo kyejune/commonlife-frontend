@@ -34,6 +34,7 @@ class HomeIoT extends Component {
         super(props);
         this.state = {
             isRefresh: false,
+            pulledTop: false,
         }
     }
 
@@ -126,10 +127,18 @@ class HomeIoT extends Component {
 
     onScroll=(evt)=>{
         const SCROLL_VALUE = this.scrollBox.scrollTop;
-        const IS_TOP = (SCROLL_VALUE <= -100);
+        const IS_TOP = (SCROLL_VALUE <= -80);
 
-        this.setState({ isRefresh: IS_TOP });
-        // if( IS_TOP && !this.state.isRefresh ) Iot.getIotAll();
+        console.log( IS_TOP, SCROLL_VALUE );
+
+        this.setState({ isRefresh: IS_TOP, isPulled:(IS_TOP||true) });
+
+        // 0으로 돌아왔고 && 밑으로 땡겨졌었다면...
+        if( SCROLL_VALUE ===  0 && this.state.pulledTop ){
+            Iot.getIotAll( ()=>{
+               this.setState({ pulledTop: false });
+            });
+        }
     }
 
 	render () {
