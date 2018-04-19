@@ -18,6 +18,10 @@
   .cl-label{
     font-weight: bold;
     width: 80px;
+
+    &+div{
+      width: calc( 100% - 80px );
+    }
   }
 
   .cl-opt-sec--title{

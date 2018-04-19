@@ -342,6 +342,14 @@ class ReservationDetail extends Component {
 					<div>{opt.info}</div>
 				</div>
 			}
+			else if( opt.type === 'input' ){
+				return <div className="cl-opt-sec cl-flex" key="input">
+                    <div className="cl-label">{opt.title}</div>
+					<div>
+                    	<input className="w-100" type="text" placeholder={opt.placeholder} defaultValue={opt.info||''}/>
+                    </div>
+                </div>
+			}
 			else {
 				return '';
 			}
