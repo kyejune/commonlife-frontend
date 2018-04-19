@@ -1,7 +1,7 @@
 import Store from 'scripts/store.js';
 import axios from 'axios';
 import DeviceStorage from "react-device-storage";
-
+import _ from 'underscore';
 
 
 
@@ -263,20 +263,7 @@ export default {
     deletePost( id, callback ){
         axios.delete( `/posts/${id}`)
             .then( response => {
-
-                let searchIndex = -1;
-                Store.feed.some( (item, idx)=>{
-
-                    const BOOL = (searchIndex = idx);
-                    if( BOOL ) searchIndex = idx;
-
-                    return BOOL;
-                });
-
-                if( searchIndex >= 0 ){
-                    Store.feed = Store.feed.splice( searchIndex, 1 );
-                }
-
+                Store.feed = _.reject( Store.feed, f => f.postIdx === id );
                 callback( response.data );
             });
     },
