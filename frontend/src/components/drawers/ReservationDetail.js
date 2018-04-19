@@ -172,6 +172,17 @@ class ReservationDetail extends Component {
 				result.dates = [ now.toDate(), tommorow.toDate() ];
 			}
 
+			if( data.schemeOptions && data.schemeOptions.length ) {
+				result.options.push( {
+					type: 'select',
+					options: data.schemeOptions
+				} );
+				result.options.push( {
+					type: 'counter',
+					title: '수량',
+				} );
+			}
+
 			// 원본 데이터도 바인딩 시켜둔다
 			result.scheme = data;
 			result.reservedSchedules = [];
@@ -300,7 +311,7 @@ class ReservationDetail extends Component {
 			}
 			else if ( opt.type === 'select' ) {
 				let Opts = opt.options.map( ( o, i ) => {
-					return <option value={i} key={i}>{o}</option>
+					return <option value={o.idx} key={i}>{o.name}</option>
 				} );
 
 				return <div className="cl-opt-sec cl-flex" key="select">

@@ -2,14 +2,8 @@ package com.kolon.comlife.reservation.web;
 
 import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
-import com.kolon.comlife.reservation.model.ReservationAmenityInfo;
-import com.kolon.comlife.reservation.model.ReservationGroupInfo;
-import com.kolon.comlife.reservation.model.ReservationInfo;
-import com.kolon.comlife.reservation.model.ReservationSchemeInfo;
-import com.kolon.comlife.reservation.service.ReservationAmenityService;
-import com.kolon.comlife.reservation.service.ReservationGroupService;
-import com.kolon.comlife.reservation.service.ReservationSchemeService;
-import com.kolon.comlife.reservation.service.ReservationService;
+import com.kolon.comlife.reservation.model.*;
+import com.kolon.comlife.reservation.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -43,6 +37,9 @@ public class ReservationSchemeController {
     @Resource(name = "reservationAmenityService")
     ReservationAmenityService amenityService;
 
+    @Resource(name = "reservationSchemeOptionService")
+    ReservationSchemeOptionService reservationSchemeOptionService;
+
     @CrossOrigin
     @GetMapping(
             value = "/",
@@ -66,6 +63,11 @@ public class ReservationSchemeController {
         params.put( "schemeIdx", info.getIdx() );
         List<ReservationAmenityInfo> amenities = amenityService.index( params );
         info.setAmenities( amenities );
+
+        HashMap optionParams = new HashMap();
+        optionParams.put( "schemeIdx", info.getIdx() );
+        List<ReservationSchemeOptionInfo> schemeOptions = reservationSchemeOptionService.index( optionParams );
+        info.setSchemeOptions( schemeOptions );
 
         return ResponseEntity.status( HttpStatus.OK ).body( info );
     }

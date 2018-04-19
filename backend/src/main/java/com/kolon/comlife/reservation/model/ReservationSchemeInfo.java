@@ -39,6 +39,7 @@ public class ReservationSchemeInfo {
 
     private ComplexInfo complex;
     private List<ReservationAmenityInfo> amenities;
+    private List<ReservationSchemeOptionInfo> schemeOptions;
 
     public int getIdx() {
         return idx;
@@ -286,5 +287,13 @@ public class ReservationSchemeInfo {
 
     public void setAmenities(List<ReservationAmenityInfo> amenities) {
         this.amenities = amenities;
+    }
+
+    public List<ReservationSchemeOptionInfo> getSchemeOptions() {
+        return schemeOptions;
+    }
+
+    public void setSchemeOptions(List<ReservationSchemeOptionInfo> schemeOptions) {
+        this.schemeOptions = schemeOptions;
     }
 }

@@ -15,24 +15,24 @@ public class ReservationSchemeOptionDAO {
     private SqlSession sqlSession;
 
     public List<ReservationSchemeOptionInfo> index(Map params ) {
-        return sqlSession.selectList( "ReservationOptionScheme.index", params );
+        return sqlSession.selectList( "ReservationSchemeOption.index", params );
     }
 
     public ReservationSchemeOptionInfo show( int idx ) {
         HashMap params = new HashMap<String, Object>();
         params.put("idx", idx);
-        return sqlSession.selectOne( "ReservationOptionScheme.show", params );
+        return sqlSession.selectOne( "ReservationSchemeOption.show", params );
     }
 
     public int create(ReservationSchemeOptionInfo info) {
-        return sqlSession.insert("ReservationOptionScheme.create", info);
+        return sqlSession.insert("ReservationSchemeOption.create", info);
     }
 
     public int update(ReservationSchemeOptionInfo info) {
-        return sqlSession.update("ReservationOptionScheme.update", info);
+        return sqlSession.update("ReservationSchemeOption.update", info);
     }
 
     public int delete(ReservationSchemeOptionInfo info) {
-        return sqlSession.delete("ReservationOptionScheme.delete", info);
+        return sqlSession.delete("ReservationSchemeOption.delete", info);
     }
 }
