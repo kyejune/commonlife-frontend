@@ -452,16 +452,6 @@
 
 .cl-card-detail {
 
-    //height: calc(100vh - 106px);
-    //overflow-y: auto;
-    //overflow-x: hidden;
-
-    //.cl-card-item-wrapper{
-    //    position: sticky;
-    //    top: 0;
-    //    margin-top: 0;
-    //}
-
     .cl-card-item-wrapper{
         position: relative;
         margin-top: 0;
@@ -524,6 +514,22 @@
 
             &:last-child{
                 color: #4a4a4a;
+            }
+        }
+    }
+
+    .cl__footer--double{
+        height: 100px;
+        padding: 0;
+
+        &>button{
+            @extend .cl-flex;
+            padding: 0 10px 0 20px;
+            height: 50%;
+            width: 100%;
+
+            &:last-child {
+                box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, 0.1);
             }
         }
     }

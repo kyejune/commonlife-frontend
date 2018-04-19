@@ -82,6 +82,11 @@ class LifeInfo extends Component {
 	render () {
 		if( !this.state ) return <div/>;
 
+		let Device;
+		if( window.device ){
+			Device = <p>{window.device.model + ', ' + window.device.platform}</p>
+		}
+
 		const { cmplxNm, dong, ho, infoList, notice, point, startDt, userImgSrc, userNm } = this.state;
 
 		return <div className="cl-info-container cl-tab--info">
@@ -95,6 +100,7 @@ class LifeInfo extends Component {
 							<div>
 								<h4>{userNm}</h4>
 								<p>{`${cmplxNm} ${dong}동 ${ho}호`}</p>
+								{Device}
 							</div>
 						</div>
 

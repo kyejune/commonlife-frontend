@@ -7,7 +7,7 @@ import moment from "moment/moment";
 import joinSrc from 'images/rsvp-normal@3x.png';
 import joinedSrc from 'images/rsvp-activity@3x.png';
 import TagComponent from "../ui/TagComponent";
-
+import RightArrowSrc from "images/ic-arrow-right@3x.png";
 
 class CardItemDetailDrawer extends Component {
 
@@ -49,6 +49,18 @@ class CardItemDetailDrawer extends Component {
     }
 
 
+    onEdit=()=>{
+        console.log( 'onEdit:', this.state );
+        Store.pushDrawer( 'write', { type:'edit', content:this.state.content, files: this.state.postFiles, index: this.state.postIdx });
+    }
+
+    onDelete=()=>{
+        Net.deletePost( this.state.postIdx, res=>{
+            alert( res.msg );
+            this.props.history.goBack();
+        });
+    }
+
     /* 이벤트 날짜 구성 컴퍼넌트 생성 */
     makeDateComponent(fromDate, toDate) {
         let result = [];
@@ -83,6 +95,10 @@ class CardItemDetailDrawer extends Component {
     render() {
         if (!this.state.postIdx) return null;
 
+        // 작성자 글이라 수정, 삭제가 가능할때
+        let Footer;
+
+
 
         const PostType = this.state.postType;
 
@@ -91,16 +107,9 @@ class CardItemDetailDrawer extends Component {
             userThumb.backgroundImage = `url(${this.state.user.imgSrc})`;
         }
 
-        // console.log('>>>>', this.state.user.imgSrc );
-
         let imgAddr;
         if (this.state.postFiles.length > 0) {
             imgAddr = this.state.postFiles[0].mediumPath;
-        }
-
-        let duration;
-        if (PostType === 'event') {
-            duration = this.makeDateComponent(this.state.eventBeginDttm, this.state.eventEndDttm);
         }
 
         // 참여버튼
@@ -116,11 +125,35 @@ class CardItemDetailDrawer extends Component {
                 </button>];
         }
 
-        let cn = "cl-card-detail";
-        // if( PostType === 'feed' ) cn = 'cl-card-detail--feed';
+        let duration;
+
+        switch(PostType){
+            case 'event':
+                duration = this.makeDateComponent(this.state.eventBeginDttm, this.state.eventEndDttm);
+
+                Footer = <footer className="cl-opts__footer cl-flex">
+                    {join}
+                </footer>;
+                break;
+
+            case 'feed':
+                if( `${Store.auth.key}` === `${this.state.usrId}` ){
+                    Footer = <footer className="cl-opts__footer cl__footer--double">
+                        <button onClick={ this.onEdit }>
+                            <div className="cl-bold color-black">수정</div>
+                            <img className="cl-flex ml-auto" src={RightArrowSrc} width="24" height="24" alt="수정"/>
+                        </button>
+                        <button onClick={ this.onDelete }>
+                            <div className="cl-bold color-black">삭제</div>
+                            <img className="cl-flex ml-auto" src={RightArrowSrc} width="24" height="24" alt="삭제"/>
+                        </button>
+                    </footer>
+                }
+                break;
+        }
 
 
-        return <div className={cn}>
+        return <div className="cl-card-detail">
 
             <div className="drawer-fitted-box--b">
                 {/* event 타입 아니면 이미지 노출 */}
@@ -195,11 +228,7 @@ class CardItemDetailDrawer extends Component {
                 </div>
             </div>
 
-            {PostType === 'event' &&
-            <footer className="cl-opts__footer cl-flex">
-                {join}
-            </footer>
-            }
+            {Footer}
         </div>
     }
 }
