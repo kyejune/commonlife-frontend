@@ -10,6 +10,7 @@ public class ReservationSchemeInfo {
     private int idx;
     private int cmplxIdx;
     private int parentIdx;
+    private String isExpress;
     private String code;
     private String icon;
     private String reservationType;
@@ -61,6 +62,14 @@ public class ReservationSchemeInfo {
 
     public void setParentIdx(int parentIdx) {
         this.parentIdx = parentIdx;
+    }
+
+    public String getIsExpress() {
+        return isExpress;
+    }
+
+    public void setIsExpress(String isExpress) {
+        this.isExpress = isExpress;
     }
 
     public String getCode() {

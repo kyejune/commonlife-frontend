@@ -18,10 +18,13 @@ import ReserveServiceCleaning from 'images/rs-icon-2@3x.png';
 import ReserveServiceFood from 'images/rs-icon-3@3x.png';
 import ReserveServiceCarwash from 'images/rs-icon-4@3x.png';
 import ReserveIcPlus from 'images/page-1@3x.png';
+import ReserveIcNext from 'images/shape-time-next@3x.png';
+import ReserveIcTime from 'images/shape-time-plus@3x.png';
 import { observer } from "mobx-react";
 import DrawerWrapper from "../drawers/DrawerWrapper";
 import net from '../../scripts/net';
 import TitleWithoutSelect from "../ui/TitleWithoutSelect";
+import ReservationListItem from "../drawers/ReservationListItem";
 
 class Reservation extends Component {
 
@@ -132,36 +135,7 @@ class Reservation extends Component {
 				<ul className="cl-reservation__list--service">
 					{
 						this.state.schemes.map( ( scheme, key ) => {
-							return <li className="cl-reservation__list-item" key={ key }>
-                                <div>
-                                    <div className="cl-flex-between">
-										{ scheme.icon === 'CLEANING' &&
-										<img src={ReserveServiceCleaning} alt=""
-											 className="cl-reservation__list-item-type-img"/>
-										}
-										{ scheme.icon === 'LAUNDRY' &&
-										<img src={ReserveServiceLaundry} alt=""
-											 className="cl-reservation__list-item-type-img"/>
-										}
-										{ scheme.icon === 'FOOD' &&
-										<img src={ReserveServiceFood} alt=""
-											 className="cl-reservation__list-item-type-img"/>
-										}
-										{ scheme.icon === 'CARWASH' &&
-										<img src={ReserveServiceCarwash} alt=""
-											 className="cl-reservation__list-item-type-img"/>
-										}
-                                        <div className="cl-reservation__list-item-text">
-                                            <h5>{ scheme.title }</h5>
-                                            <p className="cl-ellipsis">{ scheme.summary }</p>
-                                        </div>
-                                        <Link to={ '/reservation/' + scheme.idx } className="cl-reservation__list-item-bullet">
-                                            <img src={ReserveIcPlus} alt=""/>
-                                            <span>예약하기</span>
-                                        </Link>
-                                    </div>
-                                </div>
-                            </li>
+							return <ReservationListItem scheme={ scheme } key={ key }/>
 						} )
                     }
 				</ul>
