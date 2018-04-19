@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="ReservationScheme">
+<mapper namespace="ReservationSchemeOption">
 
     <select id="index" parameterType="java.util.Map" resultType="reservationSchemeOptionInfo">
         SELECT
@@ -20,15 +20,9 @@
             </when>
         </choose>
         <choose>
-            <when test='groupIdx != null'>
+            <when test='schemeIdx != null'>
                 AND
-                `PARENT_IDX` = #{groupIdx}
-            </when>
-        </choose>
-        <choose>
-            <when test='cmplxIdx != null'>
-                AND
-                `CMPLX_IDX` = #{cmplxIdx}
+                `PARENT_IDX` = #{schemeIdx}
             </when>
         </choose>
     </select>
