@@ -282,7 +282,10 @@ public class InfoController {
         imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
         imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
 
-        item.setImageInfo( imageInfoMap );
+        List imageInfoList = new ArrayList();
+        imageInfoList.add(imageInfoMap);
+
+        item.setImageInfo( imageInfoList );
 
         return ResponseEntity.status( HttpStatus.OK ).body( item );
     }
@@ -361,6 +364,7 @@ public class InfoController {
         ImageInfo imageInfo = new ImageInfo();
         Map imageInfoMap = new TreeMap();
         int imageIdx = 222;
+        List imageInfoList = new ArrayList();
 
         switch( itemIdx ) {
             case 12:
@@ -393,7 +397,9 @@ public class InfoController {
                 imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
                 imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
 
-                item.setImageInfo( imageInfoMap );
+                imageInfoList.add(imageInfoMap);
+
+                item.setImageInfo( imageInfoList );
                 break;
             case 10:
                 item.setItemIdx( 10 );
@@ -433,7 +439,9 @@ public class InfoController {
                 imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
                 imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
 
-                item.setImageInfo( imageInfoMap );
+                imageInfoList.add(imageInfoMap);
+
+                item.setImageInfo( imageInfoList );
 
                 break;
             default:
@@ -466,7 +474,9 @@ public class InfoController {
                 imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
                 imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
 
-                item.setImageInfo( imageInfoMap );
+                imageInfoList.add(imageInfoMap);
+
+                item.setImageInfo( imageInfoList );
                 break;
         }
 

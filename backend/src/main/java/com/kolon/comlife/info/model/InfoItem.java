@@ -4,6 +4,7 @@ import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.imageStore.model.ImageInfo;
 import org.apache.ibatis.type.Alias;
 
+import java.util.List;
 import java.util.Map;
 
 @Alias("infoItem")
@@ -27,7 +28,7 @@ public class InfoItem extends SimpleMsgInfo {
     private String regDttm;
     private String updDttm;
 
-    private Map imageInfo;
+    private List<Map> imageInfo;
 
     public String getItemNm() {
         return itemNm;
@@ -133,11 +134,11 @@ public class InfoItem extends SimpleMsgInfo {
         this.updDttm = updDttm;
     }
 
-    public Map getImageInfo() {
+    public List<Map> getImageInfo() {
         return imageInfo;
     }
 
-    public void setImageInfo(Map imageInfo) {
+    public void setImageInfo(List<Map> imageInfo) {
         this.imageInfo = imageInfo;
     }
 }
