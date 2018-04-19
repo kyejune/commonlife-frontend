@@ -36,6 +36,24 @@
         </choose>
     </select>
 
+    <select id="available" parameterType="java.util.Map" resultType="reservationInfo">
+        SELECT *
+        FROM   `RESERVATIONS`
+        WHERE  1=1
+        <choose>
+            <when test='schemeIdx != null'>
+                AND
+                PARENT_IDX = #{schemeIdx}
+            </when>
+        </choose>
+        <choose>
+            <when test='startDt != null'>
+                AND
+                START_DT = #{startDt}
+            </when>
+        </choose>
+    </select>
+
     <select id="show" parameterType="java.util.Map" resultType="reservationInfo">
         SELECT
         *

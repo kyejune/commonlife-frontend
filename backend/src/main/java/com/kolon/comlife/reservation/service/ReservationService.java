@@ -7,6 +7,7 @@ import java.util.Map;
 
 public interface ReservationService {
     public List<ReservationInfo> index(Map params);
+    public List<ReservationInfo> available(Map params);
     public ReservationInfo show(int idx);
     public int create(ReservationInfo info);
     public int update(ReservationInfo info);

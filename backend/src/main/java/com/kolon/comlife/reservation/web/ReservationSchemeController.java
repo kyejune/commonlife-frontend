@@ -88,4 +88,26 @@ public class ReservationSchemeController {
 
         return ResponseEntity.status( HttpStatus.OK ).body( reservations );
     }
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/{id}/available",
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity available(
+            HttpServletRequest request
+            , @PathVariable("id") int id
+    ) {
+        ReservationSchemeInfo info = service.show( id );
+
+        HashMap params = new HashMap();
+        params.put( "schemeIdx", id );
+        params.put( "startDt", request.getParameter( "startDt" ) );
+        List<ReservationInfo> reservations = reservationService.available( params );
+
+        HashMap result = new HashMap();
+        result.put( "available", info.getMaxQty() - reservations.size() );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( result );
+    }
 }

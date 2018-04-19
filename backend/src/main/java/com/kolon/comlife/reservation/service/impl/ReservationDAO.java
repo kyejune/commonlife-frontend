@@ -18,6 +18,10 @@ public class ReservationDAO {
         return sqlSession.selectList( "Reservation.index", params );
     }
 
+    public List<ReservationInfo> available(Map params ) {
+        return sqlSession.selectList( "Reservation.available", params );
+    }
+
     public ReservationInfo show( int idx ) {
         HashMap params = new HashMap<String, Object>();
         params.put("idx", idx);

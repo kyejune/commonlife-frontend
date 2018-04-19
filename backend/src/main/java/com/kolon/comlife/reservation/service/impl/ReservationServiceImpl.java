@@ -22,6 +22,12 @@ public class ReservationServiceImpl implements ReservationService {
         return dao.index( params );
     }
 
+
+    @Override
+    public List<ReservationInfo> available(Map params) {
+        return dao.available( params );
+    }
+
     @Override
     public ReservationInfo show(int idx) {
         return dao.show( idx );

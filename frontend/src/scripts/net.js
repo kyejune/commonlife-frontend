@@ -212,6 +212,13 @@ export default {
 			} );
     },
 
+    getReservationAvailable( id, date, callback ) {
+		axios.get( Store.api + '/reservation-schemes/' + id + '/available?startDt=' + date )
+			.then( response => {
+				callback( response.data );
+			} );
+    },
+
     getHomeHead( callback ) {
         axios.get( Store.api + '/home-head/' )
             .then( response => {

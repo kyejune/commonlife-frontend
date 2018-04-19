@@ -12,6 +12,7 @@ import Store from "../../scripts/store";
 import moment from "moment";
 import nl2br from 'react-nl2br';
 import queryString from 'query-string';
+import _ from 'underscore';
 
 class ReservationDetail extends Component {
 
@@ -28,12 +29,24 @@ class ReservationDetail extends Component {
 		} );
 	}
 
+	getReservationAvailable( date ) {
+		DB.getReservationAvailable( this.props.match.params.id, date, data => {
+			const cloned = _.clone( this.state );
+			const info = _.find( cloned.options, option => option.type === 'info' );
+			if( info ) {
+				info.info = `${data.available} / ${cloned.scheme.maxQty}`;
+			}
+			this.setState( cloned );
+		} );
+	}
+
 	constructor( props ) {
 		super( props );
 
 		this.state = {
 			loaded: false,
 			available: true,
+			availableCount: 0,
 			booked: false,
 			reserved: false,
             correctTime: true,
@@ -176,11 +189,12 @@ class ReservationDetail extends Component {
 				result.options.push( {
 					type: 'info',
 					title: '수량',
-					info: `${data.maxQty} / ${data.maxQty}`
+					info: `${this.state.availableCount} / ${data.maxQty}`
 				} );
 
 				// TimeScheduler 조정용 date 객체 삽입
 				result.dates = [ now.toDate(), tommorow.toDate() ];
+				this.getReservationAvailable( moment().format( 'YYYY-MM-DD' ) );
 			}
 			else if ( data.reservationType === 'D' ) {
 				result.options.push( {
@@ -222,6 +236,7 @@ class ReservationDetail extends Component {
 		// 함수 스코프 바인딩
 		this.reserve = this.reserve.bind( this );
 		this.getReservationOnDate = this.getReservationOnDate.bind( this );
+		this.getReservationAvailable = this.getReservationAvailable.bind( this );
 	}
 
 	addFloat( integer ) {
@@ -237,6 +252,11 @@ class ReservationDetail extends Component {
 	        Store.alert('유효한 시간을 선택하여 주시기 바랍니다.');
 	        return
         }
+
+        if( this.state.availableCount < 1 ) {
+			Store.alert('예약 가능한 수량이 없습니다.');
+			return
+		}
 
 		let parentIdx = this.props.match.params.id;
 		let startDt = moment( this.state.dates[ 0 ] ).format( 'YYYY-MM-DD' );
@@ -305,6 +325,7 @@ class ReservationDetail extends Component {
 		}
 
 		this.getReservationOnDate( moment( fromTo[ 0 ] ).format( 'YYYY-MM-DD' ) );
+		this.getReservationAvailable( moment( fromTo[ 0 ] ).format( 'YYYY-MM-DD' ) );
 	}
 
 	// 캘린더에 추가 =
@@ -401,7 +422,7 @@ class ReservationDetail extends Component {
 		if ( this.state.reserved || this.state.booked ) {
 			FooterBtns = [
 				<span key="blank"/>,
-				<button key="confirm" onClick={() => window.history.back()}><img src={completeSrc} alt="완료버튼" width="97" height="36"/></button>
+				<button key="confirm" onClick={() => window.history.back()}><img src={completeSrc} alt="완료버튼" height="36"/></button>
 			];
 		} else {
 			FooterBtns = [
