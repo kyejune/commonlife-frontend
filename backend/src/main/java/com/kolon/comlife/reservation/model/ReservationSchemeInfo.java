@@ -33,6 +33,8 @@ public class ReservationSchemeInfo {
     private String maintenanceEndAt;
     private String options;
     private String precautions;
+    private String userMemoLabel;
+    private String userMemoPlaceholder;
     private String delYn;
     private String regDttm;
     private String updDttm;
@@ -247,6 +249,22 @@ public class ReservationSchemeInfo {
 
     public void setPrecautions(String precautions) {
         this.precautions = precautions;
+    }
+
+    public String getUserMemoLabel() {
+        return userMemoLabel;
+    }
+
+    public void setUserMemoLabel(String userMemoLabel) {
+        this.userMemoLabel = userMemoLabel;
+    }
+
+    public String getUserMemoPlaceholder() {
+        return userMemoPlaceholder;
+    }
+
+    public void setUserMemoPlaceholder(String userMemoPlaceholder) {
+        this.userMemoPlaceholder = userMemoPlaceholder;
     }
 
     public String getDelYn() {

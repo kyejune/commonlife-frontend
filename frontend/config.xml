@@ -72,5 +72,5 @@
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <preference name="AutoHideSplashScreen" value="true" />
     <engine name="ios" spec="^4.5.4" />
-    <engine name="android" spec="^7.0.0" />
+    <engine name="android" spec="^7.1.0" />
 </widget>

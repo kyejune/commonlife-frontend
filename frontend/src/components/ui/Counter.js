@@ -23,6 +23,10 @@ class Counter extends Component {
         this.setState({ amount: targetValue });
     }
 
+    val() {
+        return this.state.amount;
+    }
+
     render() {
 
         return <div className="cl-counter" data-value={ this.state.amount }>

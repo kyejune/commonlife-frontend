@@ -77,6 +77,16 @@
             `POINT`,
             `AMOUNT`,
             `QTY`,
+            <choose>
+                <when test='optionId != null'>
+                    `OPTION_IDX`,
+                </when>
+            </choose>
+            <choose>
+                <when test='userMemo != null'>
+                    `USER_MEMO`,
+                </when>
+            </choose>
             `REG_DTTM`,
             `UPD_DTTM`
         )
@@ -108,6 +118,16 @@
   	        #{point},
   	        #{amount},
   	        #{qty},
+            <choose>
+                <when test='optionId != null'>
+                    #{optionId},
+                </when>
+            </choose>
+            <choose>
+                <when test='userMemo != null'>
+                    #{userMemo},
+                </when>
+            </choose>
   	        CURRENT_TIMESTAMP,
   	        CURRENT_TIMESTAMP
         );

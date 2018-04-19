@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import Store from "../../scripts/store";
 import moment from "moment";
 import nl2br from 'react-nl2br';
+import queryString from 'query-string';
 
 class ReservationDetail extends Component {
 
@@ -111,11 +112,16 @@ class ReservationDetail extends Component {
 			// 오늘 그리고 내일
 			const now = moment();
 			const tommorow = moment().add( 1, 'days' );
+			let queries = {};
+
+			if( window.location.hash.split( '?' ).length > 1 ) {
+				queries = queryString.parse( window.location.hash.split( '?' ).pop() );
+			}
 
 			if ( data.reservationType === 'A' ) {
 				result.options.push( {
 					type: "date",
-					value: now.format( 'YYYY-MM-DD' ),
+					value: ( queries[ 'date' ] ) ? queries[ 'date' ] : now.format( 'YYYY-MM-DD' ),
 					min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
 					max: moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
 				} );
@@ -150,7 +156,7 @@ class ReservationDetail extends Component {
 				result.options.push( {
 					type: "dateRange",
 					value: [
-						now.format( 'YYYY-MM-DD' ),
+						( queries[ 'date' ] ) ? queries[ 'date' ] : now.format( 'YYYY-MM-DD' ),
 						moment().add( 1, 'day' ).format( 'YYYY-MM-DD' )
 					],
 					min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
@@ -162,10 +168,32 @@ class ReservationDetail extends Component {
 			}
 			else if ( data.reservationType === 'C' ) {
 				result.options.push( {
-					"type": "date",
-					"value": now.format( 'YYYY-MM-DD' ),
-					"min": moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
-					"max": moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
+					type: "date",
+					value: ( queries[ 'date' ] ) ? queries[ 'date' ] : now.format( 'YYYY-MM-DD' ),
+					min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
+					max: moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
+				} );
+				result.options.push( {
+					type: 'info',
+					title: '수량',
+					info: `${data.maxQty} / ${data.maxQty}`
+				} );
+
+				// TimeScheduler 조정용 date 객체 삽입
+				result.dates = [ now.toDate(), tommorow.toDate() ];
+			}
+			else if ( data.reservationType === 'D' ) {
+				result.options.push( {
+					type: "date",
+					value: ( queries[ 'date' ] ) ? queries[ 'date' ] : now.format( 'YYYY-MM-DD' ),
+					min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
+					max: moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
+				} );
+
+				result.options.push( {
+					type: 'input',
+					title: data.userMemoLabel,
+					placeholder: data.userMemoPlaceholder
 				} );
 
 				// TimeScheduler 조정용 date 객체 삽입
@@ -216,13 +244,25 @@ class ReservationDetail extends Component {
 		let endDt = moment( this.state.dates[ 1 ] ).format( 'YYYY-MM-DD' );
 		let endTime = moment( this.state.dates[ 1 ] ).format( 'HH:mm' );
 
-		DB.createReservation( {
+		const params = {
 			parentIdx,
 			startDt,
 			startTime,
 			endDt,
 			endTime,
-		}, () => {
+		};
+
+		if( this.refs && this.refs.selector ) {
+			params.optionId = this.refs.selector.value;
+		}
+		if( this.refs && this.refs.counter ) {
+			params.qty = this.refs.counter.val();
+		}
+		if( this.refs && this.refs.userMemo ) {
+			params.userMemo = this.refs.userMemo.value;
+		}
+
+		DB.createReservation( params, () => {
 			this.setState( { reserved: true } );
 		} );
 	}
@@ -316,7 +356,7 @@ class ReservationDetail extends Component {
 
 				return <div className="cl-opt-sec cl-flex" key="select">
 					<div className="cl-label">{opt.title || "옵션"}</div>
-					<select name="" id="">{Opts}</select>
+					<select ref="selector">{Opts}</select>
 				</div>
 			}
 			else if ( opt.type === 'time' ) {
@@ -333,7 +373,7 @@ class ReservationDetail extends Component {
 			else if ( opt.type === 'counter' ) {
 				return <div className="cl-opt-sec" key="counter">
 					<div className="cl-label">{opt.title}</div>
-					<Counter {...opt} />
+					<Counter ref="counter" {...opt} />
 				</div>
 			}
 			else if ( opt.type === 'info' ) {
@@ -346,7 +386,7 @@ class ReservationDetail extends Component {
 				return <div className="cl-opt-sec cl-flex" key="input">
                     <div className="cl-label">{opt.title}</div>
 					<div>
-                    	<input className="w-100" type="text" placeholder={opt.placeholder} defaultValue={opt.info||''}/>
+                    	<input ref="userMemo" className="w-100" type="text" placeholder={opt.placeholder} defaultValue={opt.info||''}/>
                     </div>
                 </div>
 			}

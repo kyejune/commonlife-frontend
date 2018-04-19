@@ -10,6 +10,7 @@ import ReserveIcNext from 'images/shape-time-next@3x.png';
 import ReserveIcTime from 'images/shape-time-plus@3x.png';
 import ReserveIcAlert from 'images/alert-icon-red@3x.png';
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 class ReservationListItem extends Component {
 	render() {
@@ -49,7 +50,7 @@ class ReservationListItem extends Component {
 						<img src={ReserveIcPlus} alt=""/>
 						<span>예약하기</span>
 					</Link>
-					<Link to={'/reservation/' + this.props.scheme.idx} className="cl-reservation__list-item-bullet">
+					<Link to={'/reservation/' + this.props.scheme.idx + '?date=' + moment().add( 1, 'day' ).format( 'YYYY-MM-DD' ) } className="cl-reservation__list-item-bullet">
 						<img src={ReserveIcNext} alt=""/>
 						<span>내일예약</span>
 					</Link>

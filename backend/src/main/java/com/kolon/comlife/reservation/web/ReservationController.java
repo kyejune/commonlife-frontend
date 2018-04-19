@@ -191,6 +191,42 @@ public class ReservationController {
                 .body( new SimpleErrorInfo( "OK" ) );
     }
 
+    /**
+     * D 타입 예약
+     * @param scheme
+     * @param info
+     * @return
+     */
+    private ResponseEntity bookTypeD( ReservationSchemeInfo scheme, ReservationInfo info ) {
+        Date startDttm;
+
+//        try {
+//            startDttm = dateFormat.parse( info.getStartDt() + " " + "00:00:00" );
+//        }
+//        catch ( ParseException e ) {
+//            logger.debug( "Parse Exception: " + e );
+//            return ResponseEntity
+//                    .status( HttpStatus.BAD_REQUEST )
+//                    .body( new SimpleErrorInfo( "시작 일시가 유효하지 않습니다." ) );
+//        }
+//
+//        Date now = new Date();
+//
+//        if( startDttm.getTime() - now.getTime() < 0 ) {
+//            return ResponseEntity
+//                    .status(HttpStatus.BAD_REQUEST)
+//                    .body(new SimpleErrorInfo("시작 일시를 과거로 설정할 수 없습니다."));
+//        }
+
+        info.setStatus( ReservationInfo.IN_QUEUE );
+
+        service.create( info );
+
+        return ResponseEntity
+                .status( HttpStatus.OK )
+                .body( new SimpleErrorInfo( "OK" ) );
+    }
+
     @CrossOrigin
     @GetMapping(
             value = "/my",
@@ -273,6 +309,9 @@ public class ReservationController {
         String startTime = params.get( "startTime" ).toString();
         String endDt = params.get( "endDt" ).toString();
         String endTime = params.get( "endTime" ).toString();
+        String optionId = params.get( "optionId" ) != null ? params.get( "optionId" ).toString() : "";
+        String qty = params.get( "qty" ) != null ? params.get( "qty" ).toString() : "";
+        String userMemo = params.get( "userMemo" ) != null ? params.get( "userMemo" ).toString() : "";
 
         // 예약 틀
         ReservationSchemeInfo scheme = schemeService.show( parentIdx );
@@ -292,6 +331,15 @@ public class ReservationController {
         info.setEndDt( endDt );
         info.setEndTime( endTime );
         info.setQty( 1 );
+        if( optionId != "" ) {
+            info.setOptionId( Integer.parseInt( optionId ) );
+        }
+        if( qty != "" ) {
+            info.setQty( Integer.parseInt( qty ) );
+        }
+        if( userMemo != "" ) {
+            info.setUserMemo( userMemo );
+        }
 
         // 틀에서 내려받을 자료들
         info.setParentIdx( scheme.getIdx() );
@@ -305,6 +353,8 @@ public class ReservationController {
                 return bookTypeB( scheme, info );
             case "C" :
                 return bookTypeC( scheme, info );
+            case "D" :
+                return bookTypeD( scheme, info );
             default :
                 return ResponseEntity
                         .status( HttpStatus.BAD_REQUEST )

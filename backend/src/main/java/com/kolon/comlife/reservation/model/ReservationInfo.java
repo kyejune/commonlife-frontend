@@ -22,6 +22,8 @@ public class ReservationInfo {
     private int point;
     private int amount;
     private int qty;
+    private int optionId;
+    private String userMemo;
     private String regDttm;
     private String updDttm;
 
@@ -114,6 +116,22 @@ public class ReservationInfo {
 
     public void setQty(int qty) {
         this.qty = qty;
+    }
+
+    public int getOptionId() {
+        return optionId;
+    }
+
+    public void setOptionId(int optionId) {
+        this.optionId = optionId;
+    }
+
+    public String getUserMemo() {
+        return userMemo;
+    }
+
+    public void setUserMemo(String userMemo) {
+        this.userMemo = userMemo;
     }
 
     public String getRegDttm() {
