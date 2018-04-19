@@ -15,7 +15,7 @@ class ReservationListItem extends Component {
 	render() {
 		return <li className="cl-reservation__list-item cl-reservation__notice">
 			<div>
-				<div className="cl-flex-between">
+				<div className="cl-flex">
 					{ this.props.scheme.icon === 'CLEANING' &&
 					<img src={ReserveServiceCleaning} alt=""
 						 className="cl-reservation__list-item-type-img"/>
