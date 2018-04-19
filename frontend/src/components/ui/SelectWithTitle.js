@@ -12,7 +12,6 @@ class SelectWithTitle extends Component {
 	};
 
 	render () {
-		console.log( 'this.props', this.props );
 		const selectedValue = this.props.selectedValue || -1;
 		return <div className="cl-flex-between cl-select-with-title">
 			<h5>그룹 { this.props.displayLength || 0 }</h5>
