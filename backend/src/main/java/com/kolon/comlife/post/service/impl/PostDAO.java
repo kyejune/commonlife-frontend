@@ -38,8 +38,9 @@ public class PostDAO {
         return sqlSession.selectOne( "Post.selectPostContentOnly", selectParams );
     }
 
-    public int countPostList() {
-        return sqlSession.selectOne( "Post.countPostList" );
+    public int countPostList( Map params ) {
+        params.put( "postIdx", null );
+        return sqlSession.selectOne( "Post.countPostList", params );
     }
 
     public List<PostInfo> selectPostList(Map params) {

@@ -173,7 +173,7 @@ public class PostServiceImpl implements PostService {
         }
 
         // 페이지네이션 계산
-        countPosts = postDAO.countPostList();
+        countPosts = postDAO.countPostList( params );
         totalPages = Math.ceil( ( double ) countPosts / ( double ) limit );
 
         paginateInfo = new PaginateInfo();

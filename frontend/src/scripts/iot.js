@@ -33,7 +33,7 @@ export let MyIots = observable([]);
 export default {
 
     /* Iot */
-    getIotAll() {
+    getIotAll( callback ) {
 
         axios.all([
             axios.get(`/iot/complexes/${Store.cmplxId}/homes/${Store.homeId}/modes`),
@@ -46,6 +46,8 @@ export default {
 
             Modes.replace(modeRes.data.data);
             MyIots.replace(iotRes.data.data);
+
+            if( callback ) callback();
         }));
     },
 

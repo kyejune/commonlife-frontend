@@ -10,6 +10,8 @@ import addIotSrc from 'images/add-iot@3x.png';
 import addInfoSrc from 'images/add-info@3x.png';
 import addAutoSrc from 'images/add-auto@3x.png';
 import {withRouter} from "react-router-dom";
+import {observe} from "mobx/lib/mobx";
+
 
 /* 모드 목록 (편집용) */
 class MyEditor extends Component {
@@ -20,7 +22,18 @@ class MyEditor extends Component {
             checks:[], // 삭제용 btId저장용
             deviceIds:[], // 링크용
             lastDeviceId:null,
-        }
+            items:[],
+        };
+
+        observe( MyIots, change=>{
+            if( this.state.items.length === 0 )
+                this.setState({ items:MyIots });
+            return change;
+        } );
+    }
+
+    componentDidMount(){
+        this.setState({ items: MyIots });
     }
 
     onCheck = ( values )=>{
@@ -44,6 +57,8 @@ class MyEditor extends Component {
             return { btId:values.btId, sortOrder: index + 1 }
         });
 
+        this.setState({ items: values });
+
         Iot.reAlignMyIot( alignMap, ()=>{
             console.log('정렬 성공');
         });
@@ -60,9 +75,11 @@ class MyEditor extends Component {
 
     render() {
 
-        const items = MyIots.map( (m, index) =>{
+        const items = this.state.items.map( (m, index) =>{
             return { idx: index, name: m.btTitle, imgSrc:m.btImgSrc,  ...m }
         });
+
+        console.log('items:', items );
 
         // if( MyIots.length === 0 ) return <div/>;
 

@@ -44,6 +44,22 @@ scna:{
   }]
 }
 */
+let _testRegex=(value, regex)=>{
+    return value.toString().match(regex) !== null;
+}
+
+export const VALIDATOR_MSG = {
+    accepted       : {message: ':attribute(은/는) 반드시 체크되어야합니다.',    rule: (val) => val === true },
+    alpha_num_dash : {message: ':attribute에는 문자, 숫자, - 만이 허용됩니다.', rule: (val) => _testRegex(val,/^[A-Z0-9_-]*$/i) },
+    max            : {message: ':attribute값은 :max 보다 크지 않아야 합니다.',  rule: (val, options) => val.length <= options[0], messageReplace: (message, options) => message.replace(':max', options[0]) },
+    min            : {message: ':attribute값은 :min 보다 커야합니다..',       rule: (val, options) => val.length >= options[0], messageReplace: (message, options) => message.replace(':min', options[0]) },
+    phone          : {message: ':attribute(은/는) 전화번호 형식이 아닙니다.',    rule: (val) => _testRegex(val,/(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)/)},
+    required       : {message: ':attribute(은/는) 필수 입력사항입니다.',        rule: (val) => _testRegex(val,/.+/) },
+    same           : {message: '패스워드와 값이 동일하지 않습니다.',              rule: (val, options)=>{ return val === options[0]; }},
+    mail           : {message: ':attribute(은/는) 이메일 형식에 맞지 않습니다.',  rule: val =>{ return /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test( val ); }},
+    requires       : {message: ':attribute(은/는) 모두 필수 입력사항입니다.',    rule: vals => { return (vals[0] != 'undefined' && vals[1] != 'undefined');}},
+};
+
 
 
 
@@ -108,7 +124,7 @@ const Store = observable({
         if( navigator.notification ){
             navigator.notification.alert( msg, ()=>{}, 'CommonLife', '확인' );
         }else {
-            Store.alert( msg );
+            alert(msg);
         }
     },
 

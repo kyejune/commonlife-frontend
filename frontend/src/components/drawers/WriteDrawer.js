@@ -9,6 +9,7 @@ import previewSrc from 'images/img-preview-holder@3x.png';
 import Store from "../../scripts/store";
 import AlertSrc from "images/alert-icon-red@3x.png"
 import classNames from 'classnames';
+import {withRouter} from "react-router-dom";
 
 class WriteDrawer extends BottomDrawer {
 
@@ -24,14 +25,30 @@ class WriteDrawer extends BottomDrawer {
             isUploading: false,
             postType: type,
             postResult: null,
-            supportIndex: index,
+            supportIndex: index, // info -> support 카테고리 정보
+            editIndex: index,
         }
 
-        if( type === 'support' ) this.props.updateTitle('문의하기');
+        this.props.updateTitle({support:'문의하기', feed:'새글쓰기', edit:'수정하기'}[type]);
     }
 
     componentDidMount(){
         this.input.focus();
+
+
+        // 수정모드일때 세팅
+        if( this.state.postType === 'edit' ){
+            const { content, files } = Store.getDrawerData('write');
+            let obj = { content: content };
+
+            console.log( Store.getDrawerData('write') );
+            if( files.length > 0 ){
+                obj.imageId = files[0].postFileIdx;
+                obj.base64Img = files[0].mediumPath;
+            }
+
+            this.setState( obj );
+        }
     }
 
     handleChange(event) {
@@ -45,8 +62,6 @@ class WriteDrawer extends BottomDrawer {
             Store.alert("기존 이미지를 업로드 중입니다.");
             return;
         }
-
-
 
         if( navigator.camera ) {
 
@@ -92,7 +107,6 @@ class WriteDrawer extends BottomDrawer {
     }
 
     failedPicture=(message)=>{
-        //alert(message);
 
         this.setState({
             isUploading: false,
@@ -114,41 +128,53 @@ class WriteDrawer extends BottomDrawer {
         }
 
         const Files = [];
-        let data;
         let makeFunc;
 
-        // 데이터 만들기
-        if( this.state.postType === 'support'){
-            makeFunc = Net.makeTicket;
-            data = {
-                cateIdx: this.state.supportIndex,
-                content: this.state.content.replace(/\n{2,}/g, '\n\n'), // 2줄 이상만 묶어버리기
-                ticketFiles: Files
-            };
+        let { postType, supportIndex, editIndex, imageId, content } = this.state;
 
-        }else {
-            makeFunc = Net.makePost;
-            data = {
-                postType: this.state.postType,
-                content: this.state.content.replace(/\n{2,}/g, '\n\n'), // 2줄 이상만 묶어버리기
-                postFiles: Files
-            };
-        }
+        let data = {
+            content: content.replace(/\n{2,}/g, '\n\n'), // 2줄 이상만 묶어버리기
+        };
 
-        if( this.state.imageId ){
-            if( this.state.postType === 'support' ) data.ticketFiles.push( this.state.imageId );
-            else                                    data.postFiles.push( this.state.imageId );
+        switch( this.state.postType ){
+            case 'feed':
+                makeFunc = Net.makePost;
+                data = { ...data,
+                         postType: postType,
+                         postFiles: Files,
+                       };
+                if( imageId ) data.postFiles = [ imageId ];
+
+                break;
+
+            case 'edit':
+
+                break;
+
+            case 'support':
+                makeFunc = Net.makeTicket;
+                data = { ...data,
+                         cateIdx: supportIndex,
+                         ticketFiles: Files,
+                };
+
+                if( imageId ) data.ticketFiles = [ imageId ];
+
+                break;
         }
 
         // 보내기
+        if( !makeFunc ){
+            alert('준비 중입니다.');
+            return;
+        }
+
         makeFunc(data, ( success, response ) => {
 
             if( success && this.state.postType === 'feed' ){
                 Store.feed = [];
                 Net.getFeed('feed', 0 );
             }
-
-
 
             if( success )
                 this.setState({ postResult: "성공적으로 완료되었습니다." } );
@@ -161,6 +187,11 @@ class WriteDrawer extends BottomDrawer {
     onClose=()=>{
         this.setState({ postResult:null });
         this.props.close();
+
+        if( this.state.type === 'edit' ){
+            Store.popDrawer();
+            this.state.history.replace('/community/feed');
+        }
     }
 
     render() {
@@ -222,7 +253,7 @@ class WriteDrawer extends BottomDrawer {
     }
 }
 
-export default WriteDrawer;
+export default withRouter(WriteDrawer);
 
 
 

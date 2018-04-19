@@ -1,5 +1,8 @@
 
-
+.cl-reservation-detail{
+    height: 100vh;
+    overflow: auto;
+}
 
 
 .cl-reservation-option{
@@ -25,6 +28,8 @@
     h3{
       font-size: 19px;
       font-weight: bold;
+      white-space: normal;
+      word-break: keep-all;
     }
 
     p{

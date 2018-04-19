@@ -4,6 +4,7 @@ import {intercept} from 'mobx';
 import CardItem from 'components/ui/CardItem';
 import Store from 'scripts/store';
 import Net from 'scripts/net';
+import classNames from 'classnames';
 
 class CommunityFeed extends Component {
 
@@ -16,6 +17,8 @@ class CommunityFeed extends Component {
 
 		this.state = {
 			isEmpty: false,
+            pulledTop: false,
+            isRefresh: false,
 		}
 
         intercept( Store, 'communityCmplxId', change=>{
@@ -29,13 +32,12 @@ class CommunityFeed extends Component {
 		} );
 	}
 
-
     componentDidMount(){
 		this.loadPage( 0 );
 	}
 
 	loadPage=( targetPage=0 )=>{
-		if( targetPage >= this.maxPage ) return;
+		if( targetPage > 0 && targetPage >= this.maxPage ) return;
 
 		this.isLoading = true;
 
@@ -44,7 +46,7 @@ class CommunityFeed extends Component {
         	this.maxPage = res.totalPages - 1;
         	this.isLoading = false;
 
-        	this.setState({ isEmpty: ( Store.feed.length === 0 ) });
+        	this.setState({ isEmpty: ( Store.feed.length === 0 ), pulledTop: false });
 		});
 	}
 
@@ -52,12 +54,17 @@ class CommunityFeed extends Component {
         if( this.isLoading ) return;
 
 		const SCROLL_VALUE = this.scrollBox.scrollTop;
-		// const IS_TOP = (SCROLL_VALUE <= 0);
+		const IS_TOP = (SCROLL_VALUE <= -10);
 		const IS_BOTTOM = (SCROLL_VALUE >= this.scrollBox.scrollHeight - this.scrollBox.clientHeight );
 
-		// if( IS_TOP ) this.loadPage( 0 );
-		// else if( IS_BOTTOM ) this.loadPage( this.page + 1 );
-        if( IS_BOTTOM ) this.loadPage( this.page + 1 );
+		if( IS_BOTTOM ) this.loadPage( this.page + 1 );
+
+        this.setState({ isRefresh: IS_TOP, pulledTop:(IS_TOP||true) });
+
+        // 0으로 돌아왔고 && 밑으로 땡겨졌었다면...
+        if( SCROLL_VALUE ===  0 && this.state.pulledTop ){
+        	this.loadPage( 0 );
+        }
 	}
 
 
@@ -68,7 +75,15 @@ class CommunityFeed extends Component {
 		if( this.state.isEmpty ){
 			Content = <div className="cl-content--empty"/>;
 		}else{
-            Content = Store.feed.map( ( card, index ) => {
+			// 임시로 event랑 통합
+			let complexFeed = Store.event.concat(Store.feed);
+
+            complexFeed.sort( (a, b )=>{
+                return new Date(b.updDttm).getTime() - new Date(a.updDttm).getTime();
+			});
+
+
+            Content = complexFeed.map( ( card, index ) => {
                 return (
                     <CardItem key={index} list="/community/feed" cardData={card}/>
                 )
@@ -76,9 +91,11 @@ class CommunityFeed extends Component {
 		}
 
 		return (
-			<div ref={ r => this.scrollBox = r } className="cl-fitted-box" onScroll={ this.onScroll } >
+			<div className="cl-fitted-box" >
 
-				<div className="cl-card-items">
+				<div className={ classNames( "spinner--more", { "cl--none":this.state.isEmpty||!this.state.isRefresh }) } />
+
+				<div ref={ r => this.scrollBox = r } onScroll={ this.onScroll } className="cl-card-items">
 					{ Content }
 				</div>
 			</div>

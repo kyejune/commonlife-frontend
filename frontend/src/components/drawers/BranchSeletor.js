@@ -11,11 +11,11 @@ class BranchSeletor extends Component {
 
     }
 
-    onChangeBranch=( item )=>{
+    onChangeBranch = (item) => {
         this.selectedBranchId = item.cmplxId;
     }
 
-    selectBranch=()=>{
+    selectBranch = () => {
         Store.communityCmplxId = this.selectedBranchId;
         Store.popDrawer();
     }
@@ -23,12 +23,14 @@ class BranchSeletor extends Component {
 
     render() {
 
-        let b = {cmplxNm:'', addr:''};
-        if( Object.keys(Store.complexMap).length > 0 && Store.communityCmplxId ){
-            b = Store.complexMap[ Store.communityCmplxId ];
+        let b = {cmplxNm: '', addr: ''};
+        if (Object.keys(Store.complexMap).length > 0 && Store.communityCmplxId) {
+            b = Store.complexMap[Store.communityCmplxId];
         }
 
-        return <div className="drawer-fitted-box--b cl-branch-selector cl-bg--dark">
+        return <div className="cl-branch-selector cl-bg--dark">
+
+            <div className="drawer-fitted-box">
                 <div className="cl-bg--black30">
                     <div className="cl-card-item--dark">
                         <h4 className="color-white fs-16">
@@ -38,23 +40,24 @@ class BranchSeletor extends Component {
                     </div>
                 </div>
 
-                <div>
+                <div className="pb-4em">
                     {/*<h5 className="color-white fs-14 ml-2em mt-1em">서울(Seoul)</h5>*/}
-                    <BranchList className="pt-2em" defaultValue={ Store.communityCmplxId } onChange={ this.onChangeBranch }/>
+                    <BranchList className="pt-2em" defaultValue={Store.communityCmplxId}
+                                onChange={this.onChangeBranch}/>
                 </div>
-
-
-                <footer className="cl-opts__footer cl-flex">
-                    <button onClick={ Store.popDrawer }>
-                        <span className="cl-bold">취소</span>
-                    </button>
-
-
-                    <button className="ml-auto pr-1em" onClick={ this.selectBranch }>
-                        <span className="color-primary cl-bold">선택</span>
-                    </button>
-                </footer>
             </div>
+
+            <footer className="cl-opts__footer cl-flex">
+                <button onClick={Store.popDrawer}>
+                    <span className="cl-bold">취소</span>
+                </button>
+
+
+                <button className="ml-auto pr-1em" onClick={this.selectBranch}>
+                    <span className="color-primary cl-bold">선택</span>
+                </button>
+            </footer>
+        </div>
     }
 }
 

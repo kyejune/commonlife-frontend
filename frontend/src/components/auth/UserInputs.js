@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Net from "../../scripts/net";
 import SimpleReactValidator from "simple-react-validator";
 import axios from 'axios';
-import Store, { MakingUserData } from "../../scripts/store";
+import Store, {MakingUserData, VALIDATOR_MSG} from "../../scripts/store";
 import { observer } from "mobx-react";
 
 class UserInputs extends Component {
@@ -11,22 +11,7 @@ class UserInputs extends Component {
     constructor(props) {
         super(props);
 
-        this.validator = new SimpleReactValidator({
-            same:{
-                message:'password mismatch',
-                rule: (val, options)=>{
-                    return val === options[0];
-                }
-            },
-
-            mail:{
-                message:'The :attribute must be a valid email address.',
-                rule: val =>{
-                    const R = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                    return R.test( val );
-                }
-            }
-        });
+        this.validator = new SimpleReactValidator( VALIDATOR_MSG );
 
         // 아이디 중복 체크 여부
         this.state = {

@@ -29,12 +29,12 @@ export default class LikeShareAndSome extends Component{
 
 	shareItem() {
 
-        const { title, content } = this.props.data;
+        const { title, content, shareLink } = this.props.data;
 
 		let options = {
 			message: content, // not supported on Facebook, Instagram
 			subject: title, // fi. for email
-			url: null,//'https://www.website.com/foo/#bar?a=b',
+			url: shareLink,//'https://www.website.com/foo/#bar?a=b',
 			chooserTitle: 'CommonLife' // Android only
 		};
 

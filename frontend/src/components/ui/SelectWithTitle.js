@@ -20,7 +20,7 @@ class SelectWithTitle extends Component {
 					<option value="">선택지역보기</option>
 					{
 						Store.complexes.map( ( item, key ) => {
-							return <option key={ key } value={ item.cmplxId }>{ item.cmplxGrp + ' | ' + item.cmplxNm }</option>
+							return <option key={ key } value={ item.cmplxId }>{ item.cmplxNm }</option>
 						} )
 					}
 				</select>

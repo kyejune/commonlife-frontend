@@ -3,7 +3,9 @@
     display: none;
 }
 
-
+.cl--none{
+    display: none;
+}
 
 .cl-content--empty{
     position: relative;
@@ -237,8 +239,8 @@
 .cl-card-item__bg--event{
     position: relative;
     height: 230px;
-    width: calc( 100% + 30px );
-    margin-left: -15px;
+    width: 100%;//calc( 100% + 30px );
+    //margin-left: -15px;
     margin-top: -15px;
     background-repeat: no-repeat;
     background-size: cover;
@@ -277,6 +279,12 @@
 
 .cl-card-items{
     padding-bottom: 3em;
+    padding-right: 8px;
+    width: calc( 100% - 8px );
+    height: 100%;
+    position: fixed;
+    overflow: scroll;
+    -webkit-overflow-scrolling: touch;
 }
 
 .cl-card-item {
@@ -436,15 +444,16 @@
 }
 
 /* Card Item Detail */
+.cl-card-detail--feed{
+    .cl-card-item-wrapper{
+        margin-top: 0;
+    }
+}
+
 .cl-card-detail {
 
-    height: calc(100vh - 106px);
-    overflow-y: auto;
-    overflow-x: hidden;
-
     .cl-card-item-wrapper{
-        position: sticky;
-        top: 0;
+        position: relative;
         margin-top: 0;
     }
 
@@ -468,6 +477,7 @@
     .cl-card-item {
         padding-bottom: 1em;
         border-bottom: 1px solid #cfcfcf;
+        border-radius: 0;
     }
 
     .cl-card-item--event{
@@ -489,6 +499,11 @@
         color: white;
     }
 
+    .cl-card-item__img{
+        width: 100%;
+        height: auto;
+    }
+
 
     .cl-join-status{
         span{
@@ -503,6 +518,21 @@
         }
     }
 
+    .cl__footer--double{
+        height: 100px;
+        padding: 0;
+
+        &>button{
+            @extend .cl-flex;
+            padding: 0 10px 0 20px;
+            height: 50%;
+            width: 100%;
+
+            &:last-child {
+                box-shadow: 0 -2px 2px 0 rgba(0, 0, 0, 0.1);
+            }
+        }
+    }
 }
 
 /* Like Lisk */

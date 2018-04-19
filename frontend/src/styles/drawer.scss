@@ -9,6 +9,8 @@ body:not(.platform--ios){
 
 
 .cl-drawer-content-holder{
+  height: 100%;
+
   &>header{
     position: sticky;
   }
@@ -37,8 +39,8 @@ body:not(.platform--ios){
   }
 
   .dialogs__content{
-    overflow: auto;
-    height: calc( 100vh - 46px );
+    overflow: visible;
+    //height: calc( 100vh - 46px );
 
     &>div{
       min-height: 100%;

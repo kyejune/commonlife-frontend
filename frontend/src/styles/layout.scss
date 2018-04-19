@@ -1,9 +1,9 @@
 $dur: 0.4s;
-$delay: 0.2s;
 
 html, body{
     position: fixed;
     overflow: hidden;
+    user-select: none;
 }
 
 body{
@@ -33,21 +33,16 @@ body.platform--ios{
 
     .App{
         height: calc( 100vh - 3.90625vh + 46px );
+
+        & > header, #cl-footer{
+            transition-duration: 0s;
+        }
     }
 
     #root{
         margin-top: 3.90625vh;
     }
 
-    .dialogs__content{
-        //margin-top: 3.90625vh;
-        height: calc( 100vh - 3.90625vh - 46px );
-    }
-
-    //.cl-full-page{
-    //    top: 3.90625vh;
-    //    height: calc( 100vh - 3.90625vh - 50px );
-    //}
 
     #modal{
         &>div {
@@ -69,17 +64,36 @@ body.platform--ios{
         }
     }
 
-    .md-drawer .dialogs__content > div {
+    .md-drawer .dialogs__content {
+
+        &.drawer-fitted-box{
+            height: calc( 100vh - 3.90625vh - 46px );
+        }
+
         &.drawer-fitted-box--b {
             height: calc(100vh - 3.90625vh - 50px - 46px);
             min-height: calc(100vh - 3.90625vh - 50px - 46px);
         }
     }
+
+
+
+    &.model--iphone10, &.model--x86_64{
+        #cl-footer{
+            height: auto;
+
+            footer{
+                padding-bottom: 20px;
+            }
+        }
+    }
 }
 
-body:not(.platform--ios){
-    //overflow-y: scroll;
-}
+//body:not(.platform--ios){
+//    .App > header, #cl-footer{
+//        transition-duration: 0.4s;
+//    }
+//}
 
 body.cl-keyboard--open{
 
@@ -89,12 +103,12 @@ body.cl-keyboard--open{
 
     &.platform--ios{
         .cl-shrink{
-            height: calc( 96.1vh - 56px - 50px );
+            height: calc( 96.1vh - 46px );
         }
     }
 
     .cl-shrink{
-        height: calc( 100vh - 56px - 50px );
+        height: calc( 100vh - 46px - 45px );
     }
 
 
@@ -151,8 +165,17 @@ body.cl-dom--added{
 
 
 /* 스크롤 영역 따로 지정 */
-.md-drawer .dialogs__content > div {
-    &.drawer-fitted-box--b {
+.md-drawer .dialogs__content {
+
+    min-height: calc( 100% - 46px );
+
+    .drawer-fitted-box{
+        @extend .abs-scroll;
+        height: calc( 100vh - 46px );
+        min-height: calc( 100vh - 46px );
+    }
+
+    .drawer-fitted-box--b {
         @extend .abs-scroll;
         height: calc(100vh - 50px - 46px);
         min-height: calc(100vh - 50px - 46px);
@@ -161,6 +184,7 @@ body.cl-dom--added{
             height: 50px;
         }
     }
+
 }
 
 .cl-tab--community{
@@ -197,7 +221,7 @@ body.cl-dom--added{
 .cl-info-container.cl-tab--info{
     .cl-fitted-box{
         @extend .abs-scroll;
-        height: calc( 100vh - 158px );
+        height: calc( 100vh - 50px );
         //transiton: $dur height ease-in-out;
     }
 }
@@ -354,7 +378,7 @@ body.cl-dom--added{
     width: 100%;
     height: 100%;
     //padding-bottom: 56px;
-    transition: $dur*2 height ease-out;
+    //transition: $dur*2 height ease-out;
 }
 
 .cl-bg--light{

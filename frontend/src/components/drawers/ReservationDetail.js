@@ -352,7 +352,7 @@ class ReservationDetail extends Component {
 		}
 
 
-		return <div className="cl-reservation-detail pb-3em">
+		return [<div className="cl-reservation-detail pb-3em drawer-fitted-box" key="rd">
 
 			{!this.state.reserved &&
 			<Link to={'/reservation/' + this.props.match.params.id + '/thumbnails'}>
@@ -436,11 +436,10 @@ class ReservationDetail extends Component {
 				</div>}
 
 			</div>
-
-			<footer className="cl-flex-between">
-				{FooterBtns}
-			</footer>
-		</div>
+		</div>,
+		<footer className="cl-flex-between" key="rd-footer">
+			{FooterBtns}
+		</footer>]
 	}
 }
 

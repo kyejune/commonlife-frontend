@@ -71,23 +71,26 @@ class App extends Component {
             // 일반적인 상황에서..
             if( boxes.length === 1 ) bodyTop = boxes[0].scrollTop;
             else{
-                // 탭구조라서 복수개가 존재할때 보이는 영역에만 제한
-                document.querySelectorAll('.cl-fitted-box').forEach( item => {
-                    if( item.parentElement.getAttribute('aria-hidden') === 'false' ){
-                        bodyTop = item.scrollTop;
-                    }
-                });
+                // 탭구조라서 복수개가 존재할때 보이는 영역, Community탭 구조
+                let communityTabItems = document.querySelector('.md-tab-panel[aria-hidden=false] .cl-card-items');
+                if( communityTabItems )
+                    bodyTop = communityTabItems.scrollTop;
+                else
+                    return
             }
 
             const DELTA = (this.oldTop - bodyTop );
 
             this.oldTop = bodyTop;
 
-
             if( Math.abs( DELTA ) > 10 ){
-                let openMode =  DELTA < 0;
+                let openMode =  (DELTA < 0) && bodyTop > 0;
                 this.setState({
-                    scrolled: openMode,//( bodyTop > 56 )
+                    scrolled: openMode,
+                });
+            }else if( bodyTop === 0 ){
+                this.setState({
+                    scrolled: false,
                 });
             }
 
@@ -98,8 +101,11 @@ class App extends Component {
             this.router.history.listen(location => {
                 const S = new DeviceStorage().localStorage();
                 const PATH = location.pathname;
+
+                // 마지막 이동 패스 기억
                 if (PATH.indexOf('/community') === 0 || PATH.indexOf('/reservation') === 0 || PATH.indexOf('/iot') === 0 || PATH.indexOf('/info') === 0)
                     S.save('location', location.pathname);
+
             });
         }
     }

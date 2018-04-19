@@ -12,7 +12,7 @@ class DrawerContentHolder extends Component {
     constructor( props ){
         super( props );
 
-        console.log( 'DrawercontentHolder:', props );
+        // console.log( 'DrawercontentHolder:', props );
 
         this.state = {
             title: props.title,
@@ -27,8 +27,11 @@ class DrawerContentHolder extends Component {
     }
 
     componentWillUnmount(){
-        if( Store.drawer.length === 0 )
+        if( Store.drawer.length === 0 ) {
             document.querySelector('body').classList.remove('cl-dom--added');
+            document.querySelector('body').classList.remove('cl-app--expand');
+            document.querySelector('body').scrollTop = 0;
+        }
     }
 
 
