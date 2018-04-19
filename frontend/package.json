@@ -14,7 +14,8 @@
         "build-js": "react-scripts build",
         "build": "npm-run-all build-css build-js && rm -rf www && mv build www",
         "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject"
+        "eject": "react-scripts eject",
+        "mv-apk": "mv platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk ./"
     },
     "dependencies": {
         "c3": "^0.5.2",

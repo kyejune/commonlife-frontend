@@ -36,6 +36,7 @@ class ReservationDetail extends Component {
 			if( info ) {
 				info.info = `${data.available} / ${cloned.scheme.maxQty}`;
 			}
+			cloned.availableCount = data.available;
 			this.setState( cloned );
 		} );
 	}
@@ -253,7 +254,7 @@ class ReservationDetail extends Component {
 	        return
         }
 
-        if( this.state.availableCount < 1 ) {
+        if( this.state.scheme.reservationType === 'C' && this.state.availableCount < 1 ) {
 			Store.alert('예약 가능한 수량이 없습니다.');
 			return
 		}
