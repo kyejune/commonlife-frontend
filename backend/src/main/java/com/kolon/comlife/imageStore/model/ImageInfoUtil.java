@@ -22,7 +22,10 @@ public class ImageInfoUtil {
     public final static String IMAGE_TYPE_ADMINPROFILE = "ADMINPROFILE"; // Admin 프로필 사진
     public final static String IMAGE_TYPE_TICKET  = "TICKET";  // 지원 접수시, 업로드하는 이미지
     public final static String IMAGE_TYPE_COMPLEX = "COMPLEX"; // 현장 대표(로고) 이미지 업로드
-    public final static String IMAGE_TYPE_RESV    = "RESV"; // 예액 관련 이미지
+    public final static String IMAGE_TYPE_RESV    = "RESV"; // 예약 관련 이미지
+    public final static String IMAGE_TYPE_GUIDE    = "GUIDE"; // Info > Guide 관련 이미지
+    public final static String IMAGE_TYPE_BENEFIT    = "BENEFIT"; // Info > Benefit 관련 이미지
+    public final static String IMAGE_TYPE_BENEFIT_LOGO    = "BENEFIT_LOGO"; // Info > Benefit 표시 로고 이미지
 
     private static Map<String, String> supportedImageTypes = null;
 
@@ -36,6 +39,18 @@ public class ImageInfoUtil {
 
         return getImageTypePathInternal(imageType) + "/";
     }
+
+
+    public static String getImagePath( int imageIdx ) {
+        StringBuilder strBuilder = new StringBuilder();
+
+        strBuilder.append( IMAGE_STORE_BASE_PATH );
+        strBuilder.append( "/" );
+        strBuilder.append( imageIdx );
+
+        return strBuilder.toString();
+    }
+
 
     public static String getImagePath( String sizeSuffix, int imageIdx ) {
         StringBuilder strBuilder = new StringBuilder();
@@ -58,6 +73,10 @@ public class ImageInfoUtil {
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_TICKET,  "Y");
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_COMPLEX, "Y");
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_RESV,    "Y");
+                supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_GUIDE,    "Y");
+                supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_BENEFIT,    "Y");
+                supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_BENEFIT_LOGO,    "Y");
+
             }
         }
 

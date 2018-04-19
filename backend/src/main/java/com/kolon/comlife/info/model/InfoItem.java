@@ -1,7 +1,10 @@
 package com.kolon.comlife.info.model;
 
 import com.kolon.comlife.common.model.SimpleMsgInfo;
+import com.kolon.comlife.imageStore.model.ImageInfo;
 import org.apache.ibatis.type.Alias;
+
+import java.util.Map;
 
 @Alias("infoItem")
 public class InfoItem extends SimpleMsgInfo {
@@ -16,13 +19,15 @@ public class InfoItem extends SimpleMsgInfo {
     private String cateId;
 
     private String imgSrc;
-    private String desc;
+    private String desc;            //  == contents
     private int    dispOrder;
     private String setYn;
     private String delYn;
 
     private String regDttm;
     private String updDttm;
+
+    private Map imageInfo;
 
     public String getItemNm() {
         return itemNm;
@@ -126,5 +131,13 @@ public class InfoItem extends SimpleMsgInfo {
 
     public void setUpdDttm(String updDttm) {
         this.updDttm = updDttm;
+    }
+
+    public Map getImageInfo() {
+        return imageInfo;
+    }
+
+    public void setImageInfo(Map imageInfo) {
+        this.imageInfo = imageInfo;
     }
 }

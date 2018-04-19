@@ -6,6 +6,9 @@ import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
+import com.kolon.comlife.imageStore.model.ImageInfo;
+import com.kolon.comlife.imageStore.model.ImageInfoUtil;
+import com.kolon.comlife.imageStore.service.ImageStoreService;
 import com.kolon.comlife.info.model.*;
 import com.kolon.comlife.info.service.InfoService;
 import com.kolon.comlife.info.service.impl.InfoServiceImpl;
@@ -16,6 +19,7 @@ import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.model.UserExtInfo;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.prop.ServicePropertiesMap;
 import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/info/*")
@@ -44,6 +45,10 @@ public class InfoController {
 
     @Autowired
     ComplexService complexService;
+
+
+    @Autowired
+    ImageStoreService imageStoreService;
 
     @CrossOrigin
     @GetMapping(
@@ -244,13 +249,20 @@ public class InfoController {
         item = new InfoItem();
         item.setItemIdx( 10 );
         item.setCmplxId( 125 );
-        item.setItemNm( "역삼휘트니스 센터 25%" );
+        item.setItemNm( "10% 할인 프로모션 코드 제공 (10% Off Promotion)" );
         item.setCateIdx(10);
         item.setCateId("benefits");
         item.setCateNm("Benefits");
-        item.setImgSrc("cl_house-1");
-        item.setDesc("~~~ ~~~");
-        item.setDispOrder(1);
+        item.setImgSrc("http://localhost:8080/imageStore/210/s");
+        item.setDesc(
+                "벅시는 예약기반의 공항 셔틀 밴 라이드 셰어링 서비스 입니다. 경쟁력 있는 가격에, 관리가 잘 된 밴/드라이버님이 약속한 시간에 편안한 라이드를 제공합니다. 집이나 사무실에서 공항까지, 공항에서 집이나 사무실까지 도어투도어 서비스를 제공합니다.\n" +
+                        "라이드 예약 비용의 10%를 할인해 드립니다. 서비스 지역/가격 및 사용 방법은 앱과 웹사이트에서 확인하실 수 있습니다.\n" +
+                        "- 구글 플레이스토어, 애플 앱스토어에서 벅 시앱을 인스톨\u2028- 계정 등록\u2028- 쿠폰 메뉴에서 커먼라이프 프로모션 코드 입력\u2028- 벅시 예약\u2028- 결제 화면에서 쿠폰 버튼을 눌러 쿠폰 사용\u2028- 프로모션 코드 : COMMON-BUXI\n" +
+                        "About Us:\u2028BUXI provide a reservation based airport van ride-sharing service for competitive price. Highly maintained vans and drivers will give you a comfortable ride from your house/office to Incheon/Gimpo airport and vice versa, door-to-door.\n" +
+                        "Details:\u202810% off for all ride reservations\n" +
+                        "How to Redeem:\u2028- Install BUXI app from Google Play Store or Apple App Store.\u2028- Sign Up.\u2028- Register Commonlife promotion code at Coupon menu.\u2028- Book a ride.\u2028- Click the \"Coupon\" button at payment procedure and select the coupon.\u2028- Promotion code : COMMON-BUXI\n"
+        );
+        item.setDispOrder(2);
         item.setSetYn("Y");
         item.setDelYn("N");
         item.setRegDttm("2018-03-29 06:48:47.0");
@@ -260,12 +272,12 @@ public class InfoController {
         item = new InfoItem();
         item.setItemIdx( 12 );
         item.setCmplxId( 125 );
-        item.setItemNm( "프레쉬 코드 셀러드 - 25%" );
+        item.setItemNm( "모든 메뉴 및 상품 10% 할인 (10% off all orders)" );
         item.setCateIdx(10);
         item.setCateId("benefits");
         item.setCateNm("Benefits");
-        item.setImgSrc("cl_house-2");
-        item.setDesc("~~~ ~~~");
+        item.setImgSrc(imageStoreService.getImageFullPathByIdx( 212, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
+        item.setDesc("오설록, 차와 제주가 선사하는 삶의 아름다움.\n\n모든 메뉴 및 상품 10% 할인!\n\n구매시 직원에게 CommonLife 멤버쉽 키카드를 보여주시면 됩니다. 오설록 티하우스 강남점과 명동점에서만 혜택 적용 가능합니다.\n\nAbout Us: Osulloc, Beauty of life offered by tea and Jeju Island.\n\nOffer Details: Enjoy a 10% discount on all orders!\n\nHow to Redeem: Simply show your CommonLife keycard to the cashier when you pay. (Only applicable at Osulloc Teahouse Gangnam and Myeongdong locations)");
         item.setDispOrder(2);
         item.setSetYn("Y");
         item.setDelYn("N");
@@ -291,6 +303,130 @@ public class InfoController {
     }
 
 
+    @CrossOrigin
+    @GetMapping(
+            value = "/benefits/{itemIdx}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getInfoBenefitsDetail( HttpServletRequest request,
+                                                 @PathVariable("itemIdx") int itemIdx ) {
+
+        InfoItem item = new InfoItem();
+        ImageInfo imageInfo = new ImageInfo();
+        Map imageInfoMap = new TreeMap();
+        int imageIdx = 222;
+
+        switch( itemIdx ) {
+            case 12:
+                item.setItemIdx( 12 );
+                item.setCmplxId( 125 );
+                item.setItemNm( "모든 메뉴 및 상품 10% 할인 (10% off all orders)" );
+                item.setCateIdx(10);
+                item.setCateId("benefits");
+                item.setCateNm("Benefits");
+                item.setImgSrc(imageStoreService.getImageFullPathByIdx( 212, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
+                item.setDesc("오설록, 차와 제주가 선사하는 삶의 아름다움.\n\n모든 메뉴 및 상품 10% 할인!\n\n구매시 직원에게 CommonLife 멤버쉽 키카드를 보여주시면 됩니다. 오설록 티하우스 강남점과 명동점에서만 혜택 적용 가능합니다.\n\nAbout Us: Osulloc, Beauty of life offered by tea and Jeju Island.\n\nOffer Details: Enjoy a 10% discount on all orders!\n\nHow to Redeem: Simply show your CommonLife keycard to the cashier when you pay. (Only applicable at Osulloc Teahouse Gangnam and Myeongdong locations)");
+                item.setDispOrder(2);
+                item.setSetYn("Y");
+                item.setDelYn("N");
+                item.setRegDttm("2018-03-29 06:48:47.0");
+                item.setUpdDttm("2018-03-29 06:48:47.0");
+
+                imageIdx = 222;
+                imageInfoMap.put("imageIdx", imageIdx );
+                imageInfoMap.put("parentIdx", 12);
+                imageInfoMap.put("mimeType", "image/jpeg");
+                imageInfoMap.put("filePath", "origin/benefit/1522123476794.jpeg");
+                imageInfoMap.put("originPath", imageStoreService.getImageFullPathByIdx( imageIdx ));
+                imageInfoMap.put("smallPath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
+                imageInfoMap.put("mediumPath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_MEDIUM ));
+                imageInfoMap.put("largePath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_LARGE ));
+
+                imageInfoMap.put("regDttm", "2018-03-27 04:04:37.0");
+                imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+                imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+                imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+
+                item.setImageInfo( imageInfoMap );
+                break;
+            case 10:
+                item.setItemIdx( 10 );
+                item.setCmplxId( 125 );
+                item.setItemNm( "10% 할인 프로모션 코드 제공 (10% Off Promotion)" );
+                item.setCateIdx(10);
+                item.setCateId("benefits");
+                item.setCateNm("Benefits");
+                item.setImgSrc("http://localhost:8080/imageStore/210/s");
+                item.setDesc(
+                        "벅시는 예약기반의 공항 셔틀 밴 라이드 셰어링 서비스 입니다. 경쟁력 있는 가격에, 관리가 잘 된 밴/드라이버님이 약속한 시간에 편안한 라이드를 제공합니다. 집이나 사무실에서 공항까지, 공항에서 집이나 사무실까지 도어투도어 서비스를 제공합니다.\n" +
+                        "라이드 예약 비용의 10%를 할인해 드립니다. 서비스 지역/가격 및 사용 방법은 앱과 웹사이트에서 확인하실 수 있습니다.\n" +
+                        "- 구글 플레이스토어, 애플 앱스토어에서 벅 시앱을 인스톨\u2028- 계정 등록\u2028- 쿠폰 메뉴에서 커먼라이프 프로모션 코드 입력\u2028- 벅시 예약\u2028- 결제 화면에서 쿠폰 버튼을 눌러 쿠폰 사용\u2028- 프로모션 코드 : COMMON-BUXI\n" +
+                        "About Us:\u2028BUXI provide a reservation based airport van ride-sharing service for competitive price. Highly maintained vans and drivers will give you a comfortable ride from your house/office to Incheon/Gimpo airport and vice versa, door-to-door.\n" +
+                        "Details:\u202810% off for all ride reservations\n" +
+                        "How to Redeem:\u2028- Install BUXI app from Google Play Store or Apple App Store.\u2028- Sign Up.\u2028- Register Commonlife promotion code at Coupon menu.\u2028- Book a ride.\u2028- Click the \"Coupon\" button at payment procedure and select the coupon.\u2028- Promotion code : COMMON-BUXI\n"
+                );
+                item.setDispOrder(2);
+                item.setSetYn("Y");
+                item.setDelYn("N");
+                item.setRegDttm("2018-03-29 06:48:47.0");
+                item.setUpdDttm("2018-03-29 06:48:47.0");
+
+
+                imageIdx = 220;
+                imageInfoMap.put("imageIdx", imageIdx );
+                imageInfoMap.put("parentIdx", 10);
+                imageInfoMap.put("mimeType", "image/jpeg");
+                imageInfoMap.put("filePath", "origin/benefit/1522123476794.jpeg");
+                imageInfoMap.put("originPath", imageStoreService.getImageFullPathByIdx( imageIdx ));
+                imageInfoMap.put("smallPath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
+                imageInfoMap.put("mediumPath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_MEDIUM ));
+                imageInfoMap.put("largePath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_LARGE ));
+
+                imageInfoMap.put("regDttm", "2018-03-27 04:04:37.0");
+                imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+                imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+                imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+
+                item.setImageInfo( imageInfoMap );
+
+                break;
+            default:
+                item.setItemIdx( 12 );
+                item.setCmplxId( 125 );
+                item.setItemNm( "모든 메뉴 및 상품 10% 할인 (10% off all orders)" );
+                item.setCateIdx(10);
+                item.setCateId("benefits");
+                item.setCateNm("Benefits");
+                item.setImgSrc("http://localhost:8080/imageStore/212/s");
+                item.setDesc("오설록, 차와 제주가 선사하는 삶의 아름다움.\n\n모든 메뉴 및 상품 10% 할인!\n\n구매시 직원에게 CommonLife 멤버쉽 키카드를 보여주시면 됩니다. 오설록 티하우스 강남점과 명동점에서만 혜택 적용 가능합니다.\n\nAbout Us: Osulloc, Beauty of life offered by tea and Jeju Island.\n\nOffer Details: Enjoy a 10% discount on all orders!\n\nHow to Redeem: Simply show your CommonLife keycard to the cashier when you pay. (Only applicable at Osulloc Teahouse Gangnam and Myeongdong locations)");
+                item.setDispOrder(2);
+                item.setSetYn("Y");
+                item.setDelYn("N");
+                item.setRegDttm("2018-03-29 06:48:47.0");
+                item.setUpdDttm("2018-03-29 06:48:47.0");
+
+                imageIdx = 222;
+                imageInfoMap.put("imageIdx", imageIdx );
+                imageInfoMap.put("parentIdx", 12);
+                imageInfoMap.put("mimeType", "image/jpeg");
+                imageInfoMap.put("filePath", "origin/benefit/1522123476794.jpeg");
+                imageInfoMap.put("originPath", imageStoreService.getImageFullPathByIdx( imageIdx ));
+                imageInfoMap.put("smallPath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
+                imageInfoMap.put("mediumPath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_MEDIUM ));
+                imageInfoMap.put("largePath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_LARGE ));
+
+                imageInfoMap.put("regDttm", "2018-03-27 04:04:37.0");
+                imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+                imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+                imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+
+                item.setImageInfo( imageInfoMap );
+                break;
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( item );
+    }
+
+
 
     private MyStatusMain getMyStatusMainMockValue() {
         MyStatusInfo myStatusInfo;
@@ -311,30 +447,30 @@ public class InfoController {
         myStatusInfo.setMyStatusNm("2월 (2018년)");
         infoList.add(myStatusInfo);
 
-        myStatusInfo = new MyStatusInfo();
-        myStatusInfo.setMyStatusIdx( 8 );
-        myStatusInfo.setMyStatusNm("1월 (2018년)");
-        infoList.add(myStatusInfo);
-
-        myStatusInfo = new MyStatusInfo();
-        myStatusInfo.setMyStatusIdx( 7 );
-        myStatusInfo.setMyStatusNm("12월 (2017년)");
-        infoList.add(myStatusInfo);
-
-        myStatusInfo = new MyStatusInfo();
-        myStatusInfo.setMyStatusIdx( 6 );
-        myStatusInfo.setMyStatusNm("11월 (2017년)");
-        infoList.add(myStatusInfo);
-
-        myStatusInfo = new MyStatusInfo();
-        myStatusInfo.setMyStatusIdx( 5 );
-        myStatusInfo.setMyStatusNm("10월 (2017년)");
-        infoList.add(myStatusInfo);
-
-        myStatusInfo = new MyStatusInfo();
-        myStatusInfo.setMyStatusIdx( 4 );
-        myStatusInfo.setMyStatusNm("9월 (2017년)");
-        infoList.add(myStatusInfo);
+//        myStatusInfo = new MyStatusInfo();
+//        myStatusInfo.setMyStatusIdx( 8 );
+//        myStatusInfo.setMyStatusNm("1월 (2018년)");
+//        infoList.add(myStatusInfo);
+//
+//        myStatusInfo = new MyStatusInfo();
+//        myStatusInfo.setMyStatusIdx( 7 );
+//        myStatusInfo.setMyStatusNm("12월 (2017년)");
+//        infoList.add(myStatusInfo);
+//
+//        myStatusInfo = new MyStatusInfo();
+//        myStatusInfo.setMyStatusIdx( 6 );
+//        myStatusInfo.setMyStatusNm("11월 (2017년)");
+//        infoList.add(myStatusInfo);
+//
+//        myStatusInfo = new MyStatusInfo();
+//        myStatusInfo.setMyStatusIdx( 5 );
+//        myStatusInfo.setMyStatusNm("10월 (2017년)");
+//        infoList.add(myStatusInfo);
+//
+//        myStatusInfo = new MyStatusInfo();
+//        myStatusInfo.setMyStatusIdx( 4 );
+//        myStatusInfo.setMyStatusNm("9월 (2017년)");
+//        infoList.add(myStatusInfo);
 
         myStatusMain.setInfoList( infoList );
         return myStatusMain;
@@ -363,14 +499,41 @@ public class InfoController {
                 "?idx=1471&fname=%ED%95%9C%ED%99%94%ED%88%AC%EC%9E%90%EC%A6%9D%EA%B6" +
                 "%8C%5F%EC%BD%94%EC%98%A4%EB%A1%B1%EA%B8%80%EB%A1%9C%EB%B2%8C%5F20170306084157%2Epdf");
         myStatus.setMyStatusIdx( myStatusIdx );
-        myStatus.setMyStatusNm( "12월 (2017년)" );
-        myStatus.setChargesDate("2018년 3월");
-        myStatus.setTotalCharges(865900);
-        myStatus.setRentalCharges(805280);
-        myStatus.setElectricityCharges(15280);
-        myStatus.setGasCharges(15280);
-        myStatus.setWaterCharges(15280);
-        myStatus.setParkingCharges(15280);
+        switch( myStatusIdx ) {
+            case 10:
+                myStatus.setMyStatusNm( "3월 (2018년)" );
+                myStatus.setChargesDate("2018년 3월");
+                myStatus.setTotalCharges(865900);
+                myStatus.setRentalCharges(805280);
+                myStatus.setElectricityCharges(15280);
+                myStatus.setGasCharges(15280);
+                myStatus.setWaterCharges(15280);
+                myStatus.setParkingCharges(15280);
+
+                break;
+            case 9:
+                myStatus.setMyStatusNm( "2월 (2018년)" );
+                myStatus.setChargesDate("2018년 2월");
+                myStatus.setTotalCharges(765900);
+                myStatus.setRentalCharges(705280);
+                myStatus.setElectricityCharges(15280);
+                myStatus.setGasCharges(15280);
+                myStatus.setWaterCharges(15280);
+                myStatus.setParkingCharges(15280);
+
+                break;
+            default :
+                myStatus.setMyStatusNm( "3월 (2018년)" );
+                myStatus.setChargesDate("2018년 3월");
+                myStatus.setTotalCharges(865900);
+                myStatus.setRentalCharges(805280);
+                myStatus.setElectricityCharges(15280);
+                myStatus.setGasCharges(15280);
+                myStatus.setWaterCharges(15280);
+                myStatus.setParkingCharges(15280);
+
+                break;
+        }
 
         return myStatus;
     }
