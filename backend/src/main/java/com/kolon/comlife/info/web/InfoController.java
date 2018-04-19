@@ -241,6 +241,53 @@ public class InfoController {
         return ResponseEntity.status( HttpStatus.OK ).body( dataListInfo );
     }
 
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/guide/{itemIdx}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getInfoGuideDetail( HttpServletRequest request,
+                                              @PathVariable("itemIdx") int itemIdx ) {
+
+        InfoItem item = new InfoItem();
+        ImageInfo imageInfo = new ImageInfo();
+        Map imageInfoMap = new TreeMap();
+        int imageIdx = 222;
+
+        item.setItemIdx( itemIdx );
+        item.setCmplxId( 125 );
+        item.setItemNm( "유용한 정보" );
+        item.setCateId("guide");
+        item.setCateIdx(9);
+        item.setCateNm("Living Guide");
+        item.setImgSrc(imageStoreService.getImageFullPathByIdx( 212, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
+        item.setDesc("오설록, 차와 제주가 선사하는 삶의 아름다움.\n\n모든 메뉴 및 상품 10% 할인!\n\n구매시 직원에게 CommonLife 멤버쉽 키카드를 보여주시면 됩니다. 오설록 티하우스 강남점과 명동점에서만 혜택 적용 가능합니다.\n\nAbout Us: Osulloc, Beauty of life offered by tea and Jeju Island.\n\nOffer Details: Enjoy a 10% discount on all orders!\n\nHow to Redeem: Simply show your CommonLife keycard to the cashier when you pay. (Only applicable at Osulloc Teahouse Gangnam and Myeongdong locations)");
+        item.setSetYn("Y");
+        item.setDelYn("N");
+        item.setRegDttm("2018-03-29 06:48:47.0");
+        item.setUpdDttm("2018-03-29 06:48:47.0");
+
+        imageIdx = 222;
+        imageInfoMap.put("imageIdx", imageIdx );
+        imageInfoMap.put("parentIdx", itemIdx );
+        imageInfoMap.put("mimeType", "image/jpeg");
+        imageInfoMap.put("filePath", "origin/benefit/1522123476794.jpeg");
+        imageInfoMap.put("originPath", imageStoreService.getImageFullPathByIdx( imageIdx ));
+        imageInfoMap.put("smallPath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
+        imageInfoMap.put("mediumPath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_MEDIUM ));
+        imageInfoMap.put("largePath", imageStoreService.getImageFullPathByIdx( imageIdx, ImageInfoUtil.SIZE_SUFFIX_LARGE ));
+
+        imageInfoMap.put("regDttm", "2018-03-27 04:04:37.0");
+        imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+        imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+        imageInfoMap.put("updDttm", "2018-03-27 04:04:37.0");
+
+        item.setImageInfo( imageInfoMap );
+
+        return ResponseEntity.status( HttpStatus.OK ).body( item );
+    }
+
+
     private List<InfoItem> getInfoBenefitsMockValue() {
 
         List itemList = new ArrayList();
@@ -253,7 +300,7 @@ public class InfoController {
         item.setCateIdx(10);
         item.setCateId("benefits");
         item.setCateNm("Benefits");
-        item.setImgSrc("http://localhost:8080/imageStore/210/s");
+        item.setImgSrc(imageStoreService.getImageFullPathByIdx( 210, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
         item.setDesc(
                 "벅시는 예약기반의 공항 셔틀 밴 라이드 셰어링 서비스 입니다. 경쟁력 있는 가격에, 관리가 잘 된 밴/드라이버님이 약속한 시간에 편안한 라이드를 제공합니다. 집이나 사무실에서 공항까지, 공항에서 집이나 사무실까지 도어투도어 서비스를 제공합니다.\n" +
                         "라이드 예약 비용의 10%를 할인해 드립니다. 서비스 지역/가격 및 사용 방법은 앱과 웹사이트에서 확인하실 수 있습니다.\n" +
@@ -355,7 +402,7 @@ public class InfoController {
                 item.setCateIdx(10);
                 item.setCateId("benefits");
                 item.setCateNm("Benefits");
-                item.setImgSrc("http://localhost:8080/imageStore/210/s");
+                item.setImgSrc(imageStoreService.getImageFullPathByIdx( 210, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
                 item.setDesc(
                         "벅시는 예약기반의 공항 셔틀 밴 라이드 셰어링 서비스 입니다. 경쟁력 있는 가격에, 관리가 잘 된 밴/드라이버님이 약속한 시간에 편안한 라이드를 제공합니다. 집이나 사무실에서 공항까지, 공항에서 집이나 사무실까지 도어투도어 서비스를 제공합니다.\n" +
                         "라이드 예약 비용의 10%를 할인해 드립니다. 서비스 지역/가격 및 사용 방법은 앱과 웹사이트에서 확인하실 수 있습니다.\n" +
@@ -396,7 +443,7 @@ public class InfoController {
                 item.setCateIdx(10);
                 item.setCateId("benefits");
                 item.setCateNm("Benefits");
-                item.setImgSrc("http://localhost:8080/imageStore/212/s");
+                item.setImgSrc(imageStoreService.getImageFullPathByIdx( 212, ImageInfoUtil.SIZE_SUFFIX_SMALL ));
                 item.setDesc("오설록, 차와 제주가 선사하는 삶의 아름다움.\n\n모든 메뉴 및 상품 10% 할인!\n\n구매시 직원에게 CommonLife 멤버쉽 키카드를 보여주시면 됩니다. 오설록 티하우스 강남점과 명동점에서만 혜택 적용 가능합니다.\n\nAbout Us: Osulloc, Beauty of life offered by tea and Jeju Island.\n\nOffer Details: Enjoy a 10% discount on all orders!\n\nHow to Redeem: Simply show your CommonLife keycard to the cashier when you pay. (Only applicable at Osulloc Teahouse Gangnam and Myeongdong locations)");
                 item.setDispOrder(2);
                 item.setSetYn("Y");
