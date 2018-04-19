@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="ReservationScheme">
+
+    <select id="index" parameterType="java.util.Map" resultType="reservationSchemeOptionInfo">
+        SELECT
+        *
+        FROM
+        `RESERVATION_SCHEME_OPTIONS`
+        WHERE
+        `DEL_YN` = 'N'
+        <choose>
+            <when test='ids != null'>
+                AND
+                IDX IN
+                <foreach collection="ids" item="id" index="index" separator="," open="(" close=")">
+                    #{id}
+                </foreach>
+            </when>
+        </choose>
+        <choose>
+            <when test='groupIdx != null'>
+                AND
+                `PARENT_IDX` = #{groupIdx}
+            </when>
+        </choose>
+        <choose>
+            <when test='cmplxIdx != null'>
+                AND
+                `CMPLX_IDX` = #{cmplxIdx}
+            </when>
+        </choose>
+    </select>
+
+    <select id="show" parameterType="java.util.Map" resultType="reservationSchemeOptionInfo">
+        SELECT
+        *
+        FROM
+        `RESERVATION_SCHEME_OPTIONS`
+        WHERE
+        `DEL_YN` = 'N'
+        AND
+        `IDX` = #{idx}
+    </select>
+
+    <insert id="create" parameterType="reservationSchemeOptionInfo">
+
+    </insert>
+
+    <update id="update" parameterType="reservationSchemeOptionInfo">
+
+    </update>
+
+    <update id="delete" parameterType="reservationSchemeOptionInfo">
+
+    </update>
+
+</mapper>
