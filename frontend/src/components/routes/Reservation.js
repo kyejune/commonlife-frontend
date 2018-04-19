@@ -32,6 +32,7 @@ class Reservation extends Component {
 		super( props );
 
 		this.state = {
+			cmplxId: null,
 			groups: [],
 			schemes: [],
 		}
@@ -39,7 +40,7 @@ class Reservation extends Component {
 
 	load = cmplxId => {
 		net.getReservationGroups( cmplxId, data => {
-			this.setState( { groups: data.groups, schemes: data.schemes } );
+			this.setState( { cmplxId, groups: data.groups, schemes: data.schemes } );
 		} );
 	};
 
@@ -84,6 +85,8 @@ class Reservation extends Component {
 
 	render () {
 
+		const cmplxId = this.state.schemes
+
 		return <div className="cl-tab--reservation">
 			{/*크레딧 에러 팝업 */}
 			{/*<NoCreditPopup/>*/}
@@ -92,7 +95,7 @@ class Reservation extends Component {
 
 			<div className="cl-fitted-box pb-5em">
 
-				<SelectWithTitle displayLength={ this.state.groups.length } onChange={ event => this.load( event.currentTarget.value ) }/>
+				<SelectWithTitle displayLength={ this.state.groups.length } selectedValue={ this.state.cmplxId } onChange={ event => this.load( event.currentTarget.value ) }/>
 
 				<ul className="cl-reservation__list--group">
 					{

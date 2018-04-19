@@ -12,15 +12,20 @@ class SelectWithTitle extends Component {
 	};
 
 	render () {
-
+		console.log( 'this.props', this.props );
+		const selectedValue = this.props.selectedValue || -1;
 		return <div className="cl-flex-between cl-select-with-title">
 			<h5>그룹 { this.props.displayLength || 0 }</h5>
 			<div className="cl-select-with-title__select">
 				<select onChange={ this.onChange }>
-					<option value="">선택지역보기</option>
 					{
 						Store.complexes.map( ( item, key ) => {
-							return <option key={ key } value={ item.cmplxId }>{ item.cmplxNm }</option>
+							if( selectedValue === item.cmplxId.toString() ) {
+								return <option key={ key } value={ item.cmplxId } selected>{ item.cmplxNm }</option>
+							}
+							else {
+								return <option key={ key } value={ item.cmplxId }>{ item.cmplxNm }</option>
+							}
 						} )
 					}
 				</select>
