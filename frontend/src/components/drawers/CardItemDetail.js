@@ -169,7 +169,7 @@ class CardItemDetailDrawer extends Component {
 
         return <div className="cl-card-detail">
 
-            <div className="drawer-fitted-box--b">
+            <div className={ this.state.editable?"drawer-fitted-box--b":"drawer-fitted-box"}>
                 {/* event 타입 아니면 이미지 노출 */}
                 {imgAddr && PostType !== 'event' &&
                 <img className="cl-card-item__img" src={imgAddr} alt="첨부 이미지" width="100%"/>
