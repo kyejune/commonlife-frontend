@@ -19,7 +19,7 @@ $card-trans-time: 0.3s;
     .cl-avatar {
         width: 60px;
         height: 60px;
-        transition: $card-trans-time all ease-out;
+        //transition: $card-trans-time all ease-out;
 
         &:before {
             width: 60px;

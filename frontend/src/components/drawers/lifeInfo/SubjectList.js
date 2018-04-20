@@ -30,8 +30,6 @@ class SubjectList extends Component {
 
     render() {
 
-        console.log( this.state.data );
-
         const List = this.state.data.map( (item, index)=>{
            return  <li key={index}>
                {this.state.type === 'benefits' &&
@@ -40,7 +38,7 @@ class SubjectList extends Component {
                <h4 className={classNames("cl__title cl-ellipsis", this.state.type==="benefits"?'w-75':'w-90')}>
                    {item.itemNm}
                </h4>
-               <Link className="cl-next__button ml-auto" to={`/info/${this.state.type}/${item.Itemid}`} />
+               <Link className="cl-next__button ml-auto" to={`/info/${this.state.type}/${item.itemIdx}`} />
            </li>
         });
 
