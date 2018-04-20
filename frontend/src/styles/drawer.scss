@@ -7,6 +7,20 @@ body:not(.platform--ios){
   }
 }
 
+.cl-drawer-header-more{
+
+  position: absolute;
+  height: 46px;
+  right: 0;
+  top: 0;
+  z-index: 20;
+
+  img{
+    height: 100%;
+  }
+
+}
+
 
 .cl-drawer-content-holder{
   height: 100%;

@@ -6,6 +6,7 @@ import {withRouter} from 'react-router';
 import Store from "scripts/store";
 import closeSrc from 'images/back@3x.png';
 import classNames from 'classnames';
+import MoreSrc from "images/etc@3x.png";
 
 class DrawerContentHolder extends Component {
 
@@ -17,6 +18,8 @@ class DrawerContentHolder extends Component {
         this.state = {
             title: props.title,
             close: props.close,
+            more: null,
+            moreClickFunc: null,
         }
     }
 
@@ -56,6 +59,14 @@ class DrawerContentHolder extends Component {
         })
     }
 
+    setMore( bool, clickCallback ){
+        console.log( 'setMore', bool, clickCallback );
+        this.setState({
+            more: bool,
+            moreClickFunc: clickCallback,
+        })
+    }
+
     // 뒤로가기 버튼을 눌렀을때 이동할 패스를 history.goBack대신 강제 지정
     setBackPath( path ){
         this.setState({
@@ -66,6 +77,10 @@ class DrawerContentHolder extends Component {
     // 닫힘모드를 강제 지정, false: 라우터와 함께 닫힘, true: 라우터 이동없이 닫힘
     setCloseMode( bool ){
         this.setState({ close: bool });
+    }
+
+    onClickMore=()=>{
+        if( this.state.moreClickFunc ) this.state.moreClickFunc();
     }
 
 
@@ -106,9 +121,17 @@ class DrawerContentHolder extends Component {
                 setBackPath: path=> this.setBackPath(path),
                 close: ()=>this.onClose(),
                 setCloseMode: bool => this.setCloseMode( bool ),
+                setMore: (bool, func)=> this.setMore(bool, func),
                 ...Store.getDrawerData( this.props.drawer ),
             })
         );
+
+        let MoreButton;
+        if( this.state.more ) {
+            MoreButton = <button className="cl-drawer-header-more" onClick={ this.onClickMore }>
+                <img src={MoreSrc} alt="추가기능"/>
+            </button>
+        }
 
 
         return <div className="cl-drawer-content-holder">
@@ -122,6 +145,8 @@ class DrawerContentHolder extends Component {
                     titleClassName="cl-ellipsis"
                     children={ CustomHeader }
                 />
+
+                {MoreButton}
 
                 <section className={ classNames("dialogs__content",
                     {"cl-bg--light":this.props.light },

@@ -9,6 +9,7 @@ import joinedSrc from 'images/rsvp-activity@3x.png';
 import TagComponent from "../ui/TagComponent";
 import RightArrowSrc from "images/ic-arrow-right@3x.png";
 
+
 class CardItemDetailDrawer extends Component {
 
     constructor(props) {
@@ -17,15 +18,21 @@ class CardItemDetailDrawer extends Component {
         let match = this.props.match.params;
         this.state = {
             likeLink: '/community/' + match.tab + '/' + match.id + '/like',
+            editable: false,
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.updateTitle('글보기');
 
         Net.getCardContent(this.props.match.params.tab, this.props.match.params.id, data => {
             console.log(data);
             this.setState(data);
+
+
+            if( `${Store.auth.key}` === `${data.usrId}` ) {
+                this.props.setMore(true, this.onClickMore);
+            }
         });
     }
 
@@ -60,6 +67,12 @@ class CardItemDetailDrawer extends Component {
             this.props.history.goBack();
         });
     }
+
+    onClickMore=()=>{
+        this.setState({ editable: !this.state.editable });
+    }
+
+
 
     /* 이벤트 날짜 구성 컴퍼넌트 생성 */
     makeDateComponent(fromDate, toDate) {
@@ -97,6 +110,7 @@ class CardItemDetailDrawer extends Component {
 
         // 작성자 글이라 수정, 삭제가 가능할때
         let Footer;
+        let MoreButton;
 
 
 
@@ -137,7 +151,7 @@ class CardItemDetailDrawer extends Component {
                 break;
 
             case 'feed':
-                if( `${Store.auth.key}` === `${this.state.usrId}` ){
+                if( `${Store.auth.key}` === `${this.state.usrId}` && this.state.editable ){
                     Footer = <footer className="cl-opts__footer cl__footer--double">
                         <button onClick={ this.onEdit }>
                             <div className="cl-bold color-black">수정</div>
