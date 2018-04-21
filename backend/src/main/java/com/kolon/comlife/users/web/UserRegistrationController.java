@@ -481,6 +481,7 @@ public class UserRegistrationController {
                     imageBytes.length,
                     imageType,
                     imageBase64.getFileType(),
+                    userInfo.getUsrId(),
                     userInfo.getUsrId() );
         } catch( OperationFailedException e ) {
             e.printStackTrace();

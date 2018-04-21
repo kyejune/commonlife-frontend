@@ -9,10 +9,12 @@ import java.io.InputStream;
 
 public interface ImageStoreService {
 
-    ImageInfo createImage(InputStream inputStream, long imageSize, String imageType, String fileExt, int parentIdx)
+    ImageInfo createImage(InputStream inputStream, long imageSize, String imageType, String fileExt, int usrId, int parentIdx)
             throws OperationFailedException;
 
     ImageInfo getImageByIdx( int idx ) throws IOException, ImageNotFoundException;
+
+    ImageInfo getImageInfoByIdx( int idx ) throws ImageNotFoundException;
 
     ImageInfo getImageByIdxAndSize( int idx, String sizeStr ) throws IOException, ImageNotFoundException ;
 

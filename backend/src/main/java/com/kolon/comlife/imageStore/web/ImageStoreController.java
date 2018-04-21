@@ -110,7 +110,8 @@ public class ImageStoreController {
                                         mpf.getSize(),
                                         imageType,
                                         fileExt,
-                                        usrId );
+                                        usrId,
+                                        -1 );
             } catch(OperationFailedException e) {
                 logger.error(e.getMessage());
                 return ResponseEntity.status(HttpStatus.CONFLICT).body( new SimpleErrorInfo( e.getMessage() ) );
@@ -166,11 +167,12 @@ public class ImageStoreController {
         imageBytes = imageBase64.getByteData();
         try {
             uploadedImageInfo = imageStoreService.createImage(
-                    new ByteArrayInputStream( imageBytes ),
-                    imageBytes.length,
-                    imageType,
-                    imageBase64.getFileType(),
-                    usrId );
+                                    new ByteArrayInputStream( imageBytes ),
+                                    imageBytes.length,
+                                    imageType,
+                                    imageBase64.getFileType(),
+                                    usrId,
+                                    -1 );
         } catch( OperationFailedException e ) {
             e.printStackTrace();
             return ResponseEntity

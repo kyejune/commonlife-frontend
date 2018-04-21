@@ -24,8 +24,8 @@ public class ImageInfoUtil {
     public final static String IMAGE_TYPE_COMPLEX = "COMPLEX"; // 현장 대표(로고) 이미지 업로드
     public final static String IMAGE_TYPE_RESV    = "RESV"; // 예약 관련 이미지
     public final static String IMAGE_TYPE_GUIDE    = "GUIDE"; // Info > Guide 관련 이미지
-    public final static String IMAGE_TYPE_BENEFIT    = "BENEFIT"; // Info > Benefit 관련 이미지
-    public final static String IMAGE_TYPE_BENEFIT_LOGO    = "BENEFIT_LOGO"; // Info > Benefit 표시 로고 이미지
+    public final static String IMAGE_TYPE_BENEFITS    = "BENEFITS"; // Info > Benefit 관련 이미지
+    public final static String IMAGE_TYPE_BENEFITS_LOGO    = "BENEFITSLOGO"; // Info > Benefit 표시 로고 이미지
 
     private static Map<String, String> supportedImageTypes = null;
 
@@ -74,8 +74,8 @@ public class ImageInfoUtil {
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_COMPLEX, "Y");
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_RESV,    "Y");
                 supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_GUIDE,    "Y");
-                supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_BENEFIT,    "Y");
-                supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_BENEFIT_LOGO,    "Y");
+                supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_BENEFITS,    "Y");
+                supportedImageTypes.put(ImageInfoUtil.IMAGE_TYPE_BENEFITS_LOGO,    "Y");
 
             }
         }

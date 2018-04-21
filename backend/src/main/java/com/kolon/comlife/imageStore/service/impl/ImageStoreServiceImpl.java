@@ -90,7 +90,12 @@ public class ImageStoreServiceImpl implements ImageStoreService {
     }
 
 
-    public ImageInfo createImage(InputStream inputStream, long imageSize, String imageType, String fileExt, int parentIdx)
+    public ImageInfo createImage( InputStream inputStream,
+                                  long imageSize,
+                                  String imageType,
+                                  String fileExt,
+                                  int usrId,
+                                  int parentIdx )
             throws OperationFailedException
     {
         ImageInfo       imageInfo = new ImageInfo();
@@ -138,6 +143,7 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         imageInfo.setParentType( imageTypeIdx );
         imageInfo.setImageSize( imageSize );
         imageInfo.setParentIdx( parentIdx );
+        imageInfo.setUsrId( usrId );
 
         // Execution - table update
         imageInfo = imageInfoDAO.setImageFile( imageInfo );
@@ -159,6 +165,17 @@ public class ImageStoreServiceImpl implements ImageStoreService {
                                                  imageInfo.getFilePath() );
 
         imageInfo.setImageByteArray( IOUtils.toByteArray( inputStream ) );
+
+        return imageInfo;
+    }
+
+    public ImageInfo getImageInfoByIdx( int idx ) throws ImageNotFoundException {
+        ImageInfo    imageInfo;
+
+        imageInfo = imageInfoDAO.getImageFile( idx );
+        if( imageInfo == null ) {
+            throw new ImageNotFoundException("이미지가 없습니다.");
+        }
 
         return imageInfo;
     }

@@ -2,6 +2,7 @@ package com.kolon.comlife.info.model;
 
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.imageStore.model.ImageInfo;
+import com.kolon.comlife.imageStore.model.ImageInfoExt;
 import org.apache.ibatis.type.Alias;
 
 import java.util.List;
@@ -12,6 +13,8 @@ public class InfoItem extends SimpleMsgInfo {
 
     private int    itemIdx;
     private String itemNm;
+    private int    imageIdx;
+    private int    imageIdx2;
 
     private int    cmplxId;
 
@@ -28,7 +31,7 @@ public class InfoItem extends SimpleMsgInfo {
     private String regDttm;
     private String updDttm;
 
-    private List<Map> imageInfo;
+    private List<ImageInfoExt> imageInfo;
 
     public String getItemNm() {
         return itemNm;
@@ -46,6 +49,14 @@ public class InfoItem extends SimpleMsgInfo {
         this.itemIdx = itemIdx;
     }
 
+    public int getImageIdx2() {
+        return imageIdx2;
+    }
+
+    public void setImageIdx2(int imageIdx2) {
+        this.imageIdx2 = imageIdx2;
+    }
+
     public int getCateIdx() {
         return cateIdx;
     }
@@ -60,6 +71,14 @@ public class InfoItem extends SimpleMsgInfo {
 
     public void setCmplxId(int cmplxId) {
         this.cmplxId = cmplxId;
+    }
+
+    public int getImageIdx() {
+        return imageIdx;
+    }
+
+    public void setImageIdx(int imageIdx) {
+        this.imageIdx = imageIdx;
     }
 
     public String getCateNm() {
@@ -134,11 +153,11 @@ public class InfoItem extends SimpleMsgInfo {
         this.updDttm = updDttm;
     }
 
-    public List<Map> getImageInfo() {
+    public List<ImageInfoExt> getImageInfo() {
         return imageInfo;
     }
 
-    public void setImageInfo(List<Map> imageInfo) {
+    public void setImageInfo(List<ImageInfoExt> imageInfo) {
         this.imageInfo = imageInfo;
     }
 }
