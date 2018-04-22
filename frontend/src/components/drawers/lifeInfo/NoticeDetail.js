@@ -33,12 +33,12 @@ class NoticeDetail extends Component {
             userImgStyle = {backgroundImage:`url(${this.state.user.imgSrc})`};
 
         return (
-            <div className="cl-notice-detail">
+            <div className="cl-notice-detail pb-3em">
                 <p className="cl-notice-detail__content">
                     <TagComponent content={ this.state.content }/>
                 </p>
 
-                <div className="cl-card-item--dark cl-flex mb-3em">
+                <div className="cl-card-item--dark cl-flex">
                     <div className="cl-avatar" style={userImgStyle}/>
                     <div>
                         <h6 className="cl-name">{ this.state.user.userNm }</h6>

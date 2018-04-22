@@ -157,7 +157,7 @@ class LifeInfo extends Component {
 			</DrawerWrapper>
 
 			{/* Benefit 목록, 리빙가이드 목록 */}
-			<DrawerWrapper drawer="info-subject" back>
+			<DrawerWrapper drawer="info-subject" back darkgray >
 				<SubjectList/>
 			</DrawerWrapper>
 

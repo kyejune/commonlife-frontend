@@ -53,7 +53,7 @@ body:not(.platform--ios){
   }
 
   .dialogs__content{
-    overflow: visible;
+    overflow: auto;
     //height: calc( 100vh - 46px );
 
     &>div{
