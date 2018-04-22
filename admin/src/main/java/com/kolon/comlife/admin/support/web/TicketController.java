@@ -244,7 +244,8 @@ public class TicketController {
             , HttpSession session
 
     ) {
-        
+
+        // todo: 구현 안되어 있음 구현해야 함 
 
         return null;
     }
