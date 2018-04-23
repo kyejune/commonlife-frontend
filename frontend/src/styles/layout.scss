@@ -167,7 +167,7 @@ body.cl-dom--added{
 /* 스크롤 영역 따로 지정 */
 .md-drawer .dialogs__content {
 
-    min-height: calc( 100% - 46px );
+    height: calc( 100% - 46px );
 
     .drawer-fitted-box{
         @extend .abs-scroll;

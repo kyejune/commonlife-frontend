@@ -49,7 +49,7 @@
                                 <thead>
                                 <tr>
                                     <th class="text-center">ID</th>
-                                    <th class="text-center">예약명</th>
+                                    <th>예약명</th>
                                     <th>예약 개요</th>
                                     <th class="text-center">예약 개시</th>
                                     <th class="text-center">예약 마감</th>
@@ -61,15 +61,13 @@
                                 <c:forEach var="scheme" items="${schemes}">
                                     <tr>
                                         <td class="text-center">${scheme.idx}</td>
-                                        <td class="text-center">${scheme.title}</td>
+                                        <td>${scheme.title}</td>
                                         <td>${scheme.summary}</td>
                                         <td class="text-center">
                                                 ${scheme.startDt}
-                                                ${scheme.startTime}
                                         </td>
                                         <td class="text-center">
                                                 ${scheme.endDt}
-                                                ${scheme.endTime}
                                         </td>
                                         <td class="text-center">
                                             <a href="/admin/reservation-schemes/edit.do?idx=${scheme.idx}&cmplxIdx=${scheme.cmplxIdx}" class="btn btn-xs btn-white">보기/수정</a>
