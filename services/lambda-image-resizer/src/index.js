@@ -40,6 +40,22 @@ const ThumbnailSizes = {
         {size: 640, alias: 'm'},
         {size: 1280, alias: 'l'}
     ],
+    GUIDE: [
+        {size: 192, alias: 's'},
+        {size: 640, alias: 'm'},
+        {size: 1280, alias: 'l'}
+    ],
+    BENEFITS: [
+        {size: 192, alias: 's'},
+        {size: 640, alias: 'm'},
+        {size: 1280, alias: 'l'}
+    ],
+    BENEFITSLOGO: [
+        {size: 40, alias: 't', type: 'crop'},
+        {size: 80, alias: 's', type: 'crop'},
+        {size: 256, alias: 'm', type: 'crop'},
+        {size: 640, alias: 'l', type: 'crop'}
+    ],
     sizeFromKey: function(key) {
         const type = key.split('/')[1];
         if (type === 'article') {
@@ -54,7 +70,13 @@ const ThumbnailSizes = {
             return ThumbnailSizes.COMPLEX;
         } else if (type === 'resv') {
             return ThumbnailSizes.RESV;
-        }
+        } else if (type === 'guide') {
+            return ThumbnailSizes.GUIDE;
+        } else if (type === 'benefits') {
+            return ThumbnailSizes.BENEFITS;
+        } else if (type === 'benefitslogo') {
+            return ThumbnailSizes.BENEFITSLOGO;
+        }   
 
         return null;
     }
