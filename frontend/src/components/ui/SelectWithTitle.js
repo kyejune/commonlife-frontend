@@ -19,7 +19,7 @@ class SelectWithTitle extends Component {
 				<select onChange={ this.onChange }>
 					{
 						Store.complexes.map( ( item, key ) => {
-							if( selectedValue === item.cmplxId.toString() ) {
+							if( selectedValue.toString() === item.cmplxId.toString() ) {
 								return <option key={ key } value={ item.cmplxId } selected>{ item.cmplxNm }</option>
 							}
 							else {
