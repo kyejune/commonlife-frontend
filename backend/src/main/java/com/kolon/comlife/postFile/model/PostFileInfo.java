@@ -3,7 +3,6 @@ package com.kolon.comlife.postFile.model;
 import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.post.model.PostInfo;
 import org.apache.ibatis.type.Alias;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Alias("postFileInfo")
 public class PostFileInfo {

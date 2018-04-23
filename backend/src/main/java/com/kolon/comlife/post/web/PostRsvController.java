@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/posts/{postId}/rsv/*")
 public class PostRsvController {
-    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostRsvController.class);
 
     @Autowired
     private PostRsvService postRsvService;

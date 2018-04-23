@@ -24,4 +24,13 @@
     </definition>
 
 
+    <definition name="posts" extends="Layout">
+        <put-attribute name="contents" value="/WEB-INF/jsp/views/{1}.jsp" />
+        <put-attribute name="title" value="" />
+        <put-attribute name="js" value="" />
+        <put-attribute name="css" value="" />
+        <!--<put-attribute name="title" expression="${title}" /> -->
+    </definition>
+
+
 </tiles-definitions>

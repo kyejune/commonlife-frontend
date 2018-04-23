@@ -10,7 +10,23 @@
 
 
     <typeAliases>
-        <package name="com.kolon.comlife" />
+        <package name="com.kolon.comlife.admin.board.model" />
+        <package name="com.kolon.comlife.admin.complexes.model" />
+        <package name="com.kolon.comlife.admin.imageStore.model" />
+        <package name="com.kolon.comlife.admin.info.model" />
+        <package name="com.kolon.comlife.admin.login.model" />
+        <package name="com.kolon.comlife.admin.manager.model" />
+        <package name="com.kolon.comlife.admin.post.model" />
+        <package name="com.kolon.comlife.admin.reservation.model" />
+        <package name="com.kolon.comlife.admin.reservation.model" />
+        <package name="com.kolon.comlife.admin.status.model" />
+        <package name="com.kolon.comlife.admin.support.model" />
+        <package name="com.kolon.comlife.admin.users.model" />
+
+        <package name="com.kolon.comlife.common.model" />
+
+        <package name="com.kolon.comlife.properties.model" />
+
         <package name="com.kolon.common.admin.model" />
         <package name="com.kolon.common.prop" />
     </typeAliases>

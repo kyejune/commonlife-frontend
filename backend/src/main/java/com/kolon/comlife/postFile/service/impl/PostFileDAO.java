@@ -14,7 +14,7 @@ import java.util.Map;
 
 @Repository("postFileDAO")
 public class PostFileDAO {
-    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostFileDAO.class);
 
     @Resource
     private SqlSession sqlSession;

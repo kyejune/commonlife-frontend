@@ -39,6 +39,7 @@ public class InfoController {
     @Autowired
     private InfoService infoService;
 
+    ///////  SUPER 관리자 용 ///////
     @GetMapping( value = "categoryList.do" )
     public ModelAndView categoryList (
             HttpServletRequest request
@@ -151,4 +152,17 @@ public class InfoController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new SimpleMsgInfo("업데이트를 완료했습니다."));
     }
+
+
+    /////// 현장 관리자 용 ///////
+
+    /*
+    todo: living Guide의 게시판 기능 만들기
+     */
+
+
+    /*
+    todo: Benefits 게시판 기능 만들기
+     */
+
 }

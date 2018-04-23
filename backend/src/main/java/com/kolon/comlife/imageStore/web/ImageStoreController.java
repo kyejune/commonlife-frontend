@@ -34,7 +34,7 @@ import java.util.Iterator;
 @RestController
 @RequestMapping("/imageStore/")
 public class ImageStoreController {
-    private static final Logger logger = LoggerFactory.getLogger(ExampleController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ImageStoreController.class);
 
     @Autowired
     ImageStoreService imageStoreService;

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="PostRsv">
+    <select id="selectRsvList" parameterType="java.util.Map" resultType="PostRsvInfo">
+        <![CDATA[
+        SELECT
+            `RSV_IDX`,
+            `PARENT_IDX`,
+            `RSV_CURR_CNT`,
+            `RSV_MAX_CNT`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `POST_RSV`
+        WHERE
+            `PARENT_IDX` = #{parentIdx}
+        ]]>
+    </select>
+
+
+    <select id="selectRsvItemList" parameterType="java.util.Map" resultType="PostRsvItemInfo">
+        <![CDATA[
+        SELECT
+            `RSV_ITEM_IDX`,
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_ID`,
+            `DEL_YN`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `POST_RSV_ITEMS`
+        WHERE
+            `DEL_YN` = 'N'
+              AND
+            `PARENT_IDX` = #{parentIdx}
+        ]]>
+    </select>
+
+    <select id="selectRsvCountByPostId" parameterType="java.util.Map" resultType="LikeStatusInfo">
+        <![CDATA[
+        SELECT
+          COUNT(*) AS LIKE_COUNT,
+          IF( 1 = SUM(CASE WHEN `USR_ID` = #{usrId} THEN 1 ELSE 0 END), TRUE, FALSE) AS MY_LIKE_FLAG
+        FROM
+        (
+            SELECT
+                `RSV_IDX`,
+                `PARENT_TYPE`,
+                `PARENT_IDX`,
+                `USR_ID`,
+                `DEL_YN`,
+                `REG_DTTM`,
+                `UPD_DTTM`
+            FROM
+                `POST_RSV_ITEMS`
+            WHERE
+                `DEL_YN` = 'N'
+                AND
+                `PARENT_TYPE` = 'POST'
+                AND
+                `PARENT_IDX` =  #{parentIdx}
+        ) AS V;
+        ]]>
+    </select>
+
+    <select id="selectLatestLike" parameterType="java.util.Map"  resultType="PostRsvInfo">
+        <![CDATA[
+        SELECT
+            `RSV_IDX`,
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_ID`,
+            `DEL_YN`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `POST_RSV`
+        WHERE
+            `DEL_YN` = 'N'
+            AND
+            `PARENT_IDX` = #{parentIdx}
+            AND
+            `RSV_IDX` = LAST_INSERT_ID()
+        ]]>
+    </select>
+
+    <select id="selectRsvItemByParentIdxAndUsrId" parameterType="java.util.Map"  resultType="PostRsvItemInfo">
+        <![CDATA[
+        SELECT
+            `RSV_ITEM_IDX`,
+            `PARENT_TYPE`,
+            `PARENT_IDX`,
+            `USR_ID`,
+            `DEL_YN`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        FROM
+            `POST_RSV_ITEMS`
+        WHERE
+            `DEL_YN` = 'N'
+            AND
+            `PARENT_IDX` = #{parentIdx}
+            AND
+            `USR_ID` = #{usrId}
+        ]]>
+    </select>
+
+
+
+    <select id="selectRsvAvailableWithLock" parameterType="java.util.Map" resultType="int">
+        <![CDATA[
+        SELECT
+          SUM( IF(RSV_CURR_CNT < RSV_MAX_CNT,1, 0))
+        FROM
+          `POST_RSV`
+        WHERE
+          `PARENT_IDX`=#{postIdx} FOR UPDATE;
+        ]]>
+    </select>
+
+    <!-- 참여신청이 가능하면 1, 불가능하면 0 -->
+    <update id="incRsvCntIfAvailable" parameterType="java.util.Map">
+    <![CDATA[
+        UPDATE
+          `POST_RSV`
+        SET
+          `RSV_CURR_CNT` = `RSV_CURR_CNT` + 1
+        WHERE
+          `PARENT_IDX` = #{parentIdx}
+            AND
+          `RSV_CURR_CNT` < `RSV_MAX_CNT`
+    ]]>
+    </update>
+
+    <!-- 참여신청 취소가 가능하면 1, 불가능하면 0 -->
+    <update id="decRsvCntIfAvailable" parameterType="java.util.Map">
+        <![CDATA[
+        UPDATE
+          `POST_RSV`
+        SET
+          `RSV_CURR_CNT` = `RSV_CURR_CNT` - 1
+        WHERE
+          `PARENT_IDX` = #{parentIdx}
+            AND
+          `RSV_CURR_CNT` > 0
+    ]]>
+    </update>
+
+    <insert id="addRsvItem" parameterType="java.util.Map">
+        <![CDATA[
+        INSERT INTO
+          `POST_RSV_ITEMS`
+            (
+                `PARENT_IDX`,
+                `USR_ID`,
+                `REG_DTTM`,
+                `UPD_DTTM`
+            )
+        VALUES
+        (
+            #{parentIdx},
+            #{usrId},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+        ON DUPLICATE KEY
+	    UPDATE
+	      DEL_YN="N",
+	      UPD_DTTM=CURRENT_TIMESTAMP;
+        ]]>
+    </insert>
+
+    <update id="removeRsvItem" parameterType="java.util.Map">
+        <![CDATA[
+        UPDATE
+          `POST_RSV_ITEMS`
+        SET
+          `DEL_YN` = 'Y',
+          `UPD_DTTM` = CURRENT_TIMESTAMP
+        WHERE
+          `DEL_YN` = 'N'
+            AND
+          `PARENT_IDX` = #{parentIdx}
+            AND
+          `USR_ID` = #{usrId}
+        ]]>
+    </update>
+</mapper>

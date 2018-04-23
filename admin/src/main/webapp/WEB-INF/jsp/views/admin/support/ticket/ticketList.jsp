@@ -115,11 +115,6 @@
 
             function fn_link_page( pageIndex) {
                 window.location.replace("ticketList.do?pageNum=" + pageIndex);
-
-//                 $("#boardReqForm > #pageIndex").val(pageIndex);
-// //                $("#pageIndex").val(pageIndex);
-//
-//                 refreshList();
             }
 
             function refreshList(){

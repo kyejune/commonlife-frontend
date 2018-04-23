@@ -1,7 +1,7 @@
 package com.kolon.comlife.common.model;
 
 public class SimpleMsgInfo {
-    private String msg;
+    protected String msg;
 
     public SimpleMsgInfo() { };
 

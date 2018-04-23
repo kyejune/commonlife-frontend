@@ -31,7 +31,7 @@
             <li id="left_complex">
                 <a href="#">
                     <i class="fa fa-table"></i>
-                    <span class="nav-label">현장 관리</span><span class="fa arrow"></span>
+                    <span class="nav-label">슈퍼| 현장 관리</span><span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
                     <li id="left_complex_category"><a href="/admin/complexes/category.do">현장 그룹 관리</a></li>
@@ -41,7 +41,7 @@
             <li id="left_admin">
                 <a href="#">
                     <i class="fa fa-table"></i>
-                    <span class="nav-label">관리자 관리</span><span class="fa arrow"></span>
+                    <span class="nav-label">슈퍼| 관리자 관리</span><span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
                     <li id="left_admin_all"><a href="/admin/managers/list.do">전체 관리자 목록</a></li>
@@ -50,10 +50,21 @@
                     <li id="left_admin_log"><a href="/admin/managers/log.do">작업 로그</a></li>
                 </ul>
             </li>
+            <li id="left_feed">
+                <a href="#">
+                    <i class="fa fa-table"></i>
+                    <span class="nav-label">현장| FEED 관리</span><span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li id="left_feed_feed"><a href="/admin/posts/feedList.do">사용자 Feed 관리</a></li>
+                    <li id="left_feed_event"><a href="/admin/posts/eventList.do?grpId=0">Event 관리</a></li>
+                    <li id="left_feed_notice"><a href="/admin/posts/noticeList.do?grpId=1">Notice 관리</a></li>
+                </ul>
+            </li>
             <li id="left_properties">
                 <a href="#">
                     <i class="fa fa-table"></i>
-                    <span class="nav-label">환경설정 관리</span><span class="fa arrow"></span>
+                    <span class="nav-label">슈퍼| 환경설정 관리</span><span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
                     <li id="left_properties_all"><a href="/admin/properties/list.do">Properties 관리</a></li>
@@ -62,7 +73,7 @@
             <li >
                 <a href="#">
                     <i class="fa fa-table"></i>
-                    <span class="nav-label">세대주/사용자 관리</span><span class="fa arrow"></span>
+                    <span class="nav-label">슈퍼| 세대주/사용자 관리</span><span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
                     <li><a href="/admin/managers/list.do">세대주 목록</a></li>

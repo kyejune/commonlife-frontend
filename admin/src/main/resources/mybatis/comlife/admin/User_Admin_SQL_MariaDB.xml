@@ -4,48 +4,44 @@
 <mapper namespace="User">
 
     <!--- BACKEND -->
-    <!--<select id="selectUserListForPostById" parameterType="java.util.List" resultType="postUserInfo">-->
-        <!--/* Post에서 이용하는 사용자 목록 조회 */-->
-        <!--SELECT-->
-            <!--USR_INFO.USR_ID,-->
-            <!--USER_NM,-->
-            <!--IFNULL(AVATAR_IMG_SRC, NULL) AS IMG_SRC,-->
-            <!--IFNULL(USER_ALIAS, USER_NM) AS USER_ALIAS,-->
-            <!--CMPLX_NM-->
-        <!--FROM-->
-          <!--USR_INFO-->
-            <!--LEFT JOIN-->
-          <!--USR_INFO_EXT-->
-              <!--ON USR_INFO.USR_ID = USR_INFO_EXT.USR_ID-->
-            <!--JOIN-->
-          <!--COMPLEX_M-->
-              <!--ON USR_INFO.CMPLX_ID = COMPLEX_M.CMPLX_ID-->
-        <!--WHERE-->
-            <!--USR_INFO.USR_ID-->
-        <!--IN-->
-        <!--<foreach collection="list" item="item" index="index" separator="," open="(" close=")">-->
-            <!--#{item}-->
-        <!--</foreach>-->
-    <!--</select>-->
-
-    <!--<select id="selectUserListById" parameterType="java.util.List" resultType="userInfo">-->
-        <!--/* ID리스트로 사용자 조회 */-->
-        <!--SELECT-->
-                <!--*-->
-        <!--FROM-->
-                <!--USR_INFO-->
-        <!--WHERE-->
-                <!--USR_ID-->
-                <!--IN-->
-        <!--<foreach collection="list" item="item" index="index" separator="," open="(" close=")">-->
-            <!--#{item}-->
-        <!--</foreach>-->
-    <!--</select>-->
-
-    <!--<select id="selectUserRelatedInfo" parameterType="Map" resultType="Map">-->
-      <!--SELECT-->
-    <!--</select>-->
-
+    <select id="selectUserListForPostById" parameterType="java.util.List" resultType="postUserInfo">
+        /* Post에서 이용하는 사용자 목록 조회 */
+        SELECT
+            USR_INFO.USR_ID,
+            USER_NM,
+            IFNULL((
+                SELECT
+                  IMAGE_IDX
+                FROM
+                    CL_IMAGE_INFO JOIN
+                    CL_IMAGE_TYPE
+                    ON CL_IMAGE_INFO.PARENT_TYPE = CL_IMAGE_TYPE.TYPE_IDX AND CL_IMAGE_TYPE.TYPE_NM = 'profile'
+                WHERE
+                    CL_IMAGE_INFO.DEL_YN = 'N' AND
+                    CL_IMAGE_INFO.PARENT_IDX = USR_INFO.USR_ID
+                ORDER BY IMAGE_IDX DESC
+                LIMIT 1
+            ), -1) AS IMAGE_IDX,
+            IFNULL(USER_ALIAS, USER_NM) AS USER_ALIAS,
+            CL_CMPLX_NM AS CMPLX_NM
+        FROM
+          USR_INFO
+            LEFT JOIN
+          USR_INFO_EXT
+              ON USR_INFO.USR_ID = USR_INFO_EXT.USR_ID
+            JOIN
+          COMPLEX_M
+              ON USR_INFO.CMPLX_ID = COMPLEX_M.CMPLX_ID
+            LEFT JOIN
+          COMPLEX_M_EXT
+              ON COMPLEX_M.CMPLX_ID = COMPLEX_M_EXT.CMPLX_ID
+        WHERE
+          USR_INFO.USR_ID
+        IN
+        <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </select>
 
     <!-- ADMIN -->
     <select id="selectUserCountByComplexId" parameterType="Map" resultType="Map">

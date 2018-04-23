@@ -9,7 +9,6 @@ import com.kolon.comlife.admin.support.service.SupportService;
 import com.kolon.comlife.admin.support.service.TicketFileStoreService;
 import com.kolon.comlife.admin.support.service.TicketService;
 import com.kolon.comlife.admin.users.model.UserExtInfo;
-import com.kolon.comlife.admin.users.model.UserInfo;
 import com.kolon.comlife.admin.users.service.UserService;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.paginate.PaginateInfo;
@@ -245,7 +244,7 @@ public class TicketController {
 
     ) {
 
-        // todo: 구현 안되어 있음 구현해야 함 
+        // todo: 구현 안되어 있음 구현해야 함
 
         return null;
     }

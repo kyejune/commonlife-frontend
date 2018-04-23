@@ -1,7 +1,6 @@
 package com.kolon.comlife.post.service.impl;
 
 import com.kolon.comlife.post.model.PostInfo;
-import com.kolon.comlife.post.web.PostController;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +13,7 @@ import java.util.Map;
 
 @Repository("postDAO")
 public class PostDAO {
-    private static final Logger logger = LoggerFactory.getLogger(PostController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostDAO.class);
 
     @Resource
     private SqlSession sqlSession;

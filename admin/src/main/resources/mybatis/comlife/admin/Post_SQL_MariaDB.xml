@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Post">
+
+
+    <select id="countPostList" parameterType="java.util.Map" resultType="java.lang.Integer">
+        <!-- Pagination 계산을 위한 레코드 갯수 계산 -->
+        SELECT
+            COUNT( * ) as COUNT
+        FROM
+            `POST`
+        WHERE
+                1 = 1
+            <if test="cmplxId != null">
+                AND `CMPLX_ID`=#{cmplxId}
+            </if>
+            <if test="postType != null">
+                AND `POST_TYPE`=#{postType}
+            </if>
+            <if test="postIdx != null">
+                AND `POST_IDX`=#{postIdx}
+            </if>
+        ;
+    </select>
+
+    <select id="selectPostList" parameterType="java.util.Map" resultType="postInfo">
+        SELECT * FROM
+        (
+            SELECT
+            `POST_LIKE`.`POST_IDX`,
+            `POST_LIKE`.`USR_ID`,
+            `POST_LIKE`.`CMPLX_ID`,
+            `POST_LIKE`.`POST_TYPE`,
+            `POST_LIKE`.`CONTENT`,
+            `POST_LIKE`.`TITLE`,
+            `POST_LIKE`.`DEL_YN`,
+            `POST_LIKE`.`RSV_YN`,
+            `POST_LIKE`.`SHARE_YN`,
+            `POST_LIKE`.`EVENT_BEGIN_DTTM`,
+            `POST_LIKE`.`EVENT_END_DTTM`,
+            `POST_LIKE`.`EVENT_CMPLX_ID`,
+            `POST_LIKE`.`EVENT_PLACE_NM`,
+            `POST_LIKE`.`INQUIRY_YN`,
+            `POST_LIKE`.`INQUIRY_TYPE`,
+            `POST_LIKE`.`INQUIRY_INFO`,
+            `POST_LIKE`.`REG_DTTM`,
+            `POST_LIKE`.`UPD_DTTM`,
+            `POST_LIKE`.`LIKES_COUNT`,
+            `POST_LIKE`.`MY_LIKE_FLAG`,
+            `POST_RSV`.`RSV_MAX_CNT` AS RSV_MAX_CNT,
+            `POST_RSV`.`RSV_CURR_CNT` AS RSV_COUNT,
+            IF( 1 = SUM(CASE WHEN (`POST_RSV_ITEMS`.`USR_ID` = #{usrId} AND `POST_RSV_ITEMS`.`DEL_YN` = "N") THEN 1 ELSE 0 END),
+              TRUE,
+              FALSE ) AS RSV_FLAG
+            FROM
+            (
+                SELECT
+                    `POST`.`POST_IDX`,
+                    `POST`.`USR_ID`,
+                    `POST`.`CMPLX_ID`,
+                    `POST`.`POST_TYPE`,
+                    `POST`.`CONTENT`,
+                    `POST`.`TITLE`,
+                    `POST`.`DEL_YN`,
+                    `POST`.`RSV_YN`,
+                    `POST`.`SHARE_YN`,
+                    `POST`.`EVENT_BEGIN_DTTM`,
+                    `POST`.`EVENT_END_DTTM`,
+                    `POST`.`EVENT_CMPLX_ID`,
+                    `POST`.`EVENT_PLACE_NM`,
+                    `POST`.`INQUIRY_YN`,
+                    `POST`.`INQUIRY_TYPE`,
+                    `POST`.`INQUIRY_INFO`,
+                    `POST`.`REG_DTTM`,
+                    `POST`.`UPD_DTTM`,
+                    `LIKE`.`LIKE_IDX`,
+                    `LIKE`.`PARENT_IDX`,
+
+                    SUM(CASE WHEN (ISNULL(`LIKE`.`LIKE_IDX`) OR `LIKE`.`DEL_YN` = "Y") THEN 0 ELSE 1 END) AS LIKES_COUNT,
+                    IF( 1 = SUM(CASE WHEN (`LIKE`.`USR_ID` = #{usrId} AND `LIKE`.`DEL_YN` = "N") THEN 1 ELSE 0 END),
+                    TRUE,
+                    FALSE) AS MY_LIKE_FLAG
+                FROM
+                `POST`
+                LEFT JOIN
+                `LIKE`
+                ON  `POST`.`POST_IDX` = `LIKE`.`PARENT_IDX`  AND `LIKE`.`DEL_YN` = "N"
+                WHERE
+                    1 = 1
+                <if test="cmplxId != null">
+                    AND CMPLX_ID=#{cmplxId}
+                </if>
+                <if test="postType != null">
+                    AND POST_TYPE=#{postType}
+                </if>
+                <if test="postIdx != null">
+                    AND POST_IDX=#{postIdx}
+                </if>
+                GROUP BY POST_IDX
+            ) AS
+            `POST_LIKE`
+              LEFT JOIN
+            `POST_RSV`
+                ON  `POST_LIKE`.`POST_IDX` = `POST_RSV`.`PARENT_IDX` AND `POST_LIKE`.`RSV_YN` = "Y"
+              LEFT JOIN
+            `POST_RSV_ITEMS`
+                ON  `POST_LIKE`.`POST_IDX` = `POST_RSV_ITEMS`.`PARENT_IDX` AND `POST_LIKE`.`DEL_YN` = "N"
+            GROUP BY `POST_LIKE`.`POST_IDX`
+        ) AS T
+        ORDER BY `T`.`POST_IDX` DESC
+        <if test="limit != null">
+        LIMIT
+            #{limit}
+            <if test="offset != null">
+                OFFSET
+                #{offset}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectPostContentOnly" parameterType="java.util.Map" resultType="postInfo">
+        SELECT
+            POST_IDX,
+            CONTENT,
+            REG_DTTM,
+            UPD_DTTM
+        FROM
+            POST
+        WHERE
+            POST_IDX = #{postIdx};
+    </select>
+
+    <select id="selectLatestPost" resultType="postInfo">
+    <![CDATA[
+        SELECT
+                *
+        FROM
+                `POST`
+        WHERE
+                `DEL_YN` = 'N'
+                AND
+                `POST_IDX` = LAST_INSERT_ID()
+    ]]>
+    </select>
+
+    <insert id="insertPost" parameterType="postInfo">
+    <![CDATA[
+        INSERT
+        INTO    `POST`
+        (
+            `POST_TYPE`,
+            `CONTENT`,
+            `USR_ID`,
+            `CMPLX_ID`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        )
+        VALUES
+        (
+            #{postType},
+            #{content},
+            #{usrId},
+            #{cmplxId},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+    ]]>
+    </insert>
+
+    <update id="updatePost" parameterType="postInfo">
+    <![CDATA[
+        UPDATE
+                `POST`
+        SET
+                `CONTENT`   = #{content},
+                `UPD_DTTM`  = CURRENT_TIMESTAMP
+        WHERE
+                `DEL_YN`   = 'N'  AND
+                `POST_IDX` = #{postIdx} AND
+                `USR_ID`   = #{usrId}
+    ]]>
+    </update>
+
+    <update id="deletePost" parameterType="postInfo">
+    <![CDATA[
+        UPDATE  `POST`
+        SET     `DEL_YN`   = 'Y',
+                `UPD_DTTM` = CURRENT_TIMESTAMP
+        WHERE
+                `DEL_YN`   = 'N'  AND
+                `POST_IDX` = #{postIdx} AND
+                `USR_ID`   = #{usrId}
+    ]]>
+    </update>
+
+</mapper>

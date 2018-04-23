@@ -5,8 +5,6 @@ import com.kolon.comlife.post.exception.PostRsvGeneralException;
 import com.kolon.comlife.post.model.PostRsvInfo;
 import com.kolon.comlife.post.model.PostRsvStatusInfo;
 
-import java.util.List;
-
 public interface PostRsvService {
 
     PostRsvInfo getRsvInfoWithUserListByPostId(int postId );

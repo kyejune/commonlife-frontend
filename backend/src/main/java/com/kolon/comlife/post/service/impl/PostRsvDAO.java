@@ -1,10 +1,11 @@
 package com.kolon.comlife.post.service.impl;
 
-import com.kolon.comlife.like.model.LikeInfo;
 import com.kolon.comlife.like.model.LikeStatusInfo;
 import com.kolon.comlife.post.model.PostRsvInfo;
 import com.kolon.comlife.post.model.PostRsvItemInfo;
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -14,6 +15,8 @@ import java.util.Map;
 
 @Repository("postRsvDAO")
 public class PostRsvDAO {
+    private static final Logger logger = LoggerFactory.getLogger(PostRsvDAO.class);
+
     @Resource
     private SqlSession sqlSession;
 

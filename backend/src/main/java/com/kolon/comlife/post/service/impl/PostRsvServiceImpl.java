@@ -1,6 +1,5 @@
 package com.kolon.comlife.post.service.impl;
 
-import com.kolon.comlife.like.model.LikeStatusInfo;
 import com.kolon.comlife.post.exception.ReservedAlreadyException;
 import com.kolon.comlife.post.exception.PostRsvGeneralException;
 import com.kolon.comlife.post.model.PostRsvInfo;
