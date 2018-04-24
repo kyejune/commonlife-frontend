@@ -136,7 +136,7 @@
                                     <tr>
                                         <th data-toggle="true" data-sort-ignore="true">#</th>
                                         <c:if test="${adminConst.adminGrpComplex != grpId && adminConst.adminGrpSuper != grpId}">
-                                            <th data-sort-ignore="true">관리자 그룹</th>
+                                            <th class="text-center" data-sort-ignore="true">관리자 그룹</th>
                                         </c:if>
                                         <th data-sort-ignore="true">관리자 아이디</th>
                                         <th class="" data-sort-ignore="true">이름</th>
@@ -165,20 +165,20 @@
                                                     ${vo.rnum}
                                                 </td>
                                                 <c:if test="${adminConst.adminGrpComplex != grpId && adminConst.adminGrpSuper != grpId}">
-                                                <td class="center">
+                                                <td class="text-center" style="padding-top: 12px;">
                                                     <c:choose>
                                                         <c:when test="${adminConst.adminGrpSuper == vo.grpId}">
-                                                            <span class="badge-primary">
+                                                            <span class="label label-primary">
                                                                     ${vo.grpNm}
                                                             </span>
                                                         </c:when>
                                                         <c:when test="${adminConst.adminGrpComplex == vo.grpId}">
-                                                            <span class="badge-success">
+                                                            <span class="label label-success">
                                                                     ${vo.grpNm}
                                                             </span>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <span class="badge-plain">
+                                                            <span class="label label-default">
                                                                 -
                                                             </span>
                                                         </c:otherwise>
