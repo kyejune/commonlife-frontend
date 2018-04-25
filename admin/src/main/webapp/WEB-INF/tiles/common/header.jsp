@@ -80,6 +80,15 @@
                     <li><a href="/admin/managers/list.do">사용자 목록</a></li>
                 </ul>
             </li>
+            <li >
+                <a href="#">
+                    <i class="fa fa-table"></i>
+                    <span class="nav-label">현장| 사용자 지원</span><span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li><a href="/admin/support/ticket/ticketList.do">Living Support 지원</a></li>
+                </ul>
+            </li>
             <li>
                 <a href="#">
                     <i class="fa fa-calendar"></i>
