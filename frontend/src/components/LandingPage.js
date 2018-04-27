@@ -16,8 +16,16 @@ class LandingPage extends Component {
         if(ID){
 
             Net.checkAuth( logined=>{
-                if( logined ) this.props.history.push( S.read('location') || '/community/feed');
-                else          this.props.history.push('/login');
+                if( logined ){
+
+                    if( window.cordova )
+                        this.props.history.push( '/community/feed' );
+                    else
+                        this.props.history.push( S.read('location') || '/community/feed');
+                }
+                else{
+                    this.props.history.push('/login');
+                }
             });
 
         }else{

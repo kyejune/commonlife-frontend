@@ -149,7 +149,7 @@ class Reservation extends Component {
 			</DrawerWrapper>
 
 			{/* 히스토리 */}
-			<DrawerWrapper drawer="reservation-history">
+			<DrawerWrapper drawer="reservation-history" title="예약내역">
 				<ReservationHistory/>
 			</DrawerWrapper>
 

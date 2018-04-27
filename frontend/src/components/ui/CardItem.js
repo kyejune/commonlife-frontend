@@ -109,7 +109,7 @@ class CardItem extends Component {
                     {/* 작성자 정보 - 피드, 뉴스 */}
                     {PostType !== 'event' &&
                     <div className="cl-flex">
-                        <div className="cl-avatar" style={userThumb}/>
+                        <Link to={`?profile=${this.state.user.usrId}`} className="cl-avatar" style={userThumb}/>
                         <div>
                             <h6 className="cl-name">{this.state.user.userNm }</h6>
                             <p className="cl-desc">

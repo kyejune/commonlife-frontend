@@ -8,6 +8,7 @@ import joinSrc from 'images/rsvp-normal@3x.png';
 import joinedSrc from 'images/rsvp-activity@3x.png';
 import TagComponent from "../ui/TagComponent";
 import RightArrowSrc from "images/ic-arrow-right@3x.png";
+import {Link} from "react-router-dom";
 
 
 class CardItemDetailDrawer extends Component {
@@ -26,10 +27,10 @@ class CardItemDetailDrawer extends Component {
         this.props.updateTitle('글보기');
 
         Net.getCardContent(this.props.match.params.tab, this.props.match.params.id, data => {
-            console.log(data);
+            // console.log(data);
             this.setState(data);
 
-
+            // console.log( '글보기 상세:', `${Store.auth.key}`, `${data.usrId}`);
             if( `${Store.auth.key}` === `${data.usrId}` ) {
                 this.props.setMore(true, this.onClickMore);
             }
@@ -151,7 +152,7 @@ class CardItemDetailDrawer extends Component {
                 break;
 
             case 'feed':
-                if( `${Store.auth.key}` === `${this.state.usrId}` && this.state.editable ){
+                if( this.state.editable ){
                     Footer = <footer className="cl-opts__footer cl__footer--double">
                         <button onClick={ this.onEdit }>
                             <div className="cl-bold color-black">수정</div>
@@ -239,6 +240,13 @@ class CardItemDetailDrawer extends Component {
 
                 <div className="cl-card-item-detail-content">
                     <TagComponent content={this.state.content}/>
+                    <div className="fs-15 cl-flex pt-08em pb-08em cl-card-detail-after-content mt-2em">
+                        <p className="color-white mr-1em">작성일: {moment(this.state.regDttm).format('YYYY.MM.DD')}</p>
+
+                        {this.state.likesCount > 0 &&
+                            <Link to={ `${this.props.location.pathname}/like` } className="color-secondary cl-bold cl--underline">좋아요{this.state.likesCount}</Link>
+                        }
+                    </div>
                 </div>
             </div>
 

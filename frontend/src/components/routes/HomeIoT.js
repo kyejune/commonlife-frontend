@@ -48,6 +48,7 @@ class HomeIoT extends Component {
 		if( this.props.location !== prevProps.location ){
             this.updateRoute();
             // 페이지 진입시마다 새로 고침
+            // console.log( this.props.location, prevProps.location );
             if( this.props.location.pathname === '/iot' ) Iot.getIotAll();
         }
 	}
@@ -129,7 +130,9 @@ class HomeIoT extends Component {
         const SCROLL_VALUE = this.scrollBox.scrollTop;
         const IS_TOP = (SCROLL_VALUE <= -80);
 
-        this.setState({ isRefresh: IS_TOP, pulledTop:(IS_TOP||true) });
+        let ns = { isRefresh: IS_TOP };
+        if( IS_TOP ) ns.pulledTop = true;
+        this.setState( ns );
 
         // 0으로 돌아왔고 && 밑으로 땡겨졌었다면...
         if( SCROLL_VALUE ===  0 && this.state.pulledTop ){

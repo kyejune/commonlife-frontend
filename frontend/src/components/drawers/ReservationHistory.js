@@ -12,12 +12,6 @@ import moment from 'moment';
 class ReservationHistory extends Component{
 
 	componentDidMount(){
-		// ContentHolder에 전달
-		this.props.updateTitle(
-			<h2 className="md-title md-title--toolbar cl-ellipsis">
-				<span>예약내역</span>
-			</h2>
-		);
 
 		DB.getReservationHistory( data => {
 			this.setState( { history: data } );
@@ -30,7 +24,7 @@ class ReservationHistory extends Component{
 			<div className="cl-reservation-history__list-wrap">
 				{ ( this.state && this.state.history ) &&
 				( this.state.history.map( ( item, key ) => {
-					return <div className="cl-flex-between cl-reservation-history__item" key={ key }>
+				    return <div className="cl-flex-between cl-reservation-history__item" key={ key }>
 						<div className="cl-reservation-history__icon">
 							<img src={ReserveServiceLaundry} alt=""/>
 						</div>

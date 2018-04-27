@@ -1,5 +1,5 @@
 {
-    "name": "app.commonlife",
+    "name": "co.commonlife",
     "displayName": "commonlife",
     "version": "1.0.0",
     "description": "A sample Apache Cordova application that responds to the deviceready event.",
