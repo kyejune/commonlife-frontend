@@ -7,6 +7,20 @@
     <a><!-- --></a>
 </tiles:putAttribute>
 <tiles:putAttribute name="contents">
+    <c:choose>
+        <c:when test="${postType eq 'event'}">
+            <c:set value="Event" var="postTypeTxt"></c:set>
+        </c:when>
+        <c:when test="${postType eq 'news'}">
+            <c:set value="Notice" var="postTypeTxt"></c:set>
+        </c:when>
+        <c:otherwise>
+            <c:set value="사용자 Feed" var="postTypeTxt"></c:set>
+        </c:otherwise>
+    </c:choose>
+
+
+
     <!-- Section Title -->
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
@@ -19,7 +33,7 @@
                     FEED 관리
                 </li>
                 <li class="active">
-                    <a>사용자 FEED 관리</a>
+                    <a><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out>관리</a>
                 </li>
             </ol>
         </div>
@@ -28,41 +42,6 @@
     </div>
 
     <div class="wrapper wrapper-content animated fadeInRight">
-
-        <%--<div class="row">--%>
-            <%--<div class="col-lg-12">--%>
-                <%--<div class="ibox float-e-margins">--%>
-                    <%--<div class="ibox-title">--%>
-                        <%--<h5>관리자 생성</h5>--%>
-                        <%--<div class="ibox-tools">--%>
-                            <%--<a class="collapse-link">--%>
-                                <%--<i class="fa fa-chevron-up"></i>--%>
-                            <%--</a>--%>
-                        <%--</div>--%>
-                    <%--</div>--%>
-                    <%--<div class="ibox-content" style="">--%>
-                        <%--<form class="form-horizontal">--%>
-                            <%--<div class="form-group">--%>
-                                <%--<label class="col-sm-2 control-label">--%>
-                                    <%--<button type="button"--%>
-                                            <%--class="btn btn-primary b-r-lg"--%>
-                                            <%--onclick="managerAdd('~~~~~')">--%>
-                                        <%--슈퍼 관리자 생성</button>--%>
-                                <%--</label>--%>
-                                <%--<div class="col-sm-10"> 설명 작성 ... </div>--%>
-                            <%--</div>--%>
-                        <%--</form>--%>
-                    <%--</div>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-
-        <%--<form:form name="manageReqForm" id="manageReqForm" method="post" commandName="adminInfo">--%>
-            <%--<!--//paging-->--%>
-            <%--<form:hidden path="pageIndex"/>--%>
-            <%--<form:hidden path="adminId"/>--%>
-        <%--</form:form>--%>
-
         <div class="row">
             <div class="col-md-8">
                 <div class="ibox float-e-margins">
@@ -110,13 +89,20 @@
                                             <td>
                                                 <c:choose>
                                                     <c:when test="${fn:length(vo.content) < 1}" >
-                                                        {내용 없음}
+                                                        <a href="javascript:void(0)"
+                                                           onclick="showPost(${vo.postIdx})">{내용 없음}</a>
                                                     </c:when>
                                                     <c:when test="${fn:length(vo.content) > 30}" >
+                                                        <a href="javascript:void(0)"
+                                                           onclick="showPost(${vo.postIdx})">
                                                         ${fn:substring(vo.content,0, 30)}...
+                                                        </a>
                                                     </c:when>
                                                     <c:otherwise>
+                                                        <a href="javascript:void(0)"
+                                                           onclick="showPost(${vo.postIdx})">
                                                         ${vo.content}
+                                                        </a>
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
@@ -158,70 +144,16 @@
                                                 <fmt:parseDate value="${vo.updDttm}" pattern="yyyy-MM-dd HH:mm" var="sysDt2"/>
                                                 <fmt:formatDate value="${sysDt2}" pattern="yyyy.MM.dd HH:mm"/>
                                             </td>
-                                        <%--<td class="center">--%>
-                                                <%--<c:choose>--%>
-                                                    <%--<c:when test="${adminConst.adminGrpSuper == vo.grpId}">--%>
-                                                        <%--<span class="badge-primary">--%>
-                                                                <%--${vo.grpNm}--%>
-                                                        <%--</span>--%>
-                                                    <%--</c:when>--%>
-                                                    <%--<c:when test="${adminConst.adminGrpComplex == vo.grpId}">--%>
-                                                        <%--<span class="badge-success">--%>
-                                                                <%--${vo.grpNm}--%>
-                                                        <%--</span>--%>
-                                                    <%--</c:when>--%>
-                                                    <%--<c:otherwise>--%>
-                                                        <%--<span class="badge-plain">--%>
-                                                            <%-----%>
-                                                        <%--</span>--%>
-                                                    <%--</c:otherwise>--%>
-                                                <%--</c:choose>--%>
-                                            <%--</td>--%>
-                                            <%--</c:if>--%>
-                                            <%--<td>--%>
-                                                <%--<c:choose>--%>
-                                                    <%--<c:when test="${grpId == -1}">--%>
-                                                        <%--${vo.adminId}--%>
-                                                    <%--</c:when>--%>
-                                                    <%--<c:otherwise>--%>
-                                                        <%--<a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}', ${vo.grpId})">--%>
-                                                            <%--${vo.adminId}--%>
-                                                        <%--</a>--%>
-                                                    <%--</c:otherwise>--%>
-                                                <%--</c:choose>--%>
-                                            <%--</td>--%>
-                                            <%--<td class="center">${vo.adminNm}</td>--%>
-                                            <%--<td class="center">${vo.adminEmail}</td>--%>
-                                            <%--<c:if test="${adminConst.adminGrpComplex == grpId}">--%>
-                                                <%--<td class="center">${vo.cmplxNm}</td>--%>
-                                            <%--</c:if>--%>
-                                            <%--<td class="center"><p>${vo.desc}</p><br/></td>--%>
-                                            <%--<td class="center" >--%>
-                                                <%--<c:choose>--%>
-                                                    <%--<c:when test="${vo.useYn == 'Y'}">--%>
-                                                        <%--<i class="fa fa-check-circle text-navy" alt="사용"></i>--%>
-                                                    <%--</c:when>--%>
-                                                    <%--<c:when test="${vo.useYn == 'N'}">--%>
-                                                        <%--<i class="fa fa-times" alt="사용안함"></i>--%>
-                                                    <%--</c:when>--%>
-                                                    <%--<c:otherwise>--%>
-                                                        <%-----%>
-                                                    <%--</c:otherwise>--%>
-                                                <%--</c:choose>--%>
-                                            <%--</td>--%>
-                                            <%--<td class="center" >--%>
-                                                <%--<fmt:parseDate value="${vo.regDttm}" pattern="yyyy-MM-dd" var="sysDt"/>--%>
-                                                <%--<fmt:formatDate value="${sysDt}" pattern="yyyy.MM.dd"/>--%>
-                                            <%--</td>--%>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
                                     <tfoot>
                                     <!-- paginging -->
                                     <tr>
-                                        <td colspan="8">
-                                            <%--<ul class="pagination"></ul>--%>
+                                        <td colspan="8" >
+                                            <div class="center-block">
                                                 <ui:pagination paginationInfo="${paginateInfo}" jsFunction="fn_link_page"/>
+                                            </div>
                                         </td>
                                     </tr>
                                     </tfoot>
@@ -243,6 +175,55 @@
                     </div>
 
                     <div class="ibox-content" style="">
+                        <div id="emptyPost" class="text-success font-bold text"><br>
+                            <br><h3>'내용'을 클릭하여 Feed의 <br> 상세 정보를 볼 수 있습니다.</h3><br>
+                        </div>
+                        <div class="social-feed-box" id="showPost" style="display: none;">
+                            <div class="social-avatar">
+                                <a href="" class="pull-left">
+                                    <img id="profile" alt="image" src="">
+                                </a>
+                                <div class="media-body">
+                                    <a href="#" id="userNm"></a>
+                                    <small class="text-muted" id="regDttm" ></small>
+                                </div>
+                            </div>
+
+                            <div class="social-body">
+                                <div id="content"></div>
+                                <br>
+                                <br>
+                                <img id="postFile" src="#" class="img-responsive" style="display: none">
+                                <br>
+                                <br>
+                            </div>
+                            <div class="social-footer">
+                                <div class="row">
+                                    <label class="col-lg-6 control-label">
+                                        <i class="fa fa-thumbs-up"></i>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <div id="likesCount">0</div>
+                                    </div>
+                                </div>
+                                <div class="row" id="rsvYn" style="display: none;">
+                                    <label class="col-lg-6 control-label">
+                                        <i class="fa fa-users"></i> 참여자
+                                    </label>
+                                    <div class="col-lg-6">
+                                        <div id="rsvCountStatus">0</div>
+                                    </div>
+                                </div>
+                                <div class="row" id="shareYn" style="display: none;">
+                                    <label class="col-lg-6 control-label">
+                                        <i class="fa fa-share"></i>
+                                    </label>
+                                    <div class="col-lg-6">
+                                        공유 가능
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -254,7 +235,19 @@
         $(function () {
             $("#left_feed").addClass("active");
             $("#left_feed > .nav-second-level").addClass("in");
-            $("#left_feed_feed").addClass("active");
+
+            <c:choose>
+                <c:when test="${postType eq 'news'}">
+                    $("#left_feed_notice").addClass("active");
+                </c:when>
+                <c:when test="${postType eq 'event'}">
+                    $("#left_feed_event").addClass("active");
+                </c:when>
+                <c:otherwise>
+                    $("#left_feed_feed").addClass("active");
+                </c:otherwise>
+            </c:choose>
+
 
             <c:if test="${error != null}" >
                 alert("${error}");
@@ -265,9 +258,55 @@
         function fn_link_page( pageIndex ) {
             window.location.replace("feedList.do?pageNum=" + pageIndex);
         }
+
         function refreshList(){
             $("#manageReqForm").attr("action", "/admin/post/feedlist.do");
             $("#manageReqForm").submit();
+        }
+
+        function showPost( postIdx ) {
+            var url;
+
+            url  = '/admin/posts/' + postIdx;
+            console.log( postIdx );
+            console.log( url);
+
+            $.ajax({
+                url : url,
+                type : 'get',
+                success: function (rs) {
+                    $("#profile").attr( "src", rs['user']['imgSrc'] );
+                    $("#userNm").text( rs['user']['userNm'] );
+                    $("#regDttm").text( rs['regDttm'] );
+                    $("#content").text( rs['content'] );
+                    $("#likesCount").text( rs['likesCount'] );
+
+                    if( rs['rsvYn'] == "Y" ) {
+                        var rsvCountStatus = rs['rsvCount'] + " / " + rs['rsvMaxCnt'];
+                        $("#rsvCountStatus").text( rsvCountStatus );
+                        $("#rsvYn").show();
+                    }
+
+                    if( rs['shareYn'] == "Y" ) {
+                        $("#shareYn").show();
+                    }
+
+                    if( rs['postFiles'].length > 0 ) {
+                        $("#postFile").attr("src", rs['postFiles'][0]["mediumPath"] );
+                        $("#postFile").show();
+                    }
+
+                    $("#showPost").show();
+                    $("#emptyPost").hide();
+
+                    console.log( rs['user']['imgSrc'])
+                    console.log(rs);
+                },
+                error : function(){
+                    alert('해당 게시물을 가져올 수 없습니다.');
+                    console.log('error');
+                }
+            });
         }
         //
         // function managersDetail(adminId, grpId){

@@ -39,175 +39,80 @@ public class PostController {
     @Resource(name = "postService")
     private PostService postService;
 
-    @GetMapping(
-            value = "feedList.*",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+
+    private ModelAndView getListInternal( ModelAndView mav, String postType, int pageNum ) {
+        AdminInfo            adminInfo;
+        PaginateInfo         paginateInfo;
+        Map<String, Object>  postParams = new HashMap<>();
+        List<PostInfo>       postList;
+        int                  cmplxId;
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+
+        cmplxId = adminInfo.getCmplxId();
+
+        postParams.put( "postType", postType ); // NEWS == NOTICE
+        postParams.put( "limit", LIMIT_COUNT);
+        postParams.put( "pageNum", Integer.valueOf(pageNum) );
+        postParams.put( "cmplxId", Integer.valueOf( cmplxId ) );
+        postParams.put( "adminIdx", adminInfo.getAdminIdx() );
+
+        // 포스트 목록 추출
+        try {
+            paginateInfo = postService.getPostWithLikeInfoList( postParams );
+        } catch( Exception e ) {
+            e.printStackTrace();
+            logger.error(e.getMessage());
+            return mav.addObject("error",
+                    "목록 가져오기를 실패했습니다. 문제가 지속되면 담당자에게 문의하세요." );
+        }
+
+        postList = paginateInfo.getData();
+
+        logger.debug(">>>> paginateInfo.getTotalRecordCount:" + paginateInfo.getTotalRecordCount() );
+        logger.debug(">>>> paginateInfo.getPageSize:" + paginateInfo.getPageSize());
+        logger.debug(">>>> paginateInfo.getTotalPageCount:" + paginateInfo.getTotalPageCount() );
+
+        mav.addObject("postType", postType);
+        mav.addObject("paginateInfo", paginateInfo);
+        mav.addObject("postList", postList);
+
+        mav.setViewName("admin/posts/feedList");
+
+        return mav;
+    }
+
+    @GetMapping( value = "feedList.*" )
     public ModelAndView getFeedList( HttpServletRequest request,
                                      HttpServletResponse response,
                                      ModelAndView mav,
                                      HttpSession session,
                                      @RequestParam(required=false, defaultValue = "1") int pageNum ) {
-        AdminInfo            adminInfo;
-        PaginateInfo         paginateInfo;
-        Map<String, Object>  postParams = new HashMap<>();
-        int                  cmplxId;
-        List<PostInfo>       postList;
 
-        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
-        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
-        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
-
-        try {
-            if (request.getParameter("cmplxId") != null) {
-                cmplxId = StringUtil.parseInt(request.getParameter("cmplxId"), adminInfo.getCmplxId());
-            } else {
-                cmplxId = adminInfo.getCmplxId();
-            }
-        } catch( NumberFormatException e ) {
-            return mav.addObject("error", "잘못된 파라미터가 입력되었습니다. " );
-        }
-
-
-        postParams.put( "postType", POST_TYPE_FEED );
-        postParams.put( "limit", LIMIT_COUNT);
-        postParams.put( "pageNum", Integer.valueOf(pageNum) );
-        postParams.put( "cmplxId", Integer.valueOf(cmplxId) );
-        postParams.put( "adminIdx", adminInfo.getAdminIdx() );
-
-        // 포스트 목록 추출
-        try {
-            paginateInfo = postService.getPostWithLikeInfoList( postParams );
-        } catch( Exception e ) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            return mav.addObject("error",
-                                 "목록 가져오기를 실패했습니다. 문제가 지속되면 담당자에게 문의하세요." );
-        }
-
-        postList = paginateInfo.getData();
-
-        logger.debug(">>>> paginateInfo.getTotalRecordCount:" + paginateInfo.getTotalRecordCount() );
-        logger.debug(">>>> paginateInfo.getPageSize:" + paginateInfo.getPageSize());
-        logger.debug(">>>> paginateInfo.getTotalPageCount:" + paginateInfo.getTotalPageCount() );
-
-        mav.addObject("paginateInfo", paginateInfo);
-        mav.addObject("postList", postList);
-        return mav;
+        return this.getListInternal( mav, POST_TYPE_FEED, pageNum );
     }
 
-    @GetMapping(
-            value = "eventList.*",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping( value = "eventList.*" )
     public ModelAndView getEventList( HttpServletRequest request,
                                       HttpServletResponse response,
                                       ModelAndView mav,
                                       HttpSession session,
                                       @RequestParam(required=false, defaultValue = "1") int pageNum ) {
-        AdminInfo            adminInfo;
-        PaginateInfo         paginateInfo;
-        Map<String, Object>  postParams = new HashMap<>();
-        int                  cmplxId;
-        List<PostInfo>       postList;
 
-        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
-        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
-        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
-
-        try {
-            if (request.getParameter("cmplxId") != null) {
-                cmplxId = StringUtil.parseInt(request.getParameter("cmplxId"), adminInfo.getCmplxId());
-            } else {
-                cmplxId = adminInfo.getCmplxId();
-            }
-        } catch( NumberFormatException e ) {
-            return mav.addObject("error", "잘못된 파라미터가 입력되었습니다. " );
-        }
-
-
-        postParams.put( "postType", POST_TYPE_EVENT );
-        postParams.put( "limit", LIMIT_COUNT);
-        postParams.put( "pageNum", Integer.valueOf(pageNum) );
-        postParams.put( "cmplxId", Integer.valueOf(cmplxId) );
-        postParams.put( "adminIdx", adminInfo.getAdminIdx() );
-
-        // 포스트 목록 추출
-        try {
-            paginateInfo = postService.getPostWithLikeInfoList( postParams );
-        } catch( Exception e ) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            return mav.addObject("error",
-                    "목록 가져오기를 실패했습니다. 문제가 지속되면 담당자에게 문의하세요." );
-        }
-
-        postList = paginateInfo.getData();
-
-        logger.debug(">>>> paginateInfo.getTotalRecordCount:" + paginateInfo.getTotalRecordCount() );
-        logger.debug(">>>> paginateInfo.getPageSize:" + paginateInfo.getPageSize());
-        logger.debug(">>>> paginateInfo.getTotalPageCount:" + paginateInfo.getTotalPageCount() );
-
-        mav.addObject("paginateInfo", paginateInfo);
-        mav.addObject("postList", postList);
-        return mav;
+        return this.getListInternal( mav, POST_TYPE_EVENT, pageNum );
     }
 
-    @GetMapping(
-            value = "noticeList.*",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping( value = "noticeList.*" )
     public ModelAndView getNoticeList( HttpServletRequest request,
                                       HttpServletResponse response,
                                       ModelAndView mav,
                                       HttpSession session,
                                       @RequestParam(required=false, defaultValue = "1") int pageNum ) {
-        AdminInfo            adminInfo;
-        PaginateInfo         paginateInfo;
-        Map<String, Object>  postParams = new HashMap<>();
-        int                  cmplxId;
-        List<PostInfo>       postList;
 
-        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
-        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
-        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
-        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
-
-        try {
-            if (request.getParameter("cmplxId") != null) {
-                cmplxId = StringUtil.parseInt(request.getParameter("cmplxId"), adminInfo.getCmplxId());
-            } else {
-                cmplxId = adminInfo.getCmplxId();
-            }
-        } catch( NumberFormatException e ) {
-            return mav.addObject("error", "잘못된 파라미터가 입력되었습니다. " );
-        }
-
-
-        postParams.put( "postType", POST_TYPE_NEWS ); // NEWS == NOTICE
-        postParams.put( "limit", LIMIT_COUNT);
-        postParams.put( "pageNum", Integer.valueOf(pageNum) );
-        postParams.put( "cmplxId", Integer.valueOf(cmplxId) );
-        postParams.put( "adminIdx", adminInfo.getAdminIdx() );
-
-        // 포스트 목록 추출
-        try {
-            paginateInfo = postService.getPostWithLikeInfoList( postParams );
-        } catch( Exception e ) {
-            e.printStackTrace();
-            logger.error(e.getMessage());
-            return mav.addObject("error",
-                    "목록 가져오기를 실패했습니다. 문제가 지속되면 담당자에게 문의하세요." );
-        }
-
-        postList = paginateInfo.getData();
-
-        logger.debug(">>>> paginateInfo.getTotalRecordCount:" + paginateInfo.getTotalRecordCount() );
-        logger.debug(">>>> paginateInfo.getPageSize:" + paginateInfo.getPageSize());
-        logger.debug(">>>> paginateInfo.getTotalPageCount:" + paginateInfo.getTotalPageCount() );
-
-        mav.addObject("paginateInfo", paginateInfo);
-        mav.addObject("postList", postList);
-        return mav;
+        return this.getListInternal( mav, POST_TYPE_NEWS, pageNum );
     }
 
     @PostMapping(
@@ -260,6 +165,8 @@ public class PostController {
         return ResponseEntity.status( HttpStatus.OK ).body( retPost );
     }
 
+
+    ////// AJAX CALL //////
     @GetMapping(
             value = "/{id}",
             produces = MediaType.APPLICATION_JSON_VALUE)
