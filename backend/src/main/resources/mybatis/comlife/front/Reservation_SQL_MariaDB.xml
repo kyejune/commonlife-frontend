@@ -34,6 +34,8 @@
                 USR_ID = #{userId}
             </when>
         </choose>
+        ORDER  BY
+        `REG_DTTM` DESC
     </select>
 
     <select id="available" parameterType="java.util.Map" resultType="reservationInfo">
