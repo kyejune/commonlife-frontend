@@ -4,8 +4,6 @@
 <mapper namespace="User">
 
     <insert id="insertUserExt" parameterType="java.util.Map">
-<!-- TRANSACTION TEST!!! -->
-        ERROR ERROR
         INSERT
         INTO    `USR_INFO_EXT`
         (
