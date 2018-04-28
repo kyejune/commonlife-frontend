@@ -37,10 +37,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.Response;
 import java.io.ByteArrayInputStream;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @RequestMapping("/users/registration/*")
@@ -384,8 +381,8 @@ public class UserRegistrationController {
         parameter = IokUtil.buildRequestParameter(request);
         userId = parameter.getString("userId");
         userPw = parameter.getString("userPw");
-        email = parameter.getString("mail");
-        parameter.put("email", email);  // mail ==> email로 변환
+//        email = parameter.getString("mail");
+//        parameter.put("email", email);  // mail ==> email로 변환
 
         // User id validation
         try {
@@ -402,6 +399,14 @@ public class UserRegistrationController {
                     .status(HttpStatus.CONFLICT)
                     .body( new SimpleMsgInfo( "이미 가입이 완료되었습니다." ) );
         }
+
+        // debugdebug
+//        Iterator itr = parameter.keys();
+//        while( itr.hasNext() ){
+//            String key = (String)itr.next();
+//            logger.debug("key/value>>>> " + key + " / " + parameter.get(key));
+//        }
+
 
         try {
             result = mobileUserService.registerMember(parameter);

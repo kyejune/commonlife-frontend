@@ -1034,7 +1034,7 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 				if (isSuccess) {
 					parameter.put("headId", nHeadId);
 					// 5. 사용자정보 테이블 등록
-					this.insertBySqlId(NAMESPACE+"registerMember", parameter);
+						this.insertBySqlId(NAMESPACE+"registerMember", parameter);
 
 					// 6. 계약정보 테이블 등록
 					this.insertBySqlId(NAMESPACE+"insertContM", parameter);
