@@ -116,6 +116,24 @@ public class PostController {
         return this.getListInternal( mav, POST_TYPE_NEWS, pageNum );
     }
 
+
+    @GetMapping( value = "feedEdit.*" )
+    public ModelAndView editPost( HttpServletRequest request,
+                                       HttpServletResponse response,
+                                       ModelAndView mav,
+                                       HttpSession session,
+                                       @RequestParam(required=false, defaultValue = "1") int pageNum,
+                                       @RequestParam(required=false, defaultValue = "1") int postIdx ) {
+
+
+
+        mav.addObject("postType", POST_TYPE_EVENT );
+        mav.setViewName("/admin/posts/feedEdit");
+
+        return mav;
+    }
+
+
     @PostMapping(
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
@@ -128,6 +146,9 @@ public class PostController {
         List<Integer>      postFilesIdList;
         int                usrId;
         int                cmplxId;
+        String             postType;
+
+        postType = (String) args.get( "postType" );
 
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
         logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
@@ -165,7 +186,6 @@ public class PostController {
 
         return ResponseEntity.status( HttpStatus.OK ).body( retPost );
     }
-
 
     ////// AJAX CALL //////
     @GetMapping(

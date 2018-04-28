@@ -24,7 +24,7 @@
     <!-- Section Title -->
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2>FEED 관리</h2>
+            <h2><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out> 관리</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="/">Home</a>
@@ -33,7 +33,7 @@
                     FEED 관리
                 </li>
                 <li class="active">
-                    <a><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out>관리</a>
+                    <a><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out> 관리</a>
                 </li>
             </ol>
         </div>
@@ -188,7 +188,15 @@
                                     <small class="text-muted" id="regDttm" ></small>
                                 </div>
                             </div>
-                            <div class="social-footer m-sm">
+                            <div class="social-body m-sm">
+                                <div id="content" style="white-space: pre-line"></div>
+                                <br>
+                                <br>
+                                <img id="postFile" src="#" class="img-responsive" style="display: none">
+                                <br>
+                                <br>
+                            </div>
+                            <div class="social-footer">
                                 <div class="row">
                                     <label class="col-lg-6 control-label">
                                         <i class="fa fa-thumbs-up"></i>
@@ -214,22 +222,18 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-lg-12">
-                                        <button id="deleteButton"
-                                                type="button"
-                                                class="btn btn-w-m btn-danger"
+                                    <div class="hr-line-dashed"></div>
+                                    <div class="col-lg-6 btn-sm" id="updateButton">
+                                        <button type="button"
+                                                class="btn-xs btn btn-w-m btn-primary btn-outline"
+                                                onclick="">편집</button>
+                                    </div>
+                                    <div class="col-lg-6 btn-sm"  id="deleteButton">
+                                        <button type="button"
+                                                class="btn-xs btn btn-w-m btn-danger btn-outline"
                                                 onclick="">비공개</button>
                                     </div>
                                 </div>
-                            </div>
-                            <%-- info: 이미지가 포함되어 하단 정보 보기가 어려워 Body를 하단에 배치합니다. --%>
-                            <div class="social-body m-sm">
-                                <div id="content" style="white-space: pre-line"></div>
-                                <br>
-                                <br>
-                                <img id="postFile" src="#" class="img-responsive" style="display: none">
-                                <br>
-                                <br>
                             </div>
                         </div>
                     </div>
@@ -261,6 +265,16 @@
                 alert("${error}");
                 return;
             </c:if>
+
+            // initialze datetime picker
+            $( '.datepicker' ).each( function( index, element ) {
+                var $element = $( element );
+                var params = {};
+                if( $element.data( 'format' ) ) {
+                    params.format = $element.data( 'format' );
+                }
+                $element.datetimepicker( params );
+            } );
         })
 
         function fn_link_page( pageIndex ) {
@@ -351,20 +365,6 @@
                 }
             }
         }
-
-
-        //
-        // function managersDetail(adminId, grpId){
-        //     $("#manageReqForm > #adminId").val(adminId);
-        //     $("#manageReqForm").attr("action", "/admin/managers/write.do?grpId=" + grpId);
-        //     $("#manageReqForm").submit();
-        // }
-        //
-        // function managerAdd(grpId){
-        //     $("#manageReqForm").attr("action", "/admin/managers/write.do?create=true&grpId=" + grpId);
-        //     $("#manageReqForm").submit();
-        // }
-
     </script>
 </tiles:putAttribute>
 </tiles:insertDefinition>
