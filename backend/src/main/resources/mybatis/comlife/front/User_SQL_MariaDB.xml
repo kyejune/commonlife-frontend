@@ -72,7 +72,7 @@
                   JOIN
                 CL_IMAGE_TYPE AS T
                     ON I.PARENT_TYPE =  T.TYPE_IDX AND T.TYPE_NM = 'PROFILE'
-            WHERE I.PARENT_IDX = U.USR_ID
+            WHERE I.PARENT_IDX = U.USR_ID AND I.DEL_YN = 'N'
             ORDER BY IMAGE_IDX DESC
             LIMIT 1
         )               AS IMAGE_IDX ,
