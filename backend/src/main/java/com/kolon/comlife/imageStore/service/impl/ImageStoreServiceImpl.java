@@ -142,7 +142,11 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         imageInfo.setFileNm( fileName );
         imageInfo.setParentType( imageTypeIdx );
         imageInfo.setImageSize( imageSize );
-        imageInfo.setParentIdx( parentIdx );
+        if( ImageInfoUtil.isImageTypeProfile( imageType ) ) {
+            imageInfo.setParentIdx(usrId); // Profile의 경우, parentIdx로 usrId 입력
+        } else {
+            imageInfo.setParentIdx(parentIdx);
+        }
         imageInfo.setUsrId( usrId );
 
         // Execution - table update

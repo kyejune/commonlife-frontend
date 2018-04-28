@@ -83,4 +83,8 @@ public class ImageInfoUtil {
         return ( supportedImageTypes.get(imageType.toUpperCase()) != null &&
                  "Y".equals( supportedImageTypes.get(imageType.toUpperCase())) );
     }
+
+    public static boolean isImageTypeProfile( String imageType ) {
+        return IMAGE_TYPE_PROFILE.equals( imageType.toUpperCase() );
+    }
 }

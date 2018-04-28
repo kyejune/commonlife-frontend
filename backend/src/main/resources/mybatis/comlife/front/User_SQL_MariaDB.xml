@@ -71,7 +71,7 @@
                 CL_IMAGE_INFO AS I
                   JOIN
                 CL_IMAGE_TYPE AS T
-                    ON I.PARENT_TYPE =  T.TYPE_IDX AND T.TYPE_NM = 'profile'
+                    ON I.PARENT_TYPE =  T.TYPE_IDX AND T.TYPE_NM = 'PROFILE'
             WHERE I.PARENT_IDX = U.USR_ID
             ORDER BY IMAGE_IDX DESC
             LIMIT 1
