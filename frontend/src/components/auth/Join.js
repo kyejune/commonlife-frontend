@@ -79,7 +79,7 @@ class Join extends Component {
     registerUser() {
         const {branch, houseHolder, user} = MakingUserData;
         //registNewUser( branchId, dongId, hoId, hhname, hhphone, name, phone, certId, certDate, id, password, callback ){//2018-02-10 14:42:22
-        Net.registNewUser(branch.cmplxId, houseHolder.dong, houseHolder.ho, houseHolder.name, houseHolder.phone, user.name, user.phone, user.certReqId, moment().format('YYYY-MM-DD hh:mm:ss'), user.id, user.password, res => {
+        Net.registNewUser(branch.cmplxId, houseHolder.dong, houseHolder.ho, houseHolder.name, houseHolder.phone, user.name, user.phone, user.certReqId, moment().format('YYYY-MM-DD hh:mm:ss'), user.id, user.password, user.mail, res => {
             this.setState({step: this.state.step + 1});
         });
     }

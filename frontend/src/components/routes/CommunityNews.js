@@ -5,6 +5,7 @@ import Store from "scripts/store";
 import Net from "../../scripts/net";
 import {intercept} from "mobx/lib/mobx";
 import classNames from 'classnames';
+import {withRouter} from "react-router-dom";
 
 class CommunityNews extends Component {
 
@@ -35,6 +36,14 @@ class CommunityNews extends Component {
 
     componentDidMount(){
         this.loadPage( 0 );
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (this.props.location !== prevProps.location && ( this.props.location.pathname === '/community/news' ) ){
+            Store.news.length = 0;
+            this.loadPage( 0 );
+        }
     }
 
     loadPage=( targetPage=0 )=>{
@@ -97,4 +106,4 @@ class CommunityNews extends Component {
 	}
 }
 
-export default observer(CommunityNews);
+export default withRouter( observer(CommunityNews) );

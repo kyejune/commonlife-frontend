@@ -85,7 +85,7 @@ class WriteDrawer extends BottomDrawer {
 
     gettedPicture=(base64)=> {
 
-        const b64 = 'data:image/jpeg;base64,' + base64;
+        const b64 = `data:${this.guessImageMime(base64)};base64,${base64}`;
         let uploadFunc;
 
         if( this.state.postType === 'support')
@@ -104,6 +104,16 @@ class WriteDrawer extends BottomDrawer {
             });
 
         });
+    }
+
+    guessImageMime(data){
+        if(data.charAt(0)==='/'){
+            return "image/jpeg";
+        }else if(data.charAt(0)==='R'){
+            return "image/gif";
+        }else if(data.charAt(0)==='i'){
+            return "image/png";
+        }
     }
 
     failedPicture=(message)=>{

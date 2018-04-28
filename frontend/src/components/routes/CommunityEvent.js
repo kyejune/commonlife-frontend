@@ -5,6 +5,7 @@ import Store from "scripts/store";
 import Net from "../../scripts/net";
 import {intercept} from "mobx/lib/mobx";
 import classNames from 'classnames';
+import {withRouter} from "react-router-dom";
 
 class CommunityEvent extends Component {
 
@@ -34,6 +35,14 @@ class CommunityEvent extends Component {
 
     componentDidMount(){
         this.loadPage( 0 );
+    }
+
+    componentDidUpdate(prevProps) {
+
+        if (this.props.location !== prevProps.location && ( this.props.location.pathname === '/community/event' ) ){
+            Store.event.length = 0;
+            this.loadPage( 0 );
+        }
     }
 
     loadPage=( targetPage=0 )=>{
@@ -96,4 +105,4 @@ class CommunityEvent extends Component {
 	}
 }
 
-export default observer(CommunityEvent);
+export default withRouter( observer(CommunityEvent) );

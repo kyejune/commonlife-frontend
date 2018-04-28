@@ -18,7 +18,9 @@ class CardItem extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (this.state.postIdx !== nextProps.cardData.postIdx)
+        // if( nextProps.cardData.postIdx.toString() === '113' )
+            // console.log('nextPrpos:', nextProps.cardData, nextProps.cardData.likesCount );
+        //if (this.state.postIdx !== nextProps.cardData.postIdx)
             this.setState(nextProps.cardData);
     }
 

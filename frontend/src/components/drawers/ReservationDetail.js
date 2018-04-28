@@ -339,7 +339,7 @@ class ReservationDetail extends Component {
 	}
 
 	addedSchedule() {
-		Store.alert( '추가됨' );
+		//Store.alert( '추가됨' );
 	}
 
 	render() {

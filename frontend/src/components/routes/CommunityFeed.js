@@ -5,6 +5,7 @@ import CardItem from 'components/ui/CardItem';
 import Store from 'scripts/store';
 import Net from 'scripts/net';
 import classNames from 'classnames';
+import {withRouter} from "react-router-dom";
 
 class CommunityFeed extends Component {
 
@@ -31,6 +32,14 @@ class CommunityFeed extends Component {
             return change;
 		} );
 	}
+
+    componentDidUpdate(prevProps) {
+
+        if (this.props.location !== prevProps.location && ( this.props.location.pathname === '/community/feed' || this.props.location.pathname === '/community' ) ){
+            Store.feed.length = 0;
+        	this.loadPage( 0 );
+		}
+    }
 
     componentDidMount(){
 		this.loadPage( 0 );
@@ -103,4 +112,4 @@ class CommunityFeed extends Component {
 	}
 }
 
-export default observer(CommunityFeed);
+export default withRouter(observer(CommunityFeed));
