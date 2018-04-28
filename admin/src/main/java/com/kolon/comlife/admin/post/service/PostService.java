@@ -22,6 +22,6 @@ public interface PostService {
 
     PostInfo updatePost(PostInfo example);
 
-    PostInfo deletePost(int id, int usrId);
+    PostInfo deletePost(int id, int cmplxId, int adminIdx);
 
 }

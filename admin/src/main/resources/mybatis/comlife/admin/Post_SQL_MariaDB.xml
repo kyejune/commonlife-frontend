@@ -177,8 +177,7 @@
                 `UPD_DTTM`  = CURRENT_TIMESTAMP
         WHERE
                 `DEL_YN`   = 'N'  AND
-                `POST_IDX` = #{postIdx} AND
-                `USR_ID`   = #{usrId}
+                `POST_IDX` = #{postIdx}
     ]]>
     </update>
 
@@ -190,7 +189,7 @@
         WHERE
                 `DEL_YN`   = 'N'  AND
                 `POST_IDX` = #{postIdx} AND
-                `USR_ID`   = #{usrId}
+                `CMPLX_ID` = #{cmplxId}
     ]]>
     </update>
 

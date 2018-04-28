@@ -79,6 +79,7 @@ public class PostController {
         mav.addObject("postType", postType);
         mav.addObject("paginateInfo", paginateInfo);
         mav.addObject("postList", postList);
+        mav.addObject("pageNum", pageNum);
 
         mav.setViewName("admin/posts/feedList");
 
@@ -237,13 +238,13 @@ public class PostController {
         logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
         logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
 
-        deletedPostInfo = postService.deletePost( id, adminInfo.getAdminIdx() );
+        deletedPostInfo = postService.deletePost( id, adminInfo.getCmplxId(), adminInfo.getAdminIdx() );
         if( deletedPostInfo == null ) {
             return ResponseEntity.
                     status( HttpStatus.BAD_REQUEST ).
-                    body(new SimpleErrorInfo("해당 내용을 삭제할 수 없습니다.") );
+                    body(new SimpleErrorInfo("해당 게시물을 비공개 처리할 수 없습니다.") );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("해당 게시물을 삭제하였습니다.") );
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("해당 게시물을 비공개 처리하였습니다.") );
     }
 }

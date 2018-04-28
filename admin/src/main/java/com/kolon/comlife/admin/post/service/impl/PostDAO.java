@@ -75,11 +75,11 @@ public class PostDAO {
         return sqlSession.selectOne( "Post.selectPostList", selectParams );
     }
 
-    public int deletePost(int id, int usrId) {
+    public int deletePost(int id, int cmplxId, int adminIdx) {
         int updateCount = -1;
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
         selectParams.put( "postIdx", id );
-        selectParams.put( "usrId", usrId );
+        selectParams.put( "cmplxId", cmplxId );
         updateCount = sqlSession.update( "Post.deletePost", selectParams );
         return updateCount;
     }

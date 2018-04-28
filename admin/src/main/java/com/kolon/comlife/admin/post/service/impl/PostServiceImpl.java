@@ -24,6 +24,7 @@ import java.util.Map;
 @Service("postService")
 public class PostServiceImpl implements PostService {
     private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
+    private static final String DELETED_POST_MSG = "{{비공개 처리 됨}";
 
     @Autowired
     private PostDAO postDAO;
@@ -82,16 +83,22 @@ public class PostServiceImpl implements PostService {
 
         postInfo.setUser( userInfo );
 
-        postIdxs.add(id);
-        postFileList = postFileDAO.getPostFilesByPostIds( postIdxs );
-        if( postFileList != null && postFileList.size() > 0 ) {
-            postFile = postFileList.get(0);
-            String fullPath = postFileStoreService.getImageFullPathByIdx( postFile.getPostFileIdx() );
-            logger.debug(">>>>>>>>> postFile:" + fullPath );
-            postFile.setOriginPath( fullPath );
 
-            // PostInfo에 이미지 파일 연결
-            postInfo.getPostFiles().add( postFile );
+        // 비공개(삭제)처리된 게시물의 내용 변경 및 공개 게시물에 대해서 이미지 정보 가져오기
+        if( "Y".equals(postInfo.getDelYn()) ) {
+            postInfo.setContent( DELETED_POST_MSG );
+        } else {
+            postIdxs.add(id);
+            postFileList = postFileDAO.getPostFilesByPostIds( postIdxs );
+            if( postFileList != null && postFileList.size() > 0 ) {
+                postFile = postFileList.get(0);
+                String fullPath = postFileStoreService.getImageFullPathByIdx( postFile.getPostFileIdx() );
+                logger.debug(">>>>>>>>> postFile:" + fullPath );
+                postFile.setOriginPath( fullPath );
+
+                // PostInfo에 이미지 파일 연결
+                postInfo.getPostFiles().add( postFile );
+            }
         }
 
         return postInfo;
@@ -160,12 +167,18 @@ public class PostServiceImpl implements PostService {
         if( postIdxs.size() > 0 ) {
             postFileList = postFileDAO.getPostFilesByPostIds( postIdxs );
 
-            // Post File(업로드한 이미지) 정보 바인딩
+            // Post File(업로드한 이미지) 정보 바인딩 및 비공개 처리 게시물 처리
             for( PostInfo post : postInfoList ) {
-                for( PostFileInfo postFile : postFileList ) {
-                    if( post.getPostIdx() == postFile.getPostIdx() ) {
-                        postFile.setOriginPath( postFileStoreService.getImageFullPathByIdx( postFile.getPostFileIdx() ));
-                        post.getPostFiles().add( postFile );
+
+                // 비공개(삭제)처리된 게시물의 내용 변경 및 공개 게시물에 대해서 이미지 정보 가져오기
+                if( "Y".equals(post.getDelYn()) ) {
+                    post.setContent( DELETED_POST_MSG );
+                } else {
+                    for( PostFileInfo postFile : postFileList ) {
+                        if( post.getPostIdx() == postFile.getPostIdx() ) {
+                            postFile.setOriginPath( postFileStoreService.getImageFullPathByIdx( postFile.getPostFileIdx() ));
+                            post.getPostFiles().add( postFile );
+                        }
                     }
                 }
             }
@@ -223,10 +236,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostInfo deletePost(int id, int usrId) {
+    public PostInfo deletePost(int id, int cmplxId, int adminIdx) {
         PostInfo deletedPostInfo = null;
 
-        if( postDAO.deletePost(id, usrId) > 0 ) {
+        if( postDAO.deletePost(id, cmplxId, adminIdx) > 0 ) {
             deletedPostInfo = new PostInfo();
             deletedPostInfo.setDelYn("Y");
             deletedPostInfo.setPostIdx(id);
