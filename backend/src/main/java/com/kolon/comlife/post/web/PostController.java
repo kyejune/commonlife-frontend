@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +103,7 @@ public class PostController {
             value = "/",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity setPost( HttpServletRequest request,
-                                             @RequestBody Map args ) throws Exception {
+                                   @RequestBody Map args ) throws Exception {
         PostInfo           newPost = new PostInfo();
         PostInfo           retPost;
 
@@ -176,22 +177,35 @@ public class PostController {
     @PutMapping(
             value = "/{id}"
     )
-    public ResponseEntity updatePost( HttpServletRequest      request,
-                                      @PathVariable("id") int id,
-                                      @RequestBody PostInfo   post ) {
+    public ResponseEntity updatePost( HttpServletRequest        request,
+                                      @PathVariable("id") int   id,
+                                      @RequestBody        Map   params ) {
         AuthUserInfo currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+        PostInfo postInfo;
 
-        post.setUsrId( currUser.getUsrId() );
-        post.setPostIdx( id );
+        params.put("usrId", currUser.getUsrId()); // usrId
+        params.put("postIdx", id); // postIdx
 
-        PostInfo result = postService.updatePost( post );
-        if( result == null ) {
+        if( params.get("content") == null ) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleErrorInfo("본문 내용이 없습니다."));
+        }
+
+        if( params.get("postFiles") != null ) {
+            if( !(params.get("postFiles") instanceof List) ) {
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body( new SimpleErrorInfo("잘못된 이미지 정보가 전달 되었습니다. "));
+            }
+        }
+
+        postInfo = postService.updatePost( params );
+        if( postInfo == null ) {
             return ResponseEntity.
-                    status( HttpStatus.BAD_REQUEST ).
+                    status( HttpStatus.CONFLICT ).
                     body(new SimpleErrorInfo("해당 내용을 수정할 수 없습니다.") );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( result );
+        return ResponseEntity.status( HttpStatus.OK ).body( postInfo );
     }
 
     @DeleteMapping(

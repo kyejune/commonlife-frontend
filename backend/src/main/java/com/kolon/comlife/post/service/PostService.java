@@ -20,7 +20,7 @@ public interface PostService {
 
     PostInfo setPostWithImage(PostInfo newPost, List<Integer> fileInfo, int usrId);
 
-    PostInfo updatePost(PostInfo example);
+    PostInfo updatePost( Map params );
 
     PostInfo deletePost(int id, int usrId);
 

@@ -8,15 +8,17 @@
           *
         FROM
           `POST_FILE`
+        WHERE
+          `DEL_YN` = 'N'
         <choose>
             <when test="postFileIdx != null">
-                WHERE   `POST_FILE_IDX` = #{postFileIdx}
+                AND `POST_FILE_IDX` = #{postFileIdx}
             </when>
             <when test="postIdx != null">
-                WHERE   `POST_IDX` = #{postIdx}
+                AND `POST_IDX` = #{postIdx}
             </when>
             <when test="postIdxs != null">
-                WHERE   `POST_IDX`
+                AND `POST_IDX`
                 IN
                 <foreach collection="postIdxs" item="item" index="index" separator="," open="(" close=")">
                     #{item}
@@ -82,6 +84,17 @@
             </otherwise>
         </choose>
     </update>
+
+    <delete id="deletePostFileByPostIdx" parameterType="java.util.Map">
+        <![CDATA[
+            UPDATE  `POST_FILE`
+            SET     `DEL_YN` =  'Y',
+                    `UPD_DTTM` =    CURRENT_TIMESTAMP
+            WHERE
+                    `DEL_YN` =  'N' AND
+                    `POST_IDX` =   #{postIdx}
+        ]]>
+    </delete>
 
     <delete id="deletePostFile" parameterType="java.util.Map">
         <![CDATA[

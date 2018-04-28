@@ -64,4 +64,11 @@ public class PostFileDAO {
         sqlSession.delete( "PostFile.deletePostFile", selectParams );
         return;
     }
+
+    public void deletePostFileByPostIdx( int postIdx ) {
+        Map<String, Integer> selectParams = new HashMap<String, Integer>();
+        selectParams.put( "postIdx", postIdx );
+        sqlSession.delete( "PostFile.deletePostFileByPostIdx", selectParams );
+        return;
+    }
 }

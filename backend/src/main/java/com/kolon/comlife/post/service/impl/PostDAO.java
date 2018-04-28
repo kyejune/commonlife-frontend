@@ -56,17 +56,17 @@ public class PostDAO {
         return sqlSession.selectOne( "Post.selectLatestPost" );
     }
 
-    public PostInfo updatePost(PostInfo post) {
+    public PostInfo updatePost( Map params ) {
         int                  updateCount  = -1;
         Map<String, Integer> selectParams = new HashMap<>();
 
-        updateCount = sqlSession.update( "Post.updatePost", post );
+        updateCount = sqlSession.update( "Post.updatePost", params );
         if( updateCount < 1 ) {
             // 업데이트 되지 않은 경우, NULL 반환
             return null;
         }
 
-        selectParams.put( "postIdx", post.getPostIdx() );
+        selectParams.put( "postIdx", (Integer)params.get("postIdx") );
         selectParams.put( "cmplxId", null );
         selectParams.put( "postType", null );
         selectParams.put( "limit", null );

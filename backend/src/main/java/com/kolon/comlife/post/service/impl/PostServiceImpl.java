@@ -218,8 +218,37 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostInfo updatePost(PostInfo post) {
-        return postDAO.updatePost(post);
+    public PostInfo updatePost( Map params ) {
+        PostInfo postInfo;
+        List<PostFileInfo> fileInfoList;
+        List<Integer> postFilesIdx;
+
+            postInfo = postDAO.updatePost( params );
+        if( postInfo != null ) {
+
+            // 이미지 정보 업데이트 및 Post 업데이트
+            if( params.get("postFiles") != null )  {
+                postFilesIdx = (List)params.get("postFiles");
+                // 기존에 연결된 이미지 모두 삭제 표시 (DEL_YN = "Y")
+                postFileDAO.deletePostFileByPostIdx( postInfo.getPostIdx() );
+
+
+                if( postFilesIdx.size() > 0 ) {
+                    // 신규 이미지로 업데이트
+                    fileInfoList = postFileDAO.bindPostToPostFiles(
+                            postInfo.getPostIdx(),
+                            postFilesIdx,
+                            (Integer)params.get("usrId") );
+                } else {
+                    fileInfoList = new ArrayList<>();
+                }
+                postInfo.setPostFiles( fileInfoList );
+            } else {
+                //  params.postFiles == null, 기존 이미지 정보를 업데이트하지 않음
+            }
+        }
+
+        return postInfo;
     }
 
     @Override
