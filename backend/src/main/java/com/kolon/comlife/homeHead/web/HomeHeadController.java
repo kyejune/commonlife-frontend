@@ -39,6 +39,10 @@ public class HomeHeadController {
         if( authUserInfo != null ) {
             idx = authUserInfo.getHeadId();
         }
+        boolean exist = service.existExt( idx );
+        if( !exist ) {
+            service.createExt( idx );
+        }
         HomeHeadInfo info = service.show( idx );
         return ResponseEntity.status( HttpStatus.OK ).body( info );
     }

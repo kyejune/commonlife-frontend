@@ -8,7 +8,8 @@ import java.util.Map;
 public interface HomeHeadService {
     public List<HomeHeadInfo> index(Map params );
     public HomeHeadInfo show( int idx );
-    public int create( HomeHeadInfo info );
+    public boolean existExt( int idx );
+    public int createExt( int idx );
     public int update( HomeHeadInfo info );
     public int delete( HomeHeadInfo info );
 }

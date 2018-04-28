@@ -1,11 +1,10 @@
 package com.kolon.comlife.reservation.web;
 
 import com.kolon.comlife.common.model.SimpleErrorInfo;
-import com.kolon.comlife.complexes.model.ComplexInfo;
-import com.kolon.comlife.complexes.service.ComplexService;
+import com.kolon.comlife.homeHead.model.HomeHeadInfo;
+import com.kolon.comlife.homeHead.service.HomeHeadService;
 import com.kolon.comlife.reservation.model.ReservationInfo;
 import com.kolon.comlife.reservation.model.ReservationSchemeInfo;
-import com.kolon.comlife.reservation.service.ReservationGroupService;
 import com.kolon.comlife.reservation.service.ReservationSchemeService;
 import com.kolon.comlife.reservation.service.ReservationService;
 import com.kolon.common.model.AuthUserInfo;
@@ -19,9 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +33,8 @@ public class ReservationController {
     @Resource(name = "reservationSchemeService")
     ReservationSchemeService schemeService;
 
-    @Resource(name = "complexService")
-    ComplexService complexService;
-
-    SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+    @Resource(name = "homeHeadService")
+    HomeHeadService homeHeadService;
 
     @CrossOrigin
     @GetMapping(
@@ -57,7 +51,7 @@ public class ReservationController {
      * @param info
      * @return
      */
-    private ResponseEntity bookTypeA( ReservationSchemeInfo scheme, ReservationInfo info ) {
+    private ResponseEntity bookTypeA( ReservationSchemeInfo scheme, ReservationInfo info, HomeHeadInfo head ) {
 //        Date startDttm;
 //        Date endDttm;
 //
@@ -96,7 +90,7 @@ public class ReservationController {
 
         info.setStatus( ReservationInfo.RESERVED );
 
-        service.create( info );
+        service.create( info, head );
 
         return ResponseEntity
                 .status( HttpStatus.OK )
@@ -109,7 +103,7 @@ public class ReservationController {
      * @param info
      * @return
      */
-    private ResponseEntity bookTypeB( ReservationSchemeInfo scheme, ReservationInfo info ) {
+    private ResponseEntity bookTypeB( ReservationSchemeInfo scheme, ReservationInfo info, HomeHeadInfo head ) {
 //        Date startDttm;
 //        Date endDttm;
 //
@@ -148,7 +142,7 @@ public class ReservationController {
 
         info.setStatus( ReservationInfo.RESERVED );
 
-        service.create( info );
+        service.create( info, head );
 
         return ResponseEntity
                 .status( HttpStatus.OK )
@@ -161,7 +155,7 @@ public class ReservationController {
      * @param info
      * @return
      */
-    private ResponseEntity bookTypeC( ReservationSchemeInfo scheme, ReservationInfo info ) {
+    private ResponseEntity bookTypeC( ReservationSchemeInfo scheme, ReservationInfo info, HomeHeadInfo head ) {
         Date startDttm;
 
 //        try {
@@ -184,7 +178,7 @@ public class ReservationController {
 
         info.setStatus( ReservationInfo.IN_QUEUE );
 
-        service.create( info );
+        service.create( info, head );
 
         return ResponseEntity
                 .status( HttpStatus.OK )
@@ -197,7 +191,7 @@ public class ReservationController {
      * @param info
      * @return
      */
-    private ResponseEntity bookTypeD( ReservationSchemeInfo scheme, ReservationInfo info ) {
+    private ResponseEntity bookTypeD( ReservationSchemeInfo scheme, ReservationInfo info, HomeHeadInfo head ) {
         Date startDttm;
 
 //        try {
@@ -220,7 +214,7 @@ public class ReservationController {
 
         info.setStatus( ReservationInfo.IN_QUEUE );
 
-        service.create( info );
+        service.create( info, head );
 
         return ResponseEntity
                 .status( HttpStatus.OK )
@@ -235,8 +229,8 @@ public class ReservationController {
     public ResponseEntity myReservations( HttpServletRequest request ) {
         AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
 
-        // TODO: 로컬에서 인증 정보가 없으면 yunamkim(userId: 632)을 기본값으로 출력한다. 추후 수정 필요.
-        int idx = 632;
+        // TODO: 로컬에서 인증 정보가 없으면 yunamkim(userId: 725)을 기본값으로 출력한다. 추후 수정 필요.
+        int idx = 725;
         if( authUserInfo != null ) {
             idx = authUserInfo.getUsrId();
         }
@@ -244,42 +238,6 @@ public class ReservationController {
         HashMap params = new HashMap();
         params.put( "userId", idx );
         List<ReservationInfo> reservations = service.index( params );
-
-        // 아이디 리스트를 뽑아 스키마 출력
-        ArrayList<Integer> ids = new ArrayList<Integer>();
-        for ( ReservationInfo e : reservations ) {
-            ids.add( e.getParentIdx() );
-        }
-
-        if( ids.size() > 0 ) {
-            HashMap schemeParams = new HashMap();
-            schemeParams.put( "ids", ids );
-            List<ReservationSchemeInfo> schemes = schemeService.index( schemeParams );
-
-            // 스키마에서 현장 아이디를 뽑아서...
-            ids = new ArrayList<Integer>();
-
-            for ( ReservationSchemeInfo s : schemes ) {
-                ids.add( s.getCmplxIdx() );
-                for ( ReservationInfo r : reservations ) {
-                    if( s.getIdx() == r.getParentIdx() ) {
-                        r.setScheme( s );
-                        continue;
-                    }
-                }
-            }
-
-            List<ComplexInfo> complexes = complexService.getComplexList();
-
-            for ( ComplexInfo c : complexes) {
-                for ( ReservationSchemeInfo s : schemes ) {
-                    if( c.getCmplxId() == s.getCmplxIdx() ) {
-                        s.setComplex( c );
-                    }
-                }
-            }
-
-        }
 
         return ResponseEntity.status( HttpStatus.OK ).body( reservations );
     }
@@ -318,10 +276,19 @@ public class ReservationController {
 
         AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
 
-        // TODO: 로컬에서 인증 정보가 없으면 yunamkim(userId: 632)을 기본값으로 출력한다. 추후 수정 필요.
-        int idx = 632;
+        // TODO: 로컬에서 인증 정보가 없으면 yunamkim(userId: 725)을 기본값으로 출력한다. 추후 수정 필요.
+        int idx = 725;
+        int headIdx  = 632;
         if( authUserInfo != null ) {
             idx = authUserInfo.getUsrId();
+            headIdx = authUserInfo.getHeadId();
+        }
+
+        HomeHeadInfo head = homeHeadService.show( headIdx );
+        if( head.getPoints() < scheme.getPoint() ) {
+            return ResponseEntity
+                    .status( HttpStatus.CONFLICT )
+                    .body( new SimpleErrorInfo( "크레딧이 부족합니다." ) );
         }
 
         ReservationInfo info = new ReservationInfo();
@@ -331,13 +298,13 @@ public class ReservationController {
         info.setEndDt( endDt );
         info.setEndTime( endTime );
         info.setQty( 1 );
-        if( optionId != "" ) {
+        if( !optionId.equals( "" ) ) {
             info.setOptionId( Integer.parseInt( optionId ) );
         }
-        if( qty != "" ) {
+        if( !qty.equals( "" ) ) {
             info.setQty( Integer.parseInt( qty ) );
         }
-        if( userMemo != "" ) {
+        if( !userMemo.equals( "" ) ) {
             info.setUserMemo( userMemo );
         }
 
@@ -348,13 +315,13 @@ public class ReservationController {
 
         switch ( scheme.getReservationType() ) {
             case "A" :
-                return bookTypeA( scheme, info );
+                return bookTypeA( scheme, info, head );
             case "B" :
-                return bookTypeB( scheme, info );
+                return bookTypeB( scheme, info, head );
             case "C" :
-                return bookTypeC( scheme, info );
+                return bookTypeC( scheme, info, head );
             case "D" :
-                return bookTypeD( scheme, info );
+                return bookTypeD( scheme, info, head );
             default :
                 return ResponseEntity
                         .status( HttpStatus.BAD_REQUEST )

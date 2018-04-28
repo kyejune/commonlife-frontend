@@ -25,8 +25,13 @@ public class HomeHeadServiceImpl implements HomeHeadService {
     }
 
     @Override
-    public int create(HomeHeadInfo info) {
-        return dao.create(info);
+    public boolean existExt(int idx) {
+        return dao.existExt(idx);
+    }
+
+    @Override
+    public int createExt(int idx) {
+        return dao.createExt(idx);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.kolon.comlife.reservation.service.impl;
 
+import com.kolon.comlife.homeHead.model.HomeHeadInfo;
 import com.kolon.comlife.reservation.model.ReservationInfo;
 import com.kolon.comlife.reservation.service.ReservationService;
 import org.slf4j.Logger;
@@ -34,8 +35,8 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public int create(ReservationInfo info) {
-        return dao.create( info );
+    public int create(ReservationInfo info, HomeHeadInfo head) {
+        return dao.create( info, head );
     }
 
     @Override

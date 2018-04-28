@@ -49,4 +49,68 @@
         </choose>
     </select>
 
+    <select id="existExt" parameterType="java.util.Map" resultType="java.lang.Boolean">
+        SELECT
+        IF( COUNT( * ) > 0, TRUE, FALSE ) AS `EXISTS`
+        FROM
+        `HOME_HEAD_M_EXT`
+        WHERE
+        1=1
+        <choose>
+            <when test='idx != null'>
+                AND
+                `HOME_HEAD_ID` = #{idx}
+            </when>
+        </choose>
+        <choose>
+            <when test='headId != null'>
+                AND
+                `HOME_HEAD_ID` = #{headId}
+            </when>
+        </choose>
+    </select>
+
+    <insert id="createExt" parameterType="java.util.Map">
+        INSERT INTO
+        `HOME_HEAD_M_EXT`
+        (
+            `HOME_HEAD_ID`,
+            `POINTS`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        )
+        VALUES
+        (
+            #{idx},
+            0,
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
+    <update id="updatePoints" parameterType="java.util.Map">
+        UPDATE
+        `HOME_HEAD_M_EXT`
+        LEFT JOIN
+        `HOME_HEAD_M`
+        ON
+        `HOME_HEAD_M_EXT`.`HOME_HEAD_ID` = `HOME_HEAD_M`.`HEAD_ID`
+        SET
+        `HOME_HEAD_M_EXT`.`POINTS` = #{points}
+        WHERE
+        1=1
+        <choose>
+            <when test='idx != null'>
+                AND
+                `HOME_HEAD_M`.`HEAD_ID` = #{idx}
+            </when>
+        </choose>
+        <choose>
+            <when test='headId != null'>
+                AND
+                `HOME_HEAD_M`.`HEAD_ID` = #{headId}
+            </when>
+        </choose>
+    </update>
+
 </mapper>

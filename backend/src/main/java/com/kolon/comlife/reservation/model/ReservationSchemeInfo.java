@@ -39,6 +39,7 @@ public class ReservationSchemeInfo {
     private String regDttm;
     private String updDttm;
 
+    private ReservationGroupInfo group;
     private ComplexInfo complex;
     private List<ReservationAmenityInfo> amenities;
     private List<ReservationSchemeOptionInfo> schemeOptions;
@@ -289,6 +290,14 @@ public class ReservationSchemeInfo {
 
     public void setUpdDttm(String updDttm) {
         this.updDttm = updDttm;
+    }
+
+    public ReservationGroupInfo getGroup() {
+        return group;
+    }
+
+    public void setGroup(ReservationGroupInfo group) {
+        this.group = group;
     }
 
     public ComplexInfo getComplex() {
