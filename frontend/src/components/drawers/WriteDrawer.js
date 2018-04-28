@@ -158,6 +158,14 @@ class WriteDrawer extends BottomDrawer {
                 break;
 
             case 'edit':
+                makeFunc = Net.updatePost;
+                data = {
+                    id: this.state.editIndex,
+                    content: content.replace(/\n{2,}/g, '\n\n'), // 2줄 이상만 묶어버리기
+                    postFiles:[],
+                };
+
+                if( imageId ) data.postFiles = [ imageId ];
 
                 break;
 
@@ -174,11 +182,6 @@ class WriteDrawer extends BottomDrawer {
         }
 
         // 보내기
-        if( !makeFunc ){
-            alert('준비 중입니다.');
-            return;
-        }
-
         makeFunc(data, ( success, response ) => {
 
             if( success && this.state.postType === 'feed' ){
@@ -198,9 +201,9 @@ class WriteDrawer extends BottomDrawer {
         this.setState({ postResult:null });
         this.props.close();
 
-        if( this.state.type === 'edit' ){
+        if( this.state.postType === 'edit' ){
+            this.props.history.replace('/community/feed');
             Store.popDrawer();
-            this.state.history.replace('/community/feed');
         }
     }
 

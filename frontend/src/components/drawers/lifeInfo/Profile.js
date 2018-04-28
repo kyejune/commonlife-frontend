@@ -18,6 +18,7 @@ class Profile extends Component {
             email:'',
             userId:'',
             userImgSrc:'',
+            changedImgB64:null,
             userNm:'',
             password: '',
             passwordconfirm: '',
@@ -96,7 +97,12 @@ class Profile extends Component {
 
     uploadImg( b64img ){
         Net.changeProfileImage( b64img, res=>{
-            this.loadData();
+
+            // 재로딩 하는건 반영되는 시간이 있어서 안맞을 가능성이 있어서 직접 b64때려 밖음
+            this.setState({
+                changedImgB64: b64img,
+            });
+            // this.loadData();
         });
     }
 
@@ -183,7 +189,7 @@ class Profile extends Component {
             <div className="cl-profile-card">
 
                 <div className="cl-avatar-border">
-                    <div className="cl-avatar" style={{ backgroundImage:`url(${this.state.userImgSrc})` }}/>
+                    <div className="cl-avatar" style={{ backgroundImage:`url(${ ( this.state.changedImgB64||this.state.userImgSrc ) })` }}/>
                 </div>
                 <button className="cl-edit__button" onClick={ this.changeProfileImage }/>
 

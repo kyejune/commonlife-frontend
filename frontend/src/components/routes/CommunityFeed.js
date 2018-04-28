@@ -84,15 +84,8 @@ class CommunityFeed extends Component {
 		if( this.state.isEmpty ){
 			Content = <div className="cl-content--empty"/>;
 		}else{
-			// 임시로 event랑 통합
-			let complexFeed = Store.event.concat(Store.feed);
 
-            complexFeed.sort( (a, b )=>{
-                return new Date(b.updDttm).getTime() - new Date(a.updDttm).getTime();
-			});
-
-
-            Content = complexFeed.map( ( card, index ) => {
+            Content = Store.feed.map( ( card, index ) => {
                 return (
                     <CardItem key={index} list="/community/feed" cardData={card}/>
                 )

@@ -79,9 +79,10 @@ export default {
 ///posts/?postType=feed&page=2
     getFeed( type, page, callback ){
 
-        // console.log( 'A of getFeed:', axios.defaults );
-        //?cmplxId=127
-        axios.get( `/posts/?postType=${type}&page=${(page+1)||1}&cmplxId=${Store.communityCmplxId}`)
+        let path = `/posts/?page=${(page+1)||1}&cmplxId=${Store.communityCmplxId}`;
+        if( type !== 'feed' ) path += `&postType=${type}`;
+
+        axios.get( path )
             .then( response =>{
                 let prevStack = Store[type];
                 let newStack = response.data.data.filter( item => {
@@ -259,6 +260,15 @@ export default {
                 callback( false, error );
             });
     },
+
+    updatePost( data, callback ){
+
+        axios.put( `/posts/${data.id}`, data )
+            .then( response => {
+                callback( response.data );
+            });
+    },
+
 
     deletePost( id, callback ){
         axios.delete( `/posts/${id}`)
