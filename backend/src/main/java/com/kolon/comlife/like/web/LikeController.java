@@ -7,7 +7,9 @@ import com.kolon.comlife.like.model.LikeInfo;
 import com.kolon.comlife.like.model.LikeStatusInfo;
 import com.kolon.comlife.like.service.LikeService;
 import com.kolon.comlife.post.web.PostController;
+import com.kolon.comlife.users.exception.NotFoundException;
 import com.kolon.comlife.users.model.PostUserInfo;
+import com.kolon.comlife.users.model.UserProfileInfo;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
@@ -74,6 +76,51 @@ public class LikeController {
 
         return ResponseEntity.status( HttpStatus.OK ).body( likes );
     }
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/profile/{usrId}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getInfoProfile(HttpServletRequest request,
+                                         @PathVariable( "postId" ) int postId,
+                                         @PathVariable( "usrId" ) int usrId ) {
+        AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+        UserProfileInfo userProfile;
+        List<LikeInfo> likes;
+        boolean foundFlag = false;
+
+        likes = likeService.getLikeList( postId );
+        if( likes == null ) {
+            return ResponseEntity.
+                    status( HttpStatus.NOT_FOUND ).
+                    body( new SimpleErrorInfo("해당 사용자 프로필을 가져올 수 없습니다.") );
+        }
+
+        for( LikeInfo like : likes ) {
+            if( like.getUsrId() == usrId ) {
+                foundFlag = true;
+                break;
+            }
+        }
+
+        if( !foundFlag ) {
+            return ResponseEntity.
+                    status( HttpStatus.NOT_FOUND ).
+                    body( new SimpleErrorInfo("해당 사용자 프로필을 가져올 수 없습니다.") );
+        }
+
+        try {
+            userProfile = userService.getUserProfile( usrId );
+        } catch( NotFoundException e ) {
+            logger.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( e.getMessage() );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( userProfile  );
+    }
+
 
     @GetMapping(
             value = "/has",

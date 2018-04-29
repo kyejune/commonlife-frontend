@@ -1,6 +1,6 @@
-package com.kolon.comlife.info.model;
+package com.kolon.comlife.users.model;
 
-public class InfoUserProfile {
+public class UserProfileInfo {
     String userImgSrc;
     String userId;
     String userNm;

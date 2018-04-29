@@ -12,12 +12,11 @@ import com.kolon.comlife.info.exception.OperationFailedException;
 import com.kolon.comlife.info.model.InfoData;
 import com.kolon.comlife.info.model.InfoItem;
 import com.kolon.comlife.info.model.InfoMain;
-import com.kolon.comlife.info.model.InfoUserProfile;
+import com.kolon.comlife.users.model.UserProfileInfo;
 import com.kolon.comlife.info.service.InfoService;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.post.service.impl.PostDAO;
 import com.kolon.comlife.postFile.model.PostFileInfo;
-import com.kolon.comlife.postFile.service.exception.NoDataException;
 import com.kolon.comlife.postFile.service.impl.PostFileDAO;
 import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.model.UserExtInfo;
@@ -28,10 +27,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static com.kolon.comlife.imageStore.model.ImageInfoUtil.*;
 
@@ -290,10 +287,10 @@ public class InfoServiceImpl implements InfoService {
         return infoItem;
     }
 
-    private InfoUserProfile getInfoProfileInternal( AuthUserInfo authUserInfo ) throws DataNotFoundException {
+    private UserProfileInfo getInfoProfileInternal(AuthUserInfo authUserInfo ) throws DataNotFoundException {
         ComplexInfo     cmplxInfo;
         UserExtInfo     userInfo;
-        InfoUserProfile userProfile = new InfoUserProfile();
+        UserProfileInfo userProfile = new UserProfileInfo();
         String          imgFullPath;
 
         userInfo = userDAO.getUserExtById( authUserInfo.getUsrId() );
@@ -322,12 +319,12 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public InfoUserProfile getInfoProfile(AuthUserInfo authUserInfo ) throws DataNotFoundException {
+    public UserProfileInfo getInfoProfile(AuthUserInfo authUserInfo ) throws DataNotFoundException {
         return this.getInfoProfileInternal( authUserInfo );
     }
 
     @Override
-    public InfoUserProfile updateInfoProfileEmail( AuthUserInfo authUserInfo, String newEmail )
+    public UserProfileInfo updateInfoProfileEmail(AuthUserInfo authUserInfo, String newEmail )
             throws DataNotFoundException
     {
         int updatedCnt ;
@@ -340,7 +337,7 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public InfoUserProfile updateInfoProfileUserPw( AuthUserInfo authUserInfo, String oldUserPw, String newUserPw )
+    public UserProfileInfo updateInfoProfileUserPw(AuthUserInfo authUserInfo, String oldUserPw, String newUserPw )
             throws DataNotFoundException
     {
         // todo: password의 암호화 처리 부분 체크 할 것

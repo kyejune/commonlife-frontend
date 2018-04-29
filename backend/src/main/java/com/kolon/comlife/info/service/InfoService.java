@@ -4,7 +4,7 @@ import com.kolon.comlife.info.exception.DataNotFoundException;
 import com.kolon.comlife.info.exception.OperationFailedException;
 import com.kolon.comlife.info.model.InfoItem;
 import com.kolon.comlife.info.model.InfoMain;
-import com.kolon.comlife.info.model.InfoUserProfile;
+import com.kolon.comlife.users.model.UserProfileInfo;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.common.model.AuthUserInfo;
 
@@ -24,10 +24,10 @@ public interface InfoService {
 
     InfoItem getInfoBenefitsItem( int cmplxId, int itemIdx ) throws DataNotFoundException, OperationFailedException ;
 
-    InfoUserProfile getInfoProfile(AuthUserInfo authUserInfo ) throws DataNotFoundException;
+    UserProfileInfo getInfoProfile(AuthUserInfo authUserInfo ) throws DataNotFoundException;
 
-    InfoUserProfile updateInfoProfileEmail( AuthUserInfo authUserInfo, String newEmail ) throws DataNotFoundException;
+    UserProfileInfo updateInfoProfileEmail(AuthUserInfo authUserInfo, String newEmail ) throws DataNotFoundException;
 
-    InfoUserProfile updateInfoProfileUserPw( AuthUserInfo authUserInfo, String oldUserPw, String newUserPw )
+    UserProfileInfo updateInfoProfileUserPw(AuthUserInfo authUserInfo, String oldUserPw, String newUserPw )
             throws DataNotFoundException;
 }

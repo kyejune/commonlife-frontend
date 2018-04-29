@@ -3,15 +3,14 @@ package com.kolon.comlife.info.web;
 import com.kolon.comlife.common.model.DataListInfo;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
-import com.kolon.comlife.imageStore.model.ImageInfo;
-import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.imageStore.service.ImageStoreService;
 import com.kolon.comlife.info.exception.DataNotFoundException;
 import com.kolon.comlife.info.exception.OperationFailedException;
 import com.kolon.comlife.info.model.*;
 import com.kolon.comlife.info.service.InfoService;
 import com.kolon.comlife.post.model.PostInfo;
-import com.kolon.comlife.postFile.service.exception.NoDataException;
+import com.kolon.comlife.users.exception.NotFoundException;
+import com.kolon.comlife.users.model.UserProfileInfo;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
@@ -21,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -348,11 +346,11 @@ public class InfoController {
     public ResponseEntity getInfoProfile(HttpServletRequest request ) {
 
         AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
-        InfoUserProfile userProfile;
+        UserProfileInfo userProfile;
 
         try {
-            userProfile = infoService.getInfoProfile( authUserInfo );
-        } catch( DataNotFoundException e ) {
+            userProfile = userService.getUserProfile( authUserInfo.getUsrId() );
+        } catch( NotFoundException e ) {
             logger.error( e.getMessage() );
             return ResponseEntity
                     .status( HttpStatus.BAD_REQUEST )
@@ -370,7 +368,7 @@ public class InfoController {
                                           @RequestBody Map<String, String> bodyMap ) {
 
         AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
-        InfoUserProfile userProfile;
+        UserProfileInfo userProfile;
         String newEmail = bodyMap.get("newEmail");
         String oldUserPw = bodyMap.get("oldUserPw");
         String newUserPw = bodyMap.get("newUserPw");
