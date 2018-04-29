@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ include file="/WEB-INF/jsp/views/common/commonHead.jsp" %>
 <tiles:insertDefinition name="admin">
-    <tiles:putAttribute name="title">관리자 관리</tiles:putAttribute>
+<tiles:putAttribute name="title">관리자 관리</tiles:putAttribute>
     <tiles:putAttribute name="contents">
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
@@ -34,40 +34,32 @@
                             </div>
                         </div>
                         <div class="ibox-content" style="">
-
-                            <div id="calendar"></div>
-
+                            <h2>reservation</h2>
+                            <c:if test="${not empty reservation['class'].declaredFields}">
+                                <dl>
+                                    <c:forEach var="field" items="${reservation['class'].declaredFields}">
+                                        <c:catch>
+                                            <dt>${field.name}</dt>
+                                            <dd>${reservation[field.name]}</dd>
+                                        </c:catch>
+                                    </c:forEach>
+                                </dl>
+                            </c:if>
+                            <h2>reservation.scheme</h2>
+                            <c:if test="${not empty reservation.scheme['class'].declaredFields}">
+                                <dl>
+                                    <c:forEach var="field" items="${reservation.scheme['class'].declaredFields}">
+                                        <c:catch>
+                                            <dt>${field.name}</dt>
+                                            <dd>${reservation.scheme[field.name]}</dd>
+                                        </c:catch>
+                                    </c:forEach>
+                                </dl>
+                            </c:if>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
-    </tiles:putAttribute>
-    <tiles:putAttribute name="js">
-        <script>
-            var events = [];
-            <c:forEach var="reservation" items="${reservations}">
-            events.push( {
-                idx: '${reservation.idx}',
-                title: '${reservation.scheme.title}',
-                start: moment( '${reservation.startDt}' ).toDate(),
-                end: moment( '${reservation.endDt}' ).toDate()
-            } );
-            </c:forEach>
-            $( function() {
-                $('#calendar').fullCalendar({
-                    header: {
-                        left: 'prev,next',
-                        center: 'title',
-                        right: 'month,agendaWeek,agendaDay'
-                    },
-                    events: events,
-                    eventClick: function(calEvent, jsEvent, view) {
-                        window.location.href = "/admin/reservations/show.do?idx=" + calEvent.idx;
-                    }
-                });
-            } );
-        </script>
     </tiles:putAttribute>
 </tiles:insertDefinition>

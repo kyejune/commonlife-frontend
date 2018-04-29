@@ -67,7 +67,7 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "calendar.do")
-    public ModelAndView calReservationScheme (
+    public ModelAndView calReservation (
             HttpServletRequest request
             , HttpServletResponse response
             , ModelAndView mav
@@ -80,7 +80,7 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "list.do")
-    public ModelAndView listReservationScheme (
+    public ModelAndView listReservation (
             HttpServletRequest request
             , HttpServletResponse response
             , ModelAndView mav
@@ -93,7 +93,7 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "create.do")
-    public ModelAndView createReservationScheme (
+    public ModelAndView createReservation (
             HttpServletRequest request
             , HttpServletResponse response
             , ModelAndView mav
@@ -114,7 +114,7 @@ public class ReservationController {
     @RequestMapping(value = "create.do"
             , method = RequestMethod.POST
     )
-    public String storeReservationScheme (
+    public String storeReservation (
             HttpServletRequest request
             , HttpServletResponse response
             , HttpSession session
@@ -153,12 +153,25 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "edit.do")
-    public ModelAndView editReservationScheme (
+    public ModelAndView editReservation (
             HttpServletRequest request
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
     ) {
+        return mav;
+    }
+
+    @RequestMapping(value = "show.do")
+    public ModelAndView showReservation (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+    ) {
+        int idx = Integer.parseInt( request.getParameter( "idx" ) );
+        ReservationInfo reservation = service.show( idx );
+        mav.addObject( "reservation", reservation );
         return mav;
     }
 

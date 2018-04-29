@@ -1,6 +1,7 @@
 package com.kolon.comlife.admin.reservation.service.impl;
 
 import com.kolon.comlife.admin.reservation.model.ReservationInfo;
+import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.admin.reservation.string.Reservation;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -14,6 +15,9 @@ public class ReservationDAO {
     @Resource
     private SqlSession sqlSession;
 
+    @Resource(name="reservationSchemeDAO")
+    private ReservationSchemeDAO schemeDAO;
+
     public List<ReservationInfo> index() {
         return sqlSession.selectList( "Reservation.index" );
     }
@@ -21,7 +25,12 @@ public class ReservationDAO {
     public ReservationInfo show( int idx ) {
         HashMap params = new HashMap<String, Object>();
         params.put("idx", idx);
-        return sqlSession.selectOne("Reservation.show", params);
+        ReservationInfo reservation = sqlSession.selectOne("Reservation.show", params);
+
+        ReservationSchemeInfo scheme = schemeDAO.show( reservation.getParentIdx() );
+        reservation.setScheme( scheme );
+
+        return reservation;
     }
 
     public int create( ReservationInfo info ) {

@@ -46,6 +46,7 @@
                                     <th class="text-center">포인트</th>
                                     <th class="text-center">금액</th>
                                     <%--<th class="text-center">수량</th>--%>
+                                    <th class="text-center">보기</th>
                                     <th class="text-center">삭제</th>
                                 </tr>
                                 </thead>
@@ -60,6 +61,9 @@
                                         <td class="text-center">${reservation.endTime}</td>
                                         <td class="text-center">${reservation.point}</td>
                                         <td class="text-center">${reservation.amount}</td>
+                                        <td class="text-center">
+                                            <a href="/admin/reservations/show.do?idx=${reservation.idx}" class="btn btn-xs btn-white">보기</a>
+                                        </td>
                                         <td class="text-center">
                                             <form action="/admin/reservations/delete.do" method="post">
                                                 <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >

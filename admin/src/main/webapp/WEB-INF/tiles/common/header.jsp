@@ -92,14 +92,23 @@
             <li>
                 <a href="#">
                     <i class="fa fa-calendar"></i>
-                    <span class="nav-label">예약 관리<span class="fa arrow"></span></span>
+                    <span class="nav-label">슈퍼| 예약 틀 관리<span class="fa arrow"></span></span>
                 </a>
-                <ul class="nav nav-second-level callapse">
+                <ul class="nav nav-second-level collapse">
                     <li><a href="/admin/reservation-amenities/list.do">예약 시설 옵션 관리</a></li>
-                    <li><a href="/admin/reservation-groups/list.do">예약 그룹 관리</a></li>
+                    <li><a href="/admin/reservation-groups/list.do">예약 틀 관리</a></li>
+                    <%--<li><a href="/admin/reservations/queue.do">장기 예약 신청 관리</a></li>--%>
+                </ul>
+            </li>
+            <li>
+                <a href="#">
+                    <i class="fa fa-calendar"></i>
+                    <span class="nav-label">현장| 예약 관리 <span class="fa arrow"></span></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
                     <li><a href="/admin/reservations/list.do">예약 현황 (목록형)</a></li>
                     <li><a href="/admin/reservations/calendar.do">예약 현황 (달력형)</a></li>
-                    <li><a href="/admin/reservations/queue.do">장기 예약 신청 관리</a></li>
+                    <li><a href="#">예약 등록</a></li>
                 </ul>
             </li>
         </ul>
