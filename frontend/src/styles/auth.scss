@@ -39,6 +39,14 @@
 .cl-join {
     background-color: #2E3036;
 
+    .cl-input-container{
+        background-color: black;
+
+        &:last-child{
+            background-color: #2E3036;
+        }
+    }
+
     footer{
         position: absolute;
         width: 100%;

@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import moment from "moment/moment";
+import Store from "../../scripts/store";
 
 
 class DateOne extends Component {
@@ -14,6 +15,8 @@ class DateOne extends Component {
         this.max = moment(this.props.max).format('YYYY-MM-DD');
 
 
+        console.log( this.props.max );
+
         this.state = {
             yyyymmdd: yyyymmdd,
             label: this.getLabel( yyyymmdd )
@@ -23,6 +26,11 @@ class DateOne extends Component {
     onDateChange( event ){
         let val = event.target.value;
 
+        if( this.getDateNumber(val) < this.getDateNumber(this.min) || this.getDateNumber(val) > this.getDateNumber(this.max) ){
+            Store.alert(`${this.min} ~ ${this.max}사이의 날짜를 선택해주세요.`);
+            return
+        }
+
         this.setState( {
             yyyymmdd: val,
             label: this.getLabel( val )
@@ -30,6 +38,10 @@ class DateOne extends Component {
 
         if( this.props.onUpdate )
             this.props.onUpdate( val );
+    }
+
+    getDateNumber( yyyymmdd ){
+        return parseInt(yyyymmdd.match(/\d/g).join(''));
     }
 
     getLabel( yyyymmdd ){
@@ -45,7 +57,7 @@ class DateOne extends Component {
                 <input type="date"
                        value={ this.state.yyyymmdd }
                        onChange={ e => this.onDateChange( e ) }
-                       min={this.min} max={this.max}
+                       // min={this.min} max={this.max}
                 />
             </div>
         </div>

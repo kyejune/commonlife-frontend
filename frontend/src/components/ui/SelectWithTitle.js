@@ -9,6 +9,8 @@ class SelectWithTitle extends Component {
 		if( this.props.onChange && typeof this.props.onChange === 'function' ) {
 			this.props.onChange( event );
 		}
+
+		Store.alert('변경 완료되었습니다.');
 	};
 
 	render () {

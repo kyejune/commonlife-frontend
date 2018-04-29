@@ -74,6 +74,10 @@ class UserInputs extends Component {
             });
     }
 
+    updateScroll = evt =>{
+        document.querySelector('.cl-join .cl-full-page').scrollTop = evt.target.getBoundingClientRect().top;
+    }
+
     render() {
         const {branch, houseHolder, user} = MakingUserData;
 
@@ -140,6 +144,7 @@ class UserInputs extends Component {
                 {this.validator.fieldValid('사용자 이름') && this.validator.fieldValid('휴대폰 번호') &&
                 <input className="cl__input--dark" type="number" placeholder="인증번호 입력"
                        value={user.certId}
+                       onFocus={ this.updateScroll }
                        onChange={evt => MakingUserData.user = { ...user, certId: evt.target.value }}
                 />
                 }
@@ -151,15 +156,17 @@ class UserInputs extends Component {
 
                 <input className="cl__input--dark w-70" placeholder="비밀번호" type="password"
                        value={ user.password }
+                       onFocus={ this.updateScroll }
                        onChange={ evt=> MakingUserData.user = { ...user, password: evt.target.value }}
                 />
                 {this.validator.message('비밀번호', user.password, `required|min:6|max:12`)}
 
                 <input className="cl__input--dark w-70" placeholder="비밀번호 확인" type="password"
                        value={ user.passwordConfirm }
+                       onFocus={ this.updateScroll }
                        onChange={ evt=> MakingUserData.user = { ...user, passwordConfirm: evt.target.value }}
                 />
-                {this.validator.message('비밀번호 확인', user.passwordConfirm, `required|min:6|max:12|same:${user.password}`)}
+                {this.validator.message('비밀번호 확인', user.passwordConfirm, `same:${user.password}`)}
 
             </div>
 

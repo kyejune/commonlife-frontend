@@ -455,6 +455,7 @@
     .cl-card-item-wrapper{
         position: relative;
         margin-top: 0;
+        transform: none;//translate3d(0, 0, 0);
     }
 
     .cl-opts__footer{

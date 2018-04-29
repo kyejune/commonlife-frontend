@@ -182,7 +182,7 @@ class CardItemDetailDrawer extends Component {
                      style={{backgroundImage: `url(${ imgAddr })`}}/>
                 }
 
-                <div className="cl-card-item-wrapper">
+                <div className="cl-card-item-wrapper" rnd={ Math.random()*100 }>
 
                     <div className={`cl-card-item cl-card-item--${PostType}`} key="item-info">
 

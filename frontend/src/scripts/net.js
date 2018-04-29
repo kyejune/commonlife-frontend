@@ -364,6 +364,13 @@ export default {
             });
     },
 
+    getUserInfo( id, callback ){
+        axios.get( `/users/profile/${id}` )
+            .then( response => {
+               callback( response.data );
+            });
+    },
+
 
     //{
     // "userId": "yunakim",

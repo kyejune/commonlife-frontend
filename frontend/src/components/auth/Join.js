@@ -169,7 +169,7 @@ class Join extends Component {
                 </header>
 
 
-                <div className={classNames("pb-3em", {"cl-join-welcome-wrap": step == 4})}>
+                <div className={classNames("pb-3em", {"cl-join-welcome-wrap": step == 4})} style={{backgroundColor:'#2E3036'}}>
                     {component}
                 </div>
 
