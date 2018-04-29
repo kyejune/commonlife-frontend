@@ -23,6 +23,7 @@
             </bean>
         </mvc:interceptor>
         <mvc:interceptor>
+            <mvc:mapping path="/users/profile/**" />
             <mvc:mapping path="/users/myinfo" />
             <mvc:mapping path="/users/myComplexGroup" />
             <mvc:mapping path="/users/debug/authUserInfo" />

@@ -6,6 +6,9 @@ import com.kolon.comlife.common.model.SimpleMsgInfo;
 import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
+import com.kolon.comlife.users.exception.NotFoundException;
+import com.kolon.comlife.users.model.UserProfileInfo;
+import com.kolon.comlife.users.service.UserService;
 import com.kolon.comlife.users.util.IokUtil;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
@@ -17,10 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -39,6 +39,9 @@ public class UserController {
 
     @Autowired
     ComplexService complexService;
+
+    @Autowired
+    UserService userService;
 
 
     /**
@@ -155,6 +158,34 @@ public class UserController {
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
+
+    @CrossOrigin
+    @GetMapping(
+            value = "/profile/{usrId}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getInfoProfile(HttpServletRequest request,
+                                         @PathVariable( "usrId" ) int usrId ) {
+        UserProfileInfo userProfile;
+
+        if( !AuthUserInfoUtil.isAuthUserInfoExisted( request )) {
+            logger.debug(">>>>  인증되지 않은 사용자 입니다");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo("인증되지 않은 사용자 입니다"));
+        }
+
+        try {
+            userProfile = userService.getUserProfile( usrId );
+        } catch( NotFoundException e ) {
+            logger.error( e.getMessage() );
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( e.getMessage() );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( userProfile  );
+    }
+
 
     @GetMapping(
             value="/myComplexGroup",
