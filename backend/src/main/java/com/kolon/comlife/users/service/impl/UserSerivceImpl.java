@@ -69,7 +69,7 @@ public class UserSerivceImpl implements UserService {
         }
 
         cmplxInfo = complexDAO.selectComplexById( userInfo.getCmplxId() );
-        if( userInfo == null ) {
+        if( cmplxInfo == null ) {
             logger.error( "해당 사용자의 현장 정보를 찾을 수 없습니다 cmplxId: " +  userInfo.getCmplxId() );
             throw new NotFoundException("사용자 정보를 찾을 수 없습니다" );
         }
