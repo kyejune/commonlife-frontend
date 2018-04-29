@@ -24,6 +24,9 @@ class ReservationHistory extends Component{
 			<div className="cl-reservation-history__list-wrap">
 				{ ( this.state && this.state.history ) &&
 				( this.state.history.map( ( item, key ) => {
+					if( !item.scheme ) {
+						return <div key={ key }/>
+					}
 				    return <div className="cl-flex-between cl-reservation-history__item" key={ key }>
 						<div className="cl-reservation-history__icon">
 							<img src={ReserveServiceLaundry} alt=""/>

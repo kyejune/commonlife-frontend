@@ -96,11 +96,24 @@
                         </div>
                         <div class="form-group">
                             <label>예약 유형</label>
-                            <select name="reservationType" class="form-control">
-                                <option value="A" <c:if test="${scheme.reservationType == 'A'}"> selected </c:if> >예약 A: 시간 단위 대여</option>
-                                <option value="B" <c:if test="${scheme.reservationType == 'B'}"> selected </c:if> >예약 B: 일자 단위 대여</option>
-                                <option value="C" <c:if test="${scheme.reservationType == 'C'}"> selected </c:if> >예약 C: 장기 대여</option>
-                            </select>
+                            <div>
+                                <label class="radio-inline">
+                                    <input type="radio" name="reservationType" value="A" <c:if test="${scheme.reservationType == 'A'}"> checked </c:if> <c:if test="${scheme == null}"> checked </c:if> >
+                                    A타입 (날짜+시간)
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="reservationType" value="B" <c:if test="${scheme.reservationType == 'B'}"> checked </c:if> >
+                                    B타입 (기간+옵션)
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="reservationType" value="C" <c:if test="${scheme.reservationType == 'C'}"> checked </c:if> >
+                                    C타입 (날짜)
+                                </label>
+                                <label class="radio-inline">
+                                    <input type="radio" name="reservationType" value="D" <c:if test="${scheme.reservationType == 'D'}"> checked </c:if> >
+                                    D타입 (날짜+사용자 입력 필드)
+                                </label>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>예약명</label>
