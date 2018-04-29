@@ -47,7 +47,7 @@
                     <li id="left_admin_all"><a href="/admin/managers/list.do">전체 관리자 목록</a></li>
                     <li id="left_admin_super"><a href="/admin/managers/list.do?grpId=0">슈퍼관리자 관리</a></li>
                     <li id="left_admin_complex"><a href="/admin/managers/list.do?grpId=1">현장관리자 관리</a></li>
-                    <li id="left_admin_log"><a href="/admin/managers/log.do">작업 로그</a></li>
+                    <%--<li id="left_admin_log"><a href="/admin/managers/log.do">작업 로그</a></li>--%>
                 </ul>
             </li>
             <li id="left_feed">
@@ -61,25 +61,25 @@
                     <li id="left_feed_notice"><a href="/admin/posts/noticeList.do?grpId=1">Notice 관리</a></li>
                 </ul>
             </li>
-            <li id="left_properties">
-                <a href="#">
-                    <i class="fa fa-table"></i>
-                    <span class="nav-label">슈퍼| 환경설정 관리</span><span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level collapse">
-                    <li id="left_properties_all"><a href="/admin/properties/list.do">Properties 관리</a></li>
-                </ul>
-            </li>
-            <li >
-                <a href="#">
-                    <i class="fa fa-table"></i>
-                    <span class="nav-label">슈퍼| 세대주/사용자 관리</span><span class="fa arrow"></span>
-                </a>
-                <ul class="nav nav-second-level collapse">
-                    <li><a href="/admin/managers/list.do">세대주 목록</a></li>
-                    <li><a href="/admin/managers/list.do">사용자 목록</a></li>
-                </ul>
-            </li>
+            <%--<li id="left_properties">--%>
+                <%--<a href="#">--%>
+                    <%--<i class="fa fa-table"></i>--%>
+                    <%--<span class="nav-label">슈퍼| 환경설정 관리</span><span class="fa arrow"></span>--%>
+                <%--</a>--%>
+                <%--<ul class="nav nav-second-level collapse">--%>
+                    <%--<li id="left_properties_all"><a href="/admin/properties/list.do">Properties 관리</a></li>--%>
+                <%--</ul>--%>
+            <%--</li>--%>
+            <%--<li >--%>
+                <%--<a href="#">--%>
+                    <%--<i class="fa fa-table"></i>--%>
+                    <%--<span class="nav-label">슈퍼| 세대주/사용자 관리</span><span class="fa arrow"></span>--%>
+                <%--</a>--%>
+                <%--<ul class="nav nav-second-level collapse">--%>
+                    <%--<li><a href="/admin/managers/list.do">세대주 목록</a></li>--%>
+                    <%--<li><a href="/admin/managers/list.do">사용자 목록</a></li>--%>
+                <%--</ul>--%>
+            <%--</li>--%>
             <li >
                 <a href="#">
                     <i class="fa fa-table"></i>
