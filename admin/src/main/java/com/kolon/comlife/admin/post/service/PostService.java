@@ -1,5 +1,7 @@
 package com.kolon.comlife.admin.post.service;
 
+import com.kolon.comlife.admin.post.exception.NotFoundException;
+import com.kolon.comlife.admin.post.exception.OperationFailedException;
 import com.kolon.comlife.admin.post.model.PostInfo;
 import com.kolon.comlife.common.paginate.PaginateInfo;
 
@@ -8,7 +10,7 @@ import java.util.Map;
 
 public interface PostService {
 
-    PostInfo getPostById(int id, int currUsrId) throws Exception;
+    PostInfo getPostById(int id, int currUsrId) throws NotFoundException;
 
     PaginateInfo getPostWithLikeInfoList(Map params)  throws Exception ;
 
@@ -20,7 +22,7 @@ public interface PostService {
 
     PostInfo setPostWithImage(PostInfo newPost, List<Integer> fileInfo, int usrId);
 
-    PostInfo updatePost(PostInfo example);
+    PostInfo updatePost(PostInfo example) throws OperationFailedException;
 
     PostInfo deletePost(int id, int cmplxId, int adminIdx);
 

@@ -2,6 +2,8 @@ package com.kolon.comlife.admin.post.service.impl;
 
 import com.kolon.comlife.admin.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.admin.imageStore.service.ImageStoreService;
+import com.kolon.comlife.admin.post.exception.NotFoundException;
+import com.kolon.comlife.admin.post.exception.OperationFailedException;
 import com.kolon.comlife.admin.post.model.PostFileInfo;
 import com.kolon.comlife.admin.post.model.PostInfo;
 import com.kolon.comlife.admin.post.service.PostFileStoreService;
@@ -45,9 +47,8 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private ImageStoreService imageStoreService;
 
-
     @Override
-    public PostInfo getPostById(int id, int currUsrId ) throws Exception {
+    public PostInfo getPostById(int id, int currUsrId ) throws NotFoundException {
         List<Integer>        userIds;
         List<Integer>        postIdxs;
         List<PostUserInfo>   userList;
@@ -62,13 +63,13 @@ public class PostServiceImpl implements PostService {
 
         postInfo = postDAO.selectPost(id, currUsrId);
         if( postInfo == null ) {
-            throw new Exception("해당 게시물이 없습니다.");
+            throw new NotFoundException("해당 게시물이 없습니다.");
         }
 
         userIds.add(postInfo.getUsrId());
         userList = userDAO.getUserListForPostById( userIds );
         if( userList == null || userList.size() < 1 ) {
-            throw new Exception("해당 게시물을 가져올 수 없습니다.");
+            throw new NotFoundException("게시물에 대한 사용자 정보가 없습니다. 해당 게시물을 가져올 수 없습니다.");
         }
         // 게시물의 사용자 정보 연결
         userInfo = userList.get(0);
@@ -82,7 +83,6 @@ public class PostServiceImpl implements PostService {
         }
 
         postInfo.setUser( userInfo );
-
 
         // 비공개(삭제)처리된 게시물의 내용 변경 및 공개 게시물에 대해서 이미지 정보 가져오기
         if( "Y".equals(postInfo.getDelYn()) ) {
@@ -170,8 +170,8 @@ public class PostServiceImpl implements PostService {
             // Post File(업로드한 이미지) 정보 바인딩 및 비공개 처리 게시물 처리
             for( PostInfo post : postInfoList ) {
 
-                // 비공개(삭제)처리된 게시물의 내용 변경 및 공개 게시물에 대해서 이미지 정보 가져오기
-                if( "Y".equals(post.getDelYn()) ) {
+                // 사용자 Feed 중, 비공개(삭제)처리된 게시물의 내용 변경 및 공개 게시물에 대해서 이미지 정보 가져오기
+                if( "Y".equals(post.getDelYn()) && post.getPostType().equals("feed") ) {
                     post.setContent( DELETED_POST_MSG );
                 } else {
                     for( PostFileInfo postFile : postFileList ) {
@@ -231,7 +231,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostInfo updatePost(PostInfo post) {
+    public PostInfo updatePost(PostInfo post) throws OperationFailedException {
+
+        if( post.getPostType().equals("feed") ) {
+            throw new OperationFailedException( "사용자 Feed는 변경할 수 없습니다." );
+        }
+
         return postDAO.updatePost(post);
     }
 

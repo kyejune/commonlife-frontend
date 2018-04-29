@@ -1,6 +1,5 @@
 package com.kolon.comlife.admin.info.service.impl;
 
-
 import com.kolon.comlife.admin.complexes.service.impl.ComplexDAO;
 import com.kolon.comlife.admin.info.exception.InfoGeneralException;
 import com.kolon.comlife.admin.info.model.model.InfoData;
@@ -13,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 
 @Service("infoService")
 public class InfoServiceImpl implements InfoService {
