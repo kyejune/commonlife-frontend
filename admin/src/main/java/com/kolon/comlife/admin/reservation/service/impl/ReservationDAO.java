@@ -3,6 +3,9 @@ package com.kolon.comlife.admin.reservation.service.impl;
 import com.kolon.comlife.admin.reservation.model.ReservationInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.admin.reservation.string.Reservation;
+import com.kolon.comlife.admin.users.model.UserExtInfo;
+import com.kolon.comlife.admin.users.model.UserInfo;
+import com.kolon.comlife.admin.users.service.impl.UserDAO;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -18,6 +21,9 @@ public class ReservationDAO {
     @Resource(name="reservationSchemeDAO")
     private ReservationSchemeDAO schemeDAO;
 
+    @Resource(name="userDAO")
+    private UserDAO userDAO;
+
     public List<ReservationInfo> index() {
         return sqlSession.selectList( "Reservation.index" );
     }
@@ -29,6 +35,9 @@ public class ReservationDAO {
 
         ReservationSchemeInfo scheme = schemeDAO.show( reservation.getParentIdx() );
         reservation.setScheme( scheme );
+
+        UserExtInfo user = userDAO.selectUserExtInfoByUsrId( reservation.getUsrID() );
+        reservation.setUser( user );
 
         return reservation;
     }

@@ -1,5 +1,7 @@
 package com.kolon.comlife.admin.reservation.model;
 
+import com.kolon.comlife.admin.users.model.UserExtInfo;
+import com.kolon.comlife.admin.users.model.UserInfo;
 import org.apache.ibatis.type.Alias;
 
 @Alias("reservationInfo")
@@ -19,6 +21,7 @@ public class ReservationInfo {
     private String updDttm;
 
     // Relations
+    private UserExtInfo user;
     private ReservationSchemeInfo scheme;
 
     public int getIdx() {
@@ -126,6 +129,15 @@ public class ReservationInfo {
     }
 
     // Relations
+
+
+    public UserExtInfo getUser() {
+        return user;
+    }
+
+    public void setUser(UserExtInfo user) {
+        this.user = user;
+    }
 
     public ReservationSchemeInfo getScheme() {
         return scheme;

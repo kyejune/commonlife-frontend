@@ -108,7 +108,7 @@
                 <ul class="nav nav-second-level collapse">
                     <li><a href="/admin/reservations/list.do">예약 현황 (목록형)</a></li>
                     <li><a href="/admin/reservations/calendar.do">예약 현황 (달력형)</a></li>
-                    <li><a href="#">예약 등록</a></li>
+                    <%--<li><a href="#">예약 등록</a></li>--%>
                 </ul>
             </li>
         </ul>
