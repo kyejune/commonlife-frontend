@@ -86,8 +86,16 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-12">
+                        <div class="col-xs-6">
                             <button class="btn btn-white" onclick="history.back()">뒤로가기</button>
+                        </div>
+                        <div class="col-xs-t text-right">
+                            <form action="/admin/reservations/delete.do" method="post" onsubmit="return confirm( '정말 삭제하시겠습니까?' )">
+                                <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+                                <input type="hidden" name="idx" value="${reservation.idx}">
+                                <input type="hidden" name="redirectTo" value="${ redirectTo }">
+                                <button class="btn btn-danger">이 예약을 삭제</button>
+                            </form>
                         </div>
                     </div>
 

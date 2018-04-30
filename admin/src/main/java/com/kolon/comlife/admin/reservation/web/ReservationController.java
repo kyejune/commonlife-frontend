@@ -172,7 +172,31 @@ public class ReservationController {
         int idx = Integer.parseInt( request.getParameter( "idx" ) );
         ReservationInfo reservation = service.show( idx );
         mav.addObject( "reservation", reservation );
+        mav.addObject( "redirectTo", request.getHeader( "referer" ) );
         return mav;
+    }
+
+    @RequestMapping(value = "delete.do", method = RequestMethod.POST)
+    public String deleteReservation (
+            HttpServletRequest request
+            , HttpServletResponse response
+            , ModelAndView mav
+            , HttpSession session
+    ) {
+        int idx = Integer.parseInt( request.getParameter( "idx" ) );
+        ReservationInfo reservation = new ReservationInfo();
+        reservation.setIdx( idx );
+        service.delete( reservation );
+
+        String redirectTo = request.getParameter( "redirectTo" );
+        if( redirectTo == null ) {
+            redirectTo = "/admin/reservations/list.do";
+        }
+        else if( !redirectTo.equals( "" ) ) {
+            redirectTo = "/admin/reservations/list.do";
+        }
+
+        return "redirect:" + redirectTo;
     }
 
     @RequestMapping(value = "queue.do")

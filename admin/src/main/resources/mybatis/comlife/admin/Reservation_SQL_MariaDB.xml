@@ -72,4 +72,12 @@
         WHERE
         `IDX` = #{idx}
     </update>
+
+    <update id="delete" parameterType="reservationInfo">
+        DELETE
+        FROM
+        `RESERVATIONS`
+        WHERE
+        `IDX` = #{idx}
+    </update>
 </mapper>

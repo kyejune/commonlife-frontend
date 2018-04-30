@@ -65,7 +65,7 @@
                                             <a href="/admin/reservations/show.do?idx=${reservation.idx}" class="btn btn-xs btn-white">보기</a>
                                         </td>
                                         <td class="text-center">
-                                            <form action="/admin/reservations/delete.do" method="post">
+                                            <form action="/admin/reservations/delete.do" method="post" onsubmit="return confirm( '정말 삭제하시겠습니까?' )">
                                                 <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
                                                 <input type="hidden" name="idx" value="${reservation.idx}">
                                                 <button class="btn btn-xs btn-danger">삭제</button>
