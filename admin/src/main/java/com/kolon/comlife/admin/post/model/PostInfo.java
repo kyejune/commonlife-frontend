@@ -34,6 +34,9 @@ public class PostInfo {
     private String inquiryType;
     private String inquiryInfo;
 
+    private int     adminIdx;
+    private String  adminYn;
+
     public int getPostIdx() {
         return postIdx;
     }
@@ -218,9 +221,25 @@ public class PostInfo {
         this.title = title;
     }
 
+    public int getAdminIdx() {
+        return adminIdx;
+    }
+
+    public void setAdminIdx(int adminIdx) {
+        this.adminIdx = adminIdx;
+    }
+
+    public String getAdminYn() {
+        return adminYn;
+    }
+
+    public void setAdminYn(String adminYn) {
+        this.adminYn = adminYn;
+    }
+
     /*
-                        Relations
-                     */
+                            Relations
+                         */
     private PostUserInfo user;
     private List<PostFileInfo> postFiles = new ArrayList<PostFileInfo>();
 

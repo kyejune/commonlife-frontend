@@ -30,6 +30,8 @@
             SELECT
             `POST_LIKE`.`POST_IDX`,
             `POST_LIKE`.`USR_ID`,
+            `POST_LIKE`.`ADMIN_IDX`,
+            `POST_LIKE`.`ADMIN_YN`,
             `POST_LIKE`.`CMPLX_ID`,
             `POST_LIKE`.`POST_TYPE`,
             `POST_LIKE`.`CONTENT`,
@@ -58,6 +60,8 @@
                 SELECT
                 `POST`.`POST_IDX`,
                 `POST`.`USR_ID`,
+                `POST`.`ADMIN_IDX`,
+                `POST`.`ADMIN_YN`,
                 `POST`.`CMPLX_ID`,
                 `POST`.`POST_TYPE`,
                 `POST`.`CONTENT`,

@@ -51,8 +51,9 @@ public class PostDAO {
         return sqlSession.selectList( "Post.selectPostList", params );
     }
 
-    public PostInfo insertPost(PostInfo post) {
-        sqlSession.insert( "Post.insertPost", post );
+    public PostInfo insertPostByAdmin(PostInfo post) {
+
+        sqlSession.insert( "Post.insertPostByAdmin", post );
         return sqlSession.selectOne( "Post.selectLatestPost" );
     }
 
@@ -75,12 +76,16 @@ public class PostDAO {
         return sqlSession.selectOne( "Post.selectPostList", selectParams );
     }
 
-    public int deletePost(int id, int cmplxId, int adminIdx) {
-        int updateCount = -1;
-        Map<String, Integer> selectParams = new HashMap<String, Integer>();
+    public int updatePostDelYn(int id, int cmplxId, String delYn) {
+        int updateCount  = -1;
+        Map selectParams = new HashMap();
+
         selectParams.put( "postIdx", id );
         selectParams.put( "cmplxId", cmplxId );
-        updateCount = sqlSession.update( "Post.deletePost", selectParams );
+        selectParams.put( "delYn",   delYn.toUpperCase() );
+
+        updateCount = sqlSession.update( "Post.updatePostDelYn", selectParams );
+
         return updateCount;
     }
 }

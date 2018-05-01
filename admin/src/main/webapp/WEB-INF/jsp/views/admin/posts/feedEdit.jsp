@@ -44,7 +44,7 @@
             <div class="col-md-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Event 작성/편집</h5>
+                        <h5><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out> 작성/편집</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -52,11 +52,13 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                        <form action="" method="post" class="form-horizontal">
-                            <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+                        <form action="#" class="form-horizontal" name="postInfo" id="postInfo">
+                            <%--<input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >--%>
                             <%--<input type="hidden" name="redirectTo" value="${redirectTo}">--%>
                             <input type="hidden" name="postIdx" value="${postIdx}">
+                            <input type="hidden" name="postType" value="${postType}">
 
+                            <c:if test="${postType eq 'event'}">
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">이벤트 기간</label>
                                 <div class="col-sm-10">
@@ -71,7 +73,7 @@
                                     <div class="input-group">
                                         <input type="text"
                                                class="form-control datepicker"
-                                               name="eventBeginDttm"
+                                               name="eventEndDttm"
                                                data-format="YYYY-MM-DD HH:mm"
                                                value="">
                                         <span class="input-group-addon"> 까지</span>
@@ -88,15 +90,15 @@
                             <div class="hr-line-dashed"></div>
 
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">'참여 신청' 기능 설정</label>
+                                <label class="col-sm-2 control-label">'참여 신청' 기능 설정 *</label>
                                 <div class="col-sm-10" >
                                     <div class="input-group">
                                         <label class="radio-inline">
-                                            <input type="radio" name="rsvYn" value="Y" checked>
+                                            <input type="radio" name="rsvYn" value="Y">
                                             사용
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="rsvYn" value="N">
+                                            <input type="radio" name="rsvYn" value="N"  checked>
                                             사용하지 않음
                                         </label>
                                     </div>
@@ -105,22 +107,22 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label">최대 참여 가능 인원</label>
                                 <div class="col-sm-10">
-                                    <input type="number" name="maxRsvCnt" class="form-control" value="0" min="0">
+                                    <input type="number" name="rsvMaxCnt" class="form-control" value="0" min="0">
                                     <p class="text-success">* 참여 신청 기능을 이용하면, 선착순으로 참여 신청을 받을 수 있습니다.</p>
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
 
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">'문의 안내' 표시 설정</label>
+                                <label class="col-sm-2 control-label">'문의 안내' 표시 설정 *</label>
                                 <div class="col-sm-10" >
                                     <div class="input-group">
                                         <label class="radio-inline">
-                                            <input type="radio" name="inquiryYn" value="Y" checked>
+                                            <input type="radio" name="inquiryYn" value="Y" >
                                             사용
                                         </label>
                                         <label class="radio-inline">
-                                            <input type="radio" name="inquiryYn" value="N">
+                                            <input type="radio" name="inquiryYn" value="N"  checked>
                                             사용하지 않음
                                         </label>
                                     </div>
@@ -153,7 +155,7 @@
                             <div class="hr-line-dashed"></div>
 
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">외부 공유 기능 설정</label>
+                                <label class="col-sm-2 control-label">외부 공유 기능 설정 *</label>
                                 <div class="col-sm-10" >
                                     <div class="input-group">
                                         <label class="radio-inline">
@@ -168,8 +170,9 @@
                                 </div>
                             </div>
                             <div class="hr-line-dashed"></div>
+                            </c:if>
                             <div class="form-group">
-                                <label class="col-sm-2 control-label">이벤트 설명</label>
+                                <label class="col-sm-2 control-label">내용 *</label>
                                 <div class="col-sm-10" >
                                     <textarea name="content" id="content" cols="100" rows="5"></textarea>
                                 </div>
@@ -197,7 +200,7 @@
                             <div class="form-group">
                                 <label class="col-sm-2 control-label"></label>
                                 <div class="col-sm-6" >
-                                    <button class="btn  btn-block btn-primary m-t">저장하기</button>
+                                    <div class="btn btn-block btn-primary m-t" onclick="updatePost()">저장하기</div>
                                 </div>
                                 <div class="col-sm-2"></div>
                             </div>
@@ -241,6 +244,39 @@
                 $element.datetimepicker( params );
             } );
         })
+
+        function updatePost() {
+            var data = {};
+            $.each( $("form[name=postInfo]").serializeArray(), function() {
+                data[this.name] = this.value;
+            });
+            console.log( data );
+
+            $.ajax({
+                type : 'post',
+                url : 'proc.do?${_csrf.parameterName}=${_csrf.token}',
+                data : JSON.stringify(data),
+                dataType : "json",
+                contentType : "application/json; charset=UTF-8",
+                error: function(xhr, status, error){
+                    alert(error);
+                },
+                success : function(json){
+                    alert('성공적으로 저장하였습니다');
+                    <c:choose>
+                        <c:when test="${postType eq 'news'}">
+                            window.location.href = "noticeList.do";
+                        </c:when>
+                        <c:when test="${postType eq 'event'}">
+                            window.location.href = "eventList.do";
+                        </c:when>
+                        <c:otherwise>
+                            window.location.href = "feedList.do";
+                        </c:otherwise>
+                    </c:choose>
+                }
+            });
+        }
 
     </script>
 </tiles:putAttribute>

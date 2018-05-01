@@ -61,6 +61,43 @@
               </foreach>
     </select>
 
+    <select id="selectAdminListForPostById" parameterType="java.util.List" resultType="postUserInfo">
+        /* Post에서 이용하는 관리자 목록 조회 */
+        SELECT
+            `A_I`.`ADMIN_IDX` AS `USR_ID`,
+            `A_I`.`ADMIN_NM`  AS `USER_NM`,
+            IFNULL((
+                SELECT
+                    IMAGE_IDX
+                FROM
+                    CL_IMAGE_INFO JOIN
+                    CL_IMAGE_TYPE
+                        ON CL_IMAGE_INFO.PARENT_TYPE = CL_IMAGE_TYPE.TYPE_IDX
+                          AND CL_IMAGE_TYPE.TYPE_NM = 'adminprofile'
+                WHERE
+                    CL_IMAGE_INFO.DEL_YN = 'N' AND
+                    CL_IMAGE_INFO.PARENT_IDX = A_I.ADMIN_IDX
+                ORDER BY IMAGE_IDX DESC
+                LIMIT 1
+            ), -1) AS `IMAGE_IDX`,
+            `ADMIN_NM`        AS `USER_ALIAS`,
+            CL_CMPLX_NM       AS `CMPLX_NM`
+        FROM
+            CL_ADMIN_INFO AS A_I
+              JOIN
+            COMPLEX_M AS C
+                ON A_I.CMPLX_ID = C.CMPLX_ID
+              LEFT JOIN
+            COMPLEX_M_EXT AS C_E
+                ON C.CMPLX_ID = C_E.CMPLX_ID
+        WHERE
+            A_I.ADMIN_IDX
+              IN
+            <foreach collection="list" item="item" index="index" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+    </select>
+
     <select id="selectUserListById" parameterType="java.util.List" resultType="userExtInfo">
     /* ID리스트로 다중 사용자 정보 조회 */
     SELECT

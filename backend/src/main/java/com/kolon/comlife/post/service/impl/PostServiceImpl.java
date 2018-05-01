@@ -50,7 +50,7 @@ public class PostServiceImpl implements PostService {
     public PostInfo getPostById(int id, int currUsrId ) throws Exception {
         List<Integer>        userIds;
         List<Integer>        postIdxs;
-        List<PostUserInfo>   userList;
+        List<PostUserInfo>   postUserList;
         PostFileInfo         postFile;
         List<PostFileInfo>   postFileList;
         PostUserInfo         userInfo;
@@ -65,13 +65,29 @@ public class PostServiceImpl implements PostService {
             throw new Exception("해당 게시물이 없습니다.");
         }
 
-        userIds.add(postInfo.getUsrId());
-        userList = userDAO.getUserListForPostById( userIds );
-        if( userList == null || userList.size() < 1 ) {
-            throw new Exception("해당 게시물을 가져올 수 없습니다.");
+        if( "Y".equals( postInfo.getAdminYn() ) ) {
+            userIds.add(postInfo.getAdminIdx());
+            postUserList = userDAO.getAdminListForPostById( userIds );
+        } else {
+            userIds.add(postInfo.getUsrId());
+            postUserList = userDAO.getUserListForPostById( userIds );
+        }
+
+        if( postUserList == null || postUserList.size() < 1 ) {
+            throw new Exception("게시물에 대한 사용자 정보가 없습니다. 해당 게시물을 가져올 수 없습니다.");
         }
         // 게시물의 사용자 정보 연결
-        userInfo = userList.get(0);
+        userInfo = postUserList.get(0);
+
+        if( userInfo.getImageIdx() > -1 ) {
+            userInfo.setImgSrc(
+                    imageStoreService.getImageFullPathByIdx(
+                            userInfo.getImageIdx(), ImageInfoUtil.SIZE_SUFFIX_SMALL ) );
+        } else {
+            userInfo.setImgSrc( null ); // 이미지 없는 경우, NULL 셋팅
+        }
+
+        postInfo.setUser( userInfo );
 
         if( userInfo.getImageIdx() > -1 ) {
             userInfo.setImgSrc(
@@ -102,10 +118,14 @@ public class PostServiceImpl implements PostService {
     public PaginateInfo getPostWithLikeInfoList(Map params) throws Exception {
         List<PostInfo>             postInfoList;
         List<Integer>              userIds;
+        List<Integer>              adminIdxs;
         List<PostUserInfo>         userList;
-        Map<Integer, PostUserInfo> userListMap;
+        Map<Integer, PostUserInfo> userListMap = new HashMap<>();
+        List<PostUserInfo>         adminList;
+        Map<Integer, PostUserInfo> adminListMap = new HashMap<>();
         List<Integer>              postIdxs;
         List<PostFileInfo>         postFileList;
+        String       imgSrc;
 
         PaginateInfo paginateInfo;
         double       totalPages;
@@ -124,32 +144,69 @@ public class PostServiceImpl implements PostService {
 
         // USR_ID 추출
         userIds = new ArrayList<>();
+        adminIdxs = new ArrayList<>();
+
+        // Post를 작성한 사용자+관리자 ID 목록 생성
         for (PostInfo e : postInfoList) {
-            userIds.add( e.getUsrId() );
+            logger.debug(">>>>>>>>>>>>>>>>> e.getAdminYn(): " +e.getAdminYn() );
+            if( "Y".equals(e.getAdminYn()) ) {
+                logger.debug(">>>>>>>>>>>>>>>>> Admin: " + e.getAdminIdx() );
+                adminIdxs.add( e.getAdminIdx() );
+            } else {
+                userIds.add( e.getUsrId() );
+                logger.debug(">>>>>>>>>>>>>>>>> Usr: " + e.getUsrId() );
+            }
         }
 
         if( userIds.size() > 0 ) {
             // 추출한 ID로 유저 정보 SELECT
             userList = userDAO.getUserListForPostById( userIds );
-            userListMap = new HashMap();
 
             // 사용자 정보 Map 생성
             for( PostUserInfo user : userList ) {
 
                 if( user.getImageIdx() > -1 ) {
-                    user.setImgSrc( imageStoreService.getImageFullPathByIdx( user.getImageIdx(), ImageInfoUtil.SIZE_SUFFIX_SMALL ) );
+                    imgSrc = imageStoreService.getImageFullPathByIdx(
+                            user.getImageIdx(),
+                            ImageInfoUtil.SIZE_SUFFIX_SMALL );
+                    user.setImgSrc( imgSrc );
                 } else {
                     user.setImgSrc( null ); // 이미지 없는 경우, NULL 셋팅
                 }
                 userListMap.put( Integer.valueOf(user.getUsrId()), user );
             }
+        }
 
-            // 유저 정보 바인딩
-            for( PostInfo post : postInfoList ) {
-                PostUserInfo userInfo;
-                userInfo = userListMap.get( post.getUsrId() );
-                post.setUser( userInfo );
+        if (adminIdxs.size() > 0 ) {
+            adminList = userDAO.getAdminListForPostById( adminIdxs );
+
+            for( PostUserInfo adminInfo : adminList ) {
+
+                if( adminInfo.getImageIdx() > -1 ) {
+                    imgSrc = imageStoreService.getImageFullPathByIdx(
+                            adminInfo.getImageIdx(),
+                            ImageInfoUtil.SIZE_SUFFIX_SMALL );
+                    adminInfo.setImgSrc( imgSrc );
+                } else {
+                    adminInfo.setImgSrc( null ); // 이미지 없는 경우, NULL 셋팅
+                }
+                adminListMap.put( Integer.valueOf( adminInfo.getUsrId()), adminInfo );
             }
+        }
+
+        // 유저/관리자 정보 바인딩
+        for( PostInfo post : postInfoList ) {
+            PostUserInfo userInfo;
+
+            if( "Y".equals( post.getAdminYn() ) ) {
+                // 관리자 정보에서 가져오기
+                userInfo = adminListMap.get( post.getAdminIdx() );
+            } else {
+                // 사용자 정보에서 가져오기
+                userInfo = userListMap.get( post.getUsrId() );
+            }
+
+            post.setUser( userInfo );
         }
 
         // POST_IDX 추출

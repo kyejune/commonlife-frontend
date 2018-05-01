@@ -1,6 +1,8 @@
 package com.kolon.comlife.admin.post.web;
 
 import com.kolon.comlife.admin.manager.model.AdminInfo;
+import com.kolon.comlife.admin.post.exception.NotFoundException;
+import com.kolon.comlife.admin.post.exception.OperationFailedException;
 import com.kolon.comlife.admin.post.model.PostInfo;
 import com.kolon.comlife.admin.post.service.PostService;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
@@ -21,6 +23,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +37,7 @@ public class PostController {
 
     private static final String POST_TYPE_FEED  = "feed";
     private static final String POST_TYPE_EVENT = "event";
-    private static final String POST_TYPE_NEWS  = "news";   // <- NOTICE 임
+    private static final String POST_TYPE_NEWS  = "news";   // == NOTICE
 
     @Resource(name = "postService")
     private PostService postService;
@@ -87,68 +90,122 @@ public class PostController {
     }
 
     @GetMapping( value = "feedList.*" )
-    public ModelAndView getFeedList( HttpServletRequest request,
-                                     HttpServletResponse response,
-                                     ModelAndView mav,
-                                     HttpSession session,
+    public ModelAndView getFeedList( ModelAndView        mav,
                                      @RequestParam(required=false, defaultValue = "1") int pageNum ) {
 
         return this.getListInternal( mav, POST_TYPE_FEED, pageNum );
     }
 
     @GetMapping( value = "eventList.*" )
-    public ModelAndView getEventList( HttpServletRequest request,
-                                      HttpServletResponse response,
-                                      ModelAndView mav,
-                                      HttpSession session,
+    public ModelAndView getEventList( ModelAndView        mav,
                                       @RequestParam(required=false, defaultValue = "1") int pageNum ) {
 
         return this.getListInternal( mav, POST_TYPE_EVENT, pageNum );
     }
 
     @GetMapping( value = "noticeList.*" )
-    public ModelAndView getNoticeList( HttpServletRequest request,
-                                      HttpServletResponse response,
-                                      ModelAndView mav,
-                                      HttpSession session,
+    public ModelAndView getNoticeList( ModelAndView        mav,
                                       @RequestParam(required=false, defaultValue = "1") int pageNum ) {
 
         return this.getListInternal( mav, POST_TYPE_NEWS, pageNum );
     }
 
 
+    /**
+     * Event, Notice 공통 생성 화면 (Internal)
+     */
+    private ModelAndView newPostInternal( ModelAndView mav, String postType ) {
+        AdminInfo     adminInfo;
+        PostInfo      postInfo;
+
+        mav.setViewName("/admin/posts/feedEdit");
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        mav.addObject("postType", postType );
+
+        return mav;
+    }
+
+    /**
+     * Event 생성 화면
+     */
+    @GetMapping( value = "newEvent.*" )
+    public ModelAndView newEvent( HttpServletRequest  request,
+                                   HttpServletResponse response,
+                                   ModelAndView        mav,
+                                   HttpSession         session) {
+        return newPostInternal( mav, POST_TYPE_EVENT );
+    }
+
+    /**
+     * Notice 생성 화면
+     */
+    @GetMapping( value = "newNotice.*" )
+    public ModelAndView newNotice( HttpServletRequest  request,
+                                   HttpServletResponse response,
+                                   ModelAndView        mav,
+                                   HttpSession         session) {
+        return newPostInternal( mav, POST_TYPE_NEWS );
+    }
+
+
+    /**
+     * Event, Notice 공통 편집 화면
+     */
     @GetMapping( value = "feedEdit.*" )
-    public ModelAndView editPost( HttpServletRequest request,
-                                       HttpServletResponse response,
-                                       ModelAndView mav,
-                                       HttpSession session,
-                                       @RequestParam(required=false, defaultValue = "1") int pageNum,
-                                       @RequestParam(required=false, defaultValue = "1") int postIdx ) {
+    public ModelAndView editPost( HttpServletRequest  request,
+                                  HttpServletResponse response,
+                                  ModelAndView        mav,
+                                  HttpSession         session,
+                                  @RequestParam( name = "postIdx", required=false, defaultValue = "-1") int postIdx ) {
+        AdminInfo     adminInfo;
+        PostInfo      postInfo;
 
+        mav.setViewName("/admin/posts/feedEdit");
 
+        logger.debug(">>> postIdx: " + postIdx );
+        if( postIdx < 0 ) {
+            mav.addObject("error", "해당 피드 정보를 가져올 수 없습니다." );
+            return mav;
+        }
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        try {
+            postInfo = postService.getPostById( postIdx, -1 );
+        } catch( Exception e ) {
+
+        }
 
         mav.addObject("postType", POST_TYPE_EVENT );
-        mav.setViewName("/admin/posts/feedEdit");
 
         return mav;
     }
 
 
+    ////// AJAX CALL //////
+
+    private String setString( String value, String defaultValue ) {
+        return value == value ? defaultValue : value;
+    }
+
+    /**
+     * 새로운 게시물 작성 (ajax)
+     *  - Event, Notice 가능, 사용자 Feed 불가능
+     */
     @PostMapping(
-            value = "/",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            value = "/proc.*",
+            produces = MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity setPost( HttpServletRequest request,
-                                   @RequestBody Map   args ) throws Exception {
+                                   @RequestBody Map   params ) throws Exception {
         AdminInfo adminInfo;
         PostInfo           newPost = new PostInfo();
         PostInfo           retPost;
 
-        List<Integer>      postFilesIdList;
-        int                usrId;
+        List<Integer>      postFilesIdList = new ArrayList<>();
+        int                adminIdx;
         int                cmplxId;
         String             postType;
-
-        postType = (String) args.get( "postType" );
 
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
         logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
@@ -156,7 +213,7 @@ public class PostController {
         logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
 
         try {
-            usrId = adminInfo.getAdminIdx();
+            adminIdx = adminInfo.getAdminIdx();
             if( request.getParameter( "cmplxId" ) != null ) {
                 cmplxId = StringUtil.parseInt( request.getParameter( "cmplxId" ), adminInfo.getCmplxId() );
             } else {
@@ -168,12 +225,38 @@ public class PostController {
                     .body(new SimpleErrorInfo("잘못된 cmplxId 값이 입력되었습니다. "));
         }
 
-        newPost.setUsrId( usrId );
-        newPost.setCmplxId( cmplxId );
-        newPost.setPostType( (String) args.get( "postType" ) );
-        newPost.setContent( (String) args.get( "content" ) );
 
-        postFilesIdList = (List)args.get( "postFiles" );
+        for( Object key : params.keySet() ) {
+            logger.debug("key/value>>>> " + key + "/" + params.get(key));
+        }
+
+        newPost.setCmplxId( cmplxId );
+        newPost.setAdminIdx( adminIdx );
+
+        newPost.setPostType( (String) params.get("postType") );
+        newPost.setContent( (String) params.get("content") );
+
+        // 이벤트 기간
+        newPost.setEventBeginDttm( (String) params.get("eventBeginDttm") );
+        newPost.setEventEndDttm( (String) params.get("eventEndDttm") );
+        newPost.setEventPlaceNm( (String) params.get("eventPlaceNm") );
+
+        // 문의 관련
+        if( params.get("inquiryYn") != null && params.get("inquiryYn").equals("Y") ) {
+            newPost.setInquiryInfo( (String) params.get("inquiryInfo") );
+            newPost.setInquiryType( (String) params.get("inquiryType") );
+        }
+        newPost.setInquiryYn( (String) params.get("inquiryYn") );
+
+        // 참여신청 관련
+        if( params.get("rsvYn") != null && params.get("rsvYn").equals("Y") ) {
+            newPost.setRsvMaxCnt( Integer.valueOf((String)params.get("rsvMaxCnt")) );
+        }
+        newPost.setRsvYn( (String) params.get("rsvYn") );
+
+        // 외부공유 기능 설정
+        newPost.setShareYn( (String) params.get("shareYn") );
+//        postFilesIdList = (List)args.get( "postFiles" );
 
         try {
             retPost = postService.setPostWithImage( newPost, postFilesIdList, adminInfo.getAdminIdx() );
@@ -187,12 +270,15 @@ public class PostController {
         return ResponseEntity.status( HttpStatus.OK ).body( retPost );
     }
 
-    ////// AJAX CALL //////
+    /**
+     * 게시물 상세 정보 가져오기 (ajax)
+     *  - Event, Notice, 사용자 Feed 가능
+     */
     @GetMapping(
-            value = "/{id}",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getPostInJson( HttpServletRequest      request,
-                                         @PathVariable("id") int id ) {
+            value = "/{postIdx}",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity getPostInJson( HttpServletRequest           request,
+                                         @PathVariable("postIdx") int postIdx ) {
         AdminInfo adminInfo;
         PostInfo result;
 
@@ -202,30 +288,36 @@ public class PostController {
         logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
 
         try {
-            result = postService.getPostById( id, adminInfo.getAdminIdx() );
-        } catch( Exception e ) {
+            result = postService.getPostById( postIdx, adminInfo.getAdminIdx() );
+        } catch( NotFoundException e ) {
             logger.error(e.getMessage());
             return ResponseEntity
-                    .status( HttpStatus.BAD_REQUEST)
-                    .body( new SimpleErrorInfo(e.getMessage()) );
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( new SimpleErrorInfo( e.getMessage()) );
         }
 
         if( result == null ) {
             return ResponseEntity
                     .status( HttpStatus.NOT_FOUND )
-                    .body( new SimpleErrorInfo("해당 게시물을 열람할 수 없습니다. ") );
+                    .body( new SimpleErrorInfo("해당 게시물이 존재하지 않습니다." ) );
         }
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 
+
+    /**
+     * 게시물 내용 변경하기 (ajax)
+     *  - Event, Notice 가능, 사용자 Feed 불가능
+     */
     @PutMapping(
-            value = "/{id}"
-    )
+            value = "/{postIdx}",
+            produces = MediaType.APPLICATION_JSON_VALUE )
     public ResponseEntity updatePost( HttpServletRequest      request,
-                                      @PathVariable("id") int id,
+                                      @PathVariable("postIdx") int postIdx,
                                       @RequestBody PostInfo   post ) {
         AdminInfo adminInfo;
+        PostInfo  postInfo;
 
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
         logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
@@ -233,33 +325,72 @@ public class PostController {
         logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
 
         post.setUsrId( adminInfo.getAdminIdx() );
-        post.setPostIdx( id );
+        post.setPostIdx( postIdx );
 
-        PostInfo result = postService.updatePost( post );
-        if( result == null ) {
+        try {
+            postInfo = postService.updatePost( post );
+        } catch ( OperationFailedException e ) {
+            return ResponseEntity
+                    .status( HttpStatus.CONFLICT )
+                    .body( new SimpleErrorInfo( e.getMessage() ) );
+        }
+
+        if( postInfo == null ) {
             return ResponseEntity.
                     status( HttpStatus.BAD_REQUEST ).
                     body(new SimpleErrorInfo("해당 내용을 수정할 수 없습니다.") );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( result );
+        return ResponseEntity.status( HttpStatus.OK ).body( postInfo );
     }
 
-    @DeleteMapping(
-            value = "/{id}"
-    )
-    public ResponseEntity deletePost( HttpServletRequest      request,
-                                      @PathVariable("id") int id ) {
+
+    /**
+     * 게시물 공개 하기 (ajax) - 사용자 앱의 목록에서 표시하지 않습니다.
+     *  - Event, Notice, 사용자 Feed 가능
+     */
+    @PutMapping(
+            value = "/{postIdx}/public",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity makePostPublic( HttpServletRequest      request,
+                                          @PathVariable("postIdx") int postIdx ) {
         AdminInfo adminInfo;
-        PostInfo  deletedPostInfo;
+        PostInfo  postInfo;
 
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
         logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
         logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
         logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
 
-        deletedPostInfo = postService.deletePost( id, adminInfo.getCmplxId(), adminInfo.getAdminIdx() );
-        if( deletedPostInfo == null ) {
+        postInfo = postService.makePostPublic( postIdx, adminInfo.getCmplxId(), adminInfo.getAdminIdx() );
+        if( postInfo == null ) {
+            return ResponseEntity.
+                    status( HttpStatus.BAD_REQUEST ).
+                    body(new SimpleErrorInfo("해당 게시물을 공개로 변경할 수 없습니다.") );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("해당 게시물을 공개 상태로 변경하였습니다.") );
+    }
+
+    /**
+     * 게시물 비공개 하기 (ajax) - 사용자 앱의 목록에서 표시하지 않습니다.
+     *  - Event, Notice, 사용자 Feed 가능
+     */
+    @PutMapping(
+            value = "/{postIdx}/private",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity makePostPrivate( HttpServletRequest      request,
+                                           @PathVariable("postIdx") int postIdx ) {
+        AdminInfo adminInfo;
+        PostInfo  postInfo;
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+
+        postInfo = postService.makePostPrivate( postIdx, adminInfo.getCmplxId(), adminInfo.getAdminIdx() );
+        if( postInfo == null ) {
             return ResponseEntity.
                     status( HttpStatus.BAD_REQUEST ).
                     body(new SimpleErrorInfo("해당 게시물을 비공개 처리할 수 없습니다.") );

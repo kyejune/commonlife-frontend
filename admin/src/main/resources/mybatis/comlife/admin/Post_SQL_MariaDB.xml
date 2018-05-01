@@ -30,6 +30,8 @@
             SELECT
             `POST_LIKE`.`POST_IDX`,
             `POST_LIKE`.`USR_ID`,
+            `POST_LIKE`.`ADMIN_IDX`,
+            `POST_LIKE`.`ADMIN_YN`,
             `POST_LIKE`.`CMPLX_ID`,
             `POST_LIKE`.`POST_TYPE`,
             `POST_LIKE`.`CONTENT`,
@@ -58,6 +60,8 @@
                 SELECT
                     `POST`.`POST_IDX`,
                     `POST`.`USR_ID`,
+                    `POST`.`ADMIN_IDX`,
+                    `POST`.`ADMIN_YN`,
                     `POST`.`CMPLX_ID`,
                     `POST`.`POST_TYPE`,
                     `POST`.`CONTENT`,
@@ -144,15 +148,24 @@
     ]]>
     </select>
 
-    <insert id="insertPost" parameterType="postInfo">
+    <insert id="insertPostByAdmin" parameterType="postInfo">
     <![CDATA[
         INSERT
         INTO    `POST`
         (
             `POST_TYPE`,
             `CONTENT`,
-            `USR_ID`,
+            `ADMIN_IDX`,
+            `ADMIN_YN`,
             `CMPLX_ID`,
+            `EVENT_BEGIN_DTTM`,
+            `EVENT_END_DTTM`,
+            `EVENT_PLACE_NM`,
+            `INQUIRY_YN`,
+            `INQUIRY_TYPE`,
+            `INQUIRY_INFO`,
+            `RSV_YN`,
+            `SHARE_YN`,
             `REG_DTTM`,
             `UPD_DTTM`
         )
@@ -160,8 +173,17 @@
         (
             #{postType},
             #{content},
-            #{usrId},
+            #{adminIdx},
+            'Y',
             #{cmplxId},
+            #{eventBeginDttm},
+            #{eventEndDttm},
+            #{eventPlaceNm},
+            #{inquiryYn},
+            #{inquiryType},
+            #{inquiryInfo},
+            #{rsvYn},
+            #{shareYn},
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP
         )
@@ -181,13 +203,12 @@
     ]]>
     </update>
 
-    <update id="deletePost" parameterType="postInfo">
+    <update id="updatePostDelYn" parameterType="java.util.Map">
     <![CDATA[
         UPDATE  `POST`
-        SET     `DEL_YN`   = 'Y',
+        SET     `DEL_YN`   = #{delYn},
                 `UPD_DTTM` = CURRENT_TIMESTAMP
         WHERE
-                `DEL_YN`   = 'N'  AND
                 `POST_IDX` = #{postIdx} AND
                 `CMPLX_ID` = #{cmplxId}
     ]]>
