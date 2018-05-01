@@ -90,6 +90,7 @@
         /* 사용자 목록 조회 */
         SELECT
             USR_INFO.USR_ID             AS USR_ID,
+            USR_INFO.USER_ID            AS USER_ID,
             USER_NM                     AS USER_NM,
             IFNULL((
                 SELECT

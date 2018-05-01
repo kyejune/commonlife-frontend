@@ -90,7 +90,7 @@
                                                 </td>
                                                 <td>
                                                     <c:choose>
-                                                        <c:when test="${userType eq 'user'}">${vo.userNm}</c:when>
+                                                        <c:when test="${userType eq 'user'}">${vo.userNm} (${vo.userId})</c:when>
                                                         <c:otherwise>${vo.headNm}</c:otherwise>
                                                     </c:choose>
                                                 </td>
