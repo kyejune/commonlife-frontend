@@ -21,6 +21,11 @@ public class UserDAO {
         return sqlSession.selectList( "User.selectUserListForPostById", ids );
     }
 
+    public List<PostUserInfo> getAdminListForPostById(List<Integer> adminIds ) {
+        return sqlSession.selectList( "User.selectAdminListForPostById", adminIds );
+    }
+
+
     public List<UserInfo> getUserListById(List<Integer> ids) {
         return sqlSession.selectList( "User.selectUserListById", ids );
     }

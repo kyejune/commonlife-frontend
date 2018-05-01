@@ -160,7 +160,6 @@ public class PostServiceImpl implements PostService {
 
         if( userIds.size() > 0 ) {
             // 추출한 ID로 유저 정보 SELECT
-            userListMap = new HashMap();
             userList = userDAO.getUserListForPostById( userIds );
 
             // 사용자 정보 Map 생성
