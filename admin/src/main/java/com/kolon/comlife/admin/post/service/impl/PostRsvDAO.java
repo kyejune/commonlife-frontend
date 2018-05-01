@@ -16,6 +16,13 @@ public class PostRsvDAO {
     @Resource
     private SqlSession sqlSession;
 
+    public int upsertPostRsv( int postIdx, int rsvMaxCnt ) {
+        Map<String, Integer> params = new HashMap<>();
+        params.put("postIdx", postIdx);
+        params.put("rsvMaxCnt", rsvMaxCnt);
+        return  sqlSession.insert( "PostRsv.insertRsv", params );
+    }
+
     public PostRsvInfo selectRsvInfo(int parentIdx ) {
         Map<String, Integer> params = new HashMap<String, Integer>();
         params.put( "parentIdx", parentIdx );

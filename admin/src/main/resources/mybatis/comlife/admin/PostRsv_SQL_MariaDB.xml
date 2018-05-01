@@ -2,6 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="PostRsv">
+
+    <insert id="insertRsv" parameterType="java.util.Map" >
+        INSERT INTO POST_RSV
+        (
+            PARENT_IDX,
+            RSV_MAX_CNT,
+            REG_DTTM,
+            UPD_DTTM
+        )
+        VALUES
+        (
+            #{postIdx},
+            #{rsvMaxCnt},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+        ON DUPLICATE KEY
+	    UPDATE
+	      RSV_MAX_CNT = #{rsvMaxCnt},
+	      UPD_DTTM=CURRENT_TIMESTAMP;
+    </insert>
+
     <select id="selectRsvList" parameterType="java.util.Map" resultType="PostRsvInfo">
         <![CDATA[
         SELECT
@@ -106,8 +128,6 @@
             `USR_ID` = #{usrId}
         ]]>
     </select>
-
-
 
     <select id="selectRsvAvailableWithLock" parameterType="java.util.Map" resultType="int">
         <![CDATA[

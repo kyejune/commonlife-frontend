@@ -18,12 +18,12 @@ public interface PostService {
 
     List<PostInfo> getPostListByComplexId(Map params);
 
-    PostInfo setPost(PostInfo example);
-
-    PostInfo setPostWithImage(PostInfo newPost, List<Integer> fileInfo, int usrId);
+    PostInfo setPostWithImage(PostInfo newPost, List<Integer> fileInfo, int adminIdx);
 
     PostInfo updatePost(PostInfo example) throws OperationFailedException;
 
-    PostInfo deletePost(int id, int cmplxId, int adminIdx);
+    PostInfo makePostPrivate(int id, int cmplxId, int adminIdx);
+
+    PostInfo makePostPublic(int id, int cmplxId, int adminIdx);
 
 }

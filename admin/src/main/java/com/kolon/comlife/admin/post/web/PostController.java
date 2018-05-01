@@ -203,7 +203,7 @@ public class PostController {
         PostInfo           retPost;
 
         List<Integer>      postFilesIdList = new ArrayList<>();
-        int                usrId;
+        int                adminIdx;
         int                cmplxId;
         String             postType;
 
@@ -213,7 +213,7 @@ public class PostController {
         logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
 
         try {
-            usrId = adminInfo.getAdminIdx();
+            adminIdx = adminInfo.getAdminIdx();
             if( request.getParameter( "cmplxId" ) != null ) {
                 cmplxId = StringUtil.parseInt( request.getParameter( "cmplxId" ), adminInfo.getCmplxId() );
             } else {
@@ -231,7 +231,7 @@ public class PostController {
         }
 
         newPost.setCmplxId( cmplxId );
-        newPost.setUsrId( usrId );
+        newPost.setAdminIdx( adminIdx );
 
         newPost.setPostType( (String) params.get("postType") );
         newPost.setContent( (String) params.get("content") );
@@ -239,7 +239,7 @@ public class PostController {
         // 이벤트 기간
         newPost.setEventBeginDttm( (String) params.get("eventBeginDttm") );
         newPost.setEventEndDttm( (String) params.get("eventEndDttm") );
-        newPost.setEventPlaceNm( (String) params.get("eventPlaceName") );
+        newPost.setEventPlaceNm( (String) params.get("eventPlaceNm") );
 
         // 문의 관련
         if( params.get("inquiryYn") != null && params.get("inquiryYn").equals("Y") ) {
@@ -252,7 +252,7 @@ public class PostController {
         if( params.get("rsvYn") != null && params.get("rsvYn").equals("Y") ) {
             newPost.setRsvMaxCnt( Integer.valueOf((String)params.get("rsvMaxCnt")) );
         }
-        newPost.setInquiryYn( (String) params.get("rsvYn") );
+        newPost.setRsvYn( (String) params.get("rsvYn") );
 
         // 외부공유 기능 설정
         newPost.setShareYn( (String) params.get("shareYn") );
@@ -346,14 +346,14 @@ public class PostController {
 
 
     /**
-     * 게시물 비활성화 하기 (ajax) - 사용자 앱의 목록에서 표시하지 않습니다.
+     * 게시물 공개 하기 (ajax) - 사용자 앱의 목록에서 표시하지 않습니다.
      *  - Event, Notice, 사용자 Feed 가능
      */
-    @DeleteMapping(
-            value = "/{postIdx}",
+    @PutMapping(
+            value = "/{postIdx}/public",
             produces = MediaType.APPLICATION_JSON_VALUE )
-    public ResponseEntity deletePost( HttpServletRequest      request,
-                                      @PathVariable("postIdx") int postIdx ) {
+    public ResponseEntity makePostPublic( HttpServletRequest      request,
+                                          @PathVariable("postIdx") int postIdx ) {
         AdminInfo adminInfo;
         PostInfo  postInfo;
 
@@ -362,7 +362,34 @@ public class PostController {
         logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
         logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
 
-        postInfo = postService.deletePost( postIdx, adminInfo.getCmplxId(), adminInfo.getAdminIdx() );
+        postInfo = postService.makePostPublic( postIdx, adminInfo.getCmplxId(), adminInfo.getAdminIdx() );
+        if( postInfo == null ) {
+            return ResponseEntity.
+                    status( HttpStatus.BAD_REQUEST ).
+                    body(new SimpleErrorInfo("해당 게시물을 공개로 변경할 수 없습니다.") );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("해당 게시물을 공개 상태로 변경하였습니다.") );
+    }
+
+    /**
+     * 게시물 비공개 하기 (ajax) - 사용자 앱의 목록에서 표시하지 않습니다.
+     *  - Event, Notice, 사용자 Feed 가능
+     */
+    @PutMapping(
+            value = "/{postIdx}/private",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity makePostPrivate( HttpServletRequest      request,
+                                           @PathVariable("postIdx") int postIdx ) {
+        AdminInfo adminInfo;
+        PostInfo  postInfo;
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+
+        postInfo = postService.makePostPrivate( postIdx, adminInfo.getCmplxId(), adminInfo.getAdminIdx() );
         if( postInfo == null ) {
             return ResponseEntity.
                     status( HttpStatus.BAD_REQUEST ).

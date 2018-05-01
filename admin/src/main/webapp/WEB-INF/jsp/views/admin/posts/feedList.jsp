@@ -59,6 +59,7 @@
                                     <button class="btn btn-primary"
                                             onclick="newPost()">
                                         게시물 생성
+
                                     </button>
                                 </div>
                             </div>
@@ -93,7 +94,10 @@
                                                     ${vo.postIdx}
                                                 </td>
                                                 <td>
-                                                    ${vo.user.userNm} / ${vo.user.usrId}
+                                                    <c:if test="${vo.adminYn eq 'Y'}">
+                                                        <i class="fa fa-star text-warning"></i>
+                                                    </c:if>
+                                                    ${vo.user.userNm}
                                                 </td>
                                                 <td>
                                                     <c:choose>
@@ -242,10 +246,15 @@
                                             </div>
                                     </c:if>
                                     <%--<c:if test="${postType eq 'feed'}">--%>
-                                    <div class="col-lg-6 btn-sm"  id="deleteButton">
+                                    <div class="col-lg-6 btn-sm"  id="postPrivateButton">
                                         <button type="button"
                                                 class="btn-xs btn btn-w-m btn-danger btn-outline"
                                                 onclick="">비공개</button>
+                                    </div>
+                                    <div class="col-lg-6 btn-sm"  id="postPublicButton">
+                                        <button type="button"
+                                                class="btn-xs btn btn-w-m btn-danger btn-outline"
+                                                onclick="">공개</button>
                                     </div>
                                     <%--</c:if>--%>
                                 </div>
@@ -318,10 +327,13 @@
                     $("#likesCount").text( rs['likesCount'] );
 
                     if( rs['delYn'] == "Y" ) {
-                        $("#deleteButton").hide();
+                        $("#postPrivateButton").hide();
+                        $("#postPublicButton").show();
+                        $("#postPublicButton").attr( "onclick", "makePostPublic(" + rs['postIdx'] + ")" );
                     } else {
-                        $("#deleteButton").show();
-                        $("#deleteButton").attr( "onclick", "deletePost(" + rs['postIdx'] + ")" );
+                        $("#postPrivateButton").show();
+                        $("#postPublicButton").hide();
+                        $("#postPrivateButton").attr( "onclick", "makePostPrivate(" + rs['postIdx'] + ")" );
                     }
 
                     if( rs['rsvYn'] == "Y" ) {
@@ -337,6 +349,8 @@
                     if( rs['postFiles'].length > 0 ) {
                         $("#postFile").attr("src", rs['postFiles'][0]["mediumPath"] );
                         $("#postFile").show();
+                    } else {
+                        $("#postFile").hide();
                     }
 
                     $("#showPost").show();
@@ -363,11 +377,11 @@
             </c:choose>
         }
 
-        function deletePost( postIdx ) {
+        function makePostPrivate( postIdx ) {
             var url;
             var ret;
 
-            url  = '/admin/posts/' + postIdx + "?${_csrf.parameterName}=${_csrf.token}";
+            url  = '/admin/posts/' + postIdx + "/private" + "?${_csrf.parameterName}=${_csrf.token}";
             console.log( postIdx );
             console.log( url);
 
@@ -377,7 +391,36 @@
                 if( ret ) {
                     $.ajax({
                         url : url,
-                        type : 'delete',
+                        type : 'put',
+                        success: function (data, textStatus, xhr) {
+                            console.log(data);
+                            alert(data['msg']);
+                            refreshList();
+                        },
+                        error : function(data, textStatus, xhr){
+                            console.log(data);
+                            alert(data['msg']);
+                        }
+                    });
+                }
+            }
+        }
+
+        function makePostPublic( postIdx ) {
+            var url;
+            var ret;
+
+            url  = '/admin/posts/' + postIdx +  "/public" + "?${_csrf.parameterName}=${_csrf.token}";
+            console.log( postIdx );
+            console.log( url);
+
+            ret = confirm("주의: 해당 게시물을 공개로 변경하시겠습니까? 공개된 게시물은 사용자에게 바로 노출 됩니다.");
+            if( ret ) {
+                ret = confirm("재확인 : 게시물을 공개 상태로 변경하시겠습니까?");
+                if( ret ) {
+                    $.ajax({
+                        url : url,
+                        type : 'put',
                         success: function (data, textStatus, xhr) {
                             console.log(data);
                             alert(data['msg']);

@@ -2,6 +2,7 @@ package com.kolon.comlife.admin.manager.service.impl;
 
 import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.manager.model.ManagerInfo;
+import com.kolon.comlife.admin.users.model.PostUserInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
@@ -35,6 +36,12 @@ public class ManagerDAO {
         return sqlSession.selectList("Manager.selectManagerList", managerInfo);
     }
 
+
+    public List<PostUserInfo> getAdminListForPostById(List<Integer> adminIds ) {
+        return sqlSession.selectList( "Manager.selectAdminListForPostById", adminIds );
+    }
+
+
     /**
      * 관리자 상세 조회
      * @param managerInfo
@@ -43,7 +50,6 @@ public class ManagerDAO {
     public AdminInfo selectManagerDetail(AdminInfo managerInfo) {
         return sqlSession.selectOne("Manager.selectManagerDetail", managerInfo);
     }
-
 
     /**
      * 관리자 등록

@@ -73,7 +73,7 @@
                                     <div class="input-group">
                                         <input type="text"
                                                class="form-control datepicker"
-                                               name="eventBeginDttm"
+                                               name="eventEndDttm"
                                                data-format="YYYY-MM-DD HH:mm"
                                                value="">
                                         <span class="input-group-addon"> 까지</span>
