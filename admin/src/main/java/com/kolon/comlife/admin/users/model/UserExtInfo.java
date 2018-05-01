@@ -7,6 +7,7 @@ public class UserExtInfo extends UserInfo {
     private String userAlias;
 
     private String cmplxNm; //
+    private String headNm;
 
     // UserInfo
 
@@ -72,6 +73,16 @@ public class UserExtInfo extends UserInfo {
     public void setUserAlias(String userAlias) {
         this.userAlias = userAlias;
     }
+
+    public String getHeadNm() {
+        return headNm;
+    }
+
+    public void setHeadNm(String headNm) {
+        this.headNm = headNm;
+    }
+
+
 
     // Getter & Setter of UserInfo
 

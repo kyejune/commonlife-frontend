@@ -70,16 +70,16 @@
                     <%--<li id="left_properties_all"><a href="/admin/properties/list.do">Properties 관리</a></li>--%>
                 <%--</ul>--%>
             <%--</li>--%>
-            <%--<li >--%>
-                <%--<a href="#">--%>
-                    <%--<i class="fa fa-table"></i>--%>
-                    <%--<span class="nav-label">슈퍼| 세대주/사용자 관리</span><span class="fa arrow"></span>--%>
-                <%--</a>--%>
-                <%--<ul class="nav nav-second-level collapse">--%>
-                    <%--<li><a href="/admin/managers/list.do">세대주 목록</a></li>--%>
-                    <%--<li><a href="/admin/managers/list.do">사용자 목록</a></li>--%>
-                <%--</ul>--%>
-            <%--</li>--%>
+            <li id="left_user">
+                <a href="#">
+                    <i class="fa fa-table"></i>
+                    <span class="nav-label">현장| 사용자 정보 관리</span><span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li id="left_user_head"><a href="/admin/users/headList.do">세대주 목록</a></li>
+                    <li id="left_user_user"><a href="/admin/users/userList.do">사용자 목록</a></li>
+                </ul>
+            </li>
             <li >
                 <a href="#">
                     <i class="fa fa-table"></i>

@@ -39,6 +39,23 @@ public class UserDAO {
 
 
     ////////////////// BACKEND SHARED //////////////////
+    public List<UserExtInfo> getUserListByComplexId(Map params) {
+        return sqlSession.selectList( "User.selectUserListByCmplxId", params );
+    }
+
+    public int countUserList(Map params) {
+        return sqlSession.selectOne( "User.countUserList", params );
+    }
+
+    public List<UserExtInfo> getHeadListByComplexId(Map params) {
+        return sqlSession.selectList( "User.selectHeadListByCmplxId", params );
+    }
+
+    public int countHeadList(Map params) {
+        return sqlSession.selectOne( "User.countHeadList", params );
+    }
+
+
     public List<PostUserInfo> getUserListForPostById(List<Integer> ids) {
         return sqlSession.selectList( "User.selectUserListForPostById", ids );
     }

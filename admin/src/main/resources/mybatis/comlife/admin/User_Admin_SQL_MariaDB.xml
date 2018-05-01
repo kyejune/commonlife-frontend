@@ -86,5 +86,109 @@
         ;
     </select>
 
+    <select id="selectUserListByCmplxId" parameterType="java.util.Map" resultType="UserExtInfo">
+        /* 사용자 목록 조회 */
+        SELECT
+            USR_INFO.USR_ID             AS USR_ID,
+            USER_NM                     AS USER_NM,
+            IFNULL((
+                SELECT
+                IMAGE_IDX
+                FROM
+                CL_IMAGE_INFO JOIN
+                CL_IMAGE_TYPE
+                ON CL_IMAGE_INFO.PARENT_TYPE = CL_IMAGE_TYPE.TYPE_IDX AND CL_IMAGE_TYPE.TYPE_NM = 'profile'
+                WHERE
+                CL_IMAGE_INFO.DEL_YN = 'N' AND
+                CL_IMAGE_INFO.PARENT_IDX = USR_INFO.USR_ID
+                ORDER BY IMAGE_IDX DESC
+                LIMIT 1
+            ), -1)                      AS IMAGE_IDX,
+            IFNULL(USER_ALIAS, USER_NM) AS USER_ALIAS,
+            CL_CMPLX_NM                 AS CMPLX_NM,
+            DONG                        AS DONG,
+            HO                          AS HO,
+            USR_INFO.REG_DT             AS REG_DT,
+            USR_INFO.EMAIL              AS EMAIL,
+            USR_INFO.HEAD_ID            AS HEAD_ID,
+            HOME_HEAD_M.HEAD_NM         AS HEAD_NM
+        FROM
+            USR_INFO
+              LEFT JOIN
+            USR_INFO_EXT
+                ON USR_INFO.USR_ID = USR_INFO_EXT.USR_ID
+              JOIN
+            HOME_HEAD_M
+                ON HOME_HEAD_M.HEAD_ID = USR_INFO.HEAD_ID
+              JOIN
+            COMPLEX_M
+                ON USR_INFO.CMPLX_ID = COMPLEX_M.CMPLX_ID
+              LEFT JOIN
+            COMPLEX_M_EXT
+                ON COMPLEX_M.CMPLX_ID = COMPLEX_M_EXT.CMPLX_ID
+        WHERE
+            USR_INFO.CMPLX_ID = #{cmplxId}
+        <if test="limit != null">
+            LIMIT
+            #{limit}
+            <if test="offset != null">
+                OFFSET
+                #{offset}
+            </if>
+        </if>
+    </select>
+
+    <select id="countUserList" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            USR_INFO
+        WHERE
+            USR_INFO.CMPLX_ID = #{cmplxId}
+    </select>
+
+
+    <select id="selectHeadListByCmplxId" parameterType="java.util.Map" resultType="UserExtInfo">
+        /* 세대주 목록 조회 */
+        SELECT
+            CL_CMPLX_NM                 AS CMPLX_NM,
+            DONG                        AS DONG,
+            HO                          AS HO,
+            HOME_HEAD_M.REG_DT             AS REG_DT,
+            HOME_HEAD_M.EMAIL              AS EMAIL,
+            HOME_HEAD_M.HEAD_ID            AS HEAD_ID,
+            HOME_HEAD_M.HEAD_NM         AS HEAD_NM
+        FROM
+            HOME_HEAD_M
+              JOIN
+            HOME_M
+                ON HOME_HEAD_M.HOME_ID = HOME_M.HOME_ID AND HOME_HEAD_M.CMPLX_ID = HOME_M.CMPLX_ID
+              JOIN
+            COMPLEX_M
+                ON HOME_HEAD_M.CMPLX_ID = COMPLEX_M.CMPLX_ID
+              LEFT JOIN
+            COMPLEX_M_EXT
+                ON COMPLEX_M.CMPLX_ID = COMPLEX_M_EXT.CMPLX_ID
+        WHERE
+            HOME_HEAD_M.CMPLX_ID = #{cmplxId}
+            <if test="limit != null">
+                LIMIT
+                #{limit}
+                <if test="offset != null">
+                    OFFSET
+                    #{offset}
+                </if>
+            </if>
+    </select>
+
+    <select id="countHeadList" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+          COUNT(*)
+        FROM
+          HOME_HEAD_M
+        WHERE
+          HOME_HEAD_M.CMPLX_ID = #{cmplxId}
+    </select>
+
 
 </mapper>

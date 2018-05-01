@@ -4,8 +4,10 @@ import com.kolon.comlife.admin.users.exception.UserGeneralException;
 import com.kolon.comlife.admin.users.model.PostUserInfo;
 import com.kolon.comlife.admin.users.model.UserExtInfo;
 import com.kolon.comlife.admin.users.model.UserInfo;
+import com.kolon.comlife.common.paginate.PaginateInfo;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
 
@@ -15,6 +17,11 @@ public interface UserService {
     UserExtInfo getUserExtInfoById(int usrId );
 
     ////////////////// BACKEND SHARED //////////////////
+
+    PaginateInfo getUserListByComplexId(Map params) throws UserGeneralException;
+
+    PaginateInfo getHeadListByComplexId(Map params) throws UserGeneralException;
+
     List<PostUserInfo> getUserListForPostById(List<Integer> ids);
 
     List<UserInfo> getUserListById(List<Integer> ids );
