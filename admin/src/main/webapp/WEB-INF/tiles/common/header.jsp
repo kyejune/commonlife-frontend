@@ -5,28 +5,11 @@
         <ul class="nav metismenu" id="side-menu">
             <li class="nav-header">
 
-                <div class="visible-md">
+                <div class="dropdown profile-element">
                     <img class="nav-header__logo" src="/resources/img/logo_default.png" alt="">
 
                     <p class="nav-header__welcome"><strong class="font-bold">관리자님 안녕하세요.</strong></p>
                 </div>
-
-
-                <%--<div class="dropdown profile-element">--%>
-                    <%--<a data-toggle="dropdown" class="dropdown-toggle" href="#">--%>
-                        <%--<span class="clear">--%>
-                            <%--<span class="block m-t-xs">--%>
-                                <%--<strong class="font-bold">{ADMIN NAME}</strong>--%>
-                            <%--</span>--%>
-                            <%--<span class="text-muted text-xs block">--%>
-                                <%--{ADMIN GROUP} <b class="caret"></b>--%>
-                            <%--</span>--%>
-                        <%--</span>--%>
-                    <%--</a>--%>
-                    <%--<ul class="dropdown-menu animated fadeInRight m-t-xs">--%>
-                        <%--<li><a href="#">Logout</a></li>--%>
-                    <%--</ul>--%>
-                <%--</div>--%>
                 <div class="logo-element">
                     <img src="/resources/img/logo_small.png" alt="">
                 </div>
