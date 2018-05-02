@@ -34,11 +34,23 @@
                             </div>
                         </div>
                         <div class="ibox-content" style="">
-                            <table class="table">
+                            <div class="form-group">
+                                <div class="btn-group">
+                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">지점선택 <span class="caret"></span></button>
+                                    <ul class="dropdown-menu">
+                                        <c:forEach var="complex" items="${complexes}">
+                                        <li><a href="/admin/reservations/list.do?complexIdx=${complex.cmplxId}">${complex.cmplxNm}</a></li>
+                                        </c:forEach>
+                                    </ul>
+                                </div>
+                            </div>
+                            <table class="table" id="reservation-list">
                                 <thead>
                                 <tr>
-                                    <th class="text-center">Index</th>
+                                    <th class="text-center">ID</th>
+                                    <th class="text-center">신청회원</th>
                                     <th class="text-center">예약명</th>
+                                    <th class="text-center">예약 지점</th>
                                     <th class="text-center">시작일</th>
                                     <th class="text-center">시작시각</th>
                                     <th class="text-center">종료일</th>
@@ -54,7 +66,13 @@
                                 <c:forEach var="reservation" items="${reservations}">
                                     <tr>
                                         <td class="text-center">${reservation.idx}</td>
+                                        <td class="text-center">
+                                            <a href="/admin/users/userList.do" class="btn btn-xs btn-success">
+                                                <c:out value="${reservation.user.userNm}" default="- 정보 없음 -"/>
+                                            </a>
+                                        </td>
                                         <td class="text-center">${reservation.scheme.title}</td>
+                                        <td class="text-center">${reservation.scheme.complex.cmplxNm}</td>
                                         <td class="text-center">${reservation.startDt}</td>
                                         <td class="text-center">${reservation.startTime}</td>
                                         <td class="text-center">${reservation.endDt}</td>
@@ -62,7 +80,7 @@
                                         <td class="text-center">${reservation.point}</td>
                                         <td class="text-center">${reservation.amount}</td>
                                         <td class="text-center">
-                                            <a href="/admin/reservations/show.do?idx=${reservation.idx}" class="btn btn-xs btn-white">보기</a>
+                                            <a href="/admin/reservations/show.do?idx=${reservation.idx}" class="btn btn-xs btn-info">예약 내역 보기</a>
                                         </td>
                                         <td class="text-center">
                                             <form action="/admin/reservations/delete.do" method="post" onsubmit="return confirm( '정말 삭제하시겠습니까?' )">
@@ -80,5 +98,14 @@
                 </div>
             </div>
         </div>
+    </tiles:putAttribute>
+    <tiles:putAttribute name="js">
+        <script>
+            $(document).ready(function(){
+                $('#reservation-list').footable();
+            });
+
+        </script>
+
     </tiles:putAttribute>
 </tiles:insertDefinition>

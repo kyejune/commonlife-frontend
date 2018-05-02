@@ -1,5 +1,6 @@
 package com.kolon.comlife.admin.reservation.model;
 
+import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import org.apache.ibatis.type.Alias;
 
 import java.util.List;
@@ -37,6 +38,7 @@ public class ReservationSchemeInfo {
     private String regDttm;
     private String updDttm;
 
+    private ComplexInfo complex;
     private List<ReservationAmenityInfo> amenities;
 
     public int getIdx() {
@@ -277,6 +279,14 @@ public class ReservationSchemeInfo {
 
     public void setUpdDttm(String updDttm) {
         this.updDttm = updDttm;
+    }
+
+    public ComplexInfo getComplex() {
+        return complex;
+    }
+
+    public void setComplex(ComplexInfo complex) {
+        this.complex = complex;
     }
 
     public List<ReservationAmenityInfo> getAmenities() {

@@ -7,6 +7,7 @@ import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.admin.reservation.service.ReservationGroupService;
 import com.kolon.comlife.admin.reservation.service.ReservationSchemeService;
 import com.kolon.comlife.admin.reservation.service.ReservationService;
+import com.kolon.comlife.admin.users.service.UserService;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,27 +42,39 @@ public class ReservationController {
     @Resource(name = "reservationService")
     private ReservationService service;
 
-    private List<ReservationInfo> getReservationList() {
-        List<ReservationInfo> reservations = service.index();
+    @Resource(name = "userService")
+    private UserService userService;
+
+    private List<ReservationInfo> getReservationList( HashMap params ) {
+        List<ReservationInfo> reservations = service.index( params );
         List<Integer> ids = new ArrayList<Integer>();
         for (ReservationInfo item :
                 reservations) {
             ids.add( item.getParentIdx() );
+            item.setUser( userService.getUserExtInfoById( item.getUsrID() ) );
         }
 
-        HashMap params = new HashMap<String, Object>();
+        HashMap schemeParams = new HashMap();
         if( ids.size() > 0 ) {
-            params.put( "ids", ids );
+            schemeParams.put( "ids", ids );
         }
-        List<ReservationSchemeInfo> schemes = schemeService.index( params );
+        List<ReservationSchemeInfo> schemes = schemeService.index( schemeParams );
 
         for (ReservationInfo item : reservations) {
             for (ReservationSchemeInfo scheme : schemes) {
                 if (scheme.getIdx() == item.getParentIdx()) {
                     item.setScheme(scheme);
                 }
+                scheme.setComplex( complexService.getComplexById( scheme.getCmplxIdx() ) );
             }
         }
+
+        return reservations;
+    }
+
+    private List<ReservationInfo> getReservationList() {
+        HashMap params = new HashMap<String, Object>();
+        List<ReservationInfo> reservations = this.getReservationList( params );
 
         return reservations;
     }
@@ -86,7 +99,16 @@ public class ReservationController {
             , ModelAndView mav
             , HttpSession session
     ) {
-        List<ReservationInfo> reservations = this.getReservationList();
+        String complexIdx = request.getParameter( "complexIdx" );
+        HashMap params = new HashMap();
+        if( complexIdx != null && !complexIdx.equals( "" ) ) {
+            params.put( "cmplxIdx", complexIdx );
+        }
+
+        List<ComplexInfo> complexes = complexService.getComplexList();
+        mav.addObject( "complexes", complexes );
+
+        List<ReservationInfo> reservations = this.getReservationList( params );
         mav.addObject( "reservations", reservations );
 
         return mav;

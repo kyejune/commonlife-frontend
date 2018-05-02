@@ -3,12 +3,23 @@
 
 <mapper namespace="Reservation">
     <select id="index" resultType="reservationInfo">
-        <![CDATA[
-            SELECT
-                    *
-            FROM
-                    `RESERVATIONS`
-        ]]>
+        SELECT
+        `RESERVATIONS`.*,
+        `RESERVATION_SCHEMES`.`CMPLX_IDX`
+        FROM
+        `RESERVATIONS`
+        LEFT JOIN
+        `RESERVATION_SCHEMES`
+        ON
+        `RESERVATIONS`.`PARENT_IDX` = `RESERVATION_SCHEMES`.`IDX`
+        WHERE
+        1=1
+        <choose>
+            <when test='cmplxIdx != null'>
+                AND
+                    `RESERVATION_SCHEMES`.`CMPLX_IDX` = #{cmplxIdx}
+            </when>
+        </choose>
     </select>
     <select id="show" parameterType="java.util.Map" resultType="reservationInfo">
         <![CDATA[
