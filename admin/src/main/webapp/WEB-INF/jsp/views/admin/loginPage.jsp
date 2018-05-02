@@ -26,8 +26,10 @@
                     <div>
                         <h1 class="logo-name"></h1>
                     </div>
-                    <h3>환영합니다</h3>
-                    <p></p>
+                    <h3>
+                        <img src="/resources/img/logo_intro.png" alt="">
+                    </h3>
+                    <p><strong class="bold-font">환영합니다.</strong></p>
                     <div class="m-t">
                         <div class="form-group">
                             <input type="text" class="form-control" placeholder="Username" required=""  id="mngId" name="mngId">

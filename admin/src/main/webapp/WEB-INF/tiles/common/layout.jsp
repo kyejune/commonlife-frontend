@@ -25,6 +25,7 @@
 
     <link href="/resources/css/animate.css" rel="stylesheet">
     <link href="/resources/css/style.css" rel="stylesheet">
+    <link href="/resources/css/commonlife.css" rel="stylesheet">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <tiles:insertAttribute name="css" />

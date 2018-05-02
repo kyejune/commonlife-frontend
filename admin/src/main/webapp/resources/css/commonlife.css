@@ -1,0 +1,11 @@
+.nav-header .nav-header__logo {
+    position: relative;
+    left: -6px;
+}
+
+.nav-header .nav-header__welcome {
+    /*margin-top: 2em;*/
+    color: #ffffff;
+    position: relative;
+    top: 1.5em;
+}
