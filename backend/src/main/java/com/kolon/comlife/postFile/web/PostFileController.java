@@ -40,7 +40,7 @@ import java.util.HashMap;
 @RestController
 @RequestMapping("/postFiles/*")
 public class PostFileController {
-    private static final Logger logger = LoggerFactory.getLogger(ExampleController.class);
+    private static final Logger logger = LoggerFactory.getLogger(PostFileController.class);
 
     @Autowired
     PostFileStoreService storeService;

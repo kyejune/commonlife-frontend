@@ -1,7 +1,5 @@
 package com.kolon.comlife.users.model;
 
-import com.kolon.comlife.imageStore.model.ImageInfoUtil;
-
 public class UserExtInfo extends UserInfo {
 
     String userAlias;       // Unused
