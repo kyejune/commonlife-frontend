@@ -8,15 +8,17 @@
           *
         FROM
           `POST_FILE`
+        WHERE
+            `DEL_YN` = "N" AND
         <choose>
             <when test="postFileIdx != null">
-                WHERE   `POST_FILE_IDX` = #{postFileIdx}
+                `POST_FILE_IDX` = #{postFileIdx}
             </when>
             <when test="postIdx != null">
-                WHERE   `POST_IDX` = #{postIdx}
+                `POST_IDX` = #{postIdx}
             </when>
             <when test="postIdxs != null">
-                WHERE   `POST_IDX`
+                `POST_IDX`
                 IN
                 <foreach collection="postIdxs" item="item" index="index" separator="," open="(" close=")">
                     #{item}
@@ -65,7 +67,6 @@
         SET     `POST_IDX` =  #{postIdx}
         WHERE
             ISNULL(`POST_IDX`) AND
-            `USR_ID` = #{usrId} AND   -- 본인이 업로드한 이미지만 연결할 수 있음
         <choose>
             <when test="postFileIdx != null">
                 `POST_FILE_IDX` =   #{postFileIdx}

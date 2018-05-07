@@ -70,6 +70,9 @@
                                     <tr>
                                         <th>#</th>
                                         <th>사용자</th>
+                                        <c:if test="${postType eq 'event'}">
+                                        <th>제목</th>
+                                        </c:if>
                                         <th>내용</th>
                                         <th><a href="#" alt="Like 개수"><i class="fa fa-thumbs-o-up"></i></a></th>
                                         <th><a href="#" alt="이미지 포함 여부"><i class="fa fa-file-image-o"></i></a></th>
@@ -99,25 +102,27 @@
                                                     </c:if>
                                                     ${vo.user.userNm}
                                                 </td>
+                                                <c:if test="${postType eq 'event'}">
                                                 <td>
-                                                    <c:choose>
-                                                        <c:when test="${fn:length(vo.content) < 1}" >
-                                                            <a href="javascript:void(0)"
-                                                               onclick="showPost(${vo.postIdx})">{내용 없음}</a>
-                                                        </c:when>
-                                                        <c:when test="${fn:length(vo.content) > 30}" >
-                                                            <a href="javascript:void(0)"
-                                                               onclick="showPost(${vo.postIdx})">
-                                                            ${fn:substring(vo.content,0, 30)}...
-                                                            </a>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                            <a href="javascript:void(0)"
-                                                               onclick="showPost(${vo.postIdx})">
-                                                            ${vo.content}
-                                                            </a>
-                                                        </c:otherwise>
-                                                    </c:choose>
+                                                    ${vo.title}
+                                                </td>
+                                                </c:if>
+                                                <td>
+                                                    <a href="javascript:void(0)"
+                                                       onclick="showPost(${vo.postIdx})">
+
+                                                        <c:choose>
+                                                            <c:when test="${fn:length(vo.content) < 1}" >
+                                                                <c:out value="{내용 없음}" escapeXml="false"></c:out>
+                                                            </c:when>
+                                                            <c:when test="${fn:length(vo.content) > 30}" >
+                                                                <c:out value="${fn:substring(vo.content,0, 30)}..." escapeXml="false"></c:out>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                                <c:out value="${vo.content}" escapeXml="false"></c:out>
+                                                            </c:otherwise>
+                                                        </c:choose>
+                                                    </a>
                                                 </td>
                                                 <td>
                                                     <c:choose>
@@ -163,7 +168,14 @@
                                         <tfoot>
                                         <!-- paginging -->
                                         <tr>
-                                            <td colspan="8" >
+                                            <c:choose>
+                                                <c:when test="${postType eq 'event'}">
+                                                <td colspan="9" >
+                                                </c:when>
+                                                <c:otherwise>
+                                                <td colspan="8" >
+                                                </c:otherwise>
+                                            </c:choose>
                                                 <div class="center-block">
                                                     <ui:pagination paginationInfo="${paginateInfo}" jsFunction="fn_link_page"/>
                                                 </div>
@@ -179,7 +191,7 @@
             </div>
             <div class="col-md-4">
                 <div class="ibox float-e-margins">
-                    <div class="ibox-title">
+                    <div class="ibox-titile">
                         <h5><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out> 상세보기</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">

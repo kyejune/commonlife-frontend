@@ -137,16 +137,6 @@ public class ImageStoreController {
         ImageBase64 imageBase64 = new ImageBase64();
         byte[]       imageBytes;
 
-//        if( currUser != null ) {
-//            logger.debug(">>> CmplxId: " + currUser.getCmplxId());
-//            logger.debug(">>> UserId: " + currUser.getUserId());
-//            logger.debug(">>> UsrId: " + currUser.getUsrId());
-//
-//            usrId = currUser.getUsrId();
-//        } else {
-//            usrId = -1; // default value
-//        }
-
         base64 = params.get( "file" );
         if( base64 == null ) {
             return ResponseEntity

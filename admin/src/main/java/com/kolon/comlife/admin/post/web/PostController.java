@@ -122,6 +122,7 @@ public class PostController {
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         mav.addObject("postType", postType );
+        mav.addObject("postUpdateYn", "N" ); // N == 새로운 글 생성
 
         return mav;
     }
@@ -159,7 +160,7 @@ public class PostController {
                                   HttpSession         session,
                                   @RequestParam( name = "postIdx", required=false, defaultValue = "-1") int postIdx ) {
         AdminInfo     adminInfo;
-        PostInfo      postInfo;
+        PostInfo      postInfo = null;
 
         mav.setViewName("/admin/posts/feedEdit");
 
@@ -174,10 +175,14 @@ public class PostController {
         try {
             postInfo = postService.getPostById( postIdx, -1 );
         } catch( Exception e ) {
-
+            mav.addObject("error", "해당 피드 정보를 가져올 수 없습니다. " + e.getMessage());
+            return mav;
         }
 
-        mav.addObject("postType", POST_TYPE_EVENT );
+        mav.addObject("postIdx", postIdx );
+        mav.addObject("postUpdateYn", "Y" );
+        mav.addObject("postType", postInfo.getPostType() );
+        mav.addObject("postInfo", postInfo );
 
         return mav;
     }
@@ -232,6 +237,7 @@ public class PostController {
 
         newPost.setCmplxId( cmplxId );
         newPost.setAdminIdx( adminIdx );
+        newPost.setAdminYn( "Y" );
 
         newPost.setPostType( (String) params.get("postType") );
         newPost.setContent( (String) params.get("content") );
@@ -317,31 +323,40 @@ public class PostController {
                                       @PathVariable("postIdx") int postIdx,
                                       @RequestBody PostInfo   post ) {
         AdminInfo adminInfo;
-        PostInfo  postInfo;
+        PostInfo  retPostInfo;
 
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
         logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
         logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
         logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
 
-        post.setUsrId( adminInfo.getAdminIdx() );
+        post.setAdminIdx( adminInfo.getAdminIdx() );
+        post.setAdminYn( "Y" );
         post.setPostIdx( postIdx );
+        logger.debug(">>>> postFiles " + post.getPostFiles());
+        logger.debug(">>>> postFiles.size() " + post.getPostFiles().size());
+
+        if(post.getPostFiles() != null && post.getPostFiles().size() > 0 )
+        {
+            logger.debug("postFiles:" + post.getPostFiles().size());
+            logger.debug("postFiles[0]:" + post.getPostFiles().get(0).getPostIdx() );
+        }
 
         try {
-            postInfo = postService.updatePost( post );
+            retPostInfo = postService.updatePost( post );
         } catch ( OperationFailedException e ) {
             return ResponseEntity
                     .status( HttpStatus.CONFLICT )
                     .body( new SimpleErrorInfo( e.getMessage() ) );
         }
 
-        if( postInfo == null ) {
+        if( retPostInfo == null ) {
             return ResponseEntity.
                     status( HttpStatus.BAD_REQUEST ).
                     body(new SimpleErrorInfo("해당 내용을 수정할 수 없습니다.") );
         }
 
-        return ResponseEntity.status( HttpStatus.OK ).body( postInfo );
+        return ResponseEntity.status( HttpStatus.OK ).body( retPostInfo );
     }
 
 

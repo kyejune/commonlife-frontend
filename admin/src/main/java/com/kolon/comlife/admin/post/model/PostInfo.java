@@ -238,8 +238,8 @@ public class PostInfo {
     }
 
     /*
-                            Relations
-                         */
+        Relations
+     */
     private PostUserInfo user;
     private List<PostFileInfo> postFiles = new ArrayList<PostFileInfo>();
 

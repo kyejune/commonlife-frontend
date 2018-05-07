@@ -99,7 +99,10 @@ public class PostServiceImpl implements PostService {
 
         // 비공개(삭제)처리된 게시물의 내용 변경 및 공개 게시물에 대해서 이미지 정보 가져오기
         if( "Y".equals(postInfo.getDelYn()) ) {
-            postInfo.setContent( DELETED_POST_MSG );
+            // 사용자가 작성한 Feed에 대해서만 비공개 표시함
+            if( "feed".equals(postInfo.getPostType()) ) {
+                postInfo.setContent( DELETED_POST_MSG );
+            }
         } else {
             postIdxs.add(id);
             postFileList = postFileDAO.getPostFilesByPostIds( postIdxs );
@@ -284,13 +287,55 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostInfo updatePost(PostInfo post) throws OperationFailedException {
+    public PostInfo updatePost( PostInfo newPost ) throws OperationFailedException {
+        List<Integer>      newFileIdxList = new ArrayList<>();
+        List<Integer>      oldFileIdxList = new ArrayList<>();
+        PostInfo           retPostInfo;
+        List<PostFileInfo> retPostFileInfoList;
+        List<PostFileInfo> oldPostFileInfoList;
 
-        if( post.getPostType().equals("feed") ) {
+        // 이전에 업로드 된 이미지가 있는지 체크
+        oldPostFileInfoList = postFileDAO.getPostFilesByPostId( newPost.getPostIdx() );
+        logger.debug("oldPost.getPostFiles().size()>>> " + oldPostFileInfoList.size() );
+        for( PostFileInfo f : oldPostFileInfoList ) {
+            logger.debug("f.getPostFileIdx>>>> " + f.getPostFileIdx() );
+            oldFileIdxList.add( f.getPostFileIdx() );
+        }
+
+        if( newPost.getPostType().equals("feed") ) {
             throw new OperationFailedException( "사용자 Feed는 변경할 수 없습니다." );
         }
 
-        return postDAO.updatePost(post);
+        if( "Y".equals( newPost.getRsvYn() ) ) {
+            postRsvDAO.upsertPostRsv( newPost.getPostIdx(), newPost.getRsvMaxCnt() );
+        }
+
+        for( PostFileInfo f : newPost.getPostFiles() ) {
+            logger.debug("f.getPostFileIdx>>>> " + f.getPostFileIdx() );
+            newFileIdxList.add( f.getPostFileIdx() );
+        }
+
+        // 업데이트 수행
+        retPostInfo = postDAO.updatePost( newPost );
+
+        if( oldFileIdxList.size() > 0 && newFileIdxList.size() > 0 &&
+            oldFileIdxList.get(0) == newFileIdxList.get(0) ) {
+            // do nothing
+        } else {
+            if( oldFileIdxList.size() > 0 ) {
+                // delete¸
+                postFileDAO.deletePostFile( oldFileIdxList.get(0) );
+                retPostInfo.setPostFiles( new ArrayList<PostFileInfo>() );
+            }
+
+            if( newFileIdxList.size() > 0 ) {
+                // Bind
+                retPostFileInfoList = postFileDAO.bindPostToPostFiles( newPost.getPostIdx(), newFileIdxList, -1 );
+                retPostInfo.setPostFiles( retPostFileInfoList );
+            }
+        }
+
+        return retPostInfo;
     }
 
     @Override

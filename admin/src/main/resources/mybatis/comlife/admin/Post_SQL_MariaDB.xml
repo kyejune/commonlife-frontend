@@ -191,16 +191,24 @@
     </insert>
 
     <update id="updatePost" parameterType="postInfo">
-    <![CDATA[
         UPDATE
                 `POST`
         SET
+                <if test="postType == 'event'">
+                    `TITLE` = #{title},
+                    `EVENT_BEGIN_DTTM` = #{eventBeginDttm},
+                    `EVENT_END_DTTM` = #{eventEndDttm},
+                    `EVENT_PLACE_NM` = #{eventPlaceNm},
+                    `RSV_YN` = #{rsvYn},
+                    `INQUIRY_YN` = #{inquiryYn},
+                    `INQUIRY_TYPE` = #{inquiryType},
+                    `INQUIRY_INFO` = #{inquiryInfo},
+                    `SHARE_YN` = #{shareYn},
+                </if>
                 `CONTENT`   = #{content},
                 `UPD_DTTM`  = CURRENT_TIMESTAMP
         WHERE
-                `DEL_YN`   = 'N'  AND
-                `POST_IDX` = #{postIdx}
-    ]]>
+                `POST_IDX` = #{postIdx};
     </update>
 
     <update id="updatePostDelYn" parameterType="java.util.Map">

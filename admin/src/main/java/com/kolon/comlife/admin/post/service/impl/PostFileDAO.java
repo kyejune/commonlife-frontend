@@ -52,7 +52,6 @@ public class PostFileDAO {
         Map<String, Object> params = new HashMap<>();
         params.put( "postIdx", postIdx );
         params.put( "postFileIdxs", postFileIdxs );
-        params.put( "usrId", usrId );
         sqlSession.update( "PostFile.bindPostToPostFiles", params );
         return sqlSession.selectList( "PostFile.selectPostFile", params );
     }
