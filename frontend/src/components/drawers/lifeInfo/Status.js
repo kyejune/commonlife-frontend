@@ -30,9 +30,9 @@ class Status extends Component {
         return <div className="cl-info-status">
 
             <li className="cl-card-item">
-                <h4 className="cl-name">역삼동 하우징</h4>
+                <h4 className="cl-name">{this.state.branch}</h4>
                 <p className="cl-desc">
-                    조성우 세대 | 101동 1002호
+                    {this.state.desc}
                 </p>
             </li>
 

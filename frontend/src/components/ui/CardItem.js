@@ -17,12 +17,12 @@ class CardItem extends Component {
         this.state = props.cardData;
     }
 
-    componentWillReceiveProps(nextProps) {
-        // if( nextProps.cardData.postIdx.toString() === '113' )
-            // console.log('nextPrpos:', nextProps.cardData, nextProps.cardData.likesCount );
-        //if (this.state.postIdx !== nextProps.cardData.postIdx)
-            this.setState(nextProps.cardData);
-    }
+    // componentWillReceiveProps(nextProps) {
+    //     // if( nextProps.cardData.postIdx.toString() === '113' )
+    //         // console.log('nextPrpos:', nextProps.cardData, nextProps.cardData.likesCount );
+    //     //if (this.state.postIdx !== nextProps.cardData.postIdx)
+    //         this.setState(nextProps.cardData);
+    // }
 
     onChangeLike = (likeCount, hasLiked) => {
         let obj = Object.assign({}, this.state);

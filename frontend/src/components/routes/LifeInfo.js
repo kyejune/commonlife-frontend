@@ -125,7 +125,7 @@ class LifeInfo extends Component {
 					</div>
 
 
-					<ul className="cl-info-dashboard__list">
+					<ul className="cl-info-dashboard__list pb-9em">
 
 						{infoList.map( ( item, key )=> {
 

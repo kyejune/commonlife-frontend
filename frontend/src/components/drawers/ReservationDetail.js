@@ -474,7 +474,7 @@ class ReservationDetail extends Component {
 
 
 			{/* 하단 정보 출력 부분 */}
-			<div className="cl-reservation-info">
+			<div className="cl-reservation-info pb-3em">
 
 				<div className="cl-credit cl-flex-between">
 					<div className="cl-label">{this.state.reserved ? "잔여 크레딧" : "예약 크레딧/잔여 크레딧"}</div>

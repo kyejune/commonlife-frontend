@@ -170,6 +170,7 @@ $card-trans-time: 0.3s;
     grid-template-columns: repeat(2, 50vw);
     border-bottom: 1px solid #313336;
     transition: $card-trans-time margin-top ease-out;
+    background-color: #1F2125;
 
     .cl__thumb--rounded {
         width: 56px;
@@ -188,6 +189,12 @@ $card-trans-time: 0.3s;
         &:nth-child(odd) {
             border-right: none;
         }
+
+        &:last-child, &:nth-last-child(2){
+            border-bottom: 1px solid #313336;
+        }
+
+
 
         a {
             margin: auto;

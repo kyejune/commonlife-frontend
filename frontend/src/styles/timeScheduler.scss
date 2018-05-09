@@ -49,9 +49,6 @@
 .cl-time-scheduler{
 
   position: relative;
-  //border-top: 1px solid #cfcfcf;
-
-
 
   .cl-time--selected{
     @extend .cl-flex-between;
@@ -89,7 +86,7 @@
     background-color: #4a90e2;
     border: 2px solid #195fb1;
     border-radius: 3px;
-    transition: all 0.2s;
+    //transition: all 0.2s;
 
     &.cl-controlling{
       background-color: rgba(74, 144, 226, 0.5);
@@ -115,7 +112,17 @@
     border-radius: 50%;
     top: calc( 50% - 7px );
     z-index: 1;
-    transition: all 0.2s;
+    //transition: all 0.2s;
+
+    &:after{
+      content:'';
+      position: absolute;
+      width: 40px;
+      height: 60px;
+      top: -25px;
+      right: -14px;
+      background-color: transparent;
+    }
 
     &.react-draggable-dragging{
       background-color: orange;
@@ -128,7 +135,7 @@
 
 
   .cl-time-ctrl{
-    padding: 20px 16px;
+    //padding: 20px 16px;
 
     p{
       font-size: 14px;
@@ -139,6 +146,9 @@
 
     button{
       opacity: 0.5;
+      background-color: transparent;
+      width: 60px;
+      height: 60px;
     }
   }
 

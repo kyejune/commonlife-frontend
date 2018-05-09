@@ -146,9 +146,12 @@ class CardItemDetailDrawer extends Component {
             case 'event':
                 duration = this.makeDateComponent(this.state.eventBeginDttm, this.state.eventEndDttm);
 
-                Footer = <footer className="cl-opts__footer cl-flex">
-                    {join}
-                </footer>;
+                console.log('join:', join );
+                if( join !== undefined ) {
+                    Footer = <footer className="cl-opts__footer cl-flex">
+                        {join}
+                    </footer>
+                }
                 break;
 
             case 'feed':

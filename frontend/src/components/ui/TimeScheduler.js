@@ -10,7 +10,7 @@ class TimeScheduler extends Component {
 
     constructor(props) {
         super(props);
-        this.state = this.makeState( props );
+        this.state = { ...this.makeState( props ), isDraggingHandle:false };
     }
 
     componentWillReceiveProps( nextProps ){
@@ -91,17 +91,20 @@ class TimeScheduler extends Component {
 
     // 핸들 드래그용 이벤트 헨들러
     handleStart() {
+        this.setState({ isDraggingHandle:true });
         this.timeEl.classList.add('cl-controlling');
     }
 
-    handleDrag() {
-        setTimeout(() => this.syncTimeSize(), 0);
+    handleDrag( event ) {
+        setTimeout(() => this.syncTimeSize(), 0 );
+        // event.stopImmediatePropagation();
     }
 
     handleStop() {
         this.timeEl.classList.remove('cl-controlling');
         this.syncTimeSize();
-    }//
+        this.setState({ isDraggingHandle:false });
+    }
 
 
     syncTimeSize=()=>{
@@ -113,11 +116,20 @@ class TimeScheduler extends Component {
     }
 
     // 타임존 드래그용 이벤트 헨들러
+    timeDragStart=()=>{
+        this.setState({ isDraggingHandle: true });
+    }
+
     timeDrag=()=> {
         setTimeout(() => {
-            this.setState({start: (this.timeEl.style.transform.match(/\d+/g)[0] / this.state.W) * .5 + this.state.min});
+            this.setState({
+                start: (this.timeEl.style.transform.match(/\d+/g)[0] / this.state.W) * .5 + this.state.min});
             this.updateTimeSize();
         }, 0);
+    }
+
+    timeDragStop=()=>{
+        this.setState({ isDraggingHandle:false });
     }
 
     // 타임존 위치나 크기가 변경될때, 기 예약된 부분과 hitTest
@@ -174,13 +186,15 @@ class TimeScheduler extends Component {
         return float;
     }
 
-
-
     render() {
 
         const W = this.state.W;
         const MIN = parseFloat(this.props.min);
         const HALF_LEN = (this.props.max - MIN) * 2;
+        let OverflowStyle;
+        if( this.state.isDraggingHandle ) OverflowStyle = { overflow: 'hidden' };
+
+        console.log( 'idh:', this.state.isDraggingHandle, OverflowStyle );
 
         // 30분 단위로 그리기
         let halfHours = [...Array(HALF_LEN)].map((e, i) => {
@@ -200,7 +214,9 @@ class TimeScheduler extends Component {
                                            defaultPosition={{x: W * (this.state.start - this.props.min)*2, y: 0}}
                                            bounds={{left: 0, right: HALF_LEN * W - (W * this.state.hour)*2 }}
                                            cancel=".cl-area-handle"
+                                           onStart={() => this.timeDragStart()}
                                            onDrag={() => this.timeDrag()}
+                                           onStop={() => this.timeDragStop()}
                 >
                     <div className="cl-area--selected" ref={ref => this.timeEl = ref} style={{ width: W * this.state.hour * 2 }}>
                         <Draggable key="time-handler"
@@ -210,7 +226,7 @@ class TimeScheduler extends Component {
                                    defaultPosition={{x: W * this.state.hour * 2, y: 0}}
                                    bounds={{left: W, right: W * 2 * this.props.maxWidth}}
                                    onStart={() => this.handleStart()}
-                                   onDrag={() => this.handleDrag()}
+                                   onDrag={event => this.handleDrag( event )}
                                    onStop={() => this.handleStop()}
                         >
                             <span className="cl-area-handle" ref={ref => this.handleEl = ref}
@@ -239,7 +255,7 @@ class TimeScheduler extends Component {
             </div>
 
 
-            <div className="cl-30mins">
+            <div className="cl-30mins" style={ OverflowStyle }>
                 {halfHours}
             </div>
 
