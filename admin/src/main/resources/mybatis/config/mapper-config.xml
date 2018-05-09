@@ -18,7 +18,6 @@
         <package name="com.kolon.comlife.admin.manager.model" />
         <package name="com.kolon.comlife.admin.post.model" />
         <package name="com.kolon.comlife.admin.reservation.model" />
-        <package name="com.kolon.comlife.admin.reservation.model" />
         <package name="com.kolon.comlife.admin.status.model" />
         <package name="com.kolon.comlife.admin.support.model" />
         <package name="com.kolon.comlife.admin.users.model" />

@@ -132,18 +132,29 @@
         $( '#field-toggle' ).trigger( 'change' );
 
         // 옵션 리스트 생성 및 추가
-        $( '#add-option-button' ).on( 'click', function( evennt ) {
+        $( '#add-option-button' ).on( 'click', function( event ) {
             var value = $( '#option-input' ).val();
-            var item = $( '<li class="list-group-item">' + value +
-                '                                       <input type="hidden" name="" value="">' +
-                '                                        <span class="pull-right">' +
-                '                                            <button class="btn btn-danger btn-xs" type="button">' +
-                '                                                &times;' +
-                '                                            </button>' +
-                '                                        </span>' +
-                '                                    </li>' );
-            $( '#options-list' ).append( item );
-            $( '#option-input' ).val( '' );
+            $.ajax( {
+                url: '/admin/api/reservation-scheme-options/',
+                type: 'post',
+                data: {
+                    _csrf: $( 'meta[name=_csrf]' ).attr( 'content' ),
+                    name: value
+                }
+            } )
+                .done( function( data ) {
+                    var item = $( '<li class="list-group-item">' + value +
+                        '                                       <input type="hidden" name="optionIdx" value="' + data.idx + '">' +
+                        '                                        <span class="pull-right">' +
+                        '                                            <button class="btn btn-danger btn-xs" type="button">' +
+                        '                                                &times;' +
+                        '                                            </button>' +
+                        '                                        </span>' +
+                        '                                    </li>' );
+                    $( '#options-list' ).append( item );
+                    $( '#option-input' ).val( '' );
+                } );
+
         } );
 
         $( document ).on( 'click', '#options-list .btn-danger', function( event ) {

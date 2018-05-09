@@ -27,4 +27,19 @@ public class ReservationSchemeOptionServiceImpl implements ReservationSchemeOpti
         dao.create( info );
         return dao.latest();
     }
+
+    @Override
+    public ReservationSchemeOptionInfo show(int id) {
+        return dao.show( id );
+    }
+
+    @Override
+    public int update(ReservationSchemeOptionInfo info) {
+        return dao.update(info);
+    }
+
+    @Override
+    public int delete(ReservationSchemeOptionInfo info) {
+        return dao.delete(info);
+    }
 }

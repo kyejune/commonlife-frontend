@@ -8,4 +8,7 @@ import java.util.Map;
 public interface ReservationSchemeOptionService {
     public List<ReservationSchemeOptionInfo> index(Map params);
     public ReservationSchemeOptionInfo create(ReservationSchemeOptionInfo info);
+    public ReservationSchemeOptionInfo show(int id);
+    public int update(ReservationSchemeOptionInfo info);
+    public int delete(ReservationSchemeOptionInfo info);
 }

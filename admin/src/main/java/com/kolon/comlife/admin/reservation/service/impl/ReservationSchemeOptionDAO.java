@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,5 +22,19 @@ public class ReservationSchemeOptionDAO {
         return sqlSession.insert("ReservationSchemeOption.create", info);
     }
 
+    public int update(ReservationSchemeOptionInfo info) {
+        return sqlSession.update( "ReservationSchemeOption.update" );
+    }
+
+    public ReservationSchemeOptionInfo show( int id ) {
+        HashMap params = new HashMap();
+        params.put( "idx", id );
+        return sqlSession.selectOne( "ReservationSchemeOption.show", params );
+    }
+
     public ReservationSchemeOptionInfo latest() { return sqlSession.selectOne( "ReservationSchemeOption.latest" ); }
+
+    public int delete(ReservationSchemeOptionInfo info) {
+        return sqlSession.update( "ReservationSchemeOption.delete" );
+    }
 }
