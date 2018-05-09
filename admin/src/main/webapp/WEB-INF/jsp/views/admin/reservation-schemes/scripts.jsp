@@ -144,7 +144,7 @@
             } )
                 .done( function( data ) {
                     var item = $( '<li class="list-group-item">' + value +
-                        '                                       <input type="hidden" name="optionIdx" value="' + data.idx + '">' +
+                        '                                       <input type="hidden" name="optionIdx[]" value="' + data.idx + '">' +
                         '                                        <span class="pull-right">' +
                         '                                            <button class="btn btn-danger btn-xs" type="button">' +
                         '                                                &times;' +

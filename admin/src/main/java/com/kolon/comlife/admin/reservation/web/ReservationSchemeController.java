@@ -133,6 +133,7 @@ public class ReservationSchemeController {
             , @RequestParam( value = "amenities[]", required = false ) int[] amenities
             , @RequestParam( value = "precautions", required = false ) String precautions
             , @RequestParam( value = "delYn", required = false, defaultValue = "N") String delYn
+            , @RequestParam( value = "optionIdx[]", required = false) int[] optionIdx
             ) {
 
         ReservationSchemeInfo info = new ReservationSchemeInfo();
