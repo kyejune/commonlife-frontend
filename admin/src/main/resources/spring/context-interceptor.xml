@@ -15,13 +15,13 @@
             <mvc:mapping path="/**" />
             <bean id="logInterceptor" class="com.kolon.common.interceptor.LogInterceptor" />
         </mvc:interceptor>
-        <mvc:interceptor>
-            <mvc:mapping path="/**" />
-            <bean id="apiKeyCheckerInterceptor" class="com.kolon.common.interceptor.ApiKeyCheckerInterceptor" >
-                <property name="apiTestYN" value="#{prop_dev['apiTestYN']}" />
-                <property name="apiKey" value="#{prop_dev['apiKey']}" />
-            </bean>
-        </mvc:interceptor>
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**" />-->
+            <!--<bean id="apiKeyCheckerInterceptor" class="com.kolon.common.interceptor.ApiKeyCheckerInterceptor" >-->
+                <!--<property name="apiTestYN" value="#{prop_dev['apiTestYN']}" />-->
+                <!--<property name="apiKey" value="#{prop_dev['apiKey']}" />-->
+            <!--</bean>-->
+        <!--</mvc:interceptor>-->
     </mvc:interceptors>
 
 </beans>

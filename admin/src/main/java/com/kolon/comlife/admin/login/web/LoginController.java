@@ -32,6 +32,10 @@ public class LoginController {
     public void logout(HttpSession session) {
         AdminInfo userLoginInfo = (AdminInfo) session.getAttribute( USER_LOGIN_INFO );
 
+        if( userLoginInfo == null ) {
+            return;
+        }
+
         logger.info( "Logged out! {}, {}@{}",
                      session.getId(),
                      userLoginInfo.getAdminId(),
