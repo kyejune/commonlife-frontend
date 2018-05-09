@@ -192,5 +192,45 @@
             var $element = $( element );
             $element.css( 'backgroundImage', 'url(' + HOST + $element.data( 'image' ) + ')')
         } );
+
+        // 전송 전 폼 검증 체크
+        $( '#scheme-form' ).on( 'submit', function( event ) {
+            // 예약명 유무
+            if( !$( 'input[name=title]' ).val() ) {
+                event.preventDefault();
+                alert( '예약명은 필수 입력 항목입니다.' );
+                return false;
+            }
+            // 예약 개요
+            if( !$( 'input[name=summary]' ).val() ) {
+                event.preventDefault();
+                alert( '예약 개요는 필수 입력 항목입니다.' );
+                return false;
+            }
+            // 예약 상세
+            if( !$( 'textarea[name=description]' ).val() ) {
+                event.preventDefault();
+                alert( '예약 상세는 필수 입력 항목입니다.' );
+                return false;
+            }
+            // 예약 가능일: 시작일
+            if( !$( 'input[name=startDt]' ).val() ) {
+                event.preventDefault();
+                alert( '예약 가능일은 필수 입력 항목입니다.' );
+                return false;
+            }
+            // 예약 가능일: 종료일
+            if( !$( 'input[name=endDt]' ).val() ) {
+                event.preventDefault();
+                alert( '예약 가능일은 필수 입력 항목입니다.' );
+                return false;
+            }
+            // 아이콘
+            if( !$( 'input[name=icon]:checked' ).val() ) {
+                event.preventDefault();
+                alert( '아이콘은 필수 입력 항목입니다.' );
+                return false;
+            }
+        } );
     } );
 </script>

@@ -19,7 +19,7 @@
     </div>
 </div>
 <div class="wrapper wrapper-content animated fadeInRight">
-    <form action="" method="post">
+    <form action="" method="post" id="scheme-form">
         <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
         <input type="hidden" name="redirectTo" value="${redirectTo}">
 
@@ -137,7 +137,7 @@
                                                 <img src="/resources/img/reservations/rs-icon-2-3x.png" style="max-width: 100%;" alt="">
                                                 <div>CLEANING</div>
                                                 <div>
-                                                    <input type="radio" name="icon" <c:if test="${scheme.icon == 'CLEANING'}"> checked </c:if> >
+                                                    <input type="radio" name="icon" <c:if test="${scheme.icon == 'CLEANING'}"> checked </c:if> value="CLEANING" >
                                                 </div>
                                             </label>
                                         </div>
@@ -146,7 +146,7 @@
                                                 <img src="/resources/img/reservations/rs-icon-1-3x.png" style="max-width: 100%;" alt="">
                                                 <div>LAUNDRY</div>
                                                 <div>
-                                                    <input type="radio" name="icon" <c:if test="${scheme.icon == 'LAUNDRY'}"> checked </c:if> >
+                                                    <input type="radio" name="icon" <c:if test="${scheme.icon == 'LAUNDRY'}"> checked </c:if> value="LAUNDRY" >
                                                 </div>
                                             </label>
                                         </div>
@@ -155,7 +155,7 @@
                                                 <img src="/resources/img/reservations/rs-icon-3-3x.png" style="max-width: 100%;" alt="">
                                                 <div>FOOD</div>
                                                 <div>
-                                                    <input type="radio" name="icon" <c:if test="${scheme.icon == 'FOOD'}"> checked </c:if> >
+                                                    <input type="radio" name="icon" <c:if test="${scheme.icon == 'FOOD'}"> checked </c:if> value="FOOD" >
                                                 </div>
                                             </label>
                                         </div>
@@ -164,7 +164,7 @@
                                                 <img src="/resources/img/reservations/rs-icon-4-3x.png" style="max-width: 100%;" alt="">
                                                 <div>CARWASH</div>
                                                 <div>
-                                                    <input type="radio" name="icon" <c:if test="${scheme.icon == 'CARWASH'}"> checked </c:if> >
+                                                    <input type="radio" name="icon" <c:if test="${scheme.icon == 'CARWASH'}"> checked </c:if> value="CARWASH" >
                                                 </div>
                                             </label>
                                         </div>
