@@ -3,6 +3,7 @@ package com.kolon.comlife.admin.support.web;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
+import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.support.exception.SupportGeneralException;
 import com.kolon.comlife.admin.support.model.SupportCategoryInfo;
 import com.kolon.comlife.admin.support.service.SupportService;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -46,10 +48,14 @@ public class SupportController {
             , HttpSession session
             , @ModelAttribute("categoryInfo") SupportCategoryInfo categoryInfo
     ) {
+
+        AdminInfo                 adminInfo;
         ComplexInfoDetail         complexInfo;
         List<SupportCategoryInfo> categoryList;
         String                    categoryListJson;
         ObjectMapper              mapper = new ObjectMapper();
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         try {
             complexInfo = complexService.getComplexById(categoryInfo.getCmplxId());
@@ -76,6 +82,8 @@ public class SupportController {
                     "error",
                     "작업 처리과정에 에러가 발생했습니다. 문제가 지속되면 담당자에게 문의하세요.");
         }
+
+        mav.addObject("adminInfo", adminInfo);
 
         mav.addObject("complexInfo", complexInfo );
         mav.addObject("categoryInfo", categoryInfo); // Parameters

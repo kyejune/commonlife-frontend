@@ -554,7 +554,7 @@
         <!------ [APP - INFO] 설정 끝 ------>
 
     </form:form>
-    <form:form name="manageReqForm" id="manageReqForm" method="post" commandName="adminInfo">
+    <form:form name="manageReqForm" id="manageReqForm" method="post" commandName="managerInfo">
         <form:hidden path="adminId"/>
     </form:form>
 </tiles:putAttribute>

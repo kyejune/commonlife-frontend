@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -53,7 +54,6 @@ public class ComplexController {
     private AdminConst adminConst;
 
 
-
     @RequestMapping(value = "list.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView complexList (
             HttpServletRequest request
@@ -64,6 +64,9 @@ public class ComplexController {
     ) {
         // 전체현장 목록 가져오기
 
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
         logger.debug("====================> 현장 목록 리스트");
         logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
         logger.debug("====================> complexInfo.getCmplxNm : {} ", complexInfo.getCmplxNm());
@@ -73,6 +76,7 @@ public class ComplexController {
 
 //        mav.addObject("grpId",      grpId);
 //        mav.addObject("adminConst", adminConst);
+        mav.addObject("adminInfo", adminInfo);
         mav.addObject("complexList", complexList);
 
         return mav;
@@ -87,7 +91,11 @@ public class ComplexController {
             , HttpSession session
             , @ModelAttribute ComplexInfo complexInfo
     ) {
+
         // 현장 상세 정보 가져오기
+
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         logger.debug("====================> 현장 상세 정보 가져오기");
         logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
@@ -98,6 +106,7 @@ public class ComplexController {
 
 //        mav.addObject("grpId",      grpId);
 //        mav.addObject("adminConst", adminConst);
+        mav.addObject("adminInfo", adminInfo);
         mav.addObject("complexDetail", complexDetail );
 
         return mav;
@@ -111,6 +120,9 @@ public class ComplexController {
             , HttpSession session
             , @ModelAttribute ComplexInfo complexInfo
     ) {
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
         List<ComplexInfo> complexList;
 
         if( complexInfo == null ) {
@@ -125,6 +137,7 @@ public class ComplexController {
 
         complexList = complexService.getComplexList();
 
+        mav.addObject("adminInfo", adminInfo);
         mav.addObject("complexList", complexList);
         mav.addObject("complexConst", complexConst);
 
@@ -188,8 +201,10 @@ public class ComplexController {
         ComplexInfoDetail resultComplexInfo;
         int               totalUserCount;
         List<AdminInfo>   managerList;
-        AdminInfo         adminInfo;
+        AdminInfo         adminInfoParam;
         List<ComplexRegion> regionList;
+        AdminInfo            adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         logger.debug("====================> 현장 상세 정보 페이지 ");
         logger.debug("====================> complexInfo.getCmplxId : {} ", complexInfo.getCmplxId());
@@ -221,17 +236,18 @@ public class ComplexController {
         }
 
         // 해당 현장의 관리자 정보 가져오기
-        adminInfo = new AdminInfo();
+        adminInfoParam = new AdminInfo();
 
-        adminInfo.setSearchType1("CMPLX_ID");
-        adminInfo.setSearchKeyword1(String.valueOf( complexInfo.getCmplxId() ));
-        managerList = managerService.selectManagerList(adminInfo);
+        adminInfoParam.setSearchType1("CMPLX_ID");
+        adminInfoParam.setSearchKeyword1(String.valueOf( complexInfo.getCmplxId() ));
+        managerList = managerService.selectManagerList( adminInfoParam );
 
         mav.addObject("complexDetail",  resultComplexInfo);
         mav.addObject("totalUserCount", totalUserCount);
         mav.addObject("managerList",    managerList);
         mav.addObject("adminConst",     adminConst);
-        mav.addObject("adminInfo",      new AdminInfo());  // Manager 화면전환시 이용
+        mav.addObject("managerInfo",    new AdminInfo());  // Manager 화면전환시 이용
+        mav.addObject("adminInfo",      adminInfo ); // 로그인한 관리자 정보
         mav.addObject("regionList",     regionList);
 
         return mav;

@@ -7,18 +7,19 @@
 
                 <div class="dropdown profile-element">
                     <img class="nav-header__logo" src="/resources/img/logo_default.png" alt="">
-
-                    <p class="nav-header__welcome"><strong class="font-bold">관리자님 안녕하세요.</strong></p>
+                    <c:if test="${adminInfo.adminNm != null}">
+                        <p class="nav-header__welcome"><strong class="font-bold">${adminInfo.adminNm}</strong>님 안녕하세요.</p>
+                    </c:if>
                 </div>
                 <div class="logo-element">
                     <img src="/resources/img/logo_small.png" alt="">
                 </div>
             </li>
-            <li>
-                <a href="?">
-                    <i class="fa fa-th-large"></i>
-                    <span class="nav-label">Main View</span></a>
-            </li>
+            <%--<li>--%>
+                <%--<a href="?">--%>
+                    <%--<i class="fa fa-th-large"></i>--%>
+                    <%--<span class="nav-label">Main View</span></a>--%>
+            <%--</li>--%>
             <li id="left_complex">
                 <a href="#">
                     <i class="fa fa-table"></i>
@@ -44,12 +45,12 @@
             <li id="left_feed">
                 <a href="#">
                     <i class="fa fa-table"></i>
-                    <span class="nav-label">현장| FEED 관리</span><span class="fa arrow"></span>
+                    <span class="nav-label">현장| 커뮤니티</span><span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
-                    <li id="left_feed_feed"><a href="/admin/posts/feedList.do">사용자 Feed 관리</a></li>
                     <li id="left_feed_event"><a href="/admin/posts/eventList.do?grpId=0">Event 관리</a></li>
                     <li id="left_feed_notice"><a href="/admin/posts/noticeList.do?grpId=1">Notice 관리</a></li>
+                    <li id="left_feed_feed"><a href="/admin/posts/feedList.do">사용자 작성글 관리</a></li>
                 </ul>
             </li>
             <%--<li id="left_properties">--%>

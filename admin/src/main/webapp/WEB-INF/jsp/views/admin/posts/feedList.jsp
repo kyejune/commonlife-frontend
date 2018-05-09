@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/WEB-INF/jsp/views/common/commonHead.jsp" %>
 <tiles:insertDefinition name="posts">
-<tiles:putAttribute name="title">FEED 관리</tiles:putAttribute>
+<tiles:putAttribute name="title">커뮤니티</tiles:putAttribute>
 <tiles:putAttribute name="css">
     <!-- DataTables -->
     <a><!-- --></a>
@@ -15,23 +15,23 @@
             <c:set value="Notice" var="postTypeTxt"></c:set>
         </c:when>
         <c:otherwise>
-            <c:set value="사용자 Feed" var="postTypeTxt"></c:set>
+            <c:set value="사용자 작성글" var="postTypeTxt"></c:set>
         </c:otherwise>
     </c:choose>
 
     <!-- Section Title -->
     <div class="row wrapper border-bottom white-bg page-heading">
         <div class="col-lg-10">
-            <h2><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out> 관리</h2>
+            <h2><c:out value="${postTypeTxt}" escapeXml="false">사용자 작성글</c:out> 관리</h2>
             <ol class="breadcrumb">
                 <li>
                     <a href="/">Home</a>
                 </li>
                 <li>
-                    FEED 관리
+                    커뮤니티
                 </li>
                 <li class="active">
-                    <a><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out> 관리</a>
+                    <a><c:out value="${postTypeTxt}" escapeXml="false">사용자 작성글</c:out> 관리</a>
                 </li>
             </ol>
         </div>
@@ -44,7 +44,7 @@
             <div class="col-md-8">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out> 목록</h5>
+                        <h5><c:out value="${postTypeTxt}" escapeXml="false">사용자 작성글</c:out> 목록</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -59,7 +59,6 @@
                                     <button class="btn btn-primary"
                                             onclick="newPost()">
                                         게시물 생성
-
                                     </button>
                                 </div>
                             </div>
@@ -192,7 +191,7 @@
             <div class="col-md-4">
                 <div class="ibox float-e-margins">
                     <div class="ibox-titile">
-                        <h5><c:out value="${postTypeTxt}" escapeXml="false">사용자 FEED</c:out> 상세보기</h5>
+                        <h5><c:out value="${postTypeTxt}" escapeXml="false">사용자 작성글</c:out> 상세보기</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>

@@ -72,6 +72,7 @@ public class UserController {
         logger.debug(">>>> paginateInfo.getPageSize:" + paginateInfo.getPageSize());
         logger.debug(">>>> paginateInfo.getTotalPageCount:" + paginateInfo.getTotalPageCount() );
 
+        mav.addObject("adminInfo", adminInfo);
         mav.addObject("userType", userType);
         mav.addObject("paginateInfo", paginateInfo);
         mav.addObject("userList", userList);

@@ -72,6 +72,8 @@ public class ManagerController {
     ) {
         String grpIdStr;
         int    grpId = -1;
+        AdminInfo currAdminInfo;
+        currAdminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         if(adminInfo.getSearchKeyword1() == null){
             adminInfo.setSearchKeyword1("");
@@ -111,6 +113,8 @@ public class ManagerController {
 
         List<AdminInfo> managerList = managerService.selectManagerList(adminInfo);
 
+
+        mav.addObject("adminInfo",  currAdminInfo);
         mav.addObject("grpId",      grpId);
         mav.addObject("adminConst", adminConst);
         mav.addObject("managerList", managerList);
@@ -134,6 +138,8 @@ public class ManagerController {
             , @ModelAttribute AdminInfo adminInfo
     ) {
         logger.debug("====================> adminInfo.getAdminId: {} ",adminInfo.getAdminId());
+        AdminInfo currAdminInfo;
+        currAdminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         int grpId = -1;
         AdminInfo managerDetail = null;
@@ -185,6 +191,7 @@ public class ManagerController {
             mode = "UPD";
         }
 
+        mav.addObject("adminInfo",  currAdminInfo);
         mav.addObject("grpId", grpId);
         mav.addObject("cmplxList", cmplxList);
         mav.addObject("mode", mode);
@@ -211,12 +218,11 @@ public class ManagerController {
             , @ModelAttribute AdminInfo adminInfo)
     {
         int rs = -1;
-//        BaseUserInfo baseUserInfo = (BaseUserInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
-//        managerInfo.setRegUserId(baseUserInfo.getMngId());
-//        managerInfo.setUpdUserId(baseUserInfo.getMngId());
-        // todo: 임시로 0으로 설정, 로그인 기능 도입 이후에 로그인 사용자 값에서 가져오도록 변경할 것
-        adminInfo.setRegAdminIdx(1);
-        adminInfo.setUpdAdminIdx(1);
+        AdminInfo currAdminInfo;
+        currAdminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        adminInfo.setRegAdminIdx( currAdminInfo.getAdminIdx() );
+        adminInfo.setRegAdminIdx( currAdminInfo.getAdminIdx() );
 
         // 새로운 관리자 생성
         if( "INS".equals(adminInfo.getMode()) ){

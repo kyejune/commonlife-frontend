@@ -6,6 +6,7 @@ import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.info.exception.InfoGeneralException;
 import com.kolon.comlife.admin.info.model.model.InfoData;
 import com.kolon.comlife.admin.info.service.InfoService;
+import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.support.exception.NoDataException;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -54,6 +56,10 @@ public class InfoController {
         String                    categoryListJson;
         ObjectMapper mapper = new ObjectMapper();
 
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+
         try {
             complexInfo = complexService.getComplexById( cmplxId );
             if( complexInfo == null ) {
@@ -87,6 +93,7 @@ public class InfoController {
                     "작업 처리과정에 에러가 발생했습니다. 문제가 지속되면 담당자에게 문의하세요.");
         }
 
+        mav.addObject("adminInfo", adminInfo);
         mav.addObject("complexInfo",  complexInfo );
         mav.addObject("categoryList", categoryListJson);
         mav.addObject("cmplxId",      complexInfo.getCmplxId());

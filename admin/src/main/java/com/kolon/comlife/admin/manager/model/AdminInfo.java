@@ -3,18 +3,6 @@ package com.kolon.comlife.admin.manager.model;
 import com.kolon.common.admin.model.BaseUserInfo;
 import org.apache.ibatis.type.Alias;
 
-/**
- * 관리자 Value Object
- * @author nacsde
- * @version 1.0
- * @see <pre>
- * << 개정이력(Modification Information) >>
- *
- *   수정일        수정자           수정내용
- *  ----------   --------    ---------------------------
- *   2017-07-31    조신득          최초 생성
- * </pre>
- */
 @Alias("adminInfo")
 public class AdminInfo extends BaseUserInfo {
     private int adminIdx;

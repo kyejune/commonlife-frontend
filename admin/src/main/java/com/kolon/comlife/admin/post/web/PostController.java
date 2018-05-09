@@ -79,6 +79,7 @@ public class PostController {
         logger.debug(">>>> paginateInfo.getPageSize:" + paginateInfo.getPageSize());
         logger.debug(">>>> paginateInfo.getTotalPageCount:" + paginateInfo.getTotalPageCount() );
 
+        mav.addObject("adminInfo",  adminInfo);
         mav.addObject("postType", postType);
         mav.addObject("paginateInfo", paginateInfo);
         mav.addObject("postList", postList);
@@ -121,6 +122,7 @@ public class PostController {
         mav.setViewName("/admin/posts/feedEdit");
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
+        mav.addObject("adminInfo", adminInfo);
         mav.addObject("postType", postType );
         mav.addObject("postUpdateYn", "N" ); // N == 새로운 글 생성
 
@@ -179,6 +181,7 @@ public class PostController {
             return mav;
         }
 
+        mav.addObject("adminInfo", adminInfo);
         mav.addObject("postIdx", postIdx );
         mav.addObject("postUpdateYn", "Y" );
         mav.addObject("postType", postInfo.getPostType() );

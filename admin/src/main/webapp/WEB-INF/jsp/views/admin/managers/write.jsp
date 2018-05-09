@@ -100,7 +100,6 @@
                                 <div class="form-group">
                                     <label class="col-sm-2 control-label">비밀번호</label>
                                     <div class="col-sm-10">
-                                        {todo:비밀번호 재입력 화면을 추가해야 함}
                                         <p/>
                                         <input type="password" id="adminPw" name="adminPw" class="form-control" placeholder="비밀번호 입력">
                                     </div>
