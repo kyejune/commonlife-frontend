@@ -42,7 +42,7 @@
                     </div>
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>이 그룹의 예약 틀 목록</h5>
+                            <h5>이 그룹의 예약 목록</h5>
                         </div>
                         <div class="ibox-content">
                             <table class="table">
@@ -84,7 +84,7 @@
                                 </tbody>
                             </table>
                             <div class="text-right">
-                                <a href="/admin/reservation-schemes/create.do?cmplxIdx=${group.cmplxIdx}&parentIdx=${group.idx}" class="btn btn-primary">예약 틀 추가</a>
+                                <a href="/admin/reservation-schemes/create.do?cmplxIdx=${group.cmplxIdx}&parentIdx=${group.idx}" class="btn btn-primary">예약 추가</a>
                             </div>
                         </div>
                     </div>

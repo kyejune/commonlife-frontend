@@ -99,12 +99,12 @@
 
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>그룹 없는 예약 틀</h5>
+                            <h5>빠른 예약 추가</h5>
                         </div>
                         <div class="ibox-content">
                             <c:if test="${cmplxIdx == 0}">
                                 <div class="text-center">
-                                    현장을 선택하시면 그룹 없는 예약 틀 목록이 표시됩니다.
+                                    현장을 선택하시면 빠른 예약 목록이 표시됩니다.
                                 </div>
                             </c:if>
                             <c:if test="${cmplxIdx != 0}">
@@ -147,7 +147,7 @@
                                     </tbody>
                                 </table>
                                 <div class="text-right">
-                                    <a href="/admin/reservation-schemes/create.do?cmplxIdx=${cmplxIdx}&parentIdx=0" class="btn btn-white">그룹 없는 예약 틀 추가</a>
+                                    <a href="/admin/reservation-schemes/create.do?cmplxIdx=${cmplxIdx}&parentIdx=0" class="btn btn-white">빠른 예약 추가</a>
                                 </div>
                             </c:if>
                         </div>

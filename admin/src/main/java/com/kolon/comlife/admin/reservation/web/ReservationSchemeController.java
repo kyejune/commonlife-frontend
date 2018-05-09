@@ -2,11 +2,13 @@ package com.kolon.comlife.admin.reservation.web;
 
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
+import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.reservation.model.*;
 import com.kolon.comlife.admin.reservation.service.*;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -53,6 +55,12 @@ public class ReservationSchemeController {
         List<ReservationSchemeInfo> schemes = service.index( new HashMap() );
         mav.addObject( "schemes", schemes );
 
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        mav.addObject("adminInfo", adminInfo);
+
         return mav;
     }
 
@@ -65,6 +73,11 @@ public class ReservationSchemeController {
             , @RequestParam( value = "cmplxIdx", defaultValue = "0") int cmplxIdx
             , @RequestParam( value = "parentIdx", defaultValue = "0") int parentIdx
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        mav.addObject("adminInfo", adminInfo);
+
         String redirectTo = request.getHeader( "referer" );
         mav.addObject( "redirectTo", redirectTo );
 
@@ -111,15 +124,15 @@ public class ReservationSchemeController {
             , @RequestParam( value = "availableInWeekend", required = false ) String availableInWeekend
             , @RequestParam( value = "point", required = false ) int point
             , @RequestParam( value = "amount", required = false, defaultValue = "0") int amount
-            , @RequestParam( value = "inStock", required = false ) int inStock
-            , @RequestParam( value = "maxQty", required = false ) int maxQty
+            , @RequestParam( value = "inStock", required = false, defaultValue = "0") int inStock
+            , @RequestParam( value = "maxQty", required = false, defaultValue = "0" ) int maxQty
             , @RequestParam( value = "activateDuration", required = false ) String activateDuration
             , @RequestParam( value = "maintenanceStartAt", required = false ) String maintenanceStartAt
             , @RequestParam( value = "maintenanceEndAt", required = false ) String maintenanceEndAt
             , @RequestParam( value = "options", required = false ) String options
             , @RequestParam( value = "amenities[]", required = false ) int[] amenities
             , @RequestParam( value = "precautions", required = false ) String precautions
-            , @RequestParam( value = "delYn", required = false ) String delYn
+            , @RequestParam( value = "delYn", required = false, defaultValue = "N") String delYn
             ) {
 
         ReservationSchemeInfo info = new ReservationSchemeInfo();
@@ -181,6 +194,11 @@ public class ReservationSchemeController {
             , @RequestParam( value = "cmplxIdx", defaultValue = "0") int cmplxIdx
             , @RequestParam( value = "parentIdx", required = false, defaultValue = "0") int parentIdx
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        mav.addObject("adminInfo", adminInfo);
+
         String redirectTo = request.getHeader( "referer" );
         mav.addObject( "redirectTo", redirectTo );
 

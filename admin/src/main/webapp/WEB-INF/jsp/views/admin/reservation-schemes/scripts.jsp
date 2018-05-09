@@ -16,6 +16,47 @@
         right: 0;
         top: 0;
     }
+
+    /*어매니티 멀티 셀렉터*/
+    .chosen-container-multi .chosen-choices, .chosen-container-single .chosen-single,
+    .chosen-container-active.chosen-container-multi.chosen-with-drop .chosen-choices, .chosen-container-active.chosen-with-drop .chosen-single,
+    .chosen-container .chosen-drop {
+        border: 1px solid #e5e5e5;
+        border-radius: 0;
+    }
+
+    /*어매니티 선택 항목*/
+    .scheme-form__amenities .chose-image {
+        width: 24px;
+        max-height: 24px;
+        background: #666;
+        padding: 4px;
+    }
+
+    /*어매니티 선택 항목 내부 라벨*/
+    .scheme-form__amenities .chosen-container-multi .chosen-choices li.search-choice {
+        background: none;
+        border: none;
+    }
+
+    /*어매니티 선택 항목 이미지*/
+    .scheme-form__amenities .chosen-container-multi .chosen-choices li.search-choice img {
+        margin-right: 0.5em;
+        transform: translate( 0, -1px );
+    }
+
+    /*어매니티 선택 항목 닫기 버튼*/
+    .scheme-form__amenities .chosen-container-multi .chosen-choices li.search-choice .search-choice-close {
+        transform: translate( 0, 3px );
+    }
+
+    /*어매니티 목록 이미지*/
+    .scheme-form__amenities .chose-image-list {
+        width: 24px;
+        max-height: 24px;
+        background: #666;
+        padding: 4px;
+    }
 </style>
 <script>
     $( function() {
@@ -27,6 +68,21 @@
             HOST = 'https://clback.cyville.net';
         }
 
+        // 멀티 셀렉트
+        $('.chosen-select').chosen({width: "100%"});
+
+        // 스위쳐
+        $('.js-switch').each( function( index, element ) {
+            new Switchery(element, { color: '#1AB394', size: 'small' });
+        } );
+
+        // 터치 스핀(스테퍼)
+        $(".touchspin").TouchSpin({
+            buttondown_class: 'btn btn-white',
+            buttonup_class: 'btn btn-white'
+        });
+
+        // 데이트피커
         $( '.datepicker' ).each( function( index, element ) {
             var $element = $( element );
             var params = {};
@@ -34,6 +90,66 @@
                 params.format = $element.data( 'format' );
             }
             $element.datetimepicker( params );
+        } );
+
+        // 옵션 토글
+        $( '#qty-toggle' ).on( 'change', function( event ) {
+            var toggle = $( event.currentTarget );
+            var on = toggle.prop( 'checked' );
+            var target = $( '#qty-section' );
+            if( on ) {
+                target.show();
+            }
+            else {
+                target.hide();
+            }
+        } );
+        $( '#options-toggle' ).on( 'change', function( event ) {
+            var toggle = $( event.currentTarget );
+            var on = toggle.prop( 'checked' );
+            var target = $( '#options-section' );
+            if( on ) {
+                target.show();
+            }
+            else {
+                target.hide();
+            }
+        } );
+        $( '#field-toggle' ).on( 'change', function( event ) {
+            var toggle = $( event.currentTarget );
+            var on = toggle.prop( 'checked' );
+            var target = $( '#field-section' );
+            if( on ) {
+                target.show();
+            }
+            else {
+                target.hide();
+            }
+        } );
+
+        $( '#qty-toggle' ).trigger( 'change' );
+        $( '#options-toggle' ).trigger( 'change' );
+        $( '#field-toggle' ).trigger( 'change' );
+
+        // 옵션 리스트 생성 및 추가
+        $( '#add-option-button' ).on( 'click', function( evennt ) {
+            var value = $( '#option-input' ).val();
+            var item = $( '<li class="list-group-item">' + value +
+                '                                       <input type="hidden" name="" value="">' +
+                '                                        <span class="pull-right">' +
+                '                                            <button class="btn btn-danger btn-xs" type="button">' +
+                '                                                &times;' +
+                '                                            </button>' +
+                '                                        </span>' +
+                '                                    </li>' );
+            $( '#options-list' ).append( item );
+            $( '#option-input' ).val( '' );
+        } );
+
+        $( document ).on( 'click', '#options-list .btn-danger', function( event ) {
+            event.preventDefault();
+            var button = $( event.currentTarget );
+            button.closest( '.list-group-item' ).remove();
         } );
 
         function createThumbnail( data ) {

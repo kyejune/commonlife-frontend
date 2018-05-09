@@ -5,7 +5,7 @@
     <tiles:putAttribute name="contents">
         <div class="row wrapper border-bottom white-bg page-heading">
             <div class="col-lg-10">
-                <h2>예약 틀 관리</h2>
+                <h2>예약 관리</h2>
                 <ol class="breadcrumb">
                     <li>
                         <a href="/">Home</a>
@@ -14,7 +14,7 @@
                         예약 관리
                     </li>
                     <li class="active">
-                        <a>예약 틀 관리</a>
+                        <a>예약 관리</a>
                     </li>
                 </ol>
             </div>
@@ -26,7 +26,7 @@
                 <div class="col-lg-12">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>예약 틀 목록</h5>
+                            <h5>예약 목록</h5>
                             <div class="ibox-tools">
                                 <a class="collapse-link">
                                     <i class="fa fa-chevron-up"></i>

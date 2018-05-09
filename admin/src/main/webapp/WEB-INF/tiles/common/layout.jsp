@@ -23,6 +23,17 @@
     <link href="/resources/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
     <link href="/resources/css/plugins/fullcalendar/fullcalendar.print.css" rel="stylesheet">
 
+    <%--chosen--%>
+    <link href="/resources/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
+    <link href="/resources/css/plugins/chosen/image-select.css" rel="stylesheet">
+    <link href="/resources/css/plugins/chosen/flat.css" rel="stylesheet">
+
+    <%--Switchery--%>
+    <link href="/resources/css/plugins/switchery/switchery.css" rel="stylesheet">
+
+    <%--Touchspin--%>
+    <link href="/resources/css/plugins/touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet">
+
     <link href="/resources/css/animate.css" rel="stylesheet">
     <link href="/resources/css/style.css" rel="stylesheet">
     <link href="/resources/css/commonlife.css" rel="stylesheet">
@@ -51,6 +62,15 @@
     <script src="/resources/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
     <script src="/resources/js/plugins/jasny/jasny-bootstrap.min.js"></script>
 
+    <%--chosen--%>
+    <script src="/resources/js/plugins/chosen/chosen.jquery.js"></script>
+    <script src="/resources/js/plugins/chosen/image-select.jquery.js"></script>
+
+    <%--Switchery--%>
+    <script src="/resources/js/plugins/switchery/switchery.js"></script>
+
+    <%--Touchspin--%>
+    <script src="/resources/js/plugins/touchspin/jquery.bootstrap-touchspin.min.js"></script>
 
     <!-- FooTable -->
     <script src="/resources/js/plugins/footable/footable.all.min.js"></script>
