@@ -18,12 +18,16 @@
             `A_I`.`REG_DTTM`,
             `A_I`.`REG_ADMIN_IDX`,
             `A_I`.`UPD_DTTM`,
-            `A_I`.`UPD_ADMIN_IDX`
+            `A_I`.`UPD_ADMIN_IDX`,
+            `C_E`.`CL_CMPLX_NM`
         FROM
             `CL_ADMIN_INFO` AS A_I
               LEFT JOIN
             `CL_ADMIN_GRP` AS A_G
               ON A_I.GRP_ID = A_G.GRP_ID
+              JOIN
+            `COMPLEX_M_EXT`AS C_E
+              ON `A_I`.`CMPLX_ID` = `C_E`.`CMPLX_ID`
         WHERE
             `ADMIN_ID` = #{adminId} AND
             `ADMIN_PW`=SHA2(#{adminPw}, 256) AND

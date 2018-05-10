@@ -3,7 +3,6 @@
 
 <mapper namespace="Post">
 
-
     <select id="countPostList" parameterType="java.util.Map" resultType="java.lang.Integer">
         <!-- Pagination 계산을 위한 레코드 갯수 계산 -->
         SELECT

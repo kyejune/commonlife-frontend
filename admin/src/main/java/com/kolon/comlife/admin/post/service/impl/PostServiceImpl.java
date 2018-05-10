@@ -134,7 +134,6 @@ public class PostServiceImpl implements PostService {
         String                     imgSrc = null;
 
         PaginateInfo paginateInfo;
-        double       totalPages;
         int          countPosts;
         int          limit;
         int          pageNum;
@@ -242,7 +241,6 @@ public class PostServiceImpl implements PostService {
 
 //        // 페이지네이션 계산
         countPosts = postDAO.countPostList( params );
-//        totalPages = Math.ceil( ( double ) countPosts / ( double ) limit );
 
         paginateInfo = new PaginateInfo();
         paginateInfo.setData( postInfoList );

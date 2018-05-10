@@ -179,10 +179,12 @@ public class ImageStoreController {
         try {
             imageInfo = imageStoreService.getImageByIdx( id );
         } catch ( ImageNotFoundException e ){
+            e.printStackTrace();
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body( new SimpleErrorInfo( e.getMessage()) );
         } catch ( Exception e ) {
+            e.printStackTrace();
             logger.error( e.getMessage() );
             return ResponseEntity
                     .status(HttpStatus.CONFLICT)

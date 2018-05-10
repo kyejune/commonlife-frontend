@@ -44,6 +44,198 @@
             DISP_ORDER=#{dispOrder};
     </update>
 
+    <select id="countInfoItemList" parameterType="java.util.Map" resultType="java.lang.Integer">
+        <!-- Pagination 계산을 위한 레코드 갯수 계산 -->
+        SELECT
+            COUNT( * ) as COUNT
+        FROM
+            CL_INFO_ITEM AS I
+                JOIN
+            CL_INFO_CATE AS C
+                  ON I.CATE_IDX = C.CATE_IDX
+                      AND C.CATE_ID = #{cateId}
+                      AND I.CMPLX_ID = #{cmplxId}
+        ;
+    </select>
+
+    <select id="selectInfoItemListByCmplxIdAndCategory" parameterType="java.util.Map" resultType="infoItem">
+        SELECT * FROM
+        (
+            SELECT
+                I.ITEM_IDX  AS `ITEM_IDX`,
+                I.CMPLX_ID  AS `CMPLX_ID`,
+                I.CATE_IDX  AS `CATE_IDX`,
+                I.ITEM_NM   AS `ITEM_NM`,
+                I.CONTENT   AS `DESC`,
+                I.DEL_YN    AS `DEL_YN`,
+                I.DISP_ORDER AS `DISP_ORDER`,
+                I.REG_DTTM  AS `REG_DTTM`,
+                I.UPD_DTTM  AS `UPD_DTTM`,
+                C.CATE_NM   AS `CATE_NM`,
+                C.CATE_ID   AS `CATE_ID`,
+                IFNULL(
+                (
+                    SELECT
+                      IFNULL(IMG.IMAGE_IDX, -1)
+                    FROM
+                        CL_IMAGE_INFO AS IMG  JOIN
+                        CL_IMAGE_TYPE AS IMG_TYPE
+                          ON    IMG.PARENT_TYPE = IMG_TYPE.TYPE_IDX
+                            AND IMG_TYPE.TYPE_NM = 'BENEFITSLOGO'   -- IMG_SRC는 목록에 표시되는 항목 이미지로, BENEFITSLOGO인 경우만 표시
+                            AND IMG.DEL_YN = 'N'
+                    WHERE IMG.PARENT_IDX = I.ITEM_IDX
+                    ORDER BY IMG.IMAGE_IDX DESC
+                    LIMIT 1
+                ), -1)      AS IMAGE_IDX,
+                IFNULL(
+                (
+                    SELECT
+                        IMG.IMAGE_IDX
+                    FROM
+                        CL_IMAGE_INFO AS IMG  JOIN
+                        CL_IMAGE_TYPE AS IMG_TYPE
+                          ON    IMG.PARENT_TYPE = IMG_TYPE.TYPE_IDX
+                            AND IMG.DEL_YN = 'N'
+                    WHERE
+                        IMG.PARENT_IDX = I.ITEM_IDX
+                        AND (IMG_TYPE.TYPE_NM = 'BENEFITS' OR IMG_TYPE.TYPE_NM = 'GUIDE')
+                    ORDER BY IMG.IMAGE_IDX DESC
+                        LIMIT 1
+                ), -1)    AS IMAGE_IDX_2
+            FROM
+                CL_INFO_ITEM AS I
+                    JOIN
+                CL_INFO_CATE AS C
+                    ON I.CATE_IDX = C.CATE_IDX
+                        AND C.CATE_ID = #{cateId}
+                        AND I.CMPLX_ID = #{cmplxId}
+    --         WHERE I.DEL_YN='N'
+            ORDER BY I.DISP_ORDER
+        ) AS T
+        ORDER BY `T`.`ITEM_IDX` DESC
+        <if test="limit != null">
+            LIMIT
+            #{limit}
+            <if test="offset != null">
+                OFFSET
+                #{offset}
+            </if>
+        </if>
+    </select>
+
+    <select id="selectInfoItemByCmplxIdAndCategory" parameterType="java.util.Map" resultType="infoItem">
+        SELECT
+            I.ITEM_IDX  AS `ITEM_IDX`,
+            I.CMPLX_ID  AS `CMPLX_ID`,
+            I.CATE_IDX  AS `CATE_IDX`,
+            I.ITEM_NM   AS `ITEM_NM`,
+            I.CONTENT   AS `DESC`,
+            I.DEL_YN    AS `DEL_YN`,
+            I.DISP_ORDER AS `DISP_ORDER`,
+            I.REG_DTTM  AS `REG_DTTM`,
+            I.UPD_DTTM  AS `UPD_DTTM`,
+            C.CATE_NM   AS `CATE_NM`,
+            C.CATE_ID   AS `CATE_ID`,
+            IFNULL(
+            (
+                SELECT
+                    IMG.IMAGE_IDX
+                FROM
+                    CL_IMAGE_INFO AS IMG  JOIN
+                    CL_IMAGE_TYPE AS IMG_TYPE
+                      ON    IMG.PARENT_TYPE = IMG_TYPE.TYPE_IDX
+                WHERE IMG.PARENT_IDX = I.ITEM_IDX AND IMG_TYPE.TYPE_NM = 'BENEFITSLOGO'   -- IMG_SRC는 목록에 표시되는 항목 이미지로, BENEFITSLOGO인 경우만 표시
+                ORDER BY IMG.IMAGE_IDX DESC
+                LIMIT 1
+                ), -1) AS IMAGE_IDX,
+            IFNULL(
+                (
+                    SELECT
+                        IMG.IMAGE_IDX
+                    FROM
+                        CL_IMAGE_INFO AS IMG  JOIN
+                        CL_IMAGE_TYPE AS IMG_TYPE
+                            ON    IMG.PARENT_TYPE = IMG_TYPE.TYPE_IDX
+                    WHERE IMG.PARENT_IDX = I.ITEM_IDX AND (IMG_TYPE.TYPE_NM = 'BENEFITS' OR IMG_TYPE.TYPE_NM = 'GUIDE')
+                    ORDER BY IMG.IMAGE_IDX DESC
+                    LIMIT 1
+            ), -1)    AS IMAGE_IDX_2
+        FROM
+            CL_INFO_ITEM AS I
+                JOIN
+            CL_INFO_CATE AS C
+                ON I.CATE_IDX = C.CATE_IDX
+                  AND C.CATE_ID = #{cateId}
+                  AND I.CMPLX_ID = #{cmplxId}
+        WHERE I.ITEM_IDX = #{itemIdx}
+        ;
+    </select>
+
+    <select id="selectLatestItem" resultType="infoItem">
+        <![CDATA[
+        SELECT
+                *
+        FROM
+                `CL_INFO_ITEM`
+        WHERE
+                `DEL_YN` = 'N'
+                AND
+                `ITEM_IDX` = LAST_INSERT_ID()
+        ]]>
+    </select>
+
+
+    <insert id="insertItemByAdmin" parameterType="infoItem">
+        <![CDATA[
+        INSERT
+        INTO    `CL_INFO_ITEM`
+        (
+            `ADMIN_IDX`,
+            `CMPLX_ID`,
+            `CATE_IDX`,
+            `ITEM_NM`,
+            `CONTENT`,
+            `REG_DTTM`,
+            `UPD_DTTM`
+        )
+        VALUES
+        (
+            #{adminIdx},
+            #{cmplxId},
+            (
+                SELECT CATE_IDX FROM CL_INFO_CATE WHERE CATE_ID=#{cateId}
+            ),
+            #{itemNm},
+            #{desc},
+            CURRENT_TIMESTAMP,
+            CURRENT_TIMESTAMP
+        )
+    ]]>
+    </insert>
+
+    <update id="updateItem" parameterType="infoItem">
+        UPDATE
+            `CL_INFO_ITEM`
+        SET
+            `ITEM_NM`   = #{itemNm},
+            `CONTENT`   = #{desc},
+            `UPD_DTTM`  = CURRENT_TIMESTAMP
+        WHERE
+            `ITEM_IDX` = #{itemIdx} AND
+            `CMPLX_ID` = #{cmplxId}
+    </update>
+
+
+    <update id="updateInfoDelYn" parameterType="java.util.Map">
+        <![CDATA[
+        UPDATE  `CL_INFO_ITEM`
+        SET     `DEL_YN`   = #{delYn},
+                `UPD_DTTM` = CURRENT_TIMESTAMP
+        WHERE
+                `ITEM_IDX` = #{itemIdx} AND
+                `CMPLX_ID` = #{cmplxId}
+    ]]>
+    </update>
 
 
 

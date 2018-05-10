@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.info.exception.InfoGeneralException;
-import com.kolon.comlife.admin.info.model.model.InfoData;
+import com.kolon.comlife.admin.info.model.InfoData;
 import com.kolon.comlife.admin.info.service.InfoService;
 import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.support.exception.NoDataException;
@@ -159,17 +159,4 @@ public class InfoController {
 
         return ResponseEntity.status(HttpStatus.OK).body(new SimpleMsgInfo("업데이트를 완료했습니다."));
     }
-
-
-    /////// 현장 관리자 용 ///////
-
-    /*
-    todo: living Guide의 게시판 기능 만들기
-     */
-
-
-    /*
-    todo: Benefits 게시판 기능 만들기
-     */
-
 }

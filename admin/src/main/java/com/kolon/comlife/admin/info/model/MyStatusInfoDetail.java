@@ -1,4 +1,4 @@
-package com.kolon.comlife.admin.info.model.model;
+package com.kolon.comlife.admin.info.model;
 
 public class MyStatusInfoDetail extends  MyStatusInfo {
 

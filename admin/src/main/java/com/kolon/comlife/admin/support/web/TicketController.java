@@ -79,7 +79,7 @@ public class TicketController {
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         int recCntPerPage = RECORD_COUNT_PER_PAGE;
-        int complexId = 125; // todo: 관리자 로그인 정보로 부터 cmplxId 가져오기
+        int complexId = adminInfo.getCmplxId();
 
         complexInfo = complexService.getComplexById( complexId );
         paginateInfo = ticketService.getTicketList( complexId, pageNum, recCntPerPage );
@@ -108,23 +108,20 @@ public class TicketController {
         ComplexInfoDetail complexInfo;
         UserExtInfo       userExtInfo;
         String            ticketFileImgUrl = null;
-        AdminInfo           adminInfo;
+        AdminInfo         adminInfo;
+
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         if(pageNum < 1) {
             pageNum = 1;
         }
 
-        int complexId = 125; // todo: 관리자 로그인 정보로 부터 cmplxId 가져오기
-
-        // todo: 현장 관리자가 확인 권한 있는지 체크
-
-        complexInfo = complexService.getComplexById( complexId );
+        complexInfo = complexService.getComplexById( adminInfo.getCmplxId() );
         if( complexInfo == null ) {
             return mav.addObject("error", "해당하는 현장 정보가 없습니다.");
         }
 
-        ticketInfo = ticketService.getTicket( complexId, tktIdx );
+        ticketInfo = ticketService.getTicket( adminInfo.getCmplxId(), tktIdx );
         if( ticketInfo == null ) {
             return mav.addObject("error", "해당하는 티켓 정보가 없습니다.");
         }

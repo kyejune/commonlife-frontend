@@ -8,7 +8,13 @@
                 <div class="dropdown profile-element">
                     <img class="nav-header__logo" src="/resources/img/logo_default.png" alt="">
                     <c:if test="${adminInfo.adminNm != null}">
-                        <p class="nav-header__welcome"><strong class="font-bold">${adminInfo.adminNm}</strong>님 안녕하세요.</p>
+                        <p class="nav-header__welcome">
+                            이름 : <strong class="font-bold">${adminInfo.adminNm}</strong><br/>
+                            권한 : <strong class="font-bold">${adminInfo.grpNm}</strong>
+                            <%--<c:if test="${adminInfo.grpNm eq '현장'}">--%>
+                                <%--<br/>담당현장 : ${adminInfo.cmplxNm}--%>
+                            <%--</c:if>--%>
+                        </p>
                     </c:if>
                 </div>
                 <div class="logo-element">
@@ -26,8 +32,8 @@
                     <span class="nav-label">현장| 커뮤니티</span><span class="fa arrow"></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
-                    <li id="left_feed_event"><a href="/admin/posts/eventList.do?grpId=0">Event 관리</a></li>
-                    <li id="left_feed_notice"><a href="/admin/posts/noticeList.do?grpId=1">Notice 관리</a></li>
+                    <li id="left_feed_event"><a href="/admin/posts/eventList.do">Event 관리</a></li>
+                    <li id="left_feed_notice"><a href="/admin/posts/noticeList.do">Notice 관리</a></li>
                     <li id="left_feed_feed"><a href="/admin/posts/feedList.do">사용자 작성글 관리</a></li>
                 </ul>
             </li>
@@ -40,6 +46,16 @@
                     <li><a href="/admin/reservations/list.do">예약 현황 (목록형)</a></li>
                     <li><a href="/admin/reservations/calendar.do">예약 현황 (달력형)</a></li>
                     <%--<li><a href="#">예약 등록</a></li>--%>
+                </ul>
+            </li>
+            <li id="left_info">
+                <a href="#">
+                    <i class="fa fa-table"></i>
+                    <span class="nav-label">현장| INFO</span><span class="fa arrow"></span>
+                </a>
+                <ul class="nav nav-second-level collapse">
+                    <li id="left_info_guide"><a href="/admin/info/guide/list.do">Living Guide 관리</a></li>
+                    <li id="left_info_benefits"><a href="/admin/info/benefits/list.do">Benefits 관리</a></li>
                 </ul>
             </li>
             <li id="left_user">

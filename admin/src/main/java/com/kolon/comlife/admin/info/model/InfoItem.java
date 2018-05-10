@@ -1,13 +1,19 @@
-package com.kolon.comlife.admin.info.model.model;
+package com.kolon.comlife.admin.info.model;
 
+import com.kolon.comlife.admin.imageStore.model.ImageInfoExt;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 import org.apache.ibatis.type.Alias;
+
+import java.util.List;
+import java.util.Map;
 
 @Alias("infoItem")
 public class InfoItem extends SimpleMsgInfo {
 
     private int    itemIdx;
     private String itemNm;
+    private int    imageIdx;
+    private int    imageIdx2;
 
     private int    cmplxId;
 
@@ -16,13 +22,18 @@ public class InfoItem extends SimpleMsgInfo {
     private String cateId;
 
     private String imgSrc;
-    private String desc;
+    private String desc;            //  == contents
     private int    dispOrder;
     private String setYn;
     private String delYn;
 
     private String regDttm;
     private String updDttm;
+
+    private int    adminIdx;
+    private String adminNm;
+
+    private List<ImageInfoExt> imageInfo;
 
     public String getItemNm() {
         return itemNm;
@@ -40,6 +51,14 @@ public class InfoItem extends SimpleMsgInfo {
         this.itemIdx = itemIdx;
     }
 
+    public int getImageIdx2() {
+        return imageIdx2;
+    }
+
+    public void setImageIdx2(int imageIdx2) {
+        this.imageIdx2 = imageIdx2;
+    }
+
     public int getCateIdx() {
         return cateIdx;
     }
@@ -54,6 +73,14 @@ public class InfoItem extends SimpleMsgInfo {
 
     public void setCmplxId(int cmplxId) {
         this.cmplxId = cmplxId;
+    }
+
+    public int getImageIdx() {
+        return imageIdx;
+    }
+
+    public void setImageIdx(int imageIdx) {
+        this.imageIdx = imageIdx;
     }
 
     public String getCateNm() {
@@ -126,5 +153,29 @@ public class InfoItem extends SimpleMsgInfo {
 
     public void setUpdDttm(String updDttm) {
         this.updDttm = updDttm;
+    }
+
+    public int getAdminIdx() {
+        return adminIdx;
+    }
+
+    public void setAdminIdx(int adminIdx) {
+        this.adminIdx = adminIdx;
+    }
+
+    public String getAdminNm() {
+        return adminNm;
+    }
+
+    public void setAdminNm(String adminNm) {
+        this.adminNm = adminNm;
+    }
+
+    public List<ImageInfoExt> getImageInfo() {
+        return imageInfo;
+    }
+
+    public void setImageInfo(List<ImageInfoExt> imageInfo) {
+        this.imageInfo = imageInfo;
     }
 }

@@ -3,6 +3,7 @@ package com.kolon.comlife.admin.manager.model;
 import com.kolon.common.admin.model.BaseUserInfo;
 import org.apache.ibatis.type.Alias;
 
+
 @Alias("adminInfo")
 public class AdminInfo extends BaseUserInfo {
     private int adminIdx;

@@ -1,4 +1,4 @@
-package com.kolon.comlife.admin.info.model.model;
+package com.kolon.comlife.admin.info.model;
 
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 
