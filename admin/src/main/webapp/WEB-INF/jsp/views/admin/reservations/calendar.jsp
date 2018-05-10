@@ -49,6 +49,20 @@
                                             </ul>
                                         </div>
                                     </c:if>
+                                    <c:if test="${adminInfo.cmplxId != 0}">
+                                        <div class="btn-group" id="dropdown-complex">
+                                            <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">지점선택 <span class="caret"></span></button>
+                                            <input type="hidden" name="complexIdx" value="${complexIdx}">
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">지점선택</a></li>
+                                                <c:forEach var="complex" items="${complexes}">
+                                                    <c:if test="${adminInfo.cmplxId == complex.cmplxId}">
+                                                        <li><a href="#complexIdx=${complex.cmplxId}" data-value="${complex.cmplxId}">${complex.cmplxNm}</a></li>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </ul>
+                                        </div>
+                                    </c:if>
                                 </div>
                                 <div class="form-group">
                                     <div class="btn-group" id="dropdown-group">
@@ -103,7 +117,7 @@
             <c:forEach var="reservation" items="${reservations}">
             events.push( {
                 idx: '${reservation.idx}',
-                title: '${reservation.scheme.title}',
+                title: '${reservation.scheme.title} | ${reservation.user.userNm}',
                 start: moment( '${reservation.startDt}' ).toDate(),
                 end: moment( '${reservation.endDt}' ).toDate()
             } );
@@ -116,6 +130,7 @@
                         right: 'month,agendaWeek,agendaDay'
                     },
                     events: events,
+                    displayEventTime: false,
                     eventClick: function(calEvent, jsEvent, view) {
                         window.location.href = "/admin/reservations/show.do?idx=" + calEvent.idx;
                     }

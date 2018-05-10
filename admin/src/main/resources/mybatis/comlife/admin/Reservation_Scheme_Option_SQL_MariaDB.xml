@@ -8,7 +8,7 @@
         FROM
                 `RESERVATION_SCHEME_OPTIONS`
         WHERE
-                1=1
+                `DEL_YN` = 'N'
                 <choose>
                     <when test='ids != null'>
                         AND
@@ -33,6 +33,8 @@
             FROM
                     `RESERVATION_SCHEME_OPTIONS`
             WHERE
+            `DEL_YN` = 'N'
+            AND
                     `IDX` = #{idx}
         ]]>
     </select>

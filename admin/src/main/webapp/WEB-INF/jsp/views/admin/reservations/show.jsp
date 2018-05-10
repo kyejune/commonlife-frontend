@@ -33,24 +33,72 @@
                                 <dt>예약명</dt>
                                 <dd>${reservation.scheme.title}</dd>
 
-                                <dt>예약일</dt>
-                                <dd>
-                                    ${reservation.startDt}
-                                    <c:if test="${reservation.endDt != null}">
-                                        부터 ${reservation.endDt} 까지
-                                    </c:if>
-                                </dd>
-
-                                <c:if test="${reservation.startTime != null}">
-                                    <dt>예약 시간</dt>
+                                <c:if test="${reservation.scheme.reservationType.equals( 'A' )}">
+                                    <dt>예약일</dt>
                                     <dd>
-                                        ${reservation.startTime}
-                                        <c:if test="${reservation.endTime != null}">
-                                            부터 ${reservation.endTime} 까지
-                                        </c:if>
+                                        ${reservation.startDt}
+                                    </dd>
+                                    <c:if test="${reservation.scheme.useTime.equals( 'yes' )}">
+                                        <dt>시간</dt>
+                                        <dd>
+                                            <fmt:parseDate var="startTime" value="${reservation.startTime}" pattern="HH:mm:ss" />
+                                            <fmt:formatDate value="${startTime}" pattern="HH:mm"/>
+                                            부터
+                                            <fmt:parseDate var="endTime" value="${reservation.endTime}" pattern="HH:mm:ss" />
+                                            <fmt:formatDate value="${endTime}" pattern="HH:mm"/>
+                                            까지
+                                        </dd>
+                                    </c:if>
+                                </c:if>
+                                <c:if test="${reservation.scheme.reservationType.equals( 'B' )}">
+                                    <dt>예약일</dt>
+                                    <dd>
+                                        ${reservation.startDt}
+                                        부터
+                                        ${reservation.endDt}
+                                        까지
+                                    </dd>
+                                </c:if>
+
+                                <c:if test="${reservation.option != null}">
+                                    <dt>옵션</dt>
+                                    <dd>
+                                        ${reservation.option.name}
+                                    </dd>
+                                </c:if>
+
+                                <c:if test="${reservation.scheme.useQty.equals( 'yes' )}">
+                                    <dt>수량</dt>
+                                    <dd>
+                                        ${reservation.qty}
+                                    </dd>
+                                </c:if>
+
+                                <c:if test="${reservation.userMemo != null}">
+                                    <dt>${reservation.scheme.fieldLabel}</dt>
+                                    <dd>
+                                        ${reservation.userMemo}
                                     </dd>
                                 </c:if>
                             </dl>
+                        </div>
+                        <div class="ibox-content">
+                            <div>
+                                <label>이 예약의 상태를 변경</label>
+                            </div>
+                            <div>
+                                <div class="btn-group" id="status-group">
+                                    <form action="/admin/reservations/edit-queue.do" method="post">
+                                        <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+                                        <input type="hidden" name="idx" value="${reservation.idx}">
+                                        <input type="hidden" name="status" value="${reservation.status}">
+                                        <div class="btn-group">
+                                            <button class="btn btn-white" data-value="IN_QUEUE" type="submit">예약 대기</button>
+                                            <button class="btn btn-white" data-value="RESERVED" type="submit">예약 확정</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="ibox float-e-margins">
@@ -85,17 +133,21 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-xs-6">
-                            <button class="btn btn-white" onclick="history.back()">뒤로가기</button>
-                        </div>
-                        <div class="col-xs-t text-right">
-                            <form action="/admin/reservations/delete.do" method="post" onsubmit="return confirm( '정말 삭제하시겠습니까?' )">
-                                <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
-                                <input type="hidden" name="idx" value="${reservation.idx}">
-                                <input type="hidden" name="redirectTo" value="${ redirectTo }">
-                                <button class="btn btn-danger">이 예약을 삭제</button>
-                            </form>
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <button class="btn btn-white" onclick="history.back()">뒤로가기</button>
+                                </div>
+                                <div class="col-xs-6 text-right">
+                                    <form action="/admin/reservations/delete.do" method="post" onsubmit="return confirm( '정말 삭제하시겠습니까?' )">
+                                        <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
+                                        <input type="hidden" name="idx" value="${reservation.idx}">
+                                        <input type="hidden" name="redirectTo" value="${ redirectTo }">
+                                        <button class="btn btn-danger">이 예약을 삭제</button>
+                                    </form>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -137,5 +189,27 @@
                 </div>
             </div>
         </div>
+    </tiles:putAttribute>
+    <tiles:putAttribute name="js">
+        <script>
+            $(function(){
+                $( 'input[name=status]' ).val();
+                $( '#status-group button' ).each( function( index, element ) {
+                    var $element = $( element );
+                    $element.removeClass().addClass( 'btn' );
+                    if( $element.data( 'value' ) === $( 'input[name=status]' ).val() ) {
+                        $element.addClass( 'btn-primary' );
+                    }
+                    else {
+                        $element.addClass( 'btn-white' );
+                    }
+                } );
+                $( '#status-group button' ).on( 'mouseenter', function( event ) {
+                    var $button = $( event.currentTarget );
+                    $( 'input[name=status]' ).val( $button.data( 'value' ) );
+                } );
+            });
+        </script>
+
     </tiles:putAttribute>
 </tiles:insertDefinition>

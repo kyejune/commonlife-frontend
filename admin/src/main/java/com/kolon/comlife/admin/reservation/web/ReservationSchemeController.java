@@ -45,6 +45,9 @@ public class ReservationSchemeController {
     @Resource(name = "reservationAmenitySchemeService")
     private ReservationAmenitySchemeService amenitySchemeService;
 
+    @Resource(name = "reservationSchemeOptionService")
+    private ReservationSchemeOptionService optionService;
+
     @RequestMapping(value = "list.do")
     public ModelAndView listReservationScheme (
             HttpServletRequest request
@@ -111,6 +114,14 @@ public class ReservationSchemeController {
             , @RequestParam( value = "cmplxIdx", defaultValue = "0" ) int cmplxIdx
             , @RequestParam( value = "allowCmplxIdxes[]" ) int[] allowCmplxIdxes
             , @RequestParam( value = "parentIdx", required = false, defaultValue = "0") int parentIdx
+            , @RequestParam( value = "activate", required = false, defaultValue = "no") String activate
+            , @RequestParam( value = "useTime", required = false, defaultValue = "no") String useTime
+            , @RequestParam( value = "useQueue", required = false, defaultValue = "no") String useQueue
+            , @RequestParam( value = "useQty", required = false, defaultValue = "no") String useQty
+            , @RequestParam( value = "useOptions", required = false, defaultValue = "no") String useOptions
+            , @RequestParam( value = "useField", required = false, defaultValue = "no") String useField
+            , @RequestParam( value = "isExpress", required = false, defaultValue = "N") String isExpress
+            , @RequestParam( value = "fieldLabel", required = false) String fieldLabel
             , @RequestParam( value = "code", required = false ) String code
             , @RequestParam( value = "icon", required = false ) String icon
             , @RequestParam( value = "reservationType", required = false ) String reservationType
@@ -123,12 +134,14 @@ public class ReservationSchemeController {
             , @RequestParam( value = "endDt", required = false ) String endDt
             , @RequestParam( value = "openTime", required = false, defaultValue = "00") String openTime
             , @RequestParam( value = "closeTime", required = false, defaultValue = "24") String closeTime
+            , @RequestParam( value = "maxDuration", required = false, defaultValue = "1") int maxDuration
+            , @RequestParam( value = "maxDays", required = false, defaultValue = "1") int maxDays
             , @RequestParam( value = "availableInWeekend", required = false ) String availableInWeekend
             , @RequestParam( value = "point", required = false ) int point
             , @RequestParam( value = "amount", required = false, defaultValue = "0") int amount
             , @RequestParam( value = "inStock", required = false, defaultValue = "0") int inStock
             , @RequestParam( value = "maxQty", required = false, defaultValue = "0" ) int maxQty
-            , @RequestParam( value = "activateDuration", required = false ) String activateDuration
+            , @RequestParam( value = "activateDuration", required = false, defaultValue = "0") int activateDuration
             , @RequestParam( value = "maintenanceStartAt", required = false ) String maintenanceStartAt
             , @RequestParam( value = "maintenanceEndAt", required = false ) String maintenanceEndAt
             , @RequestParam( value = "options", required = false ) String options
@@ -141,6 +154,14 @@ public class ReservationSchemeController {
         ReservationSchemeInfo info = new ReservationSchemeInfo();
         info.setCmplxIdx( cmplxIdx );
         info.setParentIdx( parentIdx );
+        info.setActivate( activate );
+        info.setUseTime( useTime );
+        info.setUseQueue( useQueue );
+        info.setUseQty( useQty );
+        info.setUseOptions( useOptions );
+        info.setUseField( useField );
+        info.setIsExpress( isExpress );
+        info.setFieldLabel( fieldLabel );
         info.setCode( code );
         info.setIcon( icon );
         info.setReservationType( reservationType );
@@ -154,6 +175,8 @@ public class ReservationSchemeController {
         // 시간 값만 받기 때문에 HH:mm:ss 형식으로 설정
         info.setOpenTime( openTime + ":00:00" );
         info.setCloseTime( closeTime + ":00:00" );
+        info.setMaxDuration( maxDuration );
+        info.setMaxDays( maxDays );
         info.setAvailableInWeekend( availableInWeekend );
         info.setPoint( point );
         info.setAmount( amount );
@@ -184,6 +207,15 @@ public class ReservationSchemeController {
             }
         }
 
+        // 옵션 항목 parentIdx 업데이트
+        if( optionIdx != null && optionIdx.length > 0 ) {
+            for ( int element: optionIdx ) {
+                ReservationSchemeOptionInfo option = optionService.show( element );
+                option.setParentIdx( savedInfo.getIdx() );
+                optionService.update( option );
+            }
+        }
+
         return "redirect:" + redirectTo;
     }
 
@@ -210,6 +242,12 @@ public class ReservationSchemeController {
 
         List<ReservationAmenityInfo> amenities = amenityService.index( new HashMap() );
         mav.addObject( "amenities", amenities );
+
+        // 옵션 목록 불러옴
+        HashMap optionParams = new HashMap();
+        optionParams.put( "parentIdx", idx );
+        List<ReservationSchemeOptionInfo> optionList = optionService.index( optionParams );
+        mav.addObject( "optionList", optionList );
 
         mav.addObject( "cmplxIdx", cmplxIdx );
         mav.addObject( "parentIdx", parentIdx );
@@ -242,6 +280,14 @@ public class ReservationSchemeController {
             , @RequestParam( value = "cmplxIdx", defaultValue = "0" ) int cmplxIdx
             , @RequestParam( value = "allowCmplxIdxes[]" ) int[] allowCmplxIdxes
             , @RequestParam( value = "parentIdx", required = false, defaultValue = "0") int parentIdx
+            , @RequestParam( value = "activate", required = false, defaultValue = "no") String activate
+            , @RequestParam( value = "useTime", required = false, defaultValue = "no") String useTime
+            , @RequestParam( value = "useQueue", required = false, defaultValue = "no") String useQueue
+            , @RequestParam( value = "useQty", required = false, defaultValue = "no") String useQty
+            , @RequestParam( value = "useOptions", required = false, defaultValue = "no") String useOptions
+            , @RequestParam( value = "useField", required = false, defaultValue = "no") String useField
+            , @RequestParam( value = "isExpress", required = false, defaultValue = "N") String isExpress
+            , @RequestParam( value = "fieldLabel", required = false) String fieldLabel
             , @RequestParam( value = "code", required = false ) String code
             , @RequestParam( value = "icon", required = false ) String icon
             , @RequestParam( value = "reservationType", required = false ) String reservationType
@@ -254,23 +300,34 @@ public class ReservationSchemeController {
             , @RequestParam( value = "endDt", required = false ) String endDt
             , @RequestParam( value = "openTime", required = false, defaultValue = "00" ) String openTime
             , @RequestParam( value = "closeTime", required = false, defaultValue = "24" ) String closeTime
+            , @RequestParam( value = "maxDuration", required = false, defaultValue = "1" ) int maxDuration
+            , @RequestParam( value = "maxDays", required = false, defaultValue = "1" ) int maxDays
             , @RequestParam( value = "availableInWeekend", required = false ) String availableInWeekend
             , @RequestParam( value = "point", required = false ) int point
             , @RequestParam( value = "amount", required = false, defaultValue = "0") int amount
             , @RequestParam( value = "inStock", required = false ) int inStock
             , @RequestParam( value = "maxQty", required = false ) int maxQty
-            , @RequestParam( value = "activateDuration", required = false ) String activateDuration
+            , @RequestParam( value = "activateDuration", required = false, defaultValue = "0") int activateDuration
             , @RequestParam( value = "maintenanceStartAt", required = false ) String maintenanceStartAt
             , @RequestParam( value = "maintenanceEndAt", required = false ) String maintenanceEndAt
             , @RequestParam( value = "options", required = false ) String options
             , @RequestParam( value = "amenities[]", required = false ) int[] amenities
             , @RequestParam( value = "precautions", required = false ) String precautions
             , @RequestParam( value = "delYn", required = false ) String delYn
+            , @RequestParam( value = "optionIdx[]", required = false) int[] optionIdx
     ) {
 
         ReservationSchemeInfo info = service.show( idx );
         info.setCmplxIdx( cmplxIdx );
         info.setParentIdx( parentIdx );
+        info.setActivate( activate );
+        info.setUseTime( useTime );
+        info.setUseQueue( useQueue );
+        info.setUseQty( useQty );
+        info.setUseOptions( useOptions );
+        info.setUseField( useField );
+        info.setIsExpress( isExpress );
+        info.setFieldLabel( fieldLabel );
         info.setCode( code );
         info.setIcon( icon );
         info.setReservationType( reservationType );
@@ -284,6 +341,8 @@ public class ReservationSchemeController {
         // 시간 값만 받기 때문에 HH:mm:ss 형식으로 설정
         info.setOpenTime( openTime + ":00:00" );
         info.setCloseTime( closeTime + ":00:00" );
+        info.setMaxDuration( maxDuration );
+        info.setMaxDays( maxDays );
         info.setAvailableInWeekend( availableInWeekend );
         info.setPoint( point );
         info.setAmount( amount );
@@ -316,6 +375,30 @@ public class ReservationSchemeController {
                 i.setAmenityIdx( element );
                 i.setSchemeIdx( savedInfo.getIdx() );
                 amenitySchemeService.create( i );
+            }
+        }
+
+        // 기존 옵션 항목 중 삭제된 항목을 찾아 제거
+        HashMap optionParams = new HashMap();
+        optionParams.put( "parentIdx", idx );
+        List<ReservationSchemeOptionInfo> oldOptions = optionService.index( optionParams );
+        oldFor : for ( ReservationSchemeOptionInfo old: oldOptions ) {
+            if( optionIdx != null && optionIdx.length > 0 ) {
+                for (int element : optionIdx) {
+                    if (old.getIdx() == element) {
+                        continue oldFor;
+                    }
+                }
+            }
+            optionService.delete( old );
+        }
+
+        // 옵션 항목 parentIdx 업데이트
+        if( optionIdx != null && optionIdx.length > 0 ) {
+            for (int element : optionIdx) {
+                ReservationSchemeOptionInfo option = optionService.show(element);
+                option.setParentIdx(savedInfo.getIdx());
+                optionService.update(option);
             }
         }
 

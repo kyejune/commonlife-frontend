@@ -48,6 +48,20 @@
                                             </ul>
                                         </div>
                                     </c:if>
+                                    <c:if test="${adminInfo.cmplxId != 0}">
+                                        <div class="btn-group" id="dropdown-complex">
+                                            <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">지점선택 <span class="caret"></span></button>
+                                            <input type="hidden" name="complexIdx" value="${complexIdx}">
+                                            <ul class="dropdown-menu">
+                                                <li><a href="#">지점선택</a></li>
+                                                <c:forEach var="complex" items="${complexes}">
+                                                    <c:if test="${adminInfo.cmplxId == complex.cmplxId}">
+                                                        <li><a href="#complexIdx=${complex.cmplxId}" data-value="${complex.cmplxId}">${complex.cmplxNm}</a></li>
+                                                    </c:if>
+                                                </c:forEach>
+                                            </ul>
+                                        </div>
+                                    </c:if>
                                 </div>
                                 <div class="form-group">
                                     <div class="btn-group" id="dropdown-group">
@@ -92,15 +106,13 @@
                                 <tr>
                                     <th class="text-center">ID</th>
                                     <th class="text-center">신청회원</th>
-                                    <th class="text-center">예약명</th>
                                     <th class="text-center">예약 지점</th>
-                                    <th class="text-center">시작일</th>
-                                    <th class="text-center">시작시각</th>
-                                    <th class="text-center">종료일</th>
-                                    <th class="text-center">종료시작</th>
+                                    <th class="text-center">그룹</th>
+                                    <th class="text-center">예약명</th>
+                                    <th class="text-center">요청일</th>
                                     <th class="text-center">포인트</th>
                                     <th class="text-center">금액</th>
-                                    <%--<th class="text-center">수량</th>--%>
+                                    <th class="text-center">상태</th>
                                     <th class="text-center">보기</th>
                                     <th class="text-center">삭제</th>
                                 </tr>
@@ -114,14 +126,24 @@
                                                 <c:out value="${reservation.user.userNm}" default="- 정보 없음 -"/>
                                             </a>
                                         </td>
-                                        <td class="text-center">${reservation.scheme.title}</td>
                                         <td class="text-center">${reservation.scheme.complex.cmplxNm}</td>
-                                        <td class="text-center">${reservation.startDt}</td>
-                                        <td class="text-center">${reservation.startTime}</td>
-                                        <td class="text-center">${reservation.endDt}</td>
-                                        <td class="text-center">${reservation.endTime}</td>
+                                        <td class="text-center">${reservation.scheme.group.title}</td>
+                                        <td class="text-center">${reservation.scheme.title}</td>
+                                        <td class="text-center">
+                                            <fmt:formatDate value="${reservation.regDttm}" pattern="yyyy-MM-dd HH:mm:ss"/>
+                                        </td>
                                         <td class="text-center">${reservation.point}</td>
                                         <td class="text-center">${reservation.amount}</td>
+                                        <td class="text-center">
+                                            <c:choose>
+                                                <c:when test="${reservation.status.equals( 'RESERVED' )}">
+                                                    예약확정
+                                                </c:when>
+                                                <c:when test="${reservation.status.equals( 'IN_QUEUE' )}">
+                                                    예약대기
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
                                         <td class="text-center">
                                             <a href="/admin/reservations/show.do?idx=${reservation.idx}" class="btn btn-xs btn-info">예약 내역 보기</a>
                                         </td>

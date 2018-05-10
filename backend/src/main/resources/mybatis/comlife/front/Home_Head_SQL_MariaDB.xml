@@ -82,7 +82,7 @@
         VALUES
         (
             #{idx},
-            0,
+            30,
             CURRENT_TIMESTAMP,
             CURRENT_TIMESTAMP
         )

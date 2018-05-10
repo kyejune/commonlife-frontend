@@ -23,7 +23,7 @@ public class ReservationSchemeOptionDAO {
     }
 
     public int update(ReservationSchemeOptionInfo info) {
-        return sqlSession.update( "ReservationSchemeOption.update" );
+        return sqlSession.update( "ReservationSchemeOption.update", info );
     }
 
     public ReservationSchemeOptionInfo show( int id ) {
@@ -35,6 +35,6 @@ public class ReservationSchemeOptionDAO {
     public ReservationSchemeOptionInfo latest() { return sqlSession.selectOne( "ReservationSchemeOption.latest" ); }
 
     public int delete(ReservationSchemeOptionInfo info) {
-        return sqlSession.update( "ReservationSchemeOption.delete" );
+        return sqlSession.update( "ReservationSchemeOption.delete", info );
     }
 }
