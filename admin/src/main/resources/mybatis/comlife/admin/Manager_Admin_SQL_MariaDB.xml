@@ -25,7 +25,7 @@
               LEFT JOIN
             `CL_ADMIN_GRP` AS A_G
               ON A_I.GRP_ID = A_G.GRP_ID
-              JOIN
+              LEFT JOIN
             `COMPLEX_M_EXT`AS C_E
               ON `A_I`.`CMPLX_ID` = `C_E`.`CMPLX_ID`
         WHERE
