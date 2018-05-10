@@ -2,6 +2,7 @@ package com.kolon.comlife.admin.reservation.web;
 
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
+import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.admin.reservation.service.ReservationGroupService;
@@ -11,6 +12,7 @@ import com.kolon.comlife.admin.users.service.UserService;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -86,7 +88,18 @@ public class ReservationController {
             , ModelAndView mav
             , HttpSession session
     ) {
-        List<ReservationInfo> reservations = this.getReservationList();
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        mav.addObject("adminInfo", adminInfo);
+
+        HashMap params = new HashMap();
+        if( adminInfo.getCmplxId() != 0 ) {
+            params.put( "cmplxIdx", adminInfo.getCmplxId() );
+        }
+
+        List<ReservationInfo> reservations = this.getReservationList( params );
         mav.addObject( "reservations", reservations );
 
         return mav;
@@ -99,10 +112,20 @@ public class ReservationController {
             , ModelAndView mav
             , HttpSession session
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        mav.addObject("adminInfo", adminInfo);
+
         String complexIdx = request.getParameter( "complexIdx" );
         HashMap params = new HashMap();
         if( complexIdx != null && !complexIdx.equals( "" ) ) {
             params.put( "cmplxIdx", complexIdx );
+        }
+
+        if( adminInfo.getCmplxId() != 0 ) {
+            params.put( "cmplxIdx", adminInfo.getCmplxId() );
         }
 
         List<ComplexInfo> complexes = complexService.getComplexList();
@@ -121,6 +144,12 @@ public class ReservationController {
             , ModelAndView mav
             , HttpSession session
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        mav.addObject("adminInfo", adminInfo);
+
         String redirectTo = request.getHeader( "referer" );
         mav.addObject( "redirectTo", redirectTo );
 
@@ -181,6 +210,12 @@ public class ReservationController {
             , ModelAndView mav
             , HttpSession session
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        mav.addObject("adminInfo", adminInfo);
+
         return mav;
     }
 
@@ -191,6 +226,12 @@ public class ReservationController {
             , ModelAndView mav
             , HttpSession session
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+
+        mav.addObject("adminInfo", adminInfo);
+
         int idx = Integer.parseInt( request.getParameter( "idx" ) );
         ReservationInfo reservation = service.show( idx );
         mav.addObject( "reservation", reservation );

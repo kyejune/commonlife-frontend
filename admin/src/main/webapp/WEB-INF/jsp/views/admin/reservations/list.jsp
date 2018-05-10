@@ -35,6 +35,7 @@
                         </div>
                         <div class="ibox-content" style="">
                             <div class="form-group">
+                                <c:if test="${adminInfo.cmplxId == 0}">
                                 <div class="btn-group">
                                     <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">지점선택 <span class="caret"></span></button>
                                     <ul class="dropdown-menu">
@@ -43,6 +44,7 @@
                                         </c:forEach>
                                     </ul>
                                 </div>
+                                </c:if>
                             </div>
                             <table class="table" id="reservation-list">
                                 <thead>

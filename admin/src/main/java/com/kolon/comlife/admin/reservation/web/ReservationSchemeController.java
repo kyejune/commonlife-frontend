@@ -52,14 +52,16 @@ public class ReservationSchemeController {
             , ModelAndView mav
             , HttpSession session
     ) {
-        List<ReservationSchemeInfo> schemes = service.index( new HashMap() );
-        mav.addObject( "schemes", schemes );
 
         // 관리자 이름 표시
         AdminInfo adminInfo;
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         mav.addObject("adminInfo", adminInfo);
+
+        HashMap params = new HashMap();
+        List<ReservationSchemeInfo> schemes = service.index( params );
+        mav.addObject( "schemes", schemes );
 
         return mav;
     }
