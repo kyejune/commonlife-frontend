@@ -2,6 +2,7 @@ package com.kolon.comlife.admin.reservation.web;
 
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
+import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationAmenityInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationGroupInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
@@ -10,6 +11,7 @@ import com.kolon.comlife.admin.reservation.service.ReservationGroupService;
 import com.kolon.comlife.admin.reservation.service.ReservationSchemeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,6 +50,11 @@ public class ReservationGroupController {
             , HttpSession session
             , @RequestParam( value = "cmplxIdx", required = false, defaultValue = "0" ) int cmplxIdx
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        mav.addObject("adminInfo", adminInfo);
+
         HashMap params = new HashMap();
 
         if( cmplxIdx != 0 ) {
@@ -80,6 +87,11 @@ public class ReservationGroupController {
             , ModelAndView mav
             , HttpSession session
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        mav.addObject("adminInfo", adminInfo);
+
         List<ComplexInfo> complexes = complexService.getComplexList();
         mav.addObject( "complexes", complexes );
 
@@ -99,7 +111,6 @@ public class ReservationGroupController {
             , @RequestParam( value = "description", required = false ) String description
             , @RequestParam( value = "icon", required = false ) String icon
             ) {
-
         ReservationGroupInfo info = new ReservationGroupInfo();
         info.setCmplxIdx( cmplxIdx );
         info.setTitle( title );
@@ -120,6 +131,11 @@ public class ReservationGroupController {
             , HttpSession session
             , @RequestParam( value = "idx", required = false, defaultValue = "0" ) int idx
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        mav.addObject("adminInfo", adminInfo);
+
         List<ComplexInfo> complexes = complexService.getComplexList();
         mav.addObject( "complexes", complexes );
 
@@ -178,6 +194,11 @@ public class ReservationGroupController {
             , HttpSession session
             , @RequestParam( value = "idx", required = false, defaultValue = "0" ) int idx
     ) {
+        // 관리자 이름 표시
+        AdminInfo adminInfo;
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        mav.addObject("adminInfo", adminInfo);
+
         ReservationGroupInfo group = service.show( idx );
         mav.addObject( "group", group );
 

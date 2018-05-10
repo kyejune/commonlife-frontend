@@ -91,7 +91,6 @@ public class ReservationController {
         // 관리자 이름 표시
         AdminInfo adminInfo;
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
-
         mav.addObject("adminInfo", adminInfo);
 
         HashMap params = new HashMap();
