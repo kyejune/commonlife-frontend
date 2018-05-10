@@ -189,7 +189,7 @@
                                 <div class="form-group">
                                     <label>이 예약을 활성화</label>
                                     <div class="text-right">
-                                        <input type="checkbox" class="js-switch" checked />
+                                        <input type="checkbox" class="js-switch" name="activate" value="yes" <c:if test="${!scheme.activate.equals( 'no' )}">checked</c:if> />
                                     </div>
                                 </div>
                             </div>
@@ -204,9 +204,10 @@
                     </div>
                     <div class="ibox-content">
                         <div class="tabs-container">
-                            <ul class="nav nav-tabs">
-                                <li class="active"><a data-toggle="tab" href="#tab-1">A. 일자 + 시간</a></li>
-                                <li class=""><a data-toggle="tab" href="#tab-2">B. 기간</a></li>
+                            <input type="hidden" name="reservationType" value="${scheme.reservationType}">
+                            <ul class="nav nav-tabs" id="reservation-type-tabs">
+                                <li class=""><a data-value="A" data-toggle="tab" href="#tab-1">A. 일자 + 시간</a></li>
+                                <li class=""><a data-value="B" data-toggle="tab" href="#tab-2">B. 기간</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="tab-1" class="tab-pane active">
@@ -215,7 +216,7 @@
                                             <div class="col-xs-12 col-md-2 col-md-push-10 form-group">
                                                 <label>시간 사용 여부</label>
                                                 <div>
-                                                    <input type="checkbox" class="js-switch" checked />
+                                                    <input type="checkbox" class="js-switch" name="useTime" value="yes" <c:if test="${scheme.useTime.equals( 'yes' )}">checked</c:if> />
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-10 col-md-pull-2 form-group">
@@ -243,7 +244,7 @@
                                                         <div>
                                                             <label>예약  가능 최대 시간</label>
                                                         </div>
-                                                        <input class="touchspin" type="text" value="" name="demo1">
+                                                        <input class="touchspin" type="text" value="${scheme.maxDuration}" name="maxDuration">
                                                         <p class="text-success">
                                                             * 최소 1시간 단위로 설정
                                                         </p>
@@ -262,7 +263,7 @@
                                             <div class="col-xs-12 col-md-2 col-md-push-10 form-group">
                                                 <label>대기 가능 여부</label>
                                                 <div>
-                                                    <input type="checkbox" class="js-switch" checked />
+                                                    <input type="checkbox" class="js-switch" name="useQueue" value="yes" <c:if test="${scheme.useQueue.equals( 'yes' )}">checked</c:if> />
                                                 </div>
                                             </div>
                                             <div class="col-xs-12 col-md-10 col-md-pull-2 form-group">
@@ -271,26 +272,26 @@
                                                         <div>
                                                             <label>예약  가능 최대일</label>
                                                         </div>
-                                                        <input class="touchspin" type="text" value="" name="demo1">
+                                                        <input class="touchspin" type="text" value="${scheme.maxDays}" name="maxDays">
                                                         <p class="text-success">
-                                                            * 최소 1시간 단위로 설정
+                                                            * 최소 1일 단위로 설정
                                                         </p>
                                                     </div>
                                                     <div class="col-xs-12 col-md-8 form-group">
                                                         <label>즉시 예약 가능 여부</label>
                                                         <div class="form-group">
                                                             <label class="radio-inline">
-                                                                <input type="radio">
+                                                                <input type="radio" name="isExpress" value="Y" <c:if test="${scheme.isExpress.equals( 'Y' )}">checked</c:if> >
                                                                 예
                                                             </label>
                                                             <label class="radio-inline">
-                                                                <input type="radio">
+                                                                <input type="radio" name="isExpress" value="N" <c:if test="${!scheme.isExpress.equals( 'Y' )}">checked</c:if> >
                                                                 아니오
                                                             </label>
                                                         </div>
-                                                        <div class="input-group">
+                                                        <div class="input-group" id="activate-duration-section">
                                                             <span class="input-group-addon">현재일보다</span>
-                                                            <input type="text" class="form-control">
+                                                            <input type="text" class="form-control" name="activateDuration" value="${scheme.activateDuration}">
                                                             <span class="input-group-addon">일 이후부터 예약 신청이 가능합니다.</span>
                                                         </div>
                                                     </div>
@@ -316,7 +317,7 @@
 
                                 <div class="switch">
                                     <div class="onoffswitch">
-                                        <input type="checkbox" class="onoffswitch-checkbox" id="qty-toggle">
+                                        <input type="checkbox" class="onoffswitch-checkbox" id="qty-toggle" name="useQty" value="yes" <c:if test="${scheme.useQty.equals( 'yes' )}">checked</c:if>>
                                         <label class="onoffswitch-label" for="qty-toggle">
                                             <span class="onoffswitch-inner"></span>
                                             <span class="onoffswitch-switch"></span>
@@ -329,7 +330,7 @@
 
                                 <div class="switch">
                                     <div class="onoffswitch">
-                                        <input type="checkbox" class="onoffswitch-checkbox" id="options-toggle">
+                                        <input type="checkbox" class="onoffswitch-checkbox" id="options-toggle" name="useOptions" value="yes" <c:if test="${scheme.useOptions.equals( 'yes' )}">checked</c:if>>
                                         <label class="onoffswitch-label" for="options-toggle">
                                             <span class="onoffswitch-inner"></span>
                                             <span class="onoffswitch-switch"></span>
@@ -342,7 +343,7 @@
 
                                 <div class="switch">
                                     <div class="onoffswitch">
-                                        <input type="checkbox" class="onoffswitch-checkbox" id="field-toggle">
+                                        <input type="checkbox" class="onoffswitch-checkbox" id="field-toggle" name="useField" value="yes" <c:if test="${scheme.useField.equals( 'yes' )}">checked</c:if>>
                                         <label class="onoffswitch-label" for="field-toggle">
                                             <span class="onoffswitch-inner"></span>
                                             <span class="onoffswitch-switch"></span>
@@ -357,11 +358,11 @@
                         <div class="row">
                             <div class="col-xs-12 col-md-6 form-group">
                                 <span>전체 재고 수</span>
-                                <input class="touchspin" type="text" value="" name="">
+                                <input class="touchspin" type="text" value="${scheme.inStock}" name="inStock">
                             </div>
                             <div class="col-xs-12 col-md-6 form-group">
                                 <span>예약 가능 최대 수량</span>
-                                <input class="touchspin" type="text" value="" name="">
+                                <input class="touchspin" type="text" value="${scheme.maxQty}" name="maxQty">
                             </div>
                         </div>
                     </div>
@@ -380,13 +381,21 @@
                                 </div>
 
                                 <ul class="list-group" id="options-list">
+                                    <c:forEach var="option" items="${optionList}">
+                                        <li class="list-group-item">${option.name}
+                                            <input type="hidden" name="optionIdx[]" value="${option.idx}">
+                                            <span class="pull-right">
+                                                <button class="btn btn-danger btn-xs" type="button">×</button>
+                                            </span>
+                                        </li>
+                                    </c:forEach>
                                 </ul>
                             </div>
                         </div>
                     </div>
                     <div class="ibox-content" id="field-section">
                         <label>TEXT 입력필드 사용</label>
-                        <input type="text" class="form-control" placeholder="필드명을 입력하세요. 예) 주차예약시 차량번호">
+                        <input type="text" class="form-control" name="fieldLabel" placeholder="필드명을 입력하세요. 예) 주차예약시 차량번호" value="${scheme.fieldLabel}">
                     </div>
                 </div>
 

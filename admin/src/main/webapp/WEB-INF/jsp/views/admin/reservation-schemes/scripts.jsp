@@ -68,6 +68,31 @@
             HOST = 'https://clback.cyville.net';
         }
 
+        // reservation type tab 클릭시
+        $( '#reservation-type-tabs a' ).on( 'click', function( event ) {
+            var $button = $( event.currentTarget );
+            $( 'input[name=reservationType]' ).val( $button.data( 'value' ) );
+        } );
+
+        // reservation type 초기화
+        if( $( 'input[name=reservationType]' ).val() === 'B' ) {
+            $( '#reservation-type-tabs a[data-value=B]' ).trigger( 'click' );
+        }
+        else {
+            $( '#reservation-type-tabs a[data-value=A]' ).trigger( 'click' );
+        }
+
+        // 즉시 예약 활성화 설정
+        $( 'input[name=isExpress]' ).on( 'change', function() {
+            if( $( 'input[name=isExpress]:checked' ).val() === 'Y' ) {
+                $( '#activate-duration-section' ).show();
+            }
+            else {
+                $( '#activate-duration-section' ).hide();
+            }
+        } );
+        $( 'input[name=isExpress]:checked' ).trigger( 'change' );
+
         // 멀티 셀렉트
         $('.chosen-select').chosen({width: "100%"});
 

@@ -45,6 +45,41 @@
         INSERT INTO `RESERVATION_SCHEMES`
                     (`CMPLX_IDX`,
                      `PARENT_IDX`,
+                    <choose>
+                        <when test='activate != null'>
+                            `ACTIVATE`,
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useTime != null'>
+                            `USE_TIME`,
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useQueue != null'>
+                            `USE_QUEUE`,
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useQty != null'>
+                            `USE_QTY`,
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useOptions != null'>
+                            `USE_OPTIONS`,
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='isExpress != null'>
+                            `IS_EXPRESS`,
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useField != null'>
+                            `USE_FIELD`,
+                        </when>
+                    </choose>
                      `CODE`,
                      `ICON`,
                      `RESERVATION_TYPE`,
@@ -75,6 +110,16 @@
                             `CLOSE_TIME`,
                         </when>
                     </choose>
+                    <choose>
+                        <when test='maxDuration != null'>
+                            `MAX_DURATION`,
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='maxDays != null'>
+                            `MAX_DAYS`,
+                        </when>
+                    </choose>
                      `AVAILABLE_IN_WEEKEND`,
                      `POINT`,
                      `AMOUNT`,
@@ -90,6 +135,41 @@
                      `UPD_DTTM`)
         VALUES      (#{cmplxIdx},
                      #{parentIdx},
+                    <choose>
+                        <when test='activate != null'>
+                            #{activate},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useTime != null'>
+                            #{useTime},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useQueue != null'>
+                            #{useQueue},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useQty != null'>
+                            #{useQty},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useOptions != null'>
+                            #{useOptions},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='isExpress != null'>
+                            #{isExpress},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='useField != null'>
+                            #{useField},
+                        </when>
+                    </choose>
                      #{code},
                      #{icon},
                      #{reservationType},
@@ -118,6 +198,16 @@
                     <choose>
                         <when test='closeTime != null'>
                             #{closeTime},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='maxDuration != null'>
+                            #{maxDuration},
+                        </when>
+                    </choose>
+                    <choose>
+                        <when test='maxDays != null'>
+                            #{maxDays},
                         </when>
                     </choose>
                      #{availableInWeekend},
@@ -162,6 +252,46 @@
                 `START_DT` = #{startDt},
                 `END_DT` = #{endDt},
                 <choose>
+                    <when test='activate != null'>
+                        `ACTIVATE` = #{activate},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='useTime != null'>
+                        `USE_TIME` = #{useTime},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='useQueue != null'>
+                        `USE_QUEUE` = #{useQueue},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='useQty != null'>
+                        `USE_QTY` = #{useQty},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='useOptions != null'>
+                        `USE_OPTIONS` = #{useOptions},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='useField != null'>
+                        `USE_FIELD` = #{useField},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='isExpress != null'>
+                        `IS_EXPRESS` = #{isExpress},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='fieldLabel != null'>
+                        `FIELD_LABEL` = #{fieldLabel},
+                    </when>
+                </choose>
+                <choose>
                     <when test='startTime != null'>
                         `START_TIME` = #{startTime},
                     </when>
@@ -181,6 +311,16 @@
                         `CLOSE_TIME` = #{closeTime},
                     </when>
                 </choose>
+                <choose>
+                    <when test='maxDuration != null'>
+                        `MAX_DURATION` = #{maxDuration},
+                    </when>
+                </choose>
+                <choose>
+                    <when test='maxDays != null'>
+                        `MAX_DAYS` = #{maxDays},
+                    </when>
+                </choose>
                 `AVAILABLE_IN_WEEKEND` = #{availableInWeekend},
                 `POINT` = #{point},
                 `AMOUNT` = #{amount},
@@ -191,7 +331,11 @@
                 `MAINTENANCE_END_AT` = #{maintenanceEndAt},
                 `OPTIONS` = #{options},
                 `PRECAUTIONS` = #{precautions},
-                `DEL_YN` = #{delYn},
+                <choose>
+                    <when test='delYn != null'>
+                        `DEL_YN` = #{delYn},
+                    </when>
+                </choose>
                 `UPD_DTTM` = CURRENT_TIMESTAMP
         WHERE
                 `IDX` = #{idx}
