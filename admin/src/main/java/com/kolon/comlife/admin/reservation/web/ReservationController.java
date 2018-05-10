@@ -94,10 +94,29 @@ public class ReservationController {
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
         mav.addObject("adminInfo", adminInfo);
 
+        String complexIdx = request.getParameter( "complexIdx" );
+        String groupIdx = request.getParameter( "groupIdx" );
+        String schemeIdx = request.getParameter( "schemeIdx" );
+        String reservationStatus = request.getParameter( "reservationStatus" );
+        mav.addObject( "groupIdx", groupIdx );
+        mav.addObject( "schemeIdx", schemeIdx );
+        mav.addObject( "reservationStatus", reservationStatus );
+
         HashMap params = new HashMap();
         if( adminInfo.getCmplxId() != 0 ) {
             params.put( "cmplxIdx", adminInfo.getCmplxId() );
         }
+
+        mav.addObject( "complexIdx", complexIdx );
+
+        List<ComplexInfo> complexes = complexService.getComplexList();
+        mav.addObject( "complexes", complexes );
+
+        List<ReservationGroupInfo> groups = groupService.index( new HashMap() );
+        mav.addObject( "groups", groups );
+
+        List<ReservationSchemeInfo> schemes = schemeService.index( new HashMap() );
+        mav.addObject( "schemes", schemes );
 
         List<ReservationInfo> reservations = this.getReservationList( params );
         mav.addObject( "reservations", reservations );
