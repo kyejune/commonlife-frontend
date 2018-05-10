@@ -12,7 +12,7 @@ if( window.location.protocol === 'file:' && window.location.pathname.includes('C
     host = 'http://192.168.0.100:8080';
 
 // 쿠키를 설정/삭제해 API 서버 주소를 고정시킬 수 있다.
-// Cookie.set( 'force-look-localhost', true );
+Cookie.set( 'force-look-localhost', true );
 // Cookie.remove( 'force-look-localhost' );
 
 // 덮어쓰기
@@ -20,7 +20,7 @@ if( window.location.protocol === 'file:' && window.location.pathname.includes('C
 if( !Cookie.get( 'force-look-localhost' ) ) {
     host = 'https://clback.cyville.net'; // 테스트용
 }
-host = 'https://cl-stage.cyville.net'; // 클라 전달용
+// host = 'https://cl-stage.cyville.net'; // 클라 전달용
 
 
 console.log( 'api host: ' + host );
