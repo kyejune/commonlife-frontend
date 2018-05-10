@@ -141,24 +141,27 @@ class ReservationDetail extends Component {
 				} );
 
 				// start, end에는 반드시 Number 형 데이터가 들어가야 한다.
-				result.options.push( {
-					type: "time",
-					value: parseInt( now.format( 'HH' ), 10 ),
-					start: parseInt( moment( data.openTime, 'HH:mm:ss.000000' ).format( 'HH' ), 10 ),
-					end: parseInt( moment( data.closeTime, 'HH:mm:ss.000000' ).format( 'HH' ), 10 ),
-					// selected: []
-					// "maxWidth": 3,
-					// "selected": [
-					//     {
-					//         "start": 9,
-					//         "end": 10
-					//     },
-					//     {
-					//         "start": 12,
-					//         "end": 14
-					//     }
-					// ]
-				} );
+				if( data.useTime === 'yes' ) {
+					result.options.push( {
+						type: "time",
+						value: parseInt( now.format( 'HH' ), 10 ),
+						start: parseInt( moment( data.openTime, 'HH:mm:ss.000000' ).format( 'HH' ), 10 ),
+						end: parseInt( moment( data.closeTime, 'HH:mm:ss.000000' ).format( 'HH' ), 10 ),
+						maxWidth: data.maxDuration
+						// selected: []
+						// "maxWidth": data.maxDuration * 2,
+						// "selected": [
+						//     {
+						//         "start": 9,
+						//         "end": 10
+						//     },
+						//     {
+						//         "start": 12,
+						//         "end": 14
+						//     }
+						// ]
+					} );
+				}
 
 				// TimeScheduler 조정용 date 객체 삽입
 				result.dates = [ now.toDate(), now.toDate() ];
@@ -180,40 +183,40 @@ class ReservationDetail extends Component {
 				// TimeScheduler 조정용 date 객체 삽입
 				result.dates = [ now.toDate(), tommorow.toDate() ];
 			}
-			else if ( data.reservationType === 'C' ) {
-				result.options.push( {
-					type: "date",
-					value: ( queries[ 'date' ] ) ? queries[ 'date' ] : now.format( 'YYYY-MM-DD' ),
-					min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
-					max: moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
-				} );
-				result.options.push( {
-					type: 'info',
-					title: '수량',
-					info: `${this.state.availableCount} / ${data.maxQty}`
-				} );
-
-				// TimeScheduler 조정용 date 객체 삽입
-				result.dates = [ now.toDate(), tommorow.toDate() ];
-				this.getReservationAvailable( moment().format( 'YYYY-MM-DD' ) );
-			}
-			else if ( data.reservationType === 'D' ) {
-				result.options.push( {
-					type: "date",
-					value: ( queries[ 'date' ] ) ? queries[ 'date' ] : now.format( 'YYYY-MM-DD' ),
-					min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
-					max: moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
-				} );
-
-				result.options.push( {
-					type: 'input',
-					title: data.userMemoLabel,
-					placeholder: data.userMemoPlaceholder
-				} );
-
-				// TimeScheduler 조정용 date 객체 삽입
-				result.dates = [ now.toDate(), tommorow.toDate() ];
-			}
+			// else if ( data.reservationType === 'C' ) {
+			// 	result.options.push( {
+			// 		type: "date",
+			// 		value: ( queries[ 'date' ] ) ? queries[ 'date' ] : now.format( 'YYYY-MM-DD' ),
+			// 		min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
+			// 		max: moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
+			// 	} );
+			// 	result.options.push( {
+			// 		type: 'info',
+			// 		title: '수량',
+			// 		info: `${this.state.availableCount} / ${data.maxQty}`
+			// 	} );
+			//
+			// 	// TimeScheduler 조정용 date 객체 삽입
+			// 	result.dates = [ now.toDate(), tommorow.toDate() ];
+			// 	this.getReservationAvailable( moment().format( 'YYYY-MM-DD' ) );
+			// }
+			// else if ( data.reservationType === 'D' ) {
+			// 	result.options.push( {
+			// 		type: "date",
+			// 		value: ( queries[ 'date' ] ) ? queries[ 'date' ] : now.format( 'YYYY-MM-DD' ),
+			// 		min: moment( data.startDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' ),
+			// 		max: moment( data.endDt, 'YYYY-MM-DD' ).format( 'YYYY-MM-DD' )
+			// 	} );
+			//
+			// 	result.options.push( {
+			// 		type: 'input',
+			// 		title: data.userMemoLabel,
+			// 		placeholder: data.userMemoPlaceholder
+			// 	} );
+			//
+			// 	// TimeScheduler 조정용 date 객체 삽입
+			// 	result.dates = [ now.toDate(), tommorow.toDate() ];
+			// }
 
 			if( data.schemeOptions && data.schemeOptions.length ) {
 				result.options.push( {
@@ -223,8 +226,18 @@ class ReservationDetail extends Component {
 				result.options.push( {
 					type: 'counter',
 					title: '수량',
+					max: data.maxQty
 				} );
 			}
+
+			if( data.useField === 'yes' ) {
+				result.options.push( {
+					type: 'input',
+					title: data.fieldLabel,
+					placeholder: data.fieldLabel
+				} );
+			}
+
 
 			// 원본 데이터도 바인딩 시켜둔다
 			result.scheme = data;

@@ -208,10 +208,12 @@ public class ReservationSchemeController {
         }
 
         // 옵션 항목 parentIdx 업데이트
-        for ( int element: optionIdx ) {
-            ReservationSchemeOptionInfo option = optionService.show( element );
-            option.setParentIdx( savedInfo.getIdx() );
-            optionService.update( option );
+        if( optionIdx != null && optionIdx.length > 0 ) {
+            for ( int element: optionIdx ) {
+                ReservationSchemeOptionInfo option = optionService.show( element );
+                option.setParentIdx( savedInfo.getIdx() );
+                optionService.update( option );
+            }
         }
 
         return "redirect:" + redirectTo;
@@ -381,21 +383,23 @@ public class ReservationSchemeController {
         optionParams.put( "parentIdx", idx );
         List<ReservationSchemeOptionInfo> oldOptions = optionService.index( optionParams );
         oldFor : for ( ReservationSchemeOptionInfo old: oldOptions ) {
-            for ( int element: optionIdx ) {
-                if( old.getIdx() == element ) {
-                    logger.debug( ">>>>>>>> continue on : " + element );
-                    continue oldFor;
+            if( optionIdx != null && optionIdx.length > 0 ) {
+                for (int element : optionIdx) {
+                    if (old.getIdx() == element) {
+                        continue oldFor;
+                    }
                 }
             }
-            logger.debug( ">>>>>>>> delete : " + old.getIdx() );
             optionService.delete( old );
         }
 
         // 옵션 항목 parentIdx 업데이트
-        for ( int element: optionIdx ) {
-            ReservationSchemeOptionInfo option = optionService.show( element );
-            option.setParentIdx( savedInfo.getIdx() );
-            optionService.update( option );
+        if( optionIdx != null && optionIdx.length > 0 ) {
+            for (int element : optionIdx) {
+                ReservationSchemeOptionInfo option = optionService.show(element);
+                option.setParentIdx(savedInfo.getIdx());
+                optionService.update(option);
+            }
         }
 
         return "redirect:" + redirectTo;
