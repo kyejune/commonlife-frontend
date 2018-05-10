@@ -77,8 +77,8 @@
                                         <button data-toggle="dropdown" class="btn btn-white dropdown-toggle">전체목록 <span class="caret"></span></button>
                                         <input type="hidden" name="reservationStatus" value="${reservationStatus}">
                                         <ul class="dropdown-menu">
-                                            <li><a href="#" data-value="reserved">전체목록</a></li>
-                                            <li><a href="#" data-value="in_queue">대기목록</a></li>
+                                            <li><a href="#" data-value="">전체목록</a></li>
+                                            <li><a href="#" data-value="IN_QUEUE">대기목록</a></li>
                                         </ul>
                                     </div>
                                 </div>

@@ -103,6 +103,27 @@ public class ReservationController {
         mav.addObject( "reservationStatus", reservationStatus );
 
         HashMap params = new HashMap();
+        // 지점에 대한 파라미터가 있을 경우
+        if( complexIdx != null && !complexIdx.equals( "" ) ) {
+            params.put( "cmplxIdx", complexIdx );
+        }
+
+        // 그룹에 대한 파라미터가 있을 경우
+        if( groupIdx != null && !groupIdx.equals( "" ) ) {
+            params.put( "groupIdx", groupIdx );
+        }
+
+        // 틀에 대한 파라미터가 있을 경우
+        if( schemeIdx != null && !schemeIdx.equals( "" ) ) {
+            params.put( "schemeIdx", schemeIdx );
+        }
+
+        // 대기 상태에 대한 파라미터가 있을 경우
+        if( reservationStatus != null && !reservationStatus.equals( "" ) ) {
+            params.put( "reservationStatus", reservationStatus );
+        }
+
+        // 현장 관리자일 경우 무조건 현장 고정
         if( adminInfo.getCmplxId() != 0 ) {
             params.put( "cmplxIdx", adminInfo.getCmplxId() );
         }
@@ -141,23 +162,35 @@ public class ReservationController {
         String groupIdx = request.getParameter( "groupIdx" );
         String schemeIdx = request.getParameter( "schemeIdx" );
         String reservationStatus = request.getParameter( "reservationStatus" );
+        mav.addObject( "complexIdx", complexIdx );
         mav.addObject( "groupIdx", groupIdx );
         mav.addObject( "schemeIdx", schemeIdx );
         mav.addObject( "reservationStatus", reservationStatus );
 
         HashMap params = new HashMap();
+        // 지점에 대한 파라미터가 있을 경우
         if( complexIdx != null && !complexIdx.equals( "" ) ) {
             params.put( "cmplxIdx", complexIdx );
-            mav.addObject( "complexIdx", complexIdx );
-        }
-
-        if( adminInfo.getCmplxId() != 0 ) {
-            params.put( "cmplxIdx", adminInfo.getCmplxId() );
         }
 
         // 그룹에 대한 파라미터가 있을 경우
         if( groupIdx != null && !groupIdx.equals( "" ) ) {
             params.put( "groupIdx", groupIdx );
+        }
+
+        // 틀에 대한 파라미터가 있을 경우
+        if( schemeIdx != null && !schemeIdx.equals( "" ) ) {
+            params.put( "schemeIdx", schemeIdx );
+        }
+
+        // 대기 상태에 대한 파라미터가 있을 경우
+        if( reservationStatus != null && !reservationStatus.equals( "" ) ) {
+            params.put( "reservationStatus", reservationStatus );
+        }
+
+        // 현장 관리자일 경우 무조건 현장 고정
+        if( adminInfo.getCmplxId() != 0 ) {
+            params.put( "cmplxIdx", adminInfo.getCmplxId() );
         }
 
         List<ComplexInfo> complexes = complexService.getComplexList();

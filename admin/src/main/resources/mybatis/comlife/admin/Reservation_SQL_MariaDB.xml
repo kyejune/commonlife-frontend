@@ -5,7 +5,8 @@
     <select id="index" resultType="reservationInfo">
         SELECT
         `RESERVATIONS`.*,
-        `RESERVATION_SCHEMES`.`CMPLX_IDX`
+        `RESERVATION_SCHEMES`.`CMPLX_IDX`,
+        `RESERVATION_SCHEMES`.`PARENT_IDX`
         FROM
         `RESERVATIONS`
         LEFT JOIN
@@ -18,6 +19,24 @@
             <when test='cmplxIdx != null'>
                 AND
                     `RESERVATION_SCHEMES`.`CMPLX_IDX` = #{cmplxIdx}
+            </when>
+        </choose>
+        <choose>
+            <when test='groupIdx != null'>
+                AND
+                `RESERVATION_SCHEMES`.`PARENT_IDX` = #{groupIdx}
+            </when>
+        </choose>
+        <choose>
+            <when test='schemeIdx != null'>
+                AND
+                `RESERVATION_SCHEMES`.`IDX` = #{schemeIdx}
+            </when>
+        </choose>
+        <choose>
+            <when test='reservationStatus != null'>
+                AND
+                `RESERVATIONS`.`STATUS` = #{reservationStatus}
             </when>
         </choose>
     </select>
