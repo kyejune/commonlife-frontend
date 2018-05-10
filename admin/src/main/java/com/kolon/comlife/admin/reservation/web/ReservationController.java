@@ -3,6 +3,7 @@ package com.kolon.comlife.admin.reservation.web;
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.manager.model.AdminInfo;
+import com.kolon.comlife.admin.reservation.model.ReservationGroupInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
 import com.kolon.comlife.admin.reservation.service.ReservationGroupService;
@@ -118,17 +119,29 @@ public class ReservationController {
         mav.addObject("adminInfo", adminInfo);
 
         String complexIdx = request.getParameter( "complexIdx" );
+        String groupIdx = request.getParameter( "groupIdx" );
+        mav.addObject( "groupIdx", groupIdx );
+
         HashMap params = new HashMap();
         if( complexIdx != null && !complexIdx.equals( "" ) ) {
             params.put( "cmplxIdx", complexIdx );
+            mav.addObject( "complexIdx", complexIdx );
         }
 
         if( adminInfo.getCmplxId() != 0 ) {
             params.put( "cmplxIdx", adminInfo.getCmplxId() );
         }
 
+        // 그룹에 대한 파라미터가 있을 경우
+        if( groupIdx != null && !groupIdx.equals( "" ) ) {
+            params.put( "groupIdx", groupIdx );
+        }
+
         List<ComplexInfo> complexes = complexService.getComplexList();
         mav.addObject( "complexes", complexes );
+
+        List<ReservationGroupInfo> groups = groupService.index( new HashMap() );
+        mav.addObject( "groups", groups );
 
         List<ReservationInfo> reservations = this.getReservationList( params );
         mav.addObject( "reservations", reservations );

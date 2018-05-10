@@ -34,18 +34,44 @@
                             </div>
                         </div>
                         <div class="ibox-content" style="">
-                            <div class="form-group">
-                                <c:if test="${adminInfo.cmplxId == 0}">
-                                <div class="btn-group">
-                                    <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">지점선택 <span class="caret"></span></button>
-                                    <ul class="dropdown-menu">
-                                        <c:forEach var="complex" items="${complexes}">
-                                        <li><a href="/admin/reservations/list.do?complexIdx=${complex.cmplxId}">${complex.cmplxNm}</a></li>
-                                        </c:forEach>
-                                    </ul>
+                            <form action="" class="form-inline">
+                                <div class="form-group">
+                                    <c:if test="${adminInfo.cmplxId == 0}">
+                                        <div class="btn-group" id="dropdown-complex">
+                                            <button data-toggle="dropdown" class="btn btn-primary dropdown-toggle">지점선택 <span class="caret"></span></button>
+                                            <input type="hidden" name="complexIdx" value="${complexIdx}">
+                                            <ul class="dropdown-menu">
+                                                <c:forEach var="complex" items="${complexes}">
+                                                    <li><a href="#complexIdx=${complex.cmplxId}" data-value="${complex.cmplxId}">${complex.cmplxNm}</a></li>
+                                                </c:forEach>
+                                            </ul>
+                                        </div>
+                                    </c:if>
                                 </div>
-                                </c:if>
-                            </div>
+                                <div class="form-group">
+                                    <div class="btn-group" id="dropdown-group">
+                                        <button data-toggle="dropdown" class="btn btn-success dropdown-toggle">그룹 선택 <span class="caret"></span></button>
+                                        <input type="hidden" name="groupIdx" value="${groupIdx}">
+                                        <ul class="dropdown-menu">
+                                            <c:forEach var="group" items="${groups}">
+                                                <li><a href="#groupIdx=${group.idx}" data-complex="${group.cmplxIdx}" data-value="${group.idx}">${group.title}</a></li>
+                                            </c:forEach>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="btn-group">
+                                        <button data-toggle="dropdown" class="btn btn-white dropdown-toggle">예약 선택 <span class="caret"></span></button>
+                                        <input type="hidden" name="groupIdx" value="">
+                                        <ul class="dropdown-menu">
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-white">필터 적용</button>
+                                </div>
+                            </form>
+
                             <table class="table" id="reservation-list">
                                 <thead>
                                 <tr>
@@ -103,10 +129,28 @@
     </tiles:putAttribute>
     <tiles:putAttribute name="js">
         <script>
+
             $(document).ready(function(){
                 $('#reservation-list').footable();
-            });
 
+                // 드롭다운 설정
+                $( '#dropdown-group li a' ).hide();
+
+                $(".dropdown-menu li a").on( 'click', function( event ){
+                    event.preventDefault();
+
+                    var item = $( event.currentTarget );
+                    item.parents(".btn-group").find('.btn').html( item.text() + ' <span class="caret"></span>' );
+                    item.parents(".btn-group").find('input').val( item.data('value') );
+
+                    $( '#dropdown-group li a' ).hide();
+                    $( '#dropdown-group li a[data-complex=' + item.data('value') + ']' ).show();
+                });
+
+                if( $( 'input[name=complexIdx]' ).val() ) {
+                    $("#dropdown-complex li a[data-value=" + $( 'input[name=complexIdx]' ).val() + "]" ).trigger( 'click' );
+                }
+            });
         </script>
 
     </tiles:putAttribute>
