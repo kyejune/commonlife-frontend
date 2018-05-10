@@ -21,7 +21,7 @@
     <link href="/resources/css/plugins/footable/footable.core.css" rel="stylesheet">
     <link href="/resources/css/plugins/datapicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="/resources/css/plugins/fullcalendar/fullcalendar.css" rel="stylesheet">
-    <link href="/resources/css/plugins/fullcalendar/fullcalendar.print.css" rel="stylesheet">
+    <link href="/resources/css/plugins/fullcalendar/fullcalendar.print.css" rel="stylesheet" media="print">
 
     <%--chosen--%>
     <link href="/resources/css/plugins/chosen/bootstrap-chosen.css" rel="stylesheet">
