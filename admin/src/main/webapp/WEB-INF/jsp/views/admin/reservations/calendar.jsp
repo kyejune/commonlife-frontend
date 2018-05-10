@@ -117,7 +117,7 @@
             <c:forEach var="reservation" items="${reservations}">
             events.push( {
                 idx: '${reservation.idx}',
-                title: '${reservation.scheme.title}',
+                title: '${reservation.scheme.title} | ${reservation.user.userNm}',
                 start: moment( '${reservation.startDt}' ).toDate(),
                 end: moment( '${reservation.endDt}' ).toDate()
             } );
@@ -130,6 +130,7 @@
                         right: 'month,agendaWeek,agendaDay'
                     },
                     events: events,
+                    displayEventTime: false,
                     eventClick: function(calEvent, jsEvent, view) {
                         window.location.href = "/admin/reservations/show.do?idx=" + calEvent.idx;
                     }

@@ -4,6 +4,8 @@ import com.kolon.comlife.admin.users.model.UserExtInfo;
 import com.kolon.comlife.admin.users.model.UserInfo;
 import org.apache.ibatis.type.Alias;
 
+import java.util.Date;
+
 @Alias("reservationInfo")
 public class ReservationInfo {
     private int idx;
@@ -17,8 +19,8 @@ public class ReservationInfo {
     private int point;
     private int amount;
     private int qty;
-    private String regDttm;
-    private String updDttm;
+    private Date regDttm;
+    private Date updDttm;
 
     // Relations
     private UserExtInfo user;
@@ -112,19 +114,19 @@ public class ReservationInfo {
         this.qty = qty;
     }
 
-    public String getRegDttm() {
+    public Date getRegDttm() {
         return regDttm;
     }
 
-    public void setRegDttm(String regDttm) {
+    public void setRegDttm(Date regDttm) {
         this.regDttm = regDttm;
     }
 
-    public String getUpdDttm() {
+    public Date getUpdDttm() {
         return updDttm;
     }
 
-    public void setUpdDttm(String updDttm) {
+    public void setUpdDttm(Date updDttm) {
         this.updDttm = updDttm;
     }
 

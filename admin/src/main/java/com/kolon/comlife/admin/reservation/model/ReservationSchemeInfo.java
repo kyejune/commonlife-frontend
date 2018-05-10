@@ -56,6 +56,7 @@ public class ReservationSchemeInfo {
 
     private ComplexInfo complex;
     private List<ReservationAmenityInfo> amenities;
+    private ReservationGroupInfo group;
 
     /*
         Getter & Setter
@@ -415,5 +416,13 @@ public class ReservationSchemeInfo {
 
     public void setAmenities(List<ReservationAmenityInfo> amenities) {
         this.amenities = amenities;
+    }
+
+    public ReservationGroupInfo getGroup() {
+        return group;
+    }
+
+    public void setGroup(ReservationGroupInfo group) {
+        this.group = group;
     }
 }

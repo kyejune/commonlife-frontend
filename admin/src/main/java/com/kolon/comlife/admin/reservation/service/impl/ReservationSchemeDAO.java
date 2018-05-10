@@ -1,5 +1,6 @@
 package com.kolon.comlife.admin.reservation.service.impl;
 
+import com.kolon.comlife.admin.reservation.model.ReservationGroupInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
@@ -14,8 +15,26 @@ public class ReservationSchemeDAO {
     @Resource
     private SqlSession sqlSession;
 
+    @Resource( name = "reservationGroupDAO" )
+    private ReservationGroupDAO groupDAO;
+
     public List<ReservationSchemeInfo> index(Map params) {
-        return sqlSession.selectList("ReservationScheme.index", params);
+        List<ReservationGroupInfo> groups = groupDAO.index( new HashMap() );
+        List<ReservationSchemeInfo> schemes = sqlSession.selectList("ReservationScheme.index", params);
+
+        if( schemes != null && schemes.size() > 0 ) {
+            for ( ReservationSchemeInfo scheme: schemes ) {
+                if( groups != null && groups.size() > 0 ) {
+                    for ( ReservationGroupInfo group: groups ) {
+                        if( scheme.getParentIdx() == group.getIdx() ) {
+                            scheme.setGroup( group );
+                        }
+                    }
+                }
+            }
+        }
+
+        return schemes;
     }
 
     public ReservationSchemeInfo show(int idx) {

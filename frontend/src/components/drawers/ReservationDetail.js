@@ -526,7 +526,7 @@ class ReservationDetail extends Component {
 				{( this.state.reserved || this.state.booked ) &&
 				<div className="cl-reserved">
 					<button onClick={() => this.addSchedule()}>나의 캘린더에 등록</button>
-					<button>예약변경 및 취소</button>
+					{/*<button>예약변경 및 취소</button>*/}
 				</div>}
 
 			</div>
