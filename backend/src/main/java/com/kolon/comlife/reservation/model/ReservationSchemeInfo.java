@@ -11,24 +11,35 @@ public class ReservationSchemeInfo {
     private int cmplxIdx;
     private int parentIdx;
     private String isExpress;
+    private String activate;
+    private String useTime;
+    private String useQueue;
+    private String useQty;
+    private String useOptions;
+    private String useField;
+    private String fieldLabel;
     private String code;
-    private String icon;
     private String reservationType;
+    private String icon;
     private String images;
     private String title;
     private String summary;
     private String description;
     private String isOpen;
     private String startDt;
+    private String startTime;
     private String endDt;
+    private String endTime;
     private String openTime;
     private String closeTime;
+    private int maxDuration;
+    private int maxDays;
     private String availableInWeekend;
     private int point;
     private int amount;
     private int inStock;
     private int maxQty;
-    private String activateDuration;
+    private int activateDuration;
     private String maintenanceStartAt;
     private String maintenanceEndAt;
     private String options;
@@ -39,10 +50,18 @@ public class ReservationSchemeInfo {
     private String regDttm;
     private String updDttm;
 
+    /*
+        Relations
+     */
+
     private ReservationGroupInfo group;
     private ComplexInfo complex;
     private List<ReservationAmenityInfo> amenities;
     private List<ReservationSchemeOptionInfo> schemeOptions;
+
+    /*
+        Getter & Setter
+     */
 
     public int getIdx() {
         return idx;
@@ -76,6 +95,62 @@ public class ReservationSchemeInfo {
         this.isExpress = isExpress;
     }
 
+    public String getActivate() {
+        return activate;
+    }
+
+    public void setActivate(String activate) {
+        this.activate = activate;
+    }
+
+    public String getUseTime() {
+        return useTime;
+    }
+
+    public void setUseTime(String useTime) {
+        this.useTime = useTime;
+    }
+
+    public String getUseQueue() {
+        return useQueue;
+    }
+
+    public void setUseQueue(String useQueue) {
+        this.useQueue = useQueue;
+    }
+
+    public String getUseQty() {
+        return useQty;
+    }
+
+    public void setUseQty(String useQty) {
+        this.useQty = useQty;
+    }
+
+    public String getUseOptions() {
+        return useOptions;
+    }
+
+    public void setUseOptions(String useOptions) {
+        this.useOptions = useOptions;
+    }
+
+    public String getUseField() {
+        return useField;
+    }
+
+    public void setUseField(String useField) {
+        this.useField = useField;
+    }
+
+    public String getFieldLabel() {
+        return fieldLabel;
+    }
+
+    public void setFieldLabel(String fieldLabel) {
+        this.fieldLabel = fieldLabel;
+    }
+
     public String getCode() {
         return code;
     }
@@ -84,20 +159,20 @@ public class ReservationSchemeInfo {
         this.code = code;
     }
 
-    public String getIcon() {
-        return icon;
-    }
-
-    public void setIcon(String icon) {
-        this.icon = icon;
-    }
-
     public String getReservationType() {
         return reservationType;
     }
 
     public void setReservationType(String reservationType) {
         this.reservationType = reservationType;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getImages() {
@@ -148,12 +223,28 @@ public class ReservationSchemeInfo {
         this.startDt = startDt;
     }
 
+    public String getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
     public String getEndDt() {
         return endDt;
     }
 
     public void setEndDt(String endDt) {
         this.endDt = endDt;
+    }
+
+    public String getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
     public String getOpenTime() {
@@ -170,6 +261,22 @@ public class ReservationSchemeInfo {
 
     public void setCloseTime(String closeTime) {
         this.closeTime = closeTime;
+    }
+
+    public int getMaxDuration() {
+        return maxDuration;
+    }
+
+    public void setMaxDuration(int maxDuration) {
+        this.maxDuration = maxDuration;
+    }
+
+    public int getMaxDays() {
+        return maxDays;
+    }
+
+    public void setMaxDays(int maxDays) {
+        this.maxDays = maxDays;
     }
 
     public String getAvailableInWeekend() {
@@ -212,11 +319,11 @@ public class ReservationSchemeInfo {
         this.maxQty = maxQty;
     }
 
-    public String getActivateDuration() {
+    public int getActivateDuration() {
         return activateDuration;
     }
 
-    public void setActivateDuration(String activateDuration) {
+    public void setActivateDuration(int activateDuration) {
         this.activateDuration = activateDuration;
     }
 
@@ -292,13 +399,9 @@ public class ReservationSchemeInfo {
         this.updDttm = updDttm;
     }
 
-    public ReservationGroupInfo getGroup() {
-        return group;
-    }
-
-    public void setGroup(ReservationGroupInfo group) {
-        this.group = group;
-    }
+    /*
+        Relations' Getter & Setter
+     */
 
     public ComplexInfo getComplex() {
         return complex;
@@ -314,6 +417,14 @@ public class ReservationSchemeInfo {
 
     public void setAmenities(List<ReservationAmenityInfo> amenities) {
         this.amenities = amenities;
+    }
+
+    public ReservationGroupInfo getGroup() {
+        return group;
+    }
+
+    public void setGroup(ReservationGroupInfo group) {
+        this.group = group;
     }
 
     public List<ReservationSchemeOptionInfo> getSchemeOptions() {
