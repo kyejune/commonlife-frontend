@@ -194,7 +194,7 @@ class TimeScheduler extends Component {
         let OverflowStyle;
         if( this.state.isDraggingHandle ) OverflowStyle = { overflow: 'hidden' };
 
-        console.log( 'idh:', this.state.isDraggingHandle, OverflowStyle );
+        //console.log( 'idh:', this.state.isDraggingHandle, OverflowStyle );
 
         // 30분 단위로 그리기
         let halfHours = [...Array(HALF_LEN)].map((e, i) => {
