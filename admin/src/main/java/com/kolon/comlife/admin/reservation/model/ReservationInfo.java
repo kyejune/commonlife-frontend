@@ -19,12 +19,15 @@ public class ReservationInfo {
     private int point;
     private int amount;
     private int qty;
+    private int optionIdx;
+    private String userMemo;
     private Date regDttm;
     private Date updDttm;
 
     // Relations
     private UserExtInfo user;
     private ReservationSchemeInfo scheme;
+    private ReservationSchemeOptionInfo option;
 
     public int getIdx() {
         return idx;
@@ -114,6 +117,22 @@ public class ReservationInfo {
         this.qty = qty;
     }
 
+    public int getOptionIdx() {
+        return optionIdx;
+    }
+
+    public void setOptionIdx(int optionIdx) {
+        this.optionIdx = optionIdx;
+    }
+
+    public String getUserMemo() {
+        return userMemo;
+    }
+
+    public void setUserMemo(String userMemo) {
+        this.userMemo = userMemo;
+    }
+
     public Date getRegDttm() {
         return regDttm;
     }
@@ -147,5 +166,13 @@ public class ReservationInfo {
 
     public void setScheme(ReservationSchemeInfo scheme) {
         this.scheme = scheme;
+    }
+
+    public ReservationSchemeOptionInfo getOption() {
+        return option;
+    }
+
+    public void setOption(ReservationSchemeOptionInfo option) {
+        this.option = option;
     }
 }

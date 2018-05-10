@@ -2,6 +2,7 @@ package com.kolon.comlife.admin.reservation.service.impl;
 
 import com.kolon.comlife.admin.reservation.model.ReservationInfo;
 import com.kolon.comlife.admin.reservation.model.ReservationSchemeInfo;
+import com.kolon.comlife.admin.reservation.model.ReservationSchemeOptionInfo;
 import com.kolon.comlife.admin.reservation.string.Reservation;
 import com.kolon.comlife.admin.users.model.UserExtInfo;
 import com.kolon.comlife.admin.users.model.UserInfo;
@@ -20,6 +21,9 @@ public class ReservationDAO {
 
     @Resource(name="reservationSchemeDAO")
     private ReservationSchemeDAO schemeDAO;
+
+    @Resource(name="reservationSchemeOptionDAO")
+    private ReservationSchemeOptionDAO optionDAO;
 
     @Resource(name="userDAO")
     private UserDAO userDAO;
@@ -42,6 +46,11 @@ public class ReservationDAO {
 
         UserExtInfo user = userDAO.selectUserExtInfoByUsrId( reservation.getUsrID() );
         reservation.setUser( user );
+
+        if( reservation.getOptionIdx() > 0 ) {
+            ReservationSchemeOptionInfo option = optionDAO.show( reservation.getOptionIdx() );
+            reservation.setOption( option );
+        }
 
         return reservation;
     }
