@@ -389,45 +389,45 @@ public class InfoController {
         oldUserPw = bodyMap.get("oldUserPw");
         newUserPw = bodyMap.get("newUserPw");
 
-        // 0-1. encrypt 된 userId/userPw를 복호화
-        if( pk_key == null || pk_key.equals("") ) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body(new SimpleErrorInfo("pk_key 값이 전달되지 않았습니다."));
-        }
-
-        try {
-            privateKey = userKeyService.getPrivateKey( pk_key );
-            // 0-2. 평문 userId/userPw 변경
-            oldUserPw = StringUtil.decryptRsa( privateKey, oldUserPw );
-            newUserPw = StringUtil.decryptRsa( privateKey, newUserPw );
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-            return ResponseEntity
-                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
-                    .body( new SimpleErrorInfo(
-                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
-        } catch (InvalidKeySpecException e) {
-            e.printStackTrace();
-            return ResponseEntity
-                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
-                    .body( new SimpleErrorInfo(
-                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity
-                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
-                    .body( new SimpleErrorInfo(
-                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
-        }
-
-
         try {
             if( newEmail != null && (oldUserPw == null || newUserPw == null) ) {
                 // Email 변경
                 logger.debug("email 변경!");
                 userProfile = infoService.updateInfoProfileEmail( authUserInfo, newEmail );
             } else if( (oldUserPw != null && newUserPw != null) && newEmail == null ) {
+                // 암호 변경시에만 체크함
+                // 0-1. encrypt 된 userId/userPw를 복호화
+                if( pk_key == null || pk_key.equals("") ) {
+                    return ResponseEntity
+                            .status(HttpStatus.BAD_REQUEST)
+                            .body(new SimpleErrorInfo("pk_key 값이 전달되지 않았습니다."));
+                }
+
+                try {
+                    privateKey = userKeyService.getPrivateKey( pk_key );
+                    // 0-2. 평문 userId/userPw 변경
+                    oldUserPw = StringUtil.decryptRsa( privateKey, oldUserPw );
+                    newUserPw = StringUtil.decryptRsa( privateKey, newUserPw );
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                    return ResponseEntity
+                            .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                            .body( new SimpleErrorInfo(
+                                    "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+                } catch (InvalidKeySpecException e) {
+                    e.printStackTrace();
+                    return ResponseEntity
+                            .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                            .body( new SimpleErrorInfo(
+                                    "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return ResponseEntity
+                            .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                            .body( new SimpleErrorInfo(
+                                    "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+                }
+
                 // 암호 변경
                 logger.debug("암호 변경!");
                 userProfile = infoService.updateInfoProfileUserPw( authUserInfo, oldUserPw, newUserPw );

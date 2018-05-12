@@ -1,6 +1,8 @@
 package com.kolon.comlife.users.service.impl;
 
 
+import com.kolon.comlife.users.exception.KeyNotFoundException;
+import com.kolon.comlife.users.exception.NotFoundException;
 import com.kolon.comlife.users.service.UserKeyService;
 import com.kolon.common.helper.JedisHelper;
 import org.slf4j.Logger;
@@ -79,7 +81,7 @@ public class UserKeySerivceImpl implements UserKeyService {
     }
 
     @Override
-    public PrivateKey getPrivateKey( String pk_key ) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public PrivateKey getPrivateKey( String pk_key ) throws NoSuchAlgorithmException, InvalidKeySpecException, KeyNotFoundException {
         Jedis jedis;
 
         KeyFactory kf;
@@ -89,6 +91,9 @@ public class UserKeySerivceImpl implements UserKeyService {
         jedis = helper.getConnection();
         try {
             privateKeyBytes = jedis.get(pk_key.getBytes());
+            if( privateKeyBytes == null ) {
+                throw new KeyNotFoundException("키에 해당 하는 값이 없음");
+            }
             logger.debug("PRIVATE_KEY_BYTES>>>> " + privateKeyBytes);
         } finally {
             helper.returnResource( jedis );
