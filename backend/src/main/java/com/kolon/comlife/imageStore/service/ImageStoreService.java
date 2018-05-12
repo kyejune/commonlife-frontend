@@ -2,7 +2,7 @@ package com.kolon.comlife.imageStore.service;
 
 import com.kolon.comlife.imageStore.exception.ImageNotFoundException;
 import com.kolon.comlife.imageStore.model.ImageInfo;
-import com.kolon.comlife.postFile.service.exception.OperationFailedException;
+import com.kolon.comlife.post.exception.OperationFailedException;
 
 import java.io.IOException;
 import java.io.InputStream;

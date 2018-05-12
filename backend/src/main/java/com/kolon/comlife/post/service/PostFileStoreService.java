@@ -1,7 +1,7 @@
-package com.kolon.comlife.postFile.service;
+package com.kolon.comlife.post.service;
 
-import com.kolon.comlife.postFile.model.PostFileInfo;
-import com.kolon.comlife.postFile.service.exception.OperationFailedException;
+import com.kolon.comlife.post.model.PostFileInfo;
+import com.kolon.comlife.post.exception.OperationFailedException;
 
 public interface PostFileStoreService {
 

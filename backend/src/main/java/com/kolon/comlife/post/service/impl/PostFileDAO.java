@@ -1,7 +1,6 @@
-package com.kolon.comlife.postFile.service.impl;
+package com.kolon.comlife.post.service.impl;
 
-import com.kolon.comlife.post.web.PostController;
-import com.kolon.comlife.postFile.model.PostFileInfo;
+import com.kolon.comlife.post.model.PostFileInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

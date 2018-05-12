@@ -12,7 +12,7 @@ import com.kolon.comlife.imageStore.exception.ImageNotFoundException;
 import com.kolon.comlife.imageStore.model.ImageInfo;
 import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.imageStore.service.ImageStoreService;
-import com.kolon.comlife.postFile.service.exception.OperationFailedException;
+import com.kolon.comlife.post.exception.OperationFailedException;
 import com.kolon.common.prop.ServicePropertiesMap;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;

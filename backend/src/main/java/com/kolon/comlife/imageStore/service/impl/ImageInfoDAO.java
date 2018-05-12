@@ -1,7 +1,6 @@
 package com.kolon.comlife.imageStore.service.impl;
 
 import com.kolon.comlife.imageStore.model.ImageInfo;
-import com.kolon.comlife.postFile.model.PostFileInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Repository("imageInfoDAO")

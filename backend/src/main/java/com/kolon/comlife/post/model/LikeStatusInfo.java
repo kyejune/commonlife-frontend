@@ -1,4 +1,4 @@
-package com.kolon.comlife.like.model;
+package com.kolon.comlife.post.model;
 
 import com.kolon.comlife.common.model.SimpleMsgInfo;
 

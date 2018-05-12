@@ -1,4 +1,4 @@
-package com.kolon.comlife.postFile.model;
+package com.kolon.comlife.post.model;
 
 import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.post.model.PostInfo;

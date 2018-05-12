@@ -1,15 +1,13 @@
-package com.kolon.comlife.like.web;
+package com.kolon.comlife.post.web;
 
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.imageStore.service.ImageStoreService;
-import com.kolon.comlife.like.model.LikeInfo;
-import com.kolon.comlife.like.model.LikeStatusInfo;
-import com.kolon.comlife.like.service.LikeService;
+import com.kolon.comlife.post.model.LikeInfo;
+import com.kolon.comlife.post.model.LikeStatusInfo;
+import com.kolon.comlife.post.service.LikeService;
 import com.kolon.comlife.post.web.PostController;
-import com.kolon.comlife.users.exception.NotFoundException;
 import com.kolon.comlife.users.model.PostUserInfo;
-import com.kolon.comlife.users.model.UserProfileInfo;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
@@ -21,7 +19,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;

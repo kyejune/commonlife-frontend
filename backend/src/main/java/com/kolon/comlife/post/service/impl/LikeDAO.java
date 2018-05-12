@@ -1,7 +1,7 @@
-package com.kolon.comlife.like.service.impl;
+package com.kolon.comlife.post.service.impl;
 
-import com.kolon.comlife.like.model.LikeInfo;
-import com.kolon.comlife.like.model.LikeStatusInfo;
+import com.kolon.comlife.post.model.LikeInfo;
+import com.kolon.comlife.post.model.LikeStatusInfo;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 

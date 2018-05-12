@@ -10,7 +10,7 @@ import com.kolon.comlife.imageStore.model.ImageBase64;
 import com.kolon.comlife.imageStore.model.ImageInfo;
 import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.imageStore.service.ImageStoreService;
-import com.kolon.comlife.postFile.service.exception.OperationFailedException;
+import com.kolon.comlife.post.exception.OperationFailedException;
 import com.kolon.comlife.users.exception.NotAcceptedUserIdException;
 import com.kolon.comlife.users.exception.UserNotExistException;
 import com.kolon.comlife.users.exception.UsersGeneralException;

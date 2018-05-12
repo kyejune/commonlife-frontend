@@ -1,8 +1,6 @@
 package com.kolon.comlife.post.model;
 
-import com.kolon.comlife.postFile.model.PostFileInfo;
 import com.kolon.comlife.users.model.PostUserInfo;
-import com.kolon.comlife.users.model.UserInfo;
 import org.apache.ibatis.type.Alias;
 
 import java.util.ArrayList;

@@ -1,23 +1,12 @@
-package com.kolon.comlife.postFile.web;
+package com.kolon.comlife.post.web;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
-import com.amazonaws.services.s3.model.*;
-import com.amazonaws.util.IOUtils;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
-import com.kolon.comlife.example.web.ExampleController;
-import com.kolon.comlife.postFile.model.PostFileInfo;
-import com.kolon.comlife.postFile.service.PostFileService;
-import com.kolon.comlife.postFile.service.PostFileStoreService;
-import com.kolon.comlife.postFile.service.exception.OperationFailedException;
+import com.kolon.comlife.post.model.PostFileInfo;
+import com.kolon.comlife.post.service.PostFileService;
+import com.kolon.comlife.post.service.PostFileStoreService;
+import com.kolon.comlife.post.exception.OperationFailedException;
 import com.kolon.common.model.AuthUserInfo;
-import com.kolon.common.prop.KeyValueMap;
-import com.kolon.common.prop.ServicePropertiesMap;
 import com.kolon.common.servlet.AuthUserInfoUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,10 +20,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.DatatypeConverter;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Timestamp;
 import java.util.HashMap;
 
 @RestController

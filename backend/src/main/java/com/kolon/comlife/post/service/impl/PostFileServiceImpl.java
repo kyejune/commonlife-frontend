@@ -1,7 +1,7 @@
-package com.kolon.comlife.postFile.service.impl;
+package com.kolon.comlife.post.service.impl;
 
-import com.kolon.comlife.postFile.model.PostFileInfo;
-import com.kolon.comlife.postFile.service.PostFileService;
+import com.kolon.comlife.post.model.PostFileInfo;
+import com.kolon.comlife.post.service.PostFileService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -1,4 +1,4 @@
-package com.kolon.comlife.postFile.service.exception;
+package com.kolon.comlife.post.exception;
 
 public class OperationFailedException extends Exception {
 

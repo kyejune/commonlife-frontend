@@ -1,4 +1,4 @@
-package com.kolon.comlife.postFile.service.impl;
+package com.kolon.comlife.post.service.impl;
 
 
 import com.amazonaws.AmazonServiceException;
@@ -13,9 +13,9 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.util.IOUtils;
-import com.kolon.comlife.postFile.model.PostFileInfo;
-import com.kolon.comlife.postFile.service.PostFileStoreService;
-import com.kolon.comlife.postFile.service.exception.OperationFailedException;
+import com.kolon.comlife.post.model.PostFileInfo;
+import com.kolon.comlife.post.service.PostFileStoreService;
+import com.kolon.comlife.post.exception.OperationFailedException;
 import com.kolon.common.prop.ServicePropertiesMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

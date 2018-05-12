@@ -1,6 +1,6 @@
 package com.kolon.comlife.post.service.impl;
 
-import com.kolon.comlife.like.model.LikeStatusInfo;
+import com.kolon.comlife.post.model.LikeStatusInfo;
 import com.kolon.comlife.post.model.PostRsvInfo;
 import com.kolon.comlife.post.model.PostRsvItemInfo;
 import org.apache.ibatis.session.SqlSession;

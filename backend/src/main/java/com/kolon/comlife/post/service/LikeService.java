@@ -1,7 +1,7 @@
-package com.kolon.comlife.like.service;
+package com.kolon.comlife.post.service;
 
-import com.kolon.comlife.like.model.LikeInfo;
-import com.kolon.comlife.like.model.LikeStatusInfo;
+import com.kolon.comlife.post.model.LikeInfo;
+import com.kolon.comlife.post.model.LikeStatusInfo;
 
 import java.util.List;
 
