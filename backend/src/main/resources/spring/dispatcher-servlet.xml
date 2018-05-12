@@ -71,14 +71,4 @@
         <property name="basenames" value="/properties/_iok_/i18n/messages" />
     </bean>
 
-
-    <!--<bean id="defaultRenderer" class="com.kolon.common.pagination.DefaultPaginationRenderer" />-->
-
-    <!--<bean id="paginationManager" class="com.kolon.common.pagination.DefaultPaginationManager">-->
-        <!--<property name="rendererType">-->
-            <!--<map>-->
-                <!--<entry key="default" value-ref="defaultRenderer" />-->
-            <!--</map>-->
-        <!--</property>-->
-    <!--</bean>-->
 </beans>

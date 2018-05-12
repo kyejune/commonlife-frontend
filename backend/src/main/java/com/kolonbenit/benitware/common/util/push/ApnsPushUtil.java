@@ -1,6 +1,5 @@
 package com.kolonbenit.benitware.common.util.push;
 
-import com.kolon.comlife.board.web.BoardController;
 import com.kolonbenit.benitware.common.util.PropertiesUtil;
 import javapns.devices.Device;
 import javapns.devices.implementations.basic.BasicDevice;

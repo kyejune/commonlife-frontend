@@ -12,24 +12,12 @@
     -->
 
     <!--
-        아래 설정을 할 경우 form-login, http-basic, logout 기능이 자동 설정 됨
-        intercept-url 은 security 가 감시(권한 관리) 할 url 패턴
-        http://zgundam.tistory.com/44
-    -->
-    <http pattern="/fileUpload.do" security="none" />
-    <http pattern="/fileUpload" security="none" />
-    <http pattern="/smartEdit/photoUpload" security="none" />
-    <http pattern="/upload/*" security="none" />
-
-    <!--
     <http auto-config="true" use-expressions="true" disable-url-rewriting="true">
     -->
     <http auto-config="true" use-expressions="true">
         <csrf />
 
         <intercept-url pattern="/" access="permitAll"/>
-        <intercept-url pattern="/error/**" access="permitAll"/>
-        <intercept-url pattern="/upload/**" access="permitAll"/>
         
         <headers>
             <frame-options policy="SAMEORIGIN"/>

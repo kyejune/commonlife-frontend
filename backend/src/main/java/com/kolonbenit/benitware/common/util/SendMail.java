@@ -1,7 +1,6 @@
 package com.kolonbenit.benitware.common.util;
 
 //import lombok.extern.slf4j.Slf4j;
-import com.kolon.comlife.board.web.BoardController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +16,7 @@ import java.util.Properties;
 @Component
 public class SendMail
 {
-	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
+	private static final Logger logger = LoggerFactory.getLogger(SendMail.class);
 	private static String host;
 	  @Value("#{applicationProps['mail.host']}")
 	  public void setMailHost(String host){
