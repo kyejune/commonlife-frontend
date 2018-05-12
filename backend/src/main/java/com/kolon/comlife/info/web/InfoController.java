@@ -11,9 +11,11 @@ import com.kolon.comlife.info.service.InfoService;
 import com.kolon.comlife.post.model.PostInfo;
 import com.kolon.comlife.users.exception.NotFoundException;
 import com.kolon.comlife.users.model.UserProfileInfo;
+import com.kolon.comlife.users.service.UserKeyService;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
+import com.kolonbenit.benitware.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +25,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 @RestController
@@ -35,6 +40,9 @@ public class InfoController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    UserKeyService userKeyService;
 
     @Autowired
     ComplexService complexService;
@@ -369,9 +377,50 @@ public class InfoController {
 
         AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
         UserProfileInfo userProfile;
-        String newEmail = bodyMap.get("newEmail");
-        String oldUserPw = bodyMap.get("oldUserPw");
-        String newUserPw = bodyMap.get("newUserPw");
+        PrivateKey privateKey;
+
+        String pk_key;
+        String newEmail;
+        String oldUserPw;
+        String newUserPw;
+
+        pk_key    = bodyMap.get("pk_key");
+        newEmail  = bodyMap.get("newEmail");
+        oldUserPw = bodyMap.get("oldUserPw");
+        newUserPw = bodyMap.get("newUserPw");
+
+        // 0-1. encrypt 된 userId/userPw를 복호화
+        if( pk_key == null || pk_key.equals("") ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("pk_key 값이 전달되지 않았습니다."));
+        }
+
+        try {
+            privateKey = userKeyService.getPrivateKey( pk_key );
+            // 0-2. 평문 userId/userPw 변경
+            oldUserPw = StringUtil.decryptRsa( privateKey, oldUserPw );
+            newUserPw = StringUtil.decryptRsa( privateKey, newUserPw );
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        }
+
 
         try {
             if( newEmail != null && (oldUserPw == null || newUserPw == null) ) {

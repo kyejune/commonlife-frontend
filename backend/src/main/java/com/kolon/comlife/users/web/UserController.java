@@ -8,10 +8,12 @@ import com.kolon.comlife.complexes.model.ComplexSimpleInfo;
 import com.kolon.comlife.complexes.service.ComplexService;
 import com.kolon.comlife.users.exception.NotFoundException;
 import com.kolon.comlife.users.model.UserProfileInfo;
+import com.kolon.comlife.users.service.UserKeyService;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.comlife.users.util.IokUtil;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
+import com.kolonbenit.benitware.common.util.StringUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.service.MobileUserService;
 import org.slf4j.Logger;
@@ -23,6 +25,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +41,9 @@ public class UserController {
 
     @Autowired
     MobileUserService mobileUserService;
+
+    @Autowired
+     UserKeyService userKeyService;
 
     @Autowired
     ComplexService complexService;
@@ -55,14 +63,60 @@ public class UserController {
     public ResponseEntity loginUser(HttpServletRequest request) {
 
         RequestParameter    parameter;
+        PrivateKey          privateKey;
+        String              pk_key;
         Map<String, Object> resultMobileUser;
         Map<String, Object> result;
         String              retMsg;
         boolean             resFlag;
         String              resType;
         ComplexInfo         cmplxInfo;
+        String              userId;
+        String              userPw;
 
         parameter = IokUtil.buildRequestParameter(request);
+        userId = parameter.getString("userId");
+        userPw = parameter.getString("userPw");
+
+        // 0-1. encrypt 된 userId/userPw를 복호화
+        pk_key = parameter.getString("pk_key");
+        if( pk_key == null || pk_key.equals("") ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("pk_key 값이 전달되지 않았습니다."));
+        }
+
+        try {
+            privateKey = userKeyService.getPrivateKey( pk_key );
+            userId = StringUtil.decryptRsa( privateKey, userId );
+            userPw = StringUtil.decryptRsa( privateKey, userPw );
+
+            logger.debug(" login:userId >>>>>> " + userId );
+
+            // 0-2. 평문 userId/userPw 변경
+            parameter.put( "userId", userId );
+            parameter.put( "userPw", userPw );
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        }
+
 
         try {
             // 1. 기존 다른 기기에서의 로그인 여부 확인

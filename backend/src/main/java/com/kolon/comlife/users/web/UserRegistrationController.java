@@ -16,12 +16,12 @@ import com.kolon.comlife.users.exception.UserNotExistException;
 import com.kolon.comlife.users.exception.UsersGeneralException;
 import com.kolon.comlife.users.model.AgreementInfo;
 import com.kolon.comlife.users.model.UserInfo;
+import com.kolon.comlife.users.service.UserKeyService;
 import com.kolon.comlife.users.service.UserRegistrationService;
 import com.kolon.comlife.users.service.UserService;
 import com.kolon.comlife.users.util.IokUtil;
+import com.kolonbenit.benitware.common.util.StringUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
-import com.kolonbenit.iot.mobile.controller.MobileUserCertNoController;
-import com.kolonbenit.iot.mobile.controller.MobileUserController;
 import com.kolonbenit.iot.mobile.service.MobileUserCertNoService;
 import com.kolonbenit.iot.mobile.service.MobileUserService;
 import org.slf4j.Logger;
@@ -33,16 +33,20 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.Response;
 import java.io.ByteArrayInputStream;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.spec.InvalidKeySpecException;
 import java.util.*;
 
 @RestController
 @RequestMapping("/users/registration/*")
 public class UserRegistrationController {
     private static final Logger logger = LoggerFactory.getLogger(UserRegistrationController.class);
+
+    @Autowired
+    private UserKeyService userKeyService;
 
     @Autowired
     private UserRegistrationService regService;
@@ -370,19 +374,56 @@ public class UserRegistrationController {
             value = "/newUser",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity registerNewUser(HttpServletRequest request) throws Exception {
-        RequestParameter parameter;
+        RequestParameter    parameter;
+        PrivateKey          privateKey;
+        String              pk_key;
         Map<String, Object> result;
-        boolean resFlag;
-        UserInfo userInfo;
-        String userId;
-        String userPw;
-        String email;
+        boolean             resFlag;
+        UserInfo            userInfo;
+        String              userId;
+        String              userPw;
+        String              email;
 
         parameter = IokUtil.buildRequestParameter(request);
         userId = parameter.getString("userId");
         userPw = parameter.getString("userPw");
-//        email = parameter.getString("mail");
-//        parameter.put("email", email);  // mail ==> email로 변환
+
+        // 0-1. encrypt 된 userId/userPw를 복호화
+        pk_key = parameter.getString("pk_key");
+        if( pk_key == null || pk_key.equals("") ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("pk_key 값이 전달되지 않았습니다."));
+        }
+
+        try {
+            privateKey = userKeyService.getPrivateKey( pk_key );
+            userId = StringUtil.decryptRsa( privateKey, userId );
+            userPw = StringUtil.decryptRsa( privateKey, userPw );
+
+            // 0-2. 평문 userId/userPw 변경
+            parameter.put( "userId", userId );
+            parameter.put( "userPw", userPw );
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        }
 
         // User id validation
         try {
@@ -442,15 +483,22 @@ public class UserRegistrationController {
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity uploadPhoto( HttpServletRequest request,
                                        @RequestBody HashMap<String, String> bodyParams ) {
-        UserInfo userInfo;
-        ImageInfo imageInfo;
-
-        String userId = bodyParams.get("userId");
-        String userPw = bodyParams.get("userPw");
-        String file   = bodyParams.get("file");
+        UserInfo    userInfo;
+        ImageInfo   imageInfo;
         ImageBase64 imageBase64 = new ImageBase64();
-        byte[]       imageBytes;
-        String imageType = ImageInfoUtil.IMAGE_TYPE_PROFILE;
+        byte[]      imageBytes;
+        String      imageType   = ImageInfoUtil.IMAGE_TYPE_PROFILE;
+
+        PrivateKey  privateKey;
+        String      pk_key;
+        String      userId;
+        String      userPw;
+        String      file;
+
+        pk_key = bodyParams.get("pk_key");
+        userId = bodyParams.get("userId");
+        userPw = bodyParams.get("userPw");
+        file   = bodyParams.get("file");
 
         if(userId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleErrorInfo( "userId를 입력하세요." ));
@@ -461,6 +509,41 @@ public class UserRegistrationController {
         if(file == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body( new SimpleErrorInfo( "file를 입력하세요." ));
         }
+
+        // 0-1. encrypt 된 userId/userPw를 복호화
+        if( pk_key == null || pk_key.equals("") ) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(new SimpleErrorInfo("pk_key 값이 전달되지 않았습니다."));
+        }
+
+        try {
+            privateKey = userKeyService.getPrivateKey( pk_key );
+            // 0-2. 평문 userId/userPw 변경
+            userId = StringUtil.decryptRsa( privateKey, userId );
+            userPw = StringUtil.decryptRsa( privateKey, userPw );
+
+            logger.debug(" login:userId >>>>>> " + userId );
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        } catch (InvalidKeySpecException e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity
+                    .status( HttpStatus.INTERNAL_SERVER_ERROR )
+                    .body( new SimpleErrorInfo(
+                            "내부 오류가 발생하였습니다. 관리자에게 문의하세요. \nerror msg: " + e.getMessage()) );
+        }
+
 
         //등록된 회원
         userInfo = userService.getUsrIdByUserIdAndPwd( userId, userPw );

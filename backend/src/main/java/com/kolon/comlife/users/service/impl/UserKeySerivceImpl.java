@@ -24,22 +24,22 @@ public class UserKeySerivceImpl implements UserKeyService {
 
     private static final String         KEY_ALGORITHM  = "RSA";
     private static final int            KEY_SIZE       = 1024; // must be longer than 512
-    private static final int            KEY_EXPIRE_SEC = 60; // 60 seconds
+    private static final int            KEY_EXPIRE_SEC = 300; // 15 seconds
     private static final String         UUID_PREFIX    = "PK_";
 
     @Override
     public Map<String, String> createKeyPair() throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         Map<String, String> result;
-        KeyPairGenerator generator;
-        KeyPair keyPair;
-        KeyFactory keyFactory;
-        PublicKey publicKey;
+        KeyPairGenerator    generator;
+        KeyPair             keyPair;
+        KeyFactory          keyFactory;
+        PublicKey           publicKey;
         PrivateKey          privateKey;
         RSAPublicKeySpec    publicSpec;
         String              publicKeyModulus;
         String              publicKeyExponent;
-        UUID uuid;
+        UUID                uuid;
         String              pk_key;
 
         Jedis jedis;

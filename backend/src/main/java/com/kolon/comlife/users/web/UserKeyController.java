@@ -82,13 +82,11 @@ public class UserKeyController {
         logger.debug("SEC_USER_ID>>>> " + userId);
         logger.debug("SEC_USER_PW>>>> " + userPw);
 
-
         try {
             privateKey = userKeyService.getPrivateKey( pk_key );
 
             userId = StringUtil.decryptRsa( privateKey, userId );
             userPw = StringUtil.decryptRsa( privateKey, userPw );
-
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
             return ResponseEntity
