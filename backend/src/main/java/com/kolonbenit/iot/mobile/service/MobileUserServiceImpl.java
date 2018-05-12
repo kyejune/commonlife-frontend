@@ -129,8 +129,9 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 		HashFunctionCipherUtil hf = new HashFunctionCipherUtil();
 		AESCipher ac = new AESCipher();
 		
-		String strUserPw = parameter.getString("userPw").replaceAll(" ", "+");
+		String strUserPw = parameter.getString("userPw");
 		//String desResult = AESCipher.decodeAES(strUserPw, keyData);
+		strUserPw = AESCipher.encodeAES(hf.hashingMD5( strUserPw ), keyData);
 		parameter.put("userPw", strUserPw);
 		
 		// deviceId, gcmRegId 없는 경우, 로그인 불가 처리로 변경됨
@@ -649,6 +650,7 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 
 	@Override
 	public Map<String, Object> mobileUserLoginConfirm(RequestParameter parameter) throws Exception {
+		HashFunctionCipherUtil hf = new HashFunctionCipherUtil();
 		Map<String, Object> resMap = new HashMap<>();
 
 		boolean isSuccess = true;
@@ -665,8 +667,9 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 				logger.info("step 2. ");				
 				logger.info("RAW userPw:"+parameter.getString("userPw"));
 				
-				String strUserPw = parameter.getString("userPw").replaceAll(" ", "+");
+				String strUserPw = parameter.getString("userPw");
 				/*String desResult = AESCipher.decodeAES(strUserPw, keyData);*/
+				strUserPw = AESCipher.encodeAES(hf.hashingMD5( strUserPw ), keyData);
 				
 				logger.info("Replace userPw:"+strUserPw);
 				
@@ -950,6 +953,7 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 	@Transactional(propagation=Propagation.REQUIRED, rollbackFor={Exception.class})
 	@Override
 	public Map<String, Object> registerMember(RequestParameter parameter) throws Exception {
+		HashFunctionCipherUtil hf = new HashFunctionCipherUtil();
 		Map<String, Object> resMap = new HashMap<>();
 
 		String strOrgUserCell = parameter.getString("userCell");
@@ -960,9 +964,11 @@ public class MobileUserServiceImpl extends BaseIbatisDao<Object, Object> impleme
 		
 		String strUserCell = FormattingUtil.cellPhoneNumHyphen(strOrgUserCell);
 		String strHeadCell = FormattingUtil.cellPhoneNumHyphen(strOrgHeadCell);
-		
-		String strUserPw = parameter.getString("userPw").replaceAll(" ", "+");
-		//String desResult = AESCipher.decodeAES(strUserPw, keyData);
+
+		String strUserPw = parameter.getString("userPw");
+
+		// encode password
+		strUserPw = AESCipher.encodeAES(hf.hashingMD5( strUserPw ), keyData);
 		parameter.put("userPw", strUserPw);
 		
 		parameter.put("userCell", strUserCell);

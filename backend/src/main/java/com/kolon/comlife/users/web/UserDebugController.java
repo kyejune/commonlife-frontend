@@ -2,15 +2,19 @@ package com.kolon.comlife.users.web;
 
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.users.service.UserDebugService;
+import com.kolon.comlife.users.service.UserKeyService;
 import com.kolon.comlife.users.util.IokUtil;
 import com.kolon.common.model.AuthUserInfo;
 import com.kolon.common.servlet.AuthUserInfoUtil;
+import com.kolonbenit.benitware.common.util.cipher.AESCipher;
+import com.kolonbenit.benitware.common.util.cipher.HashFunctionCipherUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.controller.MobileUserCertNoController;
 import com.kolonbenit.iot.mobile.service.MobileUserCertNoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +47,21 @@ public class UserDebugController {
 
     @Autowired
     private UserDebugService userDebugService;
+
+
+    /**
+     * userPw의 암호화 방식으로 value를 encoding하고, 결과를 반환합니다.
+     */
+    @GetMapping(
+            value="encode",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity getEncodeValue( HttpServletRequest request ) {
+        Map result;
+
+        result = userDebugService.getEncodeValue(request.getParameter("value") );
+
+        return ResponseEntity.status(HttpStatus.OK).body(result);
+    }
 
     /**
      *

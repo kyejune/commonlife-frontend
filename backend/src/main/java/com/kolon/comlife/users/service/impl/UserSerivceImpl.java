@@ -4,16 +4,18 @@ import com.kolon.comlife.complexes.model.ComplexInfo;
 import com.kolon.comlife.complexes.service.impl.ComplexDAO;
 import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.imageStore.service.ImageStoreService;
-import com.kolon.comlife.info.exception.DataNotFoundException;
 import com.kolon.comlife.users.exception.NotFoundException;
 import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.model.UserExtInfo;
 import com.kolon.comlife.users.model.UserInfo;
 import com.kolon.comlife.users.model.UserProfileInfo;
 import com.kolon.comlife.users.service.UserService;
+import com.kolonbenit.benitware.common.util.cipher.AESCipher;
+import com.kolonbenit.benitware.common.util.cipher.HashFunctionCipherUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +23,10 @@ import java.util.List;
 @Service("userService")
 public class UserSerivceImpl implements UserService {
     final static Logger logger = LoggerFactory.getLogger(  UserSerivceImpl.class );
+
+    // cipher keydata
+    @Value("#{applicationProps['cipher.keydata']}")
+    public String keyData;
 
     @Autowired
     private UserDAO userDAO;
@@ -43,6 +49,11 @@ public class UserSerivceImpl implements UserService {
 
     @Override
     public UserInfo getUsrIdByUserIdAndPwd( String userId, String userPw ) {
+        HashFunctionCipherUtil hf = new HashFunctionCipherUtil();
+
+        userPw = AESCipher.encodeAES(hf.hashingMD5( userPw ), keyData);
+
+
         return userDAO.getUsrIdByUserIdAndPwd( userId, userPw );
     }
 

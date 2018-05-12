@@ -341,8 +341,6 @@ public class UserController {
      *                   자동 로그아웃 된 상태(0003), 사용자 정보가 없음(0004) or 사용자 정보가 없음(0005)
      *       - "status" : 사용자 정보 상태 코드: "0001" ~ "0005"
      *   500 - 그 외의 시스템 문제
-     * todo: BUGBUG: 사용 권한 체크 안하나...?
-     * todo: userID를 PATH로 변경할 것
      */
     @GetMapping(
             value="/status",
@@ -353,7 +351,12 @@ public class UserController {
         boolean             resFlag;
         String              resType;
 
+        AuthUserInfo authUserInfo = AuthUserInfoUtil.getAuthUserInfo( request );
+
         parameter = IokUtil.buildRequestParameter( request );
+
+        parameter.put( "userId", authUserInfo.getUserId() );
+
         try {
             result = mobileUserService.mobileUserLoginStatus(parameter);
             resType = IokUtil.getResType( result );
@@ -374,8 +377,6 @@ public class UserController {
      *   200 - 정상적으로 로그아웃 되었습니다
      *   401 - 해당하는 사용자 정보가 없습니다
      *   500 - 그 외의 시스템 문제
-     * todo: BUGBUG: 사용 권한 체크 안하나...?
-     * todo: userID를 PATH로 변경할 것
      */
 
     @GetMapping(
@@ -388,6 +389,9 @@ public class UserController {
         boolean             isSuccess;
 
         parameter = IokUtil.buildRequestParameter( request );
+
+        // token에서 부터 사용자 아이디 가져 옴
+        parameter.put( "userId", authUserInfo.getUserId() );
 
         try {
             isSuccess = mobileUserService.mobileUserLogout(parameter);

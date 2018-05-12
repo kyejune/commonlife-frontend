@@ -400,6 +400,8 @@ public class UserRegistrationController {
             privateKey = userKeyService.getPrivateKey( pk_key );
             userId = StringUtil.decryptRsa( privateKey, userId );
             userPw = StringUtil.decryptRsa( privateKey, userPw );
+            logger.debug("descrypted:userId>> " +userId );
+            logger.debug("descrypted:userPw>> " +userPw );
 
             // 0-2. 평문 userId/userPw 변경
             parameter.put( "userId", userId );
@@ -463,6 +465,7 @@ public class UserRegistrationController {
         }
 
         try {
+            // todo  regService.setUserExt 생성 항목을 mmobileUserService.registerMember 내부로 옮겨야 함
             userInfo = regService.setUserExt( parameter.getString("userId"), parameter.getString("userPw"));
         } catch( UserNotExistException e ){
             logger.error(e.getMessage());

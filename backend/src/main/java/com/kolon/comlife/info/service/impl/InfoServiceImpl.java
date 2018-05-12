@@ -22,9 +22,12 @@ import com.kolon.comlife.users.model.PostUserInfo;
 import com.kolon.comlife.users.model.UserExtInfo;
 import com.kolon.comlife.users.service.impl.UserDAO;
 import com.kolon.common.model.AuthUserInfo;
+import com.kolonbenit.benitware.common.util.cipher.AESCipher;
+import com.kolonbenit.benitware.common.util.cipher.HashFunctionCipherUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,6 +41,10 @@ public class InfoServiceImpl implements InfoService {
     private static final Logger logger = LoggerFactory.getLogger( InfoServiceImpl.class );
 
     private String NO_NOTICE = null; // 공지사항 없는 경우, null 값 전송
+
+    // cipher keydata
+    @Value("#{applicationProps['cipher.keydata']}")
+    public String keyData;
 
     @Autowired
     UserDAO userDAO;
@@ -337,11 +344,16 @@ public class InfoServiceImpl implements InfoService {
     }
 
     @Override
-    public UserProfileInfo updateInfoProfileUserPw(AuthUserInfo authUserInfo, String oldUserPw, String newUserPw )
+    public UserProfileInfo
+    updateInfoProfileUserPw(AuthUserInfo authUserInfo, String oldUserPw, String newUserPw )
             throws DataNotFoundException
     {
-        // todo: password의 암호화 처리 부분 체크 할 것
+        HashFunctionCipherUtil hf = new HashFunctionCipherUtil();
         int updatedCnt ;
+
+        oldUserPw = AESCipher.encodeAES(hf.hashingMD5( oldUserPw ), keyData);
+        newUserPw = AESCipher.encodeAES(hf.hashingMD5( newUserPw ), keyData);
+
         updatedCnt = userDAO.updateUserPw( oldUserPw, newUserPw, authUserInfo.getUsrId(), authUserInfo.getUserId() );
         if(updatedCnt < 1) {
             throw new DataNotFoundException("사용자 암호의 업데이트를 실패하였습니다 입력값을 다시 한 번 확인하세요.");
