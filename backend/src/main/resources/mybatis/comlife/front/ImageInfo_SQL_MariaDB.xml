@@ -20,9 +20,9 @@
                 WHERE   `IMAGE_IDX` = #{imageIdx}
             </when>
             <when test="imageIdxList != null">
-                WHERE   `POST_IDX`
+                WHERE   `IMAGE_IDX`
                 IN
-                <foreach collection="postIdxs" item="item" index="index" separator="," open="(" close=")">
+                <foreach collection="imageIdxList" item="item" index="index" separator="," open="(" close=")">
                     #{item}
                 </foreach>
             </when>
@@ -80,37 +80,5 @@
                     `IMAGE_IDX` = LAST_INSERT_ID()
         ]]>
     </select>
-
-    <update id="bindPostToImageInfos" parameterType="java.util.Map">
-        UPDATE  `POST_FILE`
-        SET     `POST_IDX` =  #{postIdx}
-        WHERE
-            ISNULL(`POST_IDX`) AND
-            `USR_ID` = #{usrId} AND   -- 본인이 업로드한 이미지만 연결할 수 있음
-        <choose>
-            <when test="postFileIdx != null">
-                `POST_FILE_IDX` =   #{postFileIdx}
-            </when>
-            <when test="postFileIdxs != null">
-                `POST_FILE_IDX`
-                IN
-                <foreach collection="postFileIdxs" item="item" index="index" separator="," open="(" close=")">
-                    #{item}
-                </foreach>
-            </when>
-            <otherwise>
-                1 != 1 -- 상기 조건 중에 해당하지 않으면 반드시 실패
-            </otherwise>
-        </choose>
-    </update>
-
-    <delete id="deleteImageInfo" parameterType="java.util.Map">
-        <![CDATA[
-            UPDATE  `POST_FILE`
-            SET     `DEL_YN` =  'Y',
-                    `UPD_DTTM` =    CURRENT_TIMESTAMP
-            WHERE   `POST_FILE_IDX` =   #{postFileIdx}
-        ]]>
-    </delete>
 
 </mapper>
