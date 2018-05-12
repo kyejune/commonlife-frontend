@@ -2,8 +2,7 @@ import Store from 'scripts/store.js';
 import axios from 'axios';
 import DeviceStorage from "react-device-storage";
 import _ from 'underscore';
-
-
+import RSAKey from 'scripts/rsa/rsa-all';
 
 axios.defaults.baseURL = Store.api;
 // axios.defaults.headers.common['api_key'] = 'acfc218023f1d7d16ae9a38c31ddd89998f32a9ee15e7424e2c6016a8dbcda70';
@@ -358,10 +357,14 @@ export default {
 
     registNewUser( branchId, dongId, hoId, hhname, hhphone, name, phone, certId, certDate, id, password, email, callback ){
         // {{API_HOST}}/users/registration/newUser?cmplxId=132&dong=101&ho=101&headNm=김영헌&headCell=01050447244&userNm=사용자KIM2&userCell=01050447244&userCertId=34&smsChkYn=Y&smsChkDt=2018-02-10 14:42:22&userId=newuser201&userPw=fumT4DmfVP/X+RgvSg1CBNA6QAberSGDf0Iu49s0cMSlundj0QVHqTM+hS6BcVyY
-        axios.post(`/users/registration/newUser?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${hhname}&headCell=${hhphone}&userNm=${name}&userCell=${phone}&userCertId=${certId}&smsChkYn=Y&smsChkDt=${certDate}&userId=${id}&userPw=${password}&email=${email}`)
-            .then( response => {
-                callback( response.data );
-            });
+
+        this.getPublicKey( id, password, (rId, rPassword, pkKey )=>{
+            axios.post(`/users/registration/newUser?cmplxId=${branchId}&dong=${dongId}&ho=${hoId}&headNm=${hhname}&headCell=${hhphone}&userNm=${name}&userCell=${phone}&userCertId=${certId}&smsChkYn=Y&smsChkDt=${certDate}&userId=${rId}&userPw=${rPassword}&email=${email}&pk_key=${pkKey}`)
+                .then( response => {
+                    callback( response.data );
+                });
+        });
+
     },
 
     getUserInfo( id, callback ){
@@ -378,36 +381,54 @@ export default {
     // "file": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAA6lBMVEUAAAAXQl8XQmAXQV4YPloWRmUZNlAXP1wYPloXRGIWSWcYP1wVTm4YQV4YPVcZOlQXQV0ZOVQZOlUWR2YXRWMYPVkVTm4YQl8ZOFEYQV0aM0wUU3YYQV0XQl8XQ2AYQFwXPloXPVgXQF0SPVoBIkLp7vEmS2YWRGMMN1QHNFMNNVIEME8BKknz9vfu8PKpuMKfr7uInq10jZ5cdolVcogrUmwbRWEWO1fS2+DL1NrO0detu8aar72XpbKOobCDlqV2kqN4kaFqhJZjgZRRZHo6WnIWSmkvT2guTGciSGMTOlYNOFUGLksACS7w+BDIAAAAHHRSTlMA7Z7SZS4H5jsJ/O3l3tTOy769npaVfnV1aGgoe5kp8wAAAMZJREFUGNNFj9VyAlEQBSfZZSHuPjPXYBUIThR3+f/fYbkU0G+nq85Dw46Mc5uBI2dPxAE/evv9SlqglFK92Jm7JMQoSZI26mwOwM1KItls1MdFpcU1wEOAFM7Lv/+Fz6JWFwCnAoXxO/l1vRQZdZIKZjL4V2mMCuFCWoEYNr9q3+lFia1Alsvpz6zXH8RtKwhV7JeGrUp5ZSgVz+dSGKxVq10/ZroC8NwJIuZTopZSri25E4IYKaB779DKmvjmA468Oc47WDZI7RlDwZXI7gAAAABJRU5ErkJggg=="
     uploadUserProfileImage( id, pw, base64img, callback ){
         //{{API_HOST}}/users/registration/newUser/photo
-        axios.post( `/users/registration/newUser/photo`, { userId:id, userPw:pw, file:base64img })
-            .then( response =>{
-               callback( response.data );
+
+
+        this.getPublicKey( id, pw, (rId, rPw, pkKey)=>{
+            axios.post( `/users/registration/newUser/photo`, { userId:rId, userPw:rPw, 'pk_key':pkKey, file:base64img })
+                .then( response =>{
+                    callback( response.data );
+                });
+        });
+    },
+
+
+    getPublicKey( id, pw, callback ){
+        axios.get('/users/keypair')
+            .then( response=>{
+
+                let rsa = new RSAKey();
+                rsa.setPublic( response.data.publicKeyModulus, response.data.publicKeyExponent );
+
+                callback( rsa.encrypt(id), rsa.encrypt(pw), response.data['pk_key'] );
             });
     },
 
 
     login( id, password, callback ){
 
-        axios.get(`/users/login?userId=${id}&userPw=${password}&gcmRegId=${Store.gcm}&deviceId=${Store.deviceId}`)
-            .then( response =>{
+        this.getPublicKey( id, password, ( rId, rPassword, pkKey )=>{
+            axios.get(`/users/login?userId=${rId}&userPw=${rPassword}&gcmRegId=${Store.gcm}&deviceId=${Store.deviceId}&pk_key=${pkKey}`)
+                .then( response =>{
 
-                console.log( '로그인 성공:', response );
+                    console.log( '로그인 성공:', response );
 
-                //{"msg":"로그인에 성공하였습니다.","userNm":"june","usrId":716,"expireDate":"2018-04-27 01:03:34","cmplxId":127,"issueDate":"2018-04-10 09:03:04","homeId":1,"userId":"aaaa","token":"ePptHwjAPOetJkJqX9SCu+/XamBKNUXs5eLRV9qxH5zKNXXtisnQWvSShRWChj95"}
+                    //{"msg":"로그인에 성공하였습니다.","userNm":"june","usrId":716,"expireDate":"2018-04-27 01:03:34","cmplxId":127,"issueDate":"2018-04-10 09:03:04","homeId":1,"userId":"aaaa","token":"ePptHwjAPOetJkJqX9SCu+/XamBKNUXs5eLRV9qxH5zKNXXtisnQWvSShRWChj95"}
 
-                const DATA = response.data;
-                Store.cmplxId = DATA.cmplxId;
-                Store.communityCmplxId = DATA.cmplxId;
-                Store.homeId = DATA.homeId;
-                Store.auth = { name:DATA.userNm, id:DATA.userId, token:DATA.token, key:DATA.usrId };
-                Store.isAuthorized = true;
+                    const DATA = response.data;
+                    Store.cmplxId = DATA.cmplxId;
+                    Store.communityCmplxId = DATA.cmplxId;
+                    Store.homeId = DATA.homeId;
+                    Store.auth = { name:DATA.userNm, id:DATA.userId, token:DATA.token, key:DATA.usrId };
+                    Store.isAuthorized = true;
 
-                const S = new DeviceStorage().localStorage();
-                S.save( 'token', DATA.token );
+                    const S = new DeviceStorage().localStorage();
+                    S.save( 'token', DATA.token );
 
-                this.getComplexesKeyValue();
+                    this.getComplexesKeyValue();
 
-                callback( response.data );
-            })
+                    callback( response.data );
+                })
+        });
     },
 
     findId( hhname, hhphone, name, phone, callback ){
@@ -574,10 +595,14 @@ export default {
     },
 
     changePassword( oldPw, newPw, callback ){
-        axios.put( '/info/profile', { oldUserPw:oldPw, newUserPw:newPw })
-            .then( response=>{
-               callback( response.data );
-            });
+
+        this.getPublicKey( oldPw, newPw, (rOld, rNew, pkKey)=>{
+            axios.put( '/info/profile', { oldUserPw: rOld, newUserPw: rNew, 'pk_key':pkKey })
+                .then( response=>{
+                    callback( response.data );
+                });
+        });
+
     },
 
 
