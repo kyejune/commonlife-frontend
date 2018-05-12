@@ -1,19 +1,15 @@
 package com.kolon.comlife.admin.support.service.impl;
 
-import com.kolon.comlife.admin.board.model.BoardInfo;
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.service.impl.ComplexDAO;
 import com.kolon.comlife.admin.support.exception.SupportGeneralException;
 import com.kolon.comlife.admin.support.model.SupportCategoryInfo;
 import com.kolon.comlife.admin.support.service.SupportService;
-import com.kolon.common.admin.model.FileInfo;
-import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 
@@ -66,161 +62,4 @@ public class SupportServiceImpl implements SupportService {
 
         return;
     }
-
-//    @Override
-//    public List<SupportInfo> selectBoardList(SupportInfo supportInfo) {
-//        return supportDAO.selectBoardList(supportInfo);
-//    }
-
-    @Override
-    public List<BoardInfo> selectBoardAndFbList(BoardInfo boardInfo) {
-        return supportDAO.selectBoardAndFbList(boardInfo);
-    }
-
-    @Override
-    public BoardInfo selectBoardDetail(BoardInfo boardInfo) {
-        return supportDAO.selectBoardDetail(boardInfo);
-    }
-
-    @Override
-    public BoardInfo selectBoardDetailNext(BoardInfo boardInfo) {
-        return supportDAO.selectBoardDetailNext(boardInfo);
-    }
-
-    @Override
-    public BoardInfo selectBoardDetailPrev(BoardInfo boardInfo) {
-        return supportDAO.selectBoardDetailPrev(boardInfo);
-    }
-
-    @Override
-    public BoardInfo selectBoardAndFbDetailNext(BoardInfo boardInfo) {
-        return supportDAO.selectBoardAndFbDetailNext(boardInfo);
-    }
-
-    @Override
-    public BoardInfo selectBoardAndFbDetailPrev(BoardInfo boardInfo) {
-        return supportDAO.selectBoardAndFbDetailPrev(boardInfo);
-    }
-
-
-    @Override
-    public BoardInfo selectBoardDetailTop1(BoardInfo boardInfo) {
-        return supportDAO.selectBoardDetailTop1(boardInfo);
-    }
-
-    @Override
-    public List<BoardInfo> selectBoardEventDetailTop3(BoardInfo boardInfo) {
-        return supportDAO.selectBoardEventDetailTop3(boardInfo);
-    }
-
-    @Override
-    public List<BoardInfo> selectBoardOpenCloseDtDetail(BoardInfo boardInfo){
-        return supportDAO.selectBoardOpenCloseDtDetail(boardInfo);
-    }
-
-    @Override
-    public List<BoardInfo> selectBoardTodayOpenCloseDtDetail(BoardInfo boardInfo) {
-        return supportDAO.selectBoardTodayOpenCloseDtDetail(boardInfo);
-    }
-
-    @Override
-    public List<BoardInfo> selectBoardContentTypeGroupBy(BoardInfo boardInfo){
-        return supportDAO.selectBoardContentTypeGroupBy(boardInfo);
-    }
-
-
-
-    @Override
-    public int insertBoard(BoardInfo boardInfo) {
-        return supportDAO.insertBoard(boardInfo);
-    }
-
-    @Override
-    public int updateBoard(BoardInfo boardInfo) {
-        return supportDAO.updateBoard(boardInfo);
-    }
-
-    @Override
-    public int updateReadCntBoard(BoardInfo boardInfo) {
-        return supportDAO.updateReadCntBoard(boardInfo);
-    }
-
-    @Override
-    public int insertBoardFile(FileInfo fileInfo) {
-        return supportDAO.insertBoardFile(fileInfo);
-    }
-
-    @Override
-    public List<BoardInfo> selectBoardFile(BoardInfo boardInfo) {
-        return supportDAO.selectBoardFile(boardInfo);
-    }
-
-    @Override
-    public int updateDeleteBoardFile(BoardInfo boardInfo) {
-        return supportDAO.updateDeleteBoardFile(boardInfo);
-    }
-
-    @Override
-//    public int doUploadAtchFiles(HttpServletRequest request, BoardInfo boardInfo, FileInfo fileInfo) {
-    public int doUploadAtchFiles(HttpServletRequest request, BoardInfo boardInfo) {
-        int insertCount = 0;
-
-        List<FileInfo> atchFileList = boardInfo.getAtchFileList();
-
-//        if (CollectionUtils.isNotEmpty(atchFileList)){
-//            logger.debug("################### >> atchFileList.size() : {}", atchFileList.size());
-//        }else{
-//            logger.debug("################### >> atchFileList.size() : XXXXXXXXXXXXXXXXXXX");
-//        }
-
-        try {
-            if (CollectionUtils.isNotEmpty(atchFileList)){
-                for ( FileInfo vo : atchFileList ){
-                    BoardInfo vvo = (BoardInfo)vo;
-                    vvo.setUseYn("Y");
-                    vvo.setBoardIdx(boardInfo.getBoardIdx());
-                    insertCount = insertCount + supportDAO.insertBoardFile(vvo);
-                }
-            }
-
-        } catch (Exception e) {
-            logger.error(e.toString());
-            logger.error("파일 업로드 에러");
-        }
-        return insertCount;
-
-        /*
-        int insertCount = 0;
-
-        logger.debug("################### boardInfo.getFileNm() >> {}", boardInfo.getFileNm());
-        logger.debug("################### boardInfo.getAtchFileList() >> {}", boardInfo.getAtchFileList().size());
-
-
-        List<FileInfo> atchFileList = boardInfo.getAtchFileList();
-
-
-
-        if (CollectionUtils.isNotEmpty(atchFileList)){
-            logger.debug("################### >> atchFileList.size() : {}", atchFileList.size());
-        }else{
-            logger.debug("################### >> atchFileList.size() : XXXXXXXXXXXXXXXXXXX");
-        }
-
-        try {
-            if (CollectionUtils.isNotEmpty(atchFileList)){
-                for ( FileInfo vo : atchFileList ){
-                    vo.setUseYn("Y");
-                    vo.setBoardIdx(boardInfo.getBoardIdx());
-                    insertCount = insertCount + supportDAO.insertBoardFile(vo);
-                }
-            }
-
-        } catch (Exception e) {
-            logger.error(e.toString());
-            logger.error("파일 업로드 에러");
-        }
-        return insertCount;
-        */
-    }
-
 }
