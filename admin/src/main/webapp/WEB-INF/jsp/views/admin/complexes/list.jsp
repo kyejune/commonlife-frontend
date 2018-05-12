@@ -48,7 +48,7 @@
                             <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10" data-filter="#filter">
                                 <thead>
                                     <tr>
-                                        <th data-toggle="true" data-sort-ignore="true">#</th>
+                                        <th data-toggle="true" data-sort-ignore="true">ID</th>
                                         <th >현장 이름</th>
                                         <th >현장 그룹</th>
                                         <th class="" data-sort-ignore="true">현장 주소</th>
@@ -66,7 +66,7 @@
                                         <tbody>
                                         <c:forEach var="vo" items="${complexList}" varStatus="status">
                                             <tr>
-                                                <td> ${vo.rnum} </td>
+                                                <td> ${vo.cmplxId} </td>
                                                 <td><a href="complexDetail.do?cmplxId=${vo.cmplxId}">${vo.cmplxNm}</a></td>
                                                 <td> ${vo.cmplxGrp}</td>
                                                 <td> ${vo.addr}</td>

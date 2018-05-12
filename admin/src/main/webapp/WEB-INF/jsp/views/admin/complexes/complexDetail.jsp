@@ -272,7 +272,7 @@
                         <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10" data-filter="#filter">
                             <thead>
                             <tr>
-                                <th data-toggle="true" data-sort-ignore="true">#</th>
+                                <th data-toggle="true" data-sort-ignore="true">ID</th>
                                 <th data-sort-ignore="true">관리자 아이디</th>
                                 <th class="" data-sort-ignore="true">이름</th>
                                 <th class="" data-sort-ignore="true">Email</th>
@@ -293,7 +293,7 @@
                                     <tbody>
                                     <c:forEach var="vo" items="${managerList}" varStatus="status">
                                         <tr>
-                                            <td>${vo.rnum}</td>
+                                            <td>${vo.adminIdx}</td>
                                             <td>
                                                 <a href="javascript:void(0)" onclick="managersDetail('${vo.adminId}', ${vo.grpId})">
                                                         ${vo.adminId}
@@ -577,7 +577,7 @@
 
         function managersDetail(adminId, grpId){
             $("#manageReqForm > #adminId").val(adminId);
-            $("#manageReqForm").attr("action", "/admin/complexes/write.do?grpId=" + grpId);
+            $("#manageReqForm").attr("action", "/admin/managers/write.do?grpId=" + grpId);
             $("#manageReqForm").submit();
         }
 

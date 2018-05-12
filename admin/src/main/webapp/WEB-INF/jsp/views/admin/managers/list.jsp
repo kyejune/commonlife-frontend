@@ -134,7 +134,7 @@
                             <table class="footable table table-stripped toggle-arrow-tiny" data-page-size="10" data-filter="#filter">
                                 <thead>
                                     <tr>
-                                        <th data-toggle="true" data-sort-ignore="true">#</th>
+                                        <th data-toggle="true" data-sort-ignore="true">ID</th>
                                         <c:if test="${adminConst.adminGrpComplex != grpId && adminConst.adminGrpSuper != grpId}">
                                             <th class="text-center" data-sort-ignore="true">관리자 그룹</th>
                                         </c:if>
@@ -162,7 +162,7 @@
                                         <c:forEach var="vo" items="${managerList}" varStatus="status">
                                             <tr>
                                                 <td>
-                                                    ${vo.rnum}
+                                                    ${vo.adminIdx}
                                                 </td>
                                                 <c:if test="${adminConst.adminGrpComplex != grpId && adminConst.adminGrpSuper != grpId}">
                                                 <td class="text-center" style="padding-top: 12px;">

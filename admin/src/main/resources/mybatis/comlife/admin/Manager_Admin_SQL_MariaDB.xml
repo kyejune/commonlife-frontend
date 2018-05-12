@@ -54,10 +54,8 @@
             (SELECT `CMPLX_NM` FROM COMPLEX_M WHERE COMPLEX_M.CMPLX_ID = A.CMPLX_ID)
           ) AS `CMPLX_NM`,
           `GRP_ID`,
-          `GRP_NM`,
-          ROW_NUMBER() OVER(ORDER BY GRP_ID, ADMIN_ID ASC) AS RNUM,
-          COUNT(1) OVER() AS TOT
-        FROM(
+          `GRP_NM`
+        FROM (
             SELECT
                 `ADMIN_IDX`,
                 `ADMIN_ID`,
@@ -96,7 +94,8 @@
                 </otherwise>
             </choose>
         )A
-        ORDER BY RNUM
+        ORDER BY  `A`.`ADMIN_IDX` DESC
+        ;
     </select>
 
 

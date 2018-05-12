@@ -17,7 +17,7 @@
             COMPLEX_M_EXT.CL_LOGO_IMG_SRC, -- CommonLife's LOGO Image Source
             (SELECT CMPLX_GRP_TYPE FROM CMPLX_GRP_TYPE_M AS CGP LEFT JOIN CMPLX_GRP_M AS CG ON CGP.CMPLX_GRP_TYPE_ID = CG.CMPLX_GRP_TYPE_ID WHERE CG.CMPLX_ID = COMPLEX_M.CMPLX_ID )
         FROM
-            COMPLEX_M LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
+            COMPLEX_M LEFT JOIN
             COMPLEX_M_EXT JOIN
         ON
           COMPLEX_M.CMPLX_ID = COMPLEX_M_EXT.CMPLX_ID
@@ -45,7 +45,7 @@
             CMPLX.ADDR                  -- 일반 주소
         FROM
             COMPLEX_M AS CMPLX
-              LEFT JOIN  -- TODO: 확장테이블인 COMPLEX_M_EXT의 레코드가 없기 때문에 임시로 LEFT JOIN 함
+              LEFT JOIN
             COMPLEX_M_EXT AS CMPLX_EXT
         ON
             CMPLX.CMPLX_ID = CMPLX_EXT.CMPLX_ID
@@ -88,9 +88,7 @@
         A.ADDR AS ADDR,
         A.ADDR_DTL AS ADDR_DTL,
         A.ADDR1 AS ADDR1,
-        A.ADDR2 AS ADDR2,
-        ROW_NUMBER() OVER(ORDER BY CMPLX_GRP, CMPLX_NM ASC) AS RNUM,
-		COUNT(1) OVER() AS TOT
+        A.ADDR2 AS ADDR2
     FROM
     (
         SELECT
@@ -146,7 +144,6 @@
           GRP_TYPE.CMPLX_GRP_TYPE_ID = GRP.CMPLX_GRP_TYPE_ID
     ) AS B
       ON A.CMPLX_ID = B.CMPLX_ID
-    ORDER BY RNUM
     ;
     </select>
 
