@@ -10,5 +10,8 @@ hooks/
 platforms/
 src/App.css
 
+# config
+src/config/config.js
+
 *.DS_Store
 *.apk
