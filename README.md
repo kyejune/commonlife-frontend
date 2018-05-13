@@ -10,3 +10,7 @@
 
 ## Slack
 - https://helloshop-kr.slack.com
+
+
+## HISTORY 
+1. 2018-05-13  KOLON BENITE 1차 소스 코드 전달 
