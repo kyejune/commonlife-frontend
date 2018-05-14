@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "287357656880",
+    "firebase_url": "https://commonlife-298df.firebaseio.com",
+    "project_id": "commonlife-298df",
+    "storage_bucket": "commonlife-298df.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:287357656880:android:71338c820315eeb5",
+        "android_client_info": {
+          "package_name": "co.commonlife"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "287357656880-aqulmrcookuq8ibcjpnak7p0ap63a8u7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfRMksKb1ZLIpxB85kGtpYsgZtjw7vySg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
