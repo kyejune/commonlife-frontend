@@ -19,6 +19,7 @@
         <package name="com.kolon.comlife.post.model" />
         <package name="com.kolon.comlife.postFile.model" />
         <package name="com.kolon.comlife.properties.model" />
+        <package name="com.kolon.comlife.push.model" />
         <package name="com.kolon.comlife.reservation.model" />
         <package name="com.kolon.comlife.status.model" />
         <package name="com.kolon.comlife.support.model" />
