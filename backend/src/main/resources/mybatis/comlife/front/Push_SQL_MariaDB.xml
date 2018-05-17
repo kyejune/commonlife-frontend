@@ -17,4 +17,30 @@
         `PUSH_ID` DESC
     </select>
 
+    <insert id="register" parameterType="java.util.Map">
+        INSERT INTO
+        `PUSH_M`
+        (
+            `CMPLX_ID`,
+            `HOME_ID`,
+            `GCM_REG_ID`,
+            `DEVICE_ID`,
+            `USR_ID`,
+            `OS_TYPE`,
+            `REG_ID`,
+            `REG_DT`
+        )
+        VALUES
+        (
+            #{cmplxId},
+            #{homeId},
+            #{gcmRegId},
+            #{deviceId},
+            #{usrId},
+            #{osType},
+            #{regId},
+            CURRENT_TIMESTAMP
+        )
+    </insert>
+
 </mapper>
