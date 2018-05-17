@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="co.commonlife" version="1.6.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="co.commonlife" version="1.6.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>commonlife</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
@@ -23,10 +23,12 @@
         <splash density="port-xhdpi" src="res/screens/android/drawable-port-xhdpi-screen.png" />
         <splash density="port-xxhdpi" src="res/screens/android/drawable-port-xxhdpi-screen.png" />
         <splash density="port-xxxhdpi" src="res/screens/android/drawable-port-xxxhdpi-screen.png" />
+        <resource-file src="google-services.json" target="google-services.json" />
     </platform>
     <platform name="ios">
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
+        <resource-file src="GoogleService-Info.plist" />
     </platform>
     <edit-config file="*-Info.plist" mode="merge" target="NSCameraUsageDescription">
         <string>need camera access to take pictures</string>
@@ -74,6 +76,8 @@
     <plugin name="cordova-plugin-dialogs" spec="^2.0.1" />
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
     <preference name="AutoHideSplashScreen" value="true" />
+    <plugin name="cordova-plugin-fcm" spec="^2.1.2" />
+    <plugin name="cordova-plugin-badge" spec="^0.8.7" />
     <engine name="ios" spec="^4.5.4" />
     <engine name="android" spec="^7.1.0" />
 </widget>

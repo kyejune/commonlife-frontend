@@ -36,10 +36,18 @@ axios.interceptors.response.use(function (response) {
     // iot내에 변경쪽에서는 시스템 알럿 사용 안함
     const USE_SYSTEM_ALERT = ( Store.modeModal === null && Store.myModal === null );
 
-    console.log( error );
+    if( error.response !== undefined && error.response.status === 401 ){
+
+        console.log('검사:', window.location.href );
+        if( window.location.href.indexOf('/login') < 0 ) {
+            const S = new DeviceStorage().localStorage();
+            S.delete('token');
+            S.delete('location');
+            window.location.replace('/#/login');
+        }
 
     // 에러 상황일 경우 iot모달이 있으면 처리
-    if( error.response === undefined || error.response.status !== 200) {
+    }else if( error.response === undefined || error.response.status !== 200) {
 
         if( Store.modeModal !== null ){
             let obj = Store.modeModal;
