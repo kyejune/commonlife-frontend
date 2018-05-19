@@ -91,9 +91,6 @@ public class ComplexController {
             , HttpSession session
             , @ModelAttribute ComplexInfo complexInfo
     ) {
-
-        // 현장 상세 정보 가져오기
-
         AdminInfo adminInfo;
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
@@ -104,8 +101,6 @@ public class ComplexController {
 
         ComplexInfoDetail complexDetail = complexService.getComplexById( complexInfo.getCmplxId() );
 
-//        mav.addObject("grpId",      grpId);
-//        mav.addObject("adminConst", adminConst);
         mav.addObject("adminInfo", adminInfo);
         mav.addObject("complexDetail", complexDetail );
 
