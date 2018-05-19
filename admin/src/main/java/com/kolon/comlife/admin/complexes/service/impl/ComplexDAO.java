@@ -33,9 +33,6 @@ public class ComplexDAO {
         return sqlSession.selectList("Complex.selectComplexList" );
     }
 
-    public List<ComplexSimpleInfo> selectComplexInfoDetailList() {
-        return sqlSession.selectList( "Complex.selectComplexSimpleInfoDetailList" );
-    }
 
     public List<ComplexSimpleInfo> selectComplexInfoList() {
         return sqlSession.selectList( "Complex.selectComplexSimpleInfoList" );
