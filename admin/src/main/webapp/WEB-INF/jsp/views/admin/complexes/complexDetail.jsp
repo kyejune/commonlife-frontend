@@ -160,6 +160,7 @@
                         <div class="row">
                             <div class="col-lg-6 b-r">
                                 <div class="form-horizontal">
+                                    <!--
                                     <div class="form-group">
                                         <label class="col-sm-3 control-label">
                                             현장 지역
@@ -173,6 +174,7 @@
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
+                                    -->
                                     <div class="form-group">
                                         <div class="row">
                                             <div class="col-lg-6 b-r">

@@ -65,6 +65,61 @@
         ;
     </select>
 
+    <select id="selectComplexById" parameterType="ComplexInfoDetail" resultType="ComplexInfoDetail">
+        SELECT
+        `G_T`.CMPLX_GRP_TYPE      AS CMPLX_GRP_TYPE,
+        `C`.CMPLX_ID              AS CMPLX_ID,
+        `C`.CMPLX_CD              AS CMPLX_CD,
+        `C`.CMPLX_NM              AS CMPLX_NM, -- COMPLEX NAME
+        `C`.CMPLX_S_NM            AS CMPLX_S_NM,
+        `C`.LATI_POS              AS LATI_POS,
+        `C`.LONG_POS              AS LONG_POS,
+        `C`.UNIT_CNT              AS UNIT_CNT,
+        `C`.ADDR                  AS ADDR, 	-- 일반 주소
+        `C`.ADDR_DTL              AS ADDR_DTL,
+        `C`.ADDR1                 AS ADDR1,
+        `C`.ADDR2                 AS ADDR2,
+        `C`.LOC1_NM               AS LOC1_NM,
+        `C`.LOC2_NM               AS LOC2_NM,
+        `C`.POST_NO               AS POST_NO,
+        `C`.IMG_SRC               AS IMG_SRC,
+        `C`.MAP_SRC               AS MAP_SRC,
+        `C`.LOGO_IMG_SRC          AS LOGO_IMG_SRC,
+        `C`.ADMIN_ID              AS IOK_ADMIN_ID,
+        `C`.REG_ID                AS IOK_REG_ID,
+        `C`.REG_DT                AS IOK_REG_DT,
+        `C`.CHG_ID                AS IOK_CHG_ID,
+        `C`.CHG_DT                AS IOK_CHG_DT,
+        `C_E`.CL_MAP_SRC          AS CL_MAP_SRC,
+        `C_E`.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC,
+        `C_E`.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
+        `C_E`.REG_DT              AS REG_DT,
+        (SELECT ADMIN_ID FROM CL_ADMIN_INFO WHERE ADMIN_IDX = `C_E`.REG_ADMIN_IDX)
+        AS REG_ADMIN_ID,
+        `C_E`.UPD_DT              AS UPD_DT,
+        (SELECT ADMIN_ID FROM CL_ADMIN_INFO WHERE ADMIN_IDX = `C_E`.UPD_ADMIN_IDX )
+        AS UPD_ADMIN_ID
+        FROM
+        COMPLEX_M AS `C`
+        LEFT JOIN
+        COMPLEX_M_EXT AS `C_E`
+        ON `C`.CMPLX_ID = `C_E`.CMPLX_ID
+        LEFT JOIN
+        COMPLEX_GRP_M AS `G`
+        ON `C`.CMPLX_ID = `G`.CMPLX_ID
+        LEFT JOIN
+        COMPLEX_GRP_TYPE_M AS `G_T`
+        ON `G_T`.CMPLX_GRP_TYPE_ID = `G`.CMPLX_GRP_TYPE_ID
+
+        WHERE
+        `C`.CMPLX_ID = #{cmplxId}
+        AND
+        `C`.CMPLX_GB_CD = 'AD01102'
+        -- IOK 전체 현장에서 COMMON Life 용도로 이용하기 위해서는
+        -- 'CMPLX_GB_CD' 값을 'AD01102'으로 설정해야 합니다
+        ;
+    </select>
+
     <select id="selectComplexGroupType" resultType="hashmap">
         SELECT
             CMPLX_GRP_TYPE_ID,
@@ -106,61 +161,6 @@
             ${adminIdx}
         );
     </update>
-
-    <select id="selectComplexById" parameterType="ComplexInfoDetail" resultType="ComplexInfoDetail">
-        SELECT
-            `G_T`.CMPLX_GRP_TYPE      AS CMPLX_GRP_TYPE,
-            `C`.CMPLX_ID              AS CMPLX_ID,
-            `C`.CMPLX_CD              AS CMPLX_CD,
-            `C`.CMPLX_NM              AS CMPLX_NM, -- COMPLEX NAME
-            `C`.CMPLX_S_NM            AS CMPLX_S_NM,
-            `C`.LATI_POS              AS LATI_POS,
-            `C`.LONG_POS              AS LONG_POS,
-            `C`.UNIT_CNT              AS UNIT_CNT,
-            `C`.ADDR                  AS ADDR, 	-- 일반 주소
-            `C`.ADDR_DTL              AS ADDR_DTL,
-            `C`.ADDR1                 AS ADDR1,
-            `C`.ADDR2                 AS ADDR2,
-            `C`.LOC1_NM               AS LOC1_NM,
-            `C`.LOC2_NM               AS LOC2_NM,
-            `C`.POST_NO               AS POST_NO,
-            `C`.IMG_SRC               AS IMG_SRC,
-            `C`.MAP_SRC               AS MAP_SRC,
-            `C`.LOGO_IMG_SRC          AS LOGO_IMG_SRC,
-            `C`.ADMIN_ID              AS IOK_ADMIN_ID,
-            `C`.REG_ID                AS IOK_REG_ID,
-            `C`.REG_DT                AS IOK_REG_DT,
-            `C`.CHG_ID                AS IOK_CHG_ID,
-            `C`.CHG_DT                AS IOK_CHG_DT,
-            `C_E`.CL_MAP_SRC          AS CL_MAP_SRC,
-            `C_E`.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC,
-            `C_E`.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
-            `C_E`.REG_DT              AS REG_DT,
-            (SELECT ADMIN_ID FROM CL_ADMIN_INFO WHERE ADMIN_IDX = `C_E`.REG_ADMIN_IDX)
-                                      AS REG_ADMIN_ID,
-            `C_E`.UPD_DT              AS UPD_DT,
-            (SELECT ADMIN_ID FROM CL_ADMIN_INFO WHERE ADMIN_IDX = `C_E`.UPD_ADMIN_IDX )
-                                      AS UPD_ADMIN_ID
-        FROM
-            COMPLEX_M AS `C`
-              LEFT JOIN
-            COMPLEX_M_EXT AS `C_E`
-                ON `C`.CMPLX_ID = `C_E`.CMPLX_ID
-              LEFT JOIN
-            COMPLEX_GRP_M AS `G`
-                ON `C`.CMPLX_ID = `G`.CMPLX_ID
-              LEFT JOIN
-            COMPLEX_GRP_TYPE_M AS `G_T`
-                ON `G_T`.CMPLX_GRP_TYPE_ID = `G`.CMPLX_GRP_TYPE_ID
-
-        WHERE
-            `C`.CMPLX_ID = #{cmplxId}
-                AND
-            `C`.CMPLX_GB_CD = 'AD01102'
-            -- IOK 전체 현장에서 COMMON Life 용도로 이용하기 위해서는
-            -- 'CMPLX_GB_CD' 값을 'AD01102'으로 설정해야 합니다
-        ;
-    </select>
 
     <select id="selectComplexRegion" resultType="ComplexRegion">
         SELECT
