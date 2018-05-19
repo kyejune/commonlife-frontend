@@ -30,7 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 @RestController
-@RequestMapping("/imageStore/")
+@RequestMapping("/admin/imageStore/")
 public class ImageStoreController {
     private static final Logger logger = LoggerFactory.getLogger(ImageStoreController.class);
 
@@ -232,6 +232,34 @@ public class ImageStoreController {
 
         return new ResponseEntity(imageInfo.getImageByteArray(), headers, HttpStatus.OK);
     }
+
+    @CrossOrigin
+    @PutMapping( value = "/{id}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity updateImageParentIdx( HttpServletRequest      request,
+                                                @PathVariable("id") int imageIdx ) {
+        int       parentIdx;
+        ImageInfo imageInfo;
+
+        try {
+            parentIdx = Integer.valueOf( request.getParameter("parentIdx" ));
+        } catch ( NumberFormatException e ) {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( new SimpleErrorInfo( "parentIdx 값이 입력되지 않았거나 잘못된 값 입니다." ) );
+        }
+
+        try {
+            imageInfo = imageStoreService.updateImageParentIdx( imageIdx, parentIdx );
+        } catch ( OperationFailedException e ) {
+            return ResponseEntity
+                    .status( HttpStatus.CONFLICT )
+                    .body( new SimpleErrorInfo( e.getMessage() ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( imageInfo );
+    }
+
 
     @DeleteMapping(
             value = "/{id}"

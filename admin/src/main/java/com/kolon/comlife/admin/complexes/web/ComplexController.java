@@ -7,12 +7,14 @@ import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.model.ComplexRegion;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
+import com.kolon.comlife.admin.imageStore.service.ImageStoreService;
 import com.kolon.comlife.admin.manager.model.AdminConst;
 import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.manager.service.ManagerService;
 import com.kolon.comlife.admin.users.exception.UserGeneralException;
 import com.kolon.comlife.admin.users.service.UserService;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
+import com.kolon.comlife.common.model.SimpleMsgInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,6 +52,9 @@ public class ComplexController {
 
     @Autowired
     private AdminConst adminConst;
+
+    @Autowired
+    private ImageStoreService imageStoreService;
 
 
     @RequestMapping(value = "list.do", method = {RequestMethod.GET, RequestMethod.POST})
@@ -247,5 +250,30 @@ public class ComplexController {
 
         return mav;
     }
+
+
+    /**
+     * 게시물 내용 변경하기 (ajax)
+     *  - Event, Notice 가능, 사용자 Feed 불가능
+     */
+//    @PutMapping(
+//            value = "/{cmplxId}/image",
+//            produces = MediaType.APPLICATION_JSON_VALUE )
+//    public ResponseEntity updateComplexImage( HttpServletRequest       request,
+//                                              @PathVariable("cmplxId") int cmplxId ) {
+//        AdminInfo adminInfo;
+//
+//        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+//        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+//        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+//        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+//
+//        int imageIdx = Integer.valueOf( request.getParameter("imageIdx" ));
+//
+////        imageStoreService.
+//
+//
+//        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("Success!") );
+//    }
 
 }

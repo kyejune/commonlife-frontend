@@ -5,6 +5,24 @@
 <tiles:putAttribute name="css">
     <!-- DataTables -->
     <a><!-- --></a>
+    <style type="text/css">
+        .thumbnail-viewer {
+            display: inline-block;
+            position: relative;
+            content: ' ';
+            width: 120px;
+            height: 120px;
+            margin-right: 1em;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .thumbnail-viewer button {
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    </style>
 </tiles:putAttribute>
 <tiles:putAttribute name="contents">
     <!-- Section Title -->
@@ -103,7 +121,7 @@
                                                 총 세대 수
                                             </label>
                                             <div class="col-sm-9 media-">
-                                                {{총 세대 수}}
+                                                <c:out value="${cmplexDetail.unitCnt}" escapeXml="false">N/A</c:out>
                                             </div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
@@ -183,6 +201,16 @@
                                                         현장 로고 이미지
                                                     </label>
                                                     <div class="col-sm-6">
+                                                        <div id="thumbnails">
+                                                            <c:if test="${postInfo.postFiles != null}">
+                                                                <c:forEach var="image" items="${postInfo.postFiles}">
+                                                                    <div class="thumbnail-viewer" data-image="/admin/postFiles/${image.postFileIdx}" >
+                                                                        <input type="hidden" name="postFile[]" value="${image.postFileIdx}">
+                                                                        <button class="delete">&times;</button>
+                                                                    </div>
+                                                                </c:forEach>
+                                                            </c:if>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -191,14 +219,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-sm-12 fileinput fileinput-new" data-provides="fileinput">
-                                                        <span class="btn btn-block btn-default btn-file">
-                                                            <span class="fileinput-new">이미지 선택 및 업로드</span>
-                                                            <span class="fileinput-exists">이미지 변경</span>
-                                                            <input type="file" name="..."/>
-                                                        </span>
-                                                        <span class="fileinput-filename"></span>
-                                                        <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style="float: none">×</a>
+                                                    <div class="col-sm-12" >
+                                                        <input type="file" id="image-selector" multiple accept="image/*">
                                                     </div>
                                                 </div>
                                                 <%--<div class="row">--%>
@@ -208,12 +230,16 @@
                                                 <%--</div>--%>
                                                 <div class="row">
                                                     <div class="col-sm-12">
-                                                        <button class="btn btn-block btn-default">이미지 반영</button>
+                                                        <button type="button"
+                                                                class="btn btn-block btn-outline btn-default"
+                                                                onclick="updateImage()">이미지 반영</button>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
-                                                {{오른쪽}}
+                                                <p class="text-success">* '파일 선택'하면 이미지 업로드가 시작되고, 완료되면 화면에 표시됩니다. 이미지 업로드가 완료될 때 까지 기다리세요.</p>
+                                                <p class="text-success">* 추천 이미지 비율 - 1:1 가로:세로, 예) 720x720, 1440x1440</p>
+                                                <p class="text-success">* 앱에서는 이미지가 해당 비율을 유지하여 표시됩니다.</p>
                                             </div>
                                         </div>
                                     </div>
@@ -569,8 +595,90 @@
             $("#left_complex > .nav-second-level").addClass("in");
             $("#left_complex_list").addClass("active");
 
+            // 썸네일 - 이미지 업로드
+            $( '#image-selector' ).on( 'change', function( event ) {
+                _.each( event.currentTarget.files, function( file ) {
+                    uploadImage( file );
+                } );
+            } );
+
+            // 썸네일 - 이미지 삭제
+            $( document ).on( 'click', '.thumbnail-viewer .delete', function( event ) {
+                $( event.currentTarget ).closest( '.thumbnail-viewer' ).remove();
+            } );
+
+            // 썸네일 - 이미지 표시
+            $( '.thumbnail-viewer' ).each( function( index, element ) {
+                var $element = $( element );
+                $element.css( 'backgroundImage', 'url(' + $element.data( 'image' ) + ')')
+            } );
         })
 
+        function createThumbnail( data ) {
+            var thumb =
+                "<div class='thumbnail-viewer' " +
+                "      style='background-image: url(" + ( "/admin/imageStore/" + data['imageIdx'] ) + ");'>" +
+                "<button class='delete' type='button'>&times;</button>" +
+                "<input type='hidden' id='imageIdx' name='imageIdx' value='" + data['imageIdx'] + "'>" +
+                "</div>";
+            if( $('.thumbnail-viewer').length ) {
+                $('.thumbnail-viewer').remove();
+            }
+            $( '#thumbnails' ).append( $( thumb ) );
+        }
+
+        function uploadImage( file ) {
+            var data = new FormData();
+            data.append( "file", file );
+            $.ajax({
+                url: '/admin/imageStore/complex/?${_csrf.parameterName}=${_csrf.token}',
+                type: 'POST',
+                data: data,
+                contentType: false,
+                processData: false,
+                success: function (rs) {
+                    if( rs ) {
+                        console.log( rs );
+                        createThumbnail( rs );
+                    }else{
+                        alert(rs.msg);
+                    }
+                },
+                error : function(jqxhr){
+                    var respBody = jQuery.parseJSON(jqxhr.responseText);
+                    console.log(respBody);
+                    alert("이미지 업로드가 실패하였습니다.");
+                }
+            });
+        }
+
+        function updateImage( ) {
+            var url;
+            var type;
+            var cmplxId = ${complexDetail.cmplxId};
+            var imageIdx = $('#imageIdx').val();
+            console.log( cmplxId );
+            console.log( imageIdx );
+
+
+            type = 'PUT';
+            url = '/admin/imageStore/' + imageIdx +
+                  '?parentIdx=' + cmplxId +
+                  '&${_csrf.parameterName}=${_csrf.token}';
+
+                  console.log(url);
+
+            $.ajax( {
+                url: url,
+                type: type,
+                contentType: false,
+                processData: false
+            } )
+                .done( function( data ) {
+                    console.log( data);
+                    alert("업데이트 되었습니다.")
+                } );
+        }
 
         function refreshList(){
             $("#complexReqForm").attr("action", "/admin/complexes/list.do?grpId=${grpId}");

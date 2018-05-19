@@ -81,27 +81,16 @@
         ]]>
     </select>
 
-    <update id="bindPostToImageInfos" parameterType="java.util.Map">
-        UPDATE  `POST_FILE`
-        SET     `POST_IDX` =  #{postIdx}
+    <update id="updateImageParentIdx" parameterType="java.util.Map">
+        UPDATE
+            `CL_IMAGE_INFO`
+        SET
+            `PARENT_IDX` =  #{parentIdx},
+            `UPD_DTTM` = CURRENT_TIMESTAMP
         WHERE
-            ISNULL(`POST_IDX`) AND
-            `USR_ID` = #{usrId} AND   -- 본인이 업로드한 이미지만 연결할 수 있음
-        <choose>
-            <when test="postFileIdx != null">
-                `POST_FILE_IDX` =   #{postFileIdx}
-            </when>
-            <when test="postFileIdxs != null">
-                `POST_FILE_IDX`
-                IN
-                <foreach collection="postFileIdxs" item="item" index="index" separator="," open="(" close=")">
-                    #{item}
-                </foreach>
-            </when>
-            <otherwise>
-                1 != 1 -- 상기 조건 중에 해당하지 않으면 반드시 실패
-            </otherwise>
-        </choose>
+            `IMAGE_IDX` = #{imageIdx} AND
+            `DEL_YN` = 'N'
+            ;
     </update>
 
     <delete id="deleteImageInfo" parameterType="java.util.Map">

@@ -221,6 +221,19 @@ public class ImageStoreServiceImpl implements ImageStoreService {
         return imageInfo;
     }
 
+    public ImageInfo updateImageParentIdx( int imageIdx,
+                                           int parentIdx )
+            throws OperationFailedException {
+        ImageInfo imageInfo;
+
+        imageInfo = imageInfoDAO.updateImageParentIdx( imageIdx, parentIdx );
+        if( imageInfo == null ) {
+            throw  new OperationFailedException("해당하는 이미지가 없습니다.");
+        }
+
+        return imageInfo;
+    }
+
     public String getImageFullPathByIdx( int imageIdx ) {
         return serviceProp.getByKey(PROP_GROUP, SERVER_HOST) + DOWNLOAD_PATH + "/" + imageIdx;
     }

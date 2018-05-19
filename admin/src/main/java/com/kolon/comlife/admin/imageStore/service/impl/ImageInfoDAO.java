@@ -19,9 +19,9 @@ public class ImageInfoDAO {
     @Resource
     private SqlSession sqlSession;
 
-    public ImageInfo getImageFile(int imageId ) {
+    public ImageInfo getImageFile(int imageIdx ) {
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "imageIdx", imageId );
+        selectParams.put( "imageIdx", imageIdx );
         return sqlSession.selectOne( "ImageInfo.selectImageInfo", selectParams );
     }
 
@@ -31,28 +31,24 @@ public class ImageInfoDAO {
         return sqlSession.selectOne( "ImageInfo.selectImageTypeIdxByTypeNm", selectParams );
     }
 
-    public List<PostFileInfo> getPostFilesByPostId(int id ) {
-        Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "postIdx", id );
-        return sqlSession.selectList( "PostFile.selectPostFile", selectParams );
-    }
-
-    public List<PostFileInfo> getPostFilesByPostIds( List<Integer> ids ) {
-        Map<String, List<Integer>> selectParams = new HashMap<String, List<Integer>>();
-        selectParams.put( "postIdxs", ids );
-        return sqlSession.selectList( "PostFile.selectPostFile", selectParams );
-    }
-
     public ImageInfo setImageFile(ImageInfo imageInfo ) {
         sqlSession.insert( "ImageInfo.insertImageInfo", imageInfo );
         return sqlSession.selectOne( "ImageInfo.selectLatestImageInfo" );
     }
 
-    public PostFileInfo updatePostFile( int id, PostFileInfo postFileInfo ) {
-        sqlSession.update( "PostFile.updatePostFile", postFileInfo );
+    public ImageInfo updateImageParentIdx( int imageIdx, int parentIdx ) {
+        int                  retCnt;
         Map<String, Integer> selectParams = new HashMap<String, Integer>();
-        selectParams.put( "postFileIdx", id );
-        return sqlSession.selectOne( "PostFile.selectLatestPostFile" );
+
+        selectParams.put( "imageIdx", imageIdx );
+        selectParams.put( "parentIdx", parentIdx );
+        retCnt = sqlSession.update( "ImageInfo.updateImageParentIdx", selectParams );
+
+        if(retCnt < 1) {
+            return null;
+        }
+
+        return sqlSession.selectOne( "ImageInfo.selectImageInfo", selectParams );
     }
 
     public List<PostFileInfo> bindPostToPostFiles( int postIdx, List<Integer> postFileIdxs, int usrId ) {

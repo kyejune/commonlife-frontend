@@ -28,9 +28,7 @@
 
         <intercept-url pattern="/" access="permitAll"/>
         <intercept-url pattern="/error/**" access="permitAll"/>
-        <intercept-url pattern="/upload/**" access="permitAll"/>
         <intercept-url pattern="/j_spring_security_logout" access="permitAll"/>
-
         <intercept-url pattern="/admin/**" access="hasRole('ROLE_USER')"/>
 
         <!-- custom login page 선언 -->

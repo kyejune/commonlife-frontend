@@ -28,4 +28,6 @@ public interface ImageStoreService {
 
     String getImageFullPathByIdx( int imageIdx, String imageSizeSuffix );
 
+    ImageInfo updateImageParentIdx( int imageIdx, int parentIdx ) throws OperationFailedException;
+
 }
