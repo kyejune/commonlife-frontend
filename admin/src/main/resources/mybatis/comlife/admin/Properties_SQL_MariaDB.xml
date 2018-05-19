@@ -30,7 +30,6 @@
         ;
     </select>
 
-
     <select id="selectPropertiesDetail" parameterType="propertiesInfo" resultType="propertiesInfo">
         /* 프로퍼티 상세 조회 */
         DECLARE @propGroup VARCHAR(100) SET @propGroup = #{propGroup}

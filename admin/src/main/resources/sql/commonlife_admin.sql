@@ -7,8 +7,8 @@ CREATE TABLE `CL_ADMIN_GRP` (
   PRIMARY KEY (`GRP_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `CL_ADMIN_GRP`  VALUES (0, 'Super Admin', 'COMMONLife 서비스 최상위 관리자 그룹 입니다.', NOW() );
-INSERT INTO `CL_ADMIN_GRP`  VALUES (1, 'Complex Admin', 'COMMONLife 서비스 현장 관리자 그룹 입니다.', NOW() );
+INSERT INTO `CL_ADMIN_GRP`  VALUES (0, 'Super Admin', 'COMMON Life 서비스 최상위 관리자 그룹 입니다.', NOW() );
+INSERT INTO `CL_ADMIN_GRP`  VALUES (1, 'Complex Admin', 'COMMON Life 서비스 현장 관리자 그룹 입니다.', NOW() );
 
 
 CREATE TABLE `CL_ADMIN_INFO` (

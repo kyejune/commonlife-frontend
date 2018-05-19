@@ -64,7 +64,7 @@
 
 
         <div class="row">
-            <!-- Uncategorized -->
+            <!-- INITIAL - 초기 -->
             <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content" style="">
@@ -73,31 +73,37 @@
                             <i class="fa fa-hand-o-up"></i>
                             초기 설정된 현장은 여기에 나타나게 됩니다. <br>
                             <i class="fa fa-hand-o-up"></i>
-                            준비중 항목으로 이동하고 현장의 세부 설정을 진행하시기 바랍니다.
+                            준비중 항목으로 이동하고 현장의 세부 설정을 진행하시기 바랍니다. <br>
+                            <i class="fa fa-hand-o-up"></i>
+                            이 항목에서 다른 항목으로 옮기게 되면, 다시 미분류 항목으로 옮길 수 없습니다.
                         </p>
                         <ul class="sortable-list connectList agile-list"
-                            id="srt_list_${complexConst.grpUncategorizedId}"
-                            value="${complexConst.grpUncategorizedId}">
+                            id="srt_list_${complexConst.grpInitialId}"
+                            value="${complexConst.grpInitialId}">
                         </ul>
                     </div>
                 </div>
             </div>
-            <!-- 준비 -->
+            <!-- PREPRATION - 준비 -->
             <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content" style="">
                         <h3>1. 준비중</h3>
                         <p class="small">
+                            <i class="fa fa-hand-o-up"></i>아래 현장들은 사용자 앱의 목록에서 표시되지 않습니다. <br>
                             <i class="fa fa-hand-o-up"></i>여기에 현장을 배치하고 현장의 세부 설정을 진행하세요. <br>
                             <i class="fa fa-hand-o-up"></i>현장의 세부 설정을 마무리하였고 공개할 준비가 되었다면,
                             "2.COMMON Life -민간" 또는 "3.따복하우스 -공공" 항목으로 이동하세요.
                         </p>
-                        <ul class="sortable-list connectList agile-list" id="srt_list_READY" value="READY">
+                        </ul>
+                        <ul class="sortable-list connectList agile-list"
+                            id="srt_list_${complexConst.grpPreparationId}"
+                            value="${complexConst.grpPreparationId}">
                         </ul>
                     </div>
                 </div>
             </div>
-            <!-- COMMNON Life  -->
+            <!-- MINGAN - COMMNON Life -->
             <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content" style="">
@@ -112,7 +118,7 @@
                     </div>
                 </div>
             </div>
-            <!-- 민간 -->
+            <!-- GONGGONG - 따복하우스 -->
             <div class="col-lg-3">
                 <div class="ibox">
                     <div class="ibox-content" style="">
@@ -131,8 +137,6 @@
     </div>
 </tiles:putAttribute>
 <tiles:putAttribute name="js">
-
-
     <!-- jquery UI -->
     <script src="/resources/js/plugins/jquery-ui/jquery-ui.min.js"></script>
     <!-- Touch Punch - Touch Event Support for jQuery UI -->
@@ -140,36 +144,34 @@
 
     <script type="text/javascript">
         $(function () {
-            $('.footable').footable();
-
             $("#left_complex").addClass("active");
             $("#left_complex > .nav-second-level").addClass("in");
             $("#left_complex_category").addClass("active");
-            <%--<c:choose>--%>
-                <%--<c:when test="${adminConst.adminGrpSuper == grpId}">--%>
-                    <%--$("#left_admin_super").addClass("active");--%>
-                <%--</c:when>--%>
-                <%--<c:when test="${adminConst.adminGrpComplex == grpId}">--%>
-                    <%--$("#left_admin_complex").addClass("active");--%>
-                <%--</c:when>--%>
-                <%--<c:otherwise>--%>
-                    <%--$("#left_admin_all").addClass("active");--%>
-                <%--</c:otherwise>--%>
-            <%--</c:choose>--%>
 
             //  전체 리스트 가져오기
             var cmplxCard;
+            var cmplxCardClass;
+
             <c:forEach var="vo" items="${complexList}" varStatus="status">
-            <%--<td> ${vo.cmplxGrpId}</td>--%>
-            <%--<td> ${vo.cmplxGrp}</td>--%>
-            cmplxCard = '<li class="success-element" id="${vo.cmplxId}">${vo.cmplxNm}' +
-                '<div class="agile-detail">' +
-                '<i class="fa fa-clock-o"></i> ${vo.addr}' +
-                '</div></li>';
+                <c:choose>
+                    <c:when test="${vo.cmplxGrpId == complexConst.grpInitialId}">
+                        cmplxCardClass = '"default-element"';
+                    </c:when>
+                    <c:when test="${vo.cmplxGrpId == complexConst.grpPreparationId}">
+                        cmplxCardClass = '"warning-element"';
+                    </c:when>
+                    <c:otherwise>
+                        cmplxCardClass = '"success-element"';
+                    </c:otherwise>
+                </c:choose>
+                cmplxCard = '<li class=' + cmplxCardClass + ' id="${vo.cmplxId}">${vo.cmplxNm}' +
+                    '<div class="agile-detail">' +
+                    '<i class="fa fa-clock-o"></i> ${vo.addr}' +
+                    '</div></li>';
                 $("#srt_list_${vo.cmplxGrpId}").append(cmplxCard);
             </c:forEach>
 
-            $("#srt_list_0, #srt_list_1, #srt_list_2").sortable({
+            $("#srt_list_-1, #srt_list_0, #srt_list_1, #srt_list_2").sortable({
                 connectWith: ".connectList",
                 receive: function( event, ui ) {
                     var cmplxGrpId  = $(event.target).attr('value');
@@ -177,41 +179,32 @@
 
                     console.log(cmplxGrpId);
                     console.log(cmplxId);
-                    // ui.item.attr('data-id');
+
+                    if( cmplxGrpId < 0 ) {
+                        alert( "한 번 분류된 현장은 '미분류'로 되돌릴 수 없습니다. " +
+                               "서비스에 노출을 방지하고자 하는 경우, '준비중' 항목으로 이동하세요.");
+                        refreshList();
+                        return;
+                    }
+
 
                     procIns( cmplxId, cmplxGrpId);
 
-                    var todo = $( "#uncategorized" ).sortable( "toArray" );
-                    var inprogress = $( "#mingan" ).sortable( "toArray" );
-                    var completed = $( "#gonggong" ).sortable( "toArray" );
-                    console.log("ToDo: " + window.JSON.stringify(todo) + "<br/>" +
-                        "In Progress: " + window.JSON.stringify(inprogress) + "<br/>" +
-                        "Completed: " + window.JSON.stringify(completed));
+                    // var initial     = $( "#initial" ).sortable( "toArray" );
+                    // var preparation = $( "#prepration" ).sortable( "toArray" );
+                    // var mingan  = $( "#mingan" ).sortable( "toArray" );
+                    // var gonggong= $( "#gonggong" ).sortable( "toArray" );
+                    //
+                    // console.log( "initial: "     + window.JSON.stringify(initial) );
+                    // console.log( "preparation: " + window.JSON.stringify(preparation) );
+                    // console.log( "mingan: "      + window.JSON.stringify(mingan) );
+                    // console.log( "gonggong: "    + window.JSON.stringify(gonggong) );
                 }
             }).disableSelection();
         })
 
-
-//         function fn_link_page(pageIndex){
-//             $("#complexReqForm > #pageIndex").val(pageIndex);
-// //                $("#pageIndex").val(pageIndex);
-//
-//             refreshList();
-//         }
-
         function refreshList(){
             $("#complexReqForm").attr("action", "/admin/complexes/category.do");
-            $("#complexReqForm").submit();
-        }
-
-        function managersDetail(adminId, grpId){
-            $("#complexReqForm > #adminId").val(adminId);
-            $("#complexReqForm").attr("action", "/admin/complexes/write.do?grpId=" + grpId);
-            $("#complexReqForm").submit();
-        }
-
-        function managerAdd(grpId){
-            $("#complexReqForm").attr("action", "/admin/complexes/write.do?create=true&grpId=" + grpId);
             $("#complexReqForm").submit();
         }
 

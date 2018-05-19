@@ -137,8 +137,8 @@ public class ComplexController {
 
         complexList = complexService.getComplexList();
 
-        mav.addObject("adminInfo", adminInfo);
-        mav.addObject("complexList", complexList);
+        mav.addObject("adminInfo",    adminInfo);
+        mav.addObject("complexList",  complexList);
         mav.addObject("complexConst", complexConst);
 
         return mav;

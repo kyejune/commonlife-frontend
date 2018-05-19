@@ -3,6 +3,6 @@
         Welcome!<strong></strong>
     </div>
     <div>
-        Copyright &copy; 2018 COMMONLife All rights reserved.
+        Copyright &copy; 2018 COMMON Life All rights reserved.
     </div>
 </div>
