@@ -4,6 +4,7 @@ import {Link, withRouter} from "react-router-dom";
 import classNames from 'classnames';
 import Net from "../../scripts/net";
 import DeviceStorage from "react-device-storage";
+import Push from "../../scripts/push";
 
 
 class Login extends Component {
@@ -34,6 +35,7 @@ class Login extends Component {
 
         Net.login( this.state.id, this.state.pw, res=>{
 
+            Push.init();
 
             // 최초 방문은 웰컴 페이지로
             if( this.storage.read('visited') ){

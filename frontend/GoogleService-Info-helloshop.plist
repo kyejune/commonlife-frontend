@@ -7,21 +7,21 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>232187269867-bndpb2t54p2j5en0nr510301vhvemc7b.apps.googleusercontent.com</string>
+	<string>287357656880-f113k96srgcd2ri1m3mkgjlpjv6p0mtm.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.232187269867-bndpb2t54p2j5en0nr510301vhvemc7b</string>
+	<string>com.googleusercontent.apps.287357656880-f113k96srgcd2ri1m3mkgjlpjv6p0mtm</string>
 	<key>API_KEY</key>
-	<string>AIzaSyD89E7tFZDakQxWDsHJ5csHDMHy3QXfIww</string>
+	<string>AIzaSyA0oaa31x0hqGG8h0tIELgVenE5Zf0NUWs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>232187269867</string>
+	<string>287357656880</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>co.commonlife.app</string>
+	<string>co.commonlife</string>
 	<key>PROJECT_ID</key>
-	<string>commonlife-d3596</string>
+	<string>commonlife-298df</string>
 	<key>STORAGE_BUCKET</key>
-	<string>commonlife-d3596.appspot.com</string>
+	<string>commonlife-298df.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -33,8 +33,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:232187269867:ios:8e7cbc97788f9fc0</string>
+	<string>1:287357656880:ios:71338c820315eeb5</string>
 	<key>DATABASE_URL</key>
-	<string>https://commonlife-d3596.firebaseio.com</string>
+	<string>https://commonlife-298df.firebaseio.com</string>
 </dict>
 </plist>

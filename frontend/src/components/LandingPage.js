@@ -3,6 +3,7 @@ import Net from "../scripts/net";
 import DeviceStorage from "react-device-storage";
 import {withRouter} from "react-router-dom";
 import Store from "../scripts/store"
+import Push from "../scripts/push";
 
 class LandingPage extends Component {
 
@@ -22,6 +23,9 @@ class LandingPage extends Component {
                         this.props.history.push( '/community/feed' );
                     else
                         this.props.history.push( S.read('location') || '/community/feed');
+
+
+                    setTimeout( Push.init, 1000 );
                 }
                 else{
                     this.props.history.push('/login');

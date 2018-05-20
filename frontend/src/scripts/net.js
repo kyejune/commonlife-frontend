@@ -431,7 +431,6 @@ export default {
 
                     const S = new DeviceStorage().localStorage();
                     S.save( 'token', DATA.token );
-
                     this.getComplexesKeyValue();
 
                     callback( response.data );
@@ -613,6 +612,22 @@ export default {
 
     },
 
+    sendFirebaseToken(){
+        if( !window.device || Store.firebaseToken ) return;
 
+
+        axios.post('/push/register', {
+            pushToken: Store.firebaseToken,
+            deviceId:window.device.uuid,
+            osType: (window.device.platform.indexOf('iOS') >= 0)?'IOS':'ANDROID'
+        });
+    },
+
+    getNoties( callback ){
+        axios.get('/push/')
+            .then( response=>{
+                callback( response.data );
+            });
+    }
 
 };

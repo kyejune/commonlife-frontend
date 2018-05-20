@@ -110,7 +110,6 @@ class DrawerInjector extends Component{
             </Modal>
             }
 
-
         </div>
     }
 

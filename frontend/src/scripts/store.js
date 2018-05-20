@@ -102,6 +102,8 @@ export const MakingUserData = observable({
 
 const Store = observable({
 
+    firebaseToken: null,
+
     alert: msg => {
         if( navigator.notification ){
             navigator.notification.alert( msg, ()=>{}, 'CommonLife', '확인' );

@@ -13,6 +13,10 @@ body{
 
 body.platform--ios{
 
+    #noti-toast{
+        top: 3.90625vh;
+    }
+
     .cl-full-page {
         top: 3.90625vh;
         height: 96vh;
@@ -535,4 +539,39 @@ body.cl-dom--added{
 
 header {
     border-bottom: 1px solid #1B65C1;
+}
+
+
+
+#noti-toast{
+    position: absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    padding: 20px;
+    background-color: #1052a5;
+    color: #fafafa;
+    z-index: 99999999;
+    transition: 0.8s all cubic-bezier(0.24, 0.82, 0.37, 0.99);
+    transform: translateY(-100%);
+    visibility: hidden;
+
+    &.cl--show{
+        transform: translateY(0);
+        visibility: visible;
+    }
+
+    p{
+        color: #fafafa;
+        opacity: 0.8;
+        margin-left: 14px;
+        width: calc( 100vw - 100px );
+        font-weight: bold;
+        font-size: 16px;
+
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: normal;
+        overflow: hidden;
+    }
 }
