@@ -82,13 +82,13 @@ class HouseHolderInputs extends Component {
             console.log('인증 번호 요청:', res, MakingUserData.houseHolder );
 
             // 임시로 인증번호 자동으로 가져오기
-            axios.get(`${Store.api}/users/debug/headCertNum?userCertId=${res.userCertId}&headNm=김영헌&headCell=01050447244`)
-                .then( response => {
-                    console.log( '자동 인증번호 갱신:', response.data.headCertNo );
-                    MakingUserData.houseHolder = { ...MakingUserData.houseHolder, certId: response.data.headCertNo };
-
-                    console.log( 'MakignUserData:', MakingUserData.houseHolder );
-                });
+            // axios.get(`${Store.api}/users/debug/headCertNum?userCertId=${res.userCertId}&headNm=김영헌&headCell=01050447244`)
+            //     .then( response => {
+            //         console.log( '자동 인증번호 갱신:', response.data.headCertNo );
+            //         MakingUserData.houseHolder = { ...MakingUserData.houseHolder, certId: response.data.headCertNo };
+            //
+            //         console.log( 'MakignUserData:', MakingUserData.houseHolder );
+            //     });
         });
     }
 
@@ -150,7 +150,7 @@ class HouseHolderInputs extends Component {
                 {this.validator.fieldValid('세대주 이름') && this.validator.fieldValid('휴대폰 번호') &&
                 <input className="cl__input--dark" type="number" placeholder="인증번호 입력"
                        value={houseHolder.certId}
-                       onChange={ evt => MakingUserData.houseHolder = evt.target.value }
+                       onChange={ evt => MakingUserData.houseHolder = { ...houseHolder, certId:evt.target.value } }
                 />
                 }
                 {this.validator.message('인증번호', houseHolder.certId, `required`)}

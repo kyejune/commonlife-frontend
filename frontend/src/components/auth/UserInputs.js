@@ -66,10 +66,10 @@ class UserInputs extends Component {
 
                 // 임시로 인증번호 자동으로 가져오기
                 //{{API_HOST}}/users/debug/userCertNum?userCertId=106&userCell=01046147636
-                axios.get(`${Store.api}/users/debug/userCertNum?userCertId=${res.userCertId}&userCell=${user.phone}`)
-                    .then( response => {
-                        MakingUserData.user = { ...MakingUserData.user, certId: response.data.userCertNo };
-                    });
+                // axios.get(`${Store.api}/users/debug/userCertNum?userCertId=${res.userCertId}&userCell=${user.phone}`)
+                //     .then( response => {
+                //         MakingUserData.user = { ...MakingUserData.user, certId: response.data.userCertNo };
+                //     });
 
             });
     }
