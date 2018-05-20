@@ -80,11 +80,11 @@ export const MakingUserData = observable({
         //     "따복하우스1차 베니트 개발",
     },
     houseHolder:{
-        name:'김영헌',
-        phone:'01050447244',
+        name:'',//'김영헌',
+        phone:'',//'01050447244',
         certId:'',
-        dong: '0101',
-        ho:'2803',
+        dong: '',// '0101',
+        ho:'',//2803',
     },
 
     user: {
