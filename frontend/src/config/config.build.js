@@ -1,5 +1,5 @@
 const config = {
-	api_host: 'http://dev-commonlife.smartiok.com',
+	api_host: 'https://commonlife.smartiok.com',
 };
 
 export default config;

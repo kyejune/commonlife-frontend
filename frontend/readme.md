@@ -35,5 +35,14 @@ cordova add platform ...
 
 ## Mobile Emulate Test
 ```
+cordova emulate ...
 
 ```
+
+## App Packaging
+```
+- yarn build && cordova build 
+- android or Xcode 에서 app packaging
+- app icon 과 splash screen은 /frontend/res/xcode, android studio에...
+```
+
