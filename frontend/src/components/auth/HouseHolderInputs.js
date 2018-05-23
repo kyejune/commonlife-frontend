@@ -25,7 +25,7 @@ class HouseHolderInputs extends Component {
         Net.getDongsInBranch( MakingUserData.branch.cmplxId, data => {
             this.setState({dongs: data});
 
-            if (data.length === 1) {
+            if (data.length >= 1) {
                 MakingUserData.houseHolder.dong = data[0];
                 this.loadHos(data[0]);
             }
@@ -79,10 +79,10 @@ class HouseHolderInputs extends Component {
             Store.alert(res.msg);
 
             MakingUserData.houseHolder = { ...houseHolder, certReqId:res.userCertId };
-            console.log('인증 번호 요청:', res, MakingUserData.houseHolder );
+            // console.log('인증 번호 요청:', res, MakingUserData.houseHolder );
 
             // 임시로 인증번호 자동으로 가져오기
-            // axios.get(`${Store.api}/users/debug/headCertNum?userCertId=${res.userCertId}&headNm=김영헌&headCell=01050447244`)
+            // axios.get(`${Store.api}/users/debug/headCertNum?userCertId=${res.userCertId}&headNm=조성우&headCell=01050447244`)
             //     .then( response => {
             //         console.log( '자동 인증번호 갱신:', response.data.headCertNo );
             //         MakingUserData.houseHolder = { ...MakingUserData.houseHolder, certId: response.data.headCertNo };
