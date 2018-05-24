@@ -55,6 +55,13 @@ public class ReservationGroupController {
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
         mav.addObject("adminInfo", adminInfo);
 
+        String complexIdx = request.getParameter( "complexIdx" );
+        String groupIdx = request.getParameter( "groupIdx" );
+        String schemeIdx = request.getParameter( "schemeIdx" );
+        mav.addObject( "complexIdx", complexIdx );
+        mav.addObject( "groupIdx", groupIdx );
+        mav.addObject( "schemeIdx", schemeIdx );
+
         HashMap params = new HashMap();
 
         if( cmplxIdx != 0 ) {
@@ -64,18 +71,33 @@ public class ReservationGroupController {
         List<ReservationGroupInfo> groups = service.index( params );
         List<ComplexInfo> complexes = complexService.getComplexList();
 
-        mav.addObject( "cmplxIdx", cmplxIdx );
         mav.addObject( "groups", groups );
         mav.addObject( "complexes", complexes );
 
-        if( cmplxIdx != 0 ) {
             HashMap schemeParams = new HashMap();
             schemeParams.put( "cmplxIdx", cmplxIdx );
             schemeParams.put( "groupIdx", 0 );
+
+            // 지점에 대한 파라미터가 있을 경우
+            if( complexIdx != null && !complexIdx.equals( "" ) ) {
+                schemeParams.put( "cmplxIdx", complexIdx );
+            }
+
+            // 그룹에 대한 파라미터가 있을 경우
+            if( groupIdx != null && !groupIdx.equals( "" ) ) {
+                schemeParams.put( "groupIdx", groupIdx );
+            }
+
+            // 틀에 대한 파라미터가 있을 경우
+            if( schemeIdx != null && !schemeIdx.equals( "" ) ) {
+                schemeParams.put( "schemeIdx", schemeIdx );
+            }
+
+            logger.debug( ">>>>>>>> schemeParams : " + schemeParams );
+
             List<ReservationSchemeInfo> schemes = schemeService.index( schemeParams );
 
             mav.addObject( "schemes", schemes );
-        }
 
         return mav;
     }

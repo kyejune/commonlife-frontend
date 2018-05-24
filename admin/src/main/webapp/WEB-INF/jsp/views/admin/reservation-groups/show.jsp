@@ -68,7 +68,7 @@
                                         </td>
                                         <td class="text-center">
                                                 ${scheme.endDt}
-                                        </td>
+                                        </td>ㄴ
                                         <td class="text-center">
                                             <a href="/admin/reservation-schemes/edit.do?idx=${scheme.idx}&cmplxIdx=${scheme.cmplxIdx}&parentIdx=${scheme.parentIdx}" class="btn btn-xs btn-white">보기/수정</a>
                                         </td>
