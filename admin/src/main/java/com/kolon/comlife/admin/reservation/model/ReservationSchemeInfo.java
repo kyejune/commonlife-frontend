@@ -3,6 +3,7 @@ package com.kolon.comlife.admin.reservation.model;
 import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import org.apache.ibatis.type.Alias;
 
+import java.util.Date;
 import java.util.List;
 
 @Alias("reservationSchemeInfo")
@@ -47,8 +48,8 @@ public class ReservationSchemeInfo {
     private String userMemoLabel;
     private String userMemoPlaceholder;
     private String delYn;
-    private String regDttm;
-    private String updDttm;
+    private Date regDttm;
+    private Date updDttm;
 
     /*
         Relations
@@ -382,19 +383,19 @@ public class ReservationSchemeInfo {
         this.delYn = delYn;
     }
 
-    public String getRegDttm() {
+    public Date getRegDttm() {
         return regDttm;
     }
 
-    public void setRegDttm(String regDttm) {
+    public void setRegDttm(Date regDttm) {
         this.regDttm = regDttm;
     }
 
-    public String getUpdDttm() {
+    public Date getUpdDttm() {
         return updDttm;
     }
 
-    public void setUpdDttm(String updDttm) {
+    public void setUpdDttm(Date updDttm) {
         this.updDttm = updDttm;
     }
 

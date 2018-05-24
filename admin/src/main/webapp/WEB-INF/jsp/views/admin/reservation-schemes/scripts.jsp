@@ -61,12 +61,14 @@
 <script>
     $( function() {
         var HOST = 'http://localhost:8080';
-        if( window.location.hostname === 'cl-stage-admin.cyville.net' ) {
-            HOST = 'https://cl-stage.cyville.net';
-        }
-        else if( window.location.hostname !== 'localhost' ) {
-            HOST = 'https://clback.cyville.net';
-        }
+        // if( window.location.hostname === 'cl-stage-admin.cyville.net' ) {
+        //     HOST = 'https://cl-stage.cyville.net';
+        // }
+        // else if( window.location.hostname !== 'localhost' ) {
+        //     HOST = 'https://clback.cyville.net';
+        // }
+
+        HOST = '${IMAGE_STORE_HOST}';
 
         // reservation type tab 클릭시
         $( '#reservation-type-tabs a' ).on( 'click', function( event ) {

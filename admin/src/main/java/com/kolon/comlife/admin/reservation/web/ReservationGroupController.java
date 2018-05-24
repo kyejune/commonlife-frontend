@@ -48,7 +48,6 @@ public class ReservationGroupController {
             , HttpServletResponse response
             , ModelAndView mav
             , HttpSession session
-            , @RequestParam( value = "cmplxIdx", required = false, defaultValue = "0" ) int cmplxIdx
     ) {
         // 관리자 이름 표시
         AdminInfo adminInfo;
@@ -64,40 +63,42 @@ public class ReservationGroupController {
 
         HashMap params = new HashMap();
 
-        if( cmplxIdx != 0 ) {
-            params.put( "id", cmplxIdx );
+        if( complexIdx != null && !complexIdx.equals( "" ) ) {
+            params.put( "id", complexIdx );
+            ComplexInfo selectedComplex = complexService.getComplexById( Integer.parseInt( complexIdx ) );
+            logger.debug( ">>>>>>>> selectedComplex : " + selectedComplex );
+            mav.addObject( "selectedComplex", selectedComplex );
         }
 
         List<ReservationGroupInfo> groups = service.index( params );
         List<ComplexInfo> complexes = complexService.getComplexList();
 
+
         mav.addObject( "groups", groups );
         mav.addObject( "complexes", complexes );
 
-            HashMap schemeParams = new HashMap();
-            schemeParams.put( "cmplxIdx", cmplxIdx );
-            schemeParams.put( "groupIdx", 0 );
+        HashMap schemeParams = new HashMap();
+        schemeParams.put( "groupIdx", 0 );
 
-            // 지점에 대한 파라미터가 있을 경우
-            if( complexIdx != null && !complexIdx.equals( "" ) ) {
-                schemeParams.put( "cmplxIdx", complexIdx );
-            }
+        // 지점에 대한 파라미터가 있을 경우
+        if( complexIdx != null && !complexIdx.equals( "" ) ) {
+            schemeParams.put( "cmplxIdx", complexIdx );
+        }
 
-            // 그룹에 대한 파라미터가 있을 경우
-            if( groupIdx != null && !groupIdx.equals( "" ) ) {
-                schemeParams.put( "groupIdx", groupIdx );
-            }
+        // 그룹에 대한 파라미터가 있을 경우
+        if( groupIdx != null && !groupIdx.equals( "" ) ) {
+            schemeParams.put( "groupIdx", groupIdx );
+        }
 
-            // 틀에 대한 파라미터가 있을 경우
-            if( schemeIdx != null && !schemeIdx.equals( "" ) ) {
-                schemeParams.put( "schemeIdx", schemeIdx );
-            }
+        // 틀에 대한 파라미터가 있을 경우
+        if( schemeIdx != null && !schemeIdx.equals( "" ) ) {
+            schemeParams.put( "schemeIdx", schemeIdx );
+        }
 
-            logger.debug( ">>>>>>>> schemeParams : " + schemeParams );
-
-            List<ReservationSchemeInfo> schemes = schemeService.index( schemeParams );
-
-            mav.addObject( "schemes", schemes );
+        List<ReservationSchemeInfo> schemes = schemeService.index( schemeParams );
+        List<ReservationSchemeInfo> allSchemes = schemeService.index( new HashMap() );
+        mav.addObject( "schemes", schemes );
+        mav.addObject( "allSchemes", allSchemes );
 
         return mav;
     }

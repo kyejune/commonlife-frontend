@@ -13,6 +13,9 @@
         </jsp:include>
     </tiles:putAttribute>
     <tiles:putAttribute name="js">
+        <script>
+            var HOST = '${IMAGE_STORE_HOST}';
+        </script>
         <%@include file="./scripts.jsp"%>
     </tiles:putAttribute>
 </tiles:insertDefinition>

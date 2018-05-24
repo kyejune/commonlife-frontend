@@ -94,8 +94,8 @@
                     <span class="nav-label">슈퍼| 예약 관리<span class="fa arrow"></span></span>
                 </a>
                 <ul class="nav nav-second-level collapse">
-                    <li><a href="/admin/reservation-amenities/list.do">예약 시설 옵션 관리</a></li>
-                    <li><a href="/admin/reservation-groups/list.do">예약 관리</a></li>
+                    <li><a href="/admin/reservation-groups/list.do">예약 리스트</a></li>
+                    <li><a href="/admin/reservation-amenities/list.do">시설 옵션 관리</a></li>
                     <%--<li><a href="/admin/reservations/queue.do">장기 예약 신청 관리</a></li>--%>
                 </ul>
             </li>

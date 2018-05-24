@@ -5,9 +5,11 @@ import com.kolon.comlife.admin.complexes.service.ComplexService;
 import com.kolon.comlife.admin.manager.model.AdminInfo;
 import com.kolon.comlife.admin.reservation.model.*;
 import com.kolon.comlife.admin.reservation.service.*;
+import com.kolon.common.prop.ServicePropertiesMap;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,6 +49,9 @@ public class ReservationSchemeController {
 
     @Resource(name = "reservationSchemeOptionService")
     private ReservationSchemeOptionService optionService;
+
+    @Autowired
+    ServicePropertiesMap serviceProp;
 
     @RequestMapping(value = "list.do")
     public ModelAndView listReservationScheme (
@@ -94,6 +99,9 @@ public class ReservationSchemeController {
 
         mav.addObject( "cmplxIdx", cmplxIdx );
         mav.addObject( "parentIdx", parentIdx );
+
+        // 이미지 스토어 호스트
+        mav.addObject( "IMAGE_STORE_HOST", serviceProp.getByKey( "IMAGE_STORE", "SERVER_HOST" ) );
 
         if( parentIdx != 0 ) {
             ReservationGroupInfo group = groupService.show( parentIdx );
@@ -264,6 +272,9 @@ public class ReservationSchemeController {
             ReservationGroupInfo group = groupService.show( scheme.getParentIdx() );
             mav.addObject( "group", group );
         }
+
+        // 이미지 스토어 호스트
+        mav.addObject( "IMAGE_STORE_HOST", serviceProp.getByKey( "IMAGE_STORE", "SERVER_HOST" ) );
 
         return mav;
     }

@@ -2,6 +2,8 @@ package com.kolon.comlife.admin.reservation.model;
 
 import org.apache.ibatis.type.Alias;
 
+import java.util.Date;
+
 @Alias("reservationGroupInfo")
 public class ReservationGroupInfo {
     private int idx;
@@ -12,8 +14,8 @@ public class ReservationGroupInfo {
     private String summary;
     private String description;
     private String delYn;
-    private String regDttm;
-    private String updDttm;
+    private Date regDttm;
+    private Date updDttm;
 
     public int getIdx() {
         return idx;
@@ -79,19 +81,19 @@ public class ReservationGroupInfo {
         this.delYn = delYn;
     }
 
-    public String getRegDttm() {
+    public Date getRegDttm() {
         return regDttm;
     }
 
-    public void setRegDttm(String regDttm) {
+    public void setRegDttm(Date regDttm) {
         this.regDttm = regDttm;
     }
 
-    public String getUpdDttm() {
+    public Date getUpdDttm() {
         return updDttm;
     }
 
-    public void setUpdDttm(String updDttm) {
+    public void setUpdDttm(Date updDttm) {
         this.updDttm = updDttm;
     }
 }
