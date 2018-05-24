@@ -110,8 +110,7 @@
                                     <th class="text-center">그룹</th>
                                     <th class="text-center">예약명</th>
                                     <th class="text-center">요청일</th>
-                                    <th class="text-center">포인트</th>
-                                    <th class="text-center">금액</th>
+                                    <th class="text-center">예약 속성</th>
                                     <th class="text-center">상태</th>
                                     <th class="text-center">보기</th>
                                     <th class="text-center">삭제</th>
@@ -132,15 +131,20 @@
                                         <td class="text-center">
                                             <fmt:formatDate value="${reservation.regDttm}" pattern="yyyy-MM-dd HH:mm:ss"/>
                                         </td>
-                                        <td class="text-center">${reservation.point}</td>
-                                        <td class="text-center">${reservation.amount}</td>
+                                        <td class="text-center">
+                                            TODO: DB 연동 필요
+                                        </td>
                                         <td class="text-center">
                                             <c:choose>
                                                 <c:when test="${reservation.status.equals( 'RESERVED' )}">
-                                                    예약확정
+                                                    <button class="btn btn-xs btn-success">
+                                                        예약확정
+                                                    </button>
                                                 </c:when>
                                                 <c:when test="${reservation.status.equals( 'IN_QUEUE' )}">
-                                                    예약대기
+                                                    <button class="btn btn-xs btn-warning">
+                                                        예약대기
+                                                    </button>
                                                 </c:when>
                                             </c:choose>
                                         </td>
