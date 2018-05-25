@@ -70,6 +70,60 @@
 
         HOST = '${IMAGE_STORE_HOST}';
 
+        // 드롭다운 설정
+        $( '#dropdown-group li a' ).hide();
+        $( '#dropdown-scheme li a' ).hide();
+
+        function renderSchemeItems() {
+            var complexIdx = $( 'input[name=cmplxIdx]' ).val();
+            var groupIdx = $( 'input[name=groupIdx]' ).val();
+            $( '#dropdown-scheme li a' ).hide();
+            if( !complexIdx && !groupIdx ) {
+                return false;
+            }
+            $( '#dropdown-scheme li a' ).each( function ( idnex, element ) {
+                var $element = $( element );
+                if( groupIdx ) {
+                    if( $element.data( 'complex' ) == complexIdx && $element.data( 'group' ) == groupIdx ) {
+                        $element.show();
+                    }
+                }
+                else {
+                    if( $element.data( 'complex' ) == complexIdx ) {
+                        $element.show();
+                    }
+                }
+
+            })
+        }
+
+        $(".dropdown-menu li a").on( 'click', function( event ){
+            event.preventDefault();
+
+            var item = $( event.currentTarget );
+            item.parents(".btn-group").find('.btn').html( item.text() + ' <span class="caret"></span>' );
+            item.parents(".btn-group").find('input').val( item.data('value') );
+
+            var complexIdx = $( 'input[name=cmplxIdx]' ).val();
+
+            if( complexIdx ) {
+                $( '#dropdown-group li a' ).hide();
+                $( '#dropdown-group li a[data-complex=' + complexIdx + ']' ).show();
+                $( '#dropdown-group li a.default-item' ).show();
+            }
+
+            renderSchemeItems();
+        });
+
+        if( $( 'input[name=cmplxIdx]' ).val() ) {
+            $("#dropdown-complex li a[data-value=" + $( 'input[name=cmplxIdx]' ).val() + "]" ).trigger( 'click' );
+        }
+
+        if( $( 'input[name=groupIdx]' ).val() ) {
+            $("#dropdown-group li a[data-value=" + $( 'input[name=groupIdx]' ).val() + "]" ).trigger( 'click' );
+        }
+        // 드롭다운 설정 끝
+
         // reservation type tab 클릭시
         $( '#reservation-type-tabs a' ).on( 'click', function( event ) {
             var $button = $( event.currentTarget );

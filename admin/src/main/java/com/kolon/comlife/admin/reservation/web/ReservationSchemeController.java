@@ -94,6 +94,9 @@ public class ReservationSchemeController {
         List<ComplexInfo> complexes = complexService.getComplexList();
         mav.addObject( "complexes", complexes );
 
+        List<ReservationGroupInfo> groups = groupService.index( new HashMap() );
+        mav.addObject( "groups", groups );
+
         List<ReservationAmenityInfo> amenities = amenityService.index( new HashMap() );
         mav.addObject( "amenities", amenities );
 
@@ -248,6 +251,9 @@ public class ReservationSchemeController {
         List<ComplexInfo> complexes = complexService.getComplexList();
         mav.addObject( "complexes", complexes );
 
+        List<ReservationGroupInfo> groups = groupService.index( new HashMap() );
+        mav.addObject( "groups", groups );
+
         List<ReservationAmenityInfo> amenities = amenityService.index( new HashMap() );
         mav.addObject( "amenities", amenities );
 
@@ -262,6 +268,14 @@ public class ReservationSchemeController {
 
         ReservationSchemeInfo scheme = service.show( idx );
         mav.addObject( "scheme", scheme );
+
+        ComplexInfo selectedComplex = complexService.getComplexById( scheme.getCmplxIdx() );
+        mav.addObject( "selectedComplex", selectedComplex );
+
+        if( scheme.getParentIdx() != 0 ) {
+            ReservationGroupInfo selectedGroup = groupService.show( scheme.getParentIdx() );
+            mav.addObject( "selectedGroup", selectedGroup );
+        }
 
         HashMap params = new HashMap();
         params.put( "schemeIdx", scheme.getIdx() );

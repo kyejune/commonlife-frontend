@@ -48,28 +48,71 @@
                         <div class="row">
                             <%--좌측 섹션--%>
                             <div class="col-md-7">
-                                <div class="form-group">
-                                    <label>지점 설정</label>
-                                    <select name="cmplxIdx" class="form-control">
-                                    <c:forEach var="complex" items="${complexes}">
-                                        <option value="${complex.cmplxId}" <c:if test="${cmplxIdx == complex.cmplxId}"> selected </c:if> >${complex.cmplxNm}</option>
-                                    </c:forEach>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>예약 그룹</label>
-                                    <c:if test="${parentIdx != 0}">
-                                        <div>
-                                            <input type="hidden" name="parentIdx" value="${parentIdx}">
-                                            <input type="text" class="form-control" readonly value="${group.title}">
+                                <div class="row">
+                                    <%--신규 작성일 경우에만 지점 및 그룹 설정을 할 수 있다.--%>
+                                    <c:if test="${scheme == null}">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>지점 설정</label>
+                                            <div>
+                                                <div class="btn-group" id="dropdown-complex">
+                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle">지점선택 <span class="caret"></span></button>
+                                                    <input type="hidden" name="cmplxIdx" value="${cmplxIdx}">
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#">지점선택</a></li>
+                                                        <c:forEach var="complex" items="${complexes}">
+                                                            <li><a href="#complexIdx=${complex.cmplxId}" data-value="${complex.cmplxId}">${complex.cmplxNm}</a></li>
+                                                        </c:forEach>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </c:if>
-                                    <c:if test="${parentIdx == 0}">
-                                        <div>
-                                            <input type="text" class="form-control" readonly value="그룹 없음">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>예약 그룹</label>
+                                            <div>
+                                                <div class="btn-group" id="dropdown-group">
+                                                    <button data-toggle="dropdown" class="btn btn-white dropdown-toggle">그룹없음 <span class="caret"></span></button>
+                                                    <input type="hidden" name="parentIdx" value="${parentIdx}">
+                                                    <ul class="dropdown-menu">
+                                                        <li><a href="#" class="default-item" data-value="0">그룹없음</a></li>
+                                                        <c:forEach var="group" items="${groups}">
+                                                            <li><a href="#groupIdx=${group.idx}" data-complex="${group.cmplxIdx}" data-value="${group.idx}">${group.title}</a></li>
+                                                        </c:forEach>
+                                                    </ul>
+                                                </div>
+                                            </div>
                                         </div>
+                                    </div>
+                                    </c:if>
+                                    <c:if test="${scheme != null}">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>지점 설정</label>
+                                            <div>
+                                                <input type="hidden" name="cmplxIdx" value="${selectedComplex.cmplxId}">
+                                                ${selectedComplex.cmplxNm}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label>예약 그룹</label>
+                                            <div>
+                                                <c:if test="${selectedGroup!=null}">
+                                                    <input type="hidden" name="parentIdx" value="selectedGroup.idx">
+                                                    ${selectedGroup.title}
+                                                </c:if>
+                                                <c:if test="${selectedGroup==null}">
+                                                    그룹 없음
+                                                </c:if>
+                                            </div>
+                                        </div>
+                                    </div>
                                     </c:if>
                                 </div>
+
                                 <div class="form-group">
                                     <label>접근 허용 현장</label>
                                     <div>
