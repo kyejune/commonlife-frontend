@@ -176,7 +176,7 @@
                             </div>
                             <!-- /.content -->
                             <input type="hidden" name="mode" id="mode" value="${mode}">
-                            <form:hidden path="grpId"/>
+                            <input type="hidden" name="grpId" value="${grpId}">
                         </form:form>
                         <form:form name="managerListForm" id="managerListForm" method="post" commandName="adminInfo">
                             <form:hidden path="pageIndex"/>
