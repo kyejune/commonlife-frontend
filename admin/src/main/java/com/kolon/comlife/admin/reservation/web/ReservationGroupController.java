@@ -66,7 +66,6 @@ public class ReservationGroupController {
         if( complexIdx != null && !complexIdx.equals( "" ) ) {
             params.put( "id", complexIdx );
             ComplexInfo selectedComplex = complexService.getComplexById( Integer.parseInt( complexIdx ) );
-            logger.debug( ">>>>>>>> selectedComplex : " + selectedComplex );
             mav.addObject( "selectedComplex", selectedComplex );
         }
 
@@ -224,6 +223,12 @@ public class ReservationGroupController {
 
         ReservationGroupInfo group = service.show( idx );
         mav.addObject( "group", group );
+
+        ComplexInfo selectedComplex = complexService.getComplexById( group.getCmplxIdx() );
+        mav.addObject( "selectedComplex", selectedComplex );
+
+        logger.debug( ">>>>>>>> selectedComplex : " + selectedComplex );
+        logger.debug( ">>>>>>>> selectedComplex.getCmplxNm() : " + selectedComplex.getCmplxNm() );
 
         HashMap params = new HashMap();
         params.put( "groupIdx", idx );

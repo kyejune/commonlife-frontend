@@ -34,22 +34,87 @@
                             </div>
                         </div>
                         <div class="ibox-content">
-                            <div>${group.idx}</div>
-                            <div>${group.icon}</div>
-                            <div>${group.title}</div>
-                            <div>${group.summary}</div>
-                        </div>
-                    </div>
-                    <div class="ibox float-e-margins">
-                        <div class="ibox-title">
-                            <h5>이 그룹의 예약 목록</h5>
-                        </div>
-                        <div class="ibox-content">
-                            <table class="table">
+                            <table class="table cl-reservation-table">
+                                <colgroup>
+                                    <col>
+                                    <col style="width: 180px;">
+                                    <col style="width: 60px;">
+                                    <col style="width: 200px;">
+                                    <col>
+                                </colgroup>
                                 <thead>
                                 <tr>
-                                    <th class="text-center">ID</th>
+                                    <th class="text-center"> </th>
+                                    <th>그룹명</th>
+                                    <th class="text-center">아이콘</th>
+                                    <th class="text-center">현장</th>
+                                    <th>설명</th>
+                                    <th class="text-center">수정</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-center" style="vertical-align: middle;">
+                                            <span class="label label-primary">Active</span>
+                                        </td>
+                                        <td class="">
+                                            <strong style="font-size: 1.4em;">${group.title}</strong>
+                                            <br>
+                                            <small>
+                                                Created
+                                                <fmt:formatDate value="${group.regDttm}" pattern="yyyy.MM.dd"/>
+                                            </small>
+                                        </td>
+                                        <td class="text-center">
+                                            <c:choose>
+                                                <c:when test="${group.icon == 'HOME'}">
+                                                    <img src="/resources/img/reservations/r-icon-1-3x.png" style="width: 36px;" alt="HOME">
+                                                </c:when>
+                                                <c:when test="${group.icon == 'TOOL'}">
+                                                    <img src="/resources/img/reservations/r-icon-2-3x.png" style="width: 36px;" alt="TOOL">
+                                                </c:when>
+                                                <c:when test="${group.icon == 'STORE'}">
+                                                    <img src="/resources/img/reservations/r-icon-3-3x.png" style="width: 36px;" alt="STORE">
+                                                </c:when>
+                                                <c:when test="${group.icon == 'ETC'}">
+                                                    <img src="/resources/img/reservations/r-icon-4-3x.png" style="width: 36px;" alt="ETC">
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
+                                        <td class="text-center">${selectedComplex.cmplxNm}</td>
+                                        <td>${group.summary}</td>
+                                        <td class="text-center">
+                                            <a href="/admin/reservation-groups/edit.do?idx=${group.idx}" class="btn btn-xs btn-white">
+                                                <i class="fa fa-pencil"></i> 수정
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-title">
+                            <h5>예약 목록</h5>
+                        </div>
+                        <div class="ibox-content">
+                            <table class="table cl-reservation-table">
+                                <colgroup>
+                                    <col>
+                                    <col style="width: 180px;">
+                                    <col style="width: 60px;">
+                                    <col>
+                                    <col>
+                                    <col>
+                                    <col>
+                                    <col>
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th class="text-center"> </th>
                                     <th>예약명</th>
+                                    <th class="text-center">아이콘</th>
                                     <th>예약 개요</th>
                                     <th class="text-center">예약 개시</th>
                                     <th class="text-center">예약 마감</th>
@@ -60,39 +125,83 @@
                                 <tbody>
                                 <c:forEach var="scheme" items="${schemes}">
                                     <tr>
-                                        <td class="text-center">${scheme.idx}</td>
-                                        <td>${scheme.title}</td>
+                                        <td class="text-center">
+                                            <c:choose>
+                                                <c:when test="${ scheme.activate == 'yes' }">
+                                                    <span class="label label-primary">Active</span>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <span class="label label-mute">Unactive</span>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </td>
+                                        <td>
+                                            <span style="font-size: 1.4em;">${scheme.title}</span>
+                                            <br>
+                                            <small>
+                                                Created
+                                                <fmt:formatDate value="${scheme.regDttm}" pattern="yyyy.MM.dd"/>
+                                            </small>
+                                        </td>
+                                        <td class="text-center">
+                                            <c:choose>
+                                                <c:when test="${scheme.icon =='CLEANING'}">
+                                                    <img src="/resources/img/reservations/rs-icon-2-3x.png" style="width: 36px;" alt="CLEANING">
+                                                </c:when>
+                                                <c:when test="${scheme.icon =='LAUNDRY'}">
+                                                    <img src="/resources/img/reservations/rs-icon-1-3x.png" style="width: 36px;" alt="LAUNDRY">
+                                                </c:when>
+                                                <c:when test="${scheme.icon =='FOOD'}">
+                                                    <img src="/resources/img/reservations/rs-icon-3-3x.png" style="width: 36px;" alt="FOOD">
+                                                </c:when>
+                                                <c:when test="${scheme.icon =='CARWASH'}">
+                                                    <img src="/resources/img/reservations/rs-icon-4-3x.png" style="width: 36px;" alt="CARWASH">
+                                                </c:when>
+                                            </c:choose>
+                                        </td>
                                         <td>${scheme.summary}</td>
                                         <td class="text-center">
                                                 ${scheme.startDt}
                                         </td>
                                         <td class="text-center">
                                                 ${scheme.endDt}
-                                        </td>ㄴ
+                                        </td>
                                         <td class="text-center">
-                                            <a href="/admin/reservation-schemes/edit.do?idx=${scheme.idx}&cmplxIdx=${scheme.cmplxIdx}&parentIdx=${scheme.parentIdx}" class="btn btn-xs btn-white">보기/수정</a>
+                                            <a href="/admin/reservation-schemes/edit.do?idx=${scheme.idx}&cmplxIdx=${complexIdx}" class="btn btn-xs btn-white">
+                                                <i class="fa fa-pencil"></i> 수정
+                                            </a>
                                         </td>
                                         <td class="text-center">
                                             <form action="/admin/reservation-schemes/delete.do" method="post">
                                                 <input type="hidden" name="${ _csrf.parameterName }" value="${ _csrf.token }" >
                                                 <input type="hidden" name="idx" value="${scheme.idx}">
-                                                <button class="btn btn-xs btn-danger">삭제</button>
+                                                <button class="btn btn-xs btn-danger">
+                                                    <i class="fa fa-trash"></i> 삭제
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
                                 </c:forEach>
                                 </tbody>
                             </table>
-                            <div class="text-right">
-                                <a href="/admin/reservation-schemes/create.do?cmplxIdx=${group.cmplxIdx}&parentIdx=${group.idx}" class="btn btn-primary">예약 추가</a>
-                            </div>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <button class="btn btn-white" role="button" onclick="history.back()">뒤로 가기</button>
+                    </div>
+
                 </div>
             </div>
         </div>
     </tiles:putAttribute>
     <tiles:putAttribute name="js">
+        <style type="text/css">
+            .cl-reservation-table th,
+            .cl-reservation-table td {
+                vertical-align: middle !important;
+            }
+        </style>
         <script>
             $( function() {
                 $( '.type-group' ).hide();

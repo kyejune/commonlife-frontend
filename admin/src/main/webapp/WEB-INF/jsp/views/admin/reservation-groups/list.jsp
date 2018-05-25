@@ -121,6 +121,8 @@
                                                             <li data-value="${scheme.idx}"><a href="/admin/reservation-schemes/edit.do?idx=${scheme.idx}&cmplxIdx=${group.cmplxIdx}">${scheme.title}</a></li>
                                                         </c:if>
                                                     </c:forEach>
+                                                    <li class="divider"></li>
+                                                    <li><a href="/admin/reservation-groups/show.do?idx=${group.idx}">전체 보기</a></li>
                                                 </ul>
                                             </div>
                                         </td>
@@ -330,7 +332,7 @@
             $( '.cl-res-group__res-scheme-select' ).each( function( index, element ) {
                 var $element = $( element );
                 var lengthHolder = $element.find( 'span.length' );
-                lengthHolder.text( $element.find( 'li' ).length );
+                lengthHolder.text( $element.find( 'li[data-value]' ).length );
             } );
         } );
     </script>
