@@ -54,7 +54,7 @@
 
                     <div class="ibox-content" style="">
                         <div class="row">
-                            <table class="table table-striped">
+                            <table class="table table-striped cl-admin-user-table">
                                 <thead>
                                     <tr>
                                         <th>
@@ -64,9 +64,9 @@
                                             </c:choose>
                                         </th>
                                         <th>이름</th>
-                                        <th>등록일</th>
                                         <th>동/호수</th>
                                         <th>이메일 주소</th>
+                                        <th> </th>
                                     </tr>
                                 </thead>
                                 <c:choose>
@@ -82,27 +82,52 @@
                                         <c:forEach var="vo" items="${userList}" varStatus="status">
                                             <tr>
                                                 <td>
-                                                    <p>${vo.cmplxNm}
+                                                    <span>${vo.cmplxNm}
                                                     <c:if test="${userType eq 'user'}">
                                                     <br><span class="font-bold">${vo.headNm}</span> 세대
                                                     </c:if>
-                                                    </p>
+                                                    <c:if test="${!userType.equals( 'user' )}">
+                                                        <br><span class="font-bold">세대주</span>
+                                                    </c:if>
+                                                    </span>
                                                 </td>
                                                 <td>
+                                                    <span style="font-weight: bold; font-size: 1.4em;">
                                                     <c:choose>
                                                         <c:when test="${userType eq 'user'}">${vo.userNm} (${vo.userId})</c:when>
                                                         <c:otherwise>${vo.headNm}</c:otherwise>
                                                     </c:choose>
-                                                </td>
-                                                <td>
-                                                    <fmt:parseDate value="${vo.regDt}" pattern="yyyy-MM-dd" var="sysDt"/>
-                                                    <fmt:formatDate value="${sysDt}" pattern="yyyy.MM.dd"/>
+                                                    </span>
+                                                    <br>
+                                                    <small>
+                                                        <c:if test="${vo.regDt != null}">Created </c:if>
+                                                        <fmt:parseDate value="${vo.regDt}" pattern="yyyy-MM-dd" var="sysDt"/>
+                                                        <fmt:formatDate value="${sysDt}" pattern="yyyy.MM.dd"/>
+                                                    </small>
                                                 </td>
                                                 <td>
                                                            ${vo.dong}동 ${vo.ho}호
                                                 </td>
                                                 <td>
-                                                    ${vo.email}
+                                                    <c:if test="${vo.email == null}">
+                                                        <button class="btn btn-white btn-xs">
+                                                            <i class="fa fa-envelope-o"></i>
+                                                            이메일 없음
+                                                        </button>
+                                                    </c:if>
+                                                    <c:if test="${vo.email != null}">
+                                                        <button class="btn btn-primary btn-xs" data-email="${vo.email}" title="${vo.email}">
+                                                            <i class="fa fa-envelope"></i>
+                                                            이메일 보내기
+                                                        </button>
+                                                    </c:if>
+
+                                                </td>
+                                                <td>
+                                                    <%--<button class="btn btn-xs btn-white">--%>
+                                                        <%--<i class="fa fa-id-badge"></i>--%>
+                                                        <%--정보보기--%>
+                                                    <%--</button>--%>
                                                 </td>
                                             </tr>
                                         </c:forEach>
@@ -214,6 +239,12 @@
     </div>
 </tiles:putAttribute>
 <tiles:putAttribute name="js">
+    <style type="text/css">
+        .cl-admin-user-table th,
+        .cl-admin-user-table td {
+            vertical-align: middle !important;
+        }
+    </style>
     <script type="text/javascript">
         $(function () {
             $("#left_user").addClass("active");
