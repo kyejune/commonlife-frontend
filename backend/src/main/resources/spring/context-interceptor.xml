@@ -30,6 +30,7 @@
             <mvc:mapping path="/users/myComplexGroup" />
             <mvc:mapping path="/users/debug/authUserInfo" />
             <mvc:mapping path="/imageStore/**" />
+            <mvc:mapping path="/iot/**" />
             <mvc:mapping path="/info/**" />
             <mvc:mapping path="/posts/**" />
             <mvc:mapping path="/postFiles/**" />

@@ -6,6 +6,8 @@ import com.kolon.comlife.iot.model.*;
 import com.kolon.comlife.iot.service.IotControlService;
 import com.kolon.comlife.iot.service.IotInfoService;
 import com.kolon.common.http.HttpRequestFailedException;
+import com.kolon.common.model.AuthUserInfo;
+import com.kolon.common.servlet.AuthUserInfoUtil;
 import com.kolon.common.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +55,24 @@ public class IotController {
         return ResponseEntity.status(HttpStatus.OK).body( result );
     }
 
+
+    /**
+     * 토큰에서 가져온 사용자 정보와 Path로 넘어온 Variable을 비교함
+     * 값이 차이가 있는 경우, IotInvalidPathVariableException 예외 반환
+     */
+    private void validateAuthUserWithPathInfo(AuthUserInfo authUserInfo,
+                                              int          cmplxId,
+                                              Integer      homeId )
+            throws IotInvalidPathVariableException {
+
+        if( cmplxId != authUserInfo.getCmplxId() ) {
+            throw new IotInvalidPathVariableException("현장 정보가 사용자 인증정보와 일치하지 않습니다.");
+        }
+        if( homeId != authUserInfo.getHomeId() ) {
+            throw new IotInvalidPathVariableException("세대 정보가 사용자 인증정보와 일치하지 않습니다.");
+        }
+    }
+
     /**
      * 1. '모드'의 전체 목록 가져오기 at Dashboard
      */
@@ -60,13 +80,23 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/modes",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModesList(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        AuthUserInfo currUser;
         IotModeOrAutomationListInfo modesList;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             modesList = iotInfoService.getModeList(complexId, homeId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -88,13 +118,23 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/modes/active",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getActiveMode(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        AuthUserInfo currUser;
         IotModeOrAutomationListInfo activeModeList;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             activeModeList = iotInfoService.getActiveMode(complexId, homeId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -117,6 +157,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotButtonList(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
@@ -149,6 +190,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotButton(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("buttonId")  int buttonId )
@@ -182,6 +224,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}/action",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity executeMyIotButtonPrimeFunction(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("buttonId")  int buttonId )
@@ -215,6 +258,7 @@ public class IotController {
             path = "/complexes/{complexId}/valueInfo/weather",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map>  getValueInfoOfWeather(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId )
     {
         Map weatherInfo = new HashMap();
@@ -244,7 +288,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}/action",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity  executeDevicePrimeFunction(
-            HttpServletRequest request,
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("deviceId")  int deviceId )
@@ -296,6 +340,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/rooms",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getRoomList(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
@@ -324,6 +369,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/rooms/{roomId}/devices",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getRoomsWithDevicesList(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("roomId")    int roomId)
@@ -353,6 +399,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/devices/{deviceId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceInfo(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("deviceId")  int deviceId )
@@ -382,6 +429,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/deviceCategory",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceGroupList(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
@@ -410,6 +458,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/deviceCategory/{categoryCode}/devices",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getDeviceListByDeviceGroup(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("categoryCode")    String categoryCode)
@@ -475,6 +524,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/modes/{mode}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModeInfo(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("mode")    String mode )
@@ -523,6 +573,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/modes/{mode}/switchTo",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity switchToMode(
+            HttpServletRequest                request,
             @PathVariable("complexId") int    complexId,
             @PathVariable("homeId")    int    homeId,
             @PathVariable("mode")      String mode )
@@ -554,6 +605,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/modes/turnOff",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity turnOffMode(
+            HttpServletRequest                request,
             @PathVariable("complexId") int    complexId,
             @PathVariable("homeId")    int    homeId)
     {
@@ -679,6 +731,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/modes/{mode}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateModeInfo(
+            HttpServletRequest                             request,
             @PathVariable("complexId") int                 complexId,
             @PathVariable("homeId")    int                 homeId,
             @PathVariable("mode")      String              mode,
@@ -739,6 +792,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotButtonListAvailable(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
@@ -772,6 +826,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/automation/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotAutomationListAvailable(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
@@ -805,6 +860,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/rooms/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotRoomsListAvailable(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
@@ -837,6 +893,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/rooms/{roomId}/devices/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotDevicesListByRoomAvailable(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("roomId")    int roomId)
@@ -870,6 +927,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/deviceCategory/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotDeviceCategoryListAvailable(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
@@ -902,6 +960,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/deviceCategory/{categoryCode}/devices/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotDevicesListByCategoryAvailable(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("categoryCode") String categoryCode)
@@ -937,6 +996,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/valueInfo/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getMyIotValueInfoListAvailable(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
@@ -971,6 +1031,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity addMyIotButton(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @RequestBody               Map<String, List> body)
@@ -1014,6 +1075,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateMyIotButtonOrder(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @RequestBody               Map<String, List> body)
@@ -1059,6 +1121,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/myiot/buttons/{buttonId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteMyIotButton(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("buttonId")  int buttonId)
@@ -1094,6 +1157,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAutomation(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
@@ -1123,6 +1187,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity createAutomation(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @RequestBody               Map<String, Object> body)
@@ -1190,6 +1255,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity updateAutomation(
+            HttpServletRequest                request,
             @PathVariable("complexId")    int complexId,
             @PathVariable("homeId")       int homeId,
             @PathVariable("automationId") int automationId,
@@ -1230,6 +1296,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/conditions",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModeOrAutomationConditions(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
@@ -1259,6 +1326,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/conditions",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotSensorListInfo> updateModeOrAutomationConditions(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId,
@@ -1276,6 +1344,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/actors",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModeOrAutomationActors(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
@@ -1305,6 +1374,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/actors/{deviceId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModeOrAutomationActorDetail(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId,
@@ -1336,6 +1406,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/actors",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<IotDeviceInfo> updateModeOrAutomationActors(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId,
@@ -1353,6 +1424,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EnergyInfo> getEnergyUsage(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("energyType") String  energyType)
@@ -1369,22 +1441,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EnergyInfo> createEnergyUsageExceedAlarm(
-            @PathVariable("complexId") int complexId,
-            @PathVariable("homeId")    int homeId,
-            @PathVariable("energyType") String  energyType)
-    {
-        EnergyInfo energyInfo = new EnergyInfo();
-
-        return ResponseEntity.status(HttpStatus.OK).body( energyInfo );
-    }
-
-    /**
-     * 37. 에너지사용량 초과 알람 삭제하기 at MyIOT - 에너지사용량 상세 화면
-     */
-    @DeleteMapping(
-            path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EnergyInfo> deleteEnergyUsageExceedAlarm(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("energyType") String  energyType)
@@ -1401,6 +1458,24 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EnergyInfo> setEnergyUsageExceedAlarm(
+            HttpServletRequest             request,
+            @PathVariable("complexId") int complexId,
+            @PathVariable("homeId")    int homeId,
+            @PathVariable("energyType") String  energyType)
+    {
+        EnergyInfo energyInfo = new EnergyInfo();
+
+        return ResponseEntity.status(HttpStatus.OK).body( energyInfo );
+    }
+
+    /**
+     * 37. 에너지사용량 초과 알람 삭제하기 at MyIOT - 에너지사용량 상세 화면
+     */
+    @DeleteMapping(
+            path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EnergyInfo> deleteEnergyUsageExceedAlarm(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("energyType") String  energyType)
@@ -1417,6 +1492,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/conditions/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModeOrAutomationConditionsAvailable(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
@@ -1447,6 +1523,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/actors/available",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModeOrAutomationActorsAvailable(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
@@ -1509,6 +1586,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity deleteAutomation(
+            HttpServletRequest                request,
             @PathVariable("complexId")    int complexId,
             @PathVariable("homeId")       int homeId,
             @PathVariable("automationId") int automationId)
@@ -1543,6 +1621,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getAutomationAll(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId)
     {
@@ -1571,6 +1650,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/conditions",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModeOrAutomationAllConditions(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId)
     {
@@ -1600,6 +1680,7 @@ public class IotController {
             path = "/complexes/{complexId}/homes/{homeId}/automation/actors",
             produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity getModeOrAutomationAllActors(
+            HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId)
     {
