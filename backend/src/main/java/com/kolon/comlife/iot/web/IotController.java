@@ -31,7 +31,7 @@ import java.util.Map;
 @RequestMapping("/iot")
 public class IotController {
     private static final Logger logger = LoggerFactory.getLogger(IotController.class);
-    
+
 
     @Autowired
     private IotControlService iotControlService;

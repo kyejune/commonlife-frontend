@@ -210,6 +210,11 @@ public class UserController {
         result.put("cmplxNm", cmplxInfo.getClCmplxNm());
         result.put("cmplxAddr", cmplxInfo.getClCmplxAddr());
 
+        // todo: 하단 tab(Reservation 및 SMART HOME 사용을 위한 값)
+        // 추후 업데이트 필요
+        result.put("reservationUseYn", "Y");
+        result.put("iotUseYn", "Y");
+
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }
 

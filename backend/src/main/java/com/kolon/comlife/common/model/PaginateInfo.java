@@ -7,6 +7,7 @@ public class PaginateInfo extends SimpleMsgInfo {
     private double totalPages;
     private int perPage;
     private List data;
+    private String feedWriteAllowYn;
 
     public int getCurrentPage() {
         return currentPage;
@@ -38,5 +39,13 @@ public class PaginateInfo extends SimpleMsgInfo {
 
     public void setData(List data) {
         this.data = data;
+    }
+
+    public String getFeedWriteAllowYn() {
+        return feedWriteAllowYn;
+    }
+
+    public void setFeedWriteAllowYn(String feedWriteAllowYn) {
+        this.feedWriteAllowYn = feedWriteAllowYn;
     }
 }
