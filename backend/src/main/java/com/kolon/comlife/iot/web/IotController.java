@@ -31,9 +31,7 @@ import java.util.Map;
 @RequestMapping("/iot")
 public class IotController {
     private static final Logger logger = LoggerFactory.getLogger(IotController.class);
-
-    // todo: 사용자 아이디를 토큰에서 받아올 수 있도록 변경
-    private static final String TEST_USER_ID = "yunakim";
+    
 
     @Autowired
     private IotControlService iotControlService;
@@ -53,6 +51,20 @@ public class IotController {
         result.put("msg", "ok!");
 
         return ResponseEntity.status(HttpStatus.OK).body( result );
+    }
+
+
+    /**
+     * 토큰에서 가져온 사용자 정보와 Path로 넘어온 Variable을 비교함
+     * 값이 차이가 있는 경우, IotInvalidPathVariableException 예외 반환
+     */
+    private void validateAuthUserWithPathInfoCmplxId(AuthUserInfo authUserInfo,
+                                                     int          cmplxId)
+            throws IotInvalidPathVariableException {
+
+        if( cmplxId != authUserInfo.getCmplxId() ) {
+            throw new IotInvalidPathVariableException("현장 정보가 사용자 인증정보와 일치하지 않습니다.");
+        }
     }
 
 
@@ -161,14 +173,21 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        AuthUserInfo currUser;
         IotButtonListInfo buttonList;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             buttonList = iotInfoService.getMyIotButtonList(complexId, homeId, userId, true);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -195,14 +214,21 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("buttonId")  int buttonId )
     {
+        AuthUserInfo      currUser;
         IotButtonListInfo buttonList;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             buttonList = iotInfoService.getMyIotButtonListById(complexId, homeId, userId, buttonId, true);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -229,14 +255,21 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("buttonId")  int buttonId )
     {
+        AuthUserInfo      currUser;
         IotButtonListInfo buttonInfo;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             buttonInfo = iotControlService.executeMyIotButtonPrimeFunction(complexId, homeId, userId, buttonId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler(e);
@@ -257,16 +290,28 @@ public class IotController {
     @GetMapping(
             path = "/complexes/{complexId}/valueInfo/weather",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map>  getValueInfoOfWeather(
+    public ResponseEntity getValueInfoOfWeather(
             HttpServletRequest             request,
             @PathVariable("complexId") int complexId )
     {
+        AuthUserInfo currUser;
         Map weatherInfo = new HashMap();
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
+        try {
+            validateAuthUserWithPathInfoCmplxId( currUser, complexId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( weatherInfo );
     }
 
-//   todo: 에너지사용량은 가치정보가 아닌듯.
+//   todo: 에너지사용량은 가치정보로 취급 안함
 //    /**
 //     * 7. 에너지 사용량 정보 가져오기 at Dashboard Button
 //     */
@@ -293,10 +338,13 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("deviceId")  int deviceId )
     {
+        AuthUserInfo        currUser;
         IotDeviceControlMsg ctrlInfo = new IotDeviceControlMsg();
-        IotDeviceListInfo        deviceInfo;
-        String protcKey;
-        Object value;
+        IotDeviceListInfo   deviceInfo;
+        String              protcKey;
+        Object              value;
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
 
         protcKey = request.getParameter("protcKey");
         if(protcKey == null || protcKey.equals("")) {
@@ -318,7 +366,13 @@ public class IotController {
         ctrlInfo.setValue(value);
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             deviceInfo = iotControlService.executeDeviceFunction(complexId, homeId, deviceId, ctrlInfo);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -344,10 +398,19 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        AuthUserInfo    currUser;
         IotRoomListInfo roomList;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             roomList = iotInfoService.getRoomList(complexId, homeId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -374,10 +437,19 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("roomId")    int roomId)
     {
+        AuthUserInfo      currUser;
         IotDeviceListInfo deviceListInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             deviceListInfo = iotInfoService.getRoomsWithDevicesList(complexId, homeId, roomId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -404,10 +476,19 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("deviceId")  int deviceId )
     {
+        AuthUserInfo      currUser;
         IotDeviceListInfo deviceListInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             deviceListInfo = iotInfoService.getDeviceInfo(complexId, homeId, deviceId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -433,10 +514,19 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        AuthUserInfo      currUser;
         IotDeviceGroupListInfo deviceGroupListInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             deviceGroupListInfo = iotInfoService.getDeviceGroupList(complexId, homeId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -463,10 +553,19 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("categoryCode")    String categoryCode)
     {
+        AuthUserInfo      currUser;
         IotDeviceListInfo deviceListInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             deviceListInfo = iotInfoService.getDeviceListByDeviceGroup(complexId, homeId, categoryCode);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -492,15 +591,24 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
-        int pageNo;
-        int pageRow;
+        AuthUserInfo      currUser;
+        int               pageNo;
+        int               pageRow;
         IotDeviceListInfo deviceListInfo;
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
 
         pageNo = StringUtil.parseInt(request.getParameter("pageNo"), 1);
         pageRow = StringUtil.parseInt(request.getParameter("pageRow"), 10);
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             deviceListInfo = iotInfoService.getDevicesUsageHistory(complexId, homeId, pageNo, pageRow);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -529,11 +637,15 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("mode")    String mode )
     {
-        IotModeAutomationInfo modeInfo;
+        AuthUserInfo                currUser;
+        IotModeAutomationInfo       modeInfo;
         IotModeOrAutomationListInfo modeList;
-        int                   automationId = -1;
+        int                         automationId = -1;
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             modeList = iotInfoService.getModeList(complexId, homeId);
             for( Map e : modeList.getData()) {
                 if( e.get("mode").equals(mode) ) {
@@ -552,6 +664,11 @@ public class IotController {
             }
 
             modeInfo = iotInfoService.getModeOrAutomationDetail(complexId, homeId, automationId, true);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -578,10 +695,19 @@ public class IotController {
             @PathVariable("homeId")    int    homeId,
             @PathVariable("mode")      String mode )
     {
+        AuthUserInfo                currUser;
         IotModeOrAutomationListInfo changedMode;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             changedMode = iotControlService.switchToMode( complexId, homeId, mode );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -609,10 +735,19 @@ public class IotController {
             @PathVariable("complexId") int    complexId,
             @PathVariable("homeId")    int    homeId)
     {
+        AuthUserInfo                currUser;
         IotModeOrAutomationListInfo offMode;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             offMode = iotControlService.turnOffMode( complexId, homeId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             e.printStackTrace();
             try {
@@ -650,12 +785,15 @@ public class IotController {
             @PathVariable("homeId")    int    homeId,
             @RequestBody               List<Map<String, Object>> body)
     {
+        AuthUserInfo                currUser;
         IotModeOrAutomationListInfo modeListInfo = new IotModeOrAutomationListInfo();
 
         logger.debug(">>> " + body.toString());
         logger.debug(">>> " + body.size());
         logger.debug(">>> " + body.get(0).get("seqNo"));
         logger.debug(">>> " + body.get(0).get("sortOrder"));
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
 
         // validation
         if( body.size() < 1 ) {
@@ -681,7 +819,13 @@ public class IotController {
         modeListInfo.setData(body);
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             modeListInfo = iotInfoService.updateModesOrder(complexId, homeId, modeListInfo);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -737,18 +881,21 @@ public class IotController {
             @PathVariable("mode")      String              mode,
             @RequestBody               Map<String, Object> body)
     {
-        IotModeAutomationInfo   modeInfo;
+        AuthUserInfo                currUser;
+        IotModeAutomationInfo       modeInfo;
         IotModeOrAutomationListInfo modeList;
-        IotModeAutomationIdInfo updateModeInfo;
-        int                     modeAutomationId = -1;
-        String                  userId;
+        IotModeAutomationIdInfo     updateModeInfo;
+        int                         modeAutomationId = -1;
+        String                      userId;
 
-        // todo : authInfo에서 가져올 것
-        userId = TEST_USER_ID;
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         // Mode에서 scnaId 가져오기
         try {
-            //
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
+
             modeInfo = this.convertModeAutomationRequestBody( body );
 
             modeList = iotInfoService.getModeList(complexId, homeId);
@@ -770,6 +917,11 @@ public class IotController {
             }
 
             updateModeInfo = iotInfoService.updateAutomation(complexId, homeId, modeAutomationId, userId, modeInfo, true);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -796,14 +948,21 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        AuthUserInfo      currUser;
         IotButtonListInfo buttonsList;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             buttonsList = iotInfoService.getMyIotButtonListAvailable(complexId, homeId, userId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -830,14 +989,21 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        AuthUserInfo      currUser;
         IotButtonListInfo buttonsList;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             buttonsList = iotInfoService.getMyIotAutomationListAvailable(complexId, homeId, userId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -864,14 +1030,21 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
-        IotRoomListInfo roomsList;
+        AuthUserInfo      currUser;
+        IotRoomListInfo   roomsList;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = "baek";
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             roomsList = iotInfoService.getMyIotRoomsListAvailable(complexId, homeId, userId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -898,14 +1071,21 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("roomId")    int roomId)
     {
+        AuthUserInfo      currUser;
         IotButtonListInfo buttonsList;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             buttonsList = iotInfoService.getMyIotDevicesListByRoomAvailable(complexId, homeId, userId, roomId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -931,14 +1111,22 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        AuthUserInfo           currUser;
         IotDeviceGroupListInfo deviceGroupList;
-        String            userId;
+        String                 userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             deviceGroupList = iotInfoService.getMyIotDeviceCategoryListAvailable(complexId, homeId, userId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -965,14 +1153,21 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("categoryCode") String categoryCode)
     {
+        AuthUserInfo      currUser;
         IotButtonListInfo buttonsList;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             buttonsList = iotInfoService.getMyIotDevicesListByCategoryAvailable(complexId, homeId, userId, categoryCode );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1000,14 +1195,21 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId )
     {
+        AuthUserInfo      currUser;
         IotButtonListInfo buttonsList;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             buttonsList = iotInfoService.getMyIotValueInfoListAvailable(complexId, homeId, userId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1037,13 +1239,15 @@ public class IotController {
             @RequestBody               Map<String, List> body)
 
     {
+        AuthUserInfo              currUser;
         IotButtonListInfo         addedButtonList = null;
         String                    userId;
         String                    myIotId;
         List<Map<String, Object>> myIotIdList;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();;
 
         myIotIdList = (List<Map<String, Object>>)body.get("data");
         if( myIotIdList == null ) {
@@ -1053,7 +1257,13 @@ public class IotController {
         }
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             addedButtonList = iotInfoService.addMyIotButtonByMyIotID(complexId, homeId, userId, myIotIdList);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1081,13 +1291,14 @@ public class IotController {
             @RequestBody               Map<String, List> body)
 
     {
+        AuthUserInfo              currUser;
         IotButtonListInfo         currentButtonList = null;
         String                    userId;
         String                    myIotId;
         List<Map<String, Object>> myIotIdOrderList;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         myIotIdOrderList = (List<Map<String, Object>>)body.get("data");
         if( myIotIdOrderList == null ) {
@@ -1097,7 +1308,13 @@ public class IotController {
         }
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             currentButtonList = iotInfoService.updateMyIotButtonOrder(complexId, homeId, userId, myIotIdOrderList);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1127,14 +1344,21 @@ public class IotController {
             @PathVariable("buttonId")  int buttonId)
 
     {
+        AuthUserInfo      currUser;
         IotButtonListInfo buttonList;
         String            userId;
 
-        // todo: userId is retrieved from the user's token.
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             buttonList = iotInfoService.deleteMyIotButtonListById(complexId, homeId, userId, buttonId, true);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1162,10 +1386,19 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
     {
+        AuthUserInfo          currUser;
         IotModeAutomationInfo automationInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             automationInfo = iotInfoService.getModeOrAutomationDetail(complexId, homeId, automationId, false);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1192,12 +1425,13 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @RequestBody               Map<String, Object> body)
     {
-        IotModeAutomationInfo automationInfo = new IotModeAutomationInfo();
+        AuthUserInfo            currUser;
+        IotModeAutomationInfo   automationInfo = new IotModeAutomationInfo();
         IotModeAutomationIdInfo createdAutomationInfo;
         String userId;
 
-        // todo: autoInfo 값에서 가져올 것
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         body.get("scnaIfAply");
         body.get("scnaIfSpc");
@@ -1229,7 +1463,13 @@ public class IotController {
         }
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             createdAutomationInfo = iotInfoService.createAutomation(complexId, homeId, userId, automationInfo);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch ( IotInfoGeneralException e ) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -1261,16 +1501,24 @@ public class IotController {
             @PathVariable("automationId") int automationId,
             @RequestBody                  Map<String, Object> body)
     {
-        IotModeAutomationInfo automationInfo;
+        AuthUserInfo            currUser;
+        IotModeAutomationInfo   automationInfo;
         IotModeAutomationIdInfo updateAutomationInfo;
-        String                userId;
+        String                  userId;
 
-        // todo : authInfo에서 가져올 것
-        userId = TEST_USER_ID;
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
+
             automationInfo = this.convertModeAutomationRequestBody( body );
             updateAutomationInfo = iotInfoService.updateAutomation(complexId, homeId, automationId, userId, automationInfo, false);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch ( IotInfoGeneralException e ) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -1301,10 +1549,19 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
     {
+        AuthUserInfo          currUser;
         IotModeAutomationInfo conditionInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             conditionInfo = iotInfoService.getModeOrAutomationConditions(complexId, homeId, automationId, false);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1325,14 +1582,25 @@ public class IotController {
     @PutMapping(
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/conditions",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotSensorListInfo> updateModeOrAutomationConditions(
+    public ResponseEntity updateModeOrAutomationConditions(
             HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId,
             @PathVariable("sensorId") int sensorId)
     {
+        AuthUserInfo      currUser;
         IotSensorListInfo sensorsList = new IotSensorListInfo();
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        try {
+            validateAuthUserWithPathInfo(currUser, complexId, homeId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( sensorsList );
     }
@@ -1349,10 +1617,19 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
     {
+        AuthUserInfo          currUser;
         IotModeAutomationInfo actorsInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             actorsInfo = iotInfoService.getModeOrAutomationActors(complexId, homeId, automationId, false);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1380,10 +1657,19 @@ public class IotController {
             @PathVariable("automationId") int automationId,
             @PathVariable("deviceId") int deviceId)
     {
+        AuthUserInfo      currUser;
         IotDeviceListInfo actorDetailInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             actorDetailInfo = iotInfoService.getModeOrAutomationActorDetail(complexId, homeId, automationId, deviceId, false);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1405,14 +1691,25 @@ public class IotController {
     @PutMapping(
             path = "/complexes/{complexId}/homes/{homeId}/automation/{automationId}/actors",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<IotDeviceInfo> updateModeOrAutomationActors(
+    public ResponseEntity updateModeOrAutomationActors(
             HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId,
             @PathVariable("automationId") int deviceId )
     {
+        AuthUserInfo  currUser;
         IotDeviceInfo deviceInfo = new IotDeviceInfo();
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        try {
+            validateAuthUserWithPathInfo(currUser, complexId, homeId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( deviceInfo );
     }
@@ -1423,13 +1720,24 @@ public class IotController {
     @GetMapping(
             path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EnergyInfo> getEnergyUsage(
+    public ResponseEntity getEnergyUsage(
             HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("energyType") String  energyType)
     {
-        EnergyInfo energyInfo = new EnergyInfo();
+        AuthUserInfo currUser;
+        EnergyInfo   energyInfo = new EnergyInfo();
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        try {
+            validateAuthUserWithPathInfo(currUser, complexId, homeId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( energyInfo );
     }
@@ -1440,13 +1748,24 @@ public class IotController {
     @PostMapping(
             path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EnergyInfo> createEnergyUsageExceedAlarm(
+    public ResponseEntity createEnergyUsageExceedAlarm(
             HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("energyType") String  energyType)
     {
-        EnergyInfo energyInfo = new EnergyInfo();
+        AuthUserInfo currUser;
+        EnergyInfo   energyInfo = new EnergyInfo();
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( energyInfo );
     }
@@ -1457,13 +1776,24 @@ public class IotController {
     @PutMapping(
             path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EnergyInfo> setEnergyUsageExceedAlarm(
+    public ResponseEntity setEnergyUsageExceedAlarm(
             HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("energyType") String  energyType)
     {
-        EnergyInfo energyInfo = new EnergyInfo();
+        AuthUserInfo currUser;
+        EnergyInfo   energyInfo = new EnergyInfo();
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")");
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( energyInfo );
     }
@@ -1474,13 +1804,24 @@ public class IotController {
     @DeleteMapping(
             path = "/complexes/{complexId}/homes/{homeId}/energy/{energyType}/exceedAlarm",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EnergyInfo> deleteEnergyUsageExceedAlarm(
+    public ResponseEntity deleteEnergyUsageExceedAlarm(
             HttpServletRequest             request,
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId,
             @PathVariable("energyType") String  energyType)
     {
-        EnergyInfo energyInfo = new EnergyInfo();
+        AuthUserInfo  currUser;
+        EnergyInfo    energyInfo = new EnergyInfo();
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
+        }
 
         return ResponseEntity.status(HttpStatus.OK).body( energyInfo );
     }
@@ -1497,10 +1838,19 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
     {
+        AuthUserInfo          currUser;
         IotModeAutomationInfo actorsInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             actorsInfo = iotInfoService.getModeOrAutomationConditionsAvailable(complexId, homeId, automationId, false);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1528,10 +1878,19 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("automationId") int automationId )
     {
+        AuthUserInfo          currUser;
         IotModeAutomationInfo actorsInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            currUser = AuthUserInfoUtil.getAuthUserInfo(request);
             actorsInfo = iotInfoService.getModeOrAutomationActorsAvailable(complexId, homeId, automationId, false);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1559,12 +1918,21 @@ public class IotController {
             @PathVariable("homeId")    int homeId,
             @PathVariable("deviceId")  int deviceId )
     {
+        AuthUserInfo      currUser;
         IotDeviceListInfo deviceInfo;
         String description = request.getParameter("value");
         logger.debug(">>> Param.value: " + description);
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            currUser = AuthUserInfoUtil.getAuthUserInfo(request);
             deviceInfo = iotInfoService.updateDeviceDesc(complexId, homeId, deviceId, description);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1591,11 +1959,21 @@ public class IotController {
             @PathVariable("homeId")       int homeId,
             @PathVariable("automationId") int automationId)
     {
+        AuthUserInfo            currUser;
         IotModeAutomationIdInfo updateAutomationInfo;
-        String                userId = "baek"; // todo : authInfo에서 가져올 것
+        String                  userId;
+
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+        userId = currUser.getUserId();
 
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             updateAutomationInfo = iotInfoService.deleteAutomation(complexId, homeId, automationId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch ( IotInfoGeneralException e ) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -1625,10 +2003,19 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId)
     {
+        AuthUserInfo                currUser;
         IotModeOrAutomationListInfo automationList;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             automationList = iotInfoService.getAutomationAll(complexId, homeId);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1654,10 +2041,19 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId)
     {
+        AuthUserInfo          currUser;
         IotModeAutomationInfo conditionInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             conditionInfo = iotInfoService.getModeOrAutomationAllConditions(complexId, homeId, false);
+        } catch( IotInvalidPathVariableException e ) {
+            logger.error("토큰 인증정보와 path 정보에 문제가 있습니다. 사용자정보(" + currUser.getCmplxId() + "/" + currUser.getHomeId() + ")" );
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new SimpleErrorInfo(e.getMessage()));
         } catch( Exception e ) {
             try {
                 return this.commonExceptionHandler( e );
@@ -1684,9 +2080,13 @@ public class IotController {
             @PathVariable("complexId") int complexId,
             @PathVariable("homeId")    int homeId)
     {
+        AuthUserInfo          currUser;
         IotModeAutomationInfo conditionInfo;
 
+        currUser = AuthUserInfoUtil.getAuthUserInfo(request);
+
         try {
+            validateAuthUserWithPathInfo( currUser, complexId, homeId );
             conditionInfo = iotInfoService.getModeOrAutomationAllActors(complexId, homeId, false);
         } catch( Exception e ) {
             try {
