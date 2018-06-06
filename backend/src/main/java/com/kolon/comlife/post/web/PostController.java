@@ -98,7 +98,76 @@ public class PostController {
 
         // todo: 해당 현장의 글쓰기 아이콘 표시 유/무 결정 - 테스트를 위한 dummy 값 추가
         paginateInfo.setFeedWriteAllowYn("Y");
-        
+
+        return ResponseEntity.status( HttpStatus.OK ).body( paginateInfo );
+    }
+
+    /**
+     * getPostListInJson() 메소드와 함께 feed list를 반환 함
+     * 단, pageNum은 getPostListInJson()에서의 현재 페이지가 아닌, 타겟 페이지 임
+     *    가장 최신 피드에서 부터 타켓 페이지까지의 모든 피드를 반환 함
+     */
+    @CrossOrigin
+    @GetMapping(
+            value = "/toPage/",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity getAllPostListToPageInJson(HttpServletRequest request) {
+        AuthUserInfo         currUser = AuthUserInfoUtil.getAuthUserInfo( request );
+        PaginateInfo         paginateInfo;
+        Map<String, Object>  postParams = new HashMap<>();
+        int                  cmplxId;
+        String               page;
+        int                  pageNum;
+
+        logger.debug(">>> currUser>CmplxId: " + currUser.getCmplxId());
+        logger.debug(">>> currUser>UserId: " + currUser.getUserId());
+        logger.debug(">>> currUser>UsrId: " + currUser.getUsrId());
+
+        try {
+            if (request.getParameter("cmplxId") != null) {
+                cmplxId = StringUtil.parseInt(request.getParameter("cmplxId"), currUser.getCmplxId());
+            } else {
+                cmplxId = currUser.getCmplxId();
+            }
+            page = request.getParameter("page");
+            pageNum = StringUtil.parseInt(page, 1);
+        } catch( NumberFormatException e ) {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body(new SimpleErrorInfo("잘못된 파라미터가 입력되었습니다. "));
+        }
+
+        String postType = request.getParameter("postType");
+        if( postType != null ) {
+            if( POST_TYPE_FEED.equals(postType) ||
+                    POST_TYPE_EVENT.equals(postType) ||
+                    POST_TYPE_NEWS.equals(postType)) {
+                postParams.put( "postType", postType );
+            } else {
+                return ResponseEntity
+                        .status( HttpStatus.BAD_REQUEST )
+                        .body(new SimpleErrorInfo("잘못된 postType 값이 입력되었습니다. "));
+            }
+        }
+
+        postParams.put( "limit", LIMIT_COUNT * pageNum);
+        postParams.put( "pageNum", Integer.valueOf(1) );
+        postParams.put( "cmplxId", Integer.valueOf(cmplxId) );
+        postParams.put( "usrId", currUser.getUsrId() );
+
+        // 포스트 목록 추출
+        try {
+            paginateInfo = postService.getPostWithLikeInfoList( postParams );
+        } catch( Exception e ) {
+            logger.error(e.getMessage());
+            return ResponseEntity
+                    .status( HttpStatus.SERVICE_UNAVAILABLE )
+                    .body( new SimpleErrorInfo("목록 가져오기를 실패했습니다."));
+        }
+
+        // todo: 해당 현장의 글쓰기 아이콘 표시 유/무 결정 - 테스트를 위한 dummy 값 추가
+        paginateInfo.setFeedWriteAllowYn("Y");
+
         return ResponseEntity.status( HttpStatus.OK ).body( paginateInfo );
     }
 
