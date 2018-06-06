@@ -45,15 +45,32 @@
 
     <!-- ADMIN -->
     <select id="selectUserCountByComplexId" parameterType="Map" resultType="Map">
+    <![CDATA[
         SELECT
           COUNT(*) AS USER_COUNT
         FROM
           USR_INFO
         WHERE
+--           (ISNULL(IN_DT) || IN_DT <= CURRENT_TIMESTAMP) AND
+--           (ISNULL(OUT_DT) || OUT_DT >= CURRENT_TIMESTAMP) AND
           CMPLX_ID = #{cmplxId}
         ;
+    ]]>
     </select>
 
+    <select id="selectHomeHeadCountByComplexId" parameterType="Map" resultType="Map">
+    <![CDATA[
+        SELECT
+          COUNT(*) AS HOME_HEAD_COUNT
+        FROM
+          HOME_HEAD_M
+        WHERE
+--           (ISNULL(START_DT) || START_DT <= CURRENT_TIMESTAMP) AND
+--           (ISNULL(END_DT) || END_DT >= CURRENT_TIMESTAMP) AND
+          CMPLX_ID = #{cmplxId}
+        ;
+    ]]>
+    </select>
 
     <select id="selectUserExtInfoByUsrId" parameterType="Map" resultType="UserExtInfo">
         SELECT

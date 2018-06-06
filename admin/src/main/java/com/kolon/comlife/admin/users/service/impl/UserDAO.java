@@ -29,6 +29,17 @@ public class UserDAO {
         return ((Long)result.get("USER_COUNT")).intValue();
     }
 
+    public int selectHomeHeadCountByComplexId(int cmplxId) {
+        Map params = new HashMap();
+        Map result;
+
+        params.put("cmplxId", cmplxId);
+
+        result = sqlSession.selectOne("User.selectHomeHeadCountByComplexId", params);
+
+        return ((Long)result.get("HOME_HEAD_COUNT")).intValue();
+    }
+
     public UserExtInfo selectUserExtInfoByUsrId( int usrId ) {
         Map params = new HashMap();
 

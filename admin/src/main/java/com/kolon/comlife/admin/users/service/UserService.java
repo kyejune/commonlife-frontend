@@ -14,6 +14,8 @@ public interface UserService {
     ////////////////// ADMIN ONLY //////////////////
     int getTotalUserCountByComplexId( int cmplxId ) throws UserGeneralException;
 
+    int getTotalHomeHeadCountByComplexId( int cmplxId ) throws UserGeneralException;
+
     UserExtInfo getUserExtInfoById(int usrId );
 
     ////////////////// BACKEND SHARED //////////////////

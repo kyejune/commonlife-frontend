@@ -98,6 +98,42 @@ public class ComplexServiceImpl implements ComplexService {
     }
 
     @Override
+    public void updateComplexIotUseYn(int cmplxId, boolean useYn, int adminIdx ) throws Exception {
+        int updateCount;
+
+        updateCount = complexDAO.updateComplexIotUseYn( cmplxId, useYn, adminIdx );
+        if( updateCount < 1 ) {
+            String errMsg = "업데이트 할 정보가 없습니다. 현장정보를 다시 한번 확인하세요.";
+            logger.error( errMsg );
+            throw new Exception( errMsg );
+        }
+    }
+
+    @Override
+    public void updateComplexReservationUseYn(int cmplxId, boolean useYn, int adminIdx ) throws Exception {
+        int updateCount;
+
+        updateCount = complexDAO.updateComplexReservationUseYn( cmplxId, useYn, adminIdx );
+        if( updateCount < 1 ) {
+            String errMsg = "업데이트 할 정보가 없습니다. 현장정보를 다시 한번 확인하세요.";
+            logger.error( errMsg );
+            throw new Exception( errMsg );
+        }
+    }
+
+    @Override
+    public void updateComplexFeedWriteAllowYn(int cmplxId, boolean allowYn, int adminIdx ) throws Exception {
+        int updateCount;
+
+        updateCount = complexDAO.updateComplexFeedWriteAllowYn( cmplxId, allowYn, adminIdx );
+        if( updateCount < 1 ) {
+            String errMsg = "업데이트 할 정보가 없습니다. 현장정보를 다시 한번 확인하세요.";
+            logger.error( errMsg );
+            throw new Exception( errMsg );
+        }
+    }
+
+    @Override
     public List<HashMap> selectComplexGroupType() {
         return complexDAO.selectComplexGroupType();
     }

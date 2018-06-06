@@ -69,7 +69,6 @@ public class ComplexDAO {
         return sqlSession.update("Complex.updateComplexExtAddr", param );
     }
 
-
     public int updateComplexExtMapSrc(int cmplxId, String clMapSrc, int adminIdx ) {
         Map param = new HashMap();
 
@@ -79,7 +78,32 @@ public class ComplexDAO {
         return sqlSession.update("Complex.updateComplexExtMapSrc", param );
     }
 
+    public int updateComplexIotUseYn(int cmplxId, boolean useYn, int adminIdx ) {
+        Map param = new HashMap();
 
+        param.put( "cmplxId", Integer.valueOf(cmplxId) );
+        param.put( "useYn", useYn ? "Y" : "N"  );
+        param.put( "adminIdx", Integer.valueOf(adminIdx) );
+        return sqlSession.update("Complex.updateComplexExtIotUseYn", param );
+    }
+
+    public int updateComplexReservationUseYn(int cmplxId, boolean useYn, int adminIdx ) {
+        Map param = new HashMap();
+
+        param.put( "cmplxId", Integer.valueOf(cmplxId) );
+        param.put( "useYn", useYn ? "Y" : "N"  );
+        param.put( "adminIdx", Integer.valueOf(adminIdx) );
+        return sqlSession.update("Complex.updateComplexExtReservationUseYn", param );
+    }
+
+    public int updateComplexFeedWriteAllowYn(int cmplxId, boolean allowYn, int adminIdx ) {
+        Map param = new HashMap();
+
+        param.put( "cmplxId", Integer.valueOf(cmplxId) );
+        param.put( "allowYn", allowYn ? "Y": "N" );
+        param.put( "adminIdx", Integer.valueOf(adminIdx) );
+        return sqlSession.update("Complex.updateComplexExtFeedWriteAllowYn", param );
+    }
 
     public List<HashMap> selectComplexGroupType() {
         return sqlSession.selectList("Complex.selectComplexGroupType");

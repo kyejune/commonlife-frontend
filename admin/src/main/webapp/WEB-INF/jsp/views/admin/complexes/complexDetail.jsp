@@ -120,8 +120,8 @@
                                             <label class="col-sm-3 control-label">
                                                 총 세대 수
                                             </label>
-                                            <div class="col-sm-9 media-">
-                                                <c:out value="${cmplexDetail.unitCnt}" escapeXml="false">N/A</c:out>
+                                            <div class="col-sm-9 form-control-static">
+                                                <c:out value="${totalHomeHeadCount}" escapeXml="false">N/A</c:out>
                                             </div>
                                         </div>
                                         <div class="hr-line-dashed"></div>
@@ -411,31 +411,39 @@
                                 <div class="form-horizontal">
                                     <div class="form-group">
                                         <label class="col-sm-6 control-label">
-                                            "HOME IoT" 사용 설정
+                                            "Smart Home" 사용 설정
                                         </label>
-                                        <div class="col-sm-6 form-control-static">
+                                        <div class="col-sm-3 form-control-static">
                                             <div>
                                                 <label>
-                                                    <input type="radio" checked="" value="option1" id="homeIotUseYes" name="homeIotUseRadios">
+                                                    <input type="radio" value="Y"
+                                                           id="iotUseYes" name="iotUseRadios">
                                                     사용함
                                                 </label>
                                             </div>
                                             <div>
                                                 <label>
-                                                    <input type="radio" value="option2" id="homeIotUseNo" name="homeIotUseRadios">
+                                                    <input type="radio" value="N"
+                                                           id="iotUseNo" name="iotUseRadios">
                                                     사용하지 않음
                                                 </label>
                                             </div>
+                                        </div>
+                                        <div class="col-sm-3 form-control-static">
+                                            <button class="btn btn-sm btn-primary "
+                                                    onclick="updateCmplx('iotUse')"
+                                                    type="button"><strong>업데이트</strong></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="form-horizontal">
-                                    <div class="form-group">
-                                        {{[APP 설정-"HOME IoT" 사용설정 Right}}
-                                    </div>
-                                </div>
+                                <ul>
+                                    <li>사용자앱 내 [Smart Home]탭의 표시 여부를 설정합니다.</li>
+                                    <li>"사용함" 선택시, 사용자앱 하단의 [Smart Home] 탭이 표시됩니다.</li>
+                                    <li>실제 IOT 기능 지원여부와 상관없이 탭의 표시 여부 만을 결정합니다. 따라서, 본 현장의 IOT
+                                        기능이 실제 지원하는지 여부는 'Kolon 베니트' 담당자에게 문의하시기 바랍니다.</li>
+                                </ul>
                             </div>
                         </div>
                         <div class="row">
@@ -450,29 +458,35 @@
                                         <label class="col-sm-6 control-label">
                                             "Reservation" 사용 설정
                                         </label>
-                                        <div class="col-sm-6 form-control-static">
+                                        <div class="col-sm-3 form-control-static">
                                             <div>
                                                 <label>
-                                                    <input type="radio" checked="" value="option1" id="resvUseYes" name="resvUseRadios">
+                                                    <input type="radio" value="Y"
+                                                           id="reservationUseYes" name="reservationUseRadios">
                                                     사용함
                                                 </label>
                                             </div>
                                             <div>
                                                 <label>
-                                                    <input type="radio" value="option2" id="resvUseNo" name="resvUseRadios">
+                                                    <input type="radio" value="N"
+                                                           id="reservationUseNo" name="reservationUseRadios">
                                                     사용하지 않음
                                                 </label>
                                             </div>
+                                        </div>
+                                        <div class="col-sm-3 form-control-static">
+                                            <button class="btn btn-sm btn-primary "
+                                                    onclick="updateCmplx('reservationUse')"
+                                                    type="button"><strong>업데이트</strong></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
-                                <div class="form-horizontal">
-                                    <div class="form-group">
-                                        {{[APP 설정-"Reservation" 사용설정 Right}}
-                                    </div>
-                                </div>
+                                <ul>
+                                    <li>사용자앱 내 [Reservation]탭의 표시 여부를 설정합니다.</li>
+                                    <li>"사용함" 선택시, 사용자앱 하단의 [Reservation] 탭이 표시됩니다.</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -501,28 +515,38 @@
                                         <label class="col-sm-6 control-label">
                                             사용자 글쓰기 여부
                                         </label>
-                                        <div class="col-sm-6 form-control-static">
+                                        <div class="col-sm-3 form-control-static">
                                             <div>
                                                 <label>
-                                                    <input type="radio" checked="" value="option1" id="feedWriteAllowYes" name="feedWriteAllowRadios">
+                                                    <input type="radio" value="Y"
+                                                           id="feedWriteAllowYes" name="feedWriteAllowRadios">
                                                     사용함
                                                 </label>
                                             </div>
                                             <div>
                                                 <label>
-                                                    <input type="radio" value="option2" id="feedWriteAllowNo" name="feedWriteAllowRadios">
+                                                    <input type="radio" value="N"
+                                                           id="feedWriteAllowNo" name="feedWriteAllowRadios">
                                                     사용하지 않음
                                                 </label>
                                             </div>
+                                        </div>
+                                        <div class="col-sm-3 form-control-static">
+                                            <button class="btn btn-sm btn-primary "
+                                                    onclick="updateCmplx('feedWriteAllow')"
+                                                    type="button"><strong>업데이트</strong></button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-horizontal">
-                                    <div class="form-group">
-                                        {{[APP - COMMUNITY] 설정 Right}}
-                                    </div>
+                                    <ul>
+                                        <li>사용자앱 내 [Community] - [Feed]의 글쓰기 가능 여부를 설정합니다.</li>
+                                        <li>"사용함" 선택시, 사용자앱에서 [Community] - [Feed]의 하단 우측에 글쓰기 아이콘이 표시됩니다.</li>
+                                        <li>"사용하지 않음" 선택시, 사용자앱에서 [Community] - [Feed]의 하단 우측에 글쓰기 아이콘 표시가 사라지며, 사용자는 글을 남길 수 없습니다.</li>
+                                        <li>"사용하지 않음"으로 변경 후에도 기존에 작성한 사용자 글은 계속 표시되며, 사용자는 기존 본인의 글을 수정할 수 있습니다. 변경에 유의하시기 바랍니다.</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -621,6 +645,14 @@
             $("#left_complex").addClass("active");
             $("#left_complex > .nav-second-level").addClass("in");
             $("#left_complex_list").addClass("active");
+
+            console.log("${complexDetail.iotUseYn}");
+            console.log("${complexDetail.reservationUseYn}");
+            console.log("${complexDetail.feedWriteAllowYn}");
+            // Radio 버튼 업데이트 (iotUseYn, reservationUseYn, feedWriteAllow)
+            $('input:radio[name=iotUseRadios]:input[value="${complexDetail.iotUseYn}"]').attr("checked", "checked");
+            $('input:radio[name=reservationUseRadios]:input[value="${complexDetail.reservationUseYn}"]').attr("checked", "checked");
+            $('input:radio[name=feedWriteAllowRadios]:input[value="${complexDetail.feedWriteAllowYn}"]').attr("checked", "checked");
 
             // 썸네일 - 이미지 업로드
             $( '#image-selector' ).on( 'change', function( event ) {
@@ -721,15 +753,30 @@
             var cmplxId = <c:out value="${complexDetail.cmplxId}" escapeXml="false">-1</c:out>;
             var value;
 
-            value = $('#' + id).val();
+
             if( id == 'cmplxNm') {
+                value = $('#' + id).val();
                 url = '/admin/complexes/' + cmplxId + '/name' + '?name=' + value +
                     '&${_csrf.parameterName}=${_csrf.token}';
             } else if ( id == 'cmplxAddr' ) {
+                value = $('#' + id).val();
                 url = '/admin/complexes/' + cmplxId + '/addr' + '?addr=' + value +
                     '&${_csrf.parameterName}=${_csrf.token}';
             } else if ( id == 'cmplxMapSrc' ) {
+                value = $('#' + id).val();
                 url = '/admin/complexes/' + cmplxId + '/mapSrc' + '?mapSrc=' + value +
+                    '&${_csrf.parameterName}=${_csrf.token}';
+            } else if ( id == 'iotUse' ) {
+                value = $(':radio[name="iotUseRadios"]:checked').val();
+                url = '/admin/complexes/' + cmplxId + '/iot' + '?useYn=' + value +
+                    '&${_csrf.parameterName}=${_csrf.token}';
+            } else if ( id == 'reservationUse' ) {
+                value = $(':radio[name="reservationUseRadios"]:checked').val();
+                url = '/admin/complexes/' + cmplxId + '/reservation' + '?useYn=' + value +
+                    '&${_csrf.parameterName}=${_csrf.token}';
+            } else if ( id == 'feedWriteAllow' ) {
+                value = $(':radio[name="feedWriteAllowRadios"]:checked').val();
+                url = '/admin/complexes/' + cmplxId + '/feed' + '?writeAllowYn=' + value +
                     '&${_csrf.parameterName}=${_csrf.token}';
             } else {
                 return;

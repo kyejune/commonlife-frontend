@@ -94,6 +94,8 @@
             `C_E`.CL_CMPLX_ADDR       AS CL_CMPLX_ADDR,
             `C_E`.CL_MAP_SRC          AS CL_MAP_SRC,
             `C_E`.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC,
+            `C_E`.IOT_USE_YN          AS IOT_USE_YN,
+            `C_E`.RESERVATION_USE_YN  AS RESERVATION_USE_YN,
             `C_E`.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
             `C_E`.REG_DT              AS REG_DT,
             (SELECT ADMIN_ID FROM CL_ADMIN_INFO WHERE ADMIN_IDX = `C_E`.REG_ADMIN_IDX)
@@ -154,6 +156,33 @@
             UPD_DT = CURRENT_TIMESTAMP,
             UPD_ADMIN_IDX = #{adminIdx},
             CL_MAP_SRC = #{clMapSrc}
+        WHERE CMPLX_ID = #{cmplxId};
+    </update>
+
+    <update id="updateComplexExtIotUseYn" parameterType="java.util.Map">
+        UPDATE COMPLEX_M_EXT
+        SET
+            UPD_DT = CURRENT_TIMESTAMP,
+            UPD_ADMIN_IDX = #{adminIdx},
+            IOT_USE_YN = #{useYn}
+        WHERE CMPLX_ID = #{cmplxId};
+    </update>
+
+    <update id="updateComplexExtReservationUseYn" parameterType="java.util.Map">
+        UPDATE COMPLEX_M_EXT
+        SET
+            UPD_DT = CURRENT_TIMESTAMP,
+            UPD_ADMIN_IDX = #{adminIdx},
+            RESERVATION_USE_YN = #{useYn}
+        WHERE CMPLX_ID = #{cmplxId};
+    </update>
+
+    <update id="updateComplexExtFeedWriteAllowYn" parameterType="java.util.Map">
+        UPDATE COMPLEX_M_EXT
+        SET
+            UPD_DT = CURRENT_TIMESTAMP,
+            UPD_ADMIN_IDX = #{adminIdx},
+            FEED_WRITE_ALLOW_YN = #{allowYn}
         WHERE CMPLX_ID = #{cmplxId};
     </update>
 

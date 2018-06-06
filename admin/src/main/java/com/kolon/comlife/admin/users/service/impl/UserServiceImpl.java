@@ -26,6 +26,11 @@ public class UserServiceImpl implements UserService {
         return userDAO.selectUserCountByComplexId( cmplxId );
     }
 
+    // 해당 현장의 세대 수
+    public int getTotalHomeHeadCountByComplexId( int cmplxId ) throws UserGeneralException {
+        return userDAO.selectHomeHeadCountByComplexId( cmplxId );
+    }
+
     public UserExtInfo getUserExtInfoById( int usrId ) {
         return userDAO.selectUserExtInfoByUsrId( usrId );
     }

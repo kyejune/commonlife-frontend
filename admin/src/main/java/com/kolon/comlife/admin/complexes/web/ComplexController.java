@@ -196,12 +196,14 @@ public class ComplexController {
             , HttpSession session
             , @ModelAttribute ComplexInfoDetail complexInfo
     ) {
-        ComplexInfoDetail resultComplexInfo;
-        int               totalUserCount;
-        List<AdminInfo>   managerList;
-        AdminInfo         adminInfoParam;
+        ComplexInfoDetail   resultComplexInfo;
+        int                 totalUserCount;
+        int                 totalHomeHeadCount;
+        List<AdminInfo>     managerList;
+        AdminInfo           adminInfoParam;
         List<ComplexRegion> regionList;
-        AdminInfo            adminInfo;
+        AdminInfo           adminInfo;
+
         adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
 
         logger.debug("====================> 현장 상세 정보 페이지 ");
@@ -216,6 +218,7 @@ public class ComplexController {
             }
 
             totalUserCount = userService.getTotalUserCountByComplexId( complexInfo.getCmplxId() );
+            totalHomeHeadCount = userService.getTotalHomeHeadCountByComplexId( complexInfo.getCmplxId() );
         } catch( UserGeneralException e ) {
             return mav.addObject("error", e.getMessage() );
         } catch( Exception e ) {
@@ -224,7 +227,7 @@ public class ComplexController {
         }
 
         // APP 내 표시 정보 가져오기
-        // 1) 지역목록 가져오기
+        // 1) 지역목록 가져오기 (현재 사용하지 않음)
         regionList = complexService.getComplexRegion();
         logger.debug(">> regionList> " + regionList);
         for(ComplexRegion e : regionList) {
@@ -242,6 +245,7 @@ public class ComplexController {
 
         mav.addObject("complexDetail",  resultComplexInfo);
         mav.addObject("totalUserCount", totalUserCount);
+        mav.addObject("totalHomeHeadCount", totalHomeHeadCount);
         mav.addObject("managerList",    managerList);
         mav.addObject("adminConst",     adminConst);
         mav.addObject("managerInfo",    new AdminInfo());  // Manager 화면전환시 이용
@@ -341,6 +345,114 @@ public class ComplexController {
 
         return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("Success!") );
     }
+
+
+    @PutMapping(
+            value = "/{cmplxId}/iot",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity updateComplexIotUseYn( HttpServletRequest            request,
+                                               @PathVariable("cmplxId") int    cmplxId,
+                                               @RequestParam("useYn")   String useYn) {
+        AdminInfo adminInfo;
+        boolean   useYnFlag = false;
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+
+        if( "Y".equals( useYn.toUpperCase() ) ) {
+            useYnFlag = true;
+        } else if( "N".equals( useYn.toUpperCase() ) ) {
+            useYnFlag = false;
+        } else {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( new SimpleErrorInfo( "잘못된 파라미터가 입력되었습니다. (파라미터: useYn)" ) );
+        }
+
+        try {
+            complexService.updateComplexIotUseYn( cmplxId, useYnFlag, adminInfo.getAdminIdx() );
+        } catch ( Exception e ) {
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( new SimpleErrorInfo( e.getMessage() ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("Success!") );
+    }
+
+    @PutMapping(
+            value = "/{cmplxId}/reservation",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity updateComplexReservationUseYn(
+                    HttpServletRequest              request,
+                    @PathVariable("cmplxId") int    cmplxId,
+                    @RequestParam("useYn")   String useYn)
+    {
+        AdminInfo adminInfo;
+        boolean   useYnFlag = false;
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+
+        if( "Y".equals( useYn.toUpperCase() ) ) {
+            useYnFlag = true;
+        } else if( "N".equals( useYn.toUpperCase() ) ) {
+            useYnFlag = false;
+        } else {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( new SimpleErrorInfo( "잘못된 파라미터가 입력되었습니다. (파라미터: useYn)" ) );
+        }
+
+        try {
+            complexService.updateComplexReservationUseYn( cmplxId, useYnFlag, adminInfo.getAdminIdx() );
+        } catch ( Exception e ) {
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( new SimpleErrorInfo( e.getMessage() ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("Success!") );
+    }
+
+
+    @PutMapping(
+            value = "/{cmplxId}/feed",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity updateComplexFeedWriteAllowYn(
+                    HttpServletRequest              request,
+                    @PathVariable("cmplxId") int    cmplxId,
+                    @RequestParam("writeAllowYn") String writeAllowYn)
+    {
+        AdminInfo adminInfo;
+        boolean writeAllowYnFlag = false;
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+
+        if( "Y".equals( writeAllowYn.toUpperCase() ) ) {
+            writeAllowYnFlag = true;
+        } else if( "N".equals( writeAllowYn.toUpperCase() ) ) {
+            writeAllowYnFlag = false;
+        } else {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( new SimpleErrorInfo( "잘못된 파라미터가 입력되었습니다. (파라미터: useYn)" ) );
+        }
+
+        try {
+            complexService.updateComplexFeedWriteAllowYn( cmplxId, writeAllowYnFlag, adminInfo.getAdminIdx() );
+        } catch ( Exception e ) {
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( new SimpleErrorInfo( e.getMessage() ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("Success!") );
+    }
+
+
+
 
 
 }

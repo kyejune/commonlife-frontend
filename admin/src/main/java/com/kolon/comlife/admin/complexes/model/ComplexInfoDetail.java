@@ -13,6 +13,8 @@ public class ComplexInfoDetail extends ComplexInfo {
     private String clMapSrc;    //  CMPLX_EXT.CL_MAP_SRC AS CL_MAP_SRC,
     private String clCmplxNm;    //  CMPLX_EXT.CL_CMPLX_NM AS CL_CMPLX_NM,
     private String clCmplxAddr;    //  CMPLX_EXT.CL_CMPLX_ADDR AS CL_CMPLX_ADDR,
+    private String iotUseYn;        // IOT_USE_YN
+    private String reservationUseYn; // RESERVATION_USE_YN
     private String feedWriteAllowYn; // FEED_WRITE_ALLOW_YN
     private String regAdminId; // REG_ADMIN_ID
     private String updAdminId; // UPD_ADMIN_ID
@@ -92,6 +94,22 @@ public class ComplexInfoDetail extends ComplexInfo {
 
     public void setClCmplxAddr(String clCmplxAddr) {
         this.clCmplxAddr = clCmplxAddr;
+    }
+
+    public String getIotUseYn() {
+        return iotUseYn;
+    }
+
+    public void setIotUseYn(String iotUseYn) {
+        this.iotUseYn = iotUseYn;
+    }
+
+    public String getReservationUseYn() {
+        return reservationUseYn;
+    }
+
+    public void setReservationUseYn(String reservationUseYn) {
+        this.reservationUseYn = reservationUseYn;
     }
 
     public String getFeedWriteAllowYn() {

@@ -22,6 +22,10 @@ public interface ComplexService {
     void updateComplexAddr(int cmplxId, String addr, int adminIdx ) throws Exception;
     void updateComplexMapSrc(int cmplxId, String mapSrc, int adminIdx ) throws Exception;
 
+    void updateComplexIotUseYn(int cmplxId, boolean useYn, int adminIdx ) throws Exception;
+    void updateComplexReservationUseYn(int cmplxId, boolean useYn, int adminIdx ) throws Exception;
+    void updateComplexFeedWriteAllowYn(int cmplxId, boolean writeAllowYn, int adminIdx ) throws Exception;
+
     List<HashMap> selectComplexGroupType();
 
     List<ComplexRegion> getComplexRegion();
