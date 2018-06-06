@@ -11,7 +11,8 @@ public class ComplexInfoDetail extends ComplexInfo {
     private String iokChgId;    //  CMPLX.CHG_ID AS IOK_CHG_ID,
     private String iokChgDt;    //  CMPLX.CHG_DT AS IOK_CHG_DT,
     private String clMapSrc;    //  CMPLX_EXT.CL_MAP_SRC AS CL_MAP_SRC,
-    private String clLogoImgSrc; //  CMPLX_EXT.CL_LOGO_IMG_SRC AS CL_LOGO_IMG_SRC,
+    private String clCmplxNm;    //  CMPLX_EXT.CL_CMPLX_NM AS CL_CMPLX_NM,
+    private String clCmplxAddr;    //  CMPLX_EXT.CL_CMPLX_ADDR AS CL_CMPLX_ADDR,
     private String feedWriteAllowYn; // FEED_WRITE_ALLOW_YN
     private String regAdminId; // REG_ADMIN_ID
     private String updAdminId; // UPD_ADMIN_ID
@@ -69,24 +70,28 @@ public class ComplexInfoDetail extends ComplexInfo {
         this.iokChgDt = iokChgDt;
     }
 
-    @Override
     public String getClMapSrc() {
         return clMapSrc;
     }
 
-    @Override
     public void setClMapSrc(String clMapSrc) {
         this.clMapSrc = clMapSrc;
     }
 
-    @Override
-    public String getClLogoImgSrc() {
-        return clLogoImgSrc;
+    public String getClCmplxNm() {
+        return clCmplxNm;
     }
 
-    @Override
-    public void setClLogoImgSrc(String clLogoImgSrc) {
-        this.clLogoImgSrc = clLogoImgSrc;
+    public void setClCmplxNm(String clCmplxNm) {
+        this.clCmplxNm = clCmplxNm;
+    }
+
+    public String getClCmplxAddr() {
+        return clCmplxAddr;
+    }
+
+    public void setClCmplxAddr(String clCmplxAddr) {
+        this.clCmplxAddr = clCmplxAddr;
     }
 
     public String getFeedWriteAllowYn() {

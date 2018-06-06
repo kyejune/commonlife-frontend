@@ -62,6 +62,42 @@ public class ComplexServiceImpl implements ComplexService {
     }
 
     @Override
+    public void updateComplexName(int cmplxId, String name, int adminIdx ) throws Exception {
+        int updateCount;
+
+        updateCount = complexDAO.updateComplexExtName( cmplxId, name, adminIdx );
+        if( updateCount < 1 ) {
+            String errMsg = "업데이트 할 정보가 없습니다. 현장정보를 다시 한번 확인하세요.";
+            logger.error( errMsg );
+            throw new Exception( errMsg );
+        }
+    }
+
+    @Override
+    public void updateComplexAddr(int cmplxId, String addr, int adminIdx ) throws Exception {
+        int updateCount;
+
+        updateCount = complexDAO.updateComplexExtAddr( cmplxId, addr, adminIdx );
+        if( updateCount < 1 ) {
+            String errMsg = "업데이트 할 정보가 없습니다. 현장정보를 다시 한번 확인하세요.";
+            logger.error( errMsg );
+            throw new Exception( errMsg );
+        }
+    }
+
+    @Override
+    public void updateComplexMapSrc(int cmplxId, String mapSrc, int adminIdx ) throws Exception {
+        int updateCount;
+
+        updateCount = complexDAO.updateComplexExtMapSrc( cmplxId, mapSrc, adminIdx );
+        if( updateCount < 1 ) {
+            String errMsg = "업데이트 할 정보가 없습니다. 현장정보를 다시 한번 확인하세요.";
+            logger.error( errMsg );
+            throw new Exception( errMsg );
+        }
+    }
+
+    @Override
     public List<HashMap> selectComplexGroupType() {
         return complexDAO.selectComplexGroupType();
     }

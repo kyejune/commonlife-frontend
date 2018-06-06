@@ -248,8 +248,17 @@
                                         <label class="col-sm-3 control-label">
                                             현장 표시 이름
                                         </label>
-                                        <div class="col-sm-9 form-control-static">
-                                            <input type="text" class="form-control" placeholder="역삼 Tree하우스...">
+                                        <div class="col-sm-7 form-control-static">
+                                            <input type="text"
+                                                   id="cmplxNm"
+                                                   class="form-control"
+                                                   placeholder="역삼 Tree하우스..."
+                                                   value="<c:out value="${complexDetail.clCmplxNm}" escapeXml="false"></c:out>">
+                                        </div>
+                                        <div class="col-sm-2 form-control-static">
+                                            <button class="btn btn-sm btn-primary"
+                                                    onclick="updateCmplx('cmplxNm')"
+                                                    type="button"><strong>업데이트</strong></button>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -257,8 +266,17 @@
                                         <label class="col-sm-3 control-label">
                                             현장 표시 주소
                                         </label>
-                                        <div class="col-sm-9 form-control-static">
-                                            <input type="text" class="form-control" placeholder="서울... ">
+                                        <div class="col-sm-7 form-control-static">
+                                            <input type="text"
+                                                   id="cmplxAddr"
+                                                   class="form-control"
+                                                   placeholder="서울... "
+                                                   value="<c:out value="${complexDetail.clCmplxAddr}" escapeXml="false"></c:out>">
+                                        </div>
+                                        <div class="col-sm-2 form-control-static">
+                                            <button class="btn btn-sm btn-primary"
+                                                    onclick="updateCmplx('cmplxAddr')"
+                                                    type="button"><strong>업데이트</strong></button>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -266,8 +284,17 @@
                                         <label class="col-sm-3 control-label">
                                             현장 지도<br>연결 링크
                                         </label>
-                                        <div class="col-sm-9 form-control-static">
-                                            <input type="text" class="form-control" placeholder="http://www....">
+                                        <div class="col-sm-7 form-control-static">
+                                            <input type="text"
+                                                   id="cmplxMapSrc"
+                                                   class="form-control"
+                                                   placeholder="http://www...."
+                                                   value="<c:out value="${complexDetail.clMapSrc}" escapeXml="false"></c:out>">
+                                        </div>
+                                        <div class="col-sm-2 form-control-static">
+                                            <button class="btn btn-sm btn-primary"
+                                                    onclick="updateCmplx('cmplxMapSrc')"
+                                                    type="button"><strong>업데이트</strong></button>
                                         </div>
                                     </div>
                                     <div class="hr-line-dashed"></div>
@@ -669,31 +696,77 @@
                   console.log(url);
 
             $.ajax( {
-                url: url,
-                type: type,
-                contentType: false,
-                processData: false
-            } )
-                .done( function( data ) {
-                    console.log( data);
-                    alert("업데이트 되었습니다.")
+                    url: url,
+                    type: type,
+                    contentType: false,
+                    processData: false,
+                    success: function (rs) {
+                        if (rs) {
+                            alert("업데이트 되었습니다.");
+                            refreshList();
+                        } else {
+                            alert("실패하였습니다.");
+                        }
+                    },
+                    error: function () {
+                        alert('에러가 발생하였습니다.');
+                        console.log('error');
+                    }
                 } );
         }
 
+        function updateCmplx( id ) {
+            var url;
+            var type    = 'PUT';
+            var cmplxId = <c:out value="${complexDetail.cmplxId}" escapeXml="false">-1</c:out>;
+            var value;
+
+            value = $('#' + id).val();
+            if( id == 'cmplxNm') {
+                url = '/admin/complexes/' + cmplxId + '/name' + '?name=' + value +
+                    '&${_csrf.parameterName}=${_csrf.token}';
+            } else if ( id == 'cmplxAddr' ) {
+                url = '/admin/complexes/' + cmplxId + '/addr' + '?addr=' + value +
+                    '&${_csrf.parameterName}=${_csrf.token}';
+            } else if ( id == 'cmplxMapSrc' ) {
+                url = '/admin/complexes/' + cmplxId + '/mapSrc' + '?mapSrc=' + value +
+                    '&${_csrf.parameterName}=${_csrf.token}';
+            } else {
+                return;
+            }
+
+            console.log(url);
+
+            $.ajax({
+                url: url,
+                type: type,
+                contentType: false,
+                processData: false,
+                success: function (rs) {
+                    if (rs) {
+                        alert("업데이트 되었습니다.");
+                        refreshList();
+                    } else {
+                        alert("실패하였습니다.");
+                        refreshList();
+                    }
+                },
+                error: function (req, status, error) {
+                    alert('에러가 발생하였습니다.');
+                    console.log( error );
+                    refreshList();
+                }
+            })
+        }
+
         function refreshList(){
-            $("#complexReqForm").attr("action", "/admin/complexes/list.do?grpId=${grpId}");
-            $("#complexReqForm").submit();
+            location.reload();
         }
 
         function managersDetail(adminId, grpId){
             $("#manageReqForm > #adminId").val(adminId);
             $("#manageReqForm").attr("action", "/admin/managers/write.do?grpId=" + grpId);
             $("#manageReqForm").submit();
-        }
-
-        function managerAdd(grpId){
-            $("#complexReqForm").attr("action", "/admin/complexes/write.do?create=true&grpId=" + grpId);
-            $("#complexReqForm").submit();
         }
 
     </script>

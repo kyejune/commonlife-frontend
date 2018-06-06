@@ -90,6 +90,8 @@
             `C`.REG_DT                AS IOK_REG_DT,
             `C`.CHG_ID                AS IOK_CHG_ID,
             `C`.CHG_DT                AS IOK_CHG_DT,
+            `C_E`.CL_CMPLX_NM         AS CL_CMPLX_NM,
+            `C_E`.CL_CMPLX_ADDR       AS CL_CMPLX_ADDR,
             `C_E`.CL_MAP_SRC          AS CL_MAP_SRC,
             `C_E`.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC,
             `C_E`.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
@@ -128,6 +130,32 @@
             COMPLEX_GRP_TYPE_M;
     </select>
 
+    <update id="updateComplexExtName" parameterType="java.util.Map">
+        UPDATE COMPLEX_M_EXT
+        SET
+            UPD_DT = CURRENT_TIMESTAMP,
+            UPD_ADMIN_IDX = #{adminIdx},
+            CL_CMPLX_NM = #{clCmplxNm}
+        WHERE CMPLX_ID = #{cmplxId};
+    </update>
+
+    <update id="updateComplexExtAddr" parameterType="java.util.Map">
+        UPDATE COMPLEX_M_EXT
+        SET
+            UPD_DT = CURRENT_TIMESTAMP,
+            UPD_ADMIN_IDX = #{adminIdx},
+            CL_CMPLX_ADDR = #{clCmplxAddr}
+        WHERE CMPLX_ID = #{cmplxId};
+    </update>
+
+    <update id="updateComplexExtMapSrc" parameterType="java.util.Map">
+        UPDATE COMPLEX_M_EXT
+        SET
+            UPD_DT = CURRENT_TIMESTAMP,
+            UPD_ADMIN_IDX = #{adminIdx},
+            CL_MAP_SRC = #{clMapSrc}
+        WHERE CMPLX_ID = #{cmplxId};
+    </update>
 
     <update id="updateComplexGroupTypeById" parameterType="ComplexInfo">
         INSERT INTO

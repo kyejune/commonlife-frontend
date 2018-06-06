@@ -253,8 +253,7 @@ public class ComplexController {
 
 
     /**
-     * 게시물 내용 변경하기 (ajax)
-     *  - Event, Notice 가능, 사용자 Feed 불가능
+     * 현장 대표 이미지 변경
      */
 //    @PutMapping(
 //            value = "/{cmplxId}/image",
@@ -275,5 +274,73 @@ public class ComplexController {
 //
 //        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("Success!") );
 //    }
+
+    @PutMapping(
+            value = "/{cmplxId}/name",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity updateComplexName( HttpServletRequest              request,
+                                             @PathVariable("cmplxId") int    cmplxId,
+                                             @RequestParam("name")    String name ) {
+        AdminInfo adminInfo;
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+
+        try {
+            complexService.updateComplexName( cmplxId, name, adminInfo.getAdminIdx() );
+        } catch ( Exception e ) {
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( new SimpleErrorInfo( e.getMessage() ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("Success!") );
+    }
+
+
+    @PutMapping(
+            value = "/{cmplxId}/addr",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity updateComplexAddr( HttpServletRequest              request,
+                                             @PathVariable("cmplxId") int    cmplxId,
+                                             @RequestParam("addr")    String addr ) {
+        AdminInfo adminInfo;
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+
+        try {
+            complexService.updateComplexAddr( cmplxId, addr, adminInfo.getAdminIdx() );
+        } catch ( Exception e ) {
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( new SimpleErrorInfo( e.getMessage() ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("Success!") );
+    }
+
+    @PutMapping(
+            value = "/{cmplxId}/mapSrc",
+            produces = MediaType.APPLICATION_JSON_VALUE )
+    public ResponseEntity updateComplexMapSrc( HttpServletRequest              request,
+                                             @PathVariable("cmplxId") int    cmplxId,
+                                             @RequestParam("mapSrc")    String mapSrc ) {
+        AdminInfo adminInfo;
+
+        adminInfo = (AdminInfo) SecurityContextHolder.getContext().getAuthentication().getDetails();
+        logger.debug(">>> currUser>CmplxId: "  + adminInfo.getCmplxId());
+        logger.debug(">>> currUser>AdminIdx: " + adminInfo.getAdminIdx());
+        logger.debug(">>> currUser>AdminId: "  + adminInfo.getAdminId());
+
+        try {
+            complexService.updateComplexMapSrc( cmplxId, mapSrc, adminInfo.getAdminIdx() );
+        } catch ( Exception e ) {
+            return ResponseEntity.status( HttpStatus.BAD_REQUEST ).body( new SimpleErrorInfo( e.getMessage() ) );
+        }
+
+        return ResponseEntity.status( HttpStatus.OK ).body( new SimpleMsgInfo("Success!") );
+    }
+
 
 }

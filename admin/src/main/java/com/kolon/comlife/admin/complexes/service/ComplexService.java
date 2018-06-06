@@ -18,6 +18,10 @@ public interface ComplexService {
 
     int updateComplexGroupTypeById(int cmplxId, int cmplxGrpId) throws Exception ;
 
+    void updateComplexName(int cmplxId, String name, int adminIdx ) throws Exception;
+    void updateComplexAddr(int cmplxId, String addr, int adminIdx ) throws Exception;
+    void updateComplexMapSrc(int cmplxId, String mapSrc, int adminIdx ) throws Exception;
+
     List<HashMap> selectComplexGroupType();
 
     List<ComplexRegion> getComplexRegion();

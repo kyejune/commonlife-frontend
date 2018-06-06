@@ -51,6 +51,36 @@ public class ComplexDAO {
         return sqlSession.update("Complex.createComplexExtById", complex );
     }
 
+    public int updateComplexExtName(int cmplxId, String clCmplxNm, int adminIdx ) {
+        Map param = new HashMap();
+
+        param.put( "cmplxId", Integer.valueOf(cmplxId) );
+        param.put( "clCmplxNm", clCmplxNm  );
+        param.put( "adminIdx", Integer.valueOf(adminIdx) );
+        return sqlSession.update("Complex.updateComplexExtName", param );
+    }
+
+    public int updateComplexExtAddr(int cmplxId, String clCmplxAddr, int adminIdx ) {
+        Map param = new HashMap();
+
+        param.put( "cmplxId", Integer.valueOf(cmplxId) );
+        param.put( "clCmplxAddr", clCmplxAddr  );
+        param.put( "adminIdx", Integer.valueOf(adminIdx) );
+        return sqlSession.update("Complex.updateComplexExtAddr", param );
+    }
+
+
+    public int updateComplexExtMapSrc(int cmplxId, String clMapSrc, int adminIdx ) {
+        Map param = new HashMap();
+
+        param.put( "cmplxId", Integer.valueOf(cmplxId) );
+        param.put( "clMapSrc", clMapSrc  );
+        param.put( "adminIdx", Integer.valueOf(adminIdx) );
+        return sqlSession.update("Complex.updateComplexExtMapSrc", param );
+    }
+
+
+
     public List<HashMap> selectComplexGroupType() {
         return sqlSession.selectList("Complex.selectComplexGroupType");
     }
