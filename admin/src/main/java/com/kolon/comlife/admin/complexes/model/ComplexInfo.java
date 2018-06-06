@@ -16,7 +16,9 @@ public class ComplexInfo extends ComplexInfoBase {
     private String postNo;
     private String imgSrc;
     private String mapSrc;
-    private String logoImgSrc;  // LOGO IMAGE SOURCE
+    private String logoImgSrc;  // LOGO IMAGE SOURCE - 사용하지 않음
+    private int    logoImgIdx;  // ImageStore에 저장된 현장의 이미지 인덱스(imageIdx)
+
     private String mnlSrc;      // ??
 
 
@@ -184,6 +186,14 @@ public class ComplexInfo extends ComplexInfoBase {
 
     public void setLogoImgSrc(String logoImgSrc) {
         this.logoImgSrc = logoImgSrc;
+    }
+
+    public int getLogoImgIdx() {
+        return logoImgIdx;
+    }
+
+    public void setLogoImgIdx(int logoImgIdx) {
+        this.logoImgIdx = logoImgIdx;
     }
 
     public String getMnlSrc() {

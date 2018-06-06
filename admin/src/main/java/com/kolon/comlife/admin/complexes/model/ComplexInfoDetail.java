@@ -10,12 +10,16 @@ public class ComplexInfoDetail extends ComplexInfo {
     private String iokRegDt;    //  CMPLX.REG_DT AS IOK_REG_DT,
     private String iokChgId;    //  CMPLX.CHG_ID AS IOK_CHG_ID,
     private String iokChgDt;    //  CMPLX.CHG_DT AS IOK_CHG_DT,
+
     private String clMapSrc;    //  CMPLX_EXT.CL_MAP_SRC AS CL_MAP_SRC,
     private String clCmplxNm;    //  CMPLX_EXT.CL_CMPLX_NM AS CL_CMPLX_NM,
     private String clCmplxAddr;    //  CMPLX_EXT.CL_CMPLX_ADDR AS CL_CMPLX_ADDR,
+    private String clLogoImgSrc;   //  logoImgIdx 및 ImageStore에 의해서 결정
+
     private String iotUseYn;        // IOT_USE_YN
     private String reservationUseYn; // RESERVATION_USE_YN
     private String feedWriteAllowYn; // FEED_WRITE_ALLOW_YN
+
     private String regAdminId; // REG_ADMIN_ID
     private String updAdminId; // UPD_ADMIN_ID
 
@@ -94,6 +98,14 @@ public class ComplexInfoDetail extends ComplexInfo {
 
     public void setClCmplxAddr(String clCmplxAddr) {
         this.clCmplxAddr = clCmplxAddr;
+    }
+
+    public String getClLogoImgSrc() {
+        return clLogoImgSrc;
+    }
+
+    public void setClLogoImgSrc(String clLogoImgSrc) {
+        this.clLogoImgSrc = clLogoImgSrc;
     }
 
     public String getIotUseYn() {

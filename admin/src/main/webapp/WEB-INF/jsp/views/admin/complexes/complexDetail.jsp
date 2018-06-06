@@ -202,13 +202,11 @@
                                                     </label>
                                                     <div class="col-sm-6">
                                                         <div id="thumbnails">
-                                                            <c:if test="${postInfo.postFiles != null}">
-                                                                <c:forEach var="image" items="${postInfo.postFiles}">
-                                                                    <div class="thumbnail-viewer" data-image="/admin/postFiles/${image.postFileIdx}" >
-                                                                        <input type="hidden" name="postFile[]" value="${image.postFileIdx}">
-                                                                        <button class="delete">&times;</button>
-                                                                    </div>
-                                                                </c:forEach>
+                                                            <c:if test="${complexDetail.logoImgIdx > 0}">
+                                                                <div class="thumbnail-viewer" data-image="${complexDetail.clLogoImgSrc}" >
+                                                                    <input type="hidden" id="imageIdx" name="imageIdx" value="${complexDetail.logoImgIdx}">
+                                                                    <button type="button" class="delete">&times;</button>
+                                                                </div>
                                                             </c:if>
                                                         </div>
                                                     </div>

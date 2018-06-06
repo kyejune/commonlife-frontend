@@ -44,7 +44,16 @@
             `C`.ADDR1                             AS ADDR1,
             `C`.ADDR2                             AS ADDR2,
             `C_E`.CL_MAP_SRC                      AS CL_MAP_SRC,
-            `C_E`.CL_LOGO_IMG_SRC                 AS CL_LOGO_IMG_SRC,
+            (
+                SELECT IMAGE_IDX
+                FROM CL_IMAGE_INFO, CL_IMAGE_TYPE
+                WHERE
+                    CL_IMAGE_INFO.PARENT_IDX = #{cmplxId} AND
+                    DEL_YN='N'                  AND
+                    TYPE_NM='COMPLEX'
+                ORDER BY IMAGE_IDX DESC LIMIT 1
+            )                                     AS LOGO_IMG_IDX,
+--             `C_E`.CL_LOGO_IMG_SRC                 AS CL_LOGO_IMG_SRC,
             `G_T`.CMPLX_GRP_TYPE                  AS CMPLX_GRP,
             IFNULL( `G_T`.CMPLX_GRP_TYPE_ID, -1)  AS CMPLX_GRP_ID
         FROM
@@ -93,7 +102,16 @@
             `C_E`.CL_CMPLX_NM         AS CL_CMPLX_NM,
             `C_E`.CL_CMPLX_ADDR       AS CL_CMPLX_ADDR,
             `C_E`.CL_MAP_SRC          AS CL_MAP_SRC,
-            `C_E`.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC,
+            (
+                SELECT IMAGE_IDX
+                FROM CL_IMAGE_INFO, CL_IMAGE_TYPE
+                WHERE
+                    CL_IMAGE_INFO.PARENT_IDX = #{cmplxId} AND
+                    DEL_YN='N'                  AND
+                    TYPE_NM='COMPLEX'
+                ORDER BY IMAGE_IDX DESC LIMIT 1
+            )                         AS LOGO_IMG_IDX,
+--             `C_E`.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC,
             `C_E`.IOT_USE_YN          AS IOT_USE_YN,
             `C_E`.RESERVATION_USE_YN  AS RESERVATION_USE_YN,
             `C_E`.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,

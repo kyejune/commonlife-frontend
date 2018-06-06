@@ -7,6 +7,7 @@ import com.kolon.comlife.admin.complexes.model.ComplexInfo;
 import com.kolon.comlife.admin.complexes.model.ComplexInfoDetail;
 import com.kolon.comlife.admin.complexes.model.ComplexRegion;
 import com.kolon.comlife.admin.complexes.service.ComplexService;
+import com.kolon.comlife.admin.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.admin.imageStore.service.ImageStoreService;
 import com.kolon.comlife.admin.manager.model.AdminConst;
 import com.kolon.comlife.admin.manager.model.AdminInfo;
@@ -213,6 +214,11 @@ public class ComplexController {
 
         try {
             resultComplexInfo = complexService.getComplexById( complexInfo.getCmplxId() );
+            resultComplexInfo.setClLogoImgSrc(
+                    imageStoreService.getImageFullPathByIdx(
+                            resultComplexInfo.getLogoImgIdx(),
+                            ImageInfoUtil.SIZE_SUFFIX_SMALL ) );
+
             if( resultComplexInfo == null ) {
                 mav.addObject("error", "현장에 대한 정보가 없습니다.");
             }
@@ -243,14 +249,14 @@ public class ComplexController {
         adminInfoParam.setSearchKeyword1(String.valueOf( complexInfo.getCmplxId() ));
         managerList = managerService.selectManagerList( adminInfoParam );
 
-        mav.addObject("complexDetail",  resultComplexInfo);
-        mav.addObject("totalUserCount", totalUserCount);
+        mav.addObject("complexDetail",      resultComplexInfo);
+        mav.addObject("totalUserCount",     totalUserCount);
         mav.addObject("totalHomeHeadCount", totalHomeHeadCount);
-        mav.addObject("managerList",    managerList);
-        mav.addObject("adminConst",     adminConst);
-        mav.addObject("managerInfo",    new AdminInfo());  // Manager 화면전환시 이용
-        mav.addObject("adminInfo",      adminInfo ); // 로그인한 관리자 정보
-        mav.addObject("regionList",     regionList);
+        mav.addObject("managerList",        managerList);
+        mav.addObject("adminConst",         adminConst);
+        mav.addObject("managerInfo",        new AdminInfo());  // Manager 화면전환시 이용
+        mav.addObject("adminInfo",          adminInfo ); // 로그인한 관리자 정보
+        mav.addObject("regionList",         regionList);
 
         return mav;
     }
