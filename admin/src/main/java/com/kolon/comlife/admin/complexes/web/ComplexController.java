@@ -31,6 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Iterator;
 import java.util.List;
 
 @Controller("complexController")
@@ -77,6 +78,15 @@ public class ComplexController {
         logger.debug("====================> complexInfo.getCmplxGrp : {} ", complexInfo.getCmplxGrp());
 
         List<ComplexInfo> complexList = complexService.getComplexList();
+
+        Iterator itr = complexList.iterator();
+        while( itr.hasNext() ) {
+            ComplexInfo cmplxInfo = (ComplexInfo)itr.next();
+            if( cmplxInfo.getCmplxGrpId() < 0 ) {
+                // 0=준비중, 1=공공, 2=민간이 아닌, 현장은 표시에서 제외 함
+                itr.remove();
+            }
+        }
 
 //        mav.addObject("grpId",      grpId);
 //        mav.addObject("adminConst", adminConst);

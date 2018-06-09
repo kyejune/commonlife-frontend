@@ -57,14 +57,14 @@
                         <form class="form-horizontal">
                             <h3 >유의 사항</h3>
                             <p>
-                            todo: 1. 현재 현장에 대한 정보를 표시
+                                <ul>
+                                    <li>App내 [INFO] - [Living Support]의 항목을 표시하고 순서를 변경할 수 있습니다.</li>
+                                    <li>항목간 순서를 변경한 이후, '업데이트'클릭하면 반영됩니다.</li>
+                                    <li>업데이트 즉시, 사용자의 화면에도 적용되니 변경에 주의하시기 바랍니다.</li>
+                                </ul>
                             </p>
-                            <p>
-                            - App내 [INFO] - [Living Support]의 항목을 표시하고 순서를 변경할 수 있습니다.
-                            - 항목간 순서를 변경한 이후, '업데이트'클릭하면 반영됩니다.
-                            </p>
-                            <%-- todo: 1. COMPLEX_ID 현재 현장에 대한 정보를 표시 --%>
-
+                            <br>
+                            <br>
                             <h3 >변경 사항 적용</h3>
                             <p>
                                 <button type="button"
