@@ -46,7 +46,7 @@
             <div class="col-lg-12">
                 <div class="ibox float-e-margins">
                     <div class="ibox-title">
-                        <h5>Living Support 항목 설정</h5>
+                        <h5>INFO 목록 관리</h5>
                         <div class="ibox-tools">
                             <a class="collapse-link">
                                 <i class="fa fa-chevron-up"></i>
@@ -57,19 +57,18 @@
                         <form class="form-horizontal">
                             <h3 >유의 사항</h3>
                             <p>
-                            todo: 1. 현재 현장에 대한 정보를 표시
+                                <ul>
+                                    <li>App내 [INFO]에 표시되는 목록을 관리합니다. 항목의 표시여부와 순서를 변경할 수 있습니다.</li>
+                                    <li>항목간 순서를 변경한 이후, '업데이트'를 수행하면 반영됩니다.<br></li>
+                                    <li>업데이트 즉시, 사용자의 화면에도 적용되니 변경에 주의하시기 바랍니다.<br></li>
+                                </ul>
                             </p>
-                            <p>
-                            - App내 [INFO]에 표시되는 목록을 관리합니다. 항목의 표시여부와 순서를 변경할 수 있습니다.<br>
-                            - 항목간 순서를 변경한 이후, '업데이트'를 수행하면 반영됩니다.<br>
-                            - 업데이트 즉시, 사용자의 화면에도 적용되니 변경에 주의하시기 바랍니다.<br>
-                            </p>
-                            <%-- todo: 1. COMPLEX_ID 현재 현장에 대한 정보를 표시 --%>
-
+                            <br>
+                            <br>
                             <h3 >변경 사항 적용</h3>
                             <p>
                                 <button type="button"
-                                        class="btn btn-block btn-outline btn-info"
+                                        class="btn btn-block btn-outline btn-success"
                                         onclick="javascript:procIns();" >변경 사항 적용</button>
                             </p>
                         </form>

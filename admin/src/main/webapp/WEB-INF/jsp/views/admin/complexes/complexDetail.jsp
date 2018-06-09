@@ -80,10 +80,10 @@
                                         <div class="hr-line-dashed"></div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">
-                                                현장 그룹
+                                                일반 주소
                                             </label>
                                             <div class="col-sm-9 form-control-static">
-                                                <c:out value="${complexDetail.cmplxGrpType}" escapeXml="false">
+                                                <c:out value="${complexDetail.addr}" escapeXml="false">
                                                     N/A
                                                 </c:out>
                                             </div>
@@ -91,10 +91,10 @@
                                         <div class="hr-line-dashed"></div>
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label">
-                                                일반 주소
+                                                현장 그룹
                                             </label>
                                             <div class="col-sm-9 form-control-static">
-                                                <c:out value="${complexDetail.addr}" escapeXml="false">
+                                                <c:out value="${complexDetail.cmplxGrpType}" escapeXml="false">
                                                     N/A
                                                 </c:out>
                                             </div>
@@ -205,7 +205,6 @@
                                                             <c:if test="${complexDetail.logoImgIdx > 0}">
                                                                 <div class="thumbnail-viewer" data-image="${complexDetail.clLogoImgSrc}" >
                                                                     <input type="hidden" id="imageIdx" name="imageIdx" value="${complexDetail.logoImgIdx}">
-                                                                    <button type="button" class="delete">&times;</button>
                                                                 </div>
                                                             </c:if>
                                                         </div>
@@ -218,7 +217,10 @@
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-12" >
-                                                        <input type="file" id="image-selector" multiple accept="image/*">
+                                                        <input type="file"
+                                                               class="btn btn-block btn-outline btn-default"
+                                                               id="image-selector"
+                                                               multiple accept="image/*">
                                                     </div>
                                                 </div>
                                                 <%--<div class="row">--%>
@@ -235,7 +237,9 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
-                                                <p class="text-success">* '파일 선택'하면 이미지 업로드가 시작되고, 완료되면 화면에 표시됩니다. 이미지 업로드가 완료될 때 까지 기다리세요.</p>
+                                                <p class="text-success">1. '파일 선택'하면 이미지 업로드가 시작되고, 완료되면 화면에 표시됩니다. 이미지 업로드가 완료될 때까지 잠시만 기다리세요.</p>
+                                                <p class="text-success">2. 이미지가 표시되면, '이미지 반영' 버튼을 클릭해서 서비스에 변경된 이미지를 반영하세요.</p>
+                                                <p class="text-success"></p>
                                                 <p class="text-success">* 추천 이미지 비율 - 1:1 가로:세로, 예) 720x720, 1440x1440</p>
                                                 <p class="text-success">* 앱에서는 이미지가 해당 비율을 유지하여 표시됩니다.</p>
                                             </div>
@@ -299,7 +303,13 @@
                                 </div>
                             </div>
                             <div class="col-lg-6 b-r">
-                                {{right}}
+                                <ul>
+                                    <ui>
+                                        <li>상단 [현장 기본 정보]의 [현장 이름] 및 [일반 주소]는 사용자 App내에서 표시용도로 사용되지 않습니다. [현장 표시 이름] 및 [현장 표시 주소]를 별도로 설정하세요.<br></li>
+                                        <li>사용자 App내 표시되는 텍스트의 길이의 제한이 있습니다. [현장 표시 이름] 및 [현장 표시 주소]을 설정할 때, 표시되는 길이를 유의하여 입력 바랍니다. *한글의 경우, 3~8자 추천*<br></li>
+                                        <li>[현장 지도 연결 링크]는 <a href="https://map.naver.com/" target="_blank">NAVER 지도</a>에서 위치 검색 후, 해당 주소의 URL을 이용하시기 바랍니다. (예, 코오롱 : http://naver.me/xIxRmD3M)<br></li>
+                                    </ui>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -588,7 +598,9 @@
                             <div class="col-lg-6">
                                 <div class="form-horizontal">
                                     <div class="form-group">
-                                        {{[INFO] 목록 관리 Right}}
+                                        <ul>
+                                            <li>해당 현장의 INFO에 표시되는 아이콘(목록) 설정할 수 있습니다.</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -619,7 +631,10 @@
                             <div class="col-lg-6">
                                 <div class="form-horizontal">
                                     <div class="form-group">
-                                        {{[[Living Support] 목록 관리 Right}}
+                                        <ul>
+                                            <li>[INFO] - [Living Support]내의 문의접수 분류를 설정할 수 있습니다.</li>
+                                            <li>여기에서 설정된 항목이 문의 접수시에 사용자 앱에서 표시 됩니다.</li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -675,7 +690,7 @@
             var thumb =
                 "<div class='thumbnail-viewer' " +
                 "      style='background-image: url(" + ( "/admin/imageStore/" + data['imageIdx'] ) + ");'>" +
-                "<button class='delete' type='button'>&times;</button>" +
+                // "<button class='delete' type='button'>&times;</button>" +
                 "<input type='hidden' id='imageIdx' name='imageIdx' value='" + data['imageIdx'] + "'>" +
                 "</div>";
             if( $('.thumbnail-viewer').length ) {
