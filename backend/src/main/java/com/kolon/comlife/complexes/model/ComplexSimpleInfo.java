@@ -12,6 +12,8 @@ public class ComplexSimpleInfo extends ComplexInfoBase {
     private String clMapSrc;      // CommonLife Only Map Source
     private String clLogoImgSrc;  // CommonLife Only Logo Image Source
 
+    private int    logoImgIdx;
+
     public ComplexSimpleInfo() {
         super(0, null, null);
     }
@@ -77,5 +79,13 @@ public class ComplexSimpleInfo extends ComplexInfoBase {
 
     public void setClLogoImgSrc(String clLogoImgSrc) {
         this.clLogoImgSrc = clLogoImgSrc;
+    }
+
+    public int getLogoImgIdx() {
+        return logoImgIdx;
+    }
+
+    public void setLogoImgIdx(int logoImgIdx) {
+        this.logoImgIdx = logoImgIdx;
     }
 }

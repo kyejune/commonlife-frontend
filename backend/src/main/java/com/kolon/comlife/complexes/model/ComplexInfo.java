@@ -16,14 +16,15 @@ public class ComplexInfo extends ComplexInfoBase {
     private String postNo;
     private String imgSrc;
     private String mapSrc;
-    private String logoImgSrc;  // LOGO IMAGE SOURCE
-    private String mnlSrc;      // ??
+    private String logoImgSrc;      // LOGO IMAGE SOURCE
+    private String mnlSrc;          // ??
     private String clCmplxNm;       // CL_CMPLX_NM
     private String clCmplxAddr;     // CL_CMPLX_ADDR
-    private String clMapSrc;   // CL_MAP_SRC
+    private String clMapSrc;        // CL_MAP_SRC
     private String clLogoImgSrc;    // CL_LOGO_IMG_SRC
+    private int    logoImgIdx;      // imageStore에 저장되어있는 cmplxId 값
     private String noticeYn;
-    private int noticeIdx;
+    private int    noticeIdx;
 
 
     public String getNoticeYn() {
@@ -110,6 +111,14 @@ public class ComplexInfo extends ComplexInfoBase {
 
     public void setClLogoImgSrc(String clLogoImgSrc) {
         this.clLogoImgSrc = clLogoImgSrc;
+    }
+
+    public int getLogoImgIdx() {
+        return logoImgIdx;
+    }
+
+    public void setLogoImgIdx(int logoImgIdx) {
+        this.logoImgIdx = logoImgIdx;
     }
 
     public String getCmplxCd() {

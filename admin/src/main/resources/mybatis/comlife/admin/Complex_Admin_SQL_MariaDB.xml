@@ -45,7 +45,7 @@
             `C`.ADDR2                             AS ADDR2,
             `C_E`.CL_MAP_SRC                      AS CL_MAP_SRC,
             (
-                SELECT IMAGE_IDX
+                SELECT IFNULL( IMAGE_IDX, -1 )
                 FROM CL_IMAGE_INFO, CL_IMAGE_TYPE
                 WHERE
                     CL_IMAGE_INFO.PARENT_IDX = #{cmplxId} AND
@@ -103,7 +103,7 @@
             `C_E`.CL_CMPLX_ADDR       AS CL_CMPLX_ADDR,
             `C_E`.CL_MAP_SRC          AS CL_MAP_SRC,
             (
-                SELECT IMAGE_IDX
+                SELECT IFNULL( IMAGE_IDX, -1 )
                 FROM CL_IMAGE_INFO, CL_IMAGE_TYPE
                 WHERE
                     CL_IMAGE_INFO.PARENT_IDX = #{cmplxId} AND

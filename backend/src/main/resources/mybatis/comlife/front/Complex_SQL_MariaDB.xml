@@ -32,7 +32,16 @@
 		C_E.CL_CMPLX_NM         AS CL_CMPLX_NM,
 		C_E.CL_CMPLX_ADDR       AS CL_CMPLX_ADDR,
 		C_E.CL_MAP_SRC          AS CL_MAP_SRC,
-		C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC,
+        (
+            SELECT IFNULL( IMAGE_IDX, -1 )
+            FROM CL_IMAGE_INFO, CL_IMAGE_TYPE
+            WHERE
+                CL_IMAGE_INFO.PARENT_IDX = C.CMPLX_ID AND
+                DEL_YN='N'                  AND
+                TYPE_NM='COMPLEX'
+            ORDER BY IMAGE_IDX DESC LIMIT 1
+        )                       AS LOGO_IMG_IDX,
+        -- C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC     -- LOGO_IMG_IDX로 대체하며, Service Layer에서 절대 경로로 변경되었음. 칼럼'CL_LOGO_IMG_SRC'는 사용하지 않음
 		C_E.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
 		C_E.IOT_USE_YN          AS IOT_USE_YN,
 		C_E.NOTICE_YN           AS NOTICE_YN,
@@ -78,8 +87,17 @@
         C.ADDR_DTL              AS ADDR_DTL,           -- 현장 상세 주소 (IOK에서 정의)
         C.ADDR1                 AS ADDR1,
         C.ADDR2                 AS ADDR2,
-        C_E.CL_MAP_SRC          AS CL_MAP_SRC,         -- 앱내 지도 링크 (full path URL)
-        C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC     -- 앱내 표시되는 이미지 (full path URL)
+        C_E.CL_MAP_SRC          AS CL_MAP_SRC,         -- 앱내 지도 링크 (full path URL)s
+        (
+            SELECT IFNULL( IMAGE_IDX, -1 )
+            FROM CL_IMAGE_INFO, CL_IMAGE_TYPE
+            WHERE
+                CL_IMAGE_INFO.PARENT_IDX = C.CMPLX_ID AND
+                DEL_YN='N'                  AND
+                TYPE_NM='COMPLEX'
+            ORDER BY IMAGE_IDX DESC LIMIT 1
+        )                       AS LOGO_IMG_IDX
+        -- C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC     -- LOGO_IMG_IDX로 대체하며, Service Layer에서 절대 경로로 변경되었음. 칼럼'CL_LOGO_IMG_SRC'는 사용하지 않음
     FROM
         COMPLEX_M AS C
           LEFT JOIN
@@ -114,7 +132,16 @@
         C.ADDR1                 AS ADDR1,
         C.ADDR2                 AS ADDR2,
         C_E.CL_MAP_SRC          AS CL_MAP_SRC,         -- 앱내 지도 링크 (full path URL)
-        C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC     -- 앱내 표시되는 이미지 (full path URL)
+        (
+            SELECT IFNULL( IMAGE_IDX, -1 )
+            FROM CL_IMAGE_INFO, CL_IMAGE_TYPE
+            WHERE
+                CL_IMAGE_INFO.PARENT_IDX = C.CMPLX_ID AND
+                DEL_YN='N'                  AND
+                TYPE_NM='COMPLEX'
+            ORDER BY IMAGE_IDX DESC LIMIT 1
+        )                       AS LOGO_IMG_IDX
+        -- C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC     -- LOGO_IMG_IDX로 대체하며, Service Layer에서 절대 경로로 변경되었음. 칼럼'CL_LOGO_IMG_SRC'는 사용하지 않음
     FROM
         COMPLEX_M AS C
           LEFT JOIN
