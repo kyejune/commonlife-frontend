@@ -407,8 +407,15 @@ public class UserController {
 
         parameter = IokUtil.buildRequestParameter( request );
 
+        if( authUserInfo == null ) {
+            return ResponseEntity
+                    .status( HttpStatus.BAD_REQUEST )
+                    .body( new SimpleErrorInfo("인증된 정보가 없거나 잘못된 토큰이 입력되었습니다. 입력 값을 다시 한 번 확인하세요."));
+        }
+
         // token에서 부터 사용자 아이디 가져 옴
         parameter.put( "userId", authUserInfo.getUserId() );
+        logger.debug(">>>> Logout by " + authUserInfo.getUserId());
 
         try {
             isSuccess = mobileUserService.mobileUserLogout(parameter);
