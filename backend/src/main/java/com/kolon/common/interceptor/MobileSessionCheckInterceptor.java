@@ -131,17 +131,6 @@ public class MobileSessionCheckInterceptor extends HandlerInterceptorAdapter {
 			sToken = request.getParameter("token");
 		}
 
-		// TODO: 개발 디버깅 용도입니다. 개발 완료되면 삭제 할 것
-		logger.debug("forceAuthTokenYN>>>> " + this.forceAuthTokenYN);
-		logger.debug("forceAuthToken>>>> " + this.forceAuthToken);
-		if( "Y".equals(this.forceAuthTokenYN) ) {
-			logger.debug("===== ====== ====== ====== ======");
-			logger.debug("===== DEVELOPEMENT MODE : Y =====");
-			logger.debug("===== ====== ====== ====== ======");
-			sToken = this.forceAuthToken;
-		}
-
-
 		/*********************************************************************/
 		/* Redis Token 게릿                                                                             */
 		/*********************************************************************/
