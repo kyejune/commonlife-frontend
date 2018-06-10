@@ -26,6 +26,10 @@ public class ComplexInfo extends ComplexInfoBase {
     private String noticeYn;
     private int    noticeIdx;
 
+    private String feedWriteAllowYn; //  FEED_WRITE_ALLOW_YN
+    private String iotUseYn; //  IOT_USE_YN
+    private String reservationUseYn; //  RESERVATION_USE_YN
+
 
     public String getNoticeYn() {
         return noticeYn;
@@ -255,5 +259,29 @@ public class ComplexInfo extends ComplexInfoBase {
 
     public void setMnlSrc(String mnlSrc) {
         this.mnlSrc = mnlSrc;
+    }
+
+    public String getFeedWriteAllowYn() {
+        return feedWriteAllowYn;
+    }
+
+    public void setFeedWriteAllowYn(String feedWriteAllowYn) {
+        this.feedWriteAllowYn = feedWriteAllowYn;
+    }
+
+    public String getIotUseYn() {
+        return iotUseYn;
+    }
+
+    public void setIotUseYn(String iotUseYn) {
+        this.iotUseYn = iotUseYn;
+    }
+
+    public String getReservationUseYn() {
+        return reservationUseYn;
+    }
+
+    public void setReservationUseYn(String reservationUseYn) {
+        this.reservationUseYn = reservationUseYn;
     }
 }

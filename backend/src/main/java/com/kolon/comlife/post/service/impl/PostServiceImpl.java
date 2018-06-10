@@ -1,6 +1,9 @@
 package com.kolon.comlife.post.service.impl;
 
 import com.kolon.comlife.common.model.PaginateInfo;
+import com.kolon.comlife.complexes.model.ComplexInfo;
+import com.kolon.comlife.complexes.service.ComplexService;
+import com.kolon.comlife.complexes.service.impl.ComplexDAO;
 import com.kolon.comlife.imageStore.model.ImageInfoUtil;
 import com.kolon.comlife.imageStore.service.ImageStoreService;
 import com.kolon.comlife.post.model.PostInfo;
@@ -24,6 +27,9 @@ import java.util.Map;
 @Service("postService")
 public class PostServiceImpl implements PostService {
     private static final Logger logger = LoggerFactory.getLogger(PostServiceImpl.class);
+
+    @Autowired
+    private ComplexDAO complexDAO;
 
     @Autowired
     private PostDAO postDAO;
@@ -132,6 +138,7 @@ public class PostServiceImpl implements PostService {
         int          limit;
         int          pageNum;
         int          offset;
+        String       feedWriteAllowYn;
 
         limit = ((Integer)params.get("limit")).intValue();
         pageNum = ((Integer)params.get("pageNum")).intValue();
@@ -232,11 +239,15 @@ public class PostServiceImpl implements PostService {
         countPosts = postDAO.countPostList( params );
         totalPages = Math.ceil( ( double ) countPosts / ( double ) limit );
 
+        feedWriteAllowYn = complexDAO.selectFeedWriteAllowByCmplxId(
+                                    Integer.valueOf( (Integer) params.get("cmplxId") ) );
+
         paginateInfo = new PaginateInfo();
         paginateInfo.setCurrentPage( pageNum );
         paginateInfo.setTotalPages( totalPages );
         paginateInfo.setPerPage( limit );
         paginateInfo.setData( postInfoList );
+        paginateInfo.setFeedWriteAllowYn( feedWriteAllowYn );
 
         return paginateInfo;
     }

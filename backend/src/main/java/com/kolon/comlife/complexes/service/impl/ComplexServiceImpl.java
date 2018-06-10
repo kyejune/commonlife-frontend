@@ -29,8 +29,19 @@ public class ComplexServiceImpl implements ComplexService {
 
     @Override
     public ComplexInfo getComplexById(int id ) {
+        ComplexInfo cmplxInfo;
 
-        return complexDAO.selectComplexById( id );
+        cmplxInfo = complexDAO.selectComplexById( id );
+        if( cmplxInfo.getLogoImgIdx() > 0 ) {
+            cmplxInfo.setClLogoImgSrc(
+                    imageStoreService.getImageFullPathByIdx(
+                            cmplxInfo.getLogoImgIdx(),
+                            ImageInfoUtil.SIZE_SUFFIX_MEDIUM ));
+        } else {
+            cmplxInfo.setClLogoImgSrc( null );
+        }
+
+        return cmplxInfo;
     }
 
     @Override
@@ -50,7 +61,6 @@ public class ComplexServiceImpl implements ComplexService {
                 cmplxInfo.setClLogoImgSrc( null );
             }
         }
-
 
         return cmplxList;
     }

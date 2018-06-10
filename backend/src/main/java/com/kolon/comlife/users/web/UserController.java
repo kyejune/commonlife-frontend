@@ -1,5 +1,6 @@
 package com.kolon.comlife.users.web;
 
+import com.amazonaws.services.xray.model.Http;
 import com.kolon.comlife.common.model.DataListInfo;
 import com.kolon.comlife.common.model.SimpleErrorInfo;
 import com.kolon.comlife.common.model.SimpleMsgInfo;
@@ -16,6 +17,7 @@ import com.kolon.common.servlet.AuthUserInfoUtil;
 import com.kolonbenit.benitware.common.util.StringUtil;
 import com.kolonbenit.benitware.framework.http.parameter.RequestParameter;
 import com.kolonbenit.iot.mobile.service.MobileUserService;
+import org.json.HTTP;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,6 +79,11 @@ public class UserController {
         parameter = IokUtil.buildRequestParameter(request);
         userId = parameter.getString("userId");
         userPw = parameter.getString("userPw");
+
+        // osType 체크 수행
+        if ( !(parameter.containsKey("osType")) ) {
+            parameter.put("osType", "1");
+        }
 
         // 0-1. encrypt 된 userId/userPw를 복호화
         pk_key = parameter.getString("pk_key");
@@ -197,6 +204,14 @@ public class UserController {
         }
 
         cmplxInfo = complexService.getComplexById( userInfo.getCmplxId() );
+
+        if( cmplxInfo == null ) {
+            logger.debug("준비 중인 현장의 계정은 로그인이 가능하지 않습니다. cmplxId: " + userInfo.getCmplxId());
+            return ResponseEntity
+                    .status( HttpStatus.UNAUTHORIZED )
+                    .body( "준비 중인 현장의 계정은 로그인이 가능하지 않습니다." );
+        }
+
         logger.debug(">>>>  there are authUserInfo");
         result.put("cmplxId", String.valueOf( userInfo.getCmplxId() ));
         result.put("homeId", String.valueOf( userInfo.getHomeId() ));
@@ -209,11 +224,8 @@ public class UserController {
         result.put("expireDate", userInfo.getExpireDate());
         result.put("cmplxNm", cmplxInfo.getClCmplxNm());
         result.put("cmplxAddr", cmplxInfo.getClCmplxAddr());
-
-        // todo: 하단 tab(Reservation 및 SMART HOME 사용을 위한 값)
-        // 추후 업데이트 필요
-        result.put("reservationUseYn", "Y");
-        result.put("iotUseYn", "Y");
+        result.put("reservationUseYn", cmplxInfo.getReservationUseYn());
+        result.put("iotUseYn", cmplxInfo.getIotUseYn());
 
         return ResponseEntity.status( HttpStatus.OK ).body( result );
     }

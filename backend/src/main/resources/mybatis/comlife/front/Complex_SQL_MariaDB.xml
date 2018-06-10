@@ -43,6 +43,7 @@
         )                       AS LOGO_IMG_IDX,
         -- C_E.CL_LOGO_IMG_SRC     AS CL_LOGO_IMG_SRC     -- LOGO_IMG_IDX로 대체하며, Service Layer에서 절대 경로로 변경되었음. 칼럼'CL_LOGO_IMG_SRC'는 사용하지 않음
 		C_E.FEED_WRITE_ALLOW_YN AS FEED_WRITE_ALLOW_YN,
+        C_E.RESERVATION_USE_YN  AS RESERVATION_USE_YN,
 		C_E.IOT_USE_YN          AS IOT_USE_YN,
 		C_E.NOTICE_YN           AS NOTICE_YN,
 		C_E.NOTICE_IDX          AS NOTICE_IDX,
@@ -165,5 +166,14 @@
     ;
     </select>
 
+    <select id="selectFeedWriteAllowByCmplxId" parameterType="java.util.Map" resultType="java.util.Map">
+    SELECT
+        FEED_WRITE_ALLOW_YN
+    FROM
+        COMPLEX_M_EXT
+    WHERE
+        CMPLX_ID = #{cmplxId}
+    ;
+    </select>
 
 </mapper>

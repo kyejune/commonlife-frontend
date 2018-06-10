@@ -41,4 +41,13 @@ public class ComplexDAO {
         params.put("cmplxId", Integer.valueOf(cmplxId) );
         return sqlSession.selectList( "Complex.selectComplexListInSameGroup", params );
     }
+
+    public String selectFeedWriteAllowByCmplxId( int cmplxId ) {
+        Map result;
+        Map params = new HashMap();
+        params.put("cmplxId", Integer.valueOf(cmplxId) );
+        result = sqlSession.selectOne( "Complex.selectFeedWriteAllowByCmplxId", params );
+
+        return (String)result.get("FEED_WRITE_ALLOW_YN");
+    }
 }
