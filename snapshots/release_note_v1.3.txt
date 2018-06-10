@@ -1,0 +1,18 @@
+06/10 v1.3 변경 내역 (소스 파일은 별도 첨부)
+
+1. (Backend) 로그인 시, osType을 입력하도록 설정(1=안드로이드, 2=iOS). osType이 정의되지 않은 경우, 1로 설정됨 
+2. (Backend/Admin) 현장 별, [Smart Home] 및 [Reservation] 탭의 표시 유무를 설정할 수 있도록 업데이트
+ 2-1.  *주의* COMPLEX_M_EXT 테이블의 스키마 변경이 있음. 다음의 쿼리를 반드시 수행하여 테이블을 업데이트 해야합니다. ( /admin/src/main/resources/sql/complex_m_ext_update_0606.sql )
+3. (Backend/Admin) 현장 별, 사용자의 Feed 글쓰기 여부 기능을 설정할 수 있도록 업데이트
+4. (Admin) "개별 현장 관리 / INFO / Living Support"의 도움말 내용 업데이트
+5. (Admin) 개별 현장 관리 페이지에서, 분류되지 않은 "현장"을 표시 목록에서 표시되지 않도록 수정 - bugfix
+6. (Admin) 개별 현장 관리 페이지에서, '도움말'을 추가하고, 오타를 수정
+7. (Admin) "개별 현장 관리 / INFO / [INFO] 목록 관리"의 도움말 및 오타 수정
+8. (Backend) 현장 대표 이미지를 ImageStore로 부터 가져오도록 변경
+  8-1. (주의) 회원 가입시, 현장 목록에서 이미지가 표시되지 않는 경우, 관리자 페이지를 통해서 현장 로그 이미지를 다시 업로드 해야함 
+  8-2. 이에 따라, COMPLEX_M_EXT 테이블, CL_LOGO_IMG_SRC 칼럼은 더이상 사용되지 않음 
+9. (Admin) "개별 현장 관리” 페이지에서 현장 표시 정보(현장표시 이름, 주소, 현장 지도 연결 링크) 업데이트 가능 
+10. (Backend) 최신글 부터 타겟 페이지까지의 모든 게시글을 가져오는 신규 api 추가 (/posts/toPage/)
+
+
+
