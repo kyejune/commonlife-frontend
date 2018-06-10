@@ -2,5 +2,5 @@
 .gitattributes export-ignore
 /snapshots export-ignore
 
-/admin/src/main/resources/properties   export-ignore
-/backend/src/main/resources/properties   export-ignore
+/admin/src/main/resources/properties/**/*.properties  export-ignore
+/backend/src/main/resources/properties/**/*.properties   export-ignore
