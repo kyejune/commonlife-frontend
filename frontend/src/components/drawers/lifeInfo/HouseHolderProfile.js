@@ -30,40 +30,6 @@ class Profile extends Component {
         });
     }
 
-    // selectPicture() {
-    //
-    //     if( navigator.camera ) {
-    //
-    //         navigator.camera.getPicture(
-    //             (base64) => this.gettedPicture(base64),
-    //             (msg) => this.failedPicture(msg),
-    //             {
-    //                 quality: 100,
-    //                 sourceType: 0,
-    //                 destinationType: 0
-    //             });
-    //     }else{
-    //         this.uploadImg( `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAA6lBMVEUAAAAXQl8XQmAXQV4YPloWRmUZNlAXP1wYPloXRGIWSWcYP1wVTm4YQV4YPVcZOlQXQV0ZOVQZOlUWR2YXRWMYPVkVTm4YQl8ZOFEYQV0aM0wUU3YYQV0XQl8XQ2AYQFwXPloXPVgXQF0SPVoBIkLp7vEmS2YWRGMMN1QHNFMNNVIEME8BKknz9vfu8PKpuMKfr7uInq10jZ5cdolVcogrUmwbRWEWO1fS2+DL1NrO0detu8aar72XpbKOobCDlqV2kqN4kaFqhJZjgZRRZHo6WnIWSmkvT2guTGciSGMTOlYNOFUGLksACS7w+BDIAAAAHHRSTlMA7Z7SZS4H5jsJ/O3l3tTOy769npaVfnV1aGgoe5kp8wAAAMZJREFUGNNFj9VyAlEQBSfZZSHuPjPXYBUIThR3+f/fYbkU0G+nq85Dw46Mc5uBI2dPxAE/evv9SlqglFK92Jm7JMQoSZI26mwOwM1KItls1MdFpcU1wEOAFM7Lv/+Fz6JWFwCnAoXxO/l1vRQZdZIKZjL4V2mMCuFCWoEYNr9q3+lFia1Alsvpz6zXH8RtKwhV7JeGrUp5ZSgVz+dSGKxVq10/ZroC8NwJIuZTopZSri25E4IYKaB779DKmvjmA468Oc47WDZI7RlDwZXI7gAAAABJRU5ErkJggg=="` );
-    //     }
-    //
-    // }
-    //
-    // gettedPicture(base64) {
-    //
-    //     const b64 = 'data:image/jpeg;base64,' + base64;
-    //     this.uploadImg( b64 );
-    // }
-    //
-    // failedPicture(message) {
-    //     console.log( 'failedPicture:', message );
-    // }
-    //
-    // uploadImg( b64img ){
-    //     // Net.uploadUserProfileImage( Store.auth.id, MakingUserData.user.password, b64img, res=>{
-    //     //     console.log( res );
-    //     // });
-    // }
-
 
     submit = (event) => {
 
@@ -80,6 +46,8 @@ class Profile extends Component {
         S.delete('savedId');
         S.delete('isSave');
         S.delete('token');
+
+        Net.logout();
 
         Store.auth = { ...Store.auth, token: undefined };
         Store.isAuthorized = false;

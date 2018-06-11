@@ -46,7 +46,9 @@ class CommunityFeed extends Component {
 	}
 
 	loadPage=( targetPage=0 )=>{
-		if( targetPage > 0 && targetPage >= this.maxPage ) return;
+
+		console.log( 'loadPage:', targetPage );
+		if( targetPage > 0 && targetPage > this.maxPage ) return;
 
 		this.isLoading = true;
 
@@ -66,13 +68,15 @@ class CommunityFeed extends Component {
 		const IS_TOP = (SCROLL_VALUE <= -10);
 		const IS_BOTTOM = (SCROLL_VALUE >= this.scrollBox.scrollHeight - this.scrollBox.clientHeight );
 
+
 		if( IS_BOTTOM ) this.loadPage( this.page + 1 );
 
         this.setState({ isRefresh: IS_TOP, pulledTop:(IS_TOP||true) });
 
         // 0으로 돌아왔고 && 밑으로 땡겨졌었다면...
         if( SCROLL_VALUE ===  0 && this.state.pulledTop ){
-        	this.loadPage( 0 );
+        	console.log('refresh', this.page );
+        	this.loadPage( Math.max( 0, this.page ) );
         }
 	}
 

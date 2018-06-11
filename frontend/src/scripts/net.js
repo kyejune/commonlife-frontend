@@ -84,24 +84,53 @@ axios.interceptors.response.use(function (response) {
 
 export default {
 ///posts/?postType=feed&page=2
-    getFeed( type, page, callback ){
+//     getFeed( type, page, callback ){
+//
+//         let path = `/posts/?page=${(page+1)||1}&cmplxId=${Store.communityCmplxId}`;
+//         if( type !== 'feed' ) path += `&postType=${type}`;
+//
+//         axios.get( path )
+//             .then( response =>{
+//                 let prevStack = Store[type];
+//                 let newStack = response.data.data.filter( item => {
+//                     let sames = prevStack.filter( prevItem => {
+//                             return (prevItem.postIdx === item.postIdx);
+//                         }
+//                     );
+//
+//                     return ( sames.length === 0 );
+//                 });
+//
+//                 Store[type] = Store[type].concat( newStack );
+//
+//                 // 정렬
+//                 Store[type] = Store[type].sort((a,b)=>{
+//                     return new Date(b.updDttm).getTime() - new Date(a.updDttm).getTime();
+//                 });
+//
+//                 if( callback ) callback( response.data );
+//
+//             });
+//     },
 
-        let path = `/posts/?page=${(page+1)||1}&cmplxId=${Store.communityCmplxId}`;
+
+    getFeed( type, page, callback ){
+        let path = `/posts/toPage/?page=${(page+1)||1}&cmplxId=${Store.communityCmplxId}`;
         if( type !== 'feed' ) path += `&postType=${type}`;
 
         axios.get( path )
             .then( response =>{
                 let prevStack = Store[type];
-                let newStack = response.data.data.filter( item => {
-                    let sames = prevStack.filter( prevItem => {
-                            return (prevItem.postIdx === item.postIdx);
-                        }
-                    );
+                // let newStack = response.data.data.filter( item => {
+                //     let sames = prevStack.filter( prevItem => {
+                //             return (prevItem.postIdx === item.postIdx);
+                //         }
+                //     );
+                //
+                //     return ( sames.length === 0 );
+                // });
 
-                    return ( sames.length === 0 );
-                });
-
-                Store[type] = Store[type].concat( newStack );
+                Store[type] = response.data.data;//Store[type].concat( newStack );
 
                 // 정렬
                 Store[type] = Store[type].sort((a,b)=>{
@@ -112,6 +141,9 @@ export default {
 
             });
     },
+
+
+
 
     /* Community 글보기 */
     getCardContent( type, postIdx, callback ){
@@ -415,7 +447,13 @@ export default {
     login( id, password, callback ){
 
         this.getPublicKey( id, password, ( rId, rPassword, pkKey )=>{
-            axios.get(`/users/login?userId=${rId}&userPw=${rPassword}&gcmRegId=${Store.gcm}&deviceId=${Store.deviceId}&pk_key=${pkKey}`)
+
+            let os = 1;
+            if( window.device ){
+                os = ( window.device.model.toLocaleString().indexOf( 'iphone' ) >= 0 )?2:1;
+            }
+
+            axios.get(`/users/login?userId=${rId}&userPw=${rPassword}&gcmRegId=${Store.gcm}&deviceId=${Store.deviceId}&pk_key=${pkKey}&osType=${os}`)
                 .then( response =>{
 
                     console.log( '로그인 성공:', response );
@@ -428,7 +466,6 @@ export default {
                     Store.homeId = DATA.homeId;
                     Store.auth = { name:DATA.userNm, id:DATA.userId, token:DATA.token, key:DATA.usrId };
                     Store.isAuthorized = true;
-
                     const S = new DeviceStorage().localStorage();
                     S.save( 'token', DATA.token );
                     this.getComplexesKeyValue();
@@ -436,6 +473,10 @@ export default {
                     callback( response.data );
                 })
         });
+    },
+
+    logout(){
+      axios.get('/users/logout');
     },
 
     findId( hhname, hhphone, name, phone, callback ){
