@@ -88,8 +88,10 @@ public class PostController {
 
         // 포스트 목록 추출
         try {
+            //
             paginateInfo = postService.getPostWithLikeInfoList( postParams );
         } catch( Exception e ) {
+            e.printStackTrace();
             logger.error(e.getMessage());
             return ResponseEntity
                     .status( HttpStatus.SERVICE_UNAVAILABLE )
@@ -154,16 +156,15 @@ public class PostController {
 
         // 포스트 목록 추출
         try {
+            //
             paginateInfo = postService.getPostWithLikeInfoList( postParams );
         } catch( Exception e ) {
+            e.printStackTrace();
             logger.error(e.getMessage());
             return ResponseEntity
                     .status( HttpStatus.SERVICE_UNAVAILABLE )
                     .body( new SimpleErrorInfo("목록 가져오기를 실패했습니다."));
         }
-
-        // todo: 해당 현장의 글쓰기 아이콘 표시 유/무 결정 - 테스트를 위한 dummy 값 추가
-        paginateInfo.setFeedWriteAllowYn("Y");
 
         return ResponseEntity.status( HttpStatus.OK ).body( paginateInfo );
     }
