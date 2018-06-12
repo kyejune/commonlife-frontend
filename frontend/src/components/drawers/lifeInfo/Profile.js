@@ -15,7 +15,7 @@ class Profile extends Component {
         this.state = {
             cmplxAddr:'',
             cmplxNm:'',
-            email:'',
+            email:null,
             userId:'',
             userImgSrc:'',
             changedImgB64:null,
@@ -47,14 +47,22 @@ class Profile extends Component {
     }
 
     changeEmail=()=>{
-        if( this.mailValidator.allValid() ){
-            Net.changeEmail( this.state.newEmail, res => {
-                Store.alert('이메일이 성공적으로 변경되었습니다.');
-                this.loadData();
-            });
+
+        if( this.state.email !== this.state.newEmail ) {
+            if (this.mailValidator.allValid()) {
+
+
+                Net.changeEmail(this.state.newEmail, res => {
+                    Store.alert('이메일이 성공적으로 변경되었습니다.');
+                    this.loadData();
+                });
+            } else {
+                this.mailValidator.showMessages();
+                this.forceUpdate();
+            }
+
         }else{
-            this.mailValidator.showMessages();
-            this.forceUpdate();
+            console.log( window.history.back() );
         }
 
     }
@@ -79,10 +87,9 @@ class Profile extends Component {
                     {
                         quality: 100,
                         sourceType: 0,
-                        destinationType: 0
+                        destinationType: 0,
+                        encodingType: 0,
                     });
-        }else{
-            this.uploadImg( `data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAA6lBMVEUAAAAXQl8XQmAXQV4YPloWRmUZNlAXP1wYPloXRGIWSWcYP1wVTm4YQV4YPVcZOlQXQV0ZOVQZOlUWR2YXRWMYPVkVTm4YQl8ZOFEYQV0aM0wUU3YYQV0XQl8XQ2AYQFwXPloXPVgXQF0SPVoBIkLp7vEmS2YWRGMMN1QHNFMNNVIEME8BKknz9vfu8PKpuMKfr7uInq10jZ5cdolVcogrUmwbRWEWO1fS2+DL1NrO0detu8aar72XpbKOobCDlqV2kqN4kaFqhJZjgZRRZHo6WnIWSmkvT2guTGciSGMTOlYNOFUGLksACS7w+BDIAAAAHHRSTlMA7Z7SZS4H5jsJ/O3l3tTOy769npaVfnV1aGgoe5kp8wAAAMZJREFUGNNFj9VyAlEQBSfZZSHuPjPXYBUIThR3+f/fYbkU0G+nq85Dw46Mc5uBI2dPxAE/evv9SlqglFK92Jm7JMQoSZI26mwOwM1KItls1MdFpcU1wEOAFM7Lv/+Fz6JWFwCnAoXxO/l1vRQZdZIKZjL4V2mMCuFCWoEYNr9q3+lFia1Alsvpz6zXH8RtKwhV7JeGrUp5ZSgVz+dSGKxVq10/ZroC8NwJIuZTopZSri25E4IYKaB779DKmvjmA468Oc47WDZI7RlDwZXI7gAAAABJRU5ErkJggg=="` );
         }
     }
 
@@ -125,6 +132,10 @@ class Profile extends Component {
 
         Store.auth = { ...Store.auth, token: undefined };
         Store.isAuthorized = false;
+
+
+        Net.logout();
+
         setTimeout(()=>{
             this.props.history.push('/login');
         }, 0 );
@@ -149,12 +160,12 @@ class Profile extends Component {
                 <input type="password" className="cl__input w-100" placeholder="비밀번호"
                        value={this.state.password} onChange={ (e)=> this.setState({ password: e.target.value }) }
                 />
-                {this.passwordValidator.message('password', this.state.password, 'required|min:6|max:12')}
+                {this.passwordValidator.message('비밀번호', this.state.password, 'required|min:6|max:12')}
 
                 <input type="password" className="cl__input w-100 mb-2em" placeholder="비밀번호 확인"
                        value={this.state.passwordconfirm} onChange={ (e)=> this.setState({ passwordconfirm: e.target.value }) }
                 />
-                {this.passwordValidator.message('passwordConfirm', this.state.passwordconfirm, `required|min:6|max:12|same:${this.state.password}`)}
+                {this.passwordValidator.message('비밀번호 확인', this.state.passwordconfirm, `required|min:6|max:12|same:${this.state.password}`)}
 
 
                 <button className="cl__button--dark w-100" onClick={this.requestChangePassword}>비밀번호 변경 완료</button>
@@ -168,7 +179,7 @@ class Profile extends Component {
                        placeholder="이메일 주소"
                        value={this.state.newEmail} onChange={ e=> this.setState({ newEmail: e.target.value }) }
                 />
-                {this.mailValidator.message('name', this.state.newEmail, 'required|mail', 'text-danger')}
+                {this.mailValidator.message('이메일', this.state.newEmail, 'required|mail', 'text-danger')}
                 <p className="color-white opacity-80 fs-12 mt-1em">※ 기타 사용자 정보변경시 관리자에게 문의해 주세요.</p>
 
                 <div className="cl-button-group mt-1em">
@@ -189,7 +200,11 @@ class Profile extends Component {
             <div className="cl-profile-card">
 
                 <div className="cl-avatar-border">
-                    <div className="cl-avatar" style={{ backgroundImage:`url(${ ( this.state.changedImgB64||this.state.userImgSrc ) })` }}/>
+                    <div className="cl-avatar" style={{
+                        backgroundImage:`url(${ ( this.state.changedImgB64||this.state.userImgSrc ) })`,
+                        backgroundSize:'cover',
+                    }}
+                    />
                 </div>
                 <button className="cl-edit__button" onClick={ this.changeProfileImage }/>
 

@@ -19,7 +19,7 @@ class Login extends Component {
         this.state = {
             id:isSaveId?(S.read('savedId')||''):'',
             pw:'',
-            isSaveId: isSaveId //sevedId?true:false,
+            isSaveId: isSaveId
         }
 
     }

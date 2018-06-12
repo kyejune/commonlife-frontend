@@ -76,7 +76,9 @@ class HouseHolderInputs extends Component {
         let {branch, houseHolder} = MakingUserData;
 
         Net.requestHouseHolderPhoneAuthNumber(branch.cmplxId, houseHolder.dong, houseHolder.ho, houseHolder.name, houseHolder.phone, res => {
-            Store.alert(res.msg);
+            //Store.alert(res.msg);
+
+            Store.alert('세대주 휴대전화로 인증번호가 발송되었습니다.(SMS)');
 
             MakingUserData.houseHolder = { ...houseHolder, certReqId:res.userCertId };
             // console.log('인증 번호 요청:', res, MakingUserData.houseHolder );

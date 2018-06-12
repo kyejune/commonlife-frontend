@@ -52,6 +52,13 @@ class UserInputs extends Component {
 
     // 인증 번호 요청
     onRequestCertNo = () => {
+
+        if( !this.state.checkedId ){
+            Store.alert( '아이디 중복확인을 먼저 진행하여 주세요.');
+            return;
+        }
+
+
         let { branch, houseHolder, user } = MakingUserData;
 
         console.log('유저 인증정보 요청:', houseHolder, user );
@@ -62,7 +69,7 @@ class UserInputs extends Component {
             user.name, user.phone, houseHolder.certReqId, res=>{
 
                 MakingUserData.user = { ...MakingUserData.user, certReqId: res.userCertId };
-                console.log( 'res:', res );
+                // console.log( 'res:', res );
 
                 // 임시로 인증번호 자동으로 가져오기
                 //{{API_HOST}}/users/debug/userCertNum?userCertId=106&userCell=01046147636

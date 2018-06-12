@@ -16,7 +16,11 @@ class BranchSeletor extends Component {
     }
 
     selectBranch = () => {
-        Store.communityCmplxId = this.selectedBranchId;
+
+        if( this.selectedBranchId ){
+            Store.communityCmplxId = this.selectedBranchId;
+        }
+
         Store.popDrawer();
     }
 

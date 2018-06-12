@@ -40,6 +40,11 @@ class CommunityNews extends Component {
 
     componentDidUpdate(prevProps) {
 
+        // 상세보기 왔다갔다할때 쓸데없는 목록 갱신을 막음으로 스크롤 위치 초기화되는걸 방어
+        let pathname = this.props.location.pathname;
+        let prevPathname = prevProps.location.pathname;
+        if( pathname.indexOf( prevPathname ) >= 0 || prevPathname.indexOf( pathname ) >= 0 ) return;
+
         if (this.props.location !== prevProps.location && ( this.props.location.pathname === '/community/news' ) ){
             Store.news.length = 0;
             this.loadPage( 0 );

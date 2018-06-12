@@ -49,6 +49,17 @@ class WriteDrawer extends BottomDrawer {
 
             this.setState( obj );
         }
+
+        document.addEventListener("backbutton", this.preventAndClose, false);
+    }
+
+    preventAndClose = ( event )=>{
+        event.preventDefault();
+        this.onClose();
+    }
+
+    componentWillUnmount(){
+        document.removeEventListener("backbutton", this.preventAndClose, false );
     }
 
     handleChange(event) {

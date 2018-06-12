@@ -102,6 +102,14 @@ class App extends Component {
                 const S = new DeviceStorage().localStorage();
                 const PATH = location.pathname;
 
+                // 로그아웃 후 하드웨어 백버튼으로 돌아오는 경우가 있어서 방어코드
+                console.log( (PATH.indexOf('/info') >= 0 ), Store.auth.token === undefined );
+                if( (PATH.indexOf('/info') >= 0 ) && Store.auth.token === undefined ){
+                    this.router.history.push('/login');
+                    return
+                }
+                // console.log( PATH, Store.auth );
+
                 // 마지막 이동 패스 기억
                 if (PATH.indexOf('/community') === 0 || PATH.indexOf('/reservation') === 0 || PATH.indexOf('/iot') === 0 || PATH.indexOf('/info') === 0)
                     S.save('location', location.pathname);

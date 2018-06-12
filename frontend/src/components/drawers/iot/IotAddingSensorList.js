@@ -27,12 +27,32 @@ class IotAddingSensorList extends Component {
         if( this.props.isCreate ) {
 
             Iot.getAddibleItemOfScenario('conditions', data => {
+
+                //`${item.deviceId}-${item.stsId}-${item.thingsId}` === `${t.deviceId}-${t.stsId}-${t.thingsId}`;
+
+                // 이미 추가되있는 아이템은 거르기
+                let alreadyThings = this.props.alreadyThings;
+                data.scnaIfThings = data.scnaIfThings.filter( t => {
+
+                    let isHas = alreadyThings.some( item =>{
+                        // console.log( item.chk, `${item.deviceId}-${item.stsId}-${item.thingsId}`, `${t.deviceId}-${t.stsId}-${t.thingsId}` );
+                        return item.chk === 'Y' && `${item.deviceId}-${item.stsId}-${item.thingsId}` === `${t.deviceId}-${t.stsId}-${t.thingsId}`;
+                    });
+
+                    return !isHas;
+                });
+                //
+
+
                 this.setState({
                     data: data
                 });
 
                 const clonedState = _.clone(this.state);
                 clonedState.addedData.scnaIfOption = data.scnaIfOption;
+                console.log('생성모드 데이터와 이미 있는 데이터 비교:', data.scnaIfThings, this.props.alreadyThings );
+
+
                 this.setState(clonedState);
             });
 
@@ -113,13 +133,14 @@ class IotAddingSensorList extends Component {
                 })[0], chk:'Y' }; // 일치하는 값만 가져와서, chk만 'Y'로 수정
         });
 
-
         // 생성하기위한 데이터 모으기
         if( this.props.isCreate ){
 
             Scenario.scnaIfSpc = addedData.scnaIfSpc;
             Scenario.scnaIfAply = addedData.scnaIfAply;
             Scenario.scnaIfThings = Scenario.scnaIfThings.concat( addedData.scnaIfThings );
+
+            console.log( '생성용 센서들:', addedData );
 
             // 기본값으로 데이터 만들어서 저장
             // Scenario.scnaIfSpc = this.state.time?[{ spcTime:'12:00', monYn:'Y', tueYn:'Y', wedYn:'Y', thuYn:'Y', friYn:'Y', satYn:'Y', sunYn:'Y' }]:[];

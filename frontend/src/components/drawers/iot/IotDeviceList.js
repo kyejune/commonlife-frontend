@@ -63,6 +63,20 @@ class IotDeviceCategory extends Component {
 		{
 			if( this.props.isCreate ) {
                 Iot.getAddibleItemOfScenario('actors', data => {
+
+                    // 이미 추가되있는 아이템은 거르기
+                    let alreadyThings = this.props.alreadyThings;
+                    data.scnaThings = data.scnaThings.filter( t => {
+
+                        let isHas = alreadyThings.some( item =>{
+                            // console.log( `${item.deviceId}-${item.stsId}-${item.thingsId}`, `${t.deviceId}-${t.stsId}-${t.thingsId}` );
+                            return item.chk === 'Y' && `${item.deviceId}-${item.stsId}-${item.thingsId}` === `${t.deviceId}-${t.stsId}-${t.thingsId}`;
+                        });
+
+                        return !isHas;
+                    });
+                    //
+
                     this.setState({
                         deviceData: data.scnaThings,
                         addingList: [],

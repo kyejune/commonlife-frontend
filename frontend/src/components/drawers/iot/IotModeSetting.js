@@ -34,7 +34,6 @@ class IotModeSetting extends Component {
             // mode 상태
             editTarget: option1,
             editingData: null,
-            //  editingData:null,
             isEditingSensor: false,
             isEditingDevice: false,
 
@@ -54,9 +53,7 @@ class IotModeSetting extends Component {
                 this.state.isEditingSensor = true;
                 this.state.isEditingDevice = true;
             }
-        }
-        ;
-
+        };
 
         console.log(`action:${ action }, editTarget:${ option1 }, isCreateMode: ${ option1 === 'add' }`);
 
@@ -78,11 +75,22 @@ class IotModeSetting extends Component {
             Scenario.scna[0].scnaNm = '';
             this.settingInitData(Scenario);
 
+            // 시나리오는 추가창을 router를 안통하므로 리스너를 연결
+            if(this.state.action === 'scenario' )
+                Store.addDrawerListener( this.backFromAdding );
+
         } else { // 편집 상태일경우 데이터 불러오기
             this.getSavedData();
         }
-
     }
+
+    componentWillUnmount(){
+
+        if(this.state.action === 'scenario' )
+            Store.removeDrawerListener( this.backFromAdding );
+    }
+
+
 
     // 모드 값 로드
     getSavedData = () => {
@@ -91,6 +99,15 @@ class IotModeSetting extends Component {
             this.settingInitData(data);
         });
     }
+
+
+    backFromAdding = ({ key, action }) => {
+        console.log( key, action );
+        if( action !== 'POP' ) return;
+
+        if( key === 'iot-sensor-list' || key === 'iot-device-category-detail' ) this.settingInitData(Scenario);
+    }
+
 
     // 들어온값 초기 세팅
     settingInitData = (data) => {
@@ -103,6 +120,8 @@ class IotModeSetting extends Component {
         data.scnaThings.forEach(item => {
             checkedMap[`${item.deviceId}-${item.stsId}-${item.thingsId}`] = (item.stsValue === item.maxVlu);
         });
+
+        console.log( '새로 수정된 데이터:', data );
 
         this.setState({checkedMap: checkedMap, editingData: data,});
     }
@@ -223,6 +242,7 @@ class IotModeSetting extends Component {
         // deviceId로 중복 아이템이 안생기게 검사
         const newItems = items.filter(item => {
             return !this.state.editingData.scnaThings.some(t => {
+                console.log( t, item );
                 return parseInt(t.deviceId, 10) === parseInt(item.deviceId, 10);
             });
         });
@@ -391,6 +411,8 @@ class IotModeSetting extends Component {
 
         const {action, isCreateMode, editingData, isEditingDevice, isEditingSensor} = this.state;
 
+        console.log('EditingData:', editingData );
+
         if (!editingData) return <div/>;
 
 
@@ -551,7 +573,8 @@ class IotModeSetting extends Component {
                                 onClick={() => Store.pushDrawer('iot-sensor-list', {
                                     isCreate: isCreateMode,
                                     target: this.state.editTarget,
-                                    callback: this.gettedAddingSensors
+                                    callback: this.gettedAddingSensors,
+                                    alreadyThings: editingData.scnaIfThings
                                 })}>
                             <img src={addSrc} alt="센서추가" width="40" height="40"/>
                         </button>
@@ -574,7 +597,8 @@ class IotModeSetting extends Component {
                                 onClick={() => Store.pushDrawer('iot-device-category-detail', {
                                     isCreate: isCreateMode,
                                     target: this.state.editTarget,
-                                    callback: this.gettedAddingDevices
+                                    callback: this.gettedAddingDevices,
+                                    alreadyThings: editingData.scnaThings
                                 })}>
                             <img src={addSrc} alt="기기추가" width="40" height="40"/>
                         </button>

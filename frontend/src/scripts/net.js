@@ -528,7 +528,7 @@ export default {
                     Store.cmplxId = DATA.cmplxId;
                     Store.communityCmplxId = DATA.cmplxId;
                     Store.homeId = DATA.homeId;
-                    Store.auth = { name:DATA.userNm, id:DATA.userId, token:DATA.token, key:DATA.usrId };
+                    Store.auth = { name:DATA.userNm, id:DATA.userId, token:DATA.tokenOrg||DATA.token, key:DATA.usrId };
                     Store.isAuthorized = true;
                 }
 

@@ -145,6 +145,17 @@ const Store = observable({
 
     /* 현재 열려있는 Drawer */
     drawer: [],
+    drawerListener:[],
+
+    addDrawerListener: listener => {
+      let idx = Store.drawerListener.indexOf( listener );
+      if( idx < 0 ) Store.drawerListener.push( listener );
+    },
+
+    removeDrawerListener: listener => {
+        let idx = Store.drawerListener.indexOf( listener );
+        if( idx >= 0 ) Store.drawerListener.splice( idx, 1 );
+    },
 
     hasDrawer: key => {
         let has = Store.drawer.some( drawerInfo => {
@@ -181,7 +192,11 @@ const Store = observable({
     },
 
     popDrawer: () =>{
-        Store.drawer.pop();
+        let d = Store.drawer.pop();
+
+        Store.drawerListener.forEach( listener =>{
+           listener( { key: d.key, action:'POP' } );
+        });
     },
 
     clearDrawer: () =>{
@@ -220,6 +235,7 @@ const Store = observable({
 
 
 window.Store = Store;
+window.Scenerio = Scenario;
 
 
 export default Store;
